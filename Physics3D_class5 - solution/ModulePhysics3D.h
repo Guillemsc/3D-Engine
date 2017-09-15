@@ -39,9 +39,8 @@ public:
 	void UnloadPhysBody(PhysBody3D* pb);
 	void UnloadConstraint(btTypedConstraint* con);
 	void UnloadShape(btCollisionShape* pb);
+
 private:
-
-
 	btDefaultCollisionConfiguration*	collision_conf;
 	btCollisionDispatcher*				dispatcher;
 	btBroadphaseInterface*				broad_phase;

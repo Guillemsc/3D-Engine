@@ -6,7 +6,6 @@
 #include "PerfTimer.h"
 #include "Module.h"
 
-
 class ModuleWindow;
 class ModuleInput;
 class ModuleAudio;
@@ -26,7 +25,13 @@ public:
 	bool Update();
 	bool CleanUp();
 
+	int GetArgc() const;
+	const char* GetArgv(int index) const;
 	float GetDT();
+	float GetFps();
+	float GetAvgFps();
+	int GetFramesSinceStart();
+
 
 private:
 	void AddModule(Module* mod);
@@ -48,6 +53,12 @@ public:
 private:
 	list<Module*>      modules;
 
+	int				   argc;
+	char**			   args;
+
+	string		       title;
+	string		       organization;
+
 	// Engine debug info
 	int				   capped_ms = -1;
 	PerfTimer		   ptimer;
@@ -58,7 +69,6 @@ private:
 	int				   last_sec_frame_count = 0;
 	int				   prev_last_sec_frame_count = 0;
 	float		   	   dt = 0.0f;
-
 	float			   avg_fps = 0;
 	float			   seconds_since_startup = 0;
 	float			   last_frame_ms = 0;

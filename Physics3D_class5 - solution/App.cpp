@@ -8,7 +8,7 @@
 #include "DebugScene.h"
 #include <list>
 
-Application::Application(int argc, char* args[])
+Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
 	window = new ModuleWindow();
 	input = new ModuleInput();
@@ -19,7 +19,7 @@ Application::Application(int argc, char* args[])
 	debug_scene = new DebugScene();
 
 	// The order of calls is very important!
-	// Modules will Init() Start() and Update in this order
+	// Modules will Awake() Start() and Update in this order
 	// They will CleanUp() in reverse order
 
 	// Main Modules
@@ -30,8 +30,7 @@ Application::Application(int argc, char* args[])
 	AddModule(physics);
 	AddModule(debug_scene);
 
-
-	// Renderer last!
+	// Renderer last
 	AddModule(renderer3D);
 }
 
@@ -62,10 +61,11 @@ bool Application::Start()
 	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
 		ret = (*it)->Start();
+		if (!ret) return false;
 	}
 
 	startup_time.Start();
-	return true;
+	return ret;
 }
 
 // ---------------------------------------------
@@ -75,9 +75,67 @@ void Application::PrepareUpdate()
 	startup_time.Start();
 }
 
+// Call PreUpdate, Update and PostUpdate on all modules
+bool Application::Update()
+{
+	bool ret = true;
+
+	if (input->GetWindowEvent(WE_QUIT) == true)
+		return false;
+
+	PrepareUpdate();
+	
+	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
+	{
+		if (!(*it)->GetEnabled())
+			continue;
+
+		ret = (*it)->PreUpdate();
+
+		if (!ret) return false;
+	}
+	
+	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
+	{
+		if (!(*it)->GetEnabled())
+			continue;
+
+		ret = (*it)->Update(); 
+
+		if (!ret) return false;
+	}
+	
+	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
+	{
+		if (!(*it)->GetEnabled())
+			continue;
+
+		ret = (*it)->PostUpdate(); 
+
+		if (!ret) return false;
+	}
+	
+	FinishUpdate();
+
+	return ret;
+}
+
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+	FrameCalculations();
+}
+
+bool Application::CleanUp()
+{
+	bool ret = true;
+
+	for (list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rend(); it++)
+	{
+		ret = (*it)->CleanUp();
+	}
+
+	return ret;
 }
 
 void Application::FrameCalculations()
@@ -100,62 +158,37 @@ void Application::FrameCalculations()
 	}
 }
 
-// Call PreUpdate, Update and PostUpdate on all modules
-bool Application::Update()
+int Application::GetArgc() const
 {
-	bool ret = true;
-
-	if (input->GetWindowEvent(WE_QUIT) == true)
-		ret = false;
-
-	PrepareUpdate();
-	
-	if (ret)
-	{
-		for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
-		{
-			ret = (*it)->PreUpdate();
-		}
-	}
-
-	if (ret)
-	{
-		for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
-		{
-			ret = (*it)->Update();
-		}
-	}
-
-	if (ret)
-	{
-		for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
-		{
-			ret = (*it)->PostUpdate();
-		}
-	}
-
-	FinishUpdate();
-
-	FrameCalculations();
-
-	return ret;
+	return argc;
 }
 
-bool Application::CleanUp()
+const char * Application::GetArgv(int index) const
 {
-	bool ret = true;
-
-	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
-	{
-		ret = (*it)->CleanUp();
-	}
-
-	return ret;
+	if (index < argc)
+		return args[index];
+	else
+		return NULL;
 }
 
 float Application::GetDT()
 {
 	return dt;
+}
+
+float Application::GetFps()
+{
+	return frames_on_last_update;
+}
+
+float Application::GetAvgFps()
+{
+	return avg_fps;
+}
+
+int Application::GetFramesSinceStart()
+{
+	return frame_count;
 }
 
 void Application::AddModule(Module* mod)

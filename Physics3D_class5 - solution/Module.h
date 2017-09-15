@@ -15,7 +15,7 @@ using namespace std;
 class Module
 {
 public:
-	Module(bool start_enabled = true)
+	Module(bool start_enabled = true) : enabled(start_enabled)
 	{}
 
 	virtual ~Module()

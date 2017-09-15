@@ -10,16 +10,13 @@
     <Filter Include="Sources\Containers">
       <UniqueIdentifier>{afc36133-f401-499a-aa33-0da1e500fb52}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Tools">
-      <UniqueIdentifier>{7e4dfaf7-022c-4f7d-92aa-f3b3fa9d6248}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Helpers">
       <UniqueIdentifier>{121f8e6b-df36-4ab0-be0d-601ddfc9e503}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources\Scenes">
       <UniqueIdentifier>{bab79863-b511-48b6-82cd-3e766a558384}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tools">
+    <Filter Include="Sources\Tools">
       <UniqueIdentifier>{b28b3709-8d52-42b1-9213-c124f8adbaa1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -41,15 +38,6 @@
     </ClInclude>
     <ClInclude Include="ModuleWindow.h">
       <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="p2DynArray.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="p2List.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="p2Point.h">
-      <Filter>Sources\Containers</Filter>
     </ClInclude>
     <ClInclude Include="glmath.h">
       <Filter>Sources\Containers</Filter>
@@ -75,9 +63,6 @@
     <ClInclude Include="PhysVehicle3D.h">
       <Filter>Sources\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="p2List2.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="DebugScene.h">
       <Filter>Sources\Scenes</Filter>
     </ClInclude>
@@ -85,13 +70,13 @@
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="Functions.h">
-      <Filter>Tools</Filter>
+      <Filter>Sources\Tools</Filter>
     </ClInclude>
     <ClInclude Include="PerfTimer.h">
-      <Filter>Tools</Filter>
+      <Filter>Sources\Tools</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
-      <Filter>Tools</Filter>
+      <Filter>Sources\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -109,9 +94,6 @@
     </ClCompile>
     <ClCompile Include="ModuleWindow.cpp">
       <Filter>Sources\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="log.cpp">
-      <Filter>Sources\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Sources</Filter>
@@ -144,13 +126,16 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="Functions.cpp">
-      <Filter>Tools</Filter>
+      <Filter>Sources\Tools</Filter>
     </ClCompile>
     <ClCompile Include="PerfTimer.cpp">
-      <Filter>Tools</Filter>
+      <Filter>Sources\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
-      <Filter>Tools</Filter>
+      <Filter>Sources\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="log.cpp">
+      <Filter>Sources\Tools</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
