@@ -14,11 +14,12 @@ struct PhysMotor3D;
 class DebugScene : public Module
 {
 public:
-	DebugScene(Application* app, bool start_enabled = true);
+	DebugScene(bool start_enabled = true);
 	~DebugScene();
 
+	bool Awake();
 	bool Start();
-	update_status Update(float dt);
+	bool Update();
 	bool CleanUp();
 
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);

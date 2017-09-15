@@ -1,8 +1,8 @@
 #include "Globals.h"
-#include "Application.h"
+#include "App.h"
 #include "ModuleWindow.h"
 
-ModuleWindow::ModuleWindow(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleWindow::ModuleWindow(bool start_enabled) : Module(start_enabled)
 {
 	window = NULL;
 	screen_surface = NULL;
@@ -14,10 +14,12 @@ ModuleWindow::~ModuleWindow()
 }
 
 // Called before render is available
-bool ModuleWindow::Init()
+bool ModuleWindow::Awake()
 {
-	LOG("Init SDL window & surface");
 	bool ret = true;
+
+	LOG("Init SDL window & surface");
+	SetName("Window");
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -75,6 +77,8 @@ bool ModuleWindow::Init()
 // Called before quitting
 bool ModuleWindow::CleanUp()
 {
+	bool ret = true;
+
 	LOG("Destroying SDL window and quitting all SDL systems");
 
 	//Destroy window
@@ -85,7 +89,8 @@ bool ModuleWindow::CleanUp()
 
 	//Quit SDL subsystems
 	SDL_Quit();
-	return true;
+
+	return ret;
 }
 
 void ModuleWindow::SetTitle(const char* title)

@@ -10,10 +10,10 @@ class ModuleAudio : public Module
 {
 public:
 
-	ModuleAudio(Application* app, bool start_enabled = true);
+	ModuleAudio(bool start_enabled = true);
 	~ModuleAudio();
 
-	bool Init();
+	bool Awake();
 	bool CleanUp();
 
 	// Play a music file
@@ -27,7 +27,7 @@ public:
 
 private:
 
-	Mix_Music*			music;
+	Mix_Music*			music = nullptr;
 	p2List<Mix_Chunk*>	fx;
 };
 

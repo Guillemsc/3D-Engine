@@ -1,9 +1,10 @@
 #include "Globals.h"
-#include "Application.h"
+#include "App.h"
+#include "ModuleInput.h"
 #include "PhysBody3D.h"
 #include "ModuleCamera3D.h"
 
-ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
 	CalculateViewMatrix();
 
@@ -20,11 +21,22 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 ModuleCamera3D::~ModuleCamera3D()
 {}
 
+bool ModuleCamera3D::Awake()
+{
+	bool ret = true;
+
+	LOG("Loading Camera3D");
+	SetName("camera3D");
+
+	return ret;
+}
+
 // -----------------------------------------------------------------
 bool ModuleCamera3D::Start()
 {
-	LOG("Setting up the camera");
 	bool ret = true;
+
+	LOG("Setting up the camera");
 
 	return ret;
 }
@@ -38,12 +50,14 @@ bool ModuleCamera3D::CleanUp()
 }
 
 // -----------------------------------------------------------------
-update_status ModuleCamera3D::Update(float dt)
+bool ModuleCamera3D::Update()
 {
 	// Implement a debug camera with keys and mouse
 	// Now we can make this movememnt frame rate independant!
 	//(following != nullptr && !App->circuits->choose_level)
 	//(following != nullptr && App->physics->debug == true)
+
+	bool ret = true;
 
 	//Follow code
 	if (following != nullptr)
@@ -66,9 +80,10 @@ update_status ModuleCamera3D::Update(float dt)
 	{
 
 		vec3 newPos(0, 0, 0);
-		float speed = 20.0f * dt;
+		float speed = 20.0f * App->GetDT(); 
+
 		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-			speed = 8.0f * dt;
+			speed = 8.0f * App->GetDT();
 
 		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
 		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
@@ -123,7 +138,7 @@ update_status ModuleCamera3D::Update(float dt)
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
 
-	return UPDATE_CONTINUE;
+	return ret;
 }
 
 // -----------------------------------------------------------------

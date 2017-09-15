@@ -1,10 +1,10 @@
 #include "Globals.h"
-#include "Application.h"
+#include "App.h"
 #include "ModuleAudio.h"
 
 #pragma comment( lib, "SDL_mixer/libx86/SDL2_mixer.lib" )
 
-ModuleAudio::ModuleAudio(Application* app, bool start_enabled) : Module(app, start_enabled), music(NULL)
+ModuleAudio::ModuleAudio(bool start_enabled) : Module(start_enabled)
 {}
 
 // Destructor
@@ -12,10 +12,13 @@ ModuleAudio::~ModuleAudio()
 {}
 
 // Called before render is available
-bool ModuleAudio::Init()
+bool ModuleAudio::Awake()
 {
-	LOG("Loading Audio Mixer");
 	bool ret = true;
+
+	LOG("Loading Audio Mixer");
+	SetName("Audio");
+
 	SDL_Init(0);
 
 	if(SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
@@ -47,9 +50,11 @@ bool ModuleAudio::Init()
 // Called before quitting
 bool ModuleAudio::CleanUp()
 {
+	bool ret = true;
+
 	LOG("Freeing sound FX, closing Mixer and Audio subsystem");
 
-	if(music != NULL)
+	if(music != nullptr)
 	{
 		Mix_FreeMusic(music);
 	}
@@ -65,7 +70,8 @@ bool ModuleAudio::CleanUp()
 	Mix_CloseAudio();
 	Mix_Quit();
 	SDL_QuitSubSystem(SDL_INIT_AUDIO);
-	return true;
+
+	return ret;
 }
 
 // Play a music file

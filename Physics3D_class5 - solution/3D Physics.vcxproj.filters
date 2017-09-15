@@ -19,6 +19,9 @@
     <Filter Include="Sources\Scenes">
       <UniqueIdentifier>{bab79863-b511-48b6-82cd-3e766a558384}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{b28b3709-8d52-42b1-9213-c124f8adbaa1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -51,9 +54,6 @@
     <ClInclude Include="glmath.h">
       <Filter>Sources\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Application.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
     <ClInclude Include="Globals.h">
       <Filter>Sources</Filter>
     </ClInclude>
@@ -65,9 +65,6 @@
     </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Sources\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Sources\Tools</Filter>
     </ClInclude>
     <ClInclude Include="ModulePhysics3D.h">
       <Filter>Sources\Modules</Filter>
@@ -83,6 +80,18 @@
     </ClInclude>
     <ClInclude Include="DebugScene.h">
       <Filter>Sources\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="App.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Functions.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="PerfTimer.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -103,12 +112,6 @@
     </ClCompile>
     <ClCompile Include="log.cpp">
       <Filter>Sources\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Sources\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="Application.cpp">
-      <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Sources</Filter>
@@ -136,6 +139,18 @@
     </ClCompile>
     <ClCompile Include="DebugScene.cpp">
       <Filter>Sources\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="App.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Functions.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="PerfTimer.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

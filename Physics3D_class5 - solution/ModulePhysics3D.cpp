@@ -1,5 +1,5 @@
 #include "Globals.h"
-#include "Application.h"
+#include "App.h"
 #include "ModulePhysics3D.h"
 #include "PhysBody3D.h"
 #include "PhysVehicle3D.h"
@@ -15,7 +15,7 @@
 	#pragma comment (lib, "Bullet/libx86/LinearMath.lib")
 #endif
 
-ModulePhysics3D::ModulePhysics3D(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModulePhysics3D::ModulePhysics3D(bool start_enabled) : Module(start_enabled)
 {
 	collision_conf = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(collision_conf);
@@ -35,10 +35,12 @@ ModulePhysics3D::~ModulePhysics3D()
 }
 
 // Render not available yet----------------------------------
-bool ModulePhysics3D::Init()
+bool ModulePhysics3D::Awake()
 {
-	LOG("Creating 3D Physics simulation");
 	bool ret = true;
+
+	LOG("Creating 3D Physics simulation");
+	SetName("Physics3D");
 
 	return ret;
 }
@@ -46,6 +48,8 @@ bool ModulePhysics3D::Init()
 // ---------------------------------------------------------
 bool ModulePhysics3D::Start()
 {
+	bool ret = true;
+
 	LOG("Creating Physics environment");
 
 	world = new btDiscreteDynamicsWorld(dispatcher, broad_phase, solver, collision_conf);
@@ -64,13 +68,15 @@ bool ModulePhysics3D::Start()
 		world->addRigidBody(body);
 	}
 
-	return true;
+	return ret;
 }
 
 // ---------------------------------------------------------
-update_status ModulePhysics3D::PreUpdate(float dt)
+bool ModulePhysics3D::PreUpdate()
 {
-	world->stepSimulation(dt, 15);
+	bool ret = true;
+
+	world->stepSimulation(App->GetDT(), 15);
 
 	int numManifolds = world->getDispatcher()->getNumManifolds();
 	for(int i = 0; i<numManifolds; i++)
@@ -104,12 +110,14 @@ update_status ModulePhysics3D::PreUpdate(float dt)
 		}
 	}
 
-	return UPDATE_CONTINUE;
+	return ret;
 }
 
 // ---------------------------------------------------------
-update_status ModulePhysics3D::Update(float dt)
+bool ModulePhysics3D::Update()
 {
+	bool ret = true;
+
 	//if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	//	debug = !debug;
 
@@ -126,18 +134,22 @@ update_status ModulePhysics3D::Update(float dt)
 		}
 	}
 
-	return UPDATE_CONTINUE;
+	return ret;
 }
 
 // ---------------------------------------------------------
-update_status ModulePhysics3D::PostUpdate(float dt)
+bool ModulePhysics3D::PostUpdate()
 {
-	return UPDATE_CONTINUE;
+	bool ret = true;
+
+	return ret;
 }
 
 // Called before quitting
 bool ModulePhysics3D::CleanUp()
 {
+	bool ret = true;
+
 	LOG("Destroying 3D Physics simulation");
 
 	// Remove from the world all collision bodies
@@ -178,7 +190,7 @@ bool ModulePhysics3D::CleanUp()
 	delete vehicle_raycaster;
 	delete world;
 
-	return true;
+	return ret;
 }
 
 // ---------------------------------------------------------

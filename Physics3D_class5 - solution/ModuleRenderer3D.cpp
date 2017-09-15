@@ -1,5 +1,8 @@
+#include "App.h"
+#include "ModuleWindow.h"
+#include "ModuleCamera3D.h"
 #include "Globals.h"
-#include "Application.h"
+#include "App.h"
 #include "ModuleRenderer3D.h"
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
@@ -8,7 +11,7 @@
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
-ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleRenderer3D::ModuleRenderer3D(bool start_enabled) : Module(start_enabled)
 {
 }
 
@@ -17,10 +20,12 @@ ModuleRenderer3D::~ModuleRenderer3D()
 {}
 
 // Called before render is available
-bool ModuleRenderer3D::Init()
+bool ModuleRenderer3D::Awake()
 {
-	LOG("Creating 3D Renderer context");
 	bool ret = true;
+
+	LOG("Creating 3D Renderer context");
+	SetName("Renderer3D");
 	
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
@@ -103,8 +108,10 @@ bool ModuleRenderer3D::Init()
 }
 
 // PreUpdate: clear buffer
-update_status ModuleRenderer3D::PreUpdate(float dt)
+bool ModuleRenderer3D::PreUpdate()
 {
+	bool ret = true;
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
@@ -117,24 +124,26 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
-	return UPDATE_CONTINUE;
+	return ret;
 }
 
 // PostUpdate present buffer to screen
-update_status ModuleRenderer3D::PostUpdate(float dt)
+bool ModuleRenderer3D::PostUpdate()
 {
 	SDL_GL_SwapWindow(App->window->window);
-	return UPDATE_CONTINUE;
+	return true;
 }
 
 // Called before quitting
 bool ModuleRenderer3D::CleanUp()
 {
+	bool ret = true;
+
 	LOG("Destroying 3D Renderer");
 
 	SDL_GL_DeleteContext(context);
 
-	return true;
+	return ret;
 }
 
 

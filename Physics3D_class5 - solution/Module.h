@@ -3,21 +3,25 @@
 class Application;
 struct PhysBody3D;
 
+using namespace std;
+
+#include <string>
+#include <list>
+#include <queue>
+#include <iostream>
+
+#include "SDL\include\SDL.h"
+
 class Module
 {
-private :
-	bool enabled;
-
 public:
-	Application* App;
-
-	Module(Application* parent, bool start_enabled = true) : App(parent)
+	Module(bool start_enabled = true)
 	{}
 
 	virtual ~Module()
 	{}
 
-	virtual bool Init() 
+	virtual bool Awake() 
 	{
 		return true; 
 	}
@@ -27,19 +31,19 @@ public:
 		return true;
 	}
 
-	virtual update_status PreUpdate(float dt)
+	virtual bool PreUpdate()
 	{
-		return UPDATE_CONTINUE;
+		return true;
 	}
 
-	virtual update_status Update(float dt)
+	virtual bool Update()
 	{
-		return UPDATE_CONTINUE;
+		return true;
 	}
 
-	virtual update_status PostUpdate(float dt)
+	virtual bool PostUpdate()
 	{
-		return UPDATE_CONTINUE;
+		return true;
 	}
 
 	virtual bool CleanUp() 
@@ -49,4 +53,12 @@ public:
 
 	virtual void OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	{}
+
+	void SetName(const char* set_name) { name = set_name; }
+	bool GetEnabled() { return enabled; };
+	void SetEnabled(bool set) { enabled = set; };
+
+private:
+	string name = "";
+	bool   enabled = false;
 };

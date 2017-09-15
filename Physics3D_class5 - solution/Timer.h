@@ -1,26 +1,28 @@
-#ifndef __TIMER_H__
-#define __TIMER_H__
-
-#include "Globals.h"
-#include "SDL\include\SDL.h"
+#ifndef __j1TIMER_H__
+#define __j1TIMER_H__
 
 class Timer
 {
 public:
-
-	// Constructor
 	Timer();
+	~Timer();
 
 	void Start();
+	int Read() const;
+	float ReadSec() const;
+	void SubstractTimeFromStart(float sec);
 	void Stop();
+	void PauseOn();
+	void PauseOff();
 
-	float Read();
+	bool IsActive();
+
 
 private:
-
-	bool	running;
-	Uint32	started_at;
-	Uint32	stopped_at;
+	int	    started_at;
+	bool	paused = false;
+	int     paused_at = 0;
+	bool	active = false;
 };
 
-#endif //__TIMER_H__
+#endif //__j1TIMER_H__
