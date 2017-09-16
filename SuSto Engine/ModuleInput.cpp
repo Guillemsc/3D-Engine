@@ -97,7 +97,7 @@ bool ModuleInput::PreUpdate()
 	while (SDL_PollEvent(&e))
 	{
 		// ImGui Input
-		// ImGui_ImplSdlGL2_ProcessEvent(&e);
+		ImGui_ImplSdlGL2_ProcessEvent(&e);
 
 		switch (e.type)
 		{

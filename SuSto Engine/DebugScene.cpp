@@ -5,7 +5,7 @@
 #include "PhysBody3D.h"
 #include "DebugScene.h"
 #include <cmath>
-// #include "imgui.h"
+#include "imgui.h"
 
 DebugScene::DebugScene(bool start_enabled) : Module(start_enabled)
 {
@@ -44,7 +44,7 @@ bool DebugScene::Update()
 {
 	bool ret = true;
 
-	/*ImGui::ShowTestWindow();
+	ImGui::ShowTestWindow();
 
 	ImGui::Begin("TestWindow", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
 		ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_ShowBorders |
@@ -57,7 +57,7 @@ bool DebugScene::Update()
 
 	ImGui::Text("Fps %f", App->GetFps());
 
-	ImGui::End();*/
+	ImGui::End();
 
 	Plane p(0, 10, 0, 0);
 	p.axis = true;

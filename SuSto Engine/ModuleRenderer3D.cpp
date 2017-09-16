@@ -40,7 +40,7 @@ bool ModuleRenderer3D::Awake()
 	if (ret == true)
 	{
 		LOG("Loading ImGui");
-		// ret = ImGui_ImplSdlGL2_Init(App->window->window);
+		ret = ImGui_ImplSdlGL2_Init(App->window->window);
 
 		//Use Vsync
 		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0)
@@ -130,7 +130,7 @@ bool ModuleRenderer3D::PreUpdate()
 		lights[i].Render();
 
 	// ImGui new frame
-	// ImGui_ImplSdlGL2_NewFrame(App->window->window);
+	ImGui_ImplSdlGL2_NewFrame(App->window->window);
 
 	return ret;
 }
@@ -139,7 +139,7 @@ bool ModuleRenderer3D::PreUpdate()
 bool ModuleRenderer3D::PostUpdate()
 {
 	// ImGui Draw
-	// ImGui::Render();
+	ImGui::Render();
 
 	SDL_GL_SwapWindow(App->window->window);
 	return true;
@@ -151,7 +151,7 @@ bool ModuleRenderer3D::CleanUp()
 	bool ret = true;
 
 	LOG("Destroying ImGui");
-	// ImGui_ImplSdlGL2_Shutdown();
+	ImGui_ImplSdlGL2_Shutdown();
 
 	LOG("Destroying 3D Renderer");
 	SDL_GL_DeleteContext(context);
