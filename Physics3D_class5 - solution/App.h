@@ -12,6 +12,7 @@ class ModuleAudio;
 class ModuleRenderer3D;
 class ModuleCamera3D;
 class ModulePhysics3D;
+class ModuleImGui;
 class DebugScene;
 
 class Application
@@ -48,6 +49,7 @@ public:
 	ModuleRenderer3D*  renderer3D = nullptr;
 	ModuleCamera3D*    camera = nullptr;
 	ModulePhysics3D*   physics = nullptr;
+	ModuleImGui*	   imgui = nullptr;
 	DebugScene*        debug_scene = nullptr;
 
 private:

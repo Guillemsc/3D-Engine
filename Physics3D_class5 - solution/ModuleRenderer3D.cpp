@@ -7,6 +7,7 @@
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
+#include "ModuleImGui.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -124,12 +125,16 @@ bool ModuleRenderer3D::PreUpdate()
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
+	App->imgui->NewFrame();
+
 	return ret;
 }
 
 // PostUpdate present buffer to screen
 bool ModuleRenderer3D::PostUpdate()
 {
+	App->imgui->Draw();
+
 	SDL_GL_SwapWindow(App->window->window);
 	return true;
 }
