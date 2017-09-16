@@ -19,7 +19,8 @@ ModuleRenderer3D::ModuleRenderer3D(bool start_enabled) : Module(start_enabled)
 
 // Destructor
 ModuleRenderer3D::~ModuleRenderer3D()
-{}
+{
+}
 
 // Called before render is available
 bool ModuleRenderer3D::Awake()
@@ -31,6 +32,7 @@ bool ModuleRenderer3D::Awake()
 
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
+
 	if (context == NULL)
 	{
 		LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
