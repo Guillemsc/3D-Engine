@@ -44,24 +44,7 @@ bool DebugScene::Update()
 {
 	bool ret = true;
 
-	ImGui::BulletText("Double-click on title bar to collapse window.");
-	ImGui::BulletText("Click and drag on lower right corner to resize window.");
-	ImGui::BulletText("Click and drag on any empty space to move window.");
-	ImGui::BulletText("Mouse Wheel to scroll.");
-	if (ImGui::GetIO().FontAllowUserScaling)
-		ImGui::BulletText("CTRL+Mouse Wheel to zoom window contents.");
-	ImGui::BulletText("TAB/SHIFT+TAB to cycle through keyboard editable fields.");
-	ImGui::BulletText("CTRL+Click on a slider or drag box to input text.");
-	ImGui::BulletText(
-		"While editing text:\n"
-		"- Hold SHIFT or use mouse to select text\n"
-		"- CTRL+Left/Right to word jump\n"
-		"- CTRL+A or double-click to select all\n"
-		"- CTRL+X,CTRL+C,CTRL+V clipboard\n"
-		"- CTRL+Z,CTRL+Y undo/redo\n"
-		"- ESCAPE to revert\n"
-		"- You can apply arithmetic operators +,*,/ on numerical values.\n"
-		"  Use +- to subtract.\n");
+	ImGui::ShowTestWindow();
 
 	Plane p(0, 10, 0, 0);
 	p.axis = true;
