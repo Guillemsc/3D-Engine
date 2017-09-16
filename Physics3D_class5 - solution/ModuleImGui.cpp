@@ -32,13 +32,14 @@ bool ModuleImGui::Start()
 {
 	bool ret = true;
 
-
 	return ret;
 }
 
 bool ModuleImGui::PreUpdate()
 {
 	bool ret = true;
+
+	ImGui_ImplSdlGL2_NewFrame(App->window->window);
 
 	return ret;
 }
@@ -49,6 +50,7 @@ bool ModuleImGui::Update()
 
 	ImGui::BeginMainMenuBar();
 	ImGui::Text("Hellow");
+	ImGui::EndMainMenuBar();
 
 	return ret;
 }
