@@ -51,6 +51,8 @@ bool DebugScene::Update()
 		App->EndApp();
 	}
 
+	ImGui::Text("Fps %f", App->GetFps());
+
 	Plane p(0, 10, 0, 0);
 	p.axis = true;
 	p.Render();
