@@ -81,9 +81,6 @@
     <ClInclude Include="Timer.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleImGui.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="imconfig.h">
       <Filter>Sources\ImGui</Filter>
     </ClInclude>
@@ -163,9 +160,6 @@
     </ClCompile>
     <ClCompile Include="log.cpp">
       <Filter>Sources\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleImGui.cpp">
-      <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="imgui.cpp">
       <Filter>Sources\ImGui</Filter>

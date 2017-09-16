@@ -5,7 +5,6 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModulePhysics3D.h"
-#include "ModuleImGui.h"
 #include "DebugScene.h"
 #include <list>
 
@@ -17,7 +16,6 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	renderer3D = new ModuleRenderer3D();
 	camera = new ModuleCamera3D();
 	physics = new ModulePhysics3D();
-	imgui = new ModuleImGui();
 	debug_scene = new DebugScene();
 
 	// The order of calls is very important!
@@ -30,7 +28,6 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(input);
 	AddModule(audio);
 	AddModule(physics);
-	AddModule(imgui);
 	AddModule(debug_scene);
 
 	// Renderer last

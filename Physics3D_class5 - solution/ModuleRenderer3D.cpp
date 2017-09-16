@@ -7,7 +7,8 @@
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
-#include "ModuleImGui.h"
+#include "imgui/imgui.h"
+#include "imgui_impl_sdl.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -38,6 +39,9 @@ bool ModuleRenderer3D::Awake()
 	
 	if(ret == true)
 	{
+		LOG("Loading ImGui");
+		ret = ImGui_ImplSdlGL2_Init(App->window->window);
+
 		//Use Vsync
 		if(VSYNC && SDL_GL_SetSwapInterval(1) < 0)
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
@@ -125,7 +129,8 @@ bool ModuleRenderer3D::PreUpdate()
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
-	App->imgui->NewFrame();
+	// ImGui new frame
+	ImGui_ImplSdlGL2_NewFrame(App->window->window);
 
 	return ret;
 }
@@ -133,7 +138,8 @@ bool ModuleRenderer3D::PreUpdate()
 // PostUpdate present buffer to screen
 bool ModuleRenderer3D::PostUpdate()
 {
-	App->imgui->Draw();
+	// ImGui Draw
+	ImGui::Render();
 
 	SDL_GL_SwapWindow(App->window->window);
 	return true;
@@ -144,8 +150,10 @@ bool ModuleRenderer3D::CleanUp()
 {
 	bool ret = true;
 
-	LOG("Destroying 3D Renderer");
+	LOG("Destroying ImGui");
+	ImGui_ImplSdlGL2_Shutdown();
 
+	LOG("Destroying 3D Renderer");
 	SDL_GL_DeleteContext(context);
 
 	return ret;
