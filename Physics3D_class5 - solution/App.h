@@ -27,6 +27,7 @@ public:
 
 	int GetArgc() const;
 	const char* GetArgv(int index) const;
+	void EndApp();
 	float GetDT();
 	float GetFps();
 	float GetAvgFps();
@@ -59,6 +60,7 @@ private:
 	string		       title;
 	string		       organization;
 
+	bool		       end_app = false;
 	// Engine debug info
 	int				   capped_ms = -1;
 	PerfTimer		   ptimer;

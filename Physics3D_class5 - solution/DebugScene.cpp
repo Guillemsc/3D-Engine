@@ -46,6 +46,11 @@ bool DebugScene::Update()
 
 	ImGui::ShowTestWindow();
 
+	if(ImGui::Button("Close App", ImVec2(200, 30)))
+	{
+		App->EndApp();
+	}
+
 	Plane p(0, 10, 0, 0);
 	p.axis = true;
 	p.Render();

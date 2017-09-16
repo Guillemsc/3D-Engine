@@ -80,7 +80,7 @@ bool Application::Update()
 {
 	bool ret = true;
 
-	if (input->GetWindowEvent(WE_QUIT) == true)
+	if (input->GetWindowEvent(WE_QUIT) == true || end_app)
 		return false;
 
 	PrepareUpdate();
@@ -169,6 +169,11 @@ const char * Application::GetArgv(int index) const
 		return args[index];
 	else
 		return NULL;
+}
+
+void Application::EndApp()
+{
+	end_app = true;
 }
 
 float Application::GetDT()
