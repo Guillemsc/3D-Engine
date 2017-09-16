@@ -7,6 +7,7 @@
 #include "PerfTimer.h"
 #include "Module.h"
 
+class FileSystem;
 class ModuleWindow;
 class ModuleInput;
 class ModuleAudio;
@@ -44,6 +45,7 @@ private:
 
 public:
 	//Modules
+	FileSystem*		   fs = nullptr;
 	ModuleWindow*      window = nullptr;
 	ModuleInput*       input = nullptr;
 	ModuleAudio*       audio = nullptr;

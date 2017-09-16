@@ -11,6 +11,7 @@ using namespace std;
 #include <iostream>
 
 #include "SDL\include\SDL.h"
+#include "Globals.h"
 
 class Module
 {

@@ -6,10 +6,12 @@
 #include "ModuleCamera3D.h"
 #include "ModulePhysics3D.h"
 #include "DebugScene.h"
+#include "FileSystem.h"
 #include <list>
 
 Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
+	fs = new FileSystem();
 	window = new ModuleWindow();
 	input = new ModuleInput();
 	audio = new ModuleAudio();
@@ -23,6 +25,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	// They will CleanUp() in reverse order
 
 	// Main Modules
+	AddModule(fs);
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);

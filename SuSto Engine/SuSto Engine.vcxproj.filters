@@ -13,14 +13,14 @@
     <Filter Include="Sources\Tools">
       <UniqueIdentifier>{7e4dfaf7-022c-4f7d-92aa-f3b3fa9d6248}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Helpers">
-      <UniqueIdentifier>{121f8e6b-df36-4ab0-be0d-601ddfc9e503}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Scenes">
       <UniqueIdentifier>{5c44ea0b-650a-4266-9bc1-4ea414b50e17}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources\ImGui">
       <UniqueIdentifier>{697357ba-97c7-403e-84fc-a6e79c30cb00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Components">
+      <UniqueIdentifier>{121f8e6b-df36-4ab0-be0d-601ddfc9e503}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -49,13 +49,13 @@
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="Primitive.h">
-      <Filter>Sources\Helpers</Filter>
+      <Filter>Sources\Components</Filter>
     </ClInclude>
     <ClInclude Include="Color.h">
       <Filter>Sources\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
-      <Filter>Sources\Helpers</Filter>
+      <Filter>Sources\Components</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Sources\Tools</Filter>
@@ -64,10 +64,10 @@
       <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="PhysBody3D.h">
-      <Filter>Sources\Helpers</Filter>
+      <Filter>Sources\Components</Filter>
     </ClInclude>
     <ClInclude Include="PhysVehicle3D.h">
-      <Filter>Sources\Helpers</Filter>
+      <Filter>Sources\Components</Filter>
     </ClInclude>
     <ClInclude Include="Functions.h">
       <Filter>Sources\Tools</Filter>
@@ -102,6 +102,12 @@
     <ClInclude Include="stb_truetype.h">
       <Filter>Sources\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="FileSystem.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="XMLLoader.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -132,22 +138,22 @@
       <Filter>Sources\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Primitive.cpp">
-      <Filter>Sources\Helpers</Filter>
+      <Filter>Sources\Components</Filter>
     </ClCompile>
     <ClCompile Include="Color.cpp">
       <Filter>Sources\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
-      <Filter>Sources\Helpers</Filter>
+      <Filter>Sources\Components</Filter>
     </ClCompile>
     <ClCompile Include="ModulePhysics3D.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="PhysBody3D.cpp">
-      <Filter>Sources\Helpers</Filter>
+      <Filter>Sources\Components</Filter>
     </ClCompile>
     <ClCompile Include="PhysVehicle3D.cpp">
-      <Filter>Sources\Helpers</Filter>
+      <Filter>Sources\Components</Filter>
     </ClCompile>
     <ClCompile Include="Functions.cpp">
       <Filter>Sources\Tools</Filter>
@@ -172,6 +178,12 @@
     </ClCompile>
     <ClCompile Include="imgui_impl_sdl.cpp">
       <Filter>Sources\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="XMLLoader.cpp">
+      <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
