@@ -10,7 +10,7 @@ FileSystem::FileSystem(bool enabled) : Module(enabled)
 {
 	// need to be created before Awake so other modules can use it
 	base_path = SDL_GetBasePath();
-	//PHYSFS_init(base_path);
+	PHYSFS_init(base_path);
 
 	// By default we include executable's own directory
 	// without this we won't be able to find config.xml :-(

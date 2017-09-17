@@ -8,7 +8,6 @@
 #include "DebugScene.h"
 #include "FileSystem.h"
 #include "XMLLoader.h"
-#include <list>
 
 Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {

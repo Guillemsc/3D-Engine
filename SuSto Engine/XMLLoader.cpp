@@ -16,7 +16,7 @@ bool XMLLoader::Awake()
 {
 	bool ret = true;
 
-	//LOG("Loading XML Module")
+	LOG("Loading XML Module")
 	SetName("XmlLoader");
 
 	return ret;
@@ -65,6 +65,8 @@ void XMLLoader::LoadXML(const char * path, pugi::xml_document & doc)
 bool XMLLoader::CleanUp()
 {
 	bool ret = true;
+
+	LOG("Unloading XML Module")
 
 	for (std::list<xml_doc*>::iterator it = xmls.begin(); it != xmls.end();)
 	{
