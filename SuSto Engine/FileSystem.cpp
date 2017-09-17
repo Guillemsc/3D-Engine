@@ -28,8 +28,8 @@ bool FileSystem::Awake()
 {
 	bool ret = true;
 
-	LOG("Loading File System");
-	SetName("FileSystem");
+	//LOG("Loading File System");
+	//SetName("FileSystem");
 
 	//// Ask SDL for a write dir
 	//write_path = SDL_GetPrefPath("organization", "title");

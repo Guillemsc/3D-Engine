@@ -7,11 +7,13 @@
 #include "ModulePhysics3D.h"
 #include "DebugScene.h"
 #include "FileSystem.h"
+#include "XMLLoader.h"
 #include <list>
 
 Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
 	fs = new FileSystem();
+	xml = new XMLLoader();
 	window = new ModuleWindow();
 	input = new ModuleInput();
 	audio = new ModuleAudio();
@@ -26,6 +28,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 
 	// Main Modules
 	AddModule(fs);
+	AddModule(xml);
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
@@ -140,6 +143,8 @@ bool Application::CleanUp()
 	for (list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rend(); it++)
 	{
 		ret = (*it)->CleanUp();
+
+		if (!ret) return false;
 	}
 
 	return ret;

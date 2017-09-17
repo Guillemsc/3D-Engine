@@ -10,11 +10,11 @@ struct xml_doc
 	string				path;
 };
 
-class j1XMLLoader : public Module
+class XMLLoader : public Module
 {
 public:
-	j1XMLLoader(bool enabled = true);
-	~j1XMLLoader();
+	XMLLoader(bool enabled = true);
+	~XMLLoader();
 
 	bool Awake();
 	void LoadXML(const char* path, pugi::xml_document& doc);

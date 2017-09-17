@@ -53,6 +53,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -97,6 +99,8 @@
     <ClInclude Include="PhysBody3D.h" />
     <ClInclude Include="PhysVehicle3D.h" />
     <ClInclude Include="Primitive.h" />
+    <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
+    <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="stb_rect_pack.h" />
     <ClInclude Include="stb_textedit.h" />
     <ClInclude Include="stb_truetype.h" />
@@ -127,6 +131,7 @@
     <ClCompile Include="PhysBody3D.cpp" />
     <ClCompile Include="PhysVehicle3D.cpp" />
     <ClCompile Include="Primitive.cpp" />
+    <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="XMLLoader.cpp" />
   </ItemGroup>

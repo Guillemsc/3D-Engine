@@ -8,6 +8,7 @@
 #include "Module.h"
 
 class FileSystem;
+class XMLLoader;
 class ModuleWindow;
 class ModuleInput;
 class ModuleAudio;
@@ -35,7 +36,6 @@ public:
 	float GetAvgFps();
 	int GetFramesSinceStart();
 
-
 private:
 	void AddModule(Module* mod);
 	void PrepareUpdate();
@@ -46,6 +46,7 @@ private:
 public:
 	//Modules
 	FileSystem*		   fs = nullptr;
+	XMLLoader*		   xml = nullptr;
 	ModuleWindow*      window = nullptr;
 	ModuleInput*       input = nullptr;
 	ModuleAudio*       audio = nullptr;
