@@ -63,6 +63,8 @@ bool EditorUI::Update()
 			ImGui::MenuItem("About SuSto Engine", NULL, &show_app_about);
 			ImGui::EndMenu();
 		}
+
+		ImGui::Text("Fps: %f", App->GetFps());
 	
 
 		ImGui::EndMainMenuBar();
@@ -76,6 +78,7 @@ bool EditorUI::Update()
 		ImGui::Separator();
 		ImGui::Text("By Guillem Sunyer and Simon Stoyanov.");
 		ImGui::Text("SuSto Engine is licensed under the MIT License, see LICENSE for more information.");
+		ImGui::Text("SimonLaXupa.");
 		ImGui::End();
 	}
 	
@@ -285,8 +288,6 @@ void EditorUI::LoadStyle(char * name)
 		style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
 		style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.92f, 0.31f, 0.16f, 0.80f);
 		style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.92f, 0.31f, 0.16f, 0.80f);
-
-
 	}
 
 	else if ("blue_yellow")
@@ -319,19 +320,19 @@ void EditorUI::LoadStyle(char * name)
 		style->Colors[ImGuiCol_MenuBarBg] = ImVec4(0.21f, 0.29f, 0.36f, 1.00f);
 		style->Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.21f, 0.29f, 0.36f, 1.00f);
 		style->Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.13f, 0.52f, 0.94f, 1.00f);
-		style->Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
-		style->Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.87f, 0.52f, 0.00f, 1.00f);
+		style->Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
+		style->Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
 		style->Colors[ImGuiCol_ComboBg] = ImVec4(0.13f, 0.52f, 0.94f, 1.00f);
-		style->Colors[ImGuiCol_CheckMark] = ImVec4(0.87f, 0.52f, 0.00f, 1.00f);
+		style->Colors[ImGuiCol_CheckMark] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
 		style->Colors[ImGuiCol_SliderGrab] = ImVec4(1.00f, 1.00f, 1.00f, 0.30f);
-		style->Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.87f, 0.52f, 0.00f, 1.00f);
-		style->Colors[ImGuiCol_Button] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
-		style->Colors[ImGuiCol_ButtonHovered] = ImVec4(0.87f, 0.52f, 0.00f, 1.00f);
+		style->Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
+		style->Colors[ImGuiCol_Button] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
+		style->Colors[ImGuiCol_ButtonHovered] = ImVec4(0.81f, 0.49f, 0.00f, 1.00f);
 		style->Colors[ImGuiCol_ButtonActive] = ImVec4(0.87f, 0.54f, 0.05f, 1.00f);
 		style->Colors[ImGuiCol_Header] = ImVec4(0.11f, 0.43f, 0.77f, 1.00f);
-		style->Colors[ImGuiCol_HeaderHovered] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
+		style->Colors[ImGuiCol_HeaderHovered] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
 		style->Colors[ImGuiCol_HeaderActive] = ImVec4(0.88f, 0.53f, 0.00f, 1.00f);
-		style->Colors[ImGuiCol_Separator] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
+		style->Colors[ImGuiCol_Separator] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
 		style->Colors[ImGuiCol_SeparatorHovered] = ImVec4(0.90f, 0.55f, 0.02f, 1.00f);
 		style->Colors[ImGuiCol_SeparatorActive] = ImVec4(0.89f, 0.54f, 0.01f, 1.00f);
 		style->Colors[ImGuiCol_ResizeGrip] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
@@ -343,12 +344,8 @@ void EditorUI::LoadStyle(char * name)
 		style->Colors[ImGuiCol_PlotLines] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 		style->Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.14f, 0.50f, 0.88f, 1.00f);
 		style->Colors[ImGuiCol_PlotHistogram] = ImVec4(0.14f, 0.50f, 0.88f, 1.00f);
-		style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
-		style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
-		style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
-
-
-
-
+		style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
+		style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
+		style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
 	}
 }
