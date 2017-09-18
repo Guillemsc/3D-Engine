@@ -8,6 +8,7 @@
 #include "DebugScene.h"
 #include "FileSystem.h"
 #include "XMLLoader.h"
+#include "EditorUI.h"
 
 Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
@@ -20,6 +21,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	camera = new ModuleCamera3D();
 	physics = new ModulePhysics3D();
 	debug_scene = new DebugScene();
+	editorUI = new EditorUI();
 
 	// The order of calls is very important!
 	// Modules will Awake() Start() and Update in this order
@@ -33,6 +35,8 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(input);
 	AddModule(audio);
 	AddModule(physics);
+	AddModule(editorUI);
+
 	AddModule(debug_scene);
 
 	// Renderer last

@@ -2,8 +2,7 @@
 #include "App.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleInput.h"
-#include "imgui.h"
-#include "imgui_impl_sdl.h"
+#include "EditorUI.h"
 
 #define MAX_KEYS 300
 
@@ -96,8 +95,7 @@ bool ModuleInput::PreUpdate()
 	SDL_Event e;
 	while (SDL_PollEvent(&e))
 	{
-		// ImGui Input
-		ImGui_ImplSdlGL2_ProcessEvent(&e);
+		App->editorUI->ImGuiInput(&e);
 
 		switch (e.type)
 		{

@@ -1,5 +1,5 @@
-#ifndef __j1FILESYSTEM_H__
-#define __j1FILESYSTEM_H__
+#ifndef __FILESYSTEM_H__
+#define __FILESYSTEM_H__
 
 #include "Module.h"
 
