@@ -1,5 +1,6 @@
 #include "Globals.h"
 #include "App.h"
+#include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleInput.h"
 #include "EditorUI.h"
@@ -122,7 +123,9 @@ bool ModuleInput::PreUpdate()
 				break;
 
 				if (e.window.event == SDL_WINDOWEVENT_RESIZED)
+				{
 					App->renderer3D->OnResize(e.window.data1, e.window.data2);
+				}
 			}
 			break;
 
@@ -140,8 +143,8 @@ bool ModuleInput::PreUpdate()
 		}
 	}
 
-	if (quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KEY_UP)
-		return UPDATE_STOP;
+	if (keyboard[SDL_SCANCODE_ESCAPE] == KEY_UP)
+		/*App->EndApp();*/
 
 	return ret;
 }

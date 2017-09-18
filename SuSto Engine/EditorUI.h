@@ -13,6 +13,7 @@ public:
 
 	bool Awake();
 	bool PreUpdate();
+	bool Update();
 	bool PostUpdate();
 	bool CleanUp();
 
@@ -23,6 +24,7 @@ public:
 public:
 
 private:
+	bool show_app_about = false;
 
 };
 

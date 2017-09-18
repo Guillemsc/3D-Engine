@@ -19,6 +19,11 @@ bool EditorUI::Awake()
 	LOG("Loading ImGui");
 	ret = ImGui_ImplSdlGL2_Init(App->window->window);
 
+	// Styles
+	//	-default
+	//	-black_white
+	//  -gray
+	//  -black_orange
 	LoadStyle("black_orange");
 
 	return ret;
@@ -30,6 +35,47 @@ bool EditorUI::PreUpdate()
 
 	// ImGui new frame
 	ImGui_ImplSdlGL2_NewFrame(App->window->window);
+
+	return ret;
+}
+
+bool EditorUI::Update()
+{
+	bool ret = true;
+
+	int win_width, win_height;
+	App->window->GetWindowSize(win_width, win_height);
+
+	ImGuiStyle * style = &ImGui::GetStyle();
+
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("Menu"))
+		{
+			if (ImGui::MenuItem("Quit", "Alt+F4")) { App->EndApp(); }
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Help"))
+		{
+			ImGui::MenuItem("About SuSto Engine", NULL, &show_app_about);
+			ImGui::EndMenu();
+		}
+	
+
+		ImGui::EndMainMenuBar();
+	}
+
+	if (show_app_about)
+	{
+		ImGui::Begin("About SuSto Engine", &show_app_about, ImGuiWindowFlags_AlwaysAutoResize);
+		ImGui::Text("SuSto Engine.");
+		ImGui::Separator();
+		ImGui::Text("By Guillem Sunyer and Simon Stoyanov.");
+		ImGui::Text("SuSto Engine is licensed under the MIT License, see LICENSE for more information.");
+		ImGui::End();
+	}
+	
 
 	return ret;
 }
@@ -62,12 +108,6 @@ void EditorUI::ImGuiInput(SDL_Event* ev)
 
 void EditorUI::LoadStyle(char * name)
 {
-	// Styles
-	//	-default
-	//	-black_white
-	//  -gray
-	//  -black_orange
-
 	ImGuiStyle * style = &ImGui::GetStyle();
 
 	if (name == "default")

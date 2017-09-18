@@ -19,6 +19,7 @@ public:
 	bool CleanUp();
 
 	void SetTitle(const char* title);
+	void GetWindowSize(int &width, int &height);
 
 public:
 	//The window we'll be rendering to

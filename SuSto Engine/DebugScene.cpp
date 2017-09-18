@@ -46,18 +46,18 @@ bool DebugScene::Update()
 
 	ImGui::ShowTestWindow();
 
-	ImGui::Begin("TestWindow", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
-		ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_ShowBorders |
-		ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar);
+	//ImGui::Begin("TestWindow", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+	//	ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_ShowBorders |
+	//	ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar);
 
-	if (ImGui::Button("Close App", ImVec2(200, 30)))
-	{
-		App->EndApp();
-	}
+	//if (ImGui::Button("Close App", ImVec2(200, 30)))
+	//{
+	//	App->EndApp();
+	//}
 
-	ImGui::Text("Fps %f", App->GetFps());
+	//ImGui::Text("Fps %f", App->GetFps());
 
-	ImGui::End();
+	//ImGui::End();
 
 	Plane p(0, 10, 0, 0);
 	p.axis = true;
