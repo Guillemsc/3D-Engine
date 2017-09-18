@@ -18,6 +18,8 @@ public:
 
 	void ImGuiInput(SDL_Event* ev);
 
+	void LoadStyle(char* name);
+
 public:
 
 private:
