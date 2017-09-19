@@ -41,6 +41,8 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 
 	// Renderer last
 	AddModule(renderer3D);
+
+	SetDebugMode(true);
 }
 
 Application::~Application()
@@ -209,6 +211,16 @@ float Application::GetAvgFps()
 int Application::GetFramesSinceStart()
 {
 	return frame_count;
+}
+
+bool Application::GetDebugMode()
+{
+	return debug_mode;
+}
+
+void Application::SetDebugMode(bool set)
+{
+	debug_mode = set;
 }
 
 void Application::GoToBrowser(string web)

@@ -1,6 +1,8 @@
 #include "EditorUI.h"
 #include "ModuleWindow.h"
 #include "App.h"
+#include "Primitive.h"
+#include "GeometryMath.h"
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 
@@ -49,6 +51,8 @@ bool EditorUI::Update()
 
 	ImGuiStyle * style = &ImGui::GetStyle();
 
+	//ImGui::ShowTestWindow();
+
 	// Main Window
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -62,6 +66,13 @@ bool EditorUI::Update()
 		{
 			ImGui::MenuItem("About SuSto Engine", NULL, &show_app_about);
 			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
+		{
+			ImGui::MenuItem("Geometry math test", NULL, &geometry_math_test);
+			ImGui::EndMenu();
+			dist = 6;
 		}
 
 		ImGui::Text("Fps: %f", App->GetFps());
@@ -85,6 +96,12 @@ bool EditorUI::Update()
 			App->GoToBrowser("https://github.com/Guillemsc/3D-Engine/releases");
 		}
 		ImGui::End();
+	}
+
+	// Geometry debug
+	if (geometry_math_test)
+	{
+		GeometryMathTest();
 	}
 	
 
@@ -115,6 +132,108 @@ void EditorUI::ImGuiInput(SDL_Event* ev)
 {
 	// ImGui Input
 	ImGui_ImplSdlGL2_ProcessEvent(ev);
+}
+
+void EditorUI::GeometryMathTest()
+{
+	ImGui::Begin("Geometry Math test", &geometry_math_test, ImGuiWindowFlags_AlwaysAutoResize);
+
+	ImGui::Text("Contact: %s", contact ? "Yes" : "No");
+
+	ImGui::Separator();
+
+	ImGui::InputFloat3("Position", vec3a);
+	ImGui::SliderFloat("Distance", &dist, 0, 10);
+
+	if (ImGui::Button("Sphere - Sphere"))
+	{
+		contact_sphere_sphere = !contact_sphere_sphere;
+	}
+
+	if (ImGui::Button("Sphere - Capsule"))
+	{
+		contact_sphere_capsules = !contact_sphere_capsules;
+	}
+
+	if (ImGui::Button("AABB - AABB"))
+	{
+		contact_aabb_aabb = !contact_aabb_aabb;
+	}
+
+	if (ImGui::Button("OBB - OBB"))
+	{
+		contact_obb_obb = !contact_obb_obb;
+	}
+
+	if (ImGui::Button("AABB - Ray"))
+	{
+		contact_aabb_ray = !contact_aabb_ray;
+	}
+
+	math::float3 p1 = { vec3a[0] - dist / 2, vec3a[1], vec3a[2] };
+	math::float3 p2 = { vec3a[0] + dist / 2, vec3a[1], vec3a[2] };
+	contact = false;
+
+	if (contact_sphere_sphere)
+	{
+		// Sphere 1
+		PSphere s1(2);
+		s1.color.Set(255, 0, 0);
+		s1.SetPos(p1.x, p1.y, p1.z);
+		s1.Render();
+
+		Sphere sph1(p1, 2);
+
+		// Sphere 2
+		PSphere s2(2);
+		s2.color.Set(0, 255, 0);
+		s2.SetPos(p2.x, p2.y, p2.z);
+		s2.Render();
+
+		Sphere sph2(p2, 2);
+
+		if (sph1.Intersects(sph2))
+			contact = true;
+	}
+
+	if (contact_sphere_capsules)
+	{
+		// Sphere 1
+		PSphere s1(2);
+		s1.color.Set(255, 0, 0);
+		s1.SetPos(p1.x, p1.y, p1.z);
+		s1.Render();
+
+		Sphere sph1(p1, 2);
+
+		// Sphere 2
+		PCube s2(2, 2, 2);
+		s2.color.Set(0, 255, 0);
+		s2.SetPos(p2.x, p2.y, p2.z);
+		s2.Render();
+
+		Capsule c(float3(p2.x, p2.y - 2, p2.z), float3(p2.x, p2.y, p2.z), 1.5f);
+
+		if (sph1.Intersects(c))
+			contact = true;
+	}
+
+	if (contact_aabb_aabb)
+	{
+
+	}
+
+	if (contact_obb_obb)
+	{
+
+	}
+
+	if (contact_aabb_ray)
+	{
+
+	}
+
+	ImGui::End();
 }
 
 void EditorUI::LoadStyle(char * name)

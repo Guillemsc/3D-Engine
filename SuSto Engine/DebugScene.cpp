@@ -6,6 +6,9 @@
 #include "DebugScene.h"
 #include <cmath>
 #include "imgui.h"
+#include "Primitive.h"
+#include "GeometryMath.h"
+#include "Globals.h"
 
 DebugScene::DebugScene(bool start_enabled) : Module(start_enabled)
 {
@@ -44,24 +47,10 @@ bool DebugScene::Update()
 {
 	bool ret = true;
 
-	ImGui::ShowTestWindow();
-
-	//ImGui::Begin("TestWindow", 0, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
-	//	ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_ShowBorders |
-	//	ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar);
-
-	//if (ImGui::Button("Close App", ImVec2(200, 30)))
-	//{
-	//	App->EndApp();
-	//}
-
-	//ImGui::Text("Fps %f", App->GetFps());
-
-	//ImGui::End();
-
 	PPlane p(0, 10, 0, 0);
 	p.axis = true;
 	p.Render();
+
 
 	return ret;
 }

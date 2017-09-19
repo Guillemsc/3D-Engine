@@ -38,6 +38,8 @@ public:
 	float GetFps();
 	float GetAvgFps();
 	int GetFramesSinceStart();
+	bool GetDebugMode();
+	void SetDebugMode(bool set);
 
 	void GoToBrowser(string web);
 
@@ -62,7 +64,7 @@ public:
 	DebugScene*        debug_scene = nullptr;
 
 private:
-	std::list<Module*>      modules;
+	std::list<Module*> modules;
 
 	int				   argc;
 	char**			   args;
@@ -71,7 +73,9 @@ private:
 	std::string		   organization;
 
 	bool		       end_app = false;
+
 	// Engine debug info
+	bool			   debug_mode = false;
 	int				   capped_ms = -1;
 	PerfTimer		   ptimer;
 	int				   frame_count = 0;
