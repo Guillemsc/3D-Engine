@@ -16,7 +16,7 @@ bool EditorUI::Awake()
 {
 	bool ret = true;
 
-	LOG("Loading ImGui");
+	LOG_OUTPUT("Loading ImGui");
 	ret = ImGui_ImplSdlGL2_Init(App->window->window);
 
 	// Styles
@@ -105,7 +105,7 @@ bool EditorUI::CleanUp()
 {
 	bool ret = true;
 
-	LOG("Destroying ImGui");
+	LOG_OUTPUT("Destroying ImGui");
 	ImGui_ImplSdlGL2_Shutdown();
 
 	return ret;

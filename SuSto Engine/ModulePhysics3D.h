@@ -27,9 +27,9 @@ public:
 	bool PostUpdate();
 	bool CleanUp();
 
-	PhysBody3D* AddBody(const Sphere& sphere, float mass = 1.0f);
-	PhysBody3D* AddBody(const Cube& cube, float mass = 1.0f, Module* listener = nullptr, bool sensor = false);
-	PhysBody3D* AddBody(const Cylinder& cylinder, float mass = 1.0f, Module* listener = nullptr, bool sensor = false);
+	PhysBody3D* AddBody(const PSphere& sphere, float mass = 1.0f);
+	PhysBody3D* AddBody(const PCube& cube, float mass = 1.0f, Module* listener = nullptr, bool sensor = false);
+	PhysBody3D* AddBody(const PCylinder& cylinder, float mass = 1.0f, Module* listener = nullptr, bool sensor = false);
 	PhysVehicle3D* AddVehicle(const VehicleInfo& info, Module* listener = nullptr);
 
 	void AddConstraintP2P(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB);
@@ -72,6 +72,6 @@ public:
 	void UnloadPhysBody(PhysBody3D* pb);
 
 	DebugDrawModes mode;
-	Line line;
+	PLine line;
 	Primitive point;
 };

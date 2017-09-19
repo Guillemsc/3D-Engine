@@ -51,7 +51,7 @@ bool FileSystem::Awake()
 // Called before quitting
 bool FileSystem::CleanUp()
 {
-	LOG("Freeing File System subsystem");
+	LOG_OUTPUT("Freeing File System subsystem");
 	return true;
 }
 

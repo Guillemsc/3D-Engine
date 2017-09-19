@@ -25,7 +25,7 @@ bool ModuleCamera3D::Awake()
 {
 	bool ret = true;
 
-	LOG("Loading Camera3D");
+	LOG_OUTPUT("Loading Camera3D");
 	SetName("camera3D");
 
 	return ret;
@@ -36,7 +36,7 @@ bool ModuleCamera3D::Start()
 {
 	bool ret = true;
 
-	LOG("Setting up the camera");
+	LOG_OUTPUT("Setting up the camera");
 
 	return ret;
 }
@@ -44,7 +44,7 @@ bool ModuleCamera3D::Start()
 // -----------------------------------------------------------------
 bool ModuleCamera3D::CleanUp()
 {
-	LOG("Cleaning camera");
+	LOG_OUTPUT("Cleaning camera");
 
 	return true;
 }

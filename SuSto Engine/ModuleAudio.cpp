@@ -16,14 +16,14 @@ bool ModuleAudio::Awake()
 {
 	bool ret = true;
 
-	LOG("Loading Audio Mixer");
+	LOG_OUTPUT("Loading Audio Mixer");
 	SetName("Audio");
 
 	SDL_Init(0);
 
 	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 	{
-		LOG("SDL_INIT_AUDIO could not initialize! SDL_Error: %s\n", SDL_GetError());
+		LOG_OUTPUT("SDL_INIT_AUDIO could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 
@@ -33,14 +33,14 @@ bool ModuleAudio::Awake()
 
 	if ((init & flags) != flags)
 	{
-		LOG("Could not initialize Mixer lib. Mix_Init: %s", Mix_GetError());
+		LOG_OUTPUT("Could not initialize Mixer lib. Mix_Init: %s", Mix_GetError());
 		ret = false;
 	}
 
 	//Initialize SDL_mixer
 	if (Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 1024) < 0)
 	{
-		LOG("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+		LOG_OUTPUT("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
 		ret = false;
 	}
 
@@ -52,7 +52,7 @@ bool ModuleAudio::CleanUp()
 {
 	bool ret = true;
 
-	LOG("Freeing sound FX, closing Mixer and Audio subsystem");
+	LOG_OUTPUT("Freeing sound FX, closing Mixer and Audio subsystem");
 
 	if (music != nullptr)
 	{
@@ -95,7 +95,7 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time)
 
 	if (music == NULL)
 	{
-		LOG("Cannot load music %s. Mix_GetError(): %s\n", path, Mix_GetError());
+		LOG_OUTPUT("Cannot load music %s. Mix_GetError(): %s\n", path, Mix_GetError());
 		ret = false;
 	}
 	else
@@ -104,7 +104,7 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time)
 		{
 			if (Mix_FadeInMusic(music, -1, (int)(fade_time * 1000.0f)) < 0)
 			{
-				LOG("Cannot fade in music %s. Mix_GetError(): %s", path, Mix_GetError());
+				LOG_OUTPUT("Cannot fade in music %s. Mix_GetError(): %s", path, Mix_GetError());
 				ret = false;
 			}
 		}
@@ -112,13 +112,13 @@ bool ModuleAudio::PlayMusic(const char* path, float fade_time)
 		{
 			if (Mix_PlayMusic(music, -1) < 0)
 			{
-				LOG("Cannot play in music %s. Mix_GetError(): %s", path, Mix_GetError());
+				LOG_OUTPUT("Cannot play in music %s. Mix_GetError(): %s", path, Mix_GetError());
 				ret = false;
 			}
 		}
 	}
 
-	LOG("Successfully playing %s", path);
+	LOG_OUTPUT("Successfully playing %s", path);
 	return ret;
 }
 
@@ -131,7 +131,7 @@ unsigned int ModuleAudio::LoadFx(const char* path)
 
 	if (chunk == NULL)
 	{
-		LOG("Cannot load wav %s. Mix_GetError(): %s", path, Mix_GetError());
+		LOG_OUTPUT("Cannot load wav %s. Mix_GetError(): %s", path, Mix_GetError());
 	}
 	else
 	{

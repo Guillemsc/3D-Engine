@@ -20,7 +20,7 @@ Application* App = nullptr;
 
 int main(int argc, char ** argv)
 {
-	LOG("Engine starting: '%s'", TITLE);
+	LOG_OUTPUT("Engine starting: '%s'", TITLE);
 
 	int main_return = EXIT_FAILURE;
 	MainState state = MainState::MAIN_CREATION;
@@ -31,17 +31,17 @@ int main(int argc, char ** argv)
 		{
 		case MainState::MAIN_CREATION:
 
-			LOG("CREATION PHASE ===============================");
+			LOG_OUTPUT("CREATION PHASE ===============================");
 			App = new Application(argc, argv);
 			state = MainState::MAIN_AWAKE;
 			break;
 
 		case MainState::MAIN_AWAKE:
 
-			LOG("AWAKE PHASE ===============================");
+			LOG_OUTPUT("AWAKE PHASE ===============================");
 			if (App->Awake() == false)
 			{
-				LOG("Application Awake exits with ERROR");
+				LOG_OUTPUT("Application Awake exits with ERROR");
 				state = MainState::MAIN_EXIT;
 			}
 			else
@@ -53,16 +53,16 @@ int main(int argc, char ** argv)
 
 		case MainState::MAIN_START:
 
-			LOG("START PHASE ===============================");
+			LOG_OUTPUT("START PHASE ===============================");
 			if (App->Start() == false)
 			{
-				LOG("Application Start exits with ERROR");
+				LOG_OUTPUT("Application Start exits with ERROR");
 				state = MainState::MAIN_EXIT;
 			}
 			else
 			{
 				state = MainState::MAIN_UPDATE;
-				LOG("UPDATE PHASE ===============================");
+				LOG_OUTPUT("UPDATE PHASE ===============================");
 			}
 
 			break;
@@ -78,10 +78,10 @@ int main(int argc, char ** argv)
 
 		case MainState::MAIN_CLEAN:
 
-			LOG("CLEANUP PHASE ===============================");
+			LOG_OUTPUT("CLEANUP PHASE ===============================");
 			if (App->CleanUp() == false)
 			{
-				LOG("Application CleanUp exits with ERROR");
+				LOG_OUTPUT("Application CleanUp exits with ERROR");
 			}
 			else
 				main_return = EXIT_SUCCESS;
@@ -94,6 +94,6 @@ int main(int argc, char ** argv)
 	}
 
 	delete App;
-	LOG("Exiting game '%s'...\n", TITLE);
+	LOG_OUTPUT("Exiting game '%s'...\n", TITLE);
 	return main_return;
 }

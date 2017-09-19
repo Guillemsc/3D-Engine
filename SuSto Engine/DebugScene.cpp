@@ -59,7 +59,7 @@ bool DebugScene::Update()
 
 	//ImGui::End();
 
-	Plane p(0, 10, 0, 0);
+	PPlane p(0, 10, 0, 0);
 	p.axis = true;
 	p.Render();
 

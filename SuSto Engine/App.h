@@ -7,7 +7,7 @@
 #include "PerfTimer.h"
 #include "Module.h"
 #include "Math.h" // Includes everything MathGeoLib related
-#include "MathGeoLib\scr\Algorithm\Random\LCG.h" // Includes random number generators
+#include "MathGeoLib\include\Algorithm\Random\LCG.h" // Includes random number generators
 
 class FileSystem;
 class XMLLoader;

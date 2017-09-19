@@ -25,14 +25,14 @@ bool ModuleInput::Awake()
 {
 	bool ret = true;
 
-	LOG("Init SDL input event system");
+	LOG_OUTPUT("Init SDL input event system");
 	SetName("Input");
 
 	SDL_Init(0);
 
 	if (SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
-		LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
+		LOG_OUTPUT("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 
@@ -154,7 +154,7 @@ bool ModuleInput::CleanUp()
 {
 	bool ret = true;
 
-	LOG("Quitting SDL input event subsystem");
+	LOG_OUTPUT("Quitting SDL input event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 
 	return ret;

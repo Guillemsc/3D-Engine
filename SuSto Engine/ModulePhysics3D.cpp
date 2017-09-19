@@ -38,8 +38,8 @@ ModulePhysics3D::~ModulePhysics3D()
 bool ModulePhysics3D::Awake()
 {
 	bool ret = true;
-
-	LOG("Creating 3D Physics simulation");
+	
+	LOG_OUTPUT("Creating 3D Physics simulation");
 	SetName("Physics3D");
 
 	return ret;
@@ -50,7 +50,7 @@ bool ModulePhysics3D::Start()
 {
 	bool ret = true;
 
-	LOG("Creating Physics environment");
+	LOG_OUTPUT("Creating Physics environment");
 
 	world = new btDiscreteDynamicsWorld(dispatcher, broad_phase, solver, collision_conf);
 	world->setDebugDrawer(debug_draw);
@@ -147,7 +147,7 @@ bool ModulePhysics3D::CleanUp()
 {
 	bool ret = true;
 
-	LOG("Destroying 3D Physics simulation");
+	LOG_OUTPUT("Destroying 3D Physics simulation");
 
 	// Remove from the world all collision bodies
 	for (int i = world->getNumCollisionObjects() - 1; i >= 0; i--)
@@ -199,7 +199,7 @@ bool ModulePhysics3D::CleanUp()
 }
 
 // ---------------------------------------------------------
-PhysBody3D* ModulePhysics3D::AddBody(const Sphere& sphere, float mass)
+PhysBody3D* ModulePhysics3D::AddBody(const PSphere& sphere, float mass)
 {
 	btCollisionShape* colShape = new btSphereShape(sphere.radius);
 	shapes.push_back(colShape);
@@ -227,7 +227,7 @@ PhysBody3D* ModulePhysics3D::AddBody(const Sphere& sphere, float mass)
 
 
 // ---------------------------------------------------------
-PhysBody3D* ModulePhysics3D::AddBody(const Cube& cube, float mass, Module* listener, bool sensor)
+PhysBody3D* ModulePhysics3D::AddBody(const PCube& cube, float mass, Module* listener, bool sensor)
 {
 	btCollisionShape* colShape = new btBoxShape(btVector3(cube.size.x*0.5f, cube.size.y*0.5f, cube.size.z*0.5f));
 	shapes.push_back(colShape);
@@ -261,7 +261,7 @@ PhysBody3D* ModulePhysics3D::AddBody(const Cube& cube, float mass, Module* liste
 }
 
 // ---------------------------------------------------------
-PhysBody3D* ModulePhysics3D::AddBody(const Cylinder& cylinder, float mass, Module* listener, bool sensor)
+PhysBody3D* ModulePhysics3D::AddBody(const PCylinder& cylinder, float mass, Module* listener, bool sensor)
 {
 	btCollisionShape* colShape = new btCylinderShapeX(btVector3(cylinder.height*0.5f, cylinder.radius, 0.0f));
 	shapes.push_back(colShape);
@@ -456,12 +456,12 @@ void DebugDrawer::drawContactPoint(const btVector3& PointOnB, const btVector3& n
 
 void DebugDrawer::reportErrorWarning(const char* warningString)
 {
-	LOG("Bullet warning: %s", warningString);
+	LOG_OUTPUT("Bullet warning: %s", warningString);
 }
 
 void DebugDrawer::draw3dText(const btVector3& location, const char* textString)
 {
-	LOG("Bullet draw text: %s", textString);
+	LOG_OUTPUT("Bullet draw text: %s", textString);
 }
 
 void DebugDrawer::setDebugMode(int debugMode)

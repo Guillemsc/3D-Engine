@@ -29,6 +29,8 @@ MATH_BEGIN_NAMESPACE
 /// A tick is the basic unit of the high-resolution timer.
 typedef unsigned long long tick_t;
 
+#include <time.h>
+
 /** @brief High-resolution timing and system time.
 
 	Gives out timing information in various forms. Use this rather than
