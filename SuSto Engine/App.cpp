@@ -211,6 +211,11 @@ int Application::GetFramesSinceStart()
 	return frame_count;
 }
 
+void Application::GoToBrowser(string web)
+{
+	ShellExecute(NULL, "open", web.c_str(), NULL, NULL, SW_SHOWMAXIMIZED);
+}
+
 void Application::AddModule(Module* mod)
 {
 	modules.push_back(mod);

@@ -78,6 +78,12 @@ bool EditorUI::Update()
 		ImGui::Separator();
 		ImGui::Text("By Guillem Sunyer and Simon Stoyanov.");
 		ImGui::Text("SuSto Engine is licensed under the MIT License, see LICENSE for more information.");
+		if (ImGui::Button("Github Repository")) {
+			App->GoToBrowser("https://github.com/Guillemsc/3D-Engine");
+		}
+		if (ImGui::Button("Download Latest Release")) {
+			App->GoToBrowser("https://github.com/Guillemsc/3D-Engine/releases");
+		}
 		ImGui::End();
 	}
 	

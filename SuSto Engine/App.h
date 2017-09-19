@@ -37,6 +37,8 @@ public:
 	float GetAvgFps();
 	int GetFramesSinceStart();
 
+	void GoToBrowser(string web);
+
 private:
 	void AddModule(Module* mod);
 	void PrepareUpdate();
