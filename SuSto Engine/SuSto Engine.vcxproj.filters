@@ -309,7 +309,7 @@
     <ClInclude Include="MathGeoLib\include\Time\Clock.h">
       <Filter>Sources\Components\MathGeoLib\Time</Filter>
     </ClInclude>
-    <ClInclude Include="Math.h">
+    <ClInclude Include="GeometryMath.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
   </ItemGroup>
