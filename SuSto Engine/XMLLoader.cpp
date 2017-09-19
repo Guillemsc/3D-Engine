@@ -40,11 +40,9 @@ void XMLLoader::LoadXML(const char * path, pugi::xml_document & doc)
 
 	if(!exist)
 	{
-		char* buf = NULL;
-		int size = App->fs->Load(path, &buf);
-		pugi::xml_parse_result result = doc.load_buffer(buf, size);
+		pugi::xml_parse_result result = doc.load_file(path);
 
-		if (buf == NULL)
+		if (!result)
 		{
 			LOG_OUTPUT("Error loading '%s', probably wrong XML file name", path);
 		}
@@ -57,8 +55,6 @@ void XMLLoader::LoadXML(const char * path, pugi::xml_document & doc)
 
 			xmls.push_back(new_doc);
 		}
-
-		RELEASE(buf);
 	}
 }
 
