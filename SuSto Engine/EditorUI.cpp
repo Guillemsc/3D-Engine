@@ -78,7 +78,6 @@ bool EditorUI::Update()
 		ImGui::Separator();
 		ImGui::Text("By Guillem Sunyer and Simon Stoyanov.");
 		ImGui::Text("SuSto Engine is licensed under the MIT License, see LICENSE for more information.");
-		ImGui::Text("SimonLaXupa.");
 		ImGui::End();
 	}
 	
