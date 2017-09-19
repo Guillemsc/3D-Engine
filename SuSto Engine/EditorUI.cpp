@@ -53,7 +53,7 @@ bool EditorUI::Update()
 
 	//ImGui::ShowTestWindow();
 
-	// Main Window
+	// Main Menu -------------------------
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("Menu"))
@@ -80,25 +80,15 @@ bool EditorUI::Update()
 
 		ImGui::EndMainMenuBar();
 	}
+	// -------------------------------------
 
 	// About
 	if (show_app_about)
 	{
-		ImGui::Begin("About SuSto Engine", &show_app_about, ImGuiWindowFlags_AlwaysAutoResize);
-		ImGui::Text("SuSto Engine. v.0.1");
-		ImGui::Separator();
-		ImGui::Text("By Guillem Sunyer and Simon Stoyanov.");
-		ImGui::Text("SuSto Engine is licensed under the MIT License, see LICENSE for more information.");
-		if (ImGui::Button("Github Repository")) {
-			App->GoToBrowser("https://github.com/Guillemsc/3D-Engine");
-		}
-		if (ImGui::Button("Download Latest Release")) {
-			App->GoToBrowser("https://github.com/Guillemsc/3D-Engine/releases");
-		}
-		ImGui::End();
+		About();
 	}
 
-	// Geometry debug
+	// Geometry math test debug
 	if (show_geometry_math_test)
 	{
 		GeometryMathTest();
@@ -132,6 +122,22 @@ void EditorUI::ImGuiInput(SDL_Event* ev)
 {
 	// ImGui Input
 	ImGui_ImplSdlGL2_ProcessEvent(ev);
+}
+
+void EditorUI::About()
+{
+	ImGui::Begin("About SuSto Engine", &show_app_about, ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Text("SuSto Engine. v.0.1");
+	ImGui::Separator();
+	ImGui::Text("By Guillem Sunyer and Simon Stoyanov.");
+	ImGui::Text("SuSto Engine is licensed under the MIT License, see LICENSE for more information.");
+	if (ImGui::Button("Github Repository")) {
+		App->GoToBrowser("https://github.com/Guillemsc/3D-Engine");
+	}
+	if (ImGui::Button("Download Latest Release")) {
+		App->GoToBrowser("https://github.com/Guillemsc/3D-Engine/releases");
+	}
+	ImGui::End();
 }
 
 void EditorUI::GeometryMathTest()

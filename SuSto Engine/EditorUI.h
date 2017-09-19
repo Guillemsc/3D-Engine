@@ -22,6 +22,7 @@ public:
 	void LoadStyle(char* name);
 
 private:
+	void About();
 	void GeometryMathTest();
 
 public:

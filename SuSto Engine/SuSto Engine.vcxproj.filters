@@ -129,9 +129,6 @@
     <ClInclude Include="Timer.h">
       <Filter>Sources\Components</Filter>
     </ClInclude>
-    <ClInclude Include="EditorUI.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="Module.h">
       <Filter>Sources</Filter>
     </ClInclude>
@@ -312,6 +309,9 @@
     <ClInclude Include="GeometryMath.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="EditorUI.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -391,9 +391,6 @@
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Sources\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="EditorUI.cpp">
-      <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="MathGeoLib\include\Algorithm\Random\LCG.cpp">
       <Filter>Sources\Components\MathGeoLib\Algorithm</Filter>
@@ -484,6 +481,9 @@
     </ClCompile>
     <ClCompile Include="MathGeoLib\include\Time\Clock.cpp">
       <Filter>Sources\Components\MathGeoLib\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorUI.cpp">
+      <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
