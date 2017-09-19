@@ -71,4 +71,4 @@ enum update_status
 #define WIN_BORDERLESS false
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC true
-#define TITLE "SuSto Engine"
+#define TITLE "SuSto Engine v.0.1"

@@ -74,7 +74,7 @@ bool EditorUI::Update()
 	if (show_app_about)
 	{
 		ImGui::Begin("About SuSto Engine", &show_app_about, ImGuiWindowFlags_AlwaysAutoResize);
-		ImGui::Text("SuSto Engine.");
+		ImGui::Text("SuSto Engine. v.0.1");
 		ImGui::Separator();
 		ImGui::Text("By Guillem Sunyer and Simon Stoyanov.");
 		ImGui::Text("SuSto Engine is licensed under the MIT License, see LICENSE for more information.");
