@@ -30,7 +30,7 @@ private:
 	bool show_app_about = false;
 
 	// Geometry math test
-	bool geometry_math_test = false;
+	bool show_geometry_math_test = false;
 	float vec3a[3] = { 0.0f, 0.0f, 0.0f };
 	float dist = 0;
 	bool contact = false;

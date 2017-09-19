@@ -70,7 +70,7 @@ bool EditorUI::Update()
 
 		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
 		{
-			ImGui::MenuItem("Geometry math test", NULL, &geometry_math_test);
+			ImGui::MenuItem("Geometry math test", NULL, &show_geometry_math_test);
 			ImGui::EndMenu();
 			dist = 6;
 		}
@@ -99,7 +99,7 @@ bool EditorUI::Update()
 	}
 
 	// Geometry debug
-	if (geometry_math_test)
+	if (show_geometry_math_test)
 	{
 		GeometryMathTest();
 	}
@@ -136,7 +136,7 @@ void EditorUI::ImGuiInput(SDL_Event* ev)
 
 void EditorUI::GeometryMathTest()
 {
-	ImGui::Begin("Geometry Math test", &geometry_math_test, ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("Geometry Math test", &show_geometry_math_test, ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::Text("Contact: %s", contact ? "Yes" : "No");
 
