@@ -1,5 +1,6 @@
 #include "Console.h"
 #include "App.h"
+#include "ModuleInput.h"
 #include "imgui.h"
 
 Console::Console(bool start_enabled) : Module(start_enabled)
@@ -14,8 +15,9 @@ Console::~Console()
 bool Console::Awake()
 {
 	bool ret = true;
+	LOG_OUTPUT("Loading Console");
 
-	visible = false;
+	visible = true;
 
 	return ret;
 }
@@ -26,6 +28,9 @@ bool Console::Update()
 
 	AddLogs();
 
+	if (App->input->GetKey(SDL_SCANCODE_GRAVE) == KEY_DOWN)
+		visible = !visible;
+	
 	if (!visible)
 		return true;
 
