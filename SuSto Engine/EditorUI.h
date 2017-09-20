@@ -2,6 +2,7 @@
 #define __EDITORUI_H__
 
 #include "Module.h"
+#include "GeometryMath.h"
 
 class EditorUI : public Module
 {
@@ -23,12 +24,15 @@ public:
 
 private:
 	void About();
+	void TestEngine();
 	void GeometryMathTest();
 
 public:
 
 private:
 	bool show_app_about = false;
+
+	bool show_imgui_test_window = false;
 
 	bool show_test_window = false;
 
@@ -42,6 +46,9 @@ private:
 	bool contact_aabb_aabb = false;
 	bool contact_obb_obb = false;
 	bool contact_aabb_ray = false;
+
+private:
+	float2 	range_demo; // for the random generation demo
 };
 
 #endif // __j1FILESYSTEM_H__

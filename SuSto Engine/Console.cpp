@@ -39,7 +39,6 @@ bool Console::Update()
 	if (ImGui::Begin("Console", &visible))
 	{
 		ImGui::Text("Type help to see common comands");
-
 		ImGui::Separator();
 
 		// Scrollable

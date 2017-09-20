@@ -73,10 +73,17 @@ bool EditorUI::Update()
 
 			ImGui::MenuItem("Geometry math test", NULL, &show_geometry_math_test);
 
-			ImGui::MenuItem("Test window", NULL, &show_test_window);
+			ImGui::MenuItem("Test window", NULL, &show_imgui_test_window);
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("Test"))
+		{
+			ImGui::MenuItem("Test", NULL, &show_test_window);
+
+			ImGui::EndMenu();
+		}
+		//ImGui::InputFloat2("Min/Max", range.ptr());
 		ImGui::Text("Fps: %f", App->GetFps());
 	
 
@@ -97,9 +104,15 @@ bool EditorUI::Update()
 	}
 
 	// Test window imgui
-	if (show_test_window)
+	if (show_imgui_test_window)
 	{
 		ImGui::ShowTestWindow();
+	}
+
+	// Test window of the engine
+	if (show_test_window)
+	{
+		TestEngine();
 	}
 	
 
@@ -153,6 +166,27 @@ void EditorUI::About()
 
 
 	ImGui::End();
+}
+
+void EditorUI::TestEngine() 
+{
+	ImGui::Begin("Engine Tests", &show_test_window, ImGuiWindowFlags_AlwaysAutoResize);
+
+	ImGui::Separator();
+
+	if (ImGui::BeginMenu("Random Number Generation"))
+	{
+		ImGui::InputFloat2("Min | Max", range_demo.ptr());
+		ImGui::EndMenu();
+	}
+	if (ImGui::BeginMenu("Things"))
+	{
+		ImGui::Button("thing");
+		ImGui::EndMenu();
+	}
+
+	ImGui::End();
+
 }
 
 void EditorUI::GeometryMathTest()
