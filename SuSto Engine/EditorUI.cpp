@@ -51,12 +51,10 @@ bool EditorUI::Update()
 
 	ImGuiStyle * style = &ImGui::GetStyle();
 
-	//ImGui::ShowTestWindow();
-
 	// Main Menu -------------------------
 	if (ImGui::BeginMainMenuBar())
 	{
-		if (ImGui::BeginMenu("Menu"))
+		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::MenuItem("Quit", "Alt+F4")) { App->EndApp(); }
 			ImGui::EndMenu();
@@ -71,8 +69,9 @@ bool EditorUI::Update()
 		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
 		{
 			ImGui::MenuItem("Geometry math test", NULL, &show_geometry_math_test);
+
+			ImGui::MenuItem("Test window", NULL, &show_test_window);
 			ImGui::EndMenu();
-			dist = 6;
 		}
 
 		ImGui::Text("Fps: %f", App->GetFps());
@@ -92,6 +91,12 @@ bool EditorUI::Update()
 	if (show_geometry_math_test)
 	{
 		GeometryMathTest();
+	}
+
+	// Test window imgui
+	if (show_test_window)
+	{
+		ImGui::ShowTestWindow();
 	}
 	
 

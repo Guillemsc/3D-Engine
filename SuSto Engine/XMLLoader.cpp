@@ -1,6 +1,5 @@
 #include "XMLLoader.h"
 #include "App.h"
-#include "FileSystem.h"
 #include "PugiXml\src\pugixml.hpp"
 
 XMLLoader::XMLLoader(bool start_enabled) : Module(start_enabled)

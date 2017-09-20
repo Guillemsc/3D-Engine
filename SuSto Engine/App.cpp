@@ -6,13 +6,13 @@
 #include "ModuleCamera3D.h"
 #include "ModulePhysics3D.h"
 #include "DebugScene.h"
-#include "FileSystem.h"
 #include "XMLLoader.h"
 #include "EditorUI.h"
+#include "Console.h"
 
 Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
-	fs = new FileSystem();
+	console = new Console();
 	xml = new XMLLoader();
 	window = new ModuleWindow();
 	input = new ModuleInput();
@@ -28,7 +28,6 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	// They will CleanUp() in reverse order
 
 	// Main Modules
-	AddModule(fs);
 	AddModule(xml);
 	AddModule(window);
 	AddModule(camera);
@@ -36,6 +35,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(audio);
 	AddModule(physics);
 	AddModule(editorUI);
+	AddModule(console);
 
 	AddModule(debug_scene);
 
@@ -223,9 +223,9 @@ void Application::SetDebugMode(bool set)
 	debug_mode = set;
 }
 
-void Application::GoToBrowser(string web)
+void Application::GoToBrowser(const char* url)
 {
-	ShellExecute(NULL, "open", web.c_str(), NULL, NULL, SW_SHOWMAXIMIZED);
+	ShellExecute(NULL, "open", url, NULL, NULL, SW_SHOWMAXIMIZED);
 }
 
 void Application::AddModule(Module* mod)

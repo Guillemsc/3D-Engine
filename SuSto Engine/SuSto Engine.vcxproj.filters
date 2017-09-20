@@ -108,9 +108,6 @@
     <ClInclude Include="stb_truetype.h">
       <Filter>Sources\Components\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="FileSystem.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="XMLLoader.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
@@ -312,6 +309,9 @@
     <ClInclude Include="EditorUI.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="Console.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -370,9 +370,6 @@
     </ClCompile>
     <ClCompile Include="imgui_impl_sdl.cpp">
       <Filter>Sources\Components\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="FileSystem.cpp">
-      <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="XMLLoader.cpp">
       <Filter>Sources\Modules</Filter>
@@ -483,6 +480,9 @@
       <Filter>Sources\Components\MathGeoLib\Time</Filter>
     </ClCompile>
     <ClCompile Include="EditorUI.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Console.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>

@@ -30,6 +30,8 @@ public:
 private:
 	bool show_app_about = false;
 
+	bool show_test_window = false;
+
 	// Geometry math test
 	bool show_geometry_math_test = false;
 	float vec3a[3] = { 0.0f, 0.0f, 0.0f };

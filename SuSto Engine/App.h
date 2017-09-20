@@ -6,10 +6,7 @@
 #include "Timer.h"
 #include "PerfTimer.h"
 #include "Module.h"
-#include "Math.h" // Includes everything MathGeoLib related
-#include "MathGeoLib\include\Algorithm\Random\LCG.h" // Includes random number generators
 
-class FileSystem;
 class XMLLoader;
 class ModuleWindow;
 class ModuleInput;
@@ -17,6 +14,7 @@ class ModuleAudio;
 class ModuleRenderer3D;
 class ModuleCamera3D;
 class ModulePhysics3D;
+class Console;
 class EditorUI;
 class DebugScene;
 
@@ -33,6 +31,7 @@ public:
 
 	int GetArgc() const;
 	const char* GetArgv(int index) const;
+
 	void EndApp();
 	float GetDT();
 	float GetFps();
@@ -41,7 +40,7 @@ public:
 	bool GetDebugMode();
 	void SetDebugMode(bool set);
 
-	void GoToBrowser(string web);
+	void GoToBrowser(const char* url);
 
 private:
 	void AddModule(Module* mod);
@@ -52,7 +51,6 @@ private:
 
 public:
 	//Modules
-	FileSystem*		   fs = nullptr;
 	XMLLoader*		   xml = nullptr;
 	ModuleWindow*      window = nullptr;
 	ModuleInput*       input = nullptr;
@@ -61,7 +59,10 @@ public:
 	ModuleCamera3D*    camera = nullptr;
 	ModulePhysics3D*   physics = nullptr;
 	EditorUI*		   editorUI = nullptr;
+	Console*		   console = nullptr;
 	DebugScene*        debug_scene = nullptr;
+
+	std::list<string>  logs;
 
 private:
 	std::list<Module*> modules;

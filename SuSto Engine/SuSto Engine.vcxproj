@@ -92,9 +92,9 @@
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="Console.h" />
     <ClInclude Include="DebugScene.h" />
     <ClInclude Include="EditorUI.h" />
-    <ClInclude Include="FileSystem.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
@@ -184,9 +184,9 @@
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Console.cpp" />
     <ClCompile Include="DebugScene.cpp" />
     <ClCompile Include="EditorUI.cpp" />
-    <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="imgui.cpp" />

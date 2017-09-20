@@ -93,7 +93,8 @@ int main(int argc, char ** argv)
 		}
 	}
 
+	LOG_OUTPUT("Exiting app '%s'...\n", TITLE);
 	delete App;
-	LOG_OUTPUT("Exiting game '%s'...\n", TITLE);
+
 	return main_return;
 }
