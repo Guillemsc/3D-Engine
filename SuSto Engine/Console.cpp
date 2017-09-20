@@ -2,8 +2,9 @@
 #include "App.h"
 #include "imgui.h"
 
-Console::Console(bool start_enabled)
+Console::Console(bool start_enabled) : Module(start_enabled)
 {
+	memset(input_buffer, 0, sizeof(input_buffer));
 }
 
 Console::~Console()
@@ -13,8 +14,6 @@ Console::~Console()
 bool Console::Awake()
 {
 	bool ret = true;
-
-	memset(input_buffer, 0, sizeof(input_buffer));
 
 	visible = false;
 
