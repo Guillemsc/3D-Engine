@@ -44,15 +44,28 @@ bool Console::Update()
 			ImGui::PopStyleColor();
 		}
 
+		if (scroll_bottom)
+		{
+			ImGui::SetScrollHere();
+			scroll_bottom = false;
+		}
+
 		ImGui::PopStyleVar();
 		ImGui::EndChild();
 
 		ImGui::Separator();
 
-		if (ImGui::InputText("Input", input_buffer, 255, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory), &TextChangeCallback, (void*)this)
+		if (ImGui::InputText("Input", input_buffer, 255, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion 
+			| ImGuiInputTextFlags_CallbackHistory, &TextChangeCallback, (void*)this))
 		{
+			CommandInput(input_buffer);
 
+			strcpy(input_buffer, "");
 		}
+
+		// Keep focus on text input
+		if (ImGui::IsItemHovered() || (ImGui::IsRootWindowOrAnyChildFocused() && !ImGui::IsAnyItemActive() && !ImGui::IsMouseClicked(0)))
+			ImGui::SetKeyboardFocusHere(-1);
 	}
 	ImGui::End();
 
@@ -73,6 +86,18 @@ void Console::AddLog(const char * txt, console_text_type type)
 	ct.type = type;
 
 	console_items.push_back(ct);
+
+	ScrollBottom();
+}
+
+void Console::ScrollBottom()
+{
+	scroll_bottom = true;
+}
+
+void Console::CommandInput(const char * txt)
+{
+	AddLog(txt);
 }
 
 ImColor Console::GetColorByTextType(console_text_type type)
@@ -119,5 +144,6 @@ void Console::AddLogs()
 
 static int TextChangeCallback(ImGuiTextEditCallbackData * data)
 {
-	return 0;
+	int i = 0;
+	return 1;
 }

@@ -38,6 +38,8 @@ public:
 	void AddLog(const char* txt, console_text_type type = console_text_type_default);
 
 private:
+	void ScrollBottom();
+	void CommandInput(const char* txt);
 	ImColor GetColorByTextType(console_text_type type);
 	void AddLogs();
 
@@ -46,6 +48,7 @@ private:
 	int max_items = 0;
 	bool enabled = false;
 	char input_buffer[255];
+	bool scroll_bottom = false;
 };
 
 static int TextChangeCallback(ImGuiTextEditCallbackData* data);
