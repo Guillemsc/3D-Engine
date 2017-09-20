@@ -139,9 +139,16 @@ void EditorUI::About()
 	if (ImGui::Button("Github Repository")) {
 		App->GoToBrowser("https://github.com/Guillemsc/3D-Engine");
 	}
+	ImGui::SameLine();
 	if (ImGui::Button("Download Latest Release")) {
 		App->GoToBrowser("https://github.com/Guillemsc/3D-Engine/releases");
 	}
+	ImGui::SameLine();
+	if (ImGui::Button("Report Issue")) {
+		App->GoToBrowser("https://github.com/Guillemsc/3D-Engine/issues");
+	}
+
+
 	ImGui::End();
 }
 

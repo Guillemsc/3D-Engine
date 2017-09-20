@@ -66,6 +66,7 @@ bool Console::Update()
 		// Keep focus on text input
 		if (ImGui::IsItemHovered() || (ImGui::IsRootWindowOrAnyChildFocused() && !ImGui::IsAnyItemActive() && !ImGui::IsMouseClicked(0)))
 			ImGui::SetKeyboardFocusHere(-1);
+
 	}
 	ImGui::End();
 
