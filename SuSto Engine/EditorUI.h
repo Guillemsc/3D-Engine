@@ -48,7 +48,11 @@ private:
 	bool contact_aabb_ray = false;
 
 private:
-	float2 	range_demo; // for the random generation demo
+	float2 range_demo; // for the random generation demo
+	int quantity_demo = 1; // number of random generations of the demo
+
+private:
+	void GenerateRandomNumbers(float2 range, int quantity);
 };
 
 #endif // __j1FILESYSTEM_H__

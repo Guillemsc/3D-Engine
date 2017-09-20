@@ -29,5 +29,7 @@ void ToLowerCase(std::string str);
 
 // Returns a random int given a range;
 int GetRandomValue(int range_1, int range_2);
+// Returns a random float given a range;
+float GetRandomValue(float range_1, float range_2);
 
 #endif //__FUNCTIONS_H__

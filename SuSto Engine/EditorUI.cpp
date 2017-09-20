@@ -6,6 +6,7 @@
 #include "GeometryMath.h"
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
+#include "Functions.h"
 
 EditorUI::EditorUI(bool enabled) : Module(enabled)
 {
@@ -29,6 +30,10 @@ bool EditorUI::Awake()
 	//  -black_orange
 	//  -blue_yellow
 	LoadStyle("blue_yellow");
+
+	// Initial range set
+	range_demo.x = 0;
+	range_demo.y = 100;
 
 	return ret;
 }
@@ -170,19 +175,26 @@ void EditorUI::About()
 
 void EditorUI::TestEngine() 
 {
-	ImGui::Begin("Engine Tests", &show_test_window, ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::SetNextWindowSize(ImVec2(600, 680), ImGuiCond_::ImGuiSetCond_FirstUseEver);
+	if (!ImGui::Begin("Engine Tests", &show_test_window, ImGuiWindowFlags_NoResize))
+	{
+		// Early out if the window is collapsed, as an optimization.
+		ImGui::End();
+		return;
+	}
 
 	ImGui::Separator();
 
-	if (ImGui::BeginMenu("Random Number Generation"))
+	if (ImGui::CollapsingHeader("Random Number Generation"))
 	{
-		ImGui::InputFloat2("Min | Max", range_demo.ptr());
-		ImGui::EndMenu();
-	}
-	if (ImGui::BeginMenu("Things"))
-	{
-		ImGui::Button("thing");
-		ImGui::EndMenu();
+		ImGui::InputFloat2("Min | Max", range_demo.ptr(), 2);
+		ImGui::InputInt("Number of generations", &quantity_demo);
+
+		if (ImGui::Button("Generate", { 400, 30 }))
+		{
+			GenerateRandomNumbers(range_demo, quantity_demo);
+		}
+
 	}
 
 	ImGui::End();
@@ -367,6 +379,17 @@ void EditorUI::GeometryMathTest()
 	}
 
 	ImGui::End();
+}
+
+void EditorUI::GenerateRandomNumbers(float2 range, int quantity)
+{
+	for (int i = 0; i < quantity; ++i) 
+	{
+		float number_rounded = roundf(GetRandomValue(range.x, range.y) * 100) / 100;
+		char number[255];
+		snprintf(number, 255, "%.2f", number_rounded);
+		App->console->AddLog(number);
+	}
 }
 
 void EditorUI::LoadStyle(char * name)

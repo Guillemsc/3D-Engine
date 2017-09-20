@@ -68,3 +68,12 @@ int GetRandomValue(int range_1, int range_2)
 
 	return dis(gen);
 }
+
+float GetRandomValue(float range_1, float range_2)
+{
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_real_distribution<> dis(range_1, range_2);
+
+	return dis(gen);
+}
