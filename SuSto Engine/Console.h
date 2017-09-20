@@ -49,6 +49,7 @@ private:
 	bool enabled = false;
 	char input_buffer[255];
 	bool scroll_bottom = false;
+	bool send_text_input = false;
 };
 
 static int TextChangeCallback(ImGuiTextEditCallbackData* data);

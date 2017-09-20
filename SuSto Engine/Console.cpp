@@ -33,9 +33,11 @@ bool Console::Update()
 
 		ImGui::Separator();
 
+		// Scrollable
 		ImGui::BeginChild("ScrollingRegion", ImVec2(0, -ImGui::GetItemsLineHeightWithSpacing()), false, ImGuiWindowFlags_HorizontalScrollbar);
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1));
 
+		// Scrollable texts
 		for (list<console_text>::iterator it = console_items.begin(); it != console_items.end(); it++)
 		{
 			ImVec4 col = GetColorByTextType((*it).type);
@@ -44,6 +46,7 @@ bool Console::Update()
 			ImGui::PopStyleColor();
 		}
 
+		// Scroll to bottom
 		if (scroll_bottom)
 		{
 			ImGui::SetScrollHere();
@@ -55,18 +58,34 @@ bool Console::Update()
 
 		ImGui::Separator();
 
-		if (ImGui::InputText("Input", input_buffer, 255, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion 
+		// Text input
+		if (ImGui::InputText("", input_buffer, 254, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion 
 			| ImGuiInputTextFlags_CallbackHistory, &TextChangeCallback, (void*)this))
 		{
-			CommandInput(input_buffer);
-
-			strcpy(input_buffer, "");
+			send_text_input = true;
 		}
 
 		// Keep focus on text input
 		if (ImGui::IsItemHovered() || (ImGui::IsRootWindowOrAnyChildFocused() && !ImGui::IsAnyItemActive() && !ImGui::IsMouseClicked(0)))
 			ImGui::SetKeyboardFocusHere(-1);
 
+		// Submit button
+		ImGui::SameLine();
+		if(ImGui::Button("Submit"))
+		{
+			send_text_input = true;
+		}
+
+		// Input text
+		if(send_text_input)
+		{
+			if(input_buffer != "")
+				CommandInput(input_buffer);
+
+			strcpy(input_buffer, "");
+
+			send_text_input = false;
+		}
 	}
 	ImGui::End();
 
