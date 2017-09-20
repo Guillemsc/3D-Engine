@@ -76,22 +76,15 @@ bool EditorUI::Update()
 		{
 			ImGui::MenuItem("Console", "º", &App->console->visible);
 
-			ImGui::MenuItem("Geometry math test", NULL, &show_geometry_math_test);
+			ImGui::MenuItem("Engine Tests", NULL, &show_test_window);
 
 			ImGui::MenuItem("Test window", NULL, &show_imgui_test_window);
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("Test"))
-		{
-			ImGui::MenuItem("Test", NULL, &show_test_window);
 
 			ImGui::EndMenu();
 		}
-		//ImGui::InputFloat2("Min/Max", range.ptr());
+
 		ImGui::Text("Fps: %f", App->GetFps());
 	
-
 		ImGui::EndMainMenuBar();
 	}
 	// -------------------------------------
@@ -100,12 +93,6 @@ bool EditorUI::Update()
 	if (show_app_about)
 	{
 		About();
-	}
-
-	// Geometry math test debug
-	if (show_geometry_math_test)
-	{
-		GeometryMathTest();
 	}
 
 	// Test window imgui
@@ -176,6 +163,7 @@ void EditorUI::About()
 void EditorUI::TestEngine() 
 {
 	ImGui::SetNextWindowSize(ImVec2(600, 680), ImGuiCond_::ImGuiSetCond_FirstUseEver);
+
 	if (!ImGui::Begin("Engine Tests", &show_test_window, ImGuiWindowFlags_NoResize))
 	{
 		// Early out if the window is collapsed, as an optimization.
@@ -197,14 +185,17 @@ void EditorUI::TestEngine()
 
 	}
 
+	if (ImGui::CollapsingHeader("Geometry math test"))
+	{
+		GeometryMathTest();
+	}
+
 	ImGui::End();
 
 }
 
 void EditorUI::GeometryMathTest()
 {
-	ImGui::Begin("Geometry Math test", &show_geometry_math_test, ImGuiWindowFlags_AlwaysAutoResize);
-
 	ImGui::Text("Contact: %s", contact ? "Yes" : "No");
 
 	ImGui::Separator();
@@ -377,8 +368,6 @@ void EditorUI::GeometryMathTest()
 		if (sph1.Intersects(sph2))
 			contact = true;
 	}
-
-	ImGui::End();
 }
 
 void EditorUI::GenerateRandomNumbers(float2 range, int quantity)

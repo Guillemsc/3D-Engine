@@ -37,7 +37,6 @@ private:
 	bool show_test_window = false;
 
 	// Geometry math test
-	bool show_geometry_math_test = false;
 	float vec3a[3] = { 0.0f, 0.0f, 0.0f };
 	float dist = 0;
 	bool contact = false;
@@ -46,8 +45,8 @@ private:
 	bool contact_aabb_aabb = false;
 	bool contact_obb_obb = false;
 	bool contact_aabb_ray = false;
-
-private:
+	
+	// Random generator
 	float2 range_demo; // for the random generation demo
 	int quantity_demo = 1; // number of random generations of the demo
 
