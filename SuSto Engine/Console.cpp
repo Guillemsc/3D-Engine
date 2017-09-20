@@ -49,10 +49,15 @@ bool Console::Update()
 
 		ImGui::Separator();
 
-		if (ImGui::InputText("Input", input_buffer, 255, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory), &TextChangeCallback, (void*)this)
+		if (ImGui::InputText("Input", input_buffer, 255, ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			LOG_OUTPUT(input_buffer);
+			input_buffer[0] = '\0';
+		}
+		/*if (ImGui::InputText("Input", input_buffer, 255, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory), &TextChangeCallback, (void*)this)
 		{
 
-		}
+		}*/
 	}
 	ImGui::End();
 
