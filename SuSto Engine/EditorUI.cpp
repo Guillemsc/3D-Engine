@@ -1,4 +1,5 @@
 #include "EditorUI.h"
+#include "Console.h"
 #include "ModuleWindow.h"
 #include "App.h"
 #include "Primitive.h"
@@ -68,6 +69,8 @@ bool EditorUI::Update()
 
 		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
 		{
+			ImGui::MenuItem("Console", "º", &App->console->visible);
+
 			ImGui::MenuItem("Geometry math test", NULL, &show_geometry_math_test);
 
 			ImGui::MenuItem("Test window", NULL, &show_test_window);

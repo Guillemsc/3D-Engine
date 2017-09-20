@@ -43,6 +43,9 @@ private:
 	ImColor GetColorByTextType(console_text_type type);
 	void AddLogs();
 
+public:
+	bool visible = false;
+
 private:
 	list<console_text> console_items;
 	int max_items = 0;

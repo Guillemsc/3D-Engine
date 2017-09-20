@@ -16,6 +16,8 @@ bool Console::Awake()
 
 	memset(input_buffer, 0, sizeof(input_buffer));
 
+	visible = false;
+
 	return ret;
 }
 
@@ -25,9 +27,12 @@ bool Console::Update()
 
 	AddLogs();
 
+	if (!visible)
+		return true;
+
 	ImGui::SetNextWindowSize(ImVec2(520, 600), 2);
 
-	if (ImGui::Begin("Console"))
+	if (ImGui::Begin("Console", &visible))
 	{
 		ImGui::Text("Type help to see common comands");
 
