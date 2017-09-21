@@ -6,7 +6,7 @@ configuration:
 build:
   verbosity: normal
 before_package:
-- ps: Copy-Item C:\projects\3d-engine\$env::CONFIGURATION\SuSto-Engine.exe C:\projects\3d-engine\SuSto Engine\Resources\.
+- ps: Copy-Item C:\projects\3d-engine\$env::CONFIGURATION\SuSto-Engine.exe C:\projects\3d-engine\SuStoEngine\Resources\.
 artifacts:
 - path: SuSto Engine\Resources
   name: Engine
