@@ -48,6 +48,8 @@ bool Console::Update()
 		// Scrollable texts
 		for (list<console_text>::iterator it = console_items.begin(); it != console_items.end(); it++)
 		{
+
+
 			ImVec4 col = GetColorByTextType((*it).type);
 			ImGui::PushStyleColor(ImGuiCol_Text, col);
 			ImGui::TextUnformatted((*it).txt.c_str());
@@ -114,6 +116,10 @@ void Console::AddLog(const char * txt, console_text_type type)
 	ct.type = type;
 
 	console_items.push_back(ct);
+
+	if (console_items.size() > MAX_LINES) {
+		console_items.pop_front();
+	}
 
 	ScrollBottom();
 }

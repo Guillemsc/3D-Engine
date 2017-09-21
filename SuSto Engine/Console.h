@@ -2,6 +2,7 @@
 #define __Console_H__
 
 #include "Module.h"
+#define MAX_LINES 100
 
 class Application;
 
