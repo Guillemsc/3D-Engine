@@ -11,13 +11,13 @@ build:
   project: SuSto Engine.sln
   verbosity: normal
 artifacts:
-- path: Resources
+- path: SuSto Engine\Resources
   name: engine_resources
 deploy:
 - provider: GitHub
   description: Auto-generated Release
   auth_token:
-    secure: 64cc3bade74e53769e00fe275edefc14ff460b1b
+    secure: Q1dR+oYbHtBqM5/TEk7Wgaur1ZbUwNQqIKB4Kcv3mtJNBY7KZL9tnkKxx1CmSJiA
   artifact: SuSto Engine
   draft: true
   prerelease: true
