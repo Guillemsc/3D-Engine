@@ -1,27 +1,19 @@
-version: SuSto Engine-{branch} 0.1.{build}
-branches:
-  only:
-  - master
-  - development
+version: 1.0.{build}
 skip_tags: true
 configuration:
 - Debug
 - Release
 build:
-  project: SuSto Engine.sln
   verbosity: normal
+before_package:
+- ps: Copy-Item C:\projects\3d-engine\$env::CONFIGURATION\SuSto-Engine.exe C:\projects\3d-engine\SuSto Engine\Resources\.
 artifacts:
 - path: SuSto Engine\Resources
-  name: engine_resources
+  name: Engine
 deploy:
 - provider: GitHub
-  description: Auto-generated Release
   auth_token:
-    secure: Q1dR+oYbHtBqM5/TEk7Wgaur1ZbUwNQqIKB4Kcv3mtJNBY7KZL9tnkKxx1CmSJiA
-  artifact: SuSto Engine
-  draft: true
-  prerelease: true
-  force_update: true
+    secure: 2ot2rVNY4Vcru0qcNVy1a7JafEvIY1XCNN9dEHAwZVIf+XYp4GIjJNyKxJCG74og
+  artifact: Engine
   on:
-    branch: master
     CONFIGURATION: Release
