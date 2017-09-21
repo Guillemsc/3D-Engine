@@ -8,7 +8,7 @@ configuration:
 - Debug
 - Release
 environment:
-  platform: x86
+  platform: x32
 build:
   project: SuSto Engine.sln
   verbosity: normal
