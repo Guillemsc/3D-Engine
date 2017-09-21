@@ -29,7 +29,10 @@ bool Console::Update()
 	AddLogs();
 
 	if (App->input->GetKey(SDL_SCANCODE_GRAVE) == KEY_DOWN)
+	{
 		visible = !visible;
+		return true;
+	}
 	
 	if (!visible)
 		return true;
