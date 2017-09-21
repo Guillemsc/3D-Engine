@@ -312,6 +312,7 @@
     <ClInclude Include="Console.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -505,5 +506,12 @@
     <None Include="MathGeoLib\include\Math\Matrix.inl">
       <Filter>Sources\Components\MathGeoLib\Math</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
+    <Image Include="spooky.ico" />
   </ItemGroup>
 </Project>

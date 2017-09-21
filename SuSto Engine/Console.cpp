@@ -81,7 +81,7 @@ bool Console::Update()
 
 		// Submit button
 		ImGui::SameLine();
-		if(ImGui::Button("Submit"))
+		if (ImGui::Button("Submit", { 100, 23 }))
 		{
 			send_text_input = true;
 		}
