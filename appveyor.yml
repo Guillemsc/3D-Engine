@@ -1,4 +1,4 @@
-version: 1.0.{build}
+version: 0.1.{build}
 skip_tags: true
 configuration:
 - Debug
@@ -6,7 +6,7 @@ configuration:
 build:
   verbosity: normal
 before_package:
-- ps: Copy-Item C:\projects\3d-engine\$env:CONFIGURATION\SuSto-Engine.exe C:\projects\3d-engine\SuStoEngine\Resources\.
+- ps: Copy-Item C:\projects\3d-engine\$env:CONFIGURATION\SuStoEngine.exe C:\projects\3d-engine\SuStoEngine\Resources\.
 artifacts:
 - path: SuStoEngine\Resources
   name: Engine
