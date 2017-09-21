@@ -1,0 +1,28 @@
+version: SuSto Engine-{branch} 0.1.{build}
+branches:
+  only:
+  - master
+  - development
+skip_tags: true
+configuration:
+- Debug
+- Release
+environment:
+  platform: x86
+build:
+  project: SuSto Engine.sln
+  verbosity: normal
+before_package:
+- ps: Copy-Item C:\projects\TroEngine\$env:CONFIGURATION\TroEngine.exe C:\projects\TroEngine\TroEngine\EngineResources\.
+artifacts:
+- path: Resources
+  name: engine_resources
+deploy:
+- provider: GitHub
+  auth_token:
+    secure: 64cc3bade74e53769e00fe275edefc14ff460b1b
+  artifact: SuSto Engine
+  force_update: true
+  on:
+    branch: master
+    CONFIGURATION: Release
