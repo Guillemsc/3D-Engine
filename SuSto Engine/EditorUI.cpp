@@ -8,6 +8,8 @@
 #include "imgui_impl_sdl.h"
 #include "Functions.h"
 
+//https://github.com/ocornut/imgui/issues/351
+
 EditorUI::EditorUI(bool enabled) : Module(enabled)
 {
 }
