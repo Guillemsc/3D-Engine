@@ -121,12 +121,11 @@ bool ModuleInput::PreUpdate()
 			case SDL_WINDOWEVENT_RESTORED:
 				windowEvents[WE_SHOW] = true;
 				break;
-
-				if (e.window.event == SDL_WINDOWEVENT_RESIZED)
-				{
-					App->renderer3D->OnResize(e.window.data1, e.window.data2);
-				}
+			case SDL_WINDOWEVENT_RESIZED:
+				App->renderer3D->OnResize(e.window.data1, e.window.data2);
+				break;
 			}
+			
 			break;
 
 		case SDL_MOUSEWHEEL:
