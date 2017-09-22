@@ -1,6 +1,8 @@
 #include "Globals.h"
 #include "App.h"
 #include "ModuleWindow.h"
+#include "imgui.h"
+#include "imgui_impl_sdl.h"
 
 ModuleWindow::ModuleWindow(bool start_enabled) : Module(start_enabled)
 {
@@ -59,6 +61,11 @@ bool ModuleWindow::Awake()
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
+		if (WIN_MAXIMIZED == true)
+		{
+			flags |= SDL_WINDOW_MAXIMIZED;
+		}
+
 		main_window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
 		
 		if(main_window == NULL)
@@ -81,14 +88,14 @@ bool ModuleWindow::CleanUp()
 {
 	LOG_OUTPUT("Destroying SDL window and quitting all SDL systems");
 
-	if (docks.size() > 0)
-	{
-		for (list<Dock*>::iterator it = docks.begin(); it != docks.end();)
-		{
-			(*it)->DeleteDock();
-			docks.erase(it++);
-		}
-	}
+	//if (docks.size() > 0)
+	//{
+	//	for (list<Dock*>::iterator it = docks.begin(); it != docks.end();)
+	//	{
+	//		(*it)->DeleteDock();
+	//		docks.erase(it++);
+	//	}
+	//}
 
 	//Destroy window
 	if(main_window != NULL)
@@ -111,25 +118,30 @@ void ModuleWindow::GetWindowSize(int & width, int & height)
 	SDL_GetWindowSize(main_window, &width, &height);
 }
 
-void ModuleWindow::CreateNewWindow(char * title)
-{
-	dock_id++;
-	Dock* tmp = new Dock(title);
-	docks.push_back(tmp);
-}
-
-Dock::Dock(char* title)
-{
-	Dock::title = title;
-
-	Dock::window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 750, 750, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
-	Dock::screen_surface = SDL_GetWindowSurface(window);
-	Dock::id = App->window->dock_id;
-}
-
-void Dock::DeleteDock()
-{
-	SDL_DestroyWindow(window);
-	orientation = dock_null;
-	id = -1;
-}
+//void ModuleWindow::CreateNewWindow(char * title)
+//{
+//	dock_id++;
+//	Dock* tmp = new Dock(title);
+//	docks.push_back(tmp);
+//}
+//
+//Dock::Dock(char* title)
+//{
+//	Dock::title = title;
+//
+//	Dock::window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 750, 750, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+//	Dock::screen_surface = SDL_GetWindowSurface(window);
+//	Dock::id = App->window->dock_id;
+//	Dock::context = SDL_GL_CreateContext(window);
+//
+//	ImGui_ImplSdlGL2_Init(window);
+//
+//}
+//
+//void Dock::DeleteDock()
+//{
+//	SDL_DestroyWindow(window);
+//	orientation = dock_null;
+//	id = -1;
+//	SDL_GL_DeleteContext(context);
+//}

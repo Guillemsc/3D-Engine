@@ -52,6 +52,7 @@ private:
 
 private:
 	void GenerateRandomNumbers(float2 range, int quantity);
+	bool is_on = false;
 };
 
 #endif // __j1FILESYSTEM_H__

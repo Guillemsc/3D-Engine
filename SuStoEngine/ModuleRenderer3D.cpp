@@ -134,6 +134,10 @@ bool ModuleRenderer3D::PreUpdate()
 bool ModuleRenderer3D::PostUpdate()
 {
 	SDL_GL_SwapWindow(App->window->main_window);
+	/*for (list<Dock*>::iterator it = App->window->docks.begin(); it != App->window->docks.end(); it++)
+	{
+		SDL_GL_SwapWindow((*it)->window);
+	}*/
 	return true;
 }
 
