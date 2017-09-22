@@ -16,8 +16,9 @@ ModuleWindow::~ModuleWindow()
 // Called before render is available
 bool ModuleWindow::Awake()
 {
-	LOG_OUTPUT("Init SDL window & surface");
 	bool ret = true;
+	LOG_OUTPUT("Init SDL window & surface");
+	SetName("Window");
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
