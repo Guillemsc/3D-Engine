@@ -8,6 +8,7 @@
 #include "Module.h"
 
 class XMLLoader;
+class JSONLoader;
 class ModuleWindow;
 class ModuleInput;
 class ModuleAudio;
@@ -52,6 +53,7 @@ private:
 public:
 	//Modules
 	XMLLoader*		   xml = nullptr;
+	JSONLoader*		   json = nullptr;
 	ModuleWindow*      window = nullptr;
 	ModuleInput*       input = nullptr;
 	ModuleAudio*       audio = nullptr;

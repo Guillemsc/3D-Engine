@@ -40,6 +40,9 @@
     <Filter Include="Sources\Tools">
       <UniqueIdentifier>{a9f75ce3-c4ad-48a5-8f46-5294d5718fff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Components\Parson">
+      <UniqueIdentifier>{b1623064-60e9-47f4-a610-2cf9481a55bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleAudio.h">
@@ -313,6 +316,12 @@
       <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Parson\parson.h">
+      <Filter>Sources\Components\Parson</Filter>
+    </ClInclude>
+    <ClInclude Include="JSONLoader.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -484,6 +493,12 @@
       <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="Console.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Parson\parson.c">
+      <Filter>Sources\Components\Parson</Filter>
+    </ClCompile>
+    <ClCompile Include="JSONLoader.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>

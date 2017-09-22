@@ -16,7 +16,7 @@ bool XMLLoader::Awake()
 	bool ret = true;
 
 	LOG_OUTPUT("Loading XML Module");
-	SetName("XmlLoader");
+	SetName("XMLLoader");
 
 	return ret;
 }
@@ -24,8 +24,6 @@ bool XMLLoader::Awake()
 void XMLLoader::LoadXML(const char * path, pugi::xml_document & doc)
 {
 	bool exist = false;
-
-	pugi::xml_document daoc;
 
 	for (std::list<xml_doc*>::iterator it = xmls.begin(); it != xmls.end(); ++it)
 	{

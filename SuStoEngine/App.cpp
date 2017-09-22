@@ -7,6 +7,7 @@
 #include "ModulePhysics3D.h"
 #include "DebugScene.h"
 #include "XMLLoader.h"
+#include "JSONLoader.h"
 #include "EditorUI.h"
 #include "Console.h"
 
@@ -14,6 +15,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
 	console = new Console();
 	xml = new XMLLoader();
+	json = new JSONLoader();
 	window = new ModuleWindow();
 	input = new ModuleInput();
 	audio = new ModuleAudio();
@@ -29,6 +31,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 
 	// Main Modules
 	AddModule(xml);
+	AddModule(json);
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
