@@ -2,7 +2,7 @@
 #define __PROFILER_H__
 
 #include "SDL\include\SDL.h"
-#include <list>
+#include <vector>
 #include <iostream>
 
 struct Profile
@@ -63,7 +63,7 @@ private:
 
 	// Items -----
 	Profile* current_profile = nullptr;
-	std::list<Profile*> profiles;
+	std::vector<Profile*> profiles;
 	// -----------
 };
 

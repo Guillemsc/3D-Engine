@@ -12,7 +12,7 @@ Profiler::~Profiler()
 
 void Profiler::CleanUp()
 {
-	for (std::list<Profile*>::iterator it = profiles.begin(); it != profiles.end(); it++)
+	for (std::vector<Profile*>::iterator it = profiles.begin(); it != profiles.end(); it++)
 	{
 		delete (*it);
 	}
@@ -93,7 +93,7 @@ void Profiler::StartProfile(const char * name)
 {
 	bool found = false;
 
-	for (std::list<Profile*>::iterator it = profiles.begin(); it != profiles.end(); it++)
+	for (std::vector<Profile*>::iterator it = profiles.begin(); it != profiles.end(); it++)
 	{
 		if ((*it)->name == name)
 		{
@@ -129,7 +129,7 @@ Profile * Profiler::GetProfile(const char * name)
 {
 	Profile* ret = nullptr;
 
-	for (std::list<Profile*>::iterator it = profiles.begin(); it != profiles.end(); it++)
+	for (std::vector<Profile*>::iterator it = profiles.begin(); it != profiles.end(); it++)
 	{
 		if ((*it)->name == name)
 		{
