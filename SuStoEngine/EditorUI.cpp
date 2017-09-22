@@ -85,7 +85,7 @@ bool EditorUI::Update()
 			ImGui::EndMenu();
 		}
 
-		ImGui::Text("Fps: %f", App->GetFps());
+		ImGui::Text("Fps: %d", App->GetFps());
 	
 		ImGui::EndMainMenuBar();
 	}

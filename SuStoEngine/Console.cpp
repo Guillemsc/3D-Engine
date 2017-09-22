@@ -42,7 +42,7 @@ bool Console::Update()
 	if (ImGui::Begin("Console", &visible))
 	{
 		if (ImGui::SmallButton("Clear"))
-			Clear();
+			AddLog("Help");
 
 		ImGui::SameLine();
 

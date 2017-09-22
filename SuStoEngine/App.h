@@ -7,6 +7,8 @@
 #include "PerfTimer.h"
 #include "Module.h"
 
+class Profiler;
+
 class XMLLoader;
 class JSONLoader;
 class ModuleWindow;
@@ -35,7 +37,7 @@ public:
 
 	void EndApp();
 	float GetDT();
-	float GetFps();
+	int GetFps();
 	float GetAvgFps();
 	int GetFramesSinceStart();
 	bool GetDebugMode();
@@ -66,6 +68,8 @@ public:
 
 	std::list<string>  logs;
 
+	Profiler*		   profiler = nullptr;
+
 private:
 	std::list<Module*> modules;
 
@@ -76,22 +80,8 @@ private:
 	std::string		   organization;
 
 	bool		       end_app = false;
-
-	// Engine debug info
 	bool			   debug_mode = false;
 	int				   capped_ms = -1;
-	PerfTimer		   ptimer;
-	int				   frame_count = 0;
-	Timer			   startup_time;
-	Timer			   frame_time;
-	Timer			   last_sec_frame_time;
-	int				   last_sec_frame_count = 0;
-	int				   prev_last_sec_frame_count = 0;
-	float		   	   dt = 0.0f;
-	float			   avg_fps = 0;
-	float			   seconds_since_startup = 0;
-	float			   last_frame_ms = 0;
-	float			   frames_on_last_update = 0;
 };
 
 extern Application* App;

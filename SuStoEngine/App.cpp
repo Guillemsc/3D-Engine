@@ -1,4 +1,5 @@
 #include "App.h"
+#include "Profiler.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleAudio.h"
@@ -45,6 +46,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	// Renderer last
 	AddModule(renderer3D);
 
+	profiler = new Profiler();
 	SetDebugMode(true);
 }
 
@@ -97,6 +99,8 @@ void Application::PrepareUpdate()
 bool Application::Update()
 {
 	bool ret = true;
+
+	profiler->NewFrame();
 
 	if (input->GetWindowEvent(WE_QUIT) == true || end_app)
 		return false;
@@ -201,9 +205,9 @@ float Application::GetDT()
 	return dt;
 }
 
-float Application::GetFps()
+int Application::GetFps()
 {
-	return frames_on_last_update;
+	return profiler->GetFPS();
 }
 
 float Application::GetAvgFps()

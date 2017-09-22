@@ -175,6 +175,7 @@
     <ClInclude Include="PhysBody3D.h" />
     <ClInclude Include="PhysVehicle3D.h" />
     <ClInclude Include="Primitive.h" />
+    <ClInclude Include="Profiler.h" />
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="resource.h" />
@@ -241,6 +242,7 @@
     <ClCompile Include="PhysBody3D.cpp" />
     <ClCompile Include="PhysVehicle3D.cpp" />
     <ClCompile Include="Primitive.cpp" />
+    <ClCompile Include="Profiler.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="XMLLoader.cpp" />
