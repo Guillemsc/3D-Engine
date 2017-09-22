@@ -30,7 +30,7 @@ bool ModuleRenderer3D::Awake()
 	SetName("Renderer3D");
 
 	//Create context
-	context = SDL_GL_CreateContext(App->window->window);
+	context = SDL_GL_CreateContext(App->window->main_window);
 
 	if (context == NULL)
 	{
@@ -133,7 +133,7 @@ bool ModuleRenderer3D::PreUpdate()
 // PostUpdate present buffer to screen
 bool ModuleRenderer3D::PostUpdate()
 {
-	SDL_GL_SwapWindow(App->window->window);
+	SDL_GL_SwapWindow(App->window->main_window);
 	return true;
 }
 

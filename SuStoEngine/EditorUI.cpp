@@ -23,7 +23,7 @@ bool EditorUI::Awake()
 	bool ret = true;
 
 	LOG_OUTPUT("Loading ImGui");
-	ret = ImGui_ImplSdlGL2_Init(App->window->window);
+	ret = ImGui_ImplSdlGL2_Init(App->window->main_window);
 
 	// Styles
 	//	-default
@@ -45,7 +45,7 @@ bool EditorUI::PreUpdate()
 	bool ret = true;
 
 	// ImGui new frame
-	ImGui_ImplSdlGL2_NewFrame(App->window->window);
+	ImGui_ImplSdlGL2_NewFrame(App->window->main_window);
 
 	return ret;
 }
@@ -108,7 +108,6 @@ bool EditorUI::Update()
 	{
 		TestEngine();
 	}
-	
 
 	return ret;
 }
@@ -196,7 +195,13 @@ void EditorUI::TestEngine()
 	{
 		if (ImGui::Button("Create Window")) 
 		{
-			App->window->CreateNewWindow("New Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500, SDL_WINDOW_OPENGL);
+			char number[255];
+			snprintf(number, 255, "Window %d", App->window->dock_id);
+			App->window->CreateNewWindow(number);
+		}
+		if (ImGui::Button("Delete Window"))
+		{
+			
 		}
 
 	}
