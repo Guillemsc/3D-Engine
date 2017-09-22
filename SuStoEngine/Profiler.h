@@ -2,10 +2,15 @@
 #define __PROFILER_H__
 
 #include "SDL\include\SDL.h"
+#include <list>
+#include <iostream>
 
 struct Profile
 {
+	const char* name;
+
 	float last_frame_ms = 0.0f;
+	float frame_start = 0.0f;
 	float total_frames_ms = 0.0f;
 };
 
@@ -14,18 +19,26 @@ class Profiler
 public:
 	Profiler();
 	~Profiler();
+	void CleanUp();
+
 	void AwakeFinish();
 	void StartFinish();
 	void UpdateFinish();
 
+	float GetAwakeTime();
+	float GetStartTime();
 	float GetFrameTime();
 	int GetFPS();
 	float GetAvgFPS();
 	int GetFramesSinceStartup();
 	int GetTimeSinceStartup();
 
+	void StartProfile(const char* name);
+	void FinishProfile();
+	Profile* GetProfile(const char* name);
+
 private:
-	float startup_time = 0.0f;
+	float cration_time = 0.0f;
 
 	// Awake -----
 	float awake_total_time = 0.0f;
@@ -46,6 +59,11 @@ private:
 	int frame_counter = 0;
 	float frame_counter_ms = 0.0f;
 	int last_second_frames = 0;
+	// -----------
+
+	// Items -----
+	Profile* current_profile = nullptr;
+	std::list<Profile*> profiles;
 	// -----------
 };
 

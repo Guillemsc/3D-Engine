@@ -118,7 +118,11 @@ bool Application::Update()
 		if (!(*it)->GetEnabled())
 			continue;
 
+		profiler->StartProfile((*it)->GetName());
+
 		ret = (*it)->Update();
+
+		profiler->FinishProfile();
 
 		if (!ret) return false;
 	}
@@ -157,6 +161,8 @@ bool Application::CleanUp()
 		if (!ret) return false;
 	}
 
+	profiler->CleanUp();
+
 	return ret;
 }
 
@@ -180,7 +186,7 @@ void Application::EndApp()
 
 float Application::GetDT()
 {
-	return profiler->GetFrameTime();
+	return profiler->GetFrameTime()/1000;
 }
 
 bool Application::GetDebugMode()

@@ -56,6 +56,7 @@ public:
 	{}
 
 	void SetName(const char* set_name) { name = set_name; }
+	const char* GetName();
 	bool GetEnabled() { return enabled; };
 	void SetEnabled(bool set) { enabled = set; };
 

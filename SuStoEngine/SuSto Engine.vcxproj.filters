@@ -507,6 +507,7 @@
     <ClCompile Include="Profiler.cpp">
       <Filter>Sources\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Module.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">

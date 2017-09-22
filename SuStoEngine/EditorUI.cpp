@@ -85,6 +85,8 @@ bool EditorUI::Update()
 			ImGui::EndMenu();
 		}
 
+		ImGui::Text("Awake: %f", App->profiler->GetAwakeTime()); ImGui::SameLine();
+		ImGui::Text("Start: %f", App->profiler->GetStartTime()); ImGui::SameLine();
 		ImGui::Text("Fps: %d", App->profiler->GetFPS());
 	
 		ImGui::EndMainMenuBar();
