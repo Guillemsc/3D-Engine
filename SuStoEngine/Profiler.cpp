@@ -1,21 +1,34 @@
 #include "Profiler.h"
+#include "Globals.h"
 
 Profiler::Profiler()
 {
-	startup_time = SDL_GetTicks();
-	time_since_startup = 0.0f;
 }
 
 Profiler::~Profiler()
 {
 }
 
-void Profiler::NewFrame()
+void Profiler::AwakeFinish()
+{
+	awake_total_time = SDL_GetTicks();
+}
+
+void Profiler::StartFinish()
+{
+	start_total_time = SDL_GetTicks() - awake_total_time;
+
+	update_start_time = SDL_GetTicks();
+	update_time_since_startup = 0.0f;
+}
+
+void Profiler::UpdateFinish()
 {
 	frames_since_startup++;
-	frame_ms = SDL_GetTicks() - (startup_time + time_since_startup);
-	avg_fps = float(frames_since_startup) / time_since_startup;
+	frame_ms = SDL_GetTicks() - (update_start_time + update_time_since_startup);
+	avg_fps = float(frames_since_startup) / update_time_since_startup;
 
+	// Frames / s
 	frame_counter++;
 	frame_counter_ms += frame_ms;
 	if (frame_counter_ms > 1000)
@@ -24,8 +37,10 @@ void Profiler::NewFrame()
 		frame_counter = 0;
 		frame_counter_ms = frame_counter_ms - 1000;
 	}
+	// -----------
 
-	time_since_startup = SDL_GetTicks() - startup_time;
+	// Update time since startup
+	update_time_since_startup = SDL_GetTicks() - update_start_time;
 }
 
 float Profiler::GetFrameTime()
@@ -38,6 +53,11 @@ int Profiler::GetFPS()
 	return last_second_frames;
 }
 
+float Profiler::GetAvgFPS()
+{
+	return avg_fps;
+}
+
 int Profiler::GetFramesSinceStartup()
 {
 	return frames_since_startup;
@@ -45,5 +65,5 @@ int Profiler::GetFramesSinceStartup()
 
 int Profiler::GetTimeSinceStartup()
 {
-	return time_since_startup;
+	return SDL_GetTicks();
 }

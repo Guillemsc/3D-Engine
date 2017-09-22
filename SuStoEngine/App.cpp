@@ -1,5 +1,4 @@
 #include "App.h"
-#include "Profiler.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleAudio.h"
@@ -68,6 +67,8 @@ bool Application::Awake()
 		if (!ret) return false;
 	}
 
+	profiler->AwakeFinish();
+
 	return ret;
 }
 
@@ -81,26 +82,21 @@ bool Application::Start()
 		if (!ret) return false;
 	}
 
-	startup_time.Start();
+	profiler->StartFinish();
+
 	return ret;
 }
 
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
-	frame_count++;
-	last_sec_frame_count++;
 
-	dt = (float)startup_time.Read() / 1000.0f;
-	startup_time.Start();
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
 bool Application::Update()
 {
 	bool ret = true;
-
-	profiler->NewFrame();
 
 	if (input->GetWindowEvent(WE_QUIT) == true || end_app)
 		return false;
@@ -139,13 +135,15 @@ bool Application::Update()
 
 	FinishUpdate();
 
+	profiler->UpdateFinish();
+
 	return ret;
 }
 
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
-	FrameCalculations();
+
 }
 
 bool Application::CleanUp()
@@ -160,26 +158,6 @@ bool Application::CleanUp()
 	}
 
 	return ret;
-}
-
-void Application::FrameCalculations()
-{
-	if (last_sec_frame_time.Read() > 1000)
-	{
-		last_sec_frame_time.Start();
-		prev_last_sec_frame_count = last_sec_frame_count;
-		last_sec_frame_count = 0;
-	}
-
-	avg_fps = float(frame_count) / startup_time.ReadSec();
-	seconds_since_startup = startup_time.ReadSec();
-	last_frame_ms = frame_time.Read();
-	frames_on_last_update = prev_last_sec_frame_count;
-
-	if (capped_ms > 0 && last_frame_ms < capped_ms)
-	{
-		SDL_Delay(capped_ms - last_frame_ms);
-	}
 }
 
 int Application::GetArgc() const
@@ -202,22 +180,7 @@ void Application::EndApp()
 
 float Application::GetDT()
 {
-	return dt;
-}
-
-int Application::GetFps()
-{
-	return profiler->GetFPS();
-}
-
-float Application::GetAvgFps()
-{
-	return avg_fps;
-}
-
-int Application::GetFramesSinceStart()
-{
-	return frame_count;
+	return profiler->GetFrameTime();
 }
 
 bool Application::GetDebugMode()

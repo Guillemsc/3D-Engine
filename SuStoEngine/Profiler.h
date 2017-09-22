@@ -14,16 +14,30 @@ class Profiler
 public:
 	Profiler();
 	~Profiler();
-	void NewFrame();
+	void AwakeFinish();
+	void StartFinish();
+	void UpdateFinish();
 
 	float GetFrameTime();
 	int GetFPS();
+	float GetAvgFPS();
 	int GetFramesSinceStartup();
 	int GetTimeSinceStartup();
 
 private:
 	float startup_time = 0.0f;
-	float time_since_startup = 0.0f;
+
+	// Awake -----
+	float awake_total_time = 0.0f;
+	// -----------
+
+	// Start -----
+	float start_total_time = 0.0f;
+	// -----------
+
+	// Update ----
+	float update_start_time = 0.0f;
+	float update_time_since_startup = 0.0f;
 
 	int   frames_since_startup = 0;
 	float frame_ms = 0.0f;
@@ -32,6 +46,7 @@ private:
 	int frame_counter = 0;
 	float frame_counter_ms = 0.0f;
 	int last_second_frames = 0;
+	// -----------
 };
 
 #endif //__PROFILER_H__

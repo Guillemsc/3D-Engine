@@ -3,8 +3,7 @@
 #include <list>
 #include <string>
 #include "Globals.h"
-#include "Timer.h"
-#include "PerfTimer.h"
+#include "Profiler.h"
 #include "Module.h"
 
 class Profiler;
@@ -37,9 +36,6 @@ public:
 
 	void EndApp();
 	float GetDT();
-	int GetFps();
-	float GetAvgFps();
-	int GetFramesSinceStart();
 	bool GetDebugMode();
 	void SetDebugMode(bool set);
 
@@ -49,8 +45,6 @@ private:
 	void AddModule(Module* mod);
 	void PrepareUpdate();
 	void FinishUpdate();
-
-	void FrameCalculations();
 
 public:
 	//Modules
