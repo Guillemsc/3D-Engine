@@ -41,7 +41,14 @@ bool Console::Update()
 
 	if (ImGui::Begin("Console", &visible))
 	{
-		ImGui::Text("Type help to see common comands");
+		if (ImGui::SmallButton("Clear"))
+			Clear();
+
+		ImGui::SameLine();
+
+		if (ImGui::SmallButton("Help"))
+			AddLog("Help");
+		
 		ImGui::Separator();
 
 		// Scrollable
@@ -125,6 +132,11 @@ void Console::AddLog(const char * txt, console_text_type type)
 	}
 
 	ScrollBottom();
+}
+
+void Console::Clear()
+{
+	console_items.clear();
 }
 
 void Console::ScrollBottom()

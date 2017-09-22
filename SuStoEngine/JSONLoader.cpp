@@ -14,20 +14,21 @@ bool JSONLoader::Awake()
 	bool ret = true;
 
 	LOG_OUTPUT("Loading JSON Module");
+	SetName("JSONLoader");
 
-	JSON_Object* ob = LoadJSON("package.json");
+	//JSON_Object* ob = LoadJSON("package.json");
 
-	const char *name = NULL;
+	//const char *name = NULL;
 
-	name = json_object_get_string(ob, "name");
+	//name = json_object_get_string(ob, "name");
 
-	LOG_OUTPUT("%s", name);
+	//LOG_OUTPUT("%s", name);
 
-	json_object_set_string(ob, "name", "John Smith");
+	//json_object_set_string(ob, "name", "John Smith");
 
-	SaveJSON("package.json");
+	//SaveJSON("package.json");
 
-	CreateJSON("test.json");
+	//CreateJSON("test.json");
 
 	return ret;
 }
