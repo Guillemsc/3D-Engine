@@ -101,3 +101,8 @@ void ModuleWindow::GetWindowSize(int & width, int & height)
 {
 	SDL_GetWindowSize(window, &width, &height);
 }
+
+void ModuleWindow::CreateNewWindow(const char * title, int x, int y, int w, int h, Uint32 flags)
+{
+	SDL_CreateWindow(TITLE, x, y, w, h, flags);
+}

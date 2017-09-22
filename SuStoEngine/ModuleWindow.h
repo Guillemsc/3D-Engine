@@ -21,6 +21,8 @@ public:
 	void SetTitle(const char* title);
 	void GetWindowSize(int &width, int &height);
 
+	void CreateNewWindow(const char* title, int x, int y, int w, int h, Uint32 flags);
+
 public:
 	//The window we'll be rendering to
 	SDL_Window* window;

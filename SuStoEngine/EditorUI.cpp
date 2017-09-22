@@ -192,6 +192,15 @@ void EditorUI::TestEngine()
 		GeometryMathTest();
 	}
 
+	if (ImGui::CollapsingHeader("Window Docking"))
+	{
+		if (ImGui::Button("Create Window")) 
+		{
+			App->window->CreateNewWindow("New Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 500, 500, SDL_WINDOW_OPENGL);
+		}
+
+	}
+
 	ImGui::End();
 
 }
