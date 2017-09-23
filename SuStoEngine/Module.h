@@ -55,6 +55,11 @@ public:
 	virtual void OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	{}
 
+	virtual void OnConfiguration()
+	{
+
+	}
+
 	void SetName(const char* set_name) { name = set_name; }
 	const char* GetName();
 	bool GetEnabled() { return enabled; };

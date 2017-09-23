@@ -122,6 +122,7 @@ void Profiler::FinishProfile()
 	{
 		current_profile->last_frame_ms = SDL_GetTicks() - current_profile->frame_start;
 		current_profile->total_frames_ms += current_profile->last_frame_ms;
+		current_profile = nullptr;
 	}
 }
 

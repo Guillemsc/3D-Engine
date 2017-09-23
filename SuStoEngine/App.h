@@ -64,9 +64,9 @@ public:
 
 	Profiler*		   profiler = nullptr;
 
-private:
 	std::list<Module*> modules;
 
+private:
 	int				   argc;
 	char**			   args;
 

@@ -23,6 +23,7 @@ bool EditorUI::Awake()
 	bool ret = true;
 
 	LOG_OUTPUT("Loading ImGui");
+	SetName("Editor");
 	ret = ImGui_ImplSdlGL2_Init(App->window->window);
 
 	// Styles
@@ -68,6 +69,14 @@ bool EditorUI::Update()
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("Window"))
+		{
+			ImGui::MenuItem("Console", "º", &App->console->visible);
+
+			ImGui::MenuItem("Configuration", "P", &show_app_configuration);
+
+			ImGui::EndMenu();
+		}
 		if (ImGui::BeginMenu("Help"))
 		{
 			ImGui::MenuItem("About SuSto Engine", NULL, &show_app_about);
@@ -76,8 +85,6 @@ bool EditorUI::Update()
 
 		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
 		{
-			ImGui::MenuItem("Console", "º", &App->console->visible);
-
 			ImGui::MenuItem("Engine Tests", NULL, &show_test_window);
 
 			ImGui::MenuItem("Test window", NULL, &show_imgui_test_window);
@@ -92,6 +99,12 @@ bool EditorUI::Update()
 		ImGui::EndMainMenuBar();
 	}
 	// -------------------------------------
+
+	// Profiler
+	if (show_app_configuration)
+	{
+		Configuration();
+	}
 
 	// About
 	if (show_app_about)
@@ -139,6 +152,22 @@ void EditorUI::ImGuiInput(SDL_Event* ev)
 {
 	// ImGui Input
 	ImGui_ImplSdlGL2_ProcessEvent(ev);
+}
+
+void EditorUI::Configuration()
+{
+	if (ImGui::Begin("Profiler", &show_app_configuration, ImGuiWindowFlags_NoResize))
+	{
+		for (list<Module*>::iterator it = App->modules.begin(); it != App->modules.end(); it++)
+		{
+			if (ImGui::CollapsingHeader((*it)->GetName()))
+			{
+				(*it)->OnConfiguration();
+			}
+		}
+
+		ImGui::End();
+	}
 }
 
 void EditorUI::About()
@@ -667,8 +696,5 @@ void EditorUI::LoadStyle(char * name)
 		style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
 		style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
 		style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
-
-
-
 	}
 }

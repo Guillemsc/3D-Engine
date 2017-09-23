@@ -23,6 +23,7 @@ public:
 	void LoadStyle(char* name);
 
 private:
+	void Configuration();
 	void About();
 	void TestEngine();
 	void GeometryMathTest();
@@ -31,6 +32,8 @@ public:
 
 private:
 	bool show_app_about = false;
+
+	bool show_app_configuration = false;
 
 	bool show_imgui_test_window = false;
 

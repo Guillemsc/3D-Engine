@@ -16,6 +16,7 @@ bool Console::Awake()
 {
 	bool ret = true;
 	LOG_OUTPUT("Loading Console");
+	SetName("Console");
 
 	visible = true;
 
