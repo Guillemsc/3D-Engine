@@ -63,5 +63,6 @@ typedef unsigned int uint;
 #define WIN_RESIZABLE true
 #define WIN_BORDERLESS false
 #define WIN_FULLSCREEN_DESKTOP false
+#define WIN_MAXIMIZED true
 #define VSYNC true
 #define TITLE "SuSto Engine v.0.1"

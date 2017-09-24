@@ -156,7 +156,9 @@ void EditorUI::ImGuiInput(SDL_Event* ev)
 
 void EditorUI::Configuration()
 {
-	if (ImGui::Begin("Profiler", &show_app_configuration, ImGuiWindowFlags_NoResize))
+	ImGui::SetNextWindowSize(ImVec2(500, 500), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowPosCenter(ImGuiCond_::ImGuiCond_FirstUseEver);
+	if (ImGui::Begin("Profiler", &show_app_configuration, ImGuiWindowFlags_::ImGuiWindowFlags_NoSavedSettings))
 	{
 		for (list<Module*>::iterator it = App->modules.begin(); it != App->modules.end(); it++)
 		{
@@ -701,8 +703,8 @@ void EditorUI::LoadStyle(char * name)
 
 void EditorUI::OnConfiguration()
 {
-	//char title[25];
-	//std::vector<float> framerate = App->profiler->GetFramesVector();
-	//sprintf_s(title, 25, "Framerate %.1f", framerate[framerate.size() - 1]);
-	////ImGui::PlotHistogram("Framerate");
+	char title[25];
+	std::vector<float> framerate = App->profiler->GetFramesVector();
+	sprintf_s(title, 25, "Framerate %.1f", framerate[framerate.size() - 1]);
+	ImGui::PlotHistogram("Framerate", &framerate[0], framerate.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
 }
