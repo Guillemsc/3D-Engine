@@ -4,6 +4,7 @@
 #include "SDL\include\SDL.h"
 #include <vector>
 #include <iostream>
+#define MAX_FRAMES_LOGGED 25
 
 struct Profile
 {
@@ -36,6 +37,7 @@ public:
 	void StartProfile(const char* name);
 	void FinishProfile();
 	Profile* GetProfile(const char* name);
+	std::vector<float> GetFramesVector();
 
 private:
 	float cration_time = 0.0f;
@@ -55,6 +57,7 @@ private:
 	int   frames_since_startup = 0;
 	float frame_ms = 0.0f;
 	float avg_fps = 0.0f;
+	std::vector<float> frames;
 
 	int frame_counter = 0;
 	float frame_counter_ms = 0.0f;

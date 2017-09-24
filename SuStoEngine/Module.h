@@ -56,9 +56,7 @@ public:
 	{}
 
 	virtual void OnConfiguration()
-	{
-
-	}
+	{}
 
 	void SetName(const char* set_name) { name = set_name; }
 	const char* GetName();

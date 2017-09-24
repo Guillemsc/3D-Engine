@@ -47,6 +47,10 @@ void Profiler::UpdateFinish()
 		last_second_frames = frame_counter;
 		frame_counter = 0;
 		frame_counter_ms = frame_counter_ms - 1000;
+		frames.push_back(last_second_frames);
+		if (frames.size() > MAX_FRAMES_LOGGED) {
+			frames.erase(frames.begin());
+		}
 	}
 	// -----------
 
@@ -140,4 +144,9 @@ Profile * Profiler::GetProfile(const char * name)
 	}
 
 	return ret;
+}
+
+std::vector<float> Profiler::GetFramesVector()
+{
+	return frames;
 }

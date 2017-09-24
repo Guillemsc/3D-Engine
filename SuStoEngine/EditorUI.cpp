@@ -698,3 +698,11 @@ void EditorUI::LoadStyle(char * name)
 		style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
 	}
 }
+
+void EditorUI::OnConfiguration()
+{
+	//char title[25];
+	//std::vector<float> framerate = App->profiler->GetFramesVector();
+	//sprintf_s(title, 25, "Framerate %.1f", framerate[framerate.size() - 1]);
+	////ImGui::PlotHistogram("Framerate");
+}

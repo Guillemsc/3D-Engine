@@ -21,6 +21,7 @@ public:
 	void ImGuiInput(SDL_Event* ev);
 
 	void LoadStyle(char* name);
+	void OnConfiguration();
 
 private:
 	void Configuration();
