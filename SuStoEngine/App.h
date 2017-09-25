@@ -39,10 +39,12 @@ public:
 	void EndApp();
 	float GetDT();
 	void SetAppName(const char* name);
+	const char* GetAppName();
 	void SetAppOrganization(const char* name);
+	const char* GetAppOrganization();
 	void SetMaxFps(int set);
-	bool GetDebugMode();
 	void SetDebugMode(bool set);
+	bool GetDebugMode();
 
 	void GoToBrowser(const char* url);
 

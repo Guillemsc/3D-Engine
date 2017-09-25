@@ -8,6 +8,7 @@
 #include "imgui_impl_sdl.h"
 #include "Functions.h"
 #include "Console.h"
+#include "Configuration.h"
 
 //https://github.com/ocornut/imgui/issues/351
 
@@ -25,6 +26,7 @@ bool EditorUI::Awake()
 
 	LOG_OUTPUT("Loading ImGui");
 	SetName("Editor");
+
 	ret = ImGui_ImplSdlGL2_Init(App->window->window);
 
 	// Styles
@@ -47,8 +49,10 @@ bool EditorUI::Start()
 	bool ret = true;
 
 	console = new Console();
+	configuration = new Configuration();
 
 	AddEditor(console);
+	AddEditor(configuration);
 
 	return ret;
 }
@@ -85,7 +89,7 @@ bool EditorUI::Update()
 		{
 			ImGui::MenuItem("Console", "º", &console->visible);
 
-			ImGui::MenuItem("Configuration", "P", &show_app_configuration);
+			ImGui::MenuItem("Configuration", "P", &configuration->visible);
 
 			ImGui::EndMenu();
 		}
@@ -111,12 +115,6 @@ bool EditorUI::Update()
 		ImGui::EndMainMenuBar();
 	}
 	// -------------------------------------
-
-	// Configuration
-	if (show_app_configuration)
-	{
-		Configuration();
-	}
 
 	// About
 	if (show_app_about)
@@ -179,24 +177,10 @@ void EditorUI::ImGuiInput(SDL_Event* ev)
 	ImGui_ImplSdlGL2_ProcessEvent(ev);
 }
 
-void EditorUI::Configuration()
+
+void EditorUI::AddEditor(EditorElement * el)
 {
-	ImGui::SetNextWindowSize(ImVec2(500, 500), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowPosCenter(ImGuiCond_::ImGuiCond_FirstUseEver);
-	if (ImGui::Begin("Profiler", &show_app_configuration, ImGuiWindowFlags_::ImGuiWindowFlags_NoSavedSettings))
-	{
-		ImGui::CollapsingHeader("App");
-
-		for (list<Module*>::iterator it = App->modules.begin(); it != App->modules.end(); it++)
-		{
-			if (ImGui::CollapsingHeader((*it)->GetName()))
-			{
-				(*it)->OnConfiguration();
-			}
-		}
-
-		ImGui::End();
-	}
+	editor_elements.push_back(el);
 }
 
 void EditorUI::About()
@@ -728,15 +712,3 @@ void EditorUI::LoadStyle(char * name)
 	}
 }
 
-void EditorUI::AddEditor(EditorElement * el)
-{
-	editor_elements.push_back(el);
-}
-
-void EditorUI::OnConfiguration()
-{
-	char title[25];
-	std::vector<float> framerate = App->profiler->GetFramesVector();
-	sprintf_s(title, 25, "Framerate %.1f", framerate[framerate.size() - 1]);
-	ImGui::PlotHistogram("Framerate", &framerate[0], framerate.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
-}

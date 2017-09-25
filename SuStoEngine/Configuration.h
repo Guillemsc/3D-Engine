@@ -14,6 +14,10 @@ public:
 	void Draw();
 
 public:
+
+private:
+	char name_input_buffer[255];
+	char organization_input_buffer[255];
 };
 
 #endif

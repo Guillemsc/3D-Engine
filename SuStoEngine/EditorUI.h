@@ -5,6 +5,7 @@
 #include "GeometryMath.h"
 
 class Console;
+class Configuration;
 
 class EditorElement
 {
@@ -37,12 +38,10 @@ public:
 	void ImGuiInput(SDL_Event* ev);
 
 	void LoadStyle(char* name);
-	void AddEditor(EditorElement* el);
-
-	void OnConfiguration();
 
 private:
-	void Configuration();
+	void AddEditor(EditorElement* el);
+
 	void About();
 	void TestEngine();
 	void GeometryMathTest();
@@ -50,12 +49,12 @@ private:
 
 private:
 	Console* console = nullptr;
+	Configuration* configuration = nullptr;
+
 
 	list<EditorElement*> editor_elements;
 
 	bool show_app_about = false;
-
-	bool show_app_configuration = false;
 
 	bool show_imgui_test_window = false;
 

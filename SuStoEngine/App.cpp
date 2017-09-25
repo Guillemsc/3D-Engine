@@ -227,9 +227,19 @@ void Application::SetAppName(const char* name)
 	}
 }
 
+const char * Application::GetAppName()
+{
+	return title.c_str();
+}
+
 void Application::SetAppOrganization(const char* name)
 {
 	organization = name;
+}
+
+const char * Application::GetAppOrganization()
+{
+	return organization.c_str();
 }
 
 void Application::SetMaxFps(int set)
