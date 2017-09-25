@@ -10,6 +10,8 @@
 #include "JSONLoader.h"
 #include "EditorUI.h"
 #include "Console.h"
+#include "Configuration.h"
+#include "imgui.h"
 
 Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
@@ -82,6 +84,8 @@ bool Application::Start()
 		if (!ret) return false;
 	}
 
+	LoadConfig();
+
 	profiler->StartFinish();
 
 	return ret;
@@ -100,6 +104,12 @@ bool Application::Update()
 
 	if (input->GetWindowEvent(WE_QUIT) == true || end_app)
 		return false;
+
+	// Cap fps
+	if (capped_ms > 0 && GetDT() < capped_ms)
+	{
+		SDL_Delay(capped_ms - GetDT());
+	}
 
 	PrepareUpdate();
 
@@ -179,6 +189,21 @@ const char * Application::GetArgv(int index) const
 		return NULL;
 }
 
+void Application::LoadConfig()
+{
+	JSON_Object* config = json->LoadJSON("config.json");
+
+	if (config != nullptr)
+	{
+		const char* title = json_object_dotget_string(config, "app.title");
+		const char* organization = json_object_dotget_string(config, "app.organization");
+		int max_fps = json_object_dotget_number(config, "app.max_fps");
+
+		SetAppName(title);
+		SetMaxFps(max_fps);
+	}
+}
+
 void Application::EndApp()
 {
 	end_app = true;
@@ -187,6 +212,33 @@ void Application::EndApp()
 float Application::GetDT()
 {
 	return profiler->GetFrameTime()/1000;
+}
+
+void Application::SetAppName(const char* name)
+{
+	if (title != name)
+	{
+		title = name;
+		window->SetTitle(name);
+
+		JSON_Object* config = json->LoadJSON("config.json");
+		if (config != nullptr)
+		{
+			json_object_dotset_string(config, "app.title", name);
+			json->SaveJSON("config.json");
+		}
+	}
+}
+
+void Application::SetAppOrganization(const char* name)
+{
+	organization = name;
+}
+
+void Application::SetMaxFps(int set)
+{
+	if (set > 0)
+		capped_ms = (1000 / set);
 }
 
 bool Application::GetDebugMode()

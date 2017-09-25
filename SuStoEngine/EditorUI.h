@@ -28,8 +28,7 @@ private:
 	void About();
 	void TestEngine();
 	void GeometryMathTest();
-
-public:
+	void GenerateRandomNumbers(float2 range, int quantity);
 
 private:
 	bool show_app_about = false;
@@ -53,9 +52,6 @@ private:
 	// Random generator
 	float2 range_demo; // for the random generation demo
 	int quantity_demo = 1; // number of random generations of the demo
-
-private:
-	void GenerateRandomNumbers(float2 range, int quantity);
 };
 
 #endif // __j1FILESYSTEM_H__

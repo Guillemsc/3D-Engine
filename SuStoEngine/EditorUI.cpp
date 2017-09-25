@@ -100,7 +100,7 @@ bool EditorUI::Update()
 	}
 	// -------------------------------------
 
-	// Profiler
+	// Configuration
 	if (show_app_configuration)
 	{
 		Configuration();
@@ -124,7 +124,6 @@ bool EditorUI::Update()
 		TestEngine();
 	}
 	
-
 	return ret;
 }
 
@@ -160,6 +159,8 @@ void EditorUI::Configuration()
 	ImGui::SetNextWindowPosCenter(ImGuiCond_::ImGuiCond_FirstUseEver);
 	if (ImGui::Begin("Profiler", &show_app_configuration, ImGuiWindowFlags_::ImGuiWindowFlags_NoSavedSettings))
 	{
+		ImGui::CollapsingHeader("App");
+
 		for (list<Module*>::iterator it = App->modules.begin(); it != App->modules.end(); it++)
 		{
 			if (ImGui::CollapsingHeader((*it)->GetName()))

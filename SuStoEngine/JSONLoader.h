@@ -18,16 +18,11 @@ public:
 	~JSONLoader();
 
 	bool Awake();
+	bool CleanUp();
+
 	JSON_Object* LoadJSON(const char* path);
 	void SaveJSON(const char* path);
 	JSON_Object* CreateJSON(const char* path);
-
-	// Called before quitting
-	bool CleanUp();
-
-private:
-
-public:
 
 private:
 	std::list<json_doc>	jsons;

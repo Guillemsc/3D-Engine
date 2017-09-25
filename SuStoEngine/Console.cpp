@@ -59,8 +59,6 @@ bool Console::Update()
 		// Scrollable texts
 		for (list<console_text>::iterator it = console_items.begin(); it != console_items.end(); it++)
 		{
-
-
 			ImVec4 col = GetColorByTextType((*it).type);
 			ImGui::PushStyleColor(ImGuiCol_Text, col);
 			ImGui::TextUnformatted((*it).txt.c_str());

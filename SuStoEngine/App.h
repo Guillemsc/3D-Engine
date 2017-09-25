@@ -19,6 +19,7 @@ class ModulePhysics3D;
 class Console;
 class EditorUI;
 class DebugScene;
+class Configuration;
 
 class Application
 {
@@ -34,8 +35,13 @@ public:
 	int GetArgc() const;
 	const char* GetArgv(int index) const;
 
+	void LoadConfig();
+
 	void EndApp();
 	float GetDT();
+	void SetAppName(const char* name);
+	void SetAppOrganization(const char* name);
+	void SetMaxFps(int set);
 	bool GetDebugMode();
 	void SetDebugMode(bool set);
 
@@ -50,6 +56,7 @@ public:
 	//Modules
 	XMLLoader*		   xml = nullptr;
 	JSONLoader*		   json = nullptr;
+	Configuration*     configuration = nullptr;
 	ModuleWindow*      window = nullptr;
 	ModuleInput*       input = nullptr;
 	ModuleAudio*       audio = nullptr;
@@ -74,8 +81,9 @@ private:
 	std::string		   organization;
 
 	bool		       end_app = false;
-	bool			   debug_mode = false;
 	int				   capped_ms = -1;
+
+	bool			   debug_mode = false;
 };
 
 extern Application* App;

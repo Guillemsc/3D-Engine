@@ -325,6 +325,9 @@
     <ClInclude Include="Profiler.h">
       <Filter>Sources\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Configuration.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -508,6 +511,9 @@
       <Filter>Sources\Components</Filter>
     </ClCompile>
     <ClCompile Include="Module.cpp" />
+    <ClCompile Include="Configuration.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">

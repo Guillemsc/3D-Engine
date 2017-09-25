@@ -47,10 +47,11 @@ void Profiler::UpdateFinish()
 		last_second_frames = frame_counter;
 		frame_counter = 0;
 		frame_counter_ms = frame_counter_ms - 1000;
+
 		frames.push_back(last_second_frames);
-		if (frames.size() > MAX_FRAMES_LOGGED) {
+		if (frames.size() > MAX_FRAMES_LOGGED) 
 			frames.erase(frames.begin());
-		}
+		
 	}
 	// -----------
 
