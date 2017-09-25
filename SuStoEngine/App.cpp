@@ -199,6 +199,7 @@ void Application::LoadConfig()
 		
 		SetAppName(title);
 		SetAppOrganization(organization);
+		SetVersion(version);
 		SetMaxFps(max_fps);
 	}
 }
@@ -280,6 +281,22 @@ int Application::GetMaxFps()
 bool Application::GetDebugMode()
 {
 	return debug_mode;
+}
+
+void Application::SetVersion(const char * set)
+{
+	version = set;
+
+	if (config != nullptr)
+	{
+		config->SetString("app.version", set);
+		config->Save();
+	}
+}
+
+const char * Application::GetVersion()
+{
+	return version.c_str();;
 }
 
 void Application::SetDebugMode(bool set)

@@ -49,6 +49,8 @@ public:
 	int GetMaxFps();
 	void SetDebugMode(bool set);
 	bool GetDebugMode();
+	void SetVersion(const char* version);
+	const char* GetVersion();
 
 	void GoToBrowser(const char* url);
 

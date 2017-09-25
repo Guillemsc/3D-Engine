@@ -21,7 +21,6 @@ public:
 	void DrawGrid(int HALF_GRID_SIZE);
 
 public:
-
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;

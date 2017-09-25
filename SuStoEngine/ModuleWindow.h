@@ -2,7 +2,10 @@
 #define __ModuleWindow_H__
 
 #include "Module.h"
+#include "glmath.h"
 #include "SDL/include/SDL.h"
+
+#define SCREEN_SIZE 1
 
 class Application;
 
@@ -18,8 +21,11 @@ public:
 	bool CleanUp();
 
 	void SetTitle(const char* title);
+
 	void SetWindowSize(int width, int height);
 	void GetWindowSize(int &width, int &height);
+	vec2 GetWindowSize();
+	void GetDisplaySize(int &width, int &height);
 	void SetFullscreen(bool set);
 	bool GetFullscreen();
 	void SetResizable(bool set);
@@ -30,6 +36,7 @@ public:
 	bool GetFullDekstop();
 	void SetMaximized(bool set);
 	bool GetMaximized();
+	bool GetVsync();
 
 private:
 	bool GenerateWindow(bool fullscreen, bool resizable, bool borderless, bool full_dekstop, bool maximized);
@@ -49,6 +56,7 @@ private:
 	bool borderless = false;
 	bool full_dekstop = false;
 	bool maximized = false;
+	bool vsync = false;
 };
 
 #endif // __ModuleWindow_H__

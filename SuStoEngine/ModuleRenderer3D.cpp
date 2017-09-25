@@ -41,7 +41,7 @@ bool ModuleRenderer3D::Awake()
 	if (ret == true)
 	{
 		//Use Vsync
-		if (VSYNC && SDL_GL_SetSwapInterval(0) < 0)
+		if (App->window->GetVsync() && SDL_GL_SetSwapInterval(0) < 0)
 			LOG_OUTPUT("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 
 		//Initialize Projection Matrix
@@ -105,7 +105,7 @@ bool ModuleRenderer3D::Awake()
 	}
 
 	// Projection matrix for
-	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	OnResize(App->window->GetWindowSize().x, App->window->GetWindowSize().y);
 
 	return ret;
 }

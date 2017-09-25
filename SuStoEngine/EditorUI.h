@@ -6,6 +6,7 @@
 
 class Console;
 class Configuration;
+class About;
 
 class EditorElement
 {
@@ -42,7 +43,6 @@ public:
 private:
 	void AddEditor(EditorElement* el);
 
-	void About();
 	void TestEngine();
 	void GeometryMathTest();
 	void GenerateRandomNumbers(float2 range, int quantity);
@@ -50,11 +50,9 @@ private:
 private:
 	Console* console = nullptr;
 	Configuration* configuration = nullptr;
-
+	About* about = nullptr;
 
 	list<EditorElement*> editor_elements;
-
-	bool show_app_about = false;
 
 	bool show_imgui_test_window = false;
 

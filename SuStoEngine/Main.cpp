@@ -20,7 +20,7 @@ Application* App = nullptr;
 
 int main(int argc, char ** argv)
 {
-	LOG_OUTPUT("Engine starting: '%s'", TITLE);
+	LOG_OUTPUT("Engine starting");
 
 	int main_return = EXIT_FAILURE;
 	MainState state = MainState::MAIN_CREATION;
@@ -93,7 +93,7 @@ int main(int argc, char ** argv)
 		}
 	}
 
-	LOG_OUTPUT("Exiting app '%s'...\n", TITLE);
+	LOG_OUTPUT("Exiting engine");
 	delete App;
 
 	return main_return;

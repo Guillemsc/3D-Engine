@@ -37,9 +37,6 @@
     <Filter Include="Sources\Components\MathGeoLib\Time">
       <UniqueIdentifier>{6b145f36-4881-40a4-9b57-bf3cb803960b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Tools">
-      <UniqueIdentifier>{a9f75ce3-c4ad-48a5-8f46-5294d5718fff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Components\Parson">
       <UniqueIdentifier>{b1623064-60e9-47f4-a610-2cf9481a55bf}</UniqueIdentifier>
     </Filter>
@@ -309,9 +306,6 @@
     <ClInclude Include="MathGeoLib\include\Time\Clock.h">
       <Filter>Sources\Components\MathGeoLib\Time</Filter>
     </ClInclude>
-    <ClInclude Include="GeometryMath.h">
-      <Filter>Sources\Tools</Filter>
-    </ClInclude>
     <ClInclude Include="EditorUI.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
@@ -329,6 +323,12 @@
       <Filter>Sources\Editor</Filter>
     </ClInclude>
     <ClInclude Include="Configuration.h">
+      <Filter>Sources\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryMath.h">
+      <Filter>Sources\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="About.h">
       <Filter>Sources\Editor</Filter>
     </ClInclude>
   </ItemGroup>
@@ -514,6 +514,9 @@
       <Filter>Sources\Editor</Filter>
     </ClCompile>
     <ClCompile Include="Configuration.cpp">
+      <Filter>Sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="About.cpp">
       <Filter>Sources\Editor</Filter>
     </ClCompile>
   </ItemGroup>

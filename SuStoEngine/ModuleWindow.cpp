@@ -42,13 +42,13 @@ bool ModuleWindow::Awake()
 
 	if (config != nullptr)
 	{
-		//width = json_object_dotget_number(config, "window.width");
-		//height = json_object_dotget_number(config, "window.height");
-		//fullscreen = json_object_dotget_boolean(config, "window.fullscreen");
-		//resizable = json_object_dotget_boolean(config, "window.resizable");
-		//borderless = json_object_dotget_boolean(config, "window.borderless");
-		//full_dekstop = json_object_dotget_boolean(config, "window.fulldekstop");
-		//maximized = json_object_dotget_boolean(config, "window.maximized");
+		width = config->GetNumber("window.width");
+		height = config->GetNumber("window.height");
+		fullscreen = config->GetBool("window.fullscreen");
+		resizable = config->GetBool("window.resizable");
+		borderless = config->GetBool("window.borderless");
+		full_dekstop = config->GetBool("window.fulldekstop");
+		maximized = config->GetBool("window.maximized");
 	}
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -111,7 +111,7 @@ bool ModuleWindow::GenerateWindow(bool fullscreen, bool resizable, bool borderle
 		flags |= SDL_WINDOW_MAXIMIZED;
 	}
 
-	window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+	window = SDL_CreateWindow(App->GetAppName(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
 
 	if (window == NULL)
 	{
@@ -138,13 +138,35 @@ void ModuleWindow::SetWindowSize(int _width, int _height)
 		width = _width;
 		height = _height;
 		SDL_SetWindowSize(window, width, height);
-		App->renderer3D->OnResize(width, height);
+
+		if(!fullscreen)
+			App->renderer3D->OnResize(width, height);
 	}
 }
 
 void ModuleWindow::GetWindowSize(int & width, int & height)
 {
 	SDL_GetWindowSize(window, &width, &height);
+}
+
+vec2 ModuleWindow::GetWindowSize()
+{
+	int w, h;
+	GetWindowSize(w, h);
+	return vec2(w, h);
+}
+
+void ModuleWindow::GetDisplaySize(int & width, int & height)
+{
+	SDL_DisplayMode dm;
+
+	if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
+	{
+		SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
+	}
+
+	width = dm.w;
+	height = dm.h;
 }
 
 void ModuleWindow::SetFullscreen(bool set)
@@ -168,16 +190,7 @@ bool ModuleWindow::GetFullscreen()
 
 void ModuleWindow::SetResizable(bool set)
 {
-	resizable = set;
 
-	Uint32 flags;
-
-	if (resizable == true)
-	{
-		flags |= SDL_WINDOW_RESIZABLE;
-	}
-
-	SDL_SetWindowFullscreen(window, flags);
 }
 
 bool ModuleWindow::GetResizalbe()
@@ -232,4 +245,9 @@ void ModuleWindow::SetMaximized(bool set)
 bool ModuleWindow::GetMaximized()
 {
 	return maximized;
+}
+
+bool ModuleWindow::GetVsync()
+{
+	return vsync;
 }
