@@ -1,20 +1,19 @@
 #ifndef __Configuration_H__
 #define __Configuration_H__
 
+#include "EditorUI.h"
 #include "Module.h"
 
-class Configuration : public Module
+class Configuration : public EditorElement
 {
 public:
 	Configuration(bool start_enabled = true);
 	virtual ~Configuration();
 
-	bool Awake();
-	bool Start();
-	bool Update();
+	void Start();
+	void Draw();
 
 public:
-	bool visible = false;
 };
 
 #endif

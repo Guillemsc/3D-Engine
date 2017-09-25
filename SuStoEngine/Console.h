@@ -1,7 +1,9 @@
 #ifndef __Console_H__
 #define __Console_H__
 
+#include "EditorUI.h"
 #include "Module.h"
+
 #define MAX_LINES 100	
 
 class Application;
@@ -24,17 +26,13 @@ struct console_text
 	console_text_type type = console_text_type_default;
 };
 
-class Console : public Module
+class Console : public EditorElement
 {
 public:
 	Console(bool start_enabled = true);
-
-	// Destructor
 	virtual ~Console();
 
-	bool Awake();
-	bool Update();
-	bool CleanUp();
+	void Draw();
 
 	void AddLog(const char* txt, console_text_type type = console_text_type_default);
 	void Clear();
@@ -44,9 +42,6 @@ private:
 	void CommandInput(const char* txt);
 	ImColor GetColorByTextType(console_text_type type);
 	void AddLogs();
-
-public:
-	bool visible = false;
 
 private:
 	list<console_text> console_items;

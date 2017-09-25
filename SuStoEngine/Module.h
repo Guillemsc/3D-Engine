@@ -59,7 +59,7 @@ public:
 	{}
 
 	void SetName(const char* set_name) { name = set_name; }
-	const char* GetName();
+	const char* GetName() { return name.c_str(); };
 	bool GetEnabled() { return enabled; };
 	void SetEnabled(bool set) { enabled = set; };
 

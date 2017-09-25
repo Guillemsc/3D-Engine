@@ -43,6 +43,9 @@
     <Filter Include="Sources\Components\Parson">
       <UniqueIdentifier>{b1623064-60e9-47f4-a610-2cf9481a55bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Editor">
+      <UniqueIdentifier>{1b8b97ed-0dc8-445e-8a4a-41b9de1e945f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleAudio.h">
@@ -312,9 +315,6 @@
     <ClInclude Include="EditorUI.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Console.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h" />
     <ClInclude Include="Parson\parson.h">
       <Filter>Sources\Components\Parson</Filter>
@@ -325,8 +325,11 @@
     <ClInclude Include="Profiler.h">
       <Filter>Sources\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Console.h">
+      <Filter>Sources\Editor</Filter>
+    </ClInclude>
     <ClInclude Include="Configuration.h">
-      <Filter>Sources\Modules</Filter>
+      <Filter>Sources\Editor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -498,9 +501,6 @@
     <ClCompile Include="EditorUI.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Console.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="Parson\parson.c">
       <Filter>Sources\Components\Parson</Filter>
     </ClCompile>
@@ -510,9 +510,11 @@
     <ClCompile Include="Profiler.cpp">
       <Filter>Sources\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Module.cpp" />
+    <ClCompile Include="Console.cpp">
+      <Filter>Sources\Editor</Filter>
+    </ClCompile>
     <ClCompile Include="Configuration.cpp">
-      <Filter>Sources\Modules</Filter>
+      <Filter>Sources\Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

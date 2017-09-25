@@ -16,7 +16,6 @@ class ModuleAudio;
 class ModuleRenderer3D;
 class ModuleCamera3D;
 class ModulePhysics3D;
-class Console;
 class EditorUI;
 class DebugScene;
 class Configuration;
@@ -64,7 +63,6 @@ public:
 	ModuleCamera3D*    camera = nullptr;
 	ModulePhysics3D*   physics = nullptr;
 	EditorUI*		   editorUI = nullptr;
-	Console*		   console = nullptr;
 	DebugScene*        debug_scene = nullptr;
 
 	std::list<string>  logs;

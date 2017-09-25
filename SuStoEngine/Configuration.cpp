@@ -1,6 +1,6 @@
 #include "Configuration.h"
 
-Configuration::Configuration(bool start_enabled) : Module(start_enabled)
+Configuration::Configuration(bool start_enabled) : EditorElement(start_enabled)
 {
 }
 
@@ -8,23 +8,11 @@ Configuration::~Configuration()
 {
 }
 
-bool Configuration::Awake()
+void Configuration::Start()
 {
-	bool ret = true;
-
-	return ret;
 }
 
-bool Configuration::Start()
+void Configuration::Draw()
 {
-	bool ret = true;
-
-	return ret;
 }
 
-bool Configuration::Update()
-{
-	bool ret = true;
-
-	return ret;
-}

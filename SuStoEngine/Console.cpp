@@ -3,7 +3,7 @@
 #include "ModuleInput.h"
 #include "imgui.h"
 
-Console::Console(bool start_enabled) : Module(start_enabled)
+Console::Console(bool start_enabled) : EditorElement(start_enabled)
 {
 	memset(input_buffer, 0, sizeof(input_buffer));
 }
@@ -12,18 +12,7 @@ Console::~Console()
 {
 }
 
-bool Console::Awake()
-{
-	bool ret = true;
-	LOG_OUTPUT("Loading Console");
-	SetName("Console");
-
-	visible = true;
-
-	return ret;
-}
-
-bool Console::Update()
+void Console::Draw()
 {
 	bool ret = true;
 
@@ -32,11 +21,11 @@ bool Console::Update()
 	if (App->input->GetKey(SDL_SCANCODE_GRAVE) == KEY_DOWN)
 	{
 		visible = !visible;
-		return true;
+		return;
 	}
-	
+
 	if (!visible)
-		return true;
+		return;
 
 	ImGui::SetNextWindowSize(ImVec2(520, 600), 2);
 
@@ -49,7 +38,7 @@ bool Console::Update()
 
 		if (ImGui::SmallButton("Help"))
 			AddLog("Help");
-		
+
 		ImGui::Separator();
 
 		// Scrollable
@@ -78,7 +67,7 @@ bool Console::Update()
 		ImGui::Separator();
 
 		// Text input
-		if (ImGui::InputText("", input_buffer, 254, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion 
+		if (ImGui::InputText("", input_buffer, 254, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion
 			| ImGuiInputTextFlags_CallbackHistory, &TextChangeCallback, (void*)this))
 		{
 			send_text_input = true;
@@ -96,9 +85,9 @@ bool Console::Update()
 		}
 
 		// Input text
-		if(send_text_input)
+		if (send_text_input)
 		{
-			if(input_buffer != "")
+			if (input_buffer != "")
 				CommandInput(input_buffer);
 
 			strcpy(input_buffer, "");
@@ -107,15 +96,6 @@ bool Console::Update()
 		}
 	}
 	ImGui::End();
-
-	return ret;
-}
-
-bool Console::CleanUp()
-{
-	bool ret = true;
-
-	return ret;
 }
 
 void Console::AddLog(const char * txt, console_text_type type)

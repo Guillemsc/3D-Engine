@@ -9,13 +9,11 @@
 #include "XMLLoader.h"
 #include "JSONLoader.h"
 #include "EditorUI.h"
-#include "Console.h"
 #include "Configuration.h"
 #include "imgui.h"
 
 Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
-	console = new Console();
 	xml = new XMLLoader();
 	json = new JSONLoader();
 	window = new ModuleWindow();
@@ -40,7 +38,6 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(audio);
 	AddModule(physics);
 	AddModule(editorUI);
-	AddModule(console);
 
 	AddModule(debug_scene);
 

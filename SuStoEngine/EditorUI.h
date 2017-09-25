@@ -4,6 +4,21 @@
 #include "Module.h"
 #include "GeometryMath.h"
 
+class Console;
+
+class EditorElement
+{
+public:
+	EditorElement(bool start_enabled = true) { visible = start_enabled; };
+	virtual ~EditorElement() {};
+
+	virtual void Start() {};
+	virtual void Draw() {};
+	virtual void CleanUp() {};
+
+	bool visible = false;
+};
+
 class EditorUI : public Module
 {
 public:
@@ -13,6 +28,7 @@ public:
 	virtual ~EditorUI();
 
 	bool Awake();
+	bool Start();
 	bool PreUpdate();
 	bool Update();
 	bool PostUpdate();
@@ -21,6 +37,8 @@ public:
 	void ImGuiInput(SDL_Event* ev);
 
 	void LoadStyle(char* name);
+	void AddEditor(EditorElement* el);
+
 	void OnConfiguration();
 
 private:
@@ -31,6 +49,10 @@ private:
 	void GenerateRandomNumbers(float2 range, int quantity);
 
 private:
+	Console* console = nullptr;
+
+	list<EditorElement*> editor_elements;
+
 	bool show_app_about = false;
 
 	bool show_app_configuration = false;

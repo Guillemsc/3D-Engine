@@ -7,6 +7,7 @@
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "Functions.h"
+#include "Console.h"
 
 //https://github.com/ocornut/imgui/issues/351
 
@@ -41,6 +42,17 @@ bool EditorUI::Awake()
 	return ret;
 }
 
+bool EditorUI::Start()
+{
+	bool ret = true;
+
+	console = new Console();
+
+	AddEditor(console);
+
+	return ret;
+}
+
 bool EditorUI::PreUpdate()
 {
 	bool ret = true;
@@ -71,7 +83,7 @@ bool EditorUI::Update()
 
 		if (ImGui::BeginMenu("Window"))
 		{
-			ImGui::MenuItem("Console", "º", &App->console->visible);
+			ImGui::MenuItem("Console", "º", &console->visible);
 
 			ImGui::MenuItem("Configuration", "P", &show_app_configuration);
 
@@ -124,6 +136,12 @@ bool EditorUI::Update()
 		TestEngine();
 	}
 	
+	// Draw editor elements
+	for (list<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
+	{
+		(*it)->Draw();
+	}
+
 	return ret;
 }
 
@@ -143,6 +161,14 @@ bool EditorUI::CleanUp()
 
 	LOG_OUTPUT("Destroying ImGui");
 	ImGui_ImplSdlGL2_Shutdown();
+
+	for (list<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
+	{
+		(*it)->CleanUp();
+		delete (*it);
+	}
+
+	editor_elements.clear();
 
 	return ret;
 }
@@ -460,7 +486,7 @@ void EditorUI::GenerateRandomNumbers(float2 range, int quantity)
 		float number_rounded = roundf(GetRandomValue(range.x, range.y) * 100) / 100;
 		char number[255];
 		snprintf(number, 255, "%.2f", number_rounded);
-		App->console->AddLog(number);
+		console->AddLog(number);
 	}
 }
 
@@ -700,6 +726,11 @@ void EditorUI::LoadStyle(char * name)
 		style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
 		style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
 	}
+}
+
+void EditorUI::AddEditor(EditorElement * el)
+{
+	editor_elements.push_back(el);
 }
 
 void EditorUI::OnConfiguration()
