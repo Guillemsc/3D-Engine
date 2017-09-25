@@ -60,6 +60,8 @@ bool Application::Awake()
 {
 	bool ret = true;
 
+	LoadConfig();
+
 	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
 		ret = (*it)->Awake();
@@ -80,8 +82,6 @@ bool Application::Start()
 		ret = (*it)->Start();
 		if (!ret) return false;
 	}
-
-	LoadConfig();
 
 	profiler->StartFinish();
 
@@ -194,9 +194,11 @@ void Application::LoadConfig()
 	{
 		const char* title = json_object_dotget_string(config, "app.title");
 		const char* organization = json_object_dotget_string(config, "app.organization");
+		const char* version = json_object_dotget_string(config, "app.version");
 		int max_fps = json_object_dotget_number(config, "app.max_fps");
-
+		
 		SetAppName(title);
+		SetAppOrganization(organization);
 		SetMaxFps(max_fps);
 	}
 }
@@ -234,7 +236,17 @@ const char * Application::GetAppName()
 
 void Application::SetAppOrganization(const char* name)
 {
-	organization = name;
+	if (name != organization)
+	{
+		organization = name;
+
+		JSON_Object* config = json->LoadJSON("config.json");
+		if (config != nullptr)
+		{
+			json_object_dotset_string(config, "app.organization", name);
+			json->SaveJSON("config.json");
+		}
+	}
 }
 
 const char * Application::GetAppOrganization()
@@ -245,7 +257,22 @@ const char * Application::GetAppOrganization()
 void Application::SetMaxFps(int set)
 {
 	if (set > 0)
+	{
+		max_fps = set;
 		capped_ms = (1000 / set);
+
+		JSON_Object* config = json->LoadJSON("config.json");
+		if (config != nullptr)
+		{
+			json_object_dotset_number(config, "app.max_fps", set);
+			json->SaveJSON("config.json");
+		}
+	}
+}
+
+int Application::GetMaxFps()
+{
+	return max_fps;
 }
 
 bool Application::GetDebugMode()

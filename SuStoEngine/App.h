@@ -43,6 +43,7 @@ public:
 	void SetAppOrganization(const char* name);
 	const char* GetAppOrganization();
 	void SetMaxFps(int set);
+	int GetMaxFps();
 	void SetDebugMode(bool set);
 	bool GetDebugMode();
 
@@ -79,8 +80,10 @@ private:
 
 	std::string		   title;
 	std::string		   organization;
+	std::string		   version;
 
 	bool		       end_app = false;
+	int				   max_fps = 0;
 	int				   capped_ms = -1;
 
 	bool			   debug_mode = false;

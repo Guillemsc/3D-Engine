@@ -18,6 +18,9 @@ public:
 private:
 	char name_input_buffer[255];
 	char organization_input_buffer[255];
+	int  max_fps = 0;
+	int  window_width = 0;
+	int  window_height = 0;
 };
 
 #endif

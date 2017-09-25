@@ -37,6 +37,14 @@ bool EditorUI::Awake()
 	//  -blue_yellow
 	LoadStyle("blue_yellow");
 
+	// Editor elements
+	console = new Console();
+	configuration = new Configuration();
+
+	AddEditor(console);
+	AddEditor(configuration);
+	// ---------------
+
 	// Initial range set
 	range_demo.x = 0;
 	range_demo.y = 100;
@@ -48,11 +56,10 @@ bool EditorUI::Start()
 {
 	bool ret = true;
 
-	console = new Console();
-	configuration = new Configuration();
-
-	AddEditor(console);
-	AddEditor(configuration);
+	for (list<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
+	{
+		(*it)->Start();
+	}
 
 	return ret;
 }
