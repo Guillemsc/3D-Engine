@@ -21,16 +21,19 @@ public:
 	void ImGuiInput(SDL_Event* ev);
 
 	void LoadStyle(char* name);
+	void OnConfiguration();
 
 private:
+	void Configuration();
 	void About();
 	void TestEngine();
 	void GeometryMathTest();
-
-public:
+	void GenerateRandomNumbers(float2 range, int quantity);
 
 private:
 	bool show_app_about = false;
+
+	bool show_app_configuration = false;
 
 	bool show_imgui_test_window = false;
 
@@ -49,10 +52,8 @@ private:
 	// Random generator
 	float2 range_demo; // for the random generation demo
 	int quantity_demo = 1; // number of random generations of the demo
-
-private:
-	void GenerateRandomNumbers(float2 range, int quantity);
 	bool is_on = false;
+
 };
 
 #endif // __j1FILESYSTEM_H__

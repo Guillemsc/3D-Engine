@@ -3,9 +3,10 @@
 #include <list>
 #include <string>
 #include "Globals.h"
-#include "Timer.h"
-#include "PerfTimer.h"
+#include "Profiler.h"
 #include "Module.h"
+
+class Profiler;
 
 class XMLLoader;
 class JSONLoader;
@@ -18,6 +19,7 @@ class ModulePhysics3D;
 class Console;
 class EditorUI;
 class DebugScene;
+class Configuration;
 
 class Application
 {
@@ -33,11 +35,13 @@ public:
 	int GetArgc() const;
 	const char* GetArgv(int index) const;
 
+	void LoadConfig();
+
 	void EndApp();
 	float GetDT();
-	float GetFps();
-	float GetAvgFps();
-	int GetFramesSinceStart();
+	void SetAppName(const char* name);
+	void SetAppOrganization(const char* name);
+	void SetMaxFps(int set);
 	bool GetDebugMode();
 	void SetDebugMode(bool set);
 
@@ -48,12 +52,11 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 
-	void FrameCalculations();
-
 public:
 	//Modules
 	XMLLoader*		   xml = nullptr;
 	JSONLoader*		   json = nullptr;
+	Configuration*     configuration = nullptr;
 	ModuleWindow*      window = nullptr;
 	ModuleInput*       input = nullptr;
 	ModuleAudio*       audio = nullptr;
@@ -66,9 +69,11 @@ public:
 
 	std::list<string>  logs;
 
-private:
+	Profiler*		   profiler = nullptr;
+
 	std::list<Module*> modules;
 
+private:
 	int				   argc;
 	char**			   args;
 
@@ -76,22 +81,9 @@ private:
 	std::string		   organization;
 
 	bool		       end_app = false;
-
-	// Engine debug info
-	bool			   debug_mode = false;
 	int				   capped_ms = -1;
-	PerfTimer		   ptimer;
-	int				   frame_count = 0;
-	Timer			   startup_time;
-	Timer			   frame_time;
-	Timer			   last_sec_frame_time;
-	int				   last_sec_frame_count = 0;
-	int				   prev_last_sec_frame_count = 0;
-	float		   	   dt = 0.0f;
-	float			   avg_fps = 0;
-	float			   seconds_since_startup = 0;
-	float			   last_frame_ms = 0;
-	float			   frames_on_last_update = 0;
+
+	bool			   debug_mode = false;
 };
 
 extern Application* App;

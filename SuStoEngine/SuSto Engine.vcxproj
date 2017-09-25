@@ -92,6 +92,7 @@
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="Configuration.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="DebugScene.h" />
     <ClInclude Include="EditorUI.h" />
@@ -175,6 +176,7 @@
     <ClInclude Include="PhysBody3D.h" />
     <ClInclude Include="PhysVehicle3D.h" />
     <ClInclude Include="Primitive.h" />
+    <ClInclude Include="Profiler.h" />
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="resource.h" />
@@ -187,6 +189,7 @@
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="DebugScene.cpp" />
     <ClCompile Include="EditorUI.cpp" />
@@ -230,6 +233,7 @@
     <ClCompile Include="MathGeoLib\include\Math\SSEMath.cpp" />
     <ClCompile Include="MathGeoLib\include\Math\TransformOps.cpp" />
     <ClCompile Include="MathGeoLib\include\Time\Clock.cpp" />
+    <ClCompile Include="Module.cpp" />
     <ClCompile Include="ModuleAudio.cpp" />
     <ClCompile Include="ModuleCamera3D.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
@@ -241,6 +245,7 @@
     <ClCompile Include="PhysBody3D.cpp" />
     <ClCompile Include="PhysVehicle3D.cpp" />
     <ClCompile Include="Primitive.cpp" />
+    <ClCompile Include="Profiler.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="XMLLoader.cpp" />

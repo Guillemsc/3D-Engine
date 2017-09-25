@@ -37,6 +37,7 @@ public:
 	bool CleanUp();
 
 	void AddLog(const char* txt, console_text_type type = console_text_type_default);
+	void Clear();
 
 private:
 	void ScrollBottom();

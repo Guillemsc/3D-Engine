@@ -23,7 +23,8 @@ bool EditorUI::Awake()
 	bool ret = true;
 
 	LOG_OUTPUT("Loading ImGui");
-	ImGui::CreateContext();
+
+	SetName("Editor");
 	ret = ImGui_ImplSdlGL2_Init(App->window->main_window);
 
 	// Styles
@@ -75,6 +76,14 @@ bool EditorUI::Update()
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("Window"))
+		{
+			ImGui::MenuItem("Console", "º", &App->console->visible);
+
+			ImGui::MenuItem("Configuration", "P", &show_app_configuration);
+
+			ImGui::EndMenu();
+		}
 		if (ImGui::BeginMenu("Help"))
 		{
 			ImGui::MenuItem("About SuSto Engine", NULL, &show_app_about);
@@ -83,8 +92,6 @@ bool EditorUI::Update()
 
 		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
 		{
-			ImGui::MenuItem("Console", "º", &App->console->visible);
-
 			ImGui::MenuItem("Engine Tests", NULL, &show_test_window);
 
 			ImGui::MenuItem("Test window", NULL, &show_imgui_test_window);
@@ -92,11 +99,19 @@ bool EditorUI::Update()
 			ImGui::EndMenu();
 		}
 
-		ImGui::Text("Fps: %f", App->GetFps());
+		ImGui::Text("Awake: %f", App->profiler->GetAwakeTime()); ImGui::SameLine();
+		ImGui::Text("Start: %f", App->profiler->GetStartTime()); ImGui::SameLine();
+		ImGui::Text("Fps: %d", App->profiler->GetFPS());
 	
 		ImGui::EndMainMenuBar();
 	}
 	// -------------------------------------
+
+	// Configuration
+	if (show_app_configuration)
+	{
+		Configuration();
+	}
 
 	// About
 	if (show_app_about)
@@ -145,23 +160,90 @@ void EditorUI::ImGuiInput(SDL_Event* ev)
 	ImGui_ImplSdlGL2_ProcessEvent(ev);
 }
 
+void EditorUI::Configuration()
+{
+	ImGui::SetNextWindowSize(ImVec2(500, 500), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowPosCenter(ImGuiCond_::ImGuiCond_FirstUseEver);
+	if (ImGui::Begin("Profiler", &show_app_configuration, ImGuiWindowFlags_::ImGuiWindowFlags_NoSavedSettings))
+	{
+		ImGui::CollapsingHeader("App");
+
+		for (list<Module*>::iterator it = App->modules.begin(); it != App->modules.end(); it++)
+		{
+			if (ImGui::CollapsingHeader((*it)->GetName()))
+			{
+				(*it)->OnConfiguration();
+			}
+		}
+
+		ImGui::End();
+	}
+}
+
 void EditorUI::About()
 {
 	ImGui::Begin("About SuSto Engine", &show_app_about, ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::Text("SuSto Engine. v.0.1");
+	ImGui::Text("SuSto Engine v0.1.3");
 	ImGui::Separator();
 	ImGui::Text("By Guillem Sunyer and Simon Stoyanov.");
-	ImGui::Text("SuSto Engine is licensed under the MIT License, see LICENSE for more information.");
-	if (ImGui::Button("Github Repository")) {
+	ImGui::Text("3D Engine made for the 3D engines subject during the 3rd year of Game Design and Game Development degree at CITM,");
+	if (ImGui::Button("Github Repository")) 
+	{
 		App->GoToBrowser("https://github.com/Guillemsc/3D-Engine");
 	}
 	ImGui::SameLine();
-	if (ImGui::Button("Download Latest Release")) {
+	if (ImGui::Button("Download Latest Release")) 
+	{
 		App->GoToBrowser("https://github.com/Guillemsc/3D-Engine/releases");
 	}
 	ImGui::SameLine();
-	if (ImGui::Button("Report Issue")) {
+	if (ImGui::Button("Report Issue")) 
+	{
 		App->GoToBrowser("https://github.com/Guillemsc/3D-Engine/issues");
+	}
+	ImGui::Separator();
+	if (ImGui::CollapsingHeader("Libraries")) 
+	{
+		ImGui::Columns(3, "Name");
+		ImGui::Separator();
+		ImGui::Text("Use"); ImGui::NextColumn();
+		ImGui::Text("Name"); ImGui::NextColumn();
+		ImGui::Text("Version"); ImGui::NextColumn();
+		ImGui::Separator();
+		const char* use[3] = { "Math", "UI", "File System" };
+		const char* name[3] = { "MathGeoLib", "ImGui", "Parson" };
+		const char* version[3] = { "v1.5", "v1.52", "---" };
+		static int selected = -1;
+		for (int i = 0; i < 3; i++)
+		{
+			ImGui::Text(use[i]); ImGui::NextColumn();
+			ImGui::Text(name[i]); ImGui::NextColumn();
+			ImGui::Text(version[i]); ImGui::NextColumn();
+		}
+		ImGui::Columns(1);
+		ImGui::Separator();
+	}
+	if (ImGui::CollapsingHeader("License"))
+	{
+		ImGui::Text("MIT License");
+		ImGui::Text("Copyright(c) 2017 Guillem Sunyer Caldu and Simon Stoyanov Beltran");
+		ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy");
+		ImGui::Text("of this software and associated documentation files(the 'Software'), to deal");
+		ImGui::Text("in the Software without restriction, including without limitation the rights");
+		ImGui::Text("to use, copy, modify, merge, publish, distribute, sublicense, and / or sell");
+		ImGui::Text("copies of the Software, and to permit persons to whom the Software is");
+		ImGui::Text("furnished to do so, subject to the following conditions :");
+
+		ImGui::TextColored({ 1, 0.2f, 0.2f, 1 }, "The above copyright notice and this permission notice shall be included in all");
+		ImGui::TextColored({ 1, 0.2f, 0.2f, 1 }, "copies or substantial portions of the Software.");
+
+		ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR");
+		ImGui::Text("IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,");
+		ImGui::Text("FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE");
+		ImGui::Text("AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER");
+		ImGui::Text("LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,");
+		ImGui::Text("OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE");
+		ImGui::Text("SOFTWARE.");
 	}
 
 
@@ -635,8 +717,13 @@ void EditorUI::LoadStyle(char * name)
 		style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
 		style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
 		style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
-
-
-
 	}
+}
+
+void EditorUI::OnConfiguration()
+{
+	char title[25];
+	std::vector<float> framerate = App->profiler->GetFramesVector();
+	sprintf_s(title, 25, "Framerate %.1f", framerate[framerate.size() - 1]);
+	ImGui::PlotHistogram("Framerate", &framerate[0], framerate.size(), 0, title, 0.0f, 1000.0f, ImVec2(310, 100));
 }

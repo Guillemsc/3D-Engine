@@ -16,6 +16,7 @@ bool Console::Awake()
 {
 	bool ret = true;
 	LOG_OUTPUT("Loading Console");
+	SetName("Console");
 
 	visible = true;
 
@@ -41,7 +42,14 @@ bool Console::Update()
 
 	if (ImGui::Begin("Console", &visible))
 	{
-		ImGui::Text("Type help to see common comands");
+		if (ImGui::SmallButton("Clear"))
+			AddLog("Help");
+
+		ImGui::SameLine();
+
+		if (ImGui::SmallButton("Help"))
+			AddLog("Help");
+		
 		ImGui::Separator();
 
 		// Scrollable
@@ -51,8 +59,6 @@ bool Console::Update()
 		// Scrollable texts
 		for (list<console_text>::iterator it = console_items.begin(); it != console_items.end(); it++)
 		{
-
-
 			ImVec4 col = GetColorByTextType((*it).type);
 			ImGui::PushStyleColor(ImGuiCol_Text, col);
 			ImGui::TextUnformatted((*it).txt.c_str());
@@ -125,6 +131,11 @@ void Console::AddLog(const char * txt, console_text_type type)
 	}
 
 	ScrollBottom();
+}
+
+void Console::Clear()
+{
+	console_items.clear();
 }
 
 void Console::ScrollBottom()

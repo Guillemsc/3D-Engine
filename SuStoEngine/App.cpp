@@ -10,6 +10,8 @@
 #include "JSONLoader.h"
 #include "EditorUI.h"
 #include "Console.h"
+#include "Configuration.h"
+#include "imgui.h"
 
 Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
@@ -45,6 +47,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	// Renderer last
 	AddModule(renderer3D);
 
+	profiler = new Profiler();
 	SetDebugMode(true);
 }
 
@@ -66,6 +69,8 @@ bool Application::Awake()
 		if (!ret) return false;
 	}
 
+	profiler->AwakeFinish();
+
 	return ret;
 }
 
@@ -79,18 +84,17 @@ bool Application::Start()
 		if (!ret) return false;
 	}
 
-	startup_time.Start();
+	LoadConfig();
+
+	profiler->StartFinish();
+
 	return ret;
 }
 
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
-	frame_count++;
-	last_sec_frame_count++;
 
-	dt = (float)startup_time.Read() / 1000.0f;
-	startup_time.Start();
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
@@ -100,6 +104,12 @@ bool Application::Update()
 
 	if (input->GetWindowEvent(WE_QUIT) == true || end_app)
 		return false;
+
+	// Cap fps
+	if (capped_ms > 0 && GetDT() < capped_ms)
+	{
+		SDL_Delay(capped_ms - GetDT());
+	}
 
 	PrepareUpdate();
 
@@ -118,7 +128,11 @@ bool Application::Update()
 		if (!(*it)->GetEnabled())
 			continue;
 
+		profiler->StartProfile((*it)->GetName());
+
 		ret = (*it)->Update();
+
+		profiler->FinishProfile();
 
 		if (!ret) return false;
 	}
@@ -135,13 +149,15 @@ bool Application::Update()
 
 	FinishUpdate();
 
+	profiler->UpdateFinish();
+
 	return ret;
 }
 
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
-	FrameCalculations();
+
 }
 
 bool Application::CleanUp()
@@ -155,27 +171,9 @@ bool Application::CleanUp()
 		if (!ret) return false;
 	}
 
+	profiler->CleanUp();
+
 	return ret;
-}
-
-void Application::FrameCalculations()
-{
-	if (last_sec_frame_time.Read() > 1000)
-	{
-		last_sec_frame_time.Start();
-		prev_last_sec_frame_count = last_sec_frame_count;
-		last_sec_frame_count = 0;
-	}
-
-	avg_fps = float(frame_count) / startup_time.ReadSec();
-	seconds_since_startup = startup_time.ReadSec();
-	last_frame_ms = frame_time.Read();
-	frames_on_last_update = prev_last_sec_frame_count;
-
-	if (capped_ms > 0 && last_frame_ms < capped_ms)
-	{
-		SDL_Delay(capped_ms - last_frame_ms);
-	}
 }
 
 int Application::GetArgc() const
@@ -191,6 +189,21 @@ const char * Application::GetArgv(int index) const
 		return NULL;
 }
 
+void Application::LoadConfig()
+{
+	JSON_Object* config = json->LoadJSON("config.json");
+
+	if (config != nullptr)
+	{
+		const char* title = json_object_dotget_string(config, "app.title");
+		const char* organization = json_object_dotget_string(config, "app.organization");
+		int max_fps = json_object_dotget_number(config, "app.max_fps");
+
+		SetAppName(title);
+		SetMaxFps(max_fps);
+	}
+}
+
 void Application::EndApp()
 {
 	end_app = true;
@@ -198,22 +211,34 @@ void Application::EndApp()
 
 float Application::GetDT()
 {
-	return dt;
+	return profiler->GetFrameTime()/1000;
 }
 
-float Application::GetFps()
+void Application::SetAppName(const char* name)
 {
-	return frames_on_last_update;
+	if (title != name)
+	{
+		title = name;
+		window->SetTitle(name);
+
+		JSON_Object* config = json->LoadJSON("config.json");
+		if (config != nullptr)
+		{
+			json_object_dotset_string(config, "app.title", name);
+			json->SaveJSON("config.json");
+		}
+	}
 }
 
-float Application::GetAvgFps()
+void Application::SetAppOrganization(const char* name)
 {
-	return avg_fps;
+	organization = name;
 }
 
-int Application::GetFramesSinceStart()
+void Application::SetMaxFps(int set)
 {
-	return frame_count;
+	if (set > 0)
+		capped_ms = (1000 / set);
 }
 
 bool Application::GetDebugMode()
