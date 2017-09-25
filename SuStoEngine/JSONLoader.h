@@ -4,11 +4,27 @@
 #include "Module.h"
 #include "Parson\parson.h"
 
-struct json_doc
+class JSON_Doc
 {
+public:
+	JSON_Doc(JSON_Value* value, JSON_Object* object, const char* path);
+	~JSON_Doc();
+
+	void SetString(const char* set, const char* str);
+	void SetBool(const char* set, bool bo);
+	void SetNumber(const char* set, double nu);
+	const char* GetString(const char* str);
+	bool GetBool(const char* bo);
+	double GetNumber(const char* nu);
+
+	const char* GetPath();
+	void Save();
+	void CleanUp();
+
+private:
 	JSON_Value* value = nullptr;
 	JSON_Object* object = nullptr;
-	string path;
+	const char* path;
 };
 
 class JSONLoader : public Module
@@ -20,12 +36,11 @@ public:
 	bool Awake();
 	bool CleanUp();
 
-	JSON_Object* LoadJSON(const char* path);
-	void SaveJSON(const char* path);
-	JSON_Object* CreateJSON(const char* path);
+	JSON_Doc* LoadJSON(const char* path);
+	JSON_Doc* CreateJSON(const char* path);
 
 private:
-	std::list<json_doc>	jsons;
+	std::list<JSON_Doc*> jsons;
 };
 
 #endif // !_JSONLOADER_H_

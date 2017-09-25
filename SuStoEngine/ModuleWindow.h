@@ -18,7 +18,21 @@ public:
 	bool CleanUp();
 
 	void SetTitle(const char* title);
+	void SetWindowSize(int width, int height);
 	void GetWindowSize(int &width, int &height);
+	void SetFullscreen(bool set);
+	bool GetFullscreen();
+	void SetResizable(bool set);
+	bool GetResizalbe();
+	void SetBorderless(bool set);
+	bool GetBorderless();
+	void SetFullDekstop(bool set);
+	bool GetFullDekstop();
+	void SetMaximized(bool set);
+	bool GetMaximized();
+
+private:
+	bool GenerateWindow(bool fullscreen, bool resizable, bool borderless, bool full_dekstop, bool maximized);
 
 public:
 	//The window we'll be rendering to
@@ -26,6 +40,15 @@ public:
 
 	//The surface contained by the window
 	SDL_Surface* screen_surface = nullptr;
+
+private:
+	int  width = 0;
+	int  height = 0;
+	bool fullscreen = false;
+	bool resizable = false;
+	bool borderless = false;
+	bool full_dekstop = false;
+	bool maximized = false;
 };
 
 #endif // __ModuleWindow_H__

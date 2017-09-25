@@ -188,19 +188,24 @@ const char * Application::GetArgv(int index) const
 
 void Application::LoadConfig()
 {
-	JSON_Object* config = json->LoadJSON("config.json");
+	config = json->LoadJSON("config.json");
 
 	if (config != nullptr)
 	{
-		const char* title = json_object_dotget_string(config, "app.title");
-		const char* organization = json_object_dotget_string(config, "app.organization");
-		const char* version = json_object_dotget_string(config, "app.version");
-		int max_fps = json_object_dotget_number(config, "app.max_fps");
+		const char* title = config->GetString("app.title");
+		const char* organization = config->GetString("app.organization");
+		const char* version = config->GetString("app.version");
+		int max_fps = config->GetNumber("app.max_fps");
 		
 		SetAppName(title);
 		SetAppOrganization(organization);
 		SetMaxFps(max_fps);
 	}
+}
+
+JSON_Doc* Application::GetConfig()
+{
+	return config;
 }
 
 void Application::EndApp()
@@ -220,11 +225,10 @@ void Application::SetAppName(const char* name)
 		title = name;
 		window->SetTitle(name);
 
-		JSON_Object* config = json->LoadJSON("config.json");
 		if (config != nullptr)
 		{
-			json_object_dotset_string(config, "app.title", name);
-			json->SaveJSON("config.json");
+			config->SetString("app.title", name);
+			config->Save();
 		}
 	}
 }
@@ -240,11 +244,10 @@ void Application::SetAppOrganization(const char* name)
 	{
 		organization = name;
 
-		JSON_Object* config = json->LoadJSON("config.json");
 		if (config != nullptr)
 		{
-			json_object_dotset_string(config, "app.organization", name);
-			json->SaveJSON("config.json");
+			config->SetString("app.organization", name);
+			config->Save();
 		}
 	}
 }
@@ -261,11 +264,10 @@ void Application::SetMaxFps(int set)
 		max_fps = set;
 		capped_ms = (1000 / set);
 
-		JSON_Object* config = json->LoadJSON("config.json");
 		if (config != nullptr)
 		{
-			json_object_dotset_number(config, "app.max_fps", set);
-			json->SaveJSON("config.json");
+			config->SetNumber("app.max_fps", set);
+			config->Save();
 		}
 	}
 }

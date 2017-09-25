@@ -21,6 +21,10 @@ private:
 	int  max_fps = 0;
 	int  window_width = 0;
 	int  window_height = 0;
+	bool fullscreen = false;
+	bool resizable = false;
+	bool borderless = false;
+	bool fulldekstop = false;
 };
 
 #endif

@@ -7,6 +7,7 @@
 #include "Module.h"
 
 class Profiler;
+class JSON_Doc;
 
 class XMLLoader;
 class JSONLoader;
@@ -19,6 +20,7 @@ class ModulePhysics3D;
 class EditorUI;
 class DebugScene;
 class Configuration;
+
 
 class Application
 {
@@ -35,6 +37,7 @@ public:
 	const char* GetArgv(int index) const;
 
 	void LoadConfig();
+	JSON_Doc* GetConfig();
 
 	void EndApp();
 	float GetDT();
@@ -87,6 +90,8 @@ private:
 	int				   capped_ms = -1;
 
 	bool			   debug_mode = false;
+
+	JSON_Doc*          config = nullptr;
 };
 
 extern Application* App;

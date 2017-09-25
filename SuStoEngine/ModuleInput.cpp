@@ -122,7 +122,7 @@ bool ModuleInput::PreUpdate()
 				windowEvents[WE_SHOW] = true;
 				break;
 			case SDL_WINDOWEVENT_RESIZED:
-				App->renderer3D->OnResize(e.window.data1, e.window.data2);
+				App->window->SetWindowSize(e.window.data1, e.window.data2);
 				break;
 			}
 			

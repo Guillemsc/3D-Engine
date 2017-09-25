@@ -1,5 +1,6 @@
 #include "Configuration.h"
 #include "App.h"
+#include "ModuleWindow.h"
 #include "imgui.h"
 
 Configuration::Configuration(bool start_enabled) : EditorElement(start_enabled)
@@ -17,6 +18,11 @@ void Configuration::Start()
 	strcpy(name_input_buffer, App->GetAppName());
 	strcpy(organization_input_buffer, App->GetAppOrganization());
 	max_fps = App->GetMaxFps();
+	App->window->GetWindowSize(window_width, window_height);
+	fullscreen = App->window->GetFullscreen();
+	resizable = App->window->GetResizalbe();
+	borderless = App->window->GetBorderless();
+	fulldekstop = App->window->GetFullDekstop();
 }
 
 void Configuration::Draw()
@@ -56,14 +62,31 @@ void Configuration::Draw()
 		// Window
 		if (ImGui::CollapsingHeader("Window"))
 		{
-			if (ImGui::SliderInt("Width", &window_width, 0, 999))
+			if (ImGui::SliderInt("Width", &window_width, 0, 4000))
 			{
-		
+				App->window->SetWindowSize(window_width, window_height);
 			}
-
-			if (ImGui::SliderInt("Height", &window_height, 0, 999))
+			if (ImGui::SliderInt("Height", &window_height, 0, 4000))
 			{
-	
+				App->window->SetWindowSize(window_width, window_height);
+			}
+			if (ImGui::Checkbox("Fullscren", &fullscreen))
+			{
+				App->window->SetFullscreen(fullscreen);
+			}
+			ImGui::SameLine();
+			if (ImGui::Checkbox("Resizable", &resizable))
+			{
+				App->window->SetResizable(resizable);
+			}
+			if (ImGui::Checkbox("Borderless", &borderless))
+			{
+				App->window->SetBorderless(borderless);
+			}
+			ImGui::SameLine();
+			if (ImGui::Checkbox("Full Dekstop", &fulldekstop))
+			{
+				App->window->SetFullDekstop(fulldekstop);
 			}
 		}
 

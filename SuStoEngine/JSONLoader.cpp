@@ -33,16 +33,16 @@ bool JSONLoader::Awake()
 	return ret;
 }
 
-JSON_Object* JSONLoader::LoadJSON(const char * path)
+JSON_Doc* JSONLoader::LoadJSON(const char * path)
 {
-	JSON_Object* ret = nullptr;
+	JSON_Doc* ret = nullptr;
 
 	bool exists = false;
-	for (list<json_doc>::iterator it = jsons.begin(); it != jsons.end(); it++)
+	for (list<JSON_Doc*>::iterator it = jsons.begin(); it != jsons.end(); it++)
 	{
-		if (path == (*it).path)
+		if (path == (*it)->GetPath())
 		{
-			ret = (*it).object;
+			ret = (*it);
 			exists = true;
 			break;
 		}
@@ -60,47 +60,26 @@ JSON_Object* JSONLoader::LoadJSON(const char * path)
 		else
 		{
 			LOG_OUTPUT("Succes loading %s", path);
-			ret = root_object;
 
-			json_doc new_doc;
-
-			new_doc.object = root_object;
-			new_doc.value = user_data;
-			new_doc.path = path;
+			JSON_Doc* new_doc = new JSON_Doc(user_data, root_object, path);
 			jsons.push_back(new_doc);
+
+			ret = new_doc;
 		}
 	}
 
 	return ret;
 }
 
-void JSONLoader::SaveJSON(const char * path)
-{
-	bool exists = false;
-	for (list<json_doc>::iterator it = jsons.begin(); it != jsons.end(); it++)
-	{
-		if (path == (*it).path)
-		{
-			json_serialize_to_file((*it).value, path);
-			exists = true;
-			break;
-		}
-	}
 
-	if (!exists)
-	{
-		LOG_OUTPUT("Error saving %s, probably wrong file path", path);
-	}
-}
-
-JSON_Object* JSONLoader::CreateJSON(const char * path)
+JSON_Doc* JSONLoader::CreateJSON(const char * path)
 {
-	JSON_Object* ret = nullptr;
+	JSON_Doc* ret = nullptr;
 
 	bool exists = false;
-	for (list<json_doc>::iterator it = jsons.begin(); it != jsons.end(); it++)
+	for (list<JSON_Doc*>::iterator it = jsons.begin(); it != jsons.end(); it++)
 	{
-		if (path == (*it).path)
+		if (path == (*it)->GetPath())
 		{
 			exists = true;
 			break;
@@ -116,16 +95,8 @@ JSON_Object* JSONLoader::CreateJSON(const char * path)
 		JSON_Value* root_value = json_value_init_object();
 		JSON_Object* root_object = json_value_get_object(root_value);
 
-		json_doc new_doc;
-
-		new_doc.object = root_object;
-		new_doc.value = root_value;
-		new_doc.path = path;
+		JSON_Doc* new_doc = new JSON_Doc(root_value, root_object, path);
 		jsons.push_back(new_doc);
-
-		json_serialize_to_file(root_value, path);
-
-		ret = root_object;
 	}
 
 	return ret;
@@ -137,12 +108,69 @@ bool JSONLoader::CleanUp()
 
 	LOG_OUTPUT("Unloading JSON Module");
 
-	for (list<json_doc>::iterator it = jsons.begin(); it != jsons.end();)
+	for (list<JSON_Doc*>::iterator it = jsons.begin(); it != jsons.end();)
 	{
-		json_value_free((*it).value);
+		(*it)->CleanUp();
+		delete (*it);
 
 		it = jsons.erase(it);
 	}
 
 	return ret;
+}
+
+JSON_Doc::JSON_Doc(JSON_Value * _value, JSON_Object * _object, const char* _path)
+{
+	value = _value;
+	object = _object;
+	path = _path;
+}
+
+JSON_Doc::~JSON_Doc()
+{
+}
+
+void JSON_Doc::SetString(const char * set, const char * str)
+{
+	json_object_dotset_string(object, set, str);
+}
+
+void JSON_Doc::SetBool(const char * set, bool bo)
+{
+	json_object_dotset_boolean(object, set, bo);
+}
+
+void JSON_Doc::SetNumber(const char * set, double nu)
+{
+	json_object_dotset_number(object, set, nu);
+}
+
+const char * JSON_Doc::GetString(const char * str)
+{
+	return json_object_dotget_string(object, str);
+}
+
+bool JSON_Doc::GetBool(const char * bo)
+{
+	return json_object_dotget_boolean(object, bo);
+}
+
+double JSON_Doc::GetNumber(const char * nu)
+{
+	return json_object_dotget_number(object, nu);
+}
+
+const char * JSON_Doc::GetPath()
+{
+	return path;
+}
+
+void JSON_Doc::Save()
+{
+	json_serialize_to_file_pretty(value, path);
+}
+
+void JSON_Doc::CleanUp()
+{
+	json_value_free(value);
 }
