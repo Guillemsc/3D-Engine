@@ -39,7 +39,8 @@ bool ModuleRenderer3D::Awake()
 		ret = false;
 	}
 
-	GLenum err = glewInit();
+	GLenum err = glewInit(); /* Glew Initialization */
+
 	if (err != GLEW_OK)
 	{
 		LOG_OUTPUT("Glew library could not init %s\n", glewGetErrorString(err));
