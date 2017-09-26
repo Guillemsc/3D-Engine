@@ -42,7 +42,7 @@ void Configuration::Draw()
 	{
 		// App
 		ImGui::SetNextTreeNodeOpen(true);
-		if (ImGui::CollapsingHeader("App", true))
+		if (ImGui::CollapsingHeader("App"))
 		{
 			if (ImGui::InputText("App Name", name_input_buffer, 254))
 			{

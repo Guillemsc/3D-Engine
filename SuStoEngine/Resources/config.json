@@ -3,10 +3,10 @@
         "title": "SuSto Engine",
         "organization": "SuSto Engine",
         "version": "v0.1.3",
-        "max_fps": 226
+        "max_fps": 999
     },
     "window": {
-        "width": 1820,
+        "width": 1920,
         "height": 1017,
         "fullscreen": false,
         "resizable": true,

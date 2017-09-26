@@ -7,6 +7,7 @@
 class Console;
 class Configuration;
 class About;
+class ProfilerViewer;
 
 class EditorElement
 {
@@ -48,15 +49,16 @@ private:
 	void GenerateRandomNumbers(float2 range, int quantity);
 
 private:
-	Console* console = nullptr;
-	Configuration* configuration = nullptr;
-	About* about = nullptr;
+	Console*             console = nullptr;
+	Configuration*       configuration = nullptr;
+	About*               about = nullptr;
+	ProfilerViewer*      profiler_viewer = nullptr;
 
 	list<EditorElement*> editor_elements;
 
-	bool show_imgui_test_window = false;
-
-	bool show_test_window = false;
+	bool				 show_imgui_test_window = false;
+						 
+	bool				 show_test_window = false;
 
 	// Geometry math test
 	float vec3a[3] = { 0.0f, 0.0f, 0.0f };

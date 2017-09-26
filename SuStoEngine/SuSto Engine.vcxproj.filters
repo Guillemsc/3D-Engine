@@ -331,6 +331,9 @@
     <ClInclude Include="About.h">
       <Filter>Sources\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="ProfilerViewer.h">
+      <Filter>Sources\Editor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -518,6 +521,9 @@
     </ClCompile>
     <ClCompile Include="JSONLoader.cpp">
       <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfilerViewer.cpp">
+      <Filter>Sources\Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

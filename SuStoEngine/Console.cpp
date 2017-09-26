@@ -2,6 +2,7 @@
 #include "App.h"
 #include "ModuleInput.h"
 #include "imgui.h"
+#include "Functions.h"
 
 Console::Console(bool start_enabled) : EditorElement(start_enabled)
 {
@@ -32,7 +33,7 @@ void Console::Draw()
 	if (ImGui::Begin("Console", &visible))
 	{
 		if (ImGui::SmallButton("Clear"))
-			AddLog("Help");
+			AddLog("Clear");
 
 		ImGui::SameLine();
 
@@ -125,7 +126,7 @@ void Console::ScrollBottom()
 
 void Console::CommandInput(const char * txt)
 {
-	AddLog(txt);
+	AddLog("error lol", console_text_type::console_text_type_error);
 }
 
 ImColor Console::GetColorByTextType(console_text_type type)
@@ -143,7 +144,7 @@ ImColor Console::GetColorByTextType(console_text_type type)
 		break;
 
 	case console_text_type::console_text_type_error:
-		ret = { 255, 255, 255, 255 };
+		ret = { 255, 80, 80, 255 };
 		break;
 
 	case console_text_type::console_text_type_succes:
