@@ -5,6 +5,7 @@
 #include "Primitive.h"
 #include "Functions.h"
 #include "Console.h"
+#include "glut\glut.h"
 
 EngineTest::EngineTest(bool start_enabled)
 {
@@ -254,27 +255,18 @@ void EngineTest::OpenGLOptions()
 {
 	// GL_DEPTH_TEST		GL_CULL_FACE		GL_LIGHTING
 	// GL_COLOR_MATERIAL	GL_TEXTURE_2D		two other
-	if (ImGui::Button("GL_DEPTH_TEST", ImVec2(180, 35))) 
-	{
+	// Wireframe
 
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("GL_CULL_FACE", ImVec2(180, 35)))
-	{
+	// Checkboxes
+	if (ImGui::Checkbox("GL_DEPTH_TEST", &gl_depth))				ImGui::SameLine();
+	if (ImGui::Checkbox("GL_CULL_FACE", &gl_cull_face))				ImGui::SameLine();
+	if (ImGui::Checkbox("GL_LIGHTING", &gl_lighting))				ImGui::SameLine();
+	if (ImGui::Checkbox("GL_COLOR_MATERIAL", &gl_color_material))	ImGui::SameLine();
+	if (ImGui::Checkbox("GL_TEXTURE_2D", &gl_texture_2d))			ImGui::SameLine();
+	if (ImGui::Checkbox("WIREFRAME", &wireframe_mode))				ImGui::SameLine();
+	//---------------------------------
 
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("GL_LIGHTING", ImVec2(180, 35)))
-	{
+	
+	
 
-	}
-	if (ImGui::Button("GL_COLOR_MATERIAL", ImVec2(180, 35)))
-	{
-
-	}
-	ImGui::SameLine();
-	if (ImGui::Button("GL_TEXTURE_2D", ImVec2(180, 35)))
-	{
-
-	}
 }
