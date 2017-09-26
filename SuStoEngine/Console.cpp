@@ -28,7 +28,7 @@ void Console::Draw()
 	if (!visible)
 		return;
 
-	ImGui::SetNextWindowSize(ImVec2(450, 500), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(450, 500), 2);
 
 	if (ImGui::Begin("Console", &visible))
 	{
