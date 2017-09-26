@@ -28,7 +28,7 @@ void Console::Draw()
 	if (!visible)
 		return;
 
-	ImGui::SetNextWindowSize(ImVec2(400, 400), 2);
+	ImGui::SetNextWindowSize(ImVec2(450, 500), ImGuiCond_FirstUseEver);
 
 	if (ImGui::Begin("Console", &visible))
 	{
@@ -38,7 +38,7 @@ void Console::Draw()
 		ImGui::SameLine();
 
 		if (ImGui::SmallButton("Help"))
-			AddLog("Help");
+			CommandInput(".Help");
 
 		ImGui::Separator();
 
@@ -129,6 +129,12 @@ void Console::CommandInput(const char * txt)
 	if (strcmp(txt, ".Clear") == 0) 
 	{
 		Clear();
+	}
+	else if (strcmp(txt, ".Help") == 0) 
+	{
+		AddLog("-------------------------HELP-------------------------");
+		AddLog("||\t.Clear  \t||\tClears the console");
+		AddLog("||\t.Help   \t||\tShows the list of commands");
 	}
 }
 
