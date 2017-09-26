@@ -1,4 +1,4 @@
-#include "EngineTest.h"
+﻿#include "EngineTest.h"
 #include "App.h"
 #include "imgui.h"
 #include "GeometryMath.h"
@@ -266,7 +266,52 @@ void EngineTest::OpenGLOptions()
 	if (ImGui::Checkbox("WIREFRAME", &wireframe_mode))				ImGui::SameLine();
 	//---------------------------------
 
+	if (gl_depth && !glIsEnabled(GL_DEPTH_TEST))
+		glEnable(GL_DEPTH_TEST);
+	else if (!gl_depth && glIsEnabled(GL_DEPTH_TEST))
+		glDisable(GL_DEPTH_TEST);
 	
-	
+	if (gl_cull_face && !glIsEnabled(GL_CULL_FACE))				// https://www.khronos.org/opengl/wiki/Face_Culling
+	{
+		glCullFace(GL_FRONT); 									// void glCullFace(GLenum mode​); mode​ can be set to GL_FRONT, GL_BACK, or GL_FRONT_AND_BACK.
+		glEnable(GL_CULL_FACE);									// The latter will cull all triangles. Culling both faces will only cull triangles (since only they have faces).
+	}	
+	else if (!gl_cull_face && glIsEnabled(GL_CULL_FACE))
+		glDisable(GL_CULL_FACE);
+
+	// Lighting and Color Material
+	/* _________________________________________________________________GOOD SETTINGS_________________________________________________________________
+			Set GL_LIGHT_0's position to something like 45 degrees to the 'vertical'. Coordinate (1,1,0) should work nicely in most cases.
+			Set GL_LIGHT_0's Ambient color to 0,0,0,1
+			Set GL_LIGHT_0's Diffuse color to 1,1,1,1
+			Set GL_LIGHT_0's Specular color to 1,1,1,1
+			Set the glLightModel global ambient to 0.2, 0.2, 0.2, 1 (this is the default).
+			Don't set any other glLight or glLightModel options - just let them default.
+			Enable GL_LIGHTING and GL_LIGHT_0.
+			Enable GL_COLOR_MATERIAL and set glColorMaterial to GL_AMBIENT_AND_DIFFUSE.This means that glMaterial will control the polygon's specular and 
+				emission colours and the ambient and diffuse will both be set using glColor.
+			Set the glMaterial Specular colour to 1, 1, 1, 1
+			Set the glMaterial Emission colour to 0, 0, 0, 1
+			Set the glColor to whatever colour you want each polygon to basically appear to be.That sets the Ambient and Diffuse to the same value - which is what you generally want.
+	*/
+	if (gl_lighting && !glIsEnabled(GL_LIGHTING))				// https://www.khronos.org/opengl/wiki/How_lighting_works
+		glEnable(GL_LIGHTING);
+	else if (!gl_lighting && glIsEnabled(GL_LIGHTING))
+		glDisable(GL_LIGHTING);
+
+	if (gl_color_material && !glIsEnabled(GL_COLOR_MATERIAL))	// https://www.khronos.org/opengl/wiki/How_lighting_works
+	{	
+		glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);		// void glColorMaterial (GLenum face, GLenum mode); 
+		glEnable(GL_COLOR_MATERIAL);
+	}
+	else if (!gl_color_material && glIsEnabled(GL_COLOR_MATERIAL))
+		glDisable(GL_COLOR_MATERIAL);
+
+	if (gl_texture_2d && !glIsEnabled(GL_TEXTURE_2D))			// https://www.khronos.org/opengl/wiki/Texture
+		glEnable(GL_TEXTURE_2D);
+	else if (!gl_texture_2d && glIsEnabled(GL_TEXTURE_2D))
+		glDisable(GL_TEXTURE_2D);
+
+	// Wireframe ?
 
 }

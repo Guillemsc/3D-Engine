@@ -37,7 +37,7 @@ private:
 	// GL_COLOR_MATERIAL	GL_TEXTURE_2D		two other
 	// Wireframe
 	bool gl_depth						= true;
-	bool gl_cull_face					= true;
+	bool gl_cull_face					= false;
 	bool gl_lighting					= true;
 	bool gl_color_material				= true;
 	bool gl_texture_2d					= false;
