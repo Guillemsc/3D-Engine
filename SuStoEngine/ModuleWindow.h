@@ -17,6 +17,8 @@ public:
 	// Destructor
 	virtual ~ModuleWindow();
 
+	void OnLoadConfig(JSON_Doc* config);
+	void OnSaveConfig(JSON_Doc* config);
 	bool Awake();
 	bool CleanUp();
 
@@ -26,6 +28,7 @@ public:
 	void GetWindowSize(int &width, int &height);
 	vec2 GetWindowSize();
 	void GetDisplaySize(int &width, int &height);
+	vec2 GetDisplaySize();
 	void SetFullscreen(bool set);
 	bool GetFullscreen();
 	void SetResizable(bool set);

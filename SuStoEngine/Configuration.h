@@ -4,6 +4,8 @@
 #include "EditorUI.h"
 #include "Module.h"
 
+struct ImGuiTextEditCallbackData;
+
 class Configuration : public EditorElement
 {
 public:
@@ -26,6 +28,7 @@ private:
 	bool resizable = false;
 	bool borderless = false;
 	bool fulldekstop = false;
+	bool maximized = false;
 	int  display_size_width = 0;
 	int  display_size_height = 0;
 };

@@ -37,6 +37,7 @@ public:
 	const char* GetArgv(int index) const;
 
 	void LoadConfig();
+	void SaveConfig(Module* module = nullptr);
 	JSON_Doc* GetConfig();
 
 	void EndApp();

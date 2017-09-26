@@ -2,6 +2,7 @@
 
 class Application;
 struct PhysBody3D;
+class JSON_Doc;
 
 using namespace std;
 
@@ -54,6 +55,9 @@ public:
 
 	virtual void OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	{}
+
+	virtual void OnLoadConfig(JSON_Doc* config) {};
+	virtual void OnSaveConfig(JSON_Doc* config) {};
 
 	void SetName(const char* set_name) { name = set_name; }
 	const char* GetName() { return name.c_str(); };

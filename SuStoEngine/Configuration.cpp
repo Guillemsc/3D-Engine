@@ -25,6 +25,7 @@ void Configuration::Start()
 	resizable = App->window->GetResizalbe();
 	borderless = App->window->GetBorderless();
 	fulldekstop = App->window->GetFullDekstop();
+	maximized = App->window->GetMaximized();
 	App->window->GetWindowSize(display_size_width, display_size_height);
 }
 
@@ -35,29 +36,34 @@ void Configuration::Draw()
 
 	App->window->GetWindowSize(window_width, window_height);
 
-	ImGui::SetNextWindowSize(ImVec2(520, 600), 2);
+	ImGui::SetNextWindowSize(ImVec2(400, 800), 2);
 
 	if (ImGui::Begin("Configuration", &visible))
 	{
 		// App
-		if (ImGui::CollapsingHeader("App"))
+		ImGui::SetNextTreeNodeOpen(true);
+		if (ImGui::CollapsingHeader("App", true))
 		{
-			if (ImGui::InputText("App Name", name_input_buffer, 254, ImGuiInputTextFlags_EnterReturnsTrue))
+			if (ImGui::InputText("App Name", name_input_buffer, 254))
 			{
 				App->SetAppName(name_input_buffer);
+				App->SaveConfig();
 			}
 
-			if (ImGui::InputText("Organization", organization_input_buffer, 254, ImGuiInputTextFlags_EnterReturnsTrue))
+			if (ImGui::InputText("Organization", organization_input_buffer, 254))
 			{
 				App->SetAppOrganization(organization_input_buffer);
+				App->SaveConfig();
 			}
-			if (ImGui::InputText("Version", version_input_buffer, 254, ImGuiInputTextFlags_EnterReturnsTrue))
+			if (ImGui::InputText("Version", version_input_buffer, 254))
 			{
 				App->SetVersion(version_input_buffer);
+				App->SaveConfig();
 			}
 			if (ImGui::SliderInt("Max FPS", &max_fps, 0, 999))
 			{
 				App->SetMaxFps(max_fps);
+				App->SaveConfig();
 			}
 			std::vector<float> framerate = App->profiler->GetFramesVector();
 			if (!framerate.empty())
@@ -69,6 +75,7 @@ void Configuration::Draw()
 		}
 
 		// Window
+		ImGui::SetNextTreeNodeOpen(true);
 		if (ImGui::CollapsingHeader("Window"))
 		{
 			if (ImGui::InputInt("Width", &window_width, 100))
@@ -77,6 +84,7 @@ void Configuration::Draw()
 					window_width = display_size_width;
 
 				App->window->SetWindowSize(window_width, window_height);
+				App->SaveConfig(App->window);
 			}
 			if (ImGui::InputInt("Height", &window_height, 100))
 			{
@@ -84,24 +92,34 @@ void Configuration::Draw()
 					window_height = display_size_height;
 
 				App->window->SetWindowSize(window_width, window_height);
+				App->SaveConfig(App->window);
 			}
 			if (ImGui::Checkbox("Fullscren", &fullscreen))
 			{
 				App->window->SetFullscreen(fullscreen);
+				App->SaveConfig(App->window);
 			}
 			ImGui::SameLine();
 			if (ImGui::Checkbox("Resizable", &resizable))
 			{
 				App->window->SetResizable(resizable);
+				App->SaveConfig(App->window);
 			}
 			if (ImGui::Checkbox("Borderless", &borderless))
 			{
 				App->window->SetBorderless(borderless);
+				App->SaveConfig(App->window);
 			}
 			ImGui::SameLine();
 			if (ImGui::Checkbox("Full Dekstop", &fulldekstop))
 			{
 				App->window->SetFullDekstop(fulldekstop);
+				App->SaveConfig(App->window);
+			}
+			if (ImGui::Checkbox("Maximized", &maximized))
+			{
+				App->window->SetMaximized(maximized);
+				App->SaveConfig(App->window);
 			}
 		}
 
@@ -109,4 +127,6 @@ void Configuration::Draw()
 
 	ImGui::End();
 }
+
+
 

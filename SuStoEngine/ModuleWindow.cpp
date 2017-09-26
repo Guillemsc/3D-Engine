@@ -8,11 +8,42 @@ ModuleWindow::ModuleWindow(bool start_enabled) : Module(start_enabled)
 {
 	window = NULL;
 	screen_surface = NULL;
+
+	width = 1280;
+	height = 1024;
+	fullscreen = false;
+	resizable = true;
+	borderless = false;
+	full_dekstop = false;
+	maximized = true;
+	vsync = false;
 }
 
 // Destructor
 ModuleWindow::~ModuleWindow()
 {
+}
+
+void ModuleWindow::OnLoadConfig(JSON_Doc * config)
+{
+	width = config->GetNumber("window.width");
+	height = config->GetNumber("window.height");
+	fullscreen = config->GetBool("window.fullscreen");
+	resizable = config->GetBool("window.resizable");
+	borderless = config->GetBool("window.borderless");
+	full_dekstop = config->GetBool("window.fulldekstop");
+	maximized = config->GetBool("window.maximized");
+}
+
+void ModuleWindow::OnSaveConfig(JSON_Doc * config)
+{
+	config->SetNumber("window.width", width);
+	config->SetNumber("window.height", height);
+	config->SetBool("window.fullscreen", fullscreen);
+	config->SetBool("window.resizable", resizable);
+	config->SetBool("window.borderless", borderless);
+	config->SetBool("window.fulldekstop", full_dekstop);
+	config->SetBool("window.maximized", maximized);
 }
 
 // Called before render is available
@@ -29,28 +60,6 @@ bool ModuleWindow::Awake()
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-
-	width = 1280;
-	height = 1024;
-	fullscreen = false;
-	resizable = true;
-	borderless = false;
-	full_dekstop = false;
-	maximized = true;
-	vsync = false;
-
-	JSON_Doc* config = App->GetConfig();
-
-	if (config != nullptr)
-	{
-		width = config->GetNumber("window.width");
-		height = config->GetNumber("window.height");
-		fullscreen = config->GetBool("window.fullscreen");
-		resizable = config->GetBool("window.resizable");
-		borderless = config->GetBool("window.borderless");
-		full_dekstop = config->GetBool("window.fulldekstop");
-		maximized = config->GetBool("window.maximized");
-	}
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -170,6 +179,13 @@ void ModuleWindow::GetDisplaySize(int & width, int & height)
 	height = dm.h;
 }
 
+vec2 ModuleWindow::GetDisplaySize()
+{
+	int x, y;
+	GetDisplaySize(x, y);
+	return vec2(x, y);
+}
+
 void ModuleWindow::SetFullscreen(bool set)
 {
 	fullscreen = set;
@@ -191,7 +207,7 @@ bool ModuleWindow::GetFullscreen()
 
 void ModuleWindow::SetResizable(bool set)
 {
-
+	resizable = set;
 }
 
 bool ModuleWindow::GetResizalbe()
@@ -240,7 +256,11 @@ bool ModuleWindow::GetFullDekstop()
 void ModuleWindow::SetMaximized(bool set)
 {
 	maximized = set;
-	GenerateWindow(fullscreen, resizable, borderless, full_dekstop, maximized);
+
+	if(set)
+		SDL_MaximizeWindow(window);
+	else
+		SDL_RestoreWindow(window);
 }
 
 bool ModuleWindow::GetMaximized()

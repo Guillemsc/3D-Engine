@@ -201,6 +201,33 @@ void Application::LoadConfig()
 		SetAppOrganization(organization);
 		SetVersion(version);
 		SetMaxFps(max_fps);
+
+		for (list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rend(); it++)
+		{
+			(*it)->OnLoadConfig(config);
+		}
+	}
+}
+
+void Application::SaveConfig(Module* module)
+{
+	if (config != nullptr)
+	{
+		config->SetString("app.title", App->GetAppName());
+		config->SetString("app.organization", App->GetAppOrganization());
+		config->SetNumber("app.max_fps", App->GetMaxFps());
+		config->SetString("app.version", App->GetVersion());
+
+		for (list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rend(); it++)
+		{
+			if(module == nullptr)
+				(*it)->OnSaveConfig(config);
+
+			else if(module == (*it))
+				(*it)->OnSaveConfig(config);	
+		}
+
+		config->Save();
 	}
 }
 
@@ -225,12 +252,6 @@ void Application::SetAppName(const char* name)
 	{
 		title = name;
 		window->SetTitle(name);
-
-		if (config != nullptr)
-		{
-			config->SetString("app.title", name);
-			config->Save();
-		}
 	}
 }
 
@@ -244,12 +265,6 @@ void Application::SetAppOrganization(const char* name)
 	if (name != organization)
 	{
 		organization = name;
-
-		if (config != nullptr)
-		{
-			config->SetString("app.organization", name);
-			config->Save();
-		}
 	}
 }
 
@@ -264,12 +279,6 @@ void Application::SetMaxFps(int set)
 	{
 		max_fps = set;
 		capped_ms = (1000 / set);
-
-		if (config != nullptr)
-		{
-			config->SetNumber("app.max_fps", set);
-			config->Save();
-		}
 	}
 }
 
@@ -286,12 +295,6 @@ bool Application::GetDebugMode()
 void Application::SetVersion(const char * set)
 {
 	version = set;
-
-	if (config != nullptr)
-	{
-		config->SetString("app.version", set);
-		config->Save();
-	}
 }
 
 const char * Application::GetVersion()
