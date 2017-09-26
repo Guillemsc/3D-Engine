@@ -4,13 +4,15 @@
 #include "ModuleAudio.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
-#include "ModulePhysics3D.h"
 #include "DebugScene.h"
 #include "XMLLoader.h"
 #include "JSONLoader.h"
 #include "EditorUI.h"
 #include "Configuration.h"
 #include "imgui.h"
+
+#include "mmgr\nommgr.h"
+#include "mmgr\mmgr.h"
 
 Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
@@ -21,7 +23,6 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	audio = new ModuleAudio();
 	renderer3D = new ModuleRenderer3D();
 	camera = new ModuleCamera3D();
-	physics = new ModulePhysics3D();
 	debug_scene = new DebugScene();
 	editorUI = new EditorUI();
 
@@ -36,7 +37,6 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(camera);
 	AddModule(input);
 	AddModule(audio);
-	AddModule(physics);
 	AddModule(editorUI);
 
 	AddModule(debug_scene);

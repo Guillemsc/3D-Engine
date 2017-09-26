@@ -1,6 +1,9 @@
 #include "Profiler.h"
 #include "Globals.h"
 
+#include "mmgr\nommgr.h"
+#include "mmgr\mmgr.h"
+
 Profiler::Profiler()
 {
 	cration_time = SDL_GetTicks();
@@ -52,6 +55,14 @@ void Profiler::UpdateFinish()
 		if (frames.size() > MAX_FRAMES_LOGGED) 
 			frames.erase(frames.begin());
 		
+	}
+	// -----------
+
+	// Memory Statistics
+	memory.push_back(m_getMemoryStatistics().totalActualMemory);
+
+	if (memory.size() > MAX_MEMORY_LOGGED) {
+		memory.erase(memory.begin());
 	}
 	// -----------
 
@@ -150,4 +161,9 @@ Profile * Profiler::GetProfile(const char * name)
 std::vector<float> Profiler::GetFramesVector()
 {
 	return frames;
+}
+
+std::vector<float> Profiler::GetMemoryVector()
+{
+	return memory;
 }
