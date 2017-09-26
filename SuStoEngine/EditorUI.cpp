@@ -2,14 +2,13 @@
 #include "Console.h"
 #include "ModuleWindow.h"
 #include "App.h"
-#include "Primitive.h"
-#include "GeometryMath.h"
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "Functions.h"
 #include "Console.h"
 #include "Configuration.h"
 #include "About.h"
+#include "EngineTest.h"
 #include "ProfilerViewer.h"
 
 //https://github.com/ocornut/imgui/issues/351
@@ -40,20 +39,18 @@ bool EditorUI::Awake()
 	LoadStyle("blue_yellow");
 
 	// Editor elements
-	console = new Console();
-	configuration = new Configuration();
+	console = new Console(true);
+	configuration = new Configuration(false);
 	about = new About(false);
-	profiler_viewer = new ProfilerViewer();
+	profiler_viewer = new ProfilerViewer(false);
+	engine_test = new EngineTest(false);
 
 	AddEditor(console);
 	AddEditor(configuration);
 	AddEditor(about);
 	AddEditor(profiler_viewer);
+	AddEditor(engine_test);
 	// ---------------
-
-	// Initial range set
-	range_demo.x = 0;
-	range_demo.y = 100;
 
 	return ret;
 }
@@ -116,7 +113,7 @@ bool EditorUI::Update()
 
 		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
 		{
-			ImGui::MenuItem("Engine Tests", NULL, &show_test_window);
+			ImGui::MenuItem("Engine Tests", NULL, &engine_test->visible);
 
 			ImGui::MenuItem("Test window", NULL, &show_imgui_test_window);
 
@@ -133,12 +130,6 @@ bool EditorUI::Update()
 	if (show_imgui_test_window)
 	{
 		ImGui::ShowTestWindow();
-	}
-
-	// Test window of the engine
-	if (show_test_window)
-	{
-		TestEngine();
 	}
 	
 	// Draw editor elements
@@ -190,226 +181,6 @@ void EditorUI::AddEditor(EditorElement * el)
 	editor_elements.push_back(el);
 }
 
-void EditorUI::TestEngine() 
-{
-	ImGui::SetNextWindowSize(ImVec2(600, 680), ImGuiCond_::ImGuiSetCond_FirstUseEver);
-
-	if (!ImGui::Begin("Engine Tests", &show_test_window, ImGuiWindowFlags_NoResize))
-	{
-		// Early out if the window is collapsed, as an optimization.
-		ImGui::End();
-		return;
-	}
-
-	ImGui::Separator();
-
-	if (ImGui::CollapsingHeader("Random Number Generation"))
-	{
-		ImGui::InputFloat2("Min | Max", range_demo.ptr(), 2);
-		ImGui::InputInt("Number of generations", &quantity_demo);
-
-		if (ImGui::Button("Generate", { 400, 30 }))
-		{
-			GenerateRandomNumbers(range_demo, quantity_demo);
-		}
-
-	}
-
-	if (ImGui::CollapsingHeader("Geometry math test"))
-	{
-		GeometryMathTest();
-	}
-
-	ImGui::End();
-
-}
-
-void EditorUI::GeometryMathTest()
-{
-	ImGui::Text("Contact: %s", contact ? "Yes" : "No");
-
-	ImGui::Separator();
-
-	ImGui::InputFloat3("Position", vec3a);
-	ImGui::SliderFloat("Distance", &dist, 0, 10);
-
-	if (ImGui::Button("Sphere - Sphere"))
-	{
-		contact_sphere_sphere = false;
-		contact_sphere_capsules = false;
-		contact_aabb_aabb = false;
-		contact_obb_obb = false;
-		contact_aabb_ray = false;
-		contact_sphere_sphere = !contact_sphere_sphere;
-	}
-
-	if (ImGui::Button("Sphere - Capsule"))
-	{
-		contact_sphere_sphere = false;
-		contact_sphere_capsules = false;
-		contact_aabb_aabb = false;
-		contact_obb_obb = false;
-		contact_aabb_ray = false;
-		contact_sphere_capsules = !contact_sphere_capsules;
-	}
-
-	if (ImGui::Button("AABB - AABB"))
-	{
-		contact_sphere_sphere = false;
-		contact_sphere_capsules = false;
-		contact_aabb_aabb = false;
-		contact_obb_obb = false;
-		contact_aabb_ray = false;
-		contact_aabb_aabb = !contact_aabb_aabb;
-	}
-
-	if (ImGui::Button("OBB - OBB"))
-	{
-		contact_sphere_sphere = false;
-		contact_sphere_capsules = false;
-		contact_aabb_aabb = false;
-		contact_obb_obb = false;
-		contact_aabb_ray = false;
-		contact_obb_obb = !contact_obb_obb;
-	}
-
-	if (ImGui::Button("AABB - Ray"))
-	{
-		contact_sphere_sphere = false;
-		contact_sphere_capsules = false;
-		contact_aabb_aabb = false;
-		contact_obb_obb = false;
-		contact_aabb_ray = false;
-		contact_aabb_ray = !contact_aabb_ray;
-	}
-
-	math::float3 p1 = { vec3a[0] - dist / 2, vec3a[1], vec3a[2] };
-	math::float3 p2 = { vec3a[0] + dist / 2, vec3a[1], vec3a[2] };
-	contact = false;
-
-	if (contact_sphere_sphere)
-	{
-		ImGui::Text("contact_sphere_sphere");
-
-		PSphere s1(2);
-		s1.color.Set(255, 0, 0);
-		s1.SetPos(p1.x, p1.y, p1.z);
-		s1.Render();
-
-		Sphere sph1(p1, 2);
-
-		PSphere s2(2);
-		s2.color.Set(0, 255, 0);
-		s2.SetPos(p2.x, p2.y, p2.z);
-		s2.Render();
-
-		Sphere sph2(p2, 2);
-
-		if (sph1.Intersects(sph2))
-			contact = true;
-	}
-
-	if (contact_sphere_capsules)
-	{
-		ImGui::Text("contact_sphere_capsules");
-
-		PSphere s1(2);
-		s1.color.Set(255, 0, 0);
-		s1.SetPos(p1.x, p1.y, p1.z);
-		s1.Render();
-
-		Sphere sph1(p1, 2);
-
-		PCube s2(2, 2, 2);
-		s2.color.Set(0, 255, 0);
-		s2.SetPos(p2.x, p2.y, p2.z);
-		s2.Render();
-
-		Capsule c(float3(p2.x, p2.y - 1, p2.z), float3(p2.x, p2.y + 1, p2.z), 1.0f);
-
-		if (sph1.Intersects(c))
-			contact = true;
-	}
-
-	if (contact_aabb_aabb)
-	{
-		ImGui::Text("contact_aabb_aabb");
-
-		PCube c1(2, 2, 2);
-		c1.color.Set(255, 0, 0);
-		c1.SetPos(p1.x, p1.y, p1.z);
-		c1.Render();
-
-		AABB sph1(float3(p1.x - 1, p1.y - 1, p1.z - 1), float3(p1.x + 1, p1.y + 1, p1.z + 1));
-
-		PCube c2(2, 2, 2);
-		c2.color.Set(0, 255, 0);
-		c2.SetPos(p2.x, p2.y, p2.z);
-		c2.Render();
-
-		AABB sph2(float3(p2.x - 1, p2.y - 1, p2.z - 1), float3(p2.x + 1, p2.y + 1, p2.z + 1));
-
-		if (sph1.Intersects(sph2))
-			contact = true;
-	}
-
-	if (contact_obb_obb)
-	{
-		ImGui::Text("contact_obb_obb");
-
-		PCube c1(2, 2, 2);
-		c1.color.Set(255, 0, 0);
-		c1.SetPos(p1.x, p1.y, p1.z);
-		c1.Render();
-
-		AABB ab1(float3(p1.x - 1, p1.y - 1, p1.z - 1), float3(p1.x + 1, p1.y + 1, p1.z + 1));
-		OBB sph1(ab1);
-
-		PCube c2(2, 2, 2);
-		c2.color.Set(0, 255, 0);
-		c2.SetPos(p2.x, p2.y, p2.z);
-		c2.Render();
-
-		AABB ab2(float3(p2.x - 1, p2.y - 1, p2.z - 1), float3(p2.x + 1, p2.y + 1, p2.z + 1));
-		OBB sph2(ab2);
-
-		if (sph1.Intersects(sph2))
-			contact = true;
-	}
-
-	if (contact_aabb_ray)
-	{
-		ImGui::Text("contact_aabb_ray");
-
-		PCube c1(2, 2, 2);
-		c1.color.Set(255, 0, 0);
-		c1.SetPos(p1.x, p1.y, p1.z);
-		c1.Render();
-
-		AABB sph1(float3(p1.x - 1, p1.y - 1, p1.z - 1), float3(p1.x + 1, p1.y + 1, p1.z + 1));
-
-		PLine l1(p2.x, p2.y, p2.z + 10);
-		l1.color.Set(255, 0, 0);
-		l1.SetPos(p2.x, p2.y, p2.z - 10);
-		l1.Render();
-
-		Ray sph2(float3(p2.x, p2.y, p2.z - 10), float3(p2.x, p2.y, p2.z + 10));
-
-		if (sph1.Intersects(sph2))
-			contact = true;
-	}
-}
-
-void EditorUI::GenerateRandomNumbers(float2 range, int quantity)
-{
-	for (int i = 0; i < quantity; ++i) 
-	{
-		float number_rounded = roundf(GetRandomValue(range.x, range.y) * 100) / 100;
-		char number[255];
-		snprintf(number, 255, "%.2f", number_rounded);
-		console->AddLog(number);
-	}
-}
 
 void EditorUI::LoadStyle(char * name)
 {
@@ -643,5 +414,10 @@ void EditorUI::LoadStyle(char * name)
 		style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
 		style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.90f, 0.54f, 0.00f, 1.00f);
 	}
+}
+
+Console * EditorUI::GetConsole()
+{
+	return console;
 }
 

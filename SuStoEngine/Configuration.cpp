@@ -8,6 +8,7 @@ Configuration::Configuration(bool start_enabled) : EditorElement(start_enabled)
 	memset(name_input_buffer, 0, sizeof(name_input_buffer));
 	memset(organization_input_buffer, 0, sizeof(organization_input_buffer));
 	memset(version_input_buffer, 0, sizeof(version_input_buffer));
+	visible = start_enabled;
 }
 
 Configuration::~Configuration()

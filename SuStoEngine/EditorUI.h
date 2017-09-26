@@ -8,6 +8,7 @@ class Console;
 class Configuration;
 class About;
 class ProfilerViewer;
+class EngineTest;
 
 class EditorElement
 {
@@ -41,38 +42,22 @@ public:
 
 	void LoadStyle(char* name);
 
+	Console* GetConsole();
+
 private:
 	void AddEditor(EditorElement* el);
 
-	void TestEngine();
-	void GeometryMathTest();
-	void GenerateRandomNumbers(float2 range, int quantity);
-
 private:
-	Console*             console = nullptr;
-	Configuration*       configuration = nullptr;
-	About*               about = nullptr;
-	ProfilerViewer*      profiler_viewer = nullptr;
+	Console* console						= nullptr;
+	Configuration* configuration			= nullptr;
+	About* about							= nullptr;
+	ProfilerViewer* profiler_viewer			= nullptr;
+	EngineTest* engine_test					= nullptr;
 
 	list<EditorElement*> editor_elements;
 
-	bool				 show_imgui_test_window = false;
-						 
-	bool				 show_test_window = false;
-
-	// Geometry math test
-	float vec3a[3] = { 0.0f, 0.0f, 0.0f };
-	float dist = 0;
-	bool contact = false;
-	bool contact_sphere_sphere = false;
-	bool contact_sphere_capsules = false;
-	bool contact_aabb_aabb = false;
-	bool contact_obb_obb = false;
-	bool contact_aabb_ray = false;
+	bool show_imgui_test_window				= false;
 	
-	// Random generator
-	float2 range_demo; // for the random generation demo
-	int quantity_demo = 1; // number of random generations of the demo
 };
 
 #endif // __j1FILESYSTEM_H__

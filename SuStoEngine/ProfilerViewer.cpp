@@ -4,6 +4,7 @@
 
 ProfilerViewer::ProfilerViewer(bool start_enabled)
 {
+	visible = start_enabled;
 }
 
 ProfilerViewer::~ProfilerViewer()
