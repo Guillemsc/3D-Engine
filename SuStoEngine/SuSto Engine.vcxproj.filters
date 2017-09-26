@@ -43,6 +43,9 @@
     <Filter Include="Sources\Editor">
       <UniqueIdentifier>{1b8b97ed-0dc8-445e-8a4a-41b9de1e945f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Components\mmgr">
+      <UniqueIdentifier>{b4be67e9-1f6f-427e-a955-2a57d94298ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleAudio.h">
@@ -73,15 +76,6 @@
       <Filter>Sources\Containers</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
-      <Filter>Sources\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ModulePhysics3D.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysBody3D.h">
-      <Filter>Sources\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysVehicle3D.h">
       <Filter>Sources\Components</Filter>
     </ClInclude>
     <ClInclude Include="App.h">
@@ -333,6 +327,12 @@
     </ClInclude>
     <ClInclude Include="ProfilerViewer.h">
       <Filter>Sources\Editor</Filter>
+	</ClInclude>
+    <ClInclude Include="mmgr\mmgr.h">
+      <Filter>Sources\Components\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="mmgr\nommgr.h">
+      <Filter>Sources\Components\mmgr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -364,15 +364,6 @@
       <Filter>Sources\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
-      <Filter>Sources\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ModulePhysics3D.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysBody3D.cpp">
-      <Filter>Sources\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysVehicle3D.cpp">
       <Filter>Sources\Components</Filter>
     </ClCompile>
     <ClCompile Include="App.cpp">
@@ -524,6 +515,9 @@
     </ClCompile>
     <ClCompile Include="ProfilerViewer.cpp">
       <Filter>Sources\Editor</Filter>
+	</ClCompile>
+    <ClCompile Include="mmgr\mmgr.cpp">
+      <Filter>Sources\Components\mmgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

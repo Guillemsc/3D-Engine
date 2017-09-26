@@ -33,7 +33,7 @@ void Console::Draw()
 	if (ImGui::Begin("Console", &visible))
 	{
 		if (ImGui::SmallButton("Clear"))
-			AddLog("Clear");
+			CommandInput(".Clear");
 
 		ImGui::SameLine();
 
@@ -126,7 +126,14 @@ void Console::ScrollBottom()
 
 void Console::CommandInput(const char * txt)
 {
-	AddLog("error lol", console_text_type::console_text_type_error);
+	if (txt == ".Clear") 
+	{
+		for (std::list<console_text>::iterator it = console_items.begin(); it != console_items.end();)
+		{
+			it = console_items.erase(it);
+		}
+		console_items.clear();
+	}
 }
 
 ImColor Console::GetColorByTextType(console_text_type type)

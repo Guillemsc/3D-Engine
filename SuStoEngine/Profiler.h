@@ -5,7 +5,8 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#define MAX_FRAMES_LOGGED 25
+#define MAX_FRAMES_LOGGED 100
+#define MAX_MEMORY_LOGGED 100
 
 struct Profile
 {
@@ -38,6 +39,7 @@ public:
 	int GetProfilesCount();
 	std::vector<float> GetFramesVector();
 	std::vector<Profile*> GetProfilesList();
+	std::vector<float> GetMemoryVector();
 
 private:
 	float cration_time = 0.0f;
@@ -50,6 +52,7 @@ private:
 	float frame_ms = 0.0f;
 	float avg_fps = 0.0f;
 	std::vector<float> frames;
+	std::vector<float> memory;
 
 	int frame_counter = 0;
 	float frame_counter_ms = 0.0f;
