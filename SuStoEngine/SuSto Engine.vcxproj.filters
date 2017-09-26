@@ -504,9 +504,6 @@
     <ClCompile Include="Parson\parson.c">
       <Filter>Sources\Components\Parson</Filter>
     </ClCompile>
-    <ClCompile Include="JSONLoader.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="Profiler.cpp">
       <Filter>Sources\Components</Filter>
     </ClCompile>
@@ -518,6 +515,9 @@
     </ClCompile>
     <ClCompile Include="About.cpp">
       <Filter>Sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="JSONLoader.cpp">
+      <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

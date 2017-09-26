@@ -41,7 +41,7 @@ bool ModuleRenderer3D::Awake()
 	if (ret == true)
 	{
 		//Use Vsync
-		if (App->window->GetVsync() && SDL_GL_SetSwapInterval(0) < 0)
+		if (SDL_GL_SetSwapInterval(App->window->GetVsync()) < 0)
 			LOG_OUTPUT("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 
 		//Initialize Projection Matrix

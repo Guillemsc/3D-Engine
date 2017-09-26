@@ -37,6 +37,7 @@ bool ModuleWindow::Awake()
 	borderless = false;
 	full_dekstop = false;
 	maximized = true;
+	vsync = false;
 
 	JSON_Doc* config = App->GetConfig();
 
