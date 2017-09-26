@@ -415,11 +415,7 @@ void EditorUI::LoadStyle(char * name)
 {
 	ImGuiStyle * style = &ImGui::GetStyle();
 
-	if (name == "default")
-	{
-
-	}
-	else if (name == "black_white")
+	if (TextCmp(name, "black_white"))
 	{
 		style->WindowPadding = ImVec2(15, 15);
 		style->WindowRounding = 5.0f;
@@ -477,7 +473,7 @@ void EditorUI::LoadStyle(char * name)
 		style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
 		style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
 	}
-	else if (name == "gray")
+	else if (TextCmp(name,"gray"))
 	{
 		style->ChildWindowRounding = 3.f;
 		style->GrabRounding = 0.f;
@@ -530,7 +526,7 @@ void EditorUI::LoadStyle(char * name)
 		style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.32f, 0.52f, 0.65f, 1.00f);
 		style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.20f, 0.20f, 0.20f, 0.50f);
 	}
-	else if (name == "black_orange")
+	else if (TextCmp(name, "black_orange"))
 	{
 		style->WindowPadding = ImVec2(15, 15);
 		style->WindowRounding = 5.0f;
@@ -589,7 +585,7 @@ void EditorUI::LoadStyle(char * name)
 		style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.92f, 0.31f, 0.16f, 0.80f);
 	}
 
-	else if ("blue_yellow")
+	else if (TextCmp(name, "blue_yellow"))
 	{
 		style->WindowPadding = ImVec2(15, 15);
 		style->WindowRounding = 5.0f;

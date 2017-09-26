@@ -1,5 +1,6 @@
 #include "Profiler.h"
 #include "Globals.h"
+#include "Functions.h"
 
 #include "mmgr\nommgr.h"
 #include "mmgr\mmgr.h"
@@ -54,9 +55,9 @@ void Profiler::UpdateFinish()
 	// Memory Statistics
 	memory.push_back(m_getMemoryStatistics().totalActualMemory);
 
-	if (memory.size() > MAX_MEMORY_LOGGED) {
+	if (memory.size() > MAX_MEMORY_LOGGED) 
 		memory.erase(memory.begin());
-	}
+	
 	// -----------
 
 	// Update time since startup
@@ -100,9 +101,9 @@ void Profiler::StartProfile(const char * name, ...)
 
 	for (std::vector<Profile*>::iterator it = profiles.begin(); it != profiles.end(); it++)
 	{
-		if ((*it)->name == str)
+		if (TextCmp((*it)->name.c_str(), str))
 		{
-			(*it)->timer.Start();
+			(*it)->Start();
 
 			found = true;
 			break;
@@ -113,7 +114,7 @@ void Profiler::StartProfile(const char * name, ...)
 	{
 		Profile* prof = new Profile();
 		prof->name = str;
-		prof->timer.Start();
+		prof->Start();
 		profiles.push_back(prof);
 	}
 }
@@ -136,8 +137,6 @@ void Profiler::AddToProfile(const char * name, ...)
 	//}
 }
 
-
-
 void Profiler::FinishProfile(const char* name, ...)
 {
 	char str[200];
@@ -148,10 +147,9 @@ void Profiler::FinishProfile(const char* name, ...)
 
 	for (std::vector<Profile*>::iterator it = profiles.begin(); it != profiles.end(); it++)
 	{
-		if ((*it)->name == str)
+		if (TextCmp((*it)->name.c_str(), str))
 		{
-			(*it)->last_frame_ms = (*it)->timer.ReadTicks();
-			(*it)->total_frames_ms += (*it)->last_frame_ms;
+			(*it)->Finish();
 		}
 	}
 }
@@ -168,7 +166,7 @@ Profile* Profiler::GetProfile(const char * name, ...)
 
 	for (std::vector<Profile*>::iterator it = profiles.begin(); it != profiles.end(); it++)
 	{
-		if ((*it)->name == str)
+		if (TextCmp((*it)->name.c_str(), str))
 		{
 			ret = (*it);
 			break;
@@ -196,4 +194,49 @@ std::vector<Profile*> Profiler::GetProfilesList()
 std::vector<float> Profiler::GetMemoryVector()
 {
 	return memory;
+}
+
+void Profile::Start()
+{
+	timer.Start();
+}
+
+void Profile::Finish()
+{
+	ticks.push_back(timer.ReadTicks());
+	ms.push_back(timer.ReadMs());
+
+	total_frames_ms += timer.ReadMs();
+
+	if (ticks.size() > MAX_PROFILE_LOGGED)
+	{
+		ticks.erase(ticks.begin());
+		ms.erase(ms.begin());
+	}
+}
+
+int Profile::GetLastFrameTick()
+{
+	if(!ticks.empty())
+		return ticks.back();
+
+	return 0;
+}
+
+int Profile::GetLastFrameMs()
+{
+	if (!ms.empty())
+		return ms.back();
+
+	return 0;
+}
+
+std::vector<int> Profile::GetTicksList()
+{
+	return ticks;
+}
+
+std::vector<int> Profile::GetMsList()
+{
+	return ms;
 }

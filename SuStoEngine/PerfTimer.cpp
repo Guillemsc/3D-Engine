@@ -5,21 +5,22 @@
 
 #include "PerfTimer.h"
 #include "SDL\include\SDL_timer.h"
+#include "Globals.h"
 
 int PerfTimer::frequency = 0;
 
 // ---------------------------------------------
 PerfTimer::PerfTimer()
 {
-	if (frequency == 0)
-		frequency = SDL_GetPerformanceFrequency();
-
 	Start();
 }
 
 // ---------------------------------------------
 void PerfTimer::Start()
 {
+	if (frequency == 0)
+		frequency = SDL_GetPerformanceFrequency();
+
 	started_at = SDL_GetPerformanceCounter();
 }
 
@@ -34,3 +35,4 @@ int PerfTimer::ReadTicks() const
 {
 	return SDL_GetPerformanceCounter() - started_at;
 }
+

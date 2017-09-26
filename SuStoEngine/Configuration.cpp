@@ -41,8 +41,7 @@ void Configuration::Draw()
 	if (ImGui::Begin("Configuration", &visible))
 	{
 		// App
-		ImGui::SetNextTreeNodeOpen(true);
-		if (ImGui::CollapsingHeader("App"))
+		if (ImGui::CollapsingHeader("App", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			if (ImGui::InputText("App Name", name_input_buffer, 254))
 			{
@@ -84,8 +83,7 @@ void Configuration::Draw()
 		}
 
 		// Window
-		ImGui::SetNextTreeNodeOpen(true);
-		if (ImGui::CollapsingHeader("Window"))
+		if (ImGui::CollapsingHeader("Window", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			if (ImGui::InputInt("Width", &window_width, 100))
 			{
