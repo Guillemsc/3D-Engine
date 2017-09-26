@@ -39,7 +39,7 @@ bool EditorUI::Awake()
 	LoadStyle("blue_yellow");
 
 	// Editor elements
-	console = new Console(true);
+	console = new Console(false);
 	configuration = new Configuration(false);
 	about = new About(false);
 	profiler_viewer = new ProfilerViewer(false);

@@ -61,20 +61,20 @@ private:
 
 public:
 	//Modules
-	XMLLoader*		   xml				= nullptr;
-	JSONLoader*		   json				= nullptr;
-	Configuration*     configuration	= nullptr;
-	ModuleWindow*      window			= nullptr;
-	ModuleInput*       input			= nullptr;
-	ModuleAudio*       audio			= nullptr;
-	ModuleRenderer3D*  renderer3D		= nullptr;
-	ModuleCamera3D*    camera			= nullptr;
-	EditorUI*		   editorUI			= nullptr;
-	DebugScene*        debug_scene		= nullptr;
+	XMLLoader*		   xml = nullptr;
+	JSONLoader*		   json	= nullptr;
+	Configuration*     configuration = nullptr;
+	ModuleWindow*      window = nullptr;
+	ModuleInput*       input = nullptr;
+	ModuleAudio*       audio = nullptr;
+	ModuleRenderer3D*  renderer3D = nullptr;
+	ModuleCamera3D*    camera = nullptr;
+	EditorUI*		   editorUI	= nullptr;
+	DebugScene*        debug_scene = nullptr;
 
 	std::list<string>  logs;
 
-	Profiler*		   profiler			= nullptr;
+	Profiler*		   profiler = nullptr;
 
 	std::list<Module*> modules;
 
@@ -82,17 +82,17 @@ private:
 	int				   argc;
 	char**			   args;
 
-	std::string		   title			= "";
-	std::string		   organization		= "";
-	std::string		   version			= "";
+	std::string		   title = "";
+	std::string		   organization = "";
+	std::string		   version = "";
 
-	bool		       end_app			= false;
-	int				   max_fps			= 0;
-	int				   capped_ms		= -1;
+	bool		       end_app = false;
+	int				   max_fps = 0;
+	int				   capped_ms = -1;
 
-	bool			   debug_mode		= false;
+	bool			   debug_mode = false;
 
-	JSON_Doc*          config			= nullptr;
+	JSON_Doc*          config = nullptr;
 };
 
 extern Application* App;

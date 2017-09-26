@@ -7,9 +7,8 @@
 #include "Console.h"
 #include "glut\glut.h"
 
-EngineTest::EngineTest(bool start_enabled)
+EngineTest::EngineTest(bool start_enabled) : EditorElement(start_enabled)
 {
-	visible = start_enabled;
 }
 
 EngineTest::~EngineTest()

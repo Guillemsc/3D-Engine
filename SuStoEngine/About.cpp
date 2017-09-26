@@ -5,7 +5,7 @@
 
 About::About(bool start_enabled) : EditorElement(start_enabled)
 {
-	visible = start_enabled;
+
 }
 
 About::~About()

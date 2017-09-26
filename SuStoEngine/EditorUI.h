@@ -48,15 +48,15 @@ private:
 	void AddEditor(EditorElement* el);
 
 private:
-	Console* console						= nullptr;
-	Configuration* configuration			= nullptr;
-	About* about							= nullptr;
-	ProfilerViewer* profiler_viewer			= nullptr;
-	EngineTest* engine_test					= nullptr;
+	Console*             console = nullptr;
+	Configuration*       configuration = nullptr;
+	About*               about = nullptr;
+	ProfilerViewer*      profiler_viewer	= nullptr;
+	EngineTest*          engine_test = nullptr;
 
 	list<EditorElement*> editor_elements;
 
-	bool show_imgui_test_window				= false;
+	bool                 show_imgui_test_window	= false;
 	
 };
 

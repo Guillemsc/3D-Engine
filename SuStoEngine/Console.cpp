@@ -7,7 +7,6 @@
 Console::Console(bool start_enabled) : EditorElement(start_enabled)
 {
 	memset(input_buffer, 0, sizeof(input_buffer));
-	visible = start_enabled;
 }
 
 Console::~Console()

@@ -27,7 +27,6 @@ private:
 public:
 
 private:
-
 	std::list<xml_doc*>	xmls;
 };
 

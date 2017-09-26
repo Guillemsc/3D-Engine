@@ -13,7 +13,7 @@ public:
 	int ReadTicks() const;
 
 private:
-	double started_at;
+	double     started_at = 0;
 	static int frequency;
 };
 

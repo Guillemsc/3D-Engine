@@ -19,10 +19,10 @@ public:
 
 
 private:
-	int	    started_at		= 0;
-	bool	paused			= false;
-	int     paused_at		= 0;
-	bool	active			= false;
+	int  started_at	= 0;
+	bool paused = false;
+	int  paused_at = 0;
+	bool active = false;
 };
 
 #endif //__j1TIMER_H__

@@ -11,7 +11,7 @@ using namespace std;
 #include <queue>
 #include <iostream>
 
-#include "SDL\include\SDL.h"
+#include "SDL/include/SDL.h"
 #include "Globals.h"
 
 class Module
