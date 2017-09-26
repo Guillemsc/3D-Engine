@@ -6,14 +6,30 @@
 #include <string>
 #include <iostream>
 #include "PerfTimer.h"
-#define MAX_FRAMES_LOGGED 100
-#define MAX_MEMORY_LOGGED 100
+#define MAX_FRAMES_LOGGED 50
+#define MAX_MEMORY_LOGGED 50
+#define MAX_PROFILE_LOGGED 5
 
-struct Profile
+class Profile
 {
+public:
+	void Start();
+	void Finish();
+
+	int GetLastFrameTick();
+	int GetLastFrameMs();
+
+	std::vector<int> GetTicksList();
+	std::vector<int> GetMsList();
+
+public:
 	std::string name;
 
+private:
 	PerfTimer timer;
+	std::vector<int> ms;
+	std::vector<int> ticks;
+
 	int last_frame_ms				= 0.0f;
 	int total_frames_ms				= 0.0f;
 };

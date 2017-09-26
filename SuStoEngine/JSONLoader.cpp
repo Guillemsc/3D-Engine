@@ -1,5 +1,6 @@
 #include "JSONLoader.h"
 #include "Globals.h"
+#include "Functions.h"
 
 JSONLoader::JSONLoader(bool enabled) : Module(enabled)
 {
@@ -16,20 +17,6 @@ bool JSONLoader::Awake()
 
 	LOG_OUTPUT("Loading JSON Module");
 
-	//JSON_Object* ob = LoadJSON("package.json");
-
-	//const char *name = NULL;
-
-	//name = json_object_get_string(ob, "name");
-
-	//LOG_OUTPUT("%s", name);
-
-	//json_object_set_string(ob, "name", "John Smith");
-
-	//SaveJSON("package.json");
-
-	//CreateJSON("test.json");
-
 	return ret;
 }
 
@@ -40,7 +27,7 @@ JSON_Doc* JSONLoader::LoadJSON(const char * path)
 	bool exists = false;
 	for (list<JSON_Doc*>::iterator it = jsons.begin(); it != jsons.end(); it++)
 	{
-		if (path == (*it)->GetPath())
+		if (TextCmp(path, (*it)->GetPath()))
 		{
 			ret = (*it);
 			exists = true;
@@ -79,7 +66,7 @@ JSON_Doc* JSONLoader::CreateJSON(const char * path)
 	bool exists = false;
 	for (list<JSON_Doc*>::iterator it = jsons.begin(); it != jsons.end(); it++)
 	{
-		if (path == (*it)->GetPath())
+		if (TextCmp(path, (*it)->GetPath()))
 		{
 			exists = true;
 			break;
@@ -93,10 +80,21 @@ JSON_Doc* JSONLoader::CreateJSON(const char * path)
 	else
 	{
 		JSON_Value* root_value = json_value_init_object();
-		JSON_Object* root_object = json_value_get_object(root_value);
 
-		JSON_Doc* new_doc = new JSON_Doc(root_value, root_object, path);
-		jsons.push_back(new_doc);
+		if (root_value == nullptr)
+		{
+			LOG_OUTPUT("Error creating %s. Wrong path?", path);
+		}
+		else
+		{
+
+			JSON_Object* root_object = json_value_get_object(root_value);
+
+			JSON_Doc* new_doc = new JSON_Doc(root_value, root_object, path);
+			jsons.push_back(new_doc);
+
+			ret = new_doc;
+		}
 	}
 
 	return ret;

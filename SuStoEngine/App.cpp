@@ -60,6 +60,9 @@ bool Application::Awake()
 {
 	bool ret = true;
 
+	profiler->StartProfile("hi");
+	profiler->FinishProfile("hi");
+
 	profiler->StartProfile("Engine Awake");
 
 	LoadConfig();
@@ -113,6 +116,8 @@ bool Application::Update()
 {
 	bool ret = true;
 
+	profiler->StartProfile("Engine Update");
+
 	if (input->GetWindowEvent(WE_QUIT) == true || end_app)
 		return false;
 
@@ -159,6 +164,8 @@ bool Application::Update()
 	}
 
 	FinishUpdate();
+
+	profiler->FinishProfile("Update Engine");
 
 	profiler->UpdateFinish();
 

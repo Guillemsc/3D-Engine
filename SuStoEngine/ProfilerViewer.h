@@ -12,11 +12,10 @@ public:
 
 	void Start();
 	void Draw();
-
 public:
 
 private:
-
+	int ms_ticks = false;
 };
 
 #endif
