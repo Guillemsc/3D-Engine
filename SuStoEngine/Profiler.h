@@ -32,6 +32,7 @@ private:
 
 	std::vector<int> ms;
 	std::vector<int> ticks;
+
 };
 
 class Profiler

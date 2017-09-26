@@ -35,12 +35,13 @@ private:
 
 	// GL_DEPTH_TEST		GL_CULL_FACE		GL_LIGHTING
 	// GL_COLOR_MATERIAL	GL_TEXTURE_2D		two other
-	bool  gl_depht = false;
-	bool  gl_cull_face = false;
-	bool  gl_lighting = false;
-	bool  gl_color_material = false;
-	bool  gl_texture_2d	= false;
-
+	// Wireframe
+	bool gl_depth = true;
+	bool gl_cull_face = true;
+	bool gl_lighting = true;
+	bool gl_color_material = true;
+	bool gl_texture_2d = false;
+	bool wireframe_mode = false;
 
 
 };
