@@ -1,6 +1,7 @@
 #include "About.h"
 #include "App.h"
 #include "imgui.h"
+#define NUM_LIBRARIES 5
 
 About::About(bool start_enabled) : EditorElement(start_enabled)
 {
@@ -42,19 +43,16 @@ void About::Draw()
 		ImGui::Separator();
 		if (ImGui::CollapsingHeader("Libraries"))
 		{
-			ImGui::Columns(3, "Name");
+			ImGui::Columns(2, "Name");
 			ImGui::Separator();
-			ImGui::Text("Use"); ImGui::NextColumn();
 			ImGui::Text("Name"); ImGui::NextColumn();
 			ImGui::Text("Version"); ImGui::NextColumn();
 			ImGui::Separator();
-			const char* use[3] = { "Math", "UI", "File System" };
-			const char* name[3] = { "MathGeoLib", "ImGui", "Parson" };
-			const char* version[3] = { "v1.5", "v1.52", "---" };
+			const char* name[NUM_LIBRARIES] = { "MathGeoLib", "ImGui", "Parson", "OpenGL", "Glew" };
+			const char* version[NUM_LIBRARIES] = { "v1.5", "v1.52", "---", "v2.1", "v2.1" };
 			static int selected = -1;
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < NUM_LIBRARIES; i++)
 			{
-				ImGui::Text(use[i]); ImGui::NextColumn();
 				ImGui::Text(name[i]); ImGui::NextColumn();
 				ImGui::Text(version[i]); ImGui::NextColumn();
 			}
