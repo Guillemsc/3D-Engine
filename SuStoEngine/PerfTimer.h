@@ -14,7 +14,7 @@ public:
 
 private:
 	double     started_at = 0;
-	static int frequency = 0;
+	static int frequency;
 };
 
 #endif //__j1PERFTIMER_H__

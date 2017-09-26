@@ -172,7 +172,6 @@ void ModuleCamera3D::Follow(PhysBody3D * body, float min, float max, float heigh
 	min_following_dist = min;
 	max_following_dist = max;
 	following_height = height;
-	following = body;
 	displacement = _displacement;
 }
 
