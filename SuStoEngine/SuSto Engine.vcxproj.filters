@@ -325,6 +325,9 @@
     <ClInclude Include="About.h">
       <Filter>Sources\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="ProfilerViewer.h">
+      <Filter>Sources\Editor</Filter>
+	</ClInclude>
     <ClInclude Include="mmgr\mmgr.h">
       <Filter>Sources\Components\mmgr</Filter>
     </ClInclude>
@@ -510,6 +513,9 @@
     <ClCompile Include="JSONLoader.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="ProfilerViewer.cpp">
+      <Filter>Sources\Editor</Filter>
+	</ClCompile>
     <ClCompile Include="mmgr\mmgr.cpp">
       <Filter>Sources\Components\mmgr</Filter>
     </ClCompile>

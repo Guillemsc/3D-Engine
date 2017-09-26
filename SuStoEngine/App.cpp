@@ -60,15 +60,25 @@ bool Application::Awake()
 {
 	bool ret = true;
 
+	profiler->StartProfile("hi");
+	profiler->FinishProfile("hi");
+
+
+	profiler->StartProfile("Awake");
+
 	LoadConfig();
 
 	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
+		profiler->StartProfile("Awake %s", (*it)->GetName());
+
 		ret = (*it)->Awake();
 		if (!ret) return false;
+
+		profiler->FinishProfile("Awake %s", (*it)->GetName());
 	}
 
-	profiler->AwakeFinish();
+	profiler->FinishProfile("Awake");
 
 	return ret;
 }
@@ -77,13 +87,21 @@ bool Application::Start()
 {
 	bool ret = true;
 
+	profiler->StartProfile("Start");
+
 	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
+		profiler->StartProfile("Start %s", (*it)->GetName());
+
 		ret = (*it)->Start();
 		if (!ret) return false;
+
+		profiler->FinishProfile("Start %s", (*it)->GetName());
 	}
 
-	profiler->StartFinish();
+	profiler->FinishProfile("Start");
+
+	profiler->Start();
 
 	return ret;
 }
@@ -125,11 +143,11 @@ bool Application::Update()
 		if (!(*it)->GetEnabled())
 			continue;
 
-		profiler->StartProfile((*it)->GetName());
+		profiler->StartProfile("Update %s", (*it)->GetName());
 
 		ret = (*it)->Update();
 
-		profiler->FinishProfile();
+		profiler->FinishProfile("Update %s", (*it)->GetName());
 
 		if (!ret) return false;
 	}

@@ -10,6 +10,7 @@
 #include "Console.h"
 #include "Configuration.h"
 #include "About.h"
+#include "ProfilerViewer.h"
 
 //https://github.com/ocornut/imgui/issues/351
 
@@ -42,10 +43,12 @@ bool EditorUI::Awake()
 	console = new Console();
 	configuration = new Configuration();
 	about = new About(false);
+	profiler_viewer = new ProfilerViewer();
 
 	AddEditor(console);
 	AddEditor(configuration);
 	AddEditor(about);
+	AddEditor(profiler_viewer);
 	// ---------------
 
 	// Initial range set
@@ -99,7 +102,9 @@ bool EditorUI::Update()
 		{
 			ImGui::MenuItem("Console", "º", &console->visible);
 
-			ImGui::MenuItem("Configuration", "P", &configuration->visible);
+			ImGui::MenuItem("Configuration", "c", &configuration->visible);
+
+			ImGui::MenuItem("Profiler", "p", &profiler_viewer->visible);
 
 			ImGui::EndMenu();
 		}
@@ -118,8 +123,6 @@ bool EditorUI::Update()
 			ImGui::EndMenu();
 		}
 
-		ImGui::Text("Awake: %f", App->profiler->GetAwakeTime()); ImGui::SameLine();
-		ImGui::Text("Start: %f", App->profiler->GetStartTime()); ImGui::SameLine();
 		ImGui::Text("Fps: %d", App->profiler->GetFPS());
 	
 		ImGui::EndMainMenuBar();

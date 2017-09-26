@@ -25,7 +25,8 @@ void About::Draw()
 		ImGui::Text("SuSto Engine %s", App->GetVersion());
 		ImGui::Separator();
 		ImGui::Text("By Guillem Sunyer and Simon Stoyanov.");
-		ImGui::Text("3D Engine made for the 3D engines subject during the 3rd year of Game Design and Game Development degree at CITM,");
+		ImGui::Text("3D Engine made for the 3D engines subject during the 3rd year of");
+		ImGui::Text("Game Design and Game Development degree at CITM.");
 		if (ImGui::Button("Github Repository"))
 		{
 			App->GoToBrowser("https://github.com/Guillemsc/3D-Engine");

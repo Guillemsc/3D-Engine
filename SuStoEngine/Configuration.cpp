@@ -42,7 +42,7 @@ void Configuration::Draw()
 	{
 		// App
 		ImGui::SetNextTreeNodeOpen(true);
-		if (ImGui::CollapsingHeader("App", true))
+		if (ImGui::CollapsingHeader("App"))
 		{
 			if (ImGui::InputText("App Name", name_input_buffer, 254))
 			{
@@ -66,18 +66,20 @@ void Configuration::Draw()
 				App->SaveConfig();
 			}
 			std::vector<float> framerate = App->profiler->GetFramesVector();
+
 			if (!framerate.empty())
 			{
 				char title[25];
 				sprintf_s(title, 25, "%.1f", framerate[framerate.size() - 1]);
-				ImGui::PlotHistogram("##Framerate", &framerate[0], framerate.size(), 0, title, 0.0f, 500.0f, ImVec2(0, 100));
+				ImGui::PlotHistogram("Framerate", &framerate[0], framerate.size(), 0, title, 0.0f, 500.0f, ImVec2(0, 100));
 			}
 			std::vector<float> memory = App->profiler->GetMemoryVector();
+
 			if (!memory.empty())
 			{
 				char title[25];
 				sprintf_s(title, 25, "%.1f", memory[memory.size() - 1]);
-				ImGui::PlotHistogram("##Memory", &memory[0], memory.size(), 0, title, 0.0f, 30000.0f, ImVec2(0, 100));
+				ImGui::PlotHistogram("Memory", &memory[0], memory.size(), 0, title, 0.0f, 30000.0f, ImVec2(0, 100));
 			}
 		}
 

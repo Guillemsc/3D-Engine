@@ -23,15 +23,8 @@ void Profiler::CleanUp()
 	profiles.clear();
 }
 
-void Profiler::AwakeFinish()
+void Profiler::Start()
 {
-	awake_total_time = SDL_GetTicks() - cration_time;
-}
-
-void Profiler::StartFinish()
-{
-	start_total_time = SDL_GetTicks() - awake_total_time;
-
 	update_start_time = SDL_GetTicks();
 	update_time_since_startup = 0.0f;
 }
@@ -70,16 +63,6 @@ void Profiler::UpdateFinish()
 	update_time_since_startup = SDL_GetTicks() - update_start_time;
 }
 
-float Profiler::GetAwakeTime()
-{
-	return awake_total_time;
-}
-
-float Profiler::GetStartTime()
-{
-	return start_total_time;
-}
-
 float Profiler::GetFrameTime()
 {
 	return frame_ms;
@@ -105,16 +88,21 @@ int Profiler::GetTimeSinceStartup()
 	return SDL_GetTicks();
 }
 
-void Profiler::StartProfile(const char * name)
+void Profiler::StartProfile(const char * name, ...)
 {
 	bool found = false;
 
+	char str[200];
+	va_list args;
+	va_start(args, name);
+	vsprintf_s(str, 200, name, args);
+	va_end(args);
+
 	for (std::vector<Profile*>::iterator it = profiles.begin(); it != profiles.end(); it++)
 	{
-		if ((*it)->name == name)
+		if ((*it)->name == str)
 		{
 			(*it)->frame_start = SDL_GetTicks();
-			current_profile = (*it);
 
 			found = true;
 			break;
@@ -124,31 +112,43 @@ void Profiler::StartProfile(const char * name)
 	if (!found)
 	{
 		Profile* prof = new Profile();
-		prof->name = name;
+		prof->name = str;
 		prof->frame_start = SDL_GetTicks();
 		profiles.push_back(prof);
-
-		current_profile = prof;
 	}
 }
 
-void Profiler::FinishProfile()
+void Profiler::FinishProfile(const char* name, ...)
 {
-	if (current_profile != nullptr)
+	char str[200];
+	va_list args;
+	va_start(args, name);
+	vsprintf_s(str, 200, name, args);
+	va_end(args);
+
+	for (std::vector<Profile*>::iterator it = profiles.begin(); it != profiles.end(); it++)
 	{
-		current_profile->last_frame_ms = SDL_GetTicks() - current_profile->frame_start;
-		current_profile->total_frames_ms += current_profile->last_frame_ms;
-		current_profile = nullptr;
+		if ((*it)->name == str)
+		{
+			(*it)->last_frame_ms = SDL_GetTicks() - (*it)->frame_start;
+			(*it)->total_frames_ms += (*it)->last_frame_ms;
+		}
 	}
 }
 
-Profile * Profiler::GetProfile(const char * name)
+Profile* Profiler::GetProfile(const char * name, ...)
 {
+	char str[200];
+	va_list args;
+	va_start(args, name);
+	vsprintf_s(str, 200, name, args);
+	va_end(args);
+
 	Profile* ret = nullptr;
 
 	for (std::vector<Profile*>::iterator it = profiles.begin(); it != profiles.end(); it++)
 	{
-		if ((*it)->name == name)
+		if ((*it)->name == str)
 		{
 			ret = (*it);
 			break;
@@ -158,9 +158,19 @@ Profile * Profiler::GetProfile(const char * name)
 	return ret;
 }
 
+int Profiler::GetProfilesCount()
+{
+	return profiles.size();
+}
+
 std::vector<float> Profiler::GetFramesVector()
 {
 	return frames;
+}
+
+std::vector<Profile*> Profiler::GetProfilesList()
+{
+	return profiles;
 }
 
 std::vector<float> Profiler::GetMemoryVector()

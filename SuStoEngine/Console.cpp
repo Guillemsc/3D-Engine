@@ -2,6 +2,7 @@
 #include "App.h"
 #include "ModuleInput.h"
 #include "imgui.h"
+#include "Functions.h"
 
 Console::Console(bool start_enabled) : EditorElement(start_enabled)
 {
@@ -127,11 +128,7 @@ void Console::CommandInput(const char * txt)
 {
 	if (strcmp(txt, ".Clear") == 0) 
 	{
-		for (std::list<console_text>::iterator it = console_items.begin(); it != console_items.end();)
-		{
-			it = console_items.erase(it);
-		}
-		console_items.clear();
+		Clear();
 	}
 	else if (strcmp(txt, ".Help") == 0) 
 	{
@@ -156,7 +153,7 @@ ImColor Console::GetColorByTextType(console_text_type type)
 		break;
 
 	case console_text_type::console_text_type_error:
-		ret = { 255, 255, 255, 255 };
+		ret = { 255, 80, 80, 255 };
 		break;
 
 	case console_text_type::console_text_type_succes:

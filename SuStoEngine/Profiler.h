@@ -3,13 +3,14 @@
 
 #include "SDL\include\SDL.h"
 #include <vector>
+#include <string>
 #include <iostream>
 #define MAX_FRAMES_LOGGED 100
 #define MAX_MEMORY_LOGGED 100
 
 struct Profile
 {
-	const char* name;
+	std::string name;
 
 	float last_frame_ms = 0.0f;
 	float frame_start = 0.0f;
@@ -23,34 +24,25 @@ public:
 	~Profiler();
 	void CleanUp();
 
-	void AwakeFinish();
-	void StartFinish();
+	void Start();
 	void UpdateFinish();
 
-	float GetAwakeTime();
-	float GetStartTime();
 	float GetFrameTime();
 	int GetFPS();
 	float GetAvgFPS();
 	int GetFramesSinceStartup();
 	int GetTimeSinceStartup();
 
-	void StartProfile(const char* name);
-	void FinishProfile();
-	Profile* GetProfile(const char* name);
+	void StartProfile(const char* name, ...);
+	void FinishProfile(const char * name, ...);
+	Profile* GetProfile(const char* name, ...);
+	int GetProfilesCount();
 	std::vector<float> GetFramesVector();
+	std::vector<Profile*> GetProfilesList();
 	std::vector<float> GetMemoryVector();
 
 private:
 	float cration_time = 0.0f;
-
-	// Awake -----
-	float awake_total_time = 0.0f;
-	// -----------
-
-	// Start -----
-	float start_total_time = 0.0f;
-	// -----------
 
 	// Update ----
 	float update_start_time = 0.0f;
@@ -68,7 +60,6 @@ private:
 	// -----------
 
 	// Items -----
-	Profile* current_profile = nullptr;
 	std::vector<Profile*> profiles;
 	// -----------
 };
