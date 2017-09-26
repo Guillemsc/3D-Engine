@@ -30,16 +30,16 @@ public:
 
 	vec3 X, Y, Z, Position, Reference;
 
-	float camera_distance;
+	float camera_distance			= 0;
 
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;
 
 	// Camera follow
-	PhysBody3D* following = nullptr;
-	float min_following_dist;
-	float max_following_dist;
-	float following_height;
-	float displacement;
+	PhysBody3D* following			= nullptr;
+	float min_following_dist		= 0;
+	float max_following_dist		= 0;
+	float following_height			= 0;
+	float displacement				= 0;
 };

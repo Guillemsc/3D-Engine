@@ -14,8 +14,8 @@ struct Profile
 	std::string name;
 
 	PerfTimer timer;
-	int last_frame_ms = 0.0f;
-	int total_frames_ms = 0.0f;
+	int last_frame_ms				= 0.0f;
+	int total_frames_ms				= 0.0f;
 };
 
 class Profiler
@@ -45,21 +45,21 @@ public:
 	std::vector<float> GetMemoryVector();
 
 private:
-	float cration_time = 0.0f;
+	float cration_time				= 0.0f;
 
 	// Update ----
-	float update_start_time = 0.0f;
+	float update_start_time			= 0.0f;
 	float update_time_since_startup = 0.0f;
 
-	int   frames_since_startup = 0;
-	float frame_ms = 0.0f;
-	float avg_fps = 0.0f;
+	int   frames_since_startup		= 0;
+	float frame_ms					= 0.0f;
+	float avg_fps					= 0.0f;
 	std::vector<float> frames;
 	std::vector<float> memory;
 
-	int frame_counter = 0;
-	float frame_counter_ms = 0.0f;
-	int last_second_frames = 0;
+	int frame_counter				= 0;
+	float frame_counter_ms			= 0.0f;
+	int last_second_frames			= 0;
 	// -----------
 
 	// Items -----

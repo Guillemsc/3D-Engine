@@ -55,6 +55,11 @@ void EngineTest::Draw()
 		GeometryMathTest();
 	}
 
+	if (ImGui::CollapsingHeader("OpenGL options"))
+	{
+		OpenGLOptions();
+	}
+
 	ImGui::End();
 }
 
@@ -242,5 +247,34 @@ void EngineTest::GeometryMathTest()
 
 		if (sph1.Intersects(sph2))
 			contact = true;
+	}
+}
+
+void EngineTest::OpenGLOptions()
+{
+	// GL_DEPTH_TEST		GL_CULL_FACE		GL_LIGHTING
+	// GL_COLOR_MATERIAL	GL_TEXTURE_2D		two other
+	if (ImGui::Button("GL_DEPTH_TEST", ImVec2(180, 35))) 
+	{
+
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("GL_CULL_FACE", ImVec2(180, 35)))
+	{
+
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("GL_LIGHTING", ImVec2(180, 35)))
+	{
+
+	}
+	if (ImGui::Button("GL_COLOR_MATERIAL", ImVec2(180, 35)))
+	{
+
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("GL_TEXTURE_2D", ImVec2(180, 35)))
+	{
+
 	}
 }
