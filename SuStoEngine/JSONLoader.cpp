@@ -3,6 +3,7 @@
 
 JSONLoader::JSONLoader(bool enabled) : Module(enabled)
 {
+	SetName("JSONLoader");
 }
 
 JSONLoader::~JSONLoader()
@@ -14,7 +15,6 @@ bool JSONLoader::Awake()
 	bool ret = true;
 
 	LOG_OUTPUT("Loading JSON Module");
-	SetName("JSONLoader");
 
 	//JSON_Object* ob = LoadJSON("package.json");
 

@@ -14,6 +14,7 @@
 
 ModuleRenderer3D::ModuleRenderer3D(bool start_enabled) : Module(start_enabled)
 {
+	SetName("Renderer3D");
 }
 
 // Destructor
@@ -27,7 +28,6 @@ bool ModuleRenderer3D::Awake()
 	bool ret = true;
 
 	LOG_OUTPUT("Creating 3D Renderer context");
-	SetName("Renderer3D");
 
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);

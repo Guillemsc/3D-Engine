@@ -4,7 +4,7 @@
 
 XMLLoader::XMLLoader(bool start_enabled) : Module(start_enabled)
 {
-
+	SetName("XMLLoader");
 }
 
 XMLLoader::~XMLLoader()
@@ -16,7 +16,6 @@ bool XMLLoader::Awake()
 	bool ret = true;
 
 	LOG_OUTPUT("Loading XML Module");
-	SetName("XMLLoader");
 
 	return ret;
 }

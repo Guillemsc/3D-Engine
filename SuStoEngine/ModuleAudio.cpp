@@ -5,7 +5,9 @@
 #pragma comment( lib, "SDL_mixer/libx86/SDL2_mixer.lib" )
 
 ModuleAudio::ModuleAudio(bool start_enabled) : Module(start_enabled)
-{}
+{
+	SetName("Audio");
+}
 
 // Destructor
 ModuleAudio::~ModuleAudio()
@@ -17,7 +19,6 @@ bool ModuleAudio::Awake()
 	bool ret = true;
 
 	LOG_OUTPUT("Loading Audio Mixer");
-	SetName("Audio");
 
 	SDL_Init(0);
 

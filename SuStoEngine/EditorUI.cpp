@@ -16,6 +16,7 @@
 
 EditorUI::EditorUI(bool enabled) : Module(enabled)
 {
+	SetName("Editor");
 }
 
 EditorUI::~EditorUI()
@@ -27,7 +28,6 @@ bool EditorUI::Awake()
 	bool ret = true;
 
 	LOG_OUTPUT("Loading ImGui");
-	SetName("Editor");
 
 	ret = ImGui_ImplSdlGL2_Init(App->window->window);
 

@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include "PerfTimer.h"
 #define MAX_FRAMES_LOGGED 100
 #define MAX_MEMORY_LOGGED 100
 
@@ -12,9 +13,9 @@ struct Profile
 {
 	std::string name;
 
-	float last_frame_ms = 0.0f;
-	float frame_start = 0.0f;
-	float total_frames_ms = 0.0f;
+	PerfTimer timer;
+	int last_frame_ms = 0.0f;
+	int total_frames_ms = 0.0f;
 };
 
 class Profiler
@@ -34,8 +35,10 @@ public:
 	int GetTimeSinceStartup();
 
 	void StartProfile(const char* name, ...);
+	void AddToProfile(const char* name, ...);
 	void FinishProfile(const char * name, ...);
 	Profile* GetProfile(const char* name, ...);
+
 	int GetProfilesCount();
 	std::vector<float> GetFramesVector();
 	std::vector<Profile*> GetProfilesList();

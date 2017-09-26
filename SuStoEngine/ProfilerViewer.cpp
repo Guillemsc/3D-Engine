@@ -32,7 +32,7 @@ void ProfilerViewer::Draw()
 
 			for (vector<Profile*>::iterator it = pr.begin(); it != pr.end(); it++)
 			{
-				ImGui::Text("%s, %f", (*it)->name.c_str(), (*it)->last_frame_ms);
+				ImGui::Text("%s: %d ms" , (*it)->name.c_str(), (*it)->last_frame_ms);
 			}
 		}
 	}

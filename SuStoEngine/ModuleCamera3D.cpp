@@ -5,6 +5,8 @@
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
+	SetName("Camera3D");
+
 	CalculateViewMatrix();
 
 	X = vec3(1.0f, 0.0f, 0.0f);
@@ -25,7 +27,6 @@ bool ModuleCamera3D::Awake()
 	bool ret = true;
 
 	LOG_OUTPUT("Loading Camera3D");
-	SetName("Camera3D");
 
 	return ret;
 }

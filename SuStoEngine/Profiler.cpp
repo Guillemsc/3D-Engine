@@ -102,7 +102,7 @@ void Profiler::StartProfile(const char * name, ...)
 	{
 		if ((*it)->name == str)
 		{
-			(*it)->frame_start = SDL_GetTicks();
+			(*it)->timer.Start();
 
 			found = true;
 			break;
@@ -113,10 +113,30 @@ void Profiler::StartProfile(const char * name, ...)
 	{
 		Profile* prof = new Profile();
 		prof->name = str;
-		prof->frame_start = SDL_GetTicks();
+		prof->timer.Start();
 		profiles.push_back(prof);
 	}
 }
+
+void Profiler::AddToProfile(const char * name, ...)
+{
+	char str[200];
+	va_list args;
+	va_start(args, name);
+	vsprintf_s(str, 200, name, args);
+	va_end(args);
+
+	//for (std::vector<Profile*>::iterator it = profiles.begin(); it != profiles.end(); it++)
+	//{
+	//	if ((*it)->name == str)
+	//	{
+	//		(*it)->frame_start -= (SDL_GetTicks() - (*it)->frame_start);
+	//		break;
+	//	}
+	//}
+}
+
+
 
 void Profiler::FinishProfile(const char* name, ...)
 {
@@ -130,7 +150,7 @@ void Profiler::FinishProfile(const char* name, ...)
 	{
 		if ((*it)->name == str)
 		{
-			(*it)->last_frame_ms = SDL_GetTicks() - (*it)->frame_start;
+			(*it)->last_frame_ms = (*it)->timer.ReadTicks();
 			(*it)->total_frames_ms += (*it)->last_frame_ms;
 		}
 	}

@@ -9,6 +9,8 @@
 
 ModuleInput::ModuleInput(bool start_enabled) : Module(start_enabled)
 {
+	SetName("Input");
+
 	keyboard = new KEY_STATE[MAX_KEYS];
 	memset(keyboard, KEY_IDLE, sizeof(KEY_STATE) * MAX_KEYS);
 	memset(mouse_buttons, KEY_IDLE, sizeof(KEY_STATE) * MAX_MOUSE_BUTTONS);
@@ -26,7 +28,6 @@ bool ModuleInput::Awake()
 	bool ret = true;
 
 	LOG_OUTPUT("Init SDL input event system");
-	SetName("Input");
 
 	SDL_Init(0);
 
