@@ -8,7 +8,7 @@
 
 EngineTest::EngineTest(bool start_enabled)
 {
-	visible = start_enabled;
+
 }
 
 EngineTest::~EngineTest()

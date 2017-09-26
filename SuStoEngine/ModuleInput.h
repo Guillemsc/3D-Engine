@@ -23,7 +23,6 @@ enum EventWindow
 class ModuleInput : public Module
 {
 public:
-
 	ModuleInput(bool start_enabled = true);
 	~ModuleInput();
 
@@ -72,10 +71,10 @@ private:
 	bool	   windowEvents[WE_COUNT];
 	KEY_STATE* keyboard;
 	KEY_STATE  mouse_buttons[MAX_MOUSE_BUTTONS];
-	int	       mouse_x			= 0;
-	int	       mouse_y			= 0;
-	int	       mouse_z			= 0;
-	int	       mouse_x_motion	= 0;
-	int	       mouse_y_motion	= 0;
+	int	       mouse_x = 0;
+	int	       mouse_y = 0;
+	int	       mouse_z = 0;
+	int	       mouse_x_motion = 0;
+	int	       mouse_y_motion = 0;
 	//int mouse_z_motion;
 };

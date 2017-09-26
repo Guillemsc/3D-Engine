@@ -52,14 +52,14 @@ public:
 	SDL_Surface* screen_surface = nullptr;
 
 private:
-	int  width					= 0;
-	int  height					= 0;
-	bool fullscreen				= false;
-	bool resizable				= false;
-	bool borderless				= false;
-	bool full_dekstop			= false;
-	bool maximized				= false;
-	bool vsync					= false;
+	int  width = 0;
+	int  height = 0;
+	bool fullscreen = false;
+	bool resizable = false;
+	bool borderless = false;
+	bool full_dekstop = false;
+	bool maximized = false;
+	bool vsync = false;
 };
 
 #endif // __ModuleWindow_H__

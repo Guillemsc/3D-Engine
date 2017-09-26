@@ -22,9 +22,9 @@ public:
 	void CleanUp();
 
 private:
-	JSON_Value* value = nullptr;
+	JSON_Value*  value = nullptr;
 	JSON_Object* object = nullptr;
-	const char* path;
+	const char*  path;
 };
 
 class JSONLoader : public Module

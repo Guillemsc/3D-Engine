@@ -13,8 +13,8 @@ public:
 	int ReadTicks() const;
 
 private:
-	double started_at;
-	static int frequency;
+	double     started_at = 0;
+	static int frequency = 0;
 };
 
 #endif //__j1PERFTIMER_H__
