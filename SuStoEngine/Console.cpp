@@ -125,7 +125,7 @@ void Console::ScrollBottom()
 
 void Console::CommandInput(const char * txt)
 {
-	if (txt == ".Clear") {
+	if (strcmp(txt, ".Clear") == 0) {
 		for (std::list<console_text>::iterator it = console_items.begin(); it != console_items.end();)
 		{
 			it = console_items.erase(it);
