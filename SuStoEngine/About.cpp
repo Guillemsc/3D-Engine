@@ -5,6 +5,7 @@
 
 About::About(bool start_enabled) : EditorElement(start_enabled)
 {
+	visible = start_enabled;
 }
 
 About::~About()
@@ -50,7 +51,7 @@ void About::Draw()
 			ImGui::Text("Version"); ImGui::NextColumn();
 			ImGui::Separator();
 			const char* name[NUM_LIBRARIES] = { "MathGeoLib", "ImGui", "Parson", "OpenGL", "Glew" };
-			const char* version[NUM_LIBRARIES] = { "v1.5", "v1.52", "---", "v2.1", "v2.1" };
+			const char* version[NUM_LIBRARIES] = { "v1.5", "v1.52", "---", "v2.1", "v2.0" };
 			static int selected = -1;
 			for (int i = 0; i < NUM_LIBRARIES; i++)
 			{

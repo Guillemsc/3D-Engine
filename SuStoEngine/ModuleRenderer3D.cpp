@@ -4,13 +4,14 @@
 #include "Globals.h"
 #include "App.h"
 #include "ModuleRenderer3D.h"
+#include "Glew/include/glew.h"
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
-
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
+#pragma comment (lib, "Glew/Lib/glew32.lib") /* link Microsoft OpenGL lib   */
 
 ModuleRenderer3D::ModuleRenderer3D(bool start_enabled) : Module(start_enabled)
 {
@@ -38,8 +39,26 @@ bool ModuleRenderer3D::Awake()
 		ret = false;
 	}
 
+	GLenum err = glewInit();
+	if (err != GLEW_OK)
+	{
+		LOG_OUTPUT("Glew library could not init %s\n", glewGetErrorString(err));
+		ret = false;
+	}
+	else {
+		LOG_OUTPUT("Glew library is being used correctly\n");
+		LOG_OUTPUT("Using Glew %s\n", glewGetString(GLEW_VERSION));
+	}
+
 	if (ret == true)
 	{
+		// get version info
+		LOG_OUTPUT("Vendor: %s", glGetString(GL_VENDOR));
+		LOG_OUTPUT("Renderer: %s", glGetString(GL_RENDERER));
+		LOG_OUTPUT("OpenGL version supported %s", glGetString(GL_VERSION));
+		LOG_OUTPUT("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+
 		//Use Vsync
 		if (SDL_GL_SetSwapInterval(App->window->GetVsync()) < 0)
 			LOG_OUTPUT("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
