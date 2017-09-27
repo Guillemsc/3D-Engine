@@ -16,6 +16,7 @@ public:
 public:
 
 private:
+	string sdl_ver;
 	string cpus;
 	string sys_ram;
 	string caps;

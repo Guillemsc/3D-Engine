@@ -14,9 +14,9 @@ Hardware::~Hardware()
 
 void Hardware::Start()
 {
-	cpus = "CPUs: " + std::to_string(App->profiler->GetCpuCount()) + (" (Cache: ") + std::to_string(App->profiler->GetCpuCacheLineSize()) + ")";
+	sdl_ver = std::to_string(App->GetSDLVersion().major) + "." + std::to_string(App->GetSDLVersion().minor) + "." + std::to_string(App->GetSDLVersion().patch);
+	cpus = std::to_string(App->profiler->GetCpuCount()) + (" (Cache: ") + std::to_string(App->profiler->GetCpuCacheLineSize()) + ")";
 	sys_ram = "System RAM: " + std::to_string((int)(App->profiler->GetSystemRam() * 0.001)) + "Gb";
-	caps += "Flags: ";
 
 	if (App->profiler->Has3DNow())
 		caps += "3DNow, ";
@@ -45,13 +45,13 @@ void Hardware::Draw()
 	if (!visible)
 		return;
 
-	ImGui::SetNextWindowSize(ImVec2(300, 300), 2);
-
-	if (ImGui::Begin("Hardware", &visible))
+	if (ImGui::Begin("Hardware", &visible, ImGuiWindowFlags_AlwaysAutoResize))
 	{
-		ImGui::Text(cpus.c_str());
-		ImGui::Text(sys_ram.c_str());
-		ImGui::TextWrapped(caps.c_str());
+		ImGui::Text("SDL_Version:"); ImGui::SameLine(); ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), sdl_ver.c_str());
+		ImGui::Separator();
+		ImGui::Text("CPUs:"); ImGui::SameLine(); ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), cpus.c_str());
+		ImGui::Text("System RAM:"); ImGui::SameLine(); ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), sys_ram.c_str());
+		ImGui::Text("Caps:"); ImGui::SameLine(); ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), caps.c_str());
 	}
 
 	ImGui::End();

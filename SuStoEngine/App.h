@@ -51,6 +51,7 @@ public:
 	bool GetDebugMode();
 	void SetVersion(const char* version);
 	const char* GetVersion();
+	SDL_version GetSDLVersion();
 
 	void GoToBrowser(const char* url);
 

@@ -6,7 +6,8 @@
 
 struct ImGuiTextEditCallbackData;
 
-struct hardware_info {
+struct hardware_info 
+{
 	char sdl_version[25] = "";
 	float ram_gb = 0.f;
 	uint cpu_count = 0;
