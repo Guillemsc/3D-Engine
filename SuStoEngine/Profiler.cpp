@@ -7,7 +7,7 @@
 
 #define MAX_FRAMES_LOGGED 50
 #define MAX_MEMORY_LOGGED 50
-#define MAX_PROFILE_LOGGED 100
+#define MAX_PROFILE_LOGGED 50
 
 Profiler::Profiler()
 {
@@ -28,6 +28,11 @@ void Profiler::CleanUp()
 	profiles.clear();
 }
 
+void Profiler::SetEnabled(bool set)
+{
+	enabled = set;
+}
+
 void Profiler::UpdateStart()
 {
 	frame_time.Start();
@@ -35,20 +40,20 @@ void Profiler::UpdateStart()
 
 void Profiler::UpdateFinish()
 {
-	// Frames since start
-	frames_since_startup++;
-
 	// Frame time
 	update_ms = frame_time.ReadMs();
 
-	// Avg fps
-	avg_fps = float(frames_since_startup) / time_since_startup.ReadMs();
-
 	// Cap fps
 	if (capped_ms > 0 && update_ms < capped_ms)
-	{ 
+	{
 		SDL_Delay(capped_ms - update_ms);
 	}
+
+	// Frames since start
+	frames_since_startup++;
+
+	// Avg fps
+	avg_fps = float(frames_since_startup) / time_since_startup.ReadMs();
 
 	// Frames / s
 	frame_counter++;
@@ -102,7 +107,7 @@ int Profiler::GetFPS()
 
 float Profiler::GetAvgFPS()
 {
-	return avg_fps;
+	return avg_fps*1000;
 }
 
 int Profiler::GetFramesSinceStartup()
@@ -118,6 +123,9 @@ int Profiler::GetTimeSinceStartup()
 void Profiler::StartProfile(const char * name, ...)
 {
 	bool found = false;
+
+	if (!enabled)
+		return;
 
 	char str[200];
 	va_list args;
@@ -147,24 +155,30 @@ void Profiler::StartProfile(const char * name, ...)
 
 void Profiler::AddToProfile(const char * name, ...)
 {
+	if (!enabled)
+		return;
+
 	char str[200];
 	va_list args;
 	va_start(args, name);
 	vsprintf_s(str, 200, name, args);
 	va_end(args);
 
-	//for (std::vector<Profile*>::iterator it = profiles.begin(); it != profiles.end(); it++)
-	//{
-	//	if ((*it)->name == str)
-	//	{
-	//		(*it)->frame_start -= (SDL_GetTicks() - (*it)->frame_start);
-	//		break;
-	//	}
-	//}
+	for (std::vector<Profile*>::iterator it = profiles.begin(); it != profiles.end(); it++)
+	{
+		if ((*it)->name == str)
+		{
+			(*it)->timer.AddTime((*it)->timer.ReadMs());
+			break;
+		}
+	}
 }
 
 void Profiler::FinishProfile(const char* name, ...)
 {
+	if (!enabled)
+		return;
+
 	char str[200];
 	va_list args;
 	va_start(args, name);
@@ -199,7 +213,7 @@ Profile* Profiler::GetProfile(const char * name, ...)
 		}
 	}
 
-	return ret;
+	return nullptr;
 }
 
 int Profiler::GetProfilesCount()
@@ -229,20 +243,15 @@ void Profile::Start()
 
 void Profile::Finish()
 {
-	list_ticks += timer.ReadTicks();
 	ticks.push_back(timer.ReadTicks());
 
-	list_ms += timer.ReadMs();
 	ms.push_back(timer.ReadMs());
 
 	total_frames_ms += timer.ReadMs();
 
 	if (ticks.size() > MAX_PROFILE_LOGGED)
 	{
-		list_ticks -= (*ticks.begin());
 		ticks.erase(ticks.begin());
-
-		list_ms -= (*ms.begin());
 		ms.erase(ms.begin());
 	}
 }
@@ -253,10 +262,7 @@ int Profile::GetLastFrameTick()
 
 	if (!ticks.empty())
 	{
-		ret = list_ticks / ticks.size();
-
-		if (ret < 0)
-			ret = 0;
+		ret = ticks.front();
 	}
 
 	return ret;
@@ -268,10 +274,7 @@ int Profile::GetLastFrameMs()
 
 	if (!ms.empty())
 	{
-		ret = list_ms / ms.size();
-
-		if (ret < 0)
-			ret = 0;
+		ret = ms.front();
 	}
 
 	return ret;

@@ -64,6 +64,7 @@ void Configuration::Draw()
 				App->SetMaxFps(max_fps);
 				App->SaveConfig();
 			}
+			ImGui::Text("Average fps: %d fps", (int)App->profiler->GetAvgFPS());
 			std::vector<float> framerate = App->profiler->GetFramesVector();
 
 			if (!framerate.empty())

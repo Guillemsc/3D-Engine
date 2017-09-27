@@ -10,7 +10,7 @@ public:
 	void Start();
 	int Read() const;
 	float ReadSec() const;
-	void SubstractTimeFromStart(float sec);
+	void AddTime(float sec);
 	void Stop();
 	void PauseOn();
 	void PauseOff();

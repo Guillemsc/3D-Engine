@@ -22,10 +22,9 @@ public:
 
 public:
 	std::string name;
-
-private:
 	PerfTimer timer;
 
+private:
 	int total_frames_ms = 0.0f;
 
 	std::vector<int> ms;
@@ -40,6 +39,8 @@ public:
 	Profiler();
 	~Profiler();
 	void CleanUp();
+
+	void SetEnabled(bool set);
 
 	void UpdateStart();
 	void UpdateFinish();
@@ -63,6 +64,7 @@ public:
 	std::vector<float> GetMemoryVector();
 
 private:
+	bool enabled = true;
 	float cration_time = 0.0f;
 
 	// Update ----

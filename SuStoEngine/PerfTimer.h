@@ -9,6 +9,7 @@ public:
 	PerfTimer();
 
 	void Start();
+	void AddTime(float ms);
 	double ReadMs() const;
 	int ReadTicks() const;
 

@@ -24,6 +24,11 @@ void PerfTimer::Start()
 	started_at = SDL_GetPerformanceCounter();
 }
 
+void PerfTimer::AddTime(float ms)
+{
+	started_at -= ms;
+}
+
 // ---------------------------------------------
 double PerfTimer::ReadMs() const
 {

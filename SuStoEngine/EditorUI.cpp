@@ -42,7 +42,7 @@ bool EditorUI::Awake()
 	console = new Console(false);
 	configuration = new Configuration(false);
 	about = new About(false);
-	profiler_viewer = new ProfilerViewer(false);
+	profiler_viewer = new ProfilerViewer(true);
 	engine_test = new EngineTest(false);
 
 	AddEditor(console);

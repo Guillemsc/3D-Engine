@@ -118,16 +118,22 @@ bool Application::Update()
 
 	profiler->StartProfile("Engine Update");
 
+	// PreUpdate
 	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
+		profiler->StartProfile("Update %s", (*it)->GetName());
+
 		if (!(*it)->GetEnabled())
 			continue;
 
 		ret = (*it)->PreUpdate();
 
+		profiler->AddToProfile("Update %s", (*it)->GetName());
+
 		if (!ret) return false;
 	}
 
+	// Update
 	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
 		if (!(*it)->GetEnabled())
@@ -142,6 +148,9 @@ bool Application::Update()
 		if (!ret) return false;
 	}
 
+	profiler->FinishProfile("Engine Update");
+
+	// PostUpdate
 	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
 		if (!(*it)->GetEnabled())
@@ -152,7 +161,6 @@ bool Application::Update()
 		if (!ret) return false;
 	}
 
-	profiler->FinishProfile("Engine Update");
 	FinishUpdate();
 
 	return ret;

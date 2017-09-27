@@ -43,7 +43,7 @@ float Timer::ReadSec() const
 	return float(Read()) / 1000.0f;
 }
 
-void Timer::SubstractTimeFromStart(float sec)
+void Timer::AddTime(float sec)
 {
 	started_at -= (sec * 1000);
 }
