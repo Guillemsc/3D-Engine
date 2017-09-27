@@ -15,7 +15,8 @@ public:
 public:
 
 private:
-	int  ms_ticks = false;
+	int  profiler_mode = 0;
+	int  ms_ticks = 0;
 	bool record = false;
 };
 

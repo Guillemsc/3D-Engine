@@ -4,6 +4,7 @@
 #include "SDL/include/SDL.h"
 #include "mmgr\nommgr.h"
 #include "mmgr\mmgr.h"
+#include "gpudetect\DeviceId.h"
 
 #define MAX_FRAMES_LOGGED 50
 #define MAX_MEMORY_LOGGED 50
@@ -265,6 +266,11 @@ bool Profiler::HasAVX()
 	return SDL_HasAVX();
 }
 
+bool Profiler::HasAVX2()
+{
+	return SDL_HasAVX2();
+}
+
 bool Profiler::HasAltiVec()
 {
 	return SDL_HasAltiVec();
@@ -303,6 +309,24 @@ bool Profiler::HasSSE41()
 bool Profiler::HasSSE42()
 {
 	return SDL_HasSSE42();
+}
+
+GraphicsDeviceInfo Profiler::GetGraphicsDeviceInfo()
+{
+	GraphicsDeviceInfo graphics_info;
+
+	std::wstring brand_ws;
+	if (getGraphicsDeviceInfo(&graphics_info.vendor_id, &graphics_info.device_id, &brand_ws, &graphics_info.vram_budget_mb,
+		&graphics_info.vram_usage_mb, &graphics_info.vram_avaliable_mb, &graphics_info.vram_reserved_mb))
+	{
+		graphics_info.brand.assign(brand_ws.begin(), brand_ws.end());
+		graphics_info.vram_budget_mb /= (1024.f * 1024.f);
+		graphics_info.vram_usage_mb /= (1024.f * 1024.f);
+		graphics_info.vram_avaliable_mb /= (1024.f * 1024.f);
+		graphics_info.vram_reserved_mb /= (1024.f * 1024.f);
+	}
+
+	return graphics_info;
 }
 
 void Profile::Start()

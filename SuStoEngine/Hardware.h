@@ -4,6 +4,7 @@
 #include "EditorUI.h"
 #include "Module.h"
 
+struct ImVec4;
 class Hardware : public EditorElement
 {
 public:
@@ -20,7 +21,8 @@ private:
 	string cpus;
 	string sys_ram;
 	string caps;
-
+	int    window_w;
+	int    window_h;
 };
 
 #endif

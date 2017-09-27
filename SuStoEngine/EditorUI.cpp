@@ -10,6 +10,7 @@
 #include "About.h"
 #include "EngineTest.h"
 #include "ProfilerViewer.h"
+#include "Hardware.h"
 
 //https://github.com/ocornut/imgui/issues/351
 
@@ -44,12 +45,14 @@ bool EditorUI::Awake()
 	about = new About(false);
 	profiler_viewer = new ProfilerViewer(true);
 	engine_test = new EngineTest(false);
+	hardware = new Hardware(true);
 
 	AddEditor(console);
 	AddEditor(configuration);
 	AddEditor(about);
 	AddEditor(profiler_viewer);
 	AddEditor(engine_test);
+	AddEditor(hardware);
 	// ---------------
 
 	return ret;

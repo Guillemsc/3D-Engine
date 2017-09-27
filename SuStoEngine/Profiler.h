@@ -32,6 +32,17 @@ private:
 	int list_ms = 0;
 };
 
+struct GraphicsDeviceInfo
+{
+	unsigned int	   vendor_id = 0;
+	unsigned int	   device_id = 0;
+	std::string		   brand;
+	unsigned int	   vram_budget_mb = 0;
+	unsigned int       vram_usage_mb = 0;
+	unsigned int       vram_avaliable_mb = 0;
+	unsigned int       vram_reserved_mb = 0;
+};
+
 class Profiler
 {
 public:
@@ -67,6 +78,7 @@ public:
 	int GetSystemRam();
 	bool Has3DNow();
 	bool HasAVX();
+	bool HasAVX2();
 	bool HasAltiVec();
 	bool HasMMX();
 	bool HasRDTSC();
@@ -75,6 +87,7 @@ public:
 	bool HasSSE3();
 	bool HasSSE41();
 	bool HasSSE42();
+	GraphicsDeviceInfo GetGraphicsDeviceInfo();
 
 private:
 	bool enabled = true;
