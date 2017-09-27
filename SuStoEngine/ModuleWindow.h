@@ -39,10 +39,12 @@ public:
 	bool GetFullDekstop();
 	void SetMaximized(bool set);
 	bool GetMaximized();
+	void SetBrightness(float set);
+	float GetBrightness();
 	bool GetVsync();
 
 private:
-	bool GenerateWindow(bool fullscreen, bool resizable, bool borderless, bool full_dekstop, bool maximized);
+	bool GenerateWindow(bool fullscreen, bool resizable, bool borderless, bool full_dekstop, bool maximized, float brightness);
 
 public:
 	//The window we'll be rendering to
@@ -52,14 +54,15 @@ public:
 	SDL_Surface* screen_surface = nullptr;
 
 private:
-	int  width = 0;
-	int  height = 0;
-	bool fullscreen = false;
-	bool resizable = false;
-	bool borderless = false;
-	bool full_dekstop = false;
-	bool maximized = false;
-	bool vsync = false;
+	int   width = 0;
+	int   height = 0;
+	bool  fullscreen = false;
+	bool  resizable = false;
+	bool  borderless = false;
+	bool  full_dekstop = false;
+	bool  maximized = false;
+	float brightness = 0.0f;
+	bool  vsync = false;
 };
 
 #endif // __ModuleWindow_H__

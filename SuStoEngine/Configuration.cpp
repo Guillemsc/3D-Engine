@@ -21,6 +21,7 @@ void Configuration::Start()
 	strcpy(version_input_buffer, App->GetVersion());
 	max_fps = App->GetMaxFps();
 	App->window->GetWindowSize(window_width, window_height);
+	brightness = App->window->GetBrightness();
 	fullscreen = App->window->GetFullscreen();
 	resizable = App->window->GetResizable();
 	borderless = App->window->GetBorderless();
@@ -86,6 +87,11 @@ void Configuration::Draw()
 		// Window
 		if (ImGui::CollapsingHeader("Window", ImGuiTreeNodeFlags_DefaultOpen))
 		{
+			if (ImGui::SliderFloat("Brightness", &brightness, 0, 1))
+			{
+				App->window->SetBrightness(brightness);
+				App->SaveConfig(App->window);
+			}
 			if (ImGui::InputInt("Width", &window_width, 100))
 			{
 				if (window_width > display_size_width)

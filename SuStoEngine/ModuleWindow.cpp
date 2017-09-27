@@ -35,6 +35,7 @@ void ModuleWindow::OnLoadConfig(JSON_Doc * config)
 	borderless = config->GetBool("window.borderless");
 	full_dekstop = config->GetBool("window.fulldekstop");
 	maximized = config->GetBool("window.maximized");
+	brightness = config->GetNumber("window.brightness");
 }
 
 void ModuleWindow::OnSaveConfig(JSON_Doc * config)
@@ -46,6 +47,7 @@ void ModuleWindow::OnSaveConfig(JSON_Doc * config)
 	config->SetBool("window.borderless", borderless);
 	config->SetBool("window.fulldekstop", full_dekstop);
 	config->SetBool("window.maximized", maximized);
+	config->SetNumber("window.brightness", GetBrightness());
 }
 
 // Called before render is available
@@ -69,7 +71,7 @@ bool ModuleWindow::Awake()
 	}
 	else
 	{
-		ret = GenerateWindow(fullscreen, resizable, borderless, full_dekstop, maximized);
+		ret = GenerateWindow(fullscreen, resizable, borderless, full_dekstop, maximized, brightness);
 	}
 
 	return ret;
@@ -91,7 +93,7 @@ bool ModuleWindow::CleanUp()
 	return true;
 }
 
-bool ModuleWindow::GenerateWindow(bool fullscreen, bool resizable, bool borderless, bool full_dekstop, bool maximized)
+bool ModuleWindow::GenerateWindow(bool fullscreen, bool resizable, bool borderless, bool full_dekstop, bool maximized, float brightness)
 {
 	bool ret = true;
 
@@ -132,6 +134,11 @@ bool ModuleWindow::GenerateWindow(bool fullscreen, bool resizable, bool borderle
 	else
 	{
 		screen_surface = SDL_GetWindowSurface(window);
+
+		if (brightness > 1) brightness = 1;
+		else if (brightness < 0) brightness = 0;
+
+		SDL_SetWindowBrightness(window, brightness);
 	}
 
 	return ret;
@@ -274,6 +281,24 @@ bool ModuleWindow::GetMaximized()
 		maximized = false;
 
 	return maximized;
+}
+
+void ModuleWindow::SetBrightness(float set)
+{
+	if (set > 1)
+		set = 1;
+
+	else if (set < 0)
+		set = 0;
+
+	brightness = set;
+
+	SDL_SetWindowBrightness(window, set);
+}
+
+float ModuleWindow::GetBrightness()
+{
+	return SDL_GetWindowBrightness(window);
 }
 
 bool ModuleWindow::GetVsync()

@@ -24,6 +24,7 @@ private:
 	int  max_fps = 0;
 	int  window_width = 0;
 	int  window_height = 0;
+	float brightness = 0.0f;
 	bool fullscreen	= false;
 	bool resizable = false;
 	bool borderless	= false;

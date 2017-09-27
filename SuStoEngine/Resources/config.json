@@ -7,11 +7,12 @@
     },
     "window": {
         "width": 1920,
-        "height": 1080,
+        "height": 1017,
         "fullscreen": false,
         "resizable": true,
         "borderless": false,
         "fulldekstop": false,
-        "maximized": true
+        "maximized": true,
+        "brightness": 1
     }
 }
