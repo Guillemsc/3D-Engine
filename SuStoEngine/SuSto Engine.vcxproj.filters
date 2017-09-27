@@ -337,9 +337,6 @@
     <ClInclude Include="EngineTest.h">
       <Filter>Sources\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="Hardware.h">
-      <Filter>Sources\Editor</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -526,9 +523,6 @@
       <Filter>Sources\Components\mmgr</Filter>
     </ClCompile>
     <ClCompile Include="EngineTest.cpp">
-      <Filter>Sources\Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="Hardware.cpp">
       <Filter>Sources\Editor</Filter>
     </ClCompile>
   </ItemGroup>
