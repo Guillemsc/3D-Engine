@@ -54,6 +54,7 @@ private:
 
 	polygon_mode poly_mode = polygon_mode::gl_fill;
 
+	float point_size_slider = 1;
 };
 
 #endif

@@ -266,6 +266,12 @@ void EngineTest::OpenGLOptions()
 	if (ImGui::Checkbox("WIREFRAME RENDER", &wireframe_mode))		ImGui::SameLine();
 	if (ImGui::Checkbox("POINT RENDER", &point_mode))				ImGui::SameLine();
 	//---------------------------------
+	// Slider
+	if (point_mode)
+	{
+		ImGui::SliderFloat("Point Size", &point_size_slider, 0, 10);
+		glPointSize(point_size_slider);
+	}
 
 	if (gl_depth && !glIsEnabled(GL_DEPTH_TEST))
 		glEnable(GL_DEPTH_TEST);
@@ -339,4 +345,7 @@ void EngineTest::OpenGLOptions()
 		fill_mode = false;
 		wireframe_mode = false;
 	}
+
+	if (!point_mode && !wireframe_mode && !fill_mode)
+		fill_mode = true;
 }
