@@ -9,6 +9,13 @@ Configuration::Configuration(bool start_enabled) : EditorElement(start_enabled)
 	memset(name_input_buffer, 0, sizeof(name_input_buffer));
 	memset(organization_input_buffer, 0, sizeof(organization_input_buffer));
 	memset(version_input_buffer, 0, sizeof(version_input_buffer));
+
+	SDL_version version;
+	SDL_GetVersion(&version);
+	sprintf_s(info.sdl_version, 25, "%i.%i.%i", version.major, version.minor, version.patch);
+
+	info.cpu_count = SDL_GetCPUCount();
+	info.l1_cachekb = SDL_GetCPUCacheLineSize();
 }
 
 Configuration::~Configuration()
@@ -43,7 +50,7 @@ void Configuration::Draw()
 	if (ImGui::Begin("Configuration", &visible))
 	{
 		// App
-		if (ImGui::CollapsingHeader("App", ImGuiTreeNodeFlags_DefaultOpen))
+		if (ImGui::CollapsingHeader("App"))
 		{
 			if (ImGui::InputText("App Name", name_input_buffer, 254))
 			{
@@ -96,8 +103,16 @@ void Configuration::Draw()
 			ImGui::Text("Peak Alloc Unit Count: %d", m_getMemoryStatistics().peakAllocUnitCount);
 		}
 
+		// Hardware
+		if (ImGui::CollapsingHeader("Hardware", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::Text("SDL Version: ");	ImGui::SameLine();	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), info.sdl_version);
+			ImGui::Separator();
+			ImGui::Text("CPUs: ");			ImGui::SameLine();	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%u (Cache: %ukb)", info.cpu_count, info.l1_cachekb);
+		}
+
 		// Window
-		if (ImGui::CollapsingHeader("Window", ImGuiTreeNodeFlags_DefaultOpen))
+		if (ImGui::CollapsingHeader("Window"))
 		{
 			if (ImGui::SliderFloat("Brightness", &brightness, 0, 1))
 			{
