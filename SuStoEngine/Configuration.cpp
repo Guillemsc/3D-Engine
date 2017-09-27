@@ -2,6 +2,7 @@
 #include "App.h"
 #include "ModuleWindow.h"
 #include "imgui.h"
+#include "gpudetect\DeviceId.h"
 #include "mmgr\mmgr.h"
 #include "SDL/include/SDL.h"
 
@@ -30,6 +31,21 @@ Configuration::Configuration(bool start_enabled) : EditorElement(start_enabled)
 	info.sse3 = SDL_HasSSE3() == SDL_TRUE;
 	info.sse41 = SDL_HasSSE41() == SDL_TRUE;
 	info.sse42 = SDL_HasSSE42() == SDL_TRUE;
+
+	uint vendor_id, device_id;
+	Uint64 vm, vm_curr, vm_a, vm_r;
+	std::wstring brand;
+
+	if (getGraphicsDeviceInfo(&vendor_id, &device_id, &brand, &vm, &vm_curr, &vm_a, &vm_curr))
+	{
+		info.gpu_vendor = vendor_id;
+		info.gpu_device = device_id;
+		sprintf_s(info.gpu_brand, 250, "%S", brand.c_str());
+		info.vram_mb_budget = float(vm) / (1024.f * 1024.f);
+		info.vram_mb_usage = float(vm_curr) / (1024.f * 1024.f);
+		info.vram_mb_available = float(vm_a) / (1024.f * 1024.f);
+		info.vram_mb_reserved = float(vm_curr) / (1024.f * 1024.f);
+	}
 	
 }
 
@@ -121,14 +137,21 @@ void Configuration::Draw()
 		// Hardware
 		if (ImGui::CollapsingHeader("Hardware", ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			ImGui::Text("SDL Version: ");	ImGui::SameLine();	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), info.sdl_version);
-			ImGui::Separator();
-			ImGui::Text("CPUs: ");			ImGui::SameLine();	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%u (Cache: %ukb)", info.cpu_count, info.l1_cachekb);
-			ImGui::Text("System RAM: ");	ImGui::SameLine();	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1fGb", info.ram_gb);
-			ImGui::Text("Caps");			ImGui::SameLine();	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%s%s%s%s%s%s%s\n%s%s%s%s",	
-				info.altivec ? "AltiVec, " : "",	info.avx ? "AVX, " : "",	info.avx2 ? "AVX2, " : "",		info.mmx ? "MMX, " : "",		info.now3d ? "3DNow, " : "",	info.rdtsc ? "RDTSC, " : "",
-				info.sse ? "SSE, " : "",			info.sse2 ? "SSE2, " : "",	info.sse3 ? "SSE3, " : "",		info.sse41 ? "SSE41, " : "",	info.sse42 ? "SSE42, " : "");
-																																
+			UpdateInfo();
+			ImGui::Text("SDL Version: ");				ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), info.sdl_version);
+			ImGui::Separator(); //----------------------------------------------------------------------------------------------------------------------------------------------------------------
+			ImGui::Text("CPUs: ");						ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%u (Cache: %ukb)", info.cpu_count, info.l1_cachekb);
+			ImGui::Text("System RAM: ");				ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1fGb", info.ram_gb);
+			ImGui::Text("Caps");						ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%s%s%s%s%s%s%s\n%s%s%s%s",	
+			/*||*/	info.altivec ? "AltiVec, " : "",	info.avx ? "AVX, " : "",	info.avx2 ? "AVX2, " : "",		info.mmx ? "MMX, " : "",		info.now3d ? "3DNow, " : "",	info.rdtsc ? "RDTSC, " : "",
+			/*||*/	info.sse ? "SSE, " : "",			info.sse2 ? "SSE2, " : "",	info.sse3 ? "SSE3, " : "",		info.sse41 ? "SSE41, " : "",	info.sse42 ? "SSE42, " : "");																											
+			ImGui::Separator(); //----------------------------------------------------------------------------------------------------------------------------------------------------------------
+			ImGui::Text("GPU: ");						ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "vendor %u device %u", info.gpu_vendor, info.gpu_device);
+			ImGui::Text("Brand: ");						ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), info.gpu_brand);
+			ImGui::Text("Video Memory: ");				ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_mb_budget);
+			ImGui::Text("Video Memory On Use: ");		ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_mb_usage);
+			ImGui::Text("Video Memory Available: ");	ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_mb_available);
+			ImGui::Text("Video Memory Reserved: ");		ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_mb_reserved);
 		}
 
 		// Window
@@ -189,6 +212,19 @@ void Configuration::Draw()
 	}
 
 	ImGui::End();
+}
+
+void Configuration::UpdateInfo()
+{
+	Uint64 vm, vm_curr, vm_a, vm_r;
+
+	if (getGraphicsDeviceInfo(nullptr, nullptr, nullptr, &vm, &vm_curr, &vm_a, &vm_curr))
+	{
+		info.vram_mb_budget = float(vm) / (1024.f * 1024.f);
+		info.vram_mb_usage = float(vm_curr) / (1024.f * 1024.f);
+		info.vram_mb_available = float(vm_a) / (1024.f * 1024.f);
+		info.vram_mb_reserved = float(vm_curr) / (1024.f * 1024.f);
+	}
 }
 
 

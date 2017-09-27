@@ -46,6 +46,9 @@
     <Filter Include="Sources\Components\mmgr">
       <UniqueIdentifier>{b4be67e9-1f6f-427e-a955-2a57d94298ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Components\gpudetect">
+      <UniqueIdentifier>{49c97a4b-1bdb-49c2-a920-81cd0a1b296d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleAudio.h">
@@ -337,6 +340,12 @@
     <ClInclude Include="EngineTest.h">
       <Filter>Sources\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="gpudetect\DeviceId.h">
+      <Filter>Sources\Components\gpudetect</Filter>
+    </ClInclude>
+    <ClInclude Include="gpudetect\dxgi1_4.h">
+      <Filter>Sources\Components\gpudetect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -524,6 +533,9 @@
     </ClCompile>
     <ClCompile Include="EngineTest.cpp">
       <Filter>Sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="gpudetect\DeviceId.cpp">
+      <Filter>Sources\Components\gpudetect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

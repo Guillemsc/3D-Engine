@@ -41,6 +41,7 @@ public:
 	void Draw();
 
 public:
+	void UpdateInfo();
 
 private:
 	char name_input_buffer[255];
