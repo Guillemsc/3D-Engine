@@ -262,7 +262,9 @@ void EngineTest::OpenGLOptions()
 	if (ImGui::Checkbox("GL_LIGHTING", &gl_lighting))				ImGui::SameLine();
 	if (ImGui::Checkbox("GL_COLOR_MATERIAL", &gl_color_material))	ImGui::SameLine();
 	if (ImGui::Checkbox("GL_TEXTURE_2D", &gl_texture_2d))			ImGui::SameLine();
-	if (ImGui::Checkbox("WIREFRAME", &wireframe_mode))				ImGui::SameLine();
+	if (ImGui::Checkbox("FILL RENDER", &fill_mode))					ImGui::SameLine();
+	if (ImGui::Checkbox("WIREFRAME RENDER", &wireframe_mode))		ImGui::SameLine();
+	if (ImGui::Checkbox("POINT RENDER", &point_mode))				ImGui::SameLine();
 	//---------------------------------
 
 	if (gl_depth && !glIsEnabled(GL_DEPTH_TEST))
@@ -311,16 +313,30 @@ void EngineTest::OpenGLOptions()
 	else if (!gl_texture_2d && glIsEnabled(GL_TEXTURE_2D))
 		glDisable(GL_TEXTURE_2D);
 
-	// Wireframe ?
-	if (wireframe_mode)											// https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glPolygonMode.xml
+	// Full 
+	if (fill_mode && poly_mode != gl_fill)					// https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glPolygonMode.xml
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);			// void glPolygonMode(GLenum face, GLenum mode);
+		poly_mode = gl_fill;								// face:	Specifies the polygons that mode applies to. Must be GL_FRONT for front-facing polygons, 	
+		wireframe_mode = false;								//			GL_BACK for back-facing polygons, or GL_FRONT_AND_BACK for front- and back-facing polygons.	
+		point_mode = false;									// mode:	Specifies how polygons will be rasterized. Accepted values are GL_POINT, GL_LINE, and GL_FILL.
+	} 														//			The initial value is GL_FILL for both front- and back-facing polygons.	
+															 
+	// Wireframe											
+	if (wireframe_mode && poly_mode != gl_line)
+	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	else if (!wireframe_mode)									// void glPolygonMode(GLenum face, GLenum mode);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);				// face:	Specifies the polygons that mode applies to. Must be GL_FRONT for front-facing polygons, 
-																//			GL_BACK for back-facing polygons, or GL_FRONT_AND_BACK for front- and back-facing polygons.
-																// mode:	Specifies how polygons will be rasterized. Accepted values are GL_POINT, GL_LINE, and GL_FILL. 
-																//			The initial value is GL_FILL for both front- and back-facing polygons.
+		poly_mode = gl_line;
+		fill_mode = false;
+		point_mode = false;
+	}
 
-
-
-
+	// Point											
+	if (point_mode && poly_mode != gl_point)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+		poly_mode = gl_point;
+		fill_mode = false;
+		wireframe_mode = false;
+	}
 }

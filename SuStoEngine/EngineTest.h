@@ -4,6 +4,13 @@
 #include "EditorUI.h"
 #include "Module.h"
 
+enum polygon_mode 
+{
+	gl_fill,
+	gl_line,
+	gl_point
+};
+
 class EngineTest : public EditorElement
 {
 public:
@@ -41,7 +48,11 @@ private:
 	bool gl_lighting					= true;
 	bool gl_color_material				= true;
 	bool gl_texture_2d					= false;
+	bool fill_mode						= true;
 	bool wireframe_mode					= false;
+	bool point_mode						= false;
+
+	polygon_mode poly_mode = polygon_mode::gl_fill;
 
 };
 
