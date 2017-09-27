@@ -60,9 +60,6 @@ bool Application::Awake()
 {
 	bool ret = true;
 
-	profiler->StartProfile("hi");
-	profiler->FinishProfile("hi");
-
 	profiler->StartProfile("Engine Awake");
 
 	LoadConfig();
@@ -118,9 +115,6 @@ bool Application::Update()
 
 	profiler->StartProfile("Engine Update");
 
-	if (input->GetWindowEvent(WE_QUIT) == true || end_app)
-		return false;
-
 	// Cap fps
 	if (capped_ms > 0 && GetDT() < capped_ms)
 	{
@@ -165,9 +159,12 @@ bool Application::Update()
 
 	FinishUpdate();
 
-	profiler->FinishProfile("Update Engine");
+	profiler->FinishProfile("Engine Update");
 
 	profiler->UpdateFinish();
+
+	if (input->GetWindowEvent(WE_QUIT) == true || end_app)
+		return false;
 
 	return ret;
 }

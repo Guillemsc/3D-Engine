@@ -211,7 +211,7 @@ void ModuleWindow::SetResizable(bool set)
 	resizable = set;
 }
 
-bool ModuleWindow::GetResizalbe()
+bool ModuleWindow::GetResizable()
 {
 	return resizable;
 }
@@ -266,6 +266,13 @@ void ModuleWindow::SetMaximized(bool set)
 
 bool ModuleWindow::GetMaximized()
 {
+	Uint32 flags = SDL_GetWindowFlags(window);
+
+	if (flags & SDL_WINDOW_MAXIMIZED)
+		maximized = true;
+	else
+		maximized = false;
+
 	return maximized;
 }
 

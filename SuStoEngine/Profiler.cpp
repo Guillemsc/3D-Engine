@@ -5,6 +5,10 @@
 #include "mmgr\nommgr.h"
 #include "mmgr\mmgr.h"
 
+#define MAX_FRAMES_LOGGED 50
+#define MAX_MEMORY_LOGGED 50
+#define MAX_PROFILE_LOGGED 100
+
 Profiler::Profiler()
 {
 	cration_time = SDL_GetTicks();
@@ -203,32 +207,52 @@ void Profile::Start()
 
 void Profile::Finish()
 {
+	list_ticks += timer.ReadTicks();
 	ticks.push_back(timer.ReadTicks());
+
+	list_ms += timer.ReadMs();
 	ms.push_back(timer.ReadMs());
 
 	total_frames_ms += timer.ReadMs();
 
 	if (ticks.size() > MAX_PROFILE_LOGGED)
 	{
+		list_ticks -= (*ticks.begin());
 		ticks.erase(ticks.begin());
+
+		list_ms -= (*ms.begin());
 		ms.erase(ms.begin());
 	}
 }
 
 int Profile::GetLastFrameTick()
 {
-	if(!ticks.empty())
-		return ticks.back();
+	int ret = 0;
 
-	return 0;
+	if (!ticks.empty())
+	{
+		ret = list_ticks / ticks.size();
+
+		if (ret < 0)
+			ret = 0;
+	}
+
+	return ret;
 }
 
 int Profile::GetLastFrameMs()
 {
-	if (!ms.empty())
-		return ms.back();
+	int ret = 0;
 
-	return 0;
+	if (!ms.empty())
+	{
+		ret = list_ms / ms.size();
+
+		if (ret < 0)
+			ret = 0;
+	}
+
+	return ret;
 }
 
 std::vector<int> Profile::GetTicksList()

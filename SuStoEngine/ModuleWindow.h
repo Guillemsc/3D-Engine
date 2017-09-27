@@ -32,7 +32,7 @@ public:
 	void SetFullscreen(bool set);
 	bool GetFullscreen();
 	void SetResizable(bool set);
-	bool GetResizalbe();
+	bool GetResizable();
 	void SetBorderless(bool set);
 	bool GetBorderless();
 	void SetFullDekstop(bool set);

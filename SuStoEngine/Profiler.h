@@ -6,9 +6,7 @@
 #include <string>
 #include <iostream>
 #include "PerfTimer.h"
-#define MAX_FRAMES_LOGGED 50
-#define MAX_MEMORY_LOGGED 50
-#define MAX_PROFILE_LOGGED 5
+
 
 class Profile
 {
@@ -32,7 +30,8 @@ private:
 
 	std::vector<int> ms;
 	std::vector<int> ticks;
-
+	int list_ticks = 0;
+	int list_ms = 0;
 };
 
 class Profiler

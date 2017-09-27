@@ -10,6 +10,7 @@
 
 DebugScene::DebugScene(bool start_enabled) : Module(start_enabled)
 {
+	SetName("DebugScene");
 }
 
 DebugScene::~DebugScene()
@@ -18,8 +19,6 @@ DebugScene::~DebugScene()
 bool DebugScene::Awake()
 {
 	bool ret = true;
-
-	SetName("DebugScene");
 
 	return ret;
 }

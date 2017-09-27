@@ -22,7 +22,7 @@ void Configuration::Start()
 	max_fps = App->GetMaxFps();
 	App->window->GetWindowSize(window_width, window_height);
 	fullscreen = App->window->GetFullscreen();
-	resizable = App->window->GetResizalbe();
+	resizable = App->window->GetResizable();
 	borderless = App->window->GetBorderless();
 	fulldekstop = App->window->GetFullDekstop();
 	maximized = App->window->GetMaximized();
@@ -123,6 +123,8 @@ void Configuration::Draw()
 				App->window->SetFullDekstop(fulldekstop);
 				App->SaveConfig(App->window);
 			}
+
+			maximized = App->window->GetMaximized();
 			if (ImGui::Checkbox("Maximized", &maximized))
 			{
 				App->window->SetMaximized(maximized);
