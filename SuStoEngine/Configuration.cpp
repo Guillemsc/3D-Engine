@@ -8,8 +8,6 @@
 Configuration::Configuration(bool start_enabled) : EditorElement(start_enabled)
 {
 
-<<<<<<< HEAD
-=======
 	SDL_version version;
 	SDL_GetVersion(&version);
 	sprintf_s(info.sdl_version, 25, "%i.%i.%i", version.major, version.minor, version.patch);
@@ -29,8 +27,7 @@ Configuration::Configuration(bool start_enabled) : EditorElement(start_enabled)
 	info.sse3 = SDL_HasSSE3() == SDL_TRUE;
 	info.sse41 = SDL_HasSSE41() == SDL_TRUE;
 	info.sse42 = SDL_HasSSE42() == SDL_TRUE;
-	
->>>>>>> origin/master
+
 }
 
 Configuration::~Configuration()
@@ -118,8 +115,6 @@ void Configuration::Draw()
 			ImGui::Text("Peak Alloc Unit Count: %d", m_getMemoryStatistics().peakAllocUnitCount);
 		}
 
-<<<<<<< HEAD
-=======
 		// Hardware
 		if (ImGui::CollapsingHeader("Hardware", ImGuiTreeNodeFlags_DefaultOpen))
 		{
@@ -133,7 +128,6 @@ void Configuration::Draw()
 																																
 		}
 
->>>>>>> origin/master
 		// Window
 		if (ImGui::CollapsingHeader("Window", ImGuiTreeNodeFlags_DefaultOpen))
 		{
