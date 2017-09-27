@@ -1,12 +1,10 @@
 #ifndef __PROFILER_H__
 #define __PROFILER_H__
 
-#include "SDL\include\SDL.h"
 #include <vector>
 #include <string>
 #include <iostream>
 #include "PerfTimer.h"
-
 
 class Profile
 {
@@ -62,6 +60,20 @@ public:
 	std::vector<float> GetFramesVector();
 	std::vector<Profile*> GetProfilesList();
 	std::vector<float> GetMemoryVector();
+
+	int GetCpuCount();
+	int GetCpuCacheLineSize();
+	int GetSystemRam();
+	bool Has3DNow();
+	bool HasAVX();
+	bool HasAltiVec();
+	bool HasMMX();
+	bool HasRDTSC();
+	bool HasSSE();
+	bool HasSSE2();
+	bool HasSSE3();
+	bool HasSSE41();
+	bool HasSSE42();
 
 private:
 	bool enabled = true;

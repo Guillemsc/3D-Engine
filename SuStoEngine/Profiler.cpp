@@ -1,7 +1,7 @@
 #include "Profiler.h"
 #include "Globals.h"
 #include "Functions.h"
-
+#include "SDL/include/SDL.h"
 #include "mmgr\nommgr.h"
 #include "mmgr\mmgr.h"
 
@@ -234,6 +234,71 @@ std::vector<Profile*> Profiler::GetProfilesList()
 std::vector<float> Profiler::GetMemoryVector()
 {
 	return memory;
+}
+
+int Profiler::GetCpuCount()
+{
+	return SDL_GetCPUCount();
+}
+
+int Profiler::GetCpuCacheLineSize()
+{
+	return SDL_GetCPUCacheLineSize();
+}
+
+int Profiler::GetSystemRam()
+{
+	return SDL_GetSystemRAM();
+}
+
+bool Profiler::Has3DNow()
+{
+	return SDL_Has3DNow();
+}
+
+bool Profiler::HasAVX()
+{
+	return SDL_HasAVX();
+}
+
+bool Profiler::HasAltiVec()
+{
+	return SDL_HasAltiVec();
+}
+
+bool Profiler::HasMMX()
+{
+	return SDL_HasMMX();
+}
+
+bool Profiler::HasRDTSC()
+{
+	return SDL_HasRDTSC();
+}
+
+bool Profiler::HasSSE()
+{
+	return SDL_HasSSE();
+}
+
+bool Profiler::HasSSE2()
+{
+	return SDL_HasSSE2();
+}
+
+bool Profiler::HasSSE3()
+{
+	return SDL_HasSSE3();
+}
+
+bool Profiler::HasSSE41()
+{
+	return SDL_HasSSE41();
+}
+
+bool Profiler::HasSSE42()
+{
+	return SDL_HasSSE42();
 }
 
 void Profile::Start()
