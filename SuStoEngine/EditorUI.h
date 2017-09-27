@@ -9,6 +9,7 @@ class Configuration;
 class About;
 class ProfilerViewer;
 class EngineTest;
+class Hardware;
 
 class EditorElement
 {
@@ -53,6 +54,7 @@ private:
 	About*               about = nullptr;
 	ProfilerViewer*      profiler_viewer	= nullptr;
 	EngineTest*          engine_test = nullptr;
+	Hardware*			 hardware = nullptr;
 
 	list<EditorElement*> editor_elements;
 
