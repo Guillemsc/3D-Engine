@@ -8,9 +8,6 @@
 
 Configuration::Configuration(bool start_enabled) : EditorElement(start_enabled)
 {
-	memset(name_input_buffer, 0, sizeof(name_input_buffer));
-	memset(organization_input_buffer, 0, sizeof(organization_input_buffer));
-	memset(version_input_buffer, 0, sizeof(version_input_buffer));
 
 	SDL_version version;
 	SDL_GetVersion(&version);
@@ -46,7 +43,6 @@ Configuration::Configuration(bool start_enabled) : EditorElement(start_enabled)
 		info.vram_mb_available = float(vm_a) / (1024.f * 1024.f);
 		info.vram_mb_reserved = float(vm_curr) / (1024.f * 1024.f);
 	}
-	
 }
 
 Configuration::~Configuration()
@@ -81,7 +77,7 @@ void Configuration::Draw()
 	if (ImGui::Begin("Configuration", &visible))
 	{
 		// App
-		if (ImGui::CollapsingHeader("App"))
+		if (ImGui::CollapsingHeader("App", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			if (ImGui::InputText("App Name", name_input_buffer, 254))
 			{
@@ -155,7 +151,7 @@ void Configuration::Draw()
 		}
 
 		// Window
-		if (ImGui::CollapsingHeader("Window"))
+		if (ImGui::CollapsingHeader("Window", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			if (ImGui::SliderFloat("Brightness", &brightness, 0, 1))
 			{

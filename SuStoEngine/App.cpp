@@ -311,6 +311,13 @@ const char * Application::GetVersion()
 	return version.c_str();;
 }
 
+SDL_version Application::GetSDLVersion()
+{
+	SDL_version version;
+	SDL_GetVersion(&version);
+	return version;
+}
+
 void Application::SetDebugMode(bool set)
 {
 	debug_mode = set;
