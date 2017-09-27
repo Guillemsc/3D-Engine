@@ -3,6 +3,7 @@
 #include "ModuleWindow.h"
 #include "imgui.h"
 #include "mmgr\mmgr.h"
+#include "SDL/include/SDL.h"
 
 Configuration::Configuration(bool start_enabled) : EditorElement(start_enabled)
 {
@@ -16,6 +17,20 @@ Configuration::Configuration(bool start_enabled) : EditorElement(start_enabled)
 
 	info.cpu_count = SDL_GetCPUCount();
 	info.l1_cachekb = SDL_GetCPUCacheLineSize();
+	info.ram_gb = App->profiler->GetSystemRam() / 1024; // Basic, 1024 MB = 1 GB
+
+	info.altivec = SDL_HasAltiVec() == SDL_TRUE;
+	info.avx = SDL_HasAVX() == SDL_TRUE;
+	info.avx2 = SDL_HasAVX2() == SDL_TRUE;
+	info.mmx = SDL_HasMMX() == SDL_TRUE;
+	info.now3d = SDL_Has3DNow() == SDL_TRUE;
+	info.rdtsc = SDL_HasRDTSC() == SDL_TRUE;
+	info.sse = SDL_HasSSE() == SDL_TRUE;
+	info.sse2 = SDL_HasSSE2() == SDL_TRUE;
+	info.sse3 = SDL_HasSSE3() == SDL_TRUE;
+	info.sse41 = SDL_HasSSE41() == SDL_TRUE;
+	info.sse42 = SDL_HasSSE42() == SDL_TRUE;
+	
 }
 
 Configuration::~Configuration()
@@ -109,6 +124,11 @@ void Configuration::Draw()
 			ImGui::Text("SDL Version: ");	ImGui::SameLine();	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), info.sdl_version);
 			ImGui::Separator();
 			ImGui::Text("CPUs: ");			ImGui::SameLine();	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%u (Cache: %ukb)", info.cpu_count, info.l1_cachekb);
+			ImGui::Text("System RAM: ");	ImGui::SameLine();	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1fGb", info.ram_gb);
+			ImGui::Text("Caps");			ImGui::SameLine();	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%s%s%s%s%s%s%s\n%s%s%s%s",	
+				info.altivec ? "AltiVec, " : "",	info.avx ? "AVX, " : "",	info.avx2 ? "AVX2, " : "",		info.mmx ? "MMX, " : "",		info.now3d ? "3DNow, " : "",	info.rdtsc ? "RDTSC, " : "",
+				info.sse ? "SSE, " : "",			info.sse2 ? "SSE2, " : "",	info.sse3 ? "SSE3, " : "",		info.sse41 ? "SSE41, " : "",	info.sse42 ? "SSE42, " : "");
+																																
 		}
 
 		// Window
