@@ -97,15 +97,13 @@ bool Application::Start()
 
 	profiler->FinishProfile("Engine Start");
 
-	profiler->Start();
-
 	return ret;
 }
 
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
-
+	profiler->UpdateStart();
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
@@ -113,15 +111,12 @@ bool Application::Update()
 {
 	bool ret = true;
 
-	profiler->StartProfile("Engine Update");
-
-	// Cap fps
-	if (capped_ms > 0 && GetDT() < capped_ms)
-	{
-		SDL_Delay(capped_ms - GetDT());
-	}
+	if (input->GetWindowEvent(WE_QUIT) == true || end_app)
+		return false;
 
 	PrepareUpdate();
+
+	profiler->StartProfile("Engine Update");
 
 	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
@@ -157,14 +152,8 @@ bool Application::Update()
 		if (!ret) return false;
 	}
 
-	FinishUpdate();
-
 	profiler->FinishProfile("Engine Update");
-
-	profiler->UpdateFinish();
-
-	if (input->GetWindowEvent(WE_QUIT) == true || end_app)
-		return false;
+	FinishUpdate();
 
 	return ret;
 }
@@ -172,7 +161,7 @@ bool Application::Update()
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
-
+	profiler->UpdateFinish();
 }
 
 bool Application::CleanUp()
@@ -293,16 +282,12 @@ const char * Application::GetAppOrganization()
 
 void Application::SetMaxFps(int set)
 {
-	if (set > 0)
-	{
-		max_fps = set;
-		capped_ms = (1000 / set);
-	}
+	profiler->SetMaxFps(set);
 }
 
 int Application::GetMaxFps()
 {
-	return max_fps;
+	return profiler->GetMaxFps();
 }
 
 bool Application::GetDebugMode()

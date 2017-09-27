@@ -87,8 +87,6 @@ private:
 	std::string		   version = "";
 
 	bool		       end_app = false;
-	int				   max_fps = 0;
-	int				   capped_ms = -1;
 
 	bool			   debug_mode = false;
 

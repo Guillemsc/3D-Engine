@@ -11,7 +11,7 @@
 
 Profiler::Profiler()
 {
-	cration_time = SDL_GetTicks();
+	time_since_startup.Start();
 }
 
 Profiler::~Profiler()
@@ -28,21 +28,32 @@ void Profiler::CleanUp()
 	profiles.clear();
 }
 
-void Profiler::Start()
+void Profiler::UpdateStart()
 {
-	update_start_time = SDL_GetTicks();
-	update_time_since_startup = 0.0f;
+	frame_time.Start();
 }
 
 void Profiler::UpdateFinish()
 {
+	// Frames since start
 	frames_since_startup++;
-	frame_ms = SDL_GetTicks() - (update_start_time + update_time_since_startup);
-	avg_fps = float(frames_since_startup) / update_time_since_startup;
+
+	// Frame time
+	update_ms = frame_time.ReadMs();
+
+	// Avg fps
+	avg_fps = float(frames_since_startup) / time_since_startup.ReadMs();
+
+	// Cap fps
+	if (capped_ms > 0 && update_ms < capped_ms)
+	{ 
+		SDL_Delay(capped_ms - update_ms);
+	}
 
 	// Frames / s
 	frame_counter++;
-	frame_counter_ms += frame_ms;
+	frame_counter_ms += frame_time.ReadMs();
+
 	if (frame_counter_ms > 1000)
 	{
 		last_second_frames = frame_counter;
@@ -63,14 +74,25 @@ void Profiler::UpdateFinish()
 		memory.erase(memory.begin());
 	
 	// -----------
+}
 
-	// Update time since startup
-	update_time_since_startup = SDL_GetTicks() - update_start_time;
+void Profiler::SetMaxFps(int fps)
+{
+	if (fps > 0)
+	{
+		max_fps = fps;
+		capped_ms = (float)(1000 / (float)fps);
+	}
+}
+
+int Profiler::GetMaxFps()
+{
+	return max_fps;
 }
 
 float Profiler::GetFrameTime()
 {
-	return frame_ms;
+	return update_ms;
 }
 
 int Profiler::GetFPS()

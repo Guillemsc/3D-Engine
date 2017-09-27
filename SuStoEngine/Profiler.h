@@ -41,9 +41,11 @@ public:
 	~Profiler();
 	void CleanUp();
 
-	void Start();
+	void UpdateStart();
 	void UpdateFinish();
 
+	void SetMaxFps(int fps);
+	int GetMaxFps();
 	float GetFrameTime();
 	int GetFPS();
 	float GetAvgFPS();
@@ -64,12 +66,14 @@ private:
 	float cration_time = 0.0f;
 
 	// Update ----
-	float update_start_time = 0.0f;
-	float update_time_since_startup = 0.0f;
+	PerfTimer frame_time;
+	PerfTimer time_since_startup;
 
 	int   frames_since_startup = 0;
-	float frame_ms = 0.0f;
+	float update_ms = 0.0f;
 	float avg_fps = 0.0f;
+	int	  max_fps = 0;
+	float capped_ms = -1;
 	std::vector<float> frames;
 	std::vector<float> memory;
 
