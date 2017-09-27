@@ -11,6 +11,7 @@
 
 Profiler::Profiler()
 {
+	enabled = true;
 	time_since_startup.Start();
 }
 
@@ -120,7 +121,7 @@ int Profiler::GetTimeSinceStartup()
 	return SDL_GetTicks();
 }
 
-void Profiler::StartProfile(const char * name, ...)
+void Profiler::StartProfile(bool startup, const char * name, ...)
 {
 	bool found = false;
 
@@ -149,29 +150,30 @@ void Profiler::StartProfile(const char * name, ...)
 		Profile* prof = new Profile();
 		prof->name = str;
 		prof->Start();
+		prof->startup = startup;
 		profiles.push_back(prof);
 	}
 }
 
 void Profiler::AddToProfile(const char * name, ...)
 {
-	if (!enabled)
-		return;
+	//if (!enabled)
+	//	return;
 
-	char str[200];
-	va_list args;
-	va_start(args, name);
-	vsprintf_s(str, 200, name, args);
-	va_end(args);
+	//char str[200];
+	//va_list args;
+	//va_start(args, name);
+	//vsprintf_s(str, 200, name, args);
+	//va_end(args);
 
-	for (std::vector<Profile*>::iterator it = profiles.begin(); it != profiles.end(); it++)
-	{
-		if ((*it)->name == str)
-		{
-			(*it)->timer.AddTime((*it)->timer.ReadMs());
-			break;
-		}
-	}
+	//for (std::vector<Profile*>::iterator it = profiles.begin(); it != profiles.end(); it++)
+	//{
+	//	if ((*it)->name == str)
+	//	{
+	//		(*it)->timer.AddTime((*it)->timer.ReadMs());
+	//		break;
+	//	}
+	//}
 }
 
 void Profiler::FinishProfile(const char* name, ...)
@@ -308,11 +310,11 @@ void Profile::Start()
 
 void Profile::Finish()
 {
+	total_frames_ms += timer.ReadMs();
+
 	ticks.push_back(timer.ReadTicks());
 
 	ms.push_back(timer.ReadMs());
-
-	total_frames_ms += timer.ReadMs();
 
 	if (ticks.size() > MAX_PROFILE_LOGGED)
 	{

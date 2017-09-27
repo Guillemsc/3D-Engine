@@ -15,7 +15,8 @@ public:
 public:
 
 private:
-	int ms_ticks = false;
+	int  ms_ticks = false;
+	bool record = false;
 };
 
 #endif

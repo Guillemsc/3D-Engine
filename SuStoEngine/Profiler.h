@@ -20,7 +20,8 @@ public:
 
 public:
 	std::string name;
-	PerfTimer timer;
+	PerfTimer   timer;
+	bool        startup = false;
 
 private:
 	int total_frames_ms = 0.0f;
@@ -51,7 +52,7 @@ public:
 	int GetFramesSinceStartup();
 	int GetTimeSinceStartup();
 
-	void StartProfile(const char* name, ...);
+	void StartProfile(bool startup, const char* name, ...);
 	void AddToProfile(const char* name, ...);
 	void FinishProfile(const char * name, ...);
 	Profile* GetProfile(const char* name, ...);

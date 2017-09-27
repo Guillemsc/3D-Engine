@@ -60,13 +60,13 @@ bool Application::Awake()
 {
 	bool ret = true;
 
-	profiler->StartProfile("Engine Awake");
+	profiler->StartProfile(true, "Engine Awake");
 
 	LoadConfig();
 
 	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
-		profiler->StartProfile("Awake %s", (*it)->GetName());
+		profiler->StartProfile(true, "Awake %s", (*it)->GetName());
 
 		ret = (*it)->Awake();
 		if (!ret) return false;
@@ -83,11 +83,11 @@ bool Application::Start()
 {
 	bool ret = true;
 
-	profiler->StartProfile("Engine Start");
+	profiler->StartProfile(true, "Engine Start");
 
 	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
-		profiler->StartProfile("Start %s", (*it)->GetName());
+		profiler->StartProfile(true, "Start %s", (*it)->GetName());
 
 		ret = (*it)->Start();
 		if (!ret) return false;
@@ -96,6 +96,8 @@ bool Application::Start()
 	}
 
 	profiler->FinishProfile("Engine Start");
+
+	profiler->SetEnabled(false);
 
 	return ret;
 }
@@ -116,19 +118,15 @@ bool Application::Update()
 
 	PrepareUpdate();
 
-	profiler->StartProfile("Engine Update");
+	profiler->StartProfile(false, "Engine Update");
 
 	// PreUpdate
 	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
-		profiler->StartProfile("Update %s", (*it)->GetName());
-
 		if (!(*it)->GetEnabled())
 			continue;
 
 		ret = (*it)->PreUpdate();
-
-		profiler->AddToProfile("Update %s", (*it)->GetName());
 
 		if (!ret) return false;
 	}
@@ -139,7 +137,7 @@ bool Application::Update()
 		if (!(*it)->GetEnabled())
 			continue;
 
-		profiler->StartProfile("Update %s", (*it)->GetName());
+		profiler->StartProfile(false, "Update %s", (*it)->GetName());
 
 		ret = (*it)->Update();
 
