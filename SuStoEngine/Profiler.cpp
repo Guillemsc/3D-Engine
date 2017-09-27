@@ -12,6 +12,7 @@
 Profiler::Profiler()
 {
 	enabled = true;
+	to_enable = true;
 	time_since_startup.Start();
 }
 
@@ -31,12 +32,13 @@ void Profiler::CleanUp()
 
 void Profiler::SetEnabled(bool set)
 {
-	enabled = set;
+	to_enable = set;
 }
 
 void Profiler::UpdateStart()
 {
 	frame_time.Start();
+	enabled = to_enable;
 }
 
 void Profiler::UpdateFinish()

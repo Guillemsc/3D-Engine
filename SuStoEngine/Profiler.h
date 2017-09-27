@@ -78,6 +78,9 @@ public:
 
 private:
 	bool enabled = true;
+	bool to_enable = false;
+
+	// Start
 	float cration_time = 0.0f;
 
 	// Update ----
