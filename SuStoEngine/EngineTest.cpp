@@ -312,5 +312,15 @@ void EngineTest::OpenGLOptions()
 		glDisable(GL_TEXTURE_2D);
 
 	// Wireframe ?
+	if (wireframe_mode)											// https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glPolygonMode.xml
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else if (!wireframe_mode)									// void glPolygonMode(GLenum face, GLenum mode);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);				// face:	Specifies the polygons that mode applies to. Must be GL_FRONT for front-facing polygons, 
+																//			GL_BACK for back-facing polygons, or GL_FRONT_AND_BACK for front- and back-facing polygons.
+																// mode:	Specifies how polygons will be rasterized. Accepted values are GL_POINT, GL_LINE, and GL_FILL. 
+																//			The initial value is GL_FILL for both front- and back-facing polygons.
+
+
+
 
 }

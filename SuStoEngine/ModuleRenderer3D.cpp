@@ -118,7 +118,6 @@ bool ModuleRenderer3D::Awake()
 
 		GLfloat MaterialDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, MaterialDiffuse);
-
 		glEnable(GL_DEPTH_TEST);
 		lights[0].Active(true);
 		glEnable(GL_LIGHTING);
