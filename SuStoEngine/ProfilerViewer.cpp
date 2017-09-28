@@ -102,12 +102,23 @@ void ProfilerViewer::Draw()
 		// Vram profiler ---------------------------------- -
 		else if (profiler_mode == 3)
 		{
+			GraphicsDeviceInfo info = App->profiler->GetInfo();
 
+			ImGui::Text("Video Memory: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_budget_mb);
 
-			/*ImGui::Text("Usage VRAM: %d mb", info.vram_usage_mb);
-			ImGui::Text("Avaliable VRAM: %d mb", info.vram_avaliable_mb);
-			ImGui::Text("Budget VRAM: %d mb", info.vram_budget_mb);
-			ImGui::Text("Reserved VRAM: %d mb", info.vram_reserved_mb);*/
+			ImGui::Text("Video Memory On Use: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_usage_mb);
+
+			ImGui::Text("Video Memory Available: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_avaliable_mb);
+
+			ImGui::Text("Video Memory Reserved: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_reserved_mb);
 		}
 			
 	}

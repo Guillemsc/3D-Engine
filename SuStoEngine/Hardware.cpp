@@ -90,22 +90,6 @@ void Hardware::Draw()
 		ImGui::SameLine(); 
 		ImGui::TextColored(ImVec4(sec_colour.x, sec_colour.y, sec_colour.z, sec_colour.w), info.brand);
 
-		ImGui::Text("Video Memory: ");				
-		ImGui::SameLine();		
-		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_budget_mb);
-		
-		ImGui::Text("Video Memory On Use: ");		
-		ImGui::SameLine();		
-		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_usage_mb);
-		
-		ImGui::Text("Video Memory Available: ");	
-		ImGui::SameLine();		
-		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_avaliable_mb);
-		
-		ImGui::Text("Video Memory Reserved: ");		
-		ImGui::SameLine();		
-		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_reserved_mb);
-
 		ImGui::Separator();
 
 		ImGui::Text("Display resolution:");
