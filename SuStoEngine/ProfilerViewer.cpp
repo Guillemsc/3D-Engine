@@ -102,12 +102,12 @@ void ProfilerViewer::Draw()
 		// Vram profiler ---------------------------------- -
 		else if (profiler_mode == 3)
 		{
-			GraphicsDeviceInfo info = App->profiler->GetGraphicsDeviceInfo();
 
-			ImGui::Text("Usage VRAM: %d mb", info.vram_usage_mb);
+
+			/*ImGui::Text("Usage VRAM: %d mb", info.vram_usage_mb);
 			ImGui::Text("Avaliable VRAM: %d mb", info.vram_avaliable_mb);
 			ImGui::Text("Budget VRAM: %d mb", info.vram_budget_mb);
-			ImGui::Text("Reserved VRAM: %d mb", info.vram_reserved_mb);
+			ImGui::Text("Reserved VRAM: %d mb", info.vram_reserved_mb);*/
 		}
 			
 	}

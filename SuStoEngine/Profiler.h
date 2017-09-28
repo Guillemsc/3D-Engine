@@ -87,7 +87,7 @@ public:
 	bool HasSSE3();
 	bool HasSSE41();
 	bool HasSSE42();
-	GraphicsDeviceInfo GetGraphicsDeviceInfo();
+	GraphicsDeviceInfo GetInfo();
 
 private:
 	bool enabled = true;
