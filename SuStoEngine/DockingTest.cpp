@@ -17,10 +17,11 @@ void DockingTest::Start()
 void DockingTest::Draw()
 {
 	igBeginWorkspace();
+	igDockDebugWindow();
 
-	bool a = true;
+	static bool a = true;
 	igBeginDock("Dock1", &a, 0);
-
+	
 	ImGui::Text("fuck the police");
 
 	igEndDock();

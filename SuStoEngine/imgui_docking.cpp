@@ -8,28 +8,8 @@ using namespace ImGui;
 
 #define nullptr NULL
 
-struct DockContext
-{
-	enum EndAction_
-	{
-		EndAction_None,
-		EndAction_Panel,
-		EndAction_End,
-		EndAction_EndChild
-	};
 
-
-	enum Status_
-	{
-		Status_Docked,
-		Status_Float,
-		Status_Dragged
-	};
-
-
-	struct Dock
-	{
-		Dock()
+		DockContext::Dock::Dock()
 			: id(0)
 			, next_tab(nullptr)
 			, prev_tab(nullptr)
@@ -47,31 +27,31 @@ struct DockContext
 		}
 
 
-		~Dock() { MemFree(label); }
+		DockContext::Dock::~Dock() { MemFree(label); }
 
-
-		ImVec2 getMinSize() const
+		ImVec2 DockContext::Dock::getMinSize()
 		{
-			if (!children[0]) return ImVec2(16, 16 + GetTextLineHeightWithSpacing());
+			{
+				if (!children[0]) return ImVec2(16, 16 + GetTextLineHeightWithSpacing());
 
-			ImVec2 s0 = children[0]->getMinSize();
-			ImVec2 s1 = children[1]->getMinSize();
-			return isHorizontal() ? ImVec2(s0.x + s1.x, ImMax(s0.y, s1.y))
-				: ImVec2(ImMax(s0.x, s1.x), s0.y + s1.y);
+				ImVec2 s0 = children[0]->getMinSize();
+				ImVec2 s1 = children[1]->getMinSize();
+				return isHorizontal() ? ImVec2(s0.x + s1.x, ImMax(s0.y, s1.y))
+					: ImVec2(ImMax(s0.x, s1.x), s0.y + s1.y);
+			}
 		}
 
+		bool DockContext::Dock::isHorizontal() const { return children[0]->pos.x < children[1]->pos.x; }
 
-		bool isHorizontal() const { return children[0]->pos.x < children[1]->pos.x; }
 
-
-		void setParent(Dock* dock)
+		void DockContext::Dock::setParent(Dock* dock)
 		{
 			parent = dock;
 			for (Dock* tmp = prev_tab; tmp; tmp = tmp->prev_tab) tmp->parent = dock;
 			for (Dock* tmp = next_tab; tmp; tmp = tmp->next_tab) tmp->parent = dock;
 		}
 
-		Dock& getRoot()
+		DockContext::Dock& DockContext::Dock::getRoot()
 		{
 			Dock *dock = this;
 			while (dock->parent)
@@ -80,7 +60,7 @@ struct DockContext
 		}
 
 
-		Dock& getSibling()
+		DockContext::Dock& DockContext::Dock::getSibling()
 		{
 			IM_ASSERT(parent);
 			if (parent->children[0] == &getFirstTab()) return *parent->children[1];
@@ -88,7 +68,7 @@ struct DockContext
 		}
 
 
-		Dock& getFirstTab()
+		DockContext::Dock& DockContext::Dock::getFirstTab()
 		{
 			Dock* tmp = this;
 			while (tmp->prev_tab) tmp = tmp->prev_tab;
@@ -96,7 +76,7 @@ struct DockContext
 		}
 
 
-		void setActive()
+		void DockContext::Dock::setActive()
 		{
 			active = true;
 			for (Dock* tmp = prev_tab; tmp; tmp = tmp->prev_tab) tmp->active = false;
@@ -104,10 +84,10 @@ struct DockContext
 		}
 
 
-		bool isContainer() const { return children[0] != nullptr; }
+		bool DockContext::Dock::isContainer() const { return children[0] != nullptr; }
 
 
-		void setChildrenPosSize(const ImVec2& _pos, const ImVec2& _size)
+		void DockContext::Dock::setChildrenPosSize(const ImVec2& _pos, const ImVec2& _size)
 		{
 			ImVec2 s = children[0]->size;
 			if (isHorizontal())
@@ -153,7 +133,7 @@ struct DockContext
 		}
 
 
-		void setPosSize(const ImVec2& _pos, const ImVec2& _size)
+		void DockContext::Dock::setPosSize(const ImVec2& _pos, const ImVec2& _size)
 		{
 			size = _size;
 			pos = _pos;
@@ -172,36 +152,7 @@ struct DockContext
 			setChildrenPosSize(_pos, _size);
 		}
 
-
-		char* label;
-		ImU32 id;
-		Dock* next_tab;
-		Dock* prev_tab;
-		Dock* children[2];
-		Dock* parent;
-		bool active;
-		ImVec2 pos;
-		ImVec2 size;
-		Status_ status;
-		int last_frame;
-		int invalid_frames;
-		char location[16];
-		bool opened;
-		bool first;
-	};
-
-
-	ImVector<Dock*> m_docks;
-	ImVec2 m_drag_offset;
-	Dock* m_current;
-	Dock *m_next_parent;
-	int m_last_frame;
-	EndAction_ m_end_action;
-	ImVec2 m_workspace_pos;
-	ImVec2 m_workspace_size;
-	ImGuiDockSlot m_next_dock_slot;
-
-	DockContext()
+	DockContext::DockContext()
 		: m_current(nullptr)
 		, m_next_parent(nullptr)
 		, m_last_frame(0)
@@ -210,9 +161,9 @@ struct DockContext
 	}
 
 
-	~DockContext() {}
+	DockContext::~DockContext() {}
 
-	Dock& getDock(const char* label, bool opened)
+	DockContext::Dock& DockContext::getDock(const char* label, bool opened)
 	{
 		ImU32 id = ImHash(label, 0);
 		for (int i = 0; i < m_docks.size(); ++i)
@@ -239,7 +190,7 @@ struct DockContext
 	}
 
 
-	void putInBackground()
+	void DockContext::putInBackground()
 	{
 		ImGuiWindow* win = GetCurrentWindow();
 		ImGuiContext& g = *GImGui;
@@ -260,7 +211,7 @@ struct DockContext
 	}
 
 
-	void splits()
+	void DockContext::splits()
 	{
 		if (GetFrameCount() == m_last_frame) return;
 		m_last_frame = GetFrameCount();
@@ -349,7 +300,7 @@ struct DockContext
 	}
 
 
-	void checkNonexistent()
+	void DockContext::checkNonexistent()
 	{
 		int frame_limit = ImMax(0, ImGui::GetFrameCount() - 2);
 		for (int i = 0; i < m_docks.size(); ++i)
@@ -372,7 +323,7 @@ struct DockContext
 	}
 
 
-	Dock* getDockAt(const ImVec2& pos) const
+	DockContext::Dock* DockContext::getDockAt(const ImVec2& pos) const
 	{
 		for (int i = 0; i < m_docks.size(); ++i)
 		{
@@ -389,7 +340,7 @@ struct DockContext
 	}
 
 
-	static ImRect getDockedRect(const ImRect& rect, ImGuiDockSlot dock_slot)
+	ImRect DockContext::getDockedRect(const ImRect& rect, ImGuiDockSlot dock_slot)
 	{
 		ImVec2 half_size = rect.GetSize() * 0.5f;
 		switch (dock_slot)
@@ -403,7 +354,7 @@ struct DockContext
 	}
 
 
-	static ImRect getSlotRect(ImRect parent_rect, ImGuiDockSlot dock_slot)
+	ImRect DockContext::getSlotRect(ImRect parent_rect, ImGuiDockSlot dock_slot)
 	{
 		ImVec2 size = parent_rect.Max - parent_rect.Min;
 		ImVec2 center = parent_rect.Min + size * 0.5f;
@@ -418,7 +369,7 @@ struct DockContext
 	}
 
 
-	static ImRect getSlotRectOnBorder(ImRect parent_rect, ImGuiDockSlot dock_slot)
+	ImRect DockContext::getSlotRectOnBorder(ImRect parent_rect, ImGuiDockSlot dock_slot)
 	{
 		ImVec2 size = parent_rect.Max - parent_rect.Min;
 		ImVec2 center = parent_rect.Min + size * 0.5f;
@@ -443,7 +394,7 @@ struct DockContext
 	}
 
 
-	Dock* getRootDock()
+	DockContext::Dock* DockContext::getRootDock()
 	{
 		for (int i = 0; i < m_docks.size(); ++i)
 		{
@@ -457,7 +408,7 @@ struct DockContext
 	}
 
 
-	bool dockSlots(Dock& dock, Dock* dest_dock, const ImRect& rect, bool on_border)
+	bool DockContext::dockSlots(Dock& dock, Dock* dest_dock, const ImRect& rect, bool on_border)
 	{
 		ImDrawList* canvas = GetWindowDrawList();
 		ImU32 color = GetColorU32(ImGuiCol_Button);
@@ -483,7 +434,7 @@ struct DockContext
 	}
 
 
-	void handleDrag(Dock& dock)
+	void DockContext::handleDrag(Dock& dock)
 	{
 		Dock* dest_dock = getDockAt(GetIO().MousePos);
 
@@ -533,7 +484,7 @@ struct DockContext
 	}
 
 
-	void fillLocation(Dock& dock)
+	void DockContext::fillLocation(Dock& dock)
 	{
 		if (dock.status == Status_Float) return;
 		char* c = dock.location;
@@ -548,7 +499,7 @@ struct DockContext
 	}
 
 
-	void doUndock(Dock& dock)
+	void DockContext::doUndock(Dock& dock)
 	{
 		if (dock.prev_tab)
 			dock.prev_tab->setActive();
@@ -616,7 +567,7 @@ struct DockContext
 	}
 
 
-	void drawTabbarListButton(Dock& dock)
+	void DockContext::drawTabbarListButton(Dock& dock)
 	{
 		if (!dock.next_tab) return;
 
@@ -657,7 +608,7 @@ struct DockContext
 	}
 
 
-	bool tabbar(Dock& dock, bool close_button)
+	bool DockContext::tabbar(Dock& dock, bool close_button)
 	{
 		float tabbar_height = 2 * GetTextLineHeightWithSpacing();
 		ImVec2 size(dock.size.x, tabbar_height);
@@ -736,7 +687,7 @@ struct DockContext
 	}
 
 
-	static void setDockPosSize(Dock& dest, Dock& dock, ImGuiDockSlot dock_slot, Dock& container)
+	void DockContext::setDockPosSize(Dock& dest, Dock& dock, ImGuiDockSlot dock_slot, Dock& container)
 	{
 		IM_ASSERT(!dock.prev_tab && !dock.next_tab && !dock.children[0] && !dock.children[1]);
 
@@ -781,7 +732,7 @@ struct DockContext
 	}
 
 
-	void doDock(Dock& dock, Dock* dest, ImGuiDockSlot dock_slot)
+	void DockContext::doDock(Dock& dock, Dock* dest, ImGuiDockSlot dock_slot)
 	{
 		IM_ASSERT(!dock.parent);
 		if (!dest)
@@ -845,7 +796,7 @@ struct DockContext
 	}
 
 
-	void rootDock(const ImVec2& pos, const ImVec2& size)
+	void DockContext::rootDock(const ImVec2& pos, const ImVec2& size)
 	{
 		Dock* root = getRootDock();
 		if (!root) return;
@@ -856,14 +807,14 @@ struct DockContext
 	}
 
 
-	void setDockActive()
+	void DockContext::setDockActive()
 	{
 		IM_ASSERT(m_current);
 		if (m_current) m_current->setActive();
 	}
 
 
-	static ImGuiDockSlot getSlotFromLocationCode(char code)
+	ImGuiDockSlot DockContext::getSlotFromLocationCode(char code)
 	{
 		switch (code)
 		{
@@ -875,7 +826,7 @@ struct DockContext
 	}
 
 
-	static char getLocationCode(Dock* dock)
+	char DockContext::getLocationCode(Dock* dock)
 	{
 		if (!dock) return '0';
 
@@ -894,7 +845,7 @@ struct DockContext
 	}
 
 
-	void tryDockToStoredLocation(Dock& dock)
+	void DockContext::tryDockToStoredLocation(Dock& dock)
 	{
 		if (dock.status == Status_Docked) return;
 		if (dock.location[0] == 0) return;
@@ -914,7 +865,7 @@ struct DockContext
 	}
 
 
-	bool begin(const char* label, bool* opened, ImGuiWindowFlags extra_flags)
+	bool DockContext::begin(const char* label, bool* opened, ImGuiWindowFlags extra_flags)
 	{
 		ImGuiDockSlot next_slot = m_next_dock_slot;
 		m_next_dock_slot = ImGuiDockSlot_Tab;
@@ -1017,7 +968,7 @@ struct DockContext
 	}
 
 
-	void end()
+	void DockContext::end()
 	{
 		m_current = nullptr;
 		if (m_end_action != EndAction_None) {
@@ -1036,7 +987,7 @@ struct DockContext
 	}
 
 
-	void debugWindow() {
+	void DockContext::debugWindow() {
 		//SetNextWindowSize(ImVec2(300, 300));
 		if (Begin("Dock Debug Info")) {
 			for (int i = 0; i < m_docks.size(); ++i) {
@@ -1061,7 +1012,7 @@ struct DockContext
 		End();
 	}
 
-	int getDockIndex(Dock* dock)
+	int DockContext::getDockIndex(Dock* dock)
 	{
 		if (!dock) return -1;
 
@@ -1074,137 +1025,8 @@ struct DockContext
 		return -1;
 	}
 
-	/*
-	void save(Lumix::FS::OsFile& file)
-	{
-	file << "docks = {\n";
-	for (int i = 0; i < m_docks.size(); ++i)
-	{
-	Dock& dock = *m_docks[i];
-	file << "dock" << (Lumix::uint64)&dock << " = {\n";
-	file << "index = " << i << ",\n";
-	file << "label = \"" << dock.label << "\",\n";
-	file << "x = " << (int)dock.pos.x << ",\n";
-	file << "y = " << (int)dock.pos.y << ",\n";
-	file << "location = \"" << dock.location << "\",\n";
-	file << "size_x = " << (int)dock.size.x << ",\n";
-	file << "size_y = " << (int)dock.size.y << ",\n";
-	file << "status = " << (int)dock.status << ",\n";
-	file << "active = " << (int)dock.active << ",\n";
-	file << "opened = " << (int)dock.opened << ",\n";
-	file << "prev = " << (int)getDockIndex(dock.prev_tab) << ",\n";
-	file << "next = " << (int)getDockIndex(dock.next_tab) << ",\n";
-	file << "child0 = " << (int)getDockIndex(dock.children[0]) << ",\n";
-	file << "child1 = " << (int)getDockIndex(dock.children[1]) << ",\n";
-	file << "parent = " << (int)getDockIndex(dock.parent) << "\n";
-	if (i < m_docks.size() - 1)
-	file << "},\n";
-	else
-	file << "}\n";
-	}
-	file << "}\n";
-	}
-	*/
-
-	/*
-	Dock* getDockByIndex(lua_Integer idx) { return (idx < 0) ? nullptr : m_docks[(int)idx]; }
-
-	void load(lua_State* L)
-	{
-	for (int i = 0; i < m_docks.size(); ++i)
-	{
-	m_docks[i]->~Dock();
-	MemFree(m_docks[i]);
-	}
-	m_docks.clear();
-
-	if (lua_getglobal(L, "docks") == LUA_TTABLE)
-	{
-	lua_pushnil(L);
-	while (lua_next(L, -2) != 0)
-	{
-	Dock* new_dock = (Dock*)MemAlloc(sizeof(Dock));
-	m_docks.push_back(IM_PLACEMENT_NEW(new_dock) Dock());
-	lua_pop(L, 1);
-	}
-	}
-	lua_pop(L, 1);
-
-	if (lua_getglobal(L, "docks") == LUA_TTABLE)
-	{
-	lua_pushnil(L);
-	while (lua_next(L, -2) != 0)
-	{
-	if (lua_istable(L, -1))
-	{
-	int idx = 0;
-	if (lua_getfield(L, -1, "index") == LUA_TNUMBER)
-	idx = (int)lua_tointeger(L, -1);
-	Dock& dock = *m_docks[idx];
-	dock.last_frame = 0;
-	dock.invalid_frames = 0;
-	lua_pop(L, 1);
-
-	if (lua_getfield(L, -1, "label") == LUA_TSTRING)
-	{
-	dock.label = ImStrdup(lua_tostring(L, -1));
-	dock.id = ImHash(dock.label, 0);
-	}
-	lua_pop(L, 1);
-
-	if (lua_getfield(L, -1, "x") == LUA_TNUMBER)
-	dock.pos.x = (float)lua_tonumber(L, -1);
-	if (lua_getfield(L, -2, "y") == LUA_TNUMBER)
-	dock.pos.y = (float)lua_tonumber(L, -1);
-	if (lua_getfield(L, -3, "size_x") == LUA_TNUMBER)
-	dock.size.x = (float)lua_tonumber(L, -1);
-	if (lua_getfield(L, -4, "size_y") == LUA_TNUMBER)
-	dock.size.y = (float)lua_tonumber(L, -1);
-	if (lua_getfield(L, -5, "active") == LUA_TNUMBER)
-	dock.active = lua_tointeger(L, -1) != 0;
-	if (lua_getfield(L, -6, "opened") == LUA_TNUMBER)
-	dock.opened = lua_tointeger(L, -1) != 0;
-	if (lua_getfield(L, -7, "location") == LUA_TSTRING)
-	strcpy(dock.location, lua_tostring(L, -1));
-	if (lua_getfield(L, -8, "status") == LUA_TNUMBER)
-	{
-	dock.status = (Status_)lua_tointeger(L, -1);
-	}
-	lua_pop(L, 8);
-
-	if (lua_getfield(L, -1, "prev") == LUA_TNUMBER)
-	{
-	dock.prev_tab = getDockByIndex(lua_tointeger(L, -1));
-	}
-	if (lua_getfield(L, -2, "next") == LUA_TNUMBER)
-	{
-	dock.next_tab = getDockByIndex(lua_tointeger(L, -1));
-	}
-	if (lua_getfield(L, -3, "child0") == LUA_TNUMBER)
-	{
-	dock.children[0] = getDockByIndex(lua_tointeger(L, -1));
-	}
-	if (lua_getfield(L, -4, "child1") == LUA_TNUMBER)
-	{
-	dock.children[1] = getDockByIndex(lua_tointeger(L, -1));
-	}
-	if (lua_getfield(L, -5, "parent") == LUA_TNUMBER)
-	{
-	dock.parent = getDockByIndex(lua_tointeger(L, -1));
-	}
-	lua_pop(L, 5);
-	}
-	lua_pop(L, 1);
-	}
-	}
-	lua_pop(L, 1);
-	}
-	*/
-};
-
 
 static DockContext g_dock;
-
 
 void igShutdownDock()
 {
