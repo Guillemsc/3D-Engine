@@ -83,16 +83,6 @@ void Configuration::Draw()
 				sprintf_s(title, 25, "%.1f", memory[memory.size() - 1]);
 				ImGui::PlotHistogram("Memory", &memory[0], memory.size(), 0, title, 0.0f, 30000.0f, ImVec2(0, 100));
 			}
-
-			ImGui::Text("Total Reported Mem: %d", m_getMemoryStatistics().totalReportedMemory);
-			ImGui::Text("Peak Reported Mem: %d", m_getMemoryStatistics().peakReportedMemory);
-			ImGui::Text("Total Actual Mem: %d", m_getMemoryStatistics().totalActualMemory);
-			ImGui::Text("Peak Actual Mem: %d", m_getMemoryStatistics().peakActualMemory);
-			ImGui::Text("Accumulated Reported Mem: %d", m_getMemoryStatistics().accumulatedReportedMemory);
-			ImGui::Text("Accumulated Actual Mem: %d", m_getMemoryStatistics().accumulatedActualMemory);
-			ImGui::Text("Accumulated Alloc Unit Count: %d", m_getMemoryStatistics().accumulatedAllocUnitCount);
-			ImGui::Text("Total Alloc Unit Count: %d", m_getMemoryStatistics().totalAllocUnitCount);
-			ImGui::Text("Peak Alloc Unit Count: %d", m_getMemoryStatistics().peakAllocUnitCount);
 		}
 
 		// Window

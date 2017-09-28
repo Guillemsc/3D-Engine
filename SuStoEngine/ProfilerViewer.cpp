@@ -1,6 +1,7 @@
 #include "ProfilerViewer.h"
 #include "imgui.h"
 #include "App.h"
+#include "mmgr\mmgr.h"
 
 ProfilerViewer::ProfilerViewer(bool start_enabled)
 {
@@ -97,7 +98,15 @@ void ProfilerViewer::Draw()
 		// -------------------------------------------------
 		else if (profiler_mode == 2)
 		{
-
+			ImGui::Text("Total Reported Mem: %d", m_getMemoryStatistics().totalReportedMemory);
+			ImGui::Text("Peak Reported Mem: %d", m_getMemoryStatistics().peakReportedMemory);
+			ImGui::Text("Total Actual Mem: %d", m_getMemoryStatistics().totalActualMemory);
+			ImGui::Text("Peak Actual Mem: %d", m_getMemoryStatistics().peakActualMemory);
+			ImGui::Text("Accumulated Reported Mem: %d", m_getMemoryStatistics().accumulatedReportedMemory);
+			ImGui::Text("Accumulated Actual Mem: %d", m_getMemoryStatistics().accumulatedActualMemory);
+			ImGui::Text("Accumulated Alloc Unit Count: %d", m_getMemoryStatistics().accumulatedAllocUnitCount);
+			ImGui::Text("Total Alloc Unit Count: %d", m_getMemoryStatistics().totalAllocUnitCount);
+			ImGui::Text("Peak Alloc Unit Count: %d", m_getMemoryStatistics().peakAllocUnitCount);
 		}
 		// Vram profiler ---------------------------------- -
 		else if (profiler_mode == 3)
