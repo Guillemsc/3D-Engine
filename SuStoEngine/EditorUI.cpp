@@ -4,6 +4,7 @@
 #include "App.h"
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
+#include "imgui_docking.h"
 #include "Functions.h"
 #include "Console.h"
 #include "Configuration.h"
@@ -12,6 +13,8 @@
 #include "ProfilerViewer.h"
 #include "Hardware.h"
 #include "DockingTest.h"
+
+#define USING_DOCKING true
 
 //https://github.com/ocornut/imgui/issues/351
 
@@ -79,6 +82,12 @@ bool EditorUI::PreUpdate()
 
 	// ImGui new frame
 	ImGui_ImplSdlGL2_NewFrame(App->window->window);
+
+	if (USING_DOCKING)
+	{
+		igBeginWorkspace(ImVec2(-2, 23), ImVec2(App->window->GetWindowSize().x - 2, App->window->GetWindowSize().y - 23), ImGuiWindowFlags_NoCollapse |
+			ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus);
+	}
 
 	return ret;
 }
@@ -151,6 +160,11 @@ bool EditorUI::PostUpdate()
 {
 	bool ret = true;
 
+	if (USING_DOCKING)
+	{
+		igEndWorkspace();
+	}
+
 	// ImGui Draw
 	ImGui::Render();
 
@@ -162,6 +176,7 @@ bool EditorUI::CleanUp()
 	bool ret = true;
 
 	LOG_OUTPUT("Destroying ImGui");
+	igShutdownDock();
 	ImGui_ImplSdlGL2_Shutdown();
 
 	for (list<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)

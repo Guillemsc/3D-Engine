@@ -166,10 +166,6 @@ int ModuleInput::CharToKey(const char * key)
 	return SDL_GetScancodeFromKey(SDL_GetKeyFromName(key));
 }
 
-void ModuleInput::SetKeyBinding(const char * key, const char * binding_name)
-{
-}
-
 bool ModuleInput::GetWindowEvent(EventWindow ev)
 {
 	return windowEvents[ev];

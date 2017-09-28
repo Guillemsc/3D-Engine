@@ -3,6 +3,7 @@
 #include "ModuleInput.h"
 #include "imgui.h"
 #include "Functions.h"
+#include "imgui_docking.h"
 
 Console::Console(bool start_enabled) : EditorElement(start_enabled)
 {
@@ -10,6 +11,10 @@ Console::Console(bool start_enabled) : EditorElement(start_enabled)
 }
 
 Console::~Console()
+{
+}
+
+void Console::Start()
 {
 }
 
@@ -31,7 +36,7 @@ void Console::Draw()
 
 	ImGui::SetNextWindowSize(ImVec2(450, 500), 2);
 
-	if (ImGui::Begin("Console", &visible))
+	if (igBeginDock("Console", &visible, 1))
 	{
 		if (ImGui::SmallButton("Clear"))
 			CommandInput(".Clear");
@@ -97,7 +102,7 @@ void Console::Draw()
 			send_text_input = false;
 		}
 	}
-	ImGui::End();
+	igEndDock();
 }
 
 void Console::AddLog(const char * txt, console_text_type type)

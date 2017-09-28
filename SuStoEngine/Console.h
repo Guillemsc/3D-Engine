@@ -32,6 +32,7 @@ public:
 	Console(bool start_enabled = true);
 	virtual ~Console();
 
+	void Start();
 	void Draw();
 
 	void AddLog(const char* txt, console_text_type type = console_text_type_default);

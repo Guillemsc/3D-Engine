@@ -2,9 +2,6 @@
 
 #pragma once
 
-//namespace Lumix { namespace FS { class OsFile; } }
-//struct lua_State;
-
 #ifdef __cplusplus
 extern "C" 
 {
@@ -25,7 +22,7 @@ typedef enum ImGuiDockSlot
 	ImGuiDockSlot_None
 } ImGuiDockSlot;
 
-extern void igBeginWorkspace();
+extern void igBeginWorkspace(ImVec2 pos, ImVec2 size, ImGuiWindowFlags extra_flags);
 extern void igEndWorkspace();
 extern void igShutdownDock();
 extern void igSetNextDock(ImGuiDockSlot slot);

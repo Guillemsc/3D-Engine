@@ -1,6 +1,7 @@
 #include "About.h"
 #include "App.h"
 #include "imgui.h"
+#include "imgui_docking.h"
 #define NUM_LIBRARIES 6
 
 About::About(bool start_enabled) : EditorElement(start_enabled)
@@ -21,7 +22,7 @@ void About::Draw()
 	if (!visible)
 		return;
 
-	if (ImGui::Begin("About SuSto Engine", &visible, ImGuiWindowFlags_AlwaysAutoResize))
+	if (igBeginDock("About SuSto Engine", &visible, ImGuiWindowFlags_AlwaysAutoResize))
 	{
 		ImGui::Text("SuSto Engine %s", App->GetVersion());
 		ImGui::Separator();
@@ -85,5 +86,5 @@ void About::Draw()
 		}
 
 	}
-	ImGui::End();
+	igEndDock();
 }

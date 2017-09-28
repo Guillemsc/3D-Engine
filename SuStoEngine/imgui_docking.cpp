@@ -3,8 +3,6 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "imgui_internal.h"
 #include "imgui_docking.h"
-//#include "engine/fs/os_file.h"
-//#include <lua.hpp>
 
 using namespace ImGui;
 
@@ -269,9 +267,11 @@ struct DockContext
 
 		putInBackground();
 
-		for (int i = 0; i < m_docks.size(); ++i) {
+		for (int i = 0; i < m_docks.size(); ++i) 
+		{
 			Dock& dock = *m_docks[i];
-			if (!dock.parent && (dock.status == Status_Docked)) {
+			if (!dock.parent && (dock.status == Status_Docked)) 
+			{
 				dock.setPosSize(m_workspace_pos, m_workspace_size);
 			}
 		}
@@ -1038,29 +1038,30 @@ struct DockContext
 	}
 
 
-	void debugWindow() {
-		//SetNextWindowSize(ImVec2(300, 300));
-		if (Begin("Dock Debug Info")) {
-			for (int i = 0; i < m_docks.size(); ++i) {
-				if (TreeNode((void*)i, "Dock %d (%p)", i, m_docks[i])) {
-					Dock &dock = *m_docks[i];
-					Text("pos=(%.1f %.1f) size=(%.1f %.1f)",
-						dock.pos.x, dock.pos.y,
-						dock.size.x, dock.size.y);
-					Text("parent = %p\n",
-						dock.parent);
-					Text("isContainer() == %s\n",
-						dock.isContainer() ? "true" : "false");
-					Text("status = %s\n",
-						(dock.status == Status_Docked) ? "Docked" :
-						((dock.status == Status_Dragged) ? "Dragged" :
-						((dock.status == Status_Float) ? "Float" : "?")));
-					TreePop();
-				}
-			}
+	void debugWindow() 
+	{
+		////SetNextWindowSize(ImVec2(300, 300));
+		//if (Begin("Dock Debug Info")) {
+		//	for (int i = 0; i < m_docks.size(); ++i) {
+		//		if (TreeNode((void*)i, "Dock %d (%p)", i, m_docks[i])) {
+		//			Dock &dock = *m_docks[i];
+		//			Text("pos=(%.1f %.1f) size=(%.1f %.1f)",
+		//				dock.pos.x, dock.pos.y,
+		//				dock.size.x, dock.size.y);
+		//			Text("parent = %p\n",
+		//				dock.parent);
+		//			Text("isContainer() == %s\n",
+		//				dock.isContainer() ? "true" : "false");
+		//			Text("status = %s\n",
+		//				(dock.status == Status_Docked) ? "Docked" :
+		//				((dock.status == Status_Dragged) ? "Dragged" :
+		//				((dock.status == Status_Float) ? "Float" : "?")));
+		//			TreePop();
+		//		}
+		//	}
 
-		}
-		End();
+		//}
+		//End();
 	}
 
 	int getDockIndex(Dock* dock)
@@ -1075,133 +1076,6 @@ struct DockContext
 		IM_ASSERT(false);
 		return -1;
 	}
-
-	/*
-	void save(Lumix::FS::OsFile& file)
-	{
-	file << "docks = {\n";
-	for (int i = 0; i < m_docks.size(); ++i)
-	{
-	Dock& dock = *m_docks[i];
-	file << "dock" << (Lumix::uint64)&dock << " = {\n";
-	file << "index = " << i << ",\n";
-	file << "label = \"" << dock.label << "\",\n";
-	file << "x = " << (int)dock.pos.x << ",\n";
-	file << "y = " << (int)dock.pos.y << ",\n";
-	file << "location = \"" << dock.location << "\",\n";
-	file << "size_x = " << (int)dock.size.x << ",\n";
-	file << "size_y = " << (int)dock.size.y << ",\n";
-	file << "status = " << (int)dock.status << ",\n";
-	file << "active = " << (int)dock.active << ",\n";
-	file << "opened = " << (int)dock.opened << ",\n";
-	file << "prev = " << (int)getDockIndex(dock.prev_tab) << ",\n";
-	file << "next = " << (int)getDockIndex(dock.next_tab) << ",\n";
-	file << "child0 = " << (int)getDockIndex(dock.children[0]) << ",\n";
-	file << "child1 = " << (int)getDockIndex(dock.children[1]) << ",\n";
-	file << "parent = " << (int)getDockIndex(dock.parent) << "\n";
-	if (i < m_docks.size() - 1)
-	file << "},\n";
-	else
-	file << "}\n";
-	}
-	file << "}\n";
-	}
-	*/
-
-	/*
-	Dock* getDockByIndex(lua_Integer idx) { return (idx < 0) ? nullptr : m_docks[(int)idx]; }
-
-	void load(lua_State* L)
-	{
-	for (int i = 0; i < m_docks.size(); ++i)
-	{
-	m_docks[i]->~Dock();
-	MemFree(m_docks[i]);
-	}
-	m_docks.clear();
-
-	if (lua_getglobal(L, "docks") == LUA_TTABLE)
-	{
-	lua_pushnil(L);
-	while (lua_next(L, -2) != 0)
-	{
-	Dock* new_dock = (Dock*)MemAlloc(sizeof(Dock));
-	m_docks.push_back(IM_PLACEMENT_NEW(new_dock) Dock());
-	lua_pop(L, 1);
-	}
-	}
-	lua_pop(L, 1);
-
-	if (lua_getglobal(L, "docks") == LUA_TTABLE)
-	{
-	lua_pushnil(L);
-	while (lua_next(L, -2) != 0)
-	{
-	if (lua_istable(L, -1))
-	{
-	int idx = 0;
-	if (lua_getfield(L, -1, "index") == LUA_TNUMBER)
-	idx = (int)lua_tointeger(L, -1);
-	Dock& dock = *m_docks[idx];
-	dock.last_frame = 0;
-	dock.invalid_frames = 0;
-	lua_pop(L, 1);
-
-	if (lua_getfield(L, -1, "label") == LUA_TSTRING)
-	{
-	dock.label = ImStrdup(lua_tostring(L, -1));
-	dock.id = ImHash(dock.label, 0);
-	}
-	lua_pop(L, 1);
-
-	if (lua_getfield(L, -1, "x") == LUA_TNUMBER)
-	dock.pos.x = (float)lua_tonumber(L, -1);
-	if (lua_getfield(L, -2, "y") == LUA_TNUMBER)
-	dock.pos.y = (float)lua_tonumber(L, -1);
-	if (lua_getfield(L, -3, "size_x") == LUA_TNUMBER)
-	dock.size.x = (float)lua_tonumber(L, -1);
-	if (lua_getfield(L, -4, "size_y") == LUA_TNUMBER)
-	dock.size.y = (float)lua_tonumber(L, -1);
-	if (lua_getfield(L, -5, "active") == LUA_TNUMBER)
-	dock.active = lua_tointeger(L, -1) != 0;
-	if (lua_getfield(L, -6, "opened") == LUA_TNUMBER)
-	dock.opened = lua_tointeger(L, -1) != 0;
-	if (lua_getfield(L, -7, "location") == LUA_TSTRING)
-	strcpy(dock.location, lua_tostring(L, -1));
-	if (lua_getfield(L, -8, "status") == LUA_TNUMBER)
-	{
-	dock.status = (Status_)lua_tointeger(L, -1);
-	}
-	lua_pop(L, 8);
-
-	if (lua_getfield(L, -1, "prev") == LUA_TNUMBER)
-	{
-	dock.prev_tab = getDockByIndex(lua_tointeger(L, -1));
-	}
-	if (lua_getfield(L, -2, "next") == LUA_TNUMBER)
-	{
-	dock.next_tab = getDockByIndex(lua_tointeger(L, -1));
-	}
-	if (lua_getfield(L, -3, "child0") == LUA_TNUMBER)
-	{
-	dock.children[0] = getDockByIndex(lua_tointeger(L, -1));
-	}
-	if (lua_getfield(L, -4, "child1") == LUA_TNUMBER)
-	{
-	dock.children[1] = getDockByIndex(lua_tointeger(L, -1));
-	}
-	if (lua_getfield(L, -5, "parent") == LUA_TNUMBER)
-	{
-	dock.parent = getDockByIndex(lua_tointeger(L, -1));
-	}
-	lua_pop(L, 5);
-	}
-	lua_pop(L, 1);
-	}
-	}
-	lua_pop(L, 1);
-	}
-	*/
 };
 
 
@@ -1218,19 +1092,28 @@ void igShutdownDock()
 	g_dock.m_docks.clear();
 }
 
-void igSetNextDock(ImGuiDockSlot slot) {
+void igSetNextDock(ImGuiDockSlot slot) 
+{
 	g_dock.m_next_dock_slot = slot;
 }
 
-void igBeginWorkspace() {
+void igBeginWorkspace(ImVec2 pos, ImVec2 size, ImGuiWindowFlags extra_flags)
+{
+	ImGui::SetNextWindowPos(pos);
+	ImGui::SetNextWindowSize(size);
+	bool t = true;
+	ImGui::Begin("Workspace", &t, extra_flags);
+
 	ImGuiWindowFlags flags = ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar;
 	BeginChild("###workspace", ImVec2(0, 0), false, flags);
 	g_dock.m_workspace_pos = GetWindowPos();
 	g_dock.m_workspace_size = GetWindowSize();
 }
 
-void igEndWorkspace() {
+void igEndWorkspace() 
+{
 	EndChild();
+	ImGui::End();
 }
 
 void igSetDockActive()

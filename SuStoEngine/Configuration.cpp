@@ -5,6 +5,7 @@
 #include "mmgr\mmgr.h"
 #include "SDL/include/SDL.h"
 #include "glut\glut.h"
+#include "imgui_docking.h"
 
 
 Configuration::Configuration(bool start_enabled) : EditorElement(start_enabled)
@@ -41,7 +42,7 @@ void Configuration::Draw()
 	ImGui::SetNextWindowPos(ImVec2(window_width - window_width / 4, 23), 2);
 	ImGui::SetNextWindowSize(ImVec2(window_width / 4, window_height - 23), 2);
 
-	if (ImGui::Begin("Configuration", &visible))
+	if (igBeginDock("Configuration", &visible, 0))
 	{
 		// App
 		if (ImGui::CollapsingHeader("App", ImGuiTreeNodeFlags_DefaultOpen))
@@ -149,7 +150,7 @@ void Configuration::Draw()
 		}
 	}
 
-	ImGui::End();
+	igEndDock();
 }
 
 void Configuration::OpenGLOptions()

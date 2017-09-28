@@ -2,6 +2,7 @@
 #include "imgui.h"
 #include "App.h"
 #include "mmgr\mmgr.h"
+#include "imgui_docking.h"
 
 ProfilerViewer::ProfilerViewer(bool start_enabled)
 {
@@ -28,7 +29,7 @@ void ProfilerViewer::Draw()
 	}
 
 	ImGui::SetNextWindowSize(ImVec2(400, 800), 2);
-	if (ImGui::Begin("Profiler", &visible))
+	if (igBeginDock("Profiler", &visible, 0))
 	{
 		ImGui::Text("Mode:");
 		ImGui::RadioButton("Time", &profiler_mode, 1); ImGui::SameLine();
@@ -131,5 +132,5 @@ void ProfilerViewer::Draw()
 		}
 			
 	}
-	ImGui::End();
+	igEndDock();
 }

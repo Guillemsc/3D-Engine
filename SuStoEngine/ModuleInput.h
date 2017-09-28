@@ -53,7 +53,10 @@ public:
 
 	}
 
-	void SetKeyBinding(const char* key, const char* binding_name);
+	void SetKeyBinding(const char* key, const char* binding_name)
+	{
+
+	}
 
 	KEY_STATE GetMouseButton(int id) const
 	{

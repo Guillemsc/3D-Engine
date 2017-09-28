@@ -5,6 +5,7 @@
 #include "Profiler.h"
 #include "ModuleWindow.h"
 #include "gpudetect\DeviceId.h"
+#include "imgui_docking.h"
 
 Hardware::Hardware(bool start_enabled) : EditorElement(start_enabled)
 {
@@ -58,7 +59,7 @@ void Hardware::Draw()
 	sec_colour.y += +0.2f;
 	sec_colour.z += +0.2f;
 
-	if (ImGui::Begin("Hardware", &visible, ImGuiWindowFlags_AlwaysAutoResize))
+	if (igBeginDock("Hardware", &visible, ImGuiWindowFlags_AlwaysAutoResize))
 	{
 		ImGui::Text("SDL_Version:"); 
 		ImGui::SameLine(); 
@@ -97,5 +98,5 @@ void Hardware::Draw()
 		ImGui::TextColored(ImVec4(sec_colour.x, sec_colour.y, sec_colour.z, sec_colour.w), "%d x %d", window_w, window_h);
 	}
 
-	ImGui::End();
+	igEndDock();
 }

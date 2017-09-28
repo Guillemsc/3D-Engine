@@ -16,21 +16,9 @@ void DockingTest::Start()
 
 void DockingTest::Draw()
 {
-	igBeginWorkspace();
-
 	bool a = true;
-	igBeginDock("Dock1", &a, 0);
+	//igSetNextDock(ImGuiDockSlot::ImGuiDockSlot_Bottom);
+	//igBeginDock("test", &a, 0);
 
-	ImGui::Text("fuck the police");
-
-	igEndDock();
-
-	bool b = true;
-	igBeginDock("Dock2", &b, 0);
-
-	ImGui::Text("is dis the rial doking?");
-
-	igEndDock();
-
-	igEndWorkspace();
+	//igEndDock();
 }
