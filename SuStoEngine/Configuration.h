@@ -50,10 +50,14 @@ private:
 	bool fill_mode = true;
 	bool wireframe_mode = false;
 	bool point_mode = false;
-
 	polygon_mode poly_mode = polygon_mode::gl_fill;
-
 	float point_size_slider = 1;
+
+	int lighting_type = 0;
+	float ambient[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	float diffuse[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	float specular[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	float* light_type_ptr = ambient;
 
 };
 

@@ -159,6 +159,38 @@ void Configuration::OpenGLOptions()
 	
 	ImGui::Checkbox("GL_LIGHTING", &gl_lighting);				ImGui::SameLine();
 	ImGui::Checkbox("GL_COLOR_MATERIAL", &gl_color_material);
+		// Lighting Functionalities
+		if (gl_lighting)
+		{
+			GLenum light_type = GL_AMBIENT;
+			GLenum light_num = GL_LIGHT0;
+			ImGui::Combo("Lighting types", &lighting_type, "Ambient\0Diffuse\0Specular\0", 3);
+			switch (lighting_type)
+			{
+			case 0:
+				light_type_ptr = ambient;
+				light_num = GL_LIGHT0;
+				break;
+			case 1:
+				light_type_ptr = diffuse;
+				light_num = GL_LIGHT1;
+				break;
+			case 2:
+				light_type_ptr = specular;
+				light_num = GL_LIGHT2;
+				break;
+			}
+			
+			ImGui::ColorPicker4("Ambient color##4", light_type_ptr, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview, NULL);
+			GLfloat	light_properties[] = { light_type_ptr[0], light_type_ptr[1], light_type_ptr[2], light_type_ptr[3] };
+
+			if (ImGui::Button("Submit"))
+			{
+				glLightfv(light_num, light_type, light_properties);
+				glEnable(light_num);
+			}
+			
+		}
 	
 	ImGui::Checkbox("GL_CULL_FACE", &gl_cull_face);				ImGui::SameLine();
 	ImGui::Checkbox("GL_TEXTURE_2D", &gl_texture_2d);
@@ -167,17 +199,6 @@ void Configuration::OpenGLOptions()
 	ImGui::Checkbox("WIREFRAME RENDER", &wireframe_mode);		ImGui::SameLine();
 	ImGui::Checkbox("POINT RENDER", &point_mode);				
 	//---------------------------------
-	// Functionalities
-	if (gl_lighting)
-	{
-		GLfloat	ambientProperties[] = { 1.f, 0.f, 0.f, 1.0f };
-		
-		if (ImGui::Button("Submit"))
-		{
-			glLightfv(GL_LIGHT0, GL_AMBIENT, ambientProperties);
-			glEnable(GL_LIGHT0);
-		}
-	}
 
 	//---------------------------------
 	// Slider
