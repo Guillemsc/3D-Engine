@@ -96,6 +96,7 @@
     <ClInclude Include="Configuration.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="DebugScene.h" />
+    <ClInclude Include="DockingTest.h" />
     <ClInclude Include="EditorUI.h" />
     <ClInclude Include="EngineTest.h" />
     <ClInclude Include="Functions.h" />
@@ -106,6 +107,7 @@
     <ClInclude Include="Hardware.h" />
     <ClInclude Include="imconfig.h" />
     <ClInclude Include="imgui.h" />
+    <ClInclude Include="imgui_docking.h" />
     <ClInclude Include="imgui_impl_sdl.h" />
     <ClInclude Include="imgui_internal.h" />
     <ClInclude Include="JSONLoader.h" />
@@ -198,6 +200,7 @@
     <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="DebugScene.cpp" />
+    <ClCompile Include="DockingTest.cpp" />
     <ClCompile Include="EditorUI.cpp" />
     <ClCompile Include="EngineTest.cpp" />
     <ClCompile Include="Functions.cpp" />
@@ -206,6 +209,7 @@
     <ClCompile Include="Hardware.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="imgui_demo.cpp" />
+    <ClCompile Include="imgui_docking.cpp" />
     <ClCompile Include="imgui_draw.cpp" />
     <ClCompile Include="imgui_impl_sdl.cpp" />
     <ClCompile Include="JSONLoader.cpp" />

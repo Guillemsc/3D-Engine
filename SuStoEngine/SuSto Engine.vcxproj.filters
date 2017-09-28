@@ -349,6 +349,12 @@
     <ClInclude Include="Hardware.h">
       <Filter>Sources\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="imgui_docking.h">
+      <Filter>Sources\Components\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="DockingTest.h">
+      <Filter>Sources\Editor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -541,6 +547,12 @@
       <Filter>Sources\Components\gpudetect</Filter>
     </ClCompile>
     <ClCompile Include="Hardware.cpp">
+      <Filter>Sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_docking.cpp">
+      <Filter>Sources\Components\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="DockingTest.cpp">
       <Filter>Sources\Editor</Filter>
     </ClCompile>
   </ItemGroup>
