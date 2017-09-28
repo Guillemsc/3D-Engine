@@ -143,19 +143,34 @@ void JSON_Doc::SetNumber(const char * set, double nu)
 	json_object_dotset_number(object, set, nu);
 }
 
-const char * JSON_Doc::GetString(const char * str)
+const char * JSON_Doc::GetString(const char * str, const char* defaul)
 {
-	return json_object_dotget_string(object, str);
+	const char* ret = defaul;
+
+	if(FindValue(str, json_value_type::JSONString))
+		ret = json_object_dotget_string(object, str);
+
+	return ret;
 }
 
-bool JSON_Doc::GetBool(const char * bo)
+bool JSON_Doc::GetBool(const char * str, bool defaul)
 {
-	return json_object_dotget_boolean(object, bo);
+	bool ret = defaul;
+
+	if (FindValue(str, json_value_type::JSONBoolean))
+		ret = json_object_dotget_boolean(object, str);
+
+	return ret;
 }
 
-double JSON_Doc::GetNumber(const char * nu)
+double JSON_Doc::GetNumber(const char * str, double defaul)
 {
-	return json_object_dotget_number(object, nu);
+	double ret = defaul;
+
+	if (FindValue(str, json_value_type::JSONNumber))
+		ret = json_object_dotget_number(object, str);
+
+	return ret;
 }
 
 const char * JSON_Doc::GetPath()
@@ -171,4 +186,16 @@ void JSON_Doc::Save()
 void JSON_Doc::CleanUp()
 {
 	json_value_free(value);
+}
+
+bool JSON_Doc::FindValue(const char * str, json_value_type type)
+{
+	bool ret = false;
+
+	JSON_Value* val = json_object_dotget_value(object, str);
+
+	if (val != nullptr && json_value_get_type(val) == type)
+		ret = true;
+
+	return ret;
 }
