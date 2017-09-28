@@ -120,7 +120,7 @@ bool ModuleRenderer3D::Awake()
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, MaterialDiffuse);
 		glEnable(GL_DEPTH_TEST);
 		lights[0].Active(true);
-		glEnable(GL_LIGHTING);
+		glDisable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}

@@ -5,6 +5,12 @@
 #include "Module.h"
 
 struct ImGuiTextEditCallbackData;
+enum polygon_mode
+{
+	gl_fill,
+	gl_line,
+	gl_point
+};
 
 class Configuration : public EditorElement
 {
@@ -14,6 +20,8 @@ public:
 
 	void Start();
 	void Draw();
+
+	void OpenGLOptions();
 
 public:
 
@@ -32,6 +40,21 @@ private:
 	bool  maximized = false;
 	int   display_size_width = 0;
 	int   display_size_height = 0;
+
+	// OpenGL Options
+	bool gl_depth = true;
+	bool gl_cull_face = false;
+	bool gl_lighting = false;
+	bool gl_color_material = true;
+	bool gl_texture_2d = false;
+	bool fill_mode = true;
+	bool wireframe_mode = false;
+	bool point_mode = false;
+
+	polygon_mode poly_mode = polygon_mode::gl_fill;
+
+	float point_size_slider = 1;
+
 };
 
 #endif

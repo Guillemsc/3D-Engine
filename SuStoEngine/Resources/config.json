@@ -9,7 +9,7 @@
         "width": 1680,
         "height": 987,
         "fullscreen": false,
-        "resizable": true,
+        "resizable": false,
         "borderless": false,
         "fulldekstop": false,
         "maximized": true,
