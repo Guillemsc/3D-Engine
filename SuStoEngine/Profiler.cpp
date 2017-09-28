@@ -324,6 +324,15 @@ bool Profiler::HasSSE42()
 
 GraphicsDeviceInfo Profiler::GetInfo()
 {
+	Uint64 vram_b, vram_u, vram_a, vram_r;
+	if (getGraphicsDeviceInfo(nullptr, nullptr, nullptr, &vram_b, &vram_u, &vram_a, &vram_r)) 
+	{
+		graphics_info.vram_budget_mb = float(vram_b) / (1024.f * 1024.f);
+		graphics_info.vram_usage_mb = float(vram_u) / (1024.f * 1024.f);
+		graphics_info.vram_avaliable_mb = float(vram_a) / (1024.f * 1024.f);
+		graphics_info.vram_reserved_mb = float(vram_r) / (1024.f * 1024.f);
+	}
+
 	return graphics_info;
 }
 

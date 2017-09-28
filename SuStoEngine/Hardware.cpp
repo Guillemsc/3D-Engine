@@ -90,24 +90,21 @@ void Hardware::Draw()
 		ImGui::SameLine(); 
 		ImGui::TextColored(ImVec4(sec_colour.x, sec_colour.y, sec_colour.z, sec_colour.w), info.brand);
 
-		Uint64 vram_b, vram_u, vram_a, vram_r;
-		getGraphicsDeviceInfo(nullptr, nullptr, nullptr, &vram_b, &vram_u, &vram_a, &vram_r);
-
 		ImGui::Text("Video Memory: ");				
 		ImGui::SameLine();		
-		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", vram_b);
+		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_budget_mb);
 		
 		ImGui::Text("Video Memory On Use: ");		
 		ImGui::SameLine();		
-		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", vram_u);
+		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_usage_mb);
 		
 		ImGui::Text("Video Memory Available: ");	
 		ImGui::SameLine();		
-		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", vram_a);
+		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_avaliable_mb);
 		
 		ImGui::Text("Video Memory Reserved: ");		
 		ImGui::SameLine();		
-		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", vram_r);
+		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_reserved_mb);
 
 		ImGui::Separator();
 
