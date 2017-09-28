@@ -20,6 +20,12 @@ enum EventWindow
 	WE_COUNT
 };
 
+struct KeyBinding
+{
+	char* binding_name;
+	char* key;
+};
+
 class ModuleInput : public Module
 {
 public:
@@ -34,6 +40,20 @@ public:
 	{
 		return keyboard[id];
 	}
+
+	KEY_STATE GetKey(const char* key)
+	{
+		int id = CharToKey(key);
+		
+		return GetKey(id);
+	}
+
+	KEY_STATE GetKeyBinding(const char* binding)
+	{
+
+	}
+
+	void SetKeyBinding(const char* key, const char* binding_name);
 
 	KEY_STATE GetMouseButton(int id) const
 	{
@@ -68,13 +88,17 @@ public:
 	}
 
 private:
-	bool	   windowEvents[WE_COUNT];
-	KEY_STATE* keyboard;
-	KEY_STATE  mouse_buttons[MAX_MOUSE_BUTTONS];
-	int	       mouse_x = 0;
-	int	       mouse_y = 0;
-	int	       mouse_z = 0;
-	int	       mouse_x_motion = 0;
-	int	       mouse_y_motion = 0;
+	int CharToKey(const char* key);
+
+private:
+	vector<KeyBinding> key_bindings;
+	bool			   windowEvents[WE_COUNT];
+	KEY_STATE*		   keyboard;
+	KEY_STATE		   mouse_buttons[MAX_MOUSE_BUTTONS];
+	int				   mouse_x = 0;
+	int				   mouse_y = 0;
+	int				   mouse_z = 0;
+	int				   mouse_x_motion = 0;
+	int				   mouse_y_motion = 0;
 	//int mouse_z_motion;
 };

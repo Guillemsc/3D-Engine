@@ -19,7 +19,8 @@ void Console::Draw()
 
 	AddLogs();
 
-	if (App->input->GetKey(SDL_SCANCODE_GRAVE) == KEY_DOWN)
+
+	if (App->input->GetKey("º") == KEY_DOWN)
 	{
 		visible = !visible;
 		return;
