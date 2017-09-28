@@ -64,7 +64,6 @@ bool getGraphicsDeviceInfo( unsigned int* VendorId,
 			return false;
 		}
 	}
-
 	typedef HRESULT(WINAPI*LPCREATEDXGIFACTORY)(REFIID riid, void** ppFactory);
 
 	LPCREATEDXGIFACTORY pCreateDXGIFactory = (LPCREATEDXGIFACTORY)GetProcAddress(hDXGI, "CreateDXGIFactory1");
@@ -139,7 +138,7 @@ bool getGraphicsDeviceInfo( unsigned int* VendorId,
 		*GFXBrand = AdapterDesc.Description;
 
 	pAdapter->Release();
-	FreeLibrary(hDXGI);
+	//FreeLibrary(hDXGI);
 	return true;
 }
 
