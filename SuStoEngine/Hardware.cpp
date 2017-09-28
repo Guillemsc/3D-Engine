@@ -41,7 +41,7 @@ void Hardware::Start()
 	if (App->profiler->HasSSE41())
 		caps += "SSE41, ";
 	if (App->profiler->HasSSE42())
-		caps += "SSE42, ";
+		caps += "SSE42";
 
 	App->window->GetDisplaySize(window_w, window_h);
 }
@@ -65,7 +65,7 @@ void Hardware::Draw()
 
 		ImGui::Separator();
 
-		ImGui::Text("CPUs:"); 
+		ImGui::Text("CPUs: "); 
 		ImGui::SameLine(); 
 		ImGui::TextColored(ImVec4(sec_colour.x, sec_colour.y, sec_colour.z, sec_colour.w), cpus.c_str());
 
@@ -83,11 +83,27 @@ void Hardware::Draw()
 
 		ImGui::Text("GPU:");  
 		ImGui::SameLine(); 
-		ImGui::TextColored(ImVec4(sec_colour.x, sec_colour.y, sec_colour.z, sec_colour.w), "%d", info.device_id);
+		ImGui::TextColored(ImVec4(sec_colour.x, sec_colour.y, sec_colour.z, sec_colour.w), "Vendor %d Device %d", info.vendor_id, info.device_id);
 
 		ImGui::Text("Brand:"); 
 		ImGui::SameLine(); 
-		ImGui::TextColored(ImVec4(sec_colour.x, sec_colour.y, sec_colour.z, sec_colour.w), "%s", info.brand.c_str());
+		ImGui::TextColored(ImVec4(sec_colour.x, sec_colour.y, sec_colour.z, sec_colour.w), info.brand);
+
+		ImGui::Text("Video Memory: ");				
+		ImGui::SameLine();		
+		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_budget_mb);
+		
+		ImGui::Text("Video Memory On Use: ");		
+		ImGui::SameLine();		
+		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_usage_mb);
+		
+		ImGui::Text("Video Memory Available: ");	
+		ImGui::SameLine();		
+		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_avaliable_mb);
+		
+		ImGui::Text("Video Memory Reserved: ");		
+		ImGui::SameLine();		
+		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info.vram_reserved_mb);
 
 		ImGui::Separator();
 

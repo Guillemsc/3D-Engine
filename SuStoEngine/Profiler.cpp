@@ -2,9 +2,8 @@
 #include "Globals.h"
 #include "Functions.h"
 #include "SDL/include/SDL.h"
-#include "mmgr\nommgr.h"
-#include "mmgr\mmgr.h"
 #include "gpudetect\DeviceId.h"
+#include "mmgr\mmgr.h"
 
 #define MAX_FRAMES_LOGGED 50
 #define MAX_MEMORY_LOGGED 50
@@ -15,6 +14,18 @@ Profiler::Profiler()
 	enabled = true;
 	to_enable = true;
 	time_since_startup.Start();
+
+	std::wstring brand_ws;
+	Uint64 vram_b, vram_u, vram_a, vram_r;
+
+	if (getGraphicsDeviceInfo(&graphics_info.vendor_id, &graphics_info.device_id, &brand_ws, &vram_b, &vram_u, &vram_a, &vram_r))
+	{
+		sprintf_s(graphics_info.brand, 250, "%S", brand_ws.c_str());
+		graphics_info.vram_budget_mb = float(vram_b) / (1024.f * 1024.f);
+		graphics_info.vram_usage_mb = float(vram_u) / (1024.f * 1024.f);
+		graphics_info.vram_avaliable_mb = float(vram_a) / (1024.f * 1024.f);
+		graphics_info.vram_reserved_mb = float(vram_r) / (1024.f * 1024.f);
+	}
 }
 
 Profiler::~Profiler()
@@ -313,17 +324,14 @@ bool Profiler::HasSSE42()
 
 GraphicsDeviceInfo Profiler::GetGraphicsDeviceInfo()
 {
-	GraphicsDeviceInfo graphics_info;
+	Uint64 vram_b, vram_u, vram_a, vram_r;
 
-	std::wstring brand_ws;
-	if (getGraphicsDeviceInfo(&graphics_info.vendor_id, &graphics_info.device_id, &brand_ws, &graphics_info.vram_budget_mb,
-		&graphics_info.vram_usage_mb, &graphics_info.vram_avaliable_mb, &graphics_info.vram_reserved_mb))
+	if (getGraphicsDeviceInfo(nullptr, nullptr, nullptr, &vram_b, &vram_u, &vram_a, &vram_r))
 	{
-		graphics_info.brand.assign(brand_ws.begin(), brand_ws.end());
-		graphics_info.vram_budget_mb /= (1024.f * 1024.f);
-		graphics_info.vram_usage_mb /= (1024.f * 1024.f);
-		graphics_info.vram_avaliable_mb /= (1024.f * 1024.f);
-		graphics_info.vram_reserved_mb /= (1024.f * 1024.f);
+		graphics_info.vram_budget_mb = float(vram_b) / (1024.f * 1024.f * 1024);
+		graphics_info.vram_usage_mb = float(vram_u) / (1024.f * 1024.f);
+		graphics_info.vram_avaliable_mb = float(vram_a) / (1024.f * 1024.f);
+		graphics_info.vram_reserved_mb = float(vram_r) / (1024.f * 1024.f);
 	}
 
 	return graphics_info;

@@ -34,13 +34,13 @@ private:
 
 struct GraphicsDeviceInfo
 {
-	unsigned int	   vendor_id = 0;
-	unsigned int	   device_id = 0;
-	std::string		   brand;
-	unsigned int	   vram_budget_mb = 0;
-	unsigned int       vram_usage_mb = 0;
-	unsigned int       vram_avaliable_mb = 0;
-	unsigned int       vram_reserved_mb = 0;
+	unsigned int	vendor_id = 0;
+	unsigned int	device_id = 0;
+	char			brand[250] = "";
+	float			vram_budget_mb = 0.f;
+	float			vram_usage_mb = 0.f;
+	float			vram_avaliable_mb = 0.f;
+	float			vram_reserved_mb = 0.f;
 };
 
 class Profiler
@@ -116,6 +116,7 @@ private:
 	// Items -----
 	std::vector<Profile*> profiles;
 	// -----------
+	GraphicsDeviceInfo graphics_info;
 };
 
 #endif //__PROFILER_H__
