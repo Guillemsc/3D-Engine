@@ -39,6 +39,9 @@
  *
  *****************************************************************************************/
 
+static bool first_time = true;
+static HMODULE hDXGI = NULL;
+
 bool getGraphicsDeviceInfo( unsigned int* VendorId,
 							unsigned int* DeviceId,
 							std::wstring* GFXBrand,
@@ -52,9 +55,14 @@ bool getGraphicsDeviceInfo( unsigned int* VendorId,
 	// CreateDXGIFactory function. DXGIFactory1 is supported by Windows Store Apps so
 	// try that first.
 	//
-	HMODULE hDXGI = LoadLibrary("dxgi.dll");
-	if (hDXGI == NULL) {
-		return false;
+	if (first_time)
+	{
+		first_time = false;
+
+		hDXGI = LoadLibrary("dxgi.dll");
+		if (hDXGI == NULL) {
+			return false;
+		}
 	}
 
 	typedef HRESULT(WINAPI*LPCREATEDXGIFACTORY)(REFIID riid, void** ppFactory);
@@ -68,7 +76,7 @@ bool getGraphicsDeviceInfo( unsigned int* VendorId,
 			return false;
 		}
 	}
-
+	
 	//
 	// We have the CreateDXGIFactory function so use it to actually create the factory and enumerate
 	// through the adapters. Here, we are specifically looking for the Intel gfx adapter. 
