@@ -18,176 +18,210 @@ struct DockContext
 		EndAction_EndChild
 	};
 
-
 	enum Status_
 	{
 		Status_Docked,
 		Status_Float,
 		Status_Dragged
 	};
-
-
+	
+	// Dockable window base struct
 	struct Dock
 	{
-		Dock()
-			: id(0)
-			, next_tab(nullptr)
-			, prev_tab(nullptr)
-			, parent(nullptr)
-			, pos(0, 0)
-			, size(-1, -1)
-			, active(true)
-			, status(Status_Float)
-			, label(nullptr)
-			, opened(false)
-
+		// Base constructor
+		Dock(): id(0), next_tab(nullptr) , prev_tab(nullptr), parent(nullptr), 
+			pos(0, 0), size(-1, -1), active(true), status(Status_Float), 
+			label(nullptr), opened(false)
 		{
 			location[0] = 0;
 			children[0] = children[1] = nullptr;
 		}
 
 
-		~Dock() { MemFree(label); }
-
+		~Dock() 
+		{ 
+			MemFree(label); 
+		}
 
 		ImVec2 getMinSize() const
 		{
-			if (!children[0]) return ImVec2(16, 16 + GetTextLineHeightWithSpacing());
+			if (!children[0]) 
+				return ImVec2(16, 16 + GetTextLineHeightWithSpacing());
 
 			ImVec2 s0 = children[0]->getMinSize();
 			ImVec2 s1 = children[1]->getMinSize();
+
 			return isHorizontal() ? ImVec2(s0.x + s1.x, ImMax(s0.y, s1.y))
 				: ImVec2(ImMax(s0.x, s1.x), s0.y + s1.y);
 		}
 
+		// Detects if the window horientation it's vertical or horizontal
+		bool isHorizontal() const 
+		{ 
+			if (children[0] != nullptr && children[1] != nullptr)
+				return children[0]->pos.x < children[1]->pos.x;
+			else
+				return false;
+		}
 
-		bool isHorizontal() const { return children[0]->pos.x < children[1]->pos.x; }
-
-
+		// Sets a parent
 		void setParent(Dock* dock)
 		{
 			parent = dock;
-			for (Dock* tmp = prev_tab; tmp; tmp = tmp->prev_tab) tmp->parent = dock;
-			for (Dock* tmp = next_tab; tmp; tmp = tmp->next_tab) tmp->parent = dock;
+
+			for (Dock* tmp = prev_tab; tmp != nullptr; tmp = tmp->prev_tab) 
+				tmp->parent = dock;
+
+			for (Dock* tmp = next_tab; tmp != nullptr; tmp = tmp->next_tab) 
+				tmp->parent = dock;
 		}
 
+		// Gets base dock widnow (root)
 		Dock& getRoot()
 		{
 			Dock *dock = this;
+
 			while (dock->parent)
 				dock = dock->parent;
+
 			return *dock;
 		}
 
-
-		Dock& getSibling()
-		{
-			IM_ASSERT(parent);
-			if (parent->children[0] == &getFirstTab()) return *parent->children[1];
-			return *parent->children[0];
-		}
-
-
+		// Gets the first tab
 		Dock& getFirstTab()
 		{
 			Dock* tmp = this;
-			while (tmp->prev_tab) tmp = tmp->prev_tab;
+
+			while (tmp->prev_tab) 
+				tmp = tmp->prev_tab;
+
 			return *tmp;
 		}
 
+		// Get child tab, that's not first tab
+		Dock& getSibling()
+		{
+			IM_ASSERT(parent);
 
+			if (parent->children[0] == &getFirstTab()) 
+				return *parent->children[1];
+
+			return *parent->children[0];
+		}
+		
+		// Sets active and deactives previous and nexts
 		void setActive()
 		{
 			active = true;
-			for (Dock* tmp = prev_tab; tmp; tmp = tmp->prev_tab) tmp->active = false;
-			for (Dock* tmp = next_tab; tmp; tmp = tmp->next_tab) tmp->active = false;
+
+			for (Dock* tmp = prev_tab; tmp != nullptr; tmp = tmp->prev_tab) 
+				tmp->active = false;
+
+			for (Dock* tmp = next_tab; tmp != nullptr; tmp = tmp->next_tab) 
+				tmp->active = false;
 		}
 
-
-		bool isContainer() const { return children[0] != nullptr; }
-
+		// Returns true if has a child (isParent)
+		bool isContainer() const 
+		{ 
+			return children[0] != nullptr; 
+		}
 
 		void setChildrenPosSize(const ImVec2& _pos, const ImVec2& _size)
 		{
-			ImVec2 s = children[0]->size;
+			if(children[0] == nullptr)
+				return;
+
+			ImVec2 child_size = children[0]->size;
+
+			// If the window is horizontal
+			// If the window is vertical
 			if (isHorizontal())
 			{
-				s.y = _size.y;
-				s.x = (float)int(
-					_size.x * children[0]->size.x / (children[0]->size.x + children[1]->size.x));
-				if (s.x < children[0]->getMinSize().x)
-				{
-					s.x = children[0]->getMinSize().x;
-				}
-				else if (_size.x - s.x < children[1]->getMinSize().x)
-				{
-					s.x = _size.x - children[1]->getMinSize().x;
-				}
-				children[0]->setPosSize(_pos, s);
+				child_size.y = _size.y;
 
-				s.x = _size.x - children[0]->size.x;
-				ImVec2 p = _pos;
-				p.x += children[0]->size.x;
-				children[1]->setPosSize(p, s);
+				child_size.x = (float)int(_size.x * children[0]->size.x / (children[0]->size.x + children[1]->size.x));
+
+				if (child_size.x < children[0]->getMinSize().x)
+				{
+					child_size.x = children[0]->getMinSize().x;
+				}
+				else if (_size.x - child_size.x < children[1]->getMinSize().x)
+				{
+					child_size.x = _size.x - children[1]->getMinSize().x;
+				}
+
+				children[0]->setPosSize(_pos, child_size);
+
+				child_size.x = _size.x - children[0]->size.x;
+
+				ImVec2 pos = _pos;
+				pos.x += children[0]->size.x;
+				children[1]->setPosSize(pos, child_size);
 			}
 			else
 			{
-				s.x = _size.x;
-				s.y = (float)int(
-					_size.y * children[0]->size.y / (children[0]->size.y + children[1]->size.y));
-				if (s.y < children[0]->getMinSize().y)
-				{
-					s.y = children[0]->getMinSize().y;
-				}
-				else if (_size.y - s.y < children[1]->getMinSize().y)
-				{
-					s.y = _size.y - children[1]->getMinSize().y;
-				}
-				children[0]->setPosSize(_pos, s);
+				child_size.x = _size.x;
 
-				s.y = _size.y - children[0]->size.y;
-				ImVec2 p = _pos;
-				p.y += children[0]->size.y;
-				children[1]->setPosSize(p, s);
+				child_size.y = (float)int(_size.y * children[0]->size.y / (children[0]->size.y + children[1]->size.y));
+
+				if (child_size.y < children[0]->getMinSize().y)
+				{
+					child_size.y = children[0]->getMinSize().y;
+				}
+				else if (_size.y - child_size.y < children[1]->getMinSize().y)
+				{
+					child_size.y = _size.y - children[1]->getMinSize().y;
+				}
+
+				children[0]->setPosSize(_pos, child_size);
+
+				child_size.y = _size.y - children[0]->size.y;
+
+				ImVec2 pos = _pos;
+				pos.y += children[0]->size.y;
+				children[1]->setPosSize(pos, child_size);
 			}
 		}
-
 
 		void setPosSize(const ImVec2& _pos, const ImVec2& _size)
 		{
 			size = _size;
 			pos = _pos;
-			for (Dock* tmp = prev_tab; tmp; tmp = tmp->prev_tab)
+
+			for (Dock* tmp = prev_tab; tmp != nullptr; tmp = tmp->prev_tab)
 			{
 				tmp->size = _size;
 				tmp->pos = _pos;
 			}
-			for (Dock* tmp = next_tab; tmp; tmp = tmp->next_tab)
+			for (Dock* tmp = next_tab; tmp != nullptr; tmp = tmp->next_tab)
 			{
 				tmp->size = _size;
 				tmp->pos = _pos;
 			}
 
-			if (!isContainer()) return;
+			if (!isContainer()) 
+				return;
+
 			setChildrenPosSize(_pos, _size);
 		}
 
-
-		char* label;
-		ImU32 id;
-		Dock* next_tab;
-		Dock* prev_tab;
-		Dock* children[2];
-		Dock* parent;
-		bool active;
-		ImVec2 pos;
-		ImVec2 size;
+		// Variables
+		char*   label;
+		ImU32   id;
+		Dock*   next_tab;
+		Dock*   prev_tab;
+		Dock*   children[2];
+		Dock*   parent;
+		bool    active;
+		ImVec2  pos;
+		ImVec2  size;
 		Status_ status;
-		int last_frame;
-		int invalid_frames;
-		char location[16];
-		bool opened;
-		bool first;
+		int     last_frame;
+		int		invalid_frames;
+		char    location[16];
+		bool	opened;
+		bool	first;
 	};
 
 
@@ -1037,33 +1071,6 @@ struct DockContext
 		}
 	}
 
-
-	void debugWindow() 
-	{
-		////SetNextWindowSize(ImVec2(300, 300));
-		//if (Begin("Dock Debug Info")) {
-		//	for (int i = 0; i < m_docks.size(); ++i) {
-		//		if (TreeNode((void*)i, "Dock %d (%p)", i, m_docks[i])) {
-		//			Dock &dock = *m_docks[i];
-		//			Text("pos=(%.1f %.1f) size=(%.1f %.1f)",
-		//				dock.pos.x, dock.pos.y,
-		//				dock.size.x, dock.size.y);
-		//			Text("parent = %p\n",
-		//				dock.parent);
-		//			Text("isContainer() == %s\n",
-		//				dock.isContainer() ? "true" : "false");
-		//			Text("status = %s\n",
-		//				(dock.status == Status_Docked) ? "Docked" :
-		//				((dock.status == Status_Dragged) ? "Dragged" :
-		//				((dock.status == Status_Float) ? "Float" : "?")));
-		//			TreePop();
-		//		}
-		//	}
-
-		//}
-		//End();
-	}
-
 	int getDockIndex(Dock* dock)
 	{
 		if (!dock) return -1;
@@ -1099,6 +1106,8 @@ void igSetNextDock(ImGuiDockSlot slot)
 
 void igBeginWorkspace(ImVec2 pos, ImVec2 size, ImGuiWindowFlags extra_flags)
 {
+	// We start creating the base workspace
+	// Define pos, size and flags
 	ImGui::SetNextWindowPos(pos);
 	ImGui::SetNextWindowSize(size);
 	bool t = true;
@@ -1133,10 +1142,6 @@ void igEndDock()
 	g_dock.end();
 }
 
-void igDockDebugWindow()
-{
-	g_dock.debugWindow();
-}
 
 /*
 void igSaveDock(Lumix::FS::OsFile& file)
