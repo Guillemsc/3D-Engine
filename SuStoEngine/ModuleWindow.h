@@ -43,8 +43,8 @@ public:
 	float GetBrightness();
 	bool GetVsync();
 
-private:
-	bool GenerateWindow(bool fullscreen, bool resizable, bool borderless, bool full_dekstop, bool maximized, float brightness);
+//private:
+	SDL_Window* GenerateWindow(SDL_Window* window, SDL_Surface* surface, const char* name, Uint32 flags, vec2 pos = { SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED }, vec2 size = { 500, 500 }, float brightness = 1.0f);
 
 public:
 	//The window we'll be rendering to
@@ -60,7 +60,7 @@ private:
 	bool  resizable = false;
 	bool  borderless = false;
 	bool  full_dekstop = false;
-	bool  maximized = false;
+	bool  maximized = true;
 	float brightness = 0.0f;
 	bool  vsync = false;
 };

@@ -71,7 +71,17 @@ bool ModuleWindow::Awake()
 	}
 	else
 	{
-		ret = GenerateWindow(fullscreen, resizable, borderless, full_dekstop, maximized, brightness);
+		Uint32				flags =	 0;
+		if (fullscreen)		flags += SDL_WINDOW_FULLSCREEN;
+		if (resizable)		flags += SDL_WINDOW_RESIZABLE;
+		if (borderless)		flags += SDL_WINDOW_BORDERLESS;
+		if (full_dekstop)	flags += SDL_WINDOW_FULLSCREEN_DESKTOP;
+		if (maximized)		flags += SDL_WINDOW_MAXIMIZED;
+
+		window = GenerateWindow(window, screen_surface, App->GetAppName(), flags, vec2(SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED), vec2( 0, 0), brightness);
+
+		if (window == nullptr)
+			ret = false;
 	}
 
 	return ret;
@@ -93,47 +103,20 @@ bool ModuleWindow::CleanUp()
 	return true;
 }
 
-bool ModuleWindow::GenerateWindow(bool fullscreen, bool resizable, bool borderless, bool full_dekstop, bool maximized, float brightness)
+SDL_Window* ModuleWindow::GenerateWindow(SDL_Window* window, SDL_Surface* surface, const char* name, Uint32 flags, vec2 pos, vec2 size, float brightness)
 {
-	bool ret = true;
+	flags += SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
-	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
-
-	if (fullscreen == true)
-	{
-		flags |= SDL_WINDOW_FULLSCREEN;
-	}
-
-	if (resizable == true)
-	{
-		flags |= SDL_WINDOW_RESIZABLE;
-	}
-
-	if (borderless == true)
-	{
-		flags |= SDL_WINDOW_BORDERLESS;
-	}
-
-	if (full_dekstop == true)
-	{
-		flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
-	}
-
-	if (maximized == true)
-	{
-		flags |= SDL_WINDOW_MAXIMIZED;
-	}
-
-	window = SDL_CreateWindow(App->GetAppName(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+	window = SDL_CreateWindow(App->GetAppName(), pos.x, pos.y, size.x, size.y, flags);
 
 	if (window == NULL)
 	{
 		LOG_OUTPUT("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-		ret = false;
+		return nullptr;
 	}
 	else
 	{
-		screen_surface = SDL_GetWindowSurface(window);
+		surface = SDL_GetWindowSurface(window);
 
 		if (brightness > 1) brightness = 1;
 		else if (brightness < 0) brightness = 0;
@@ -141,7 +124,7 @@ bool ModuleWindow::GenerateWindow(bool fullscreen, bool resizable, bool borderle
 		SDL_SetWindowBrightness(window, brightness);
 	}
 
-	return ret;
+	return window;
 }
 
 void ModuleWindow::SetTitle(const char* title)
