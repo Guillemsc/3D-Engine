@@ -24,6 +24,8 @@ typedef enum ImGuiDockSlot
 	ImGuiDockSlot_None
 } ImGuiDockSlot;
 
+struct DockContext;
+
 extern void igBeginWorkspace();
 extern void igEndWorkspace();
 extern void igShutdownDock();
@@ -32,6 +34,7 @@ extern bool igBeginDock(const char* label, bool* opened, ImGuiWindowFlags extra_
 extern void igEndDock();
 extern void igSetDockActive();
 extern void igDockDebugWindow();
+extern DockContext* getDockContext();
 
 #ifdef __cplusplus
 }
@@ -141,6 +144,8 @@ struct DockContext
 	void end();
 	void debugWindow();
 	int getDockIndex(Dock* dock);
+
+
 };
 
 #endif

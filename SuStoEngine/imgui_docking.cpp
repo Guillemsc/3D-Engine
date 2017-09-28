@@ -1026,7 +1026,7 @@ using namespace ImGui;
 	}
 
 
-static DockContext g_dock;
+DockContext g_dock;
 
 void igShutdownDock()
 {
@@ -1073,6 +1073,11 @@ void igEndDock()
 void igDockDebugWindow()
 {
 	g_dock.debugWindow();
+}
+
+DockContext* getDockContext()
+{
+	return &g_dock;
 }
 
 /*

@@ -5,6 +5,8 @@
 #include "Module.h"
 
 struct ImVec4;
+struct DockContext;
+
 class DockingTest : public EditorElement
 {
 public:
@@ -17,6 +19,7 @@ public:
 public:
 
 private:
+	DockContext* dock;
 
 };
 

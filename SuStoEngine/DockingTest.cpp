@@ -12,6 +12,7 @@ DockingTest::~DockingTest()
 
 void DockingTest::Start()
 {
+	dock = getDockContext();
 }
 
 void DockingTest::Draw()
@@ -19,17 +20,21 @@ void DockingTest::Draw()
 	igBeginWorkspace();
 	igDockDebugWindow();
 
-	static bool a = true;
+	bool a = true;
+	bool b = true;
+
 	igBeginDock("Dock1", &a, 0);
 	
 	ImGui::Text("fuck the police");
 
 	igEndDock();
 
-	bool b = true;
+
 	igBeginDock("Dock2", &b, 0);
 
 	ImGui::Text("is dis the rial doking?");
+	if (dock->getDock("Dock1", &a).status == dock->Status_Dragged)
+		ImGui::Text("fuck the police");
 
 	igEndDock();
 
