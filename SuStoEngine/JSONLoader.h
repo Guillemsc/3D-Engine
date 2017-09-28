@@ -13,13 +13,16 @@ public:
 	void SetString(const char* set, const char* str);
 	void SetBool(const char* set, bool bo);
 	void SetNumber(const char* set, double nu);
-	const char* GetString(const char* str);
-	bool GetBool(const char* bo);
-	double GetNumber(const char* nu);
+	const char* GetString(const char* str, const char* defaul = "");
+	bool GetBool(const char* bo, bool defaul = false);
+	double GetNumber(const char* nu, double defaul = 0);
 
 	const char* GetPath();
 	void Save();
 	void CleanUp();
+
+private:
+	bool FindValue(const char* str, json_value_type type);
 
 private:
 	JSON_Value*  value = nullptr;

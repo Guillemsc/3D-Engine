@@ -28,14 +28,14 @@ ModuleWindow::~ModuleWindow()
 
 void ModuleWindow::OnLoadConfig(JSON_Doc * config)
 {
-	width = config->GetNumber("window.width");
-	height = config->GetNumber("window.height");
-	fullscreen = config->GetBool("window.fullscreen");
-	resizable = config->GetBool("window.resizable");
-	borderless = config->GetBool("window.borderless");
-	full_dekstop = config->GetBool("window.fulldekstop");
-	maximized = config->GetBool("window.maximized");
-	brightness = config->GetNumber("window.brightness");
+	width = config->GetNumber("window.width", 900);
+	height = config->GetNumber("window.height", 900);
+	fullscreen = config->GetBool("window.fullscreen", false);
+	resizable = config->GetBool("window.resizable", true);
+	borderless = config->GetBool("window.borderless", false);
+	full_dekstop = config->GetBool("window.fulldekstop", false);
+	maximized = config->GetBool("window.maximized", false);
+	brightness = config->GetNumber("window.brightness", 1.0f);
 }
 
 void ModuleWindow::OnSaveConfig(JSON_Doc * config)
