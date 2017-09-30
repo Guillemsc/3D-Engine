@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include "Functions.h"
 
 #define MAX_MOUSE_BUTTONS 5
 
@@ -9,7 +10,7 @@ enum KEY_STATE
 	KEY_IDLE = 0,
 	KEY_DOWN,
 	KEY_REPEAT,
-	KEY_UP
+	KEY_UP,
 };
 
 enum EventWindow
@@ -22,8 +23,16 @@ enum EventWindow
 
 struct KeyBinding
 {
-	char* binding_name;
-	char* key;
+	const char* binding_name;
+	int         key;
+	KEY_STATE   state = KEY_IDLE;
+
+	bool operator == (KeyBinding bin)
+	{
+		if (key == bin.key)
+			return true;
+		return false;
+	}
 };
 
 class ModuleInput : public Module
@@ -38,20 +47,15 @@ public:
 
 	KEY_STATE GetKey(int id) const
 	{
-		return keyboard[id];
+		return keyboard[id].state;
 	}
 
 	KEY_STATE GetKey(const char* key)
-	{
-		int id = CharToKey(key);
-		
-		return GetKey(id);
+	{	
+		return GetKey(CharToKey(key));
 	}
 
-	KEY_STATE GetKeyBinding(const char* binding)
-	{
-
-	}
+	KEY_STATE GetKeyBinding(const char* binding);
 
 	void SetKeyBinding(const char* key, const char* binding_name);
 
@@ -89,11 +93,13 @@ public:
 
 private:
 	int CharToKey(const char* key);
+	void AddKey(KeyBinding k);
+	void RemoveKey(KeyBinding k);
 
 private:
-	vector<KeyBinding> key_bindings;
 	bool			   windowEvents[WE_COUNT];
-	KEY_STATE*		   keyboard;
+	KeyBinding*		   keyboard;
+	vector<KeyBinding> active_keys;
 	KEY_STATE		   mouse_buttons[MAX_MOUSE_BUTTONS];
 	int				   mouse_x = 0;
 	int				   mouse_y = 0;
