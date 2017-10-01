@@ -4,6 +4,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleInput.h"
 #include "EditorUI.h"
+#include "JSONLoader.h"
 
 #define MAX_KEYS 300
 
@@ -11,12 +12,22 @@ ModuleInput::ModuleInput(bool start_enabled) : Module(start_enabled)
 {
 	SetName("Input");
 	keyboard = new KeyBinding[MAX_KEYS];
+
+	for (int i = 0; i < MAX_KEYS; ++i)
+		keyboard[i].key = i;
 }
 
 // Destructor
 ModuleInput::~ModuleInput()
 {
 	delete[] keyboard;
+}
+
+void ModuleInput::OnLoadConfig(JSON_Doc* config)
+{
+	SetKeyBinding(config->GetString("input.console", "º"), "console");
+	SetKeyBinding(config->GetString("input.profiler", "p"), "profiler");
+	SetKeyBinding(config->GetString("input.configuration", "c"), "configuration");
 }
 
 // Called before render is available
@@ -52,8 +63,6 @@ bool ModuleInput::PreUpdate()
 
 	for (int i = 0; i < MAX_KEYS; ++i)
 	{
-		keyboard[i].key = i;
-
 		if (keys[i] == 1)
 		{
 			if (keyboard[i].state == KEY_IDLE)

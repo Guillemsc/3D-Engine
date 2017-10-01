@@ -62,8 +62,6 @@ bool Application::Awake()
 
 	profiler->StartProfile(true, "Engine Awake");
 
-	LoadConfig();
-
 	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
 		profiler->StartProfile(true, "Awake %s", (*it)->GetName());
@@ -73,6 +71,8 @@ bool Application::Awake()
 
 		profiler->FinishProfile("Awake %s", (*it)->GetName());
 	}
+
+	LoadConfig();
 
 	profiler->FinishProfile("Engine Awake");
 

@@ -1,6 +1,7 @@
 #include "ProfilerViewer.h"
 #include "imgui.h"
 #include "App.h"
+#include "ModuleInput.h"
 #include "mmgr\mmgr.h"
 
 ProfilerViewer::ProfilerViewer(bool start_enabled)
@@ -21,6 +22,12 @@ void ProfilerViewer::Start()
 
 void ProfilerViewer::Draw()
 {
+	if (App->input->GetKeyBindingDown("profiler"))
+	{
+		visible = !visible;
+		return;
+	}
+
 	if (!visible)
 	{
 		record = false;

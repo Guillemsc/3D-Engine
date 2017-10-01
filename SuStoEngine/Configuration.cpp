@@ -2,6 +2,7 @@
 #include "App.h"
 #include "ModuleWindow.h"
 #include "imgui.h"
+#include "ModuleInput.h"
 #include "mmgr\mmgr.h"
 #include "SDL/include/SDL.h"
 #include "glut\glut.h"
@@ -34,6 +35,12 @@ void Configuration::Start()
 
 void Configuration::Draw()
 {
+	if (App->input->GetKeyBindingDown("configuration"))
+	{
+		visible = !visible;
+		return;
+	}
+
 	if (!visible)
 		return;
 
@@ -143,9 +150,14 @@ void Configuration::Draw()
 		}
 
 		// Render
-		if (ImGui::CollapsingHeader("Render"))
+		if (ImGui::CollapsingHeader("Render", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			OpenGLOptions();
+		}
+
+		if (ImGui::CollapsingHeader("Input", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+
 		}
 	}
 

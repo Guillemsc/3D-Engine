@@ -41,6 +41,7 @@ public:
 	ModuleInput(bool start_enabled = true);
 	~ModuleInput();
 
+	void OnLoadConfig(JSON_Doc* config);
 	bool Awake();
 	bool PreUpdate();
 	bool CleanUp();

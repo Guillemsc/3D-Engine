@@ -14,5 +14,10 @@
         "fulldekstop": false,
         "maximized": true,
         "brightness": 1
+    },
+	   "input": {
+        "console": "º",
+		"profiler": "p",
+		"configuration": "c"
     }
 }

@@ -15,31 +15,7 @@ Console::~Console()
 
 void Console::Start()
 {
-	App->input->SetKeyBinding("q", "console");
-	App->input->SetKeyBinding("w", "console1");
-	App->input->SetKeyBinding("e", "console2");
-	App->input->SetKeyBinding("r", "console3");
-	App->input->SetKeyBinding("t", "console4");
-	App->input->SetKeyBinding("y", "console5");
-	App->input->SetKeyBinding("u", "console6");
-	App->input->SetKeyBinding("i", "console7");
-	App->input->SetKeyBinding("o", "console8");
-	App->input->SetKeyBinding("p", "console9");
-	App->input->SetKeyBinding("a", "console10");
-	App->input->SetKeyBinding("s", "console11");
-	App->input->SetKeyBinding("d", "console12");
-	App->input->SetKeyBinding("f", "console13");
-	App->input->SetKeyBinding("g", "console14");
-	App->input->SetKeyBinding("h", "console15");
-	App->input->SetKeyBinding("j", "console16");
-	App->input->SetKeyBinding("k", "console17");
-	App->input->SetKeyBinding("l", "console18");
-	App->input->SetKeyBinding("z", "console19");
-	App->input->SetKeyBinding("x", "console20");
-	App->input->SetKeyBinding("c", "console21");
-	App->input->SetKeyBinding("v", "console22");
-	App->input->SetKeyBinding("b", "console23");
-	App->input->SetKeyBinding("n", "console24");
+	
 }
 
 void Console::Draw()
@@ -47,17 +23,13 @@ void Console::Draw()
 	bool ret = true;
 
 	AddLogs();
-
-
-	for (int i = 0; i < 100; i++)
+	
+	if (App->input->GetKeyBindingDown("console"))
 	{
-		if (App->input->GetKeyBindingDown("console24"))
-		{
-			visible = !visible;
-			return;
-		}
+		visible = !visible;
+		return;
 	}
-
+	
 	if (!visible)
 		return;
 
