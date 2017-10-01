@@ -30,6 +30,9 @@ bool TextCmp(const char * text1, const char * text2)
 {
 	bool ret = false;
 
+	if (text1 == nullptr || text2 == nullptr)
+		return false;
+
 	if (strcmp(text1, text2) == 0)
 		ret = true;
 

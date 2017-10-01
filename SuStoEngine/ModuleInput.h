@@ -23,7 +23,7 @@ enum EventWindow
 
 struct KeyBinding
 {
-	const char* binding_name;
+	const char* binding_name = nullptr;
 	int         key;
 	KEY_STATE   state = KEY_IDLE;
 
@@ -45,66 +45,44 @@ public:
 	bool PreUpdate();
 	bool CleanUp();
 
-	KEY_STATE GetKey(int id) const
-	{
-		return keyboard[id].state;
-	}
+	bool GetKeyDown(int id);
+	bool GetKeyRepeat(int id);
+	bool GetKeyUp(int id);
+	bool GetKeyDown(const char* key);
+	bool GetKeyRepeat(const char* key);
+	bool GetKeyUp(const char* key);
 
-	KEY_STATE GetKey(const char* key)
-	{	
-		return GetKey(CharToKey(key));
-	}
-
-	KEY_STATE GetKeyBinding(const char* binding);
-
+	bool GetKeyBindingDown(const char* binding_name);
+	bool GetKeyBindingRepeat(const char* binding_name);
+	bool GetKeyBindingUp(const char* binding_name);
 	void SetKeyBinding(const char* key, const char* binding_name);
 
-	KEY_STATE GetMouseButton(int id) const
-	{
-		return mouse_buttons[id];
-	}
+	KEY_STATE GetMouseButton(int id) const;
 
 	bool GetWindowEvent(EventWindow ev);
 
-	int GetMouseX() const
-	{
-		return mouse_x;
-	}
-
-	int GetMouseY() const
-	{
-		return mouse_y;
-	}
-
-	int GetMouseZ() const
-	{
-		return mouse_z;
-	}
-
-	int GetMouseXMotion() const
-	{
-		return mouse_x_motion;
-	}
-
-	int GetMouseYMotion() const
-	{
-		return mouse_y_motion;
-	}
+	int GetMouseX() const;
+	int GetMouseY() const;
+	int GetMouseZ() const;
+	int GetMouseXMotion() const;
+	int GetMouseYMotion() const;
 
 private:
 	int CharToKey(const char* key);
-	void AddKey(KeyBinding k);
-	void RemoveKey(KeyBinding k);
+	void AddKeyDown(KeyBinding k);
+	void AddKeyRepeat(KeyBinding k);
+	void AddKeyUp(KeyBinding k);
 
 private:
+	vector<KeyBinding> keys_down;
+	vector<KeyBinding> keys_repeat;
+	vector<KeyBinding> keys_up;
 	bool			   windowEvents[WE_COUNT];
 	KeyBinding*		   keyboard;
-	vector<KeyBinding> active_keys;
 	KEY_STATE		   mouse_buttons[MAX_MOUSE_BUTTONS];
 	int				   mouse_x = 0;
 	int				   mouse_y = 0;
 	int				   mouse_z = 0;
 	int				   mouse_x_motion = 0;
 	int				   mouse_y_motion = 0;
-	//int mouse_z_motion;
 };

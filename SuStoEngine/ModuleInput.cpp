@@ -46,7 +46,9 @@ bool ModuleInput::PreUpdate()
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
-	active_keys.clear();
+	keys_down.clear();
+	keys_repeat.clear();
+	keys_up.clear();
 
 	for (int i = 0; i < MAX_KEYS; ++i)
 	{
@@ -57,12 +59,12 @@ bool ModuleInput::PreUpdate()
 			if (keyboard[i].state == KEY_IDLE)
 			{
 				keyboard[i].state = KEY_DOWN;
-				AddKey(keyboard[i]);
+				AddKeyDown(keyboard[i]);
 			}
 			else
 			{
 				keyboard[i].state = KEY_REPEAT;
-				AddKey(keyboard[i]);
+				AddKeyRepeat(keyboard[i]);
 			}
 		}
 		else
@@ -70,7 +72,7 @@ bool ModuleInput::PreUpdate()
 			if (keyboard[i].state == KEY_REPEAT || keyboard[i].state == KEY_DOWN)
 			{
 				keyboard[i].state = KEY_UP;
-				AddKey(keyboard[i]);
+				AddKeyUp(keyboard[i]);
 			}
 			else
 			{
@@ -79,83 +81,83 @@ bool ModuleInput::PreUpdate()
 		}
 	}
 
-Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
+	Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
 
-mouse_x /= SCREEN_SIZE;
-mouse_y /= SCREEN_SIZE;
-mouse_z = 0;
+	mouse_x /= SCREEN_SIZE;
+	mouse_y /= SCREEN_SIZE;
+	mouse_z = 0;
 
-for (int i = 0; i < 5; ++i)
-{
-	if (buttons & SDL_BUTTON(i))
+	for (int i = 0; i < 5; ++i)
 	{
-		if (mouse_buttons[i] == KEY_IDLE)
-			mouse_buttons[i] = KEY_DOWN;
-		else
-			mouse_buttons[i] = KEY_REPEAT;
-	}
-	else
-	{
-		if (mouse_buttons[i] == KEY_REPEAT || mouse_buttons[i] == KEY_DOWN)
-			mouse_buttons[i] = KEY_UP;
-		else
-			mouse_buttons[i] = KEY_IDLE;
-	}
-}
-
-mouse_x_motion = mouse_y_motion = 0;
-
-bool quit = false;
-SDL_Event e;
-while (SDL_PollEvent(&e))
-{
-	App->editorUI->ImGuiInput(&e);
-
-	switch (e.type)
-	{
-	case SDL_QUIT:
-		windowEvents[WE_QUIT] = true;
-		break;
-
-	case SDL_WINDOWEVENT:
-		switch (e.window.event)
+		if (buttons & SDL_BUTTON(i))
 		{
-			//case SDL_WINDOWEVENT_LEAVE:
-		case SDL_WINDOWEVENT_HIDDEN:
-		case SDL_WINDOWEVENT_MINIMIZED:
-		case SDL_WINDOWEVENT_FOCUS_LOST:
-			windowEvents[WE_HIDE] = true;
-			break;
+			if (mouse_buttons[i] == KEY_IDLE)
+				mouse_buttons[i] = KEY_DOWN;
+			else
+				mouse_buttons[i] = KEY_REPEAT;
+		}
+		else
+		{
+			if (mouse_buttons[i] == KEY_REPEAT || mouse_buttons[i] == KEY_DOWN)
+				mouse_buttons[i] = KEY_UP;
+			else
+				mouse_buttons[i] = KEY_IDLE;
+		}
+	}
 
-			//case SDL_WINDOWEVENT_ENTER:
-		case SDL_WINDOWEVENT_SHOWN:
-		case SDL_WINDOWEVENT_FOCUS_GAINED:
-		case SDL_WINDOWEVENT_MAXIMIZED:
-		case SDL_WINDOWEVENT_RESTORED:
-			windowEvents[WE_SHOW] = true;
+ 	mouse_x_motion = mouse_y_motion = 0;
+	
+	bool quit = false;
+	SDL_Event e;
+	while (SDL_PollEvent(&e))
+	{
+		App->editorUI->ImGuiInput(&e);
+	
+		switch (e.type)
+		{
+		case SDL_QUIT:
+			windowEvents[WE_QUIT] = true;
 			break;
-		case SDL_WINDOWEVENT_RESIZED:
-			App->window->SetWindowSize(e.window.data1, e.window.data2);
+	
+		case SDL_WINDOWEVENT:
+			switch (e.window.event)
+			{
+				//case SDL_WINDOWEVENT_LEAVE:
+			case SDL_WINDOWEVENT_HIDDEN:
+			case SDL_WINDOWEVENT_MINIMIZED:
+			case SDL_WINDOWEVENT_FOCUS_LOST:
+				windowEvents[WE_HIDE] = true;
+				break;
+	
+				//case SDL_WINDOWEVENT_ENTER:
+			case SDL_WINDOWEVENT_SHOWN:
+			case SDL_WINDOWEVENT_FOCUS_GAINED:
+			case SDL_WINDOWEVENT_MAXIMIZED:
+			case SDL_WINDOWEVENT_RESTORED:
+				windowEvents[WE_SHOW] = true;
+				break;
+			case SDL_WINDOWEVENT_RESIZED:
+				App->window->SetWindowSize(e.window.data1, e.window.data2);
+				break;
+			}
+	
+			break;
+	
+		case SDL_MOUSEWHEEL:
+			mouse_z = e.wheel.y;
+			break;
+	
+		case SDL_MOUSEMOTION:
+			mouse_x = e.motion.x / SCREEN_SIZE;
+			mouse_y = e.motion.y / SCREEN_SIZE;
+	
+			mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
+			mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
 			break;
 		}
-
-		break;
-
-	case SDL_MOUSEWHEEL:
-		mouse_z = e.wheel.y;
-		break;
-
-	case SDL_MOUSEMOTION:
-		mouse_x = e.motion.x / SCREEN_SIZE;
-		mouse_y = e.motion.y / SCREEN_SIZE;
-
-		mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
-		mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
-		break;
 	}
-}
-
-return ret;
+	
+	return ret;
 }
 
 // Called before quitting
@@ -169,48 +171,101 @@ bool ModuleInput::CleanUp()
 	return ret;
 }
 
-// char -> SDL_GetScancode: https://wiki.libsdl.org/SDL_Keycode
-int ModuleInput::CharToKey(const char * key)
+bool ModuleInput::GetKeyDown(int id)
 {
-	return SDL_GetScancodeFromKey(SDL_GetKeyFromName(key));
-}
-
-void ModuleInput::AddKey(KeyBinding k)
-{
-	for(vector<KeyBinding>::iterator it = active_keys.begin(); it != active_keys.end(); it++)
+	if (!keys_down.empty())
 	{
-		if ((*it) == k)
+		for (vector<KeyBinding>::iterator it = keys_down.begin(); it != keys_down.end(); it++)
 		{
-			return;
+			if (id == (*it).key)
+				return true;
 		}
 	}
 
-	active_keys.push_back(k);
+	return false;
 }
 
-void ModuleInput::RemoveKey(KeyBinding k)
+bool ModuleInput::GetKeyRepeat(int id)
 {
-	for (vector<KeyBinding>::iterator it = active_keys.begin(); it != active_keys.end(); it++)
+	if (!keys_repeat.empty())
 	{
-		if ((*it) == k)
+		for (vector<KeyBinding>::iterator it = keys_repeat.begin(); it != keys_repeat.end(); it++)
 		{
-			active_keys.erase(it);
-			break;
+			if (id == (*it).key)
+				return true;
+		}
+	}
+
+	return false;
+}
+
+bool ModuleInput::GetKeyUp(int id)
+{
+	if (!keys_up.empty())
+	{
+		for (vector<KeyBinding>::iterator it = keys_up.begin(); it != keys_up.end(); it++)
+		{
+			if (id == (*it).key)
+				return true;
+		}
+	}
+
+	return false;
+}
+
+bool ModuleInput::GetKeyDown(const char * key)
+{
+	return GetKeyDown(CharToKey(key));
+}
+
+bool ModuleInput::GetKeyRepeat(const char * key)
+{
+	return GetKeyRepeat(CharToKey(key));
+}
+
+bool ModuleInput::GetKeyUp(const char * key)
+{
+	return GetKeyUp(CharToKey(key));
+}
+
+bool ModuleInput::GetKeyBindingDown(const char * binding_name)
+{
+	if (!keys_down.empty())
+	{
+		for (vector<KeyBinding>::iterator it = keys_down.begin(); it != keys_down.end(); it++)
+		{
+			if (TextCmp(binding_name, (*it).binding_name))
+				return true;
+		}
+	}
+
+	return false;
+}
+
+bool ModuleInput::GetKeyBindingRepeat(const char * binding_name)
+{
+	if (!keys_repeat.empty())
+	{
+		for (vector<KeyBinding>::iterator it = keys_repeat.begin(); it != keys_repeat.end(); it++)
+		{
+			if (TextCmp(binding_name, (*it).binding_name))
+				return true;
 		}
 	}
 }
 
-KEY_STATE ModuleInput::GetKeyBinding(const char * binding)
+bool ModuleInput::GetKeyBindingUp(const char * binding_name)
 {
-	for (vector<KeyBinding>::iterator it = active_keys.begin(); it != active_keys.end(); it++)
+	if (!keys_up.empty())
 	{
-		if (TextCmp((*it).binding_name, binding))
+		for (vector<KeyBinding>::iterator it = keys_up.begin(); it != keys_up.end(); it++)
 		{
-			return (*it).state;
+			if (TextCmp(binding_name, (*it).binding_name))
+				return true;
 		}
 	}
 
-	return KEY_STATE::KEY_IDLE;
+	return false;
 }
 
 void ModuleInput::SetKeyBinding(const char * key, const char * binding_name)
@@ -225,7 +280,58 @@ void ModuleInput::SetKeyBinding(const char * key, const char * binding_name)
 	}
 }
 
+KEY_STATE ModuleInput::GetMouseButton(int id) const
+{
+	return mouse_buttons[id];
+}
+
+// char -> SDL_GetScancode: https://wiki.libsdl.org/SDL_Keycode
+int ModuleInput::CharToKey(const char * key)
+{
+	return SDL_GetScancodeFromKey(SDL_GetKeyFromName(key));
+}
+
+void ModuleInput::AddKeyDown(KeyBinding k)
+{
+	keys_down.push_back(k);
+}
+
+void ModuleInput::AddKeyRepeat(KeyBinding k)
+{
+	keys_repeat.push_back(k);
+}
+
+void ModuleInput::AddKeyUp(KeyBinding k)
+{
+	keys_up.push_back(k);
+}
+
 bool ModuleInput::GetWindowEvent(EventWindow ev)
 {
 	return windowEvents[ev];
+}
+
+int ModuleInput::GetMouseX() const
+{
+	return mouse_x;
+}
+
+int ModuleInput::GetMouseY() const
+{
+	return mouse_y;
+}
+
+int ModuleInput::GetMouseZ() const
+{
+	return mouse_x;
+}
+
+int ModuleInput::GetMouseXMotion() const
+{
+	return mouse_x_motion;
+}
+
+int ModuleInput::GetMouseYMotion() const
+{
+	return mouse_y_motion;
 }

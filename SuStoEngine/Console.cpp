@@ -51,7 +51,7 @@ void Console::Draw()
 
 	for (int i = 0; i < 100; i++)
 	{
-		if (App->input->GetKeyBinding("console24") == KEY_DOWN)
+		if (App->input->GetKeyBindingDown("console24"))
 		{
 			visible = !visible;
 			return;
