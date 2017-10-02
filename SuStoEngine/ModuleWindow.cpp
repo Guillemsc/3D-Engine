@@ -117,7 +117,7 @@ SDL_Window* ModuleWindow::GenerateWindow(SDL_Window* window, SDL_Surface* surfac
 	else
 	{
 		surface = SDL_GetWindowSurface(window);
-
+		
 		if (brightness > 1) brightness = 1;
 		else if (brightness < 0) brightness = 0;
 

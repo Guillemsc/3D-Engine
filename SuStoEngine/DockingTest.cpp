@@ -32,7 +32,6 @@ void DockingTest::Draw()
 	igDockDebugWindow();
 
 	igBeginDock("Dock1", &a, 0);
-	
 	ImGui::Text("fuck the police");
 
 	igEndDock();
@@ -41,6 +40,7 @@ void DockingTest::Draw()
 	igBeginDock("Dock2", &b, 0);
 
 	ImGui::Text("is dis the rial doking?");
+	ImGui::Image((void*)3, ImVec2(dock->getDock("Dock1", &a).size.x, dock->getDock("Dock1", &a).size.y), ImVec2(0, 1), ImVec2(1, 0));
 
 	igEndDock();
 
