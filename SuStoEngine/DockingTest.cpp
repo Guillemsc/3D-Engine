@@ -24,22 +24,13 @@ void DockingTest::Draw()
 	bool a = true;
 	bool b = true;
 
-	igBeginDock("Game", &b, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-	ImGui::Text("is dis the rial doking?");
-	ImGui::Image((void*)App->renderer3D->fbo_texture->GetTexture(), ImVec2(dock->getDock("Dock1", &a).size.x, dock->getDock("Dock1", &a).size.y), ImVec2(0, 1), ImVec2(1, 0));
+	igBeginDock("Game", &a, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+	
+	ImGui::Image((void*)App->renderer3D->fbo_texture->GetTexture(), ImVec2(dock->getDock("Game", &a).size.x, dock->getDock("Game", &a).size.y), ImVec2(0, 1), ImVec2(1, 0));
 
 	igEndDock();
-
-
-	igBeginDock("Dock1", &a, 0);
-
-	ImGui::Text("fuck the police");
-
-	igEndDock();
-
 
 	if (first_time) {
-		dock->getDock("Dock1", &a).status = dock->Status_Float;
 
 		first_time = false;
 	}

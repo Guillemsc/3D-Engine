@@ -28,8 +28,6 @@ void EngineTest::Draw()
 	if (!visible)
 		return;
 
-	ImGui::SetNextWindowSize(ImVec2(600, 680), 4);
-
 	if (!igBeginDock("Engine Tests", &visible, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 	{
 		// Early out if the window is collapsed, as an optimization.
@@ -56,7 +54,7 @@ void EngineTest::Draw()
 		GeometryMathTest();
 	}
 
-	ImGui::End();
+	igEndDock();
 }
 
 void EngineTest::GenerateRandomNumbers(float2 range, int quantity)

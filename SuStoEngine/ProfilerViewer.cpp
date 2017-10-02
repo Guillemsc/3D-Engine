@@ -36,7 +36,7 @@ void ProfilerViewer::Draw()
 	}
 
 	ImGui::SetNextWindowSize(ImVec2(400, 800), 2);
-	if (igBeginDock("Profiler", &visible, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	if (igBeginDock("Profiler", &visible, 0))
 	{
 		ImGui::Text("Mode:");
 		ImGui::RadioButton("General", &profiler_mode, 1); ImGui::SameLine();

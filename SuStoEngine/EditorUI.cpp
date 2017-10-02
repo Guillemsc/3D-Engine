@@ -83,7 +83,7 @@ bool EditorUI::PreUpdate()
 	ImGui_ImplSdlGL2_NewFrame(App->window->window);
 
 	igBeginWorkspace(&workspace_visible, ImVec2(0, 23), ImVec2(App->window->GetWindowSize().x, App->window->GetWindowSize().y - 23), 
-		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
+		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBringToFrontOnFocus);
 
 	return ret;
 }
