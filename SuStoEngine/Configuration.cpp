@@ -56,7 +56,7 @@ void Configuration::Draw()
 	ImGui::SetNextWindowPos(ImVec2(window_width - window_width / 4, 23), 2);
 	ImGui::SetNextWindowSize(ImVec2(window_width / 4, window_height - 23), 2);
 
-	if (igBeginDock("Configuration", &visible, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	if (igBeginDock("Configuration", &visible, 0))
 	{
 		if(ImGui::Button("Save Changes"))
 		{

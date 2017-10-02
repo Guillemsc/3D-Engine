@@ -3,6 +3,7 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "imgui_internal.h"
 #include "imgui_docking.h"
+#include "JSONLoader.h"
 
 using namespace ImGui;
 
@@ -1053,6 +1054,41 @@ using namespace ImGui;
 		}
 	}
 
+	void DockContext::SaveLayout(JSON_Doc * config)
+	{
+		/*config->SetNumber("DockLayout.Docks_Size", m_docks.size());
+
+		for (int i = 0; i < m_docks.size(); ++i) {
+			Dock& dock = *m_docks[i];
+			config->SetString("DockLayout.Dock", std::to_string(i).c_str());
+			config->SetString("DockLayout.Dock.Label", dock.parent ? (dock.label[0] == '\0' ? "DOCK" : dock.label) : dock.status == Status_Float ? dock.label : "ROOT");
+			config->SetNumber("DockLayout.Dock.pos_X", (int)dock.pos.x);
+			config->SetNumber("DockLayout.Dock.pos_Y", (int)dock.pos.y);
+			config->SetNumber("DockLayout.Dock.size_X", (int)dock.size.x);
+			config->SetNumber("DockLayout.Dock.size_Y", (int)dock.size.y);
+			config->SetNumber("DockLayout.Dock.status", (int)dock.status);
+			config->SetBool("DockLayout.Dock.active", dock.active ? true : false);
+			config->SetBool("DockLayout.Dock.opened", dock.opened ? true : false);
+			fillLocation(dock);
+			config->SetString("DockLayout.Dock.location", strlen(dock.location) ? dock.location : "-1");
+			config->SetNumber("DockLayout.Dock.child0", getDockIndex(dock.children[0]));
+			config->SetNumber("DockLayout.Dock.child1", getDockIndex(dock.children[1]));
+			config->SetNumber("DockLayout.Dock.prev_tab", getDockIndex(dock.prev_tab));
+			config->SetNumber("DockLayout.Dock.next_tab", getDockIndex(dock.next_tab));
+			if (dock.parent == nullptr && &dock != getRootDock()) {
+				config->SetNumber("DockLayout.Dock.parent", getDockIndex(getRootDock()));
+			}
+			else {
+				config->SetNumber("DockLayout.Dock.parent", getDockIndex(dock.parent));
+			}
+		}*/
+	}
+
+	bool DockContext::LoadLayout(JSON_Doc * config)
+	{
+		return false;
+	}
+
 
 DockContext g_dock;
 
@@ -1115,16 +1151,3 @@ DockContext* getDockContext()
 {
 	return &g_dock;
 }
-
-/*
-void igSaveDock(Lumix::FS::OsFile& file)
-{
-g_dock.save(file);
-}
-
-
-void igLoadDock(lua_State* L)
-{
-g_dock.load(L);
-}
-*/

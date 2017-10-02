@@ -25,6 +25,7 @@ typedef enum ImGuiDockSlot
 } ImGuiDockSlot;
 
 struct DockContext;
+class JSON_Doc;
 
 extern void igBeginWorkspace(bool *open, ImVec2 pos, ImVec2 size, ImGuiWindowFlags flags);
 extern void igEndWorkspace();
@@ -146,6 +147,9 @@ struct DockContext
 	int getDockIndex(Dock* dock);
 
 	void SetDockSlotPosition(ImGuiDockSlot slot, Dock dock);
+
+	void SaveLayout(JSON_Doc* config);
+	bool LoadLayout(JSON_Doc* config);
 };
 
 #endif

@@ -26,7 +26,13 @@ void DockingTest::Draw()
 
 	igBeginDock("Game", &a, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 	
-	ImGui::Image((void*)App->renderer3D->fbo_texture->GetTexture(), ImVec2(dock->getDock("Game", &a).size.x, dock->getDock("Game", &a).size.y), ImVec2(0, 1), ImVec2(1, 0));
+	ImVec2 size = ImGui::GetContentRegionAvail();
+
+	if (0 != size.x && 0 != size.y) {
+		App->renderer3D->OnResize(size.x, size.y);
+	}
+
+	ImGui::Image((void*)App->renderer3D->fbo_texture->GetTexture(), size, ImVec2(0, 1), ImVec2(1, 0));
 
 	igEndDock();
 

@@ -40,6 +40,9 @@ public:
 	bool DrawEditor();
 	bool CleanUp();
 
+	void OnLoadConfig(JSON_Doc* config);
+	void OnSaveConfig(JSON_Doc* config);
+
 	void ImGuiInput(SDL_Event* ev);
 
 	void LoadStyle(char* name);
