@@ -2,6 +2,7 @@
 #include "imgui.h"
 #include "App.h"
 #include "ModuleInput.h"
+#include "imgui_docking.h"
 #include "mmgr\mmgr.h"
 
 ProfilerViewer::ProfilerViewer(bool start_enabled)
@@ -35,7 +36,7 @@ void ProfilerViewer::Draw()
 	}
 
 	ImGui::SetNextWindowSize(ImVec2(400, 800), 2);
-	if (ImGui::Begin("Profiler", &visible))
+	if (igBeginDock("Profiler", &visible, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 	{
 		ImGui::Text("Mode:");
 		ImGui::RadioButton("General", &profiler_mode, 1); ImGui::SameLine();
@@ -161,5 +162,5 @@ void ProfilerViewer::Draw()
 		}
 			
 	}
-	ImGui::End();
+	igEndDock();
 }
