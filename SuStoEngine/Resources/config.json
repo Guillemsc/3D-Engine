@@ -6,8 +6,8 @@
         "max_fps": 999
     },
     "window": {
-        "width": 1676,
-        "height": 1023,
+        "width": 1920,
+        "height": 1017,
         "fullscreen": false,
         "resizable": true,
         "borderless": false,
@@ -15,9 +15,9 @@
         "maximized": true,
         "brightness": 1
     },
-	   "input": {
-        "console": "º",
-		"profiler": "p",
-		"configuration": "c"
+    "input": {
+        "console": "`",
+        "profiler": "",
+        "configuration": "C"
     }
 }

@@ -62,21 +62,21 @@ void Hardware::Draw()
 	{
 		ImGui::Text("SDL_Version:"); 
 		ImGui::SameLine(); 
-		ImGui::TextColored(ImVec4(sec_colour.x, sec_colour.y, sec_colour.z, sec_colour.w), sdl_ver.c_str());
+		ImGui::TextColored(sec_colour, sdl_ver.c_str());
 
 		ImGui::Separator();
 
 		ImGui::Text("CPUs: "); 
 		ImGui::SameLine(); 
-		ImGui::TextColored(ImVec4(sec_colour.x, sec_colour.y, sec_colour.z, sec_colour.w), cpus.c_str());
+		ImGui::TextColored(sec_colour, cpus.c_str());
 
 		ImGui::Text("System RAM:"); 
 		ImGui::SameLine(); 
-		ImGui::TextColored(ImVec4(sec_colour.x, sec_colour.y, sec_colour.z, sec_colour.w), sys_ram.c_str());
+		ImGui::TextColored(sec_colour, sys_ram.c_str());
 
 		ImGui::Text("Caps:"); 
 		ImGui::SameLine(); 
-		ImGui::TextColored(ImVec4(sec_colour.x, sec_colour.y, sec_colour.z, sec_colour.w), caps.c_str());
+		ImGui::TextColored(sec_colour, caps.c_str());
 
 		ImGui::Separator();
 
@@ -84,17 +84,17 @@ void Hardware::Draw()
 
 		ImGui::Text("GPU:");  
 		ImGui::SameLine(); 
-		ImGui::TextColored(ImVec4(sec_colour.x, sec_colour.y, sec_colour.z, sec_colour.w), "Vendor %d Device %d", info.vendor_id, info.device_id);
+		ImGui::TextColored(sec_colour, "Vendor %d Device %d", info.vendor_id, info.device_id);
 
 		ImGui::Text("Brand:"); 
 		ImGui::SameLine(); 
-		ImGui::TextColored(ImVec4(sec_colour.x, sec_colour.y, sec_colour.z, sec_colour.w), info.brand);
+		ImGui::TextColored(sec_colour, info.brand);
 
 		ImGui::Separator();
 
 		ImGui::Text("Display resolution:");
 		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(sec_colour.x, sec_colour.y, sec_colour.z, sec_colour.w), "%d x %d", window_w, window_h);
+		ImGui::TextColored(sec_colour, "%d x %d", window_w, window_h);
 	}
 
 	ImGui::End();

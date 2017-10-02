@@ -6,6 +6,8 @@
 #include "EditorUI.h"
 #include "JSONLoader.h"
 
+// To use PS3 Controller install this driver https://github.com/nefarius/ScpToolkit/releases/tag/v1.6.238.16010
+
 #define MAX_KEYS 300
 
 ModuleInput::ModuleInput(bool start_enabled) : Module(start_enabled)
@@ -30,6 +32,13 @@ void ModuleInput::OnLoadConfig(JSON_Doc* config)
 	SetKeyBinding(config->GetString("input.configuration", "c"), "configuration");
 }
 
+void ModuleInput::OnSaveConfig(JSON_Doc * config)
+{
+	config->SetString("input.console", GetKeyBinding("console"));
+	config->SetString("input.profiler", GetKeyBinding("profiler"));
+	config->SetString("input.configuration", GetKeyBinding("configuration"));
+}
+
 // Called before render is available
 bool ModuleInput::Awake()
 {
@@ -45,6 +54,18 @@ bool ModuleInput::Awake()
 		ret = false;
 	}
 
+	if (SDL_Init(SDL_INIT_VIDEO) != 0)
+	{
+		LOG_OUTPUT("Error on SDL_Init_Video");
+		ret = false;
+	}
+
+	if (SDL_Init(SDL_INIT_GAMECONTROLLER) != 0)
+	{
+		LOG_OUTPUT("Error on SDL_Init_GameController");
+		ret = false;
+	}
+
 	return ret;
 }
 
@@ -55,11 +76,14 @@ bool ModuleInput::PreUpdate()
 
 	SDL_PumpEvents();
 
-	const Uint8* keys = SDL_GetKeyboardState(NULL);
+	SDL_StartTextInput();
+	text_input.clear();
 
 	keys_down.clear();
 	keys_repeat.clear();
 	keys_up.clear();
+
+	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
 	for (int i = 0; i < MAX_KEYS; ++i)
 	{
@@ -127,7 +151,7 @@ bool ModuleInput::PreUpdate()
 		case SDL_QUIT:
 			windowEvents[WE_QUIT] = true;
 			break;
-	
+
 		case SDL_WINDOWEVENT:
 			switch (e.window.event)
 			{
@@ -137,7 +161,7 @@ bool ModuleInput::PreUpdate()
 			case SDL_WINDOWEVENT_FOCUS_LOST:
 				windowEvents[WE_HIDE] = true;
 				break;
-	
+
 				//case SDL_WINDOWEVENT_ENTER:
 			case SDL_WINDOWEVENT_SHOWN:
 			case SDL_WINDOWEVENT_FOCUS_GAINED:
@@ -149,20 +173,25 @@ bool ModuleInput::PreUpdate()
 				App->window->SetWindowSize(e.window.data1, e.window.data2);
 				break;
 			}
-	
+
 			break;
-	
+
 		case SDL_MOUSEWHEEL:
 			mouse_z = e.wheel.y;
 			break;
-	
+
 		case SDL_MOUSEMOTION:
 			mouse_x = e.motion.x / SCREEN_SIZE;
 			mouse_y = e.motion.y / SCREEN_SIZE;
-	
+
 			mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
 			mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
 			break;
+
+		case SDL_TEXTINPUT:
+			text_input.insert(text_input.size(), e.text.text);
+			break;
+
 		}
 	}
 	
@@ -281,12 +310,45 @@ void ModuleInput::SetKeyBinding(const char * key, const char * binding_name)
 {
 	for (int i = 0; i < MAX_KEYS; ++i)
 	{
+		if (TextCmp(keyboard[i].binding_name, binding_name))
+		{
+			keyboard[i].binding_name = "";
+		}
+
 		if (i == CharToKey(key))
 		{
 			keyboard[i].binding_name = binding_name;
-			break;
 		}
 	}
+}
+
+const char * ModuleInput::GetKeyBinding(const char * binding_name)
+{
+	for (int i = 0; i < MAX_KEYS; ++i)
+	{
+		if (TextCmp(keyboard[i].binding_name, binding_name))
+		{
+			return KeyToChar(keyboard[i].key);
+		}
+	}
+
+	return "";
+}
+
+bool ModuleInput::GetKeyboardInput(string& input)
+{
+	if (!text_input.empty())
+	{
+		input = text_input;
+		return true;
+	}
+
+	return false;
+}
+
+void ModuleInput::ClearKeyboardInput()
+{
+	text_input.clear();
 }
 
 KEY_STATE ModuleInput::GetMouseButton(int id) const
@@ -298,6 +360,11 @@ KEY_STATE ModuleInput::GetMouseButton(int id) const
 int ModuleInput::CharToKey(const char * key)
 {
 	return SDL_GetScancodeFromKey(SDL_GetKeyFromName(key));
+}
+
+const char * ModuleInput::KeyToChar(int key)
+{
+	return SDL_GetScancodeName((SDL_Scancode)key);
 }
 
 void ModuleInput::AddKeyDown(KeyBinding k)

@@ -31,6 +31,7 @@ void Configuration::Start()
 	fulldekstop = App->window->GetFullDekstop();
 	maximized = App->window->GetMaximized();
 	App->window->GetWindowSize(display_size_width, display_size_height);
+	console_binding = App->input->GetKeyBinding("console");
 }
 
 void Configuration::Draw()
@@ -44,13 +45,26 @@ void Configuration::Draw()
 	if (!visible)
 		return;
 
+	ImGuiStyle * style = &ImGui::GetStyle();
+	ImVec4 sec_colour = style->Colors[ImGuiCol_ComboBg];
+	sec_colour.x += +0.2f;
+	sec_colour.y += +0.2f;
+	sec_colour.z += +0.2f;
+
 	App->window->GetWindowSize(window_width, window_height);
 	ImGui::SetNextWindowPos(ImVec2(window_width - window_width / 4, 23), 2);
 	ImGui::SetNextWindowSize(ImVec2(window_width / 4, window_height - 23), 2);
 
 	if (ImGui::Begin("Configuration", &visible))
 	{
-		// App
+		if(ImGui::Button("Save Changes"))
+		{
+			App->SaveConfig();
+		}
+
+		// ---------------------------------------------------------------------
+		// App -----------------------------------------------------------------
+		// ---------------------------------------------------------------------
 		if (ImGui::CollapsingHeader("App", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			if (ImGui::InputText("App Name", name_input_buffer, 254))
@@ -74,27 +88,11 @@ void Configuration::Draw()
 				App->SetMaxFps(max_fps);
 				App->SaveConfig();
 			}
-			ImGui::Text("Average fps: %d fps", (int)App->profiler->GetAvgFPS());
-			std::vector<float> framerate = App->profiler->GetFramesVector();
-
-			if (!framerate.empty())
-			{
-				char title[25];
-				sprintf_s(title, 25, "%.1f", framerate[framerate.size() - 1]);
-				ImGui::PlotHistogram("Framerate", &framerate[0], framerate.size(), 0, title, 0.0f, 500.0f, ImVec2(0, 100));
-			}
-
-			std::vector<float> memory = App->profiler->GetMemoryVector();
-
-			if (!memory.empty())
-			{
-				char title[25];
-				sprintf_s(title, 25, "%.1f", memory[memory.size() - 1]);
-				ImGui::PlotHistogram("Memory", &memory[0], memory.size(), 0, title, 0.0f, 30000.0f, ImVec2(0, 100));
-			}
 		}
 
-		// Window
+		// ---------------------------------------------------------------------
+		// Window --------------------------------------------------------------
+		// ---------------------------------------------------------------------
 		if (ImGui::CollapsingHeader("Window", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			if (ImGui::SliderFloat("Brightness", &brightness, 0, 1))
@@ -149,15 +147,47 @@ void Configuration::Draw()
 			}
 		}
 
-		// Render
+		// ---------------------------------------------------------------------
+		// Renderer -----------------------------------------------------------------
+		// ---------------------------------------------------------------------
 		if (ImGui::CollapsingHeader("Render", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			OpenGLOptions();
 		}
 
+		// ---------------------------------------------------------------------
+		// Input -----------------------------------------------------------------
+		// ---------------------------------------------------------------------
 		if (ImGui::CollapsingHeader("Input", ImGuiTreeNodeFlags_DefaultOpen))
 		{
+			// Console
+			ImGui::TextColored(sec_colour, "[ %s ]", console_binding.c_str());
+			ImGui::SameLine();
+			if (ImGui::SmallButton("Rebind"))
+			{
+				console_rebind = true;
+			}
+			ImGui::SameLine();
+			ImGui::Text("Console"); 
 
+			if (console_rebind)
+			{
+				console_binding = "PREESS A KEY";
+
+				string input;
+				if (App->input->GetKeyboardInput(input))
+				{
+					console_rebind = false;
+					console_binding = ToUpperCase(input);
+					App->input->SetKeyBinding(console_binding.c_str(), "console");
+					App->input->ClearKeyboardInput();
+					App->SaveConfig();
+				}
+			}
+
+			// Configuration
+
+			// Profiler
 		}
 	}
 

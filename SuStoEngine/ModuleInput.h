@@ -42,6 +42,7 @@ public:
 	~ModuleInput();
 
 	void OnLoadConfig(JSON_Doc* config);
+	void OnSaveConfig(JSON_Doc* config);
 	bool Awake();
 	bool PreUpdate();
 	bool CleanUp();
@@ -57,6 +58,10 @@ public:
 	bool GetKeyBindingRepeat(const char* binding_name);
 	bool GetKeyBindingUp(const char* binding_name);
 	void SetKeyBinding(const char* key, const char* binding_name);
+	const char* GetKeyBinding(const char* binding_name);
+
+	bool GetKeyboardInput(string& input);
+	void ClearKeyboardInput();
 
 	KEY_STATE GetMouseButton(int id) const;
 
@@ -68,19 +73,28 @@ public:
 	int GetMouseXMotion() const;
 	int GetMouseYMotion() const;
 
-private:
 	int CharToKey(const char* key);
+	const char* KeyToChar(int key);
+
+private:
 	void AddKeyDown(KeyBinding k);
 	void AddKeyRepeat(KeyBinding k);
 	void AddKeyUp(KeyBinding k);
 
 private:
+	// Those lists are filled and cleaned every frame
 	vector<KeyBinding> keys_down;
 	vector<KeyBinding> keys_repeat;
 	vector<KeyBinding> keys_up;
-	bool			   windowEvents[WE_COUNT];
+
+	// Used to reference bindings and keys and keep track of states
 	KeyBinding*		   keyboard;
+
+	bool			   windowEvents[WE_COUNT];
 	KEY_STATE		   mouse_buttons[MAX_MOUSE_BUTTONS];
+
+	string			   text_input;
+
 	int				   mouse_x = 0;
 	int				   mouse_y = 0;
 	int				   mouse_z = 0;
