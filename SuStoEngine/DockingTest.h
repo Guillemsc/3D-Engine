@@ -20,6 +20,7 @@ public:
 
 private:
 	DockContext* dock;
+	bool first_time = true;
 
 };
 

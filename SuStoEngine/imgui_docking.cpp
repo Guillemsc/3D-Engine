@@ -1025,6 +1025,34 @@ using namespace ImGui;
 		return -1;
 	}
 
+	void DockContext::SetDockSlotPosition(ImGuiDockSlot slot, DockContext::Dock dock)
+	{
+		switch (slot)
+		{
+		case ImGuiDockSlot_Bottom:
+			dock.getRoot().size.y *= 0.5f;
+			dock.size.y *= 0.5f;
+			dock.pos.y += dock.getRoot().size.y;
+			break;
+		case ImGuiDockSlot_Right:
+			dock.getRoot().size.x *= 0.5f;
+			dock.size.x *= 0.5f;
+			dock.pos.x += dock.getRoot().size.x;
+			break;
+		case ImGuiDockSlot_Left:
+			dock.getRoot().size.x *= 0.5f;
+			dock.size.x *= 0.5f;
+			dock.getRoot().pos.x += dock.size.x;
+			break;
+		case ImGuiDockSlot_Top:
+			dock.getRoot().size.y *= 0.5f;
+			dock.size.y *= 0.5f;
+			dock.getRoot().pos.y += dock.size.y;
+			break;
+		default: IM_ASSERT(false); break;
+		}
+	}
+
 
 DockContext g_dock;
 

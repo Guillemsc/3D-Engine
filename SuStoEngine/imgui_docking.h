@@ -145,7 +145,7 @@ struct DockContext
 	void debugWindow();
 	int getDockIndex(Dock* dock);
 
-
+	void SetDockSlotPosition(ImGuiDockSlot slot, Dock dock);
 };
 
 #endif

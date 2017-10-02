@@ -50,13 +50,14 @@ bool EditorUI::Awake()
 	hardware = new Hardware(true);
 	test = new DockingTest(true);
 
+	AddEditor(test);
 	AddEditor(console);
 	AddEditor(configuration);
 	AddEditor(about);
 	AddEditor(profiler_viewer);
 	AddEditor(engine_test);
 	AddEditor(hardware);
-	AddEditor(test);
+
 	// ---------------
 
 	return ret;
@@ -81,7 +82,7 @@ bool EditorUI::PreUpdate()
 	// ImGui new frame
 	ImGui_ImplSdlGL2_NewFrame(App->window->window);
 
-	igBeginWorkspace(&workspace_visible, ImVec2(0, 0), ImVec2(App->window->GetWindowSize().x, App->window->GetWindowSize().y), 
+	igBeginWorkspace(&workspace_visible, ImVec2(0, 23), ImVec2(App->window->GetWindowSize().x, App->window->GetWindowSize().y - 23), 
 		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
 
 	return ret;
@@ -90,6 +91,14 @@ bool EditorUI::PreUpdate()
 bool EditorUI::Update()
 {
 	bool ret = true;
+
+	// Draw editor elements
+	for (list<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
+	{
+		(*it)->Draw();
+	}
+
+	igEndWorkspace();
 
 	int win_width, win_height;
 	App->window->GetWindowSize(win_width, win_height);
@@ -142,20 +151,12 @@ bool EditorUI::Update()
 		ImGui::ShowTestWindow();
 	}
 	
-	// Draw editor elements
-	for (list<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
-	{
-		(*it)->Draw();
-	}
-
 	return ret;
 }
 
 bool EditorUI::DrawEditor()
 {
 	bool ret = true;
-
-	igEndWorkspace();
 
 	// ImGui Draw
 	ImGui::Render();
