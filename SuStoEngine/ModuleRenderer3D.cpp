@@ -158,6 +158,7 @@ bool ModuleRenderer3D::PreUpdate()
 bool ModuleRenderer3D::PostUpdate()
 {
 	fbo_texture->Unbind();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	App->editorUI->DrawEditor();
 

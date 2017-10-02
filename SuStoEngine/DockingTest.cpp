@@ -30,6 +30,7 @@ void DockingTest::Draw()
 		
 	}
 
+
 	igBeginWorkspace();
 	igDockDebugWindow();
 
