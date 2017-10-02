@@ -6,6 +6,7 @@
 #include "Functions.h"
 #include "Console.h"
 #include "glut\glut.h"
+#include "imgui_docking.h"
 
 EngineTest::EngineTest(bool start_enabled) : EditorElement(start_enabled)
 {
@@ -29,7 +30,7 @@ void EngineTest::Draw()
 
 	ImGui::SetNextWindowSize(ImVec2(600, 680), 4);
 
-	if (!ImGui::Begin("Engine Tests", &visible, ImGuiWindowFlags_NoResize))
+	if (!igBeginDock("Engine Tests", &visible, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 	{
 		// Early out if the window is collapsed, as an optimization.
 		ImGui::End();
