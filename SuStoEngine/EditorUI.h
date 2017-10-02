@@ -37,7 +37,7 @@ public:
 	bool Start();
 	bool PreUpdate();
 	bool Update();
-	bool PostUpdate();
+	bool DrawEditor();
 	bool CleanUp();
 
 	void ImGuiInput(SDL_Event* ev);

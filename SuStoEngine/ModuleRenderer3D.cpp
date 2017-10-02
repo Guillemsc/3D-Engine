@@ -4,7 +4,8 @@
 #include "Globals.h"
 #include "App.h"
 #include "ModuleRenderer3D.h"
-#include "Glew/include/glew.h"
+#include "EditorUI.h"
+#include "FBO.h"
 #include "SDL/include/SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -66,6 +67,9 @@ bool ModuleRenderer3D::Awake()
 		if (SDL_GL_SetSwapInterval(App->window->GetVsync()) < 0)
 			LOG_OUTPUT("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 
+		fbo_texture = new FBO();
+		fbo_texture->Create(App->window->GetWindowSize().x, App->window->GetWindowSize().y);
+
 		//Initialize Projection Matrix
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -125,9 +129,6 @@ bool ModuleRenderer3D::Awake()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
-	// Projection matrix for
-	OnResize(App->window->GetWindowSize().x, App->window->GetWindowSize().y);
-
 	return ret;
 }
 
@@ -135,6 +136,8 @@ bool ModuleRenderer3D::Awake()
 bool ModuleRenderer3D::PreUpdate()
 {
 	bool ret = true;
+
+	fbo_texture->Bind();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
@@ -154,6 +157,10 @@ bool ModuleRenderer3D::PreUpdate()
 // PostUpdate present buffer to screen
 bool ModuleRenderer3D::PostUpdate()
 {
+	fbo_texture->Unbind();
+
+	App->editorUI->DrawEditor();
+
 	SDL_GL_SwapWindow(App->window->window);
 	return true;
 }

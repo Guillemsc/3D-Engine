@@ -355,6 +355,9 @@
     <ClInclude Include="DockingTest.h">
       <Filter>Sources\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="FBO.h">
+      <Filter>Sources\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -554,6 +557,9 @@
     </ClCompile>
     <ClCompile Include="DockingTest.cpp">
       <Filter>Sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="FBO.cpp">
+      <Filter>Sources\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

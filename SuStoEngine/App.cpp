@@ -37,8 +37,8 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(camera);
 	AddModule(input);
 	AddModule(audio);
-	AddModule(editorUI);
 
+	AddModule(editorUI);
 	AddModule(debug_scene);
 
 	// Renderer last

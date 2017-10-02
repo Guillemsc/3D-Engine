@@ -6,6 +6,8 @@
 
 #define MAX_LIGHTS 8
 
+class FBO;
+
 class ModuleRenderer3D : public Module
 {
 public:
@@ -26,5 +28,6 @@ public:
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 
+	FBO* fbo_texture;
 	uint texture_id;
 };

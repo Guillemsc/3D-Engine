@@ -99,6 +99,7 @@
     <ClInclude Include="DockingTest.h" />
     <ClInclude Include="EditorUI.h" />
     <ClInclude Include="EngineTest.h" />
+    <ClInclude Include="FBO.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
@@ -203,6 +204,7 @@
     <ClCompile Include="DockingTest.cpp" />
     <ClCompile Include="EditorUI.cpp" />
     <ClCompile Include="EngineTest.cpp" />
+    <ClCompile Include="FBO.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="gpudetect\DeviceId.cpp" />
