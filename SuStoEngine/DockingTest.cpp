@@ -39,7 +39,7 @@ void DockingTest::Draw()
 	igEndDock();
 
 
-	igBeginDock("Dock2", &b, 0);
+	igBeginDock("Dock2", &b, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
 	ImGui::Text("is dis the rial doking?");
 	ImGui::Image((void*)App->renderer3D->fbo_texture->GetTexture(), ImVec2(dock->getDock("Dock1", &a).size.x, dock->getDock("Dock1", &a).size.y), ImVec2(0, 1), ImVec2(1, 0));
