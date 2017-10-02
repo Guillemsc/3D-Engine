@@ -26,7 +26,7 @@ typedef enum ImGuiDockSlot
 
 struct DockContext;
 
-extern void igBeginWorkspace();
+extern void igBeginWorkspace(bool *open, ImVec2 pos, ImVec2 size, ImGuiWindowFlags flags);
 extern void igEndWorkspace();
 extern void igShutdownDock();
 extern void igSetNextDock(ImGuiDockSlot slot);

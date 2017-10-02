@@ -1042,15 +1042,23 @@ void igSetNextDock(ImGuiDockSlot slot) {
 	g_dock.m_next_dock_slot = slot;
 }
 
-void igBeginWorkspace() {
-	ImGuiWindowFlags flags = ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar;
-	BeginChild("###workspace", ImVec2(0, 0), false, flags);
+void igBeginWorkspace(bool *open, ImVec2 pos, ImVec2 size, ImGuiWindowFlags flags)
+{
+	ImGui::SetNextWindowPos(pos);
+	ImGui::SetNextWindowSize(size);
+
+	ImGui::Begin("window", open, flags);
+
+	ImGuiWindowFlags f = ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar;
+	BeginChild("###workspace", ImVec2(0, 0), false, f);
 	g_dock.m_workspace_pos = GetWindowPos();
 	g_dock.m_workspace_size = GetWindowSize();
 }
 
-void igEndWorkspace() {
+void igEndWorkspace() 
+{
 	EndChild();
+	ImGui::End();
 }
 
 void igSetDockActive()

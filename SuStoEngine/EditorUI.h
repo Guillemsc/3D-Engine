@@ -60,6 +60,8 @@ private:
 
 	list<EditorElement*> editor_elements;
 
+	bool				 workspace_visible = false;
+
 	bool                 show_imgui_test_window	= false;
 	
 };

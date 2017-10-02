@@ -31,7 +31,6 @@ void DockingTest::Draw()
 	}
 
 
-	igBeginWorkspace();
 	igDockDebugWindow();
 
 	igBeginDock("Dock1", &a, 0);
@@ -46,6 +45,4 @@ void DockingTest::Draw()
 	ImGui::Image((void*)App->renderer3D->fbo_texture->GetTexture(), ImVec2(dock->getDock("Dock1", &a).size.x, dock->getDock("Dock1", &a).size.y), ImVec2(0, 1), ImVec2(1, 0));
 
 	igEndDock();
-
-	igEndWorkspace();
 }

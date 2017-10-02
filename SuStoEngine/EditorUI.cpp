@@ -9,6 +9,7 @@
 #include "Configuration.h"
 #include "About.h"
 #include "EngineTest.h"
+#include "imgui_docking.h"
 #include "ProfilerViewer.h"
 #include "Hardware.h"
 #include "DockingTest.h"
@@ -80,6 +81,9 @@ bool EditorUI::PreUpdate()
 	// ImGui new frame
 	ImGui_ImplSdlGL2_NewFrame(App->window->window);
 
+	igBeginWorkspace(&workspace_visible, ImVec2(0, 0), ImVec2(App->window->GetWindowSize().x, App->window->GetWindowSize().y), 
+		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar);
+
 	return ret;
 }
 
@@ -150,6 +154,8 @@ bool EditorUI::Update()
 bool EditorUI::DrawEditor()
 {
 	bool ret = true;
+
+	igEndWorkspace();
 
 	// ImGui Draw
 	ImGui::Render();
