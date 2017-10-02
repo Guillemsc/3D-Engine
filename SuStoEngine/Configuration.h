@@ -41,6 +41,10 @@ private:
 	int   display_size_width = 0;
 	int   display_size_height = 0;
 
+	// Rebind
+	string console_binding;
+	bool console_rebind = false;
+
 	// OpenGL Options
 	bool gl_depth = true;
 	bool gl_cull_face = false;

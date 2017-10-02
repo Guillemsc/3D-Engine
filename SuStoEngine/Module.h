@@ -65,6 +65,6 @@ public:
 	void SetEnabled(bool set) { enabled = set; };
 
 private:
-	string name			= "";
-	bool   enabled		= false;
+	string name = "";
+	bool   enabled = false;
 };

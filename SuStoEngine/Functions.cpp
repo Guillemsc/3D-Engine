@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include "Functions.h"
 #include "App.h"
 #include <stdio.h>
@@ -39,6 +40,14 @@ bool TextCmp(const char * text1, const char * text2)
 	return ret;
 }
 
+void TextCpy(char* destination, const char * origen)
+{
+	if (origen != nullptr)
+	{
+		strcpy_s(destination, strlen(origen), origen);
+	}
+}
+
 void Tokenize(std::string string, const char separator, std::list<std::string>& tokens)
 {
 	uint i = 0;
@@ -56,11 +65,24 @@ void Tokenize(std::string string, const char separator, std::list<std::string>& 
 	}
 }
 
-void ToLowerCase(std::string str)
+string ToUpperCase(string str)
 {
-	for (uint i = 0; i < str.size() - 1; i++) {
+	for (uint i = 0; i < str.size(); i++)
+	{
+		str[i] = toupper(str[i]);
+	}
+
+	return str;
+}
+
+string ToLowerCase(std::string str)
+{
+	for (uint i = 0; i < str.size(); i++) 
+	{
 		str[i] = tolower(str[i]);
 	}
+
+	return str;
 }
 
 int GetRandomValue(int range_1, int range_2)
