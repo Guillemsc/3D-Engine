@@ -20,6 +20,7 @@
 EditorUI::EditorUI(bool enabled) : Module(enabled)
 {
 	SetName("Editor");
+	memset(layout_name, 0, sizeof(layout_name));
 }
 
 EditorUI::~EditorUI()
@@ -134,6 +135,33 @@ bool EditorUI::Update()
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("Layouts"))
+		{
+			ImGui::Text("Current: %s", current_layout.c_str());
+
+			ImGui::Separator();
+			for (list<string>::iterator it = layouts.begin(); it != layouts.end(); it++)
+			{
+				if (ImGui::MenuItem((*it).c_str()))
+				{
+					SetCurrentLayout((*it).c_str());
+					LoadCurrentLayout();
+				}
+			}
+			ImGui::Separator();
+
+			ImGui::InputText("", layout_name, 254);
+			if (ImGui::Button("Save layout"))
+			{
+				if (!TextCmp(layout_name, ""))
+				{
+					SaveNewLayout(layout_name);
+				}
+			}
+
+			ImGui::EndMenu();
+		}
+
 		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
 		{
 			ImGui::MenuItem("Engine Tests", NULL, &engine_test->visible);
@@ -195,6 +223,12 @@ void EditorUI::LoadLayoutsInfo()
 
 	if (layout != nullptr)
 	{
+		int size = layout->GetArrayCount("layouts");
+		for (int i = 0; i < size; i++)
+		{
+			AddExistingLayout(layout->GetStringFromArray("layouts", i));
+		}
+
 		SetCurrentLayout(layout->GetString("editor.current_layout", ""));
 	}
 	else
@@ -214,6 +248,12 @@ void EditorUI::SaveLayoutsInfo()
 	if (layout != nullptr)
 	{
 		layout->SetString("editor.current_layout", current_layout.c_str());
+
+		layout->SetArray("layouts");
+		for (list<string>::iterator it = layouts.begin(); it != layouts.end(); it++)
+		{
+			layout->AddStringToArray("layouts", (*it).c_str());
+		}
 	}
 
 	SaveCurrentLayout();
@@ -302,6 +342,17 @@ void EditorUI::SaveNewLayout(const char * layout)
 	layouts.push_back(layout);
 	current_layout = layout;
 	SaveCurrentLayout();
+}
+
+void EditorUI::RemoveLayout(const char * layout)
+{
+	for (list<string>::iterator it = layouts.begin(); it != layouts.end(); it++)
+	{
+		if (TextCmp((*it).c_str(), layout))
+		{
+			return;
+		}
+	}
 }
 
 

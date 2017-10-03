@@ -51,11 +51,15 @@ public:
 
 	void LoadLayoutsInfo();
 	void SaveLayoutsInfo();
+	
 	void AddExistingLayout(const char* layout);
 	void SetCurrentLayout(const char* current = "");
+
 	void LoadCurrentLayout();
 	void SaveCurrentLayout();
 	void SaveNewLayout(const char* layout);
+
+	void RemoveLayout(const char* layout);
 
 private:
 	void AddEditor(EditorElement* el);
@@ -78,6 +82,8 @@ private:
 	bool				 workspace_visible = false;
 
 	bool                 show_imgui_test_window	= false;
+
+	char				 layout_name[255];
 };
 
 #endif // __j1FILESYSTEM_H__

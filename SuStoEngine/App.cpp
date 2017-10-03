@@ -215,11 +215,6 @@ void Application::LoadConfig()
 		const char* version = config->GetString("app.version", "No version");
 		int max_fps = config->GetNumber("app.max_fps", 60);
 
-		config->SetArray("array");
-		config->AddBoolToArray("array", true);
-		config->AddStringToArray("array", "lol");
-		config->Save();
-
 		SetAppName(title);
 		SetAppOrganization(organization);
 		SetVersion(version);
