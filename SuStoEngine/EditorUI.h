@@ -10,7 +10,7 @@ class About;
 class ProfilerViewer;
 class EngineTest;
 class Hardware;
-class DockingTest;
+class Game;
 
 class EditorElement
 {
@@ -49,17 +49,22 @@ public:
 
 	Console* GetConsole();
 
+	void LoadLayout();
+	void SaveLayout();
+
 private:
 	void AddEditor(EditorElement* el);
 
 private:
+	JSON_Doc*			 layout = nullptr;
+
 	Console*             console = nullptr;
 	Configuration*       configuration = nullptr;
 	About*               about = nullptr;
 	ProfilerViewer*      profiler_viewer	= nullptr;
 	EngineTest*          engine_test = nullptr;
 	Hardware*			 hardware = nullptr;
-	DockingTest*		 test = nullptr;
+	Game*				 game = nullptr;
 
 	list<EditorElement*> editor_elements;
 

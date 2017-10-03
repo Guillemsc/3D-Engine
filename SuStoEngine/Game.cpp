@@ -1,4 +1,4 @@
-#include "DockingTest.h"
+#include "Game.h"
 #include "imgui.h"
 #include "imgui_docking.h"
 #include "App.h"
@@ -6,20 +6,20 @@
 #include "ModuleRenderer3D.h"
 #include "FBO.h"
 
-DockingTest::DockingTest(bool start_enabled)
+Game::Game(bool start_enabled)
 {
 }
 
-DockingTest::~DockingTest()
+Game::~Game()
 {
 }
 
-void DockingTest::Start()
+void Game::Start()
 {
 	dock = getDockContext();
 }
 
-void DockingTest::Draw()
+void Game::Draw()
 {
 	bool a = true;
 	bool b = true;

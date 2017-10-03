@@ -1054,34 +1054,41 @@ using namespace ImGui;
 		}
 	}
 
-	void DockContext::SaveLayout(JSON_Doc * config)
+	void DockContext::SaveLayout(JSON_Doc * json)
 	{
-		/*config->SetNumber("DockLayout.Docks_Size", m_docks.size());
+		json->SetNumber("DockLayout.Docks_Size", m_docks.size());
 
-		for (int i = 0; i < m_docks.size(); ++i) {
+		for (int i = 0; i < m_docks.size(); ++i) 
+		{
 			Dock& dock = *m_docks[i];
-			config->SetString("DockLayout.Dock", std::to_string(i).c_str());
-			config->SetString("DockLayout.Dock.Label", dock.parent ? (dock.label[0] == '\0' ? "DOCK" : dock.label) : dock.status == Status_Float ? dock.label : "ROOT");
-			config->SetNumber("DockLayout.Dock.pos_X", (int)dock.pos.x);
-			config->SetNumber("DockLayout.Dock.pos_Y", (int)dock.pos.y);
-			config->SetNumber("DockLayout.Dock.size_X", (int)dock.size.x);
-			config->SetNumber("DockLayout.Dock.size_Y", (int)dock.size.y);
-			config->SetNumber("DockLayout.Dock.status", (int)dock.status);
-			config->SetBool("DockLayout.Dock.active", dock.active ? true : false);
-			config->SetBool("DockLayout.Dock.opened", dock.opened ? true : false);
+
+			std::string di = "Dock" + std::to_string(i) + ".";
+
+			json->SetString(di + "ID", std::to_string(i).c_str());
+			json->SetString(di + "Label", dock.parent ? (dock.label[0] == '\0' ? "DOCK" : dock.label) : dock.status == Status_Float ? dock.label : "ROOT");
+			json->SetNumber(di + "pos_X", (int)dock.pos.x);
+			json->SetNumber(di + "pos_Y", (int)dock.pos.y);
+			json->SetNumber(di + "size_X", (int)dock.size.x);
+			json->SetNumber(di + "size_Y", (int)dock.size.y);
+			json->SetNumber(di + "status", (int)dock.status);
+			json->SetBool(di + "active", dock.active ? true : false);
+			json->SetBool(di + "opened", dock.opened ? true : false);
 			fillLocation(dock);
-			config->SetString("DockLayout.Dock.location", strlen(dock.location) ? dock.location : "-1");
-			config->SetNumber("DockLayout.Dock.child0", getDockIndex(dock.children[0]));
-			config->SetNumber("DockLayout.Dock.child1", getDockIndex(dock.children[1]));
-			config->SetNumber("DockLayout.Dock.prev_tab", getDockIndex(dock.prev_tab));
-			config->SetNumber("DockLayout.Dock.next_tab", getDockIndex(dock.next_tab));
-			if (dock.parent == nullptr && &dock != getRootDock()) {
-				config->SetNumber("DockLayout.Dock.parent", getDockIndex(getRootDock()));
+			json->SetString(di + "location", strlen(dock.location) ? dock.location : "-1");
+			json->SetNumber(di + "child0", getDockIndex(dock.children[0]));
+			json->SetNumber(di + "child1", getDockIndex(dock.children[1]));
+			json->SetNumber(di + "prev_tab", getDockIndex(dock.prev_tab));
+			json->SetNumber(di + "next_tab", getDockIndex(dock.next_tab));
+
+			if (dock.parent == nullptr && &dock != getRootDock()) 
+			{
+				json->SetNumber(di + "parent", getDockIndex(getRootDock()));
 			}
-			else {
-				config->SetNumber("DockLayout.Dock.parent", getDockIndex(dock.parent));
+			else 
+			{
+				json->SetNumber(di + "parent", getDockIndex(dock.parent));
 			}
-		}*/
+		}
 	}
 
 	bool DockContext::LoadLayout(JSON_Doc * config)

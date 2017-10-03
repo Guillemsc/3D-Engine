@@ -96,7 +96,7 @@
     <ClInclude Include="Configuration.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="DebugScene.h" />
-    <ClInclude Include="DockingTest.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="EditorUI.h" />
     <ClInclude Include="EngineTest.h" />
     <ClInclude Include="FBO.h" />
@@ -201,7 +201,7 @@
     <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="DebugScene.cpp" />
-    <ClCompile Include="DockingTest.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="EditorUI.cpp" />
     <ClCompile Include="EngineTest.cpp" />
     <ClCompile Include="FBO.cpp" />

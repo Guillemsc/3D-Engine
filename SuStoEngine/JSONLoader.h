@@ -10,9 +10,10 @@ public:
 	JSON_Doc(JSON_Value* value, JSON_Object* object, const char* path);
 	~JSON_Doc();
 
-	void SetString(const char* set, const char* str);
-	void SetBool(const char* set, bool bo);
-	void SetNumber(const char* set, double nu);
+	void SetString(string set, const char* str);
+	void SetBool(string set, bool bo);
+	void SetNumber(string set, double nu);
+	void SetArray(const char* set);
 	const char* GetString(const char* str, const char* defaul = "");
 	bool GetBool(const char* bo, bool defaul = false);
 	double GetNumber(const char* nu, double defaul = 0);

@@ -40,7 +40,7 @@ JSON_Doc* JSONLoader::LoadJSON(const char * path)
 		JSON_Value *user_data = json_parse_file(path);
 		JSON_Object *root_object = json_value_get_object(user_data);
 
-		if (user_data == nullptr)
+		if (user_data == nullptr && root_object == nullptr)
 		{
 			LOG_OUTPUT("Error loading %s", path);
 		}
@@ -87,11 +87,12 @@ JSON_Doc* JSONLoader::CreateJSON(const char * path)
 		}
 		else
 		{
-
 			JSON_Object* root_object = json_value_get_object(root_value);
 
 			JSON_Doc* new_doc = new JSON_Doc(root_value, root_object, path);
 			jsons.push_back(new_doc);
+
+			new_doc->Save();
 
 			ret = new_doc;
 		}
@@ -128,19 +129,27 @@ JSON_Doc::~JSON_Doc()
 {
 }
 
-void JSON_Doc::SetString(const char * set, const char * str)
+void JSON_Doc::SetString(string set, const char * str)
 {
-	json_object_dotset_string(object, set, str);
+	json_object_dotset_string(object, set.c_str(), str);
 }
 
-void JSON_Doc::SetBool(const char * set, bool bo)
+void JSON_Doc::SetBool(string set, bool bo)
 {
-	json_object_dotset_boolean(object, set, bo);
+	json_object_dotset_boolean(object, set.c_str(), bo);
 }
 
-void JSON_Doc::SetNumber(const char * set, double nu)
+void JSON_Doc::SetNumber(string set, double nu)
 {
-	json_object_dotset_number(object, set, nu);
+	json_object_dotset_number(object, set.c_str(), nu);
+}
+
+void JSON_Doc::SetArray(const char * set)
+{
+	JSON_Value* va = json_value_init_array();
+	JSON_Array* arr = json_value_get_array(va);
+
+	json_object_dotset_value(object, set, va);
 }
 
 const char * JSON_Doc::GetString(const char * str, const char* defaul)

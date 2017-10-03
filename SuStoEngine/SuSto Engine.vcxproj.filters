@@ -352,11 +352,11 @@
     <ClInclude Include="imgui_docking.h">
       <Filter>Sources\Components\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="DockingTest.h">
-      <Filter>Sources\Editor</Filter>
-    </ClInclude>
     <ClInclude Include="FBO.h">
       <Filter>Sources\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Sources\Editor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -555,11 +555,11 @@
     <ClCompile Include="imgui_docking.cpp">
       <Filter>Sources\Components\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="DockingTest.cpp">
-      <Filter>Sources\Editor</Filter>
-    </ClCompile>
     <ClCompile Include="FBO.cpp">
       <Filter>Sources\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Sources\Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

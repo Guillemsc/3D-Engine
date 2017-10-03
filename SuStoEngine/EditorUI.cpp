@@ -12,7 +12,7 @@
 #include "imgui_docking.h"
 #include "ProfilerViewer.h"
 #include "Hardware.h"
-#include "DockingTest.h"
+#include "Game.h"
 #include "JSONLoader.h"
 
 //https://github.com/ocornut/imgui/issues/351
@@ -49,9 +49,9 @@ bool EditorUI::Awake()
 	profiler_viewer = new ProfilerViewer(true);
 	engine_test = new EngineTest(false);
 	hardware = new Hardware(true);
-	test = new DockingTest(true);
+	game = new Game(true);
 
-	AddEditor(test);
+	AddEditor(game);
 	AddEditor(console);
 	AddEditor(configuration);
 	AddEditor(about);
@@ -61,14 +61,14 @@ bool EditorUI::Awake()
 
 	// ---------------
 
+	LoadLayout();
+
 	return ret;
 }
 
 bool EditorUI::Start()
 {
 	bool ret = true;
-
-	OnLoadConfig(App->GetConfig());
 
 	for (list<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
 	{
@@ -171,7 +171,7 @@ bool EditorUI::CleanUp()
 {
 	bool ret = true;
 
-	OnSaveConfig(App->GetConfig());
+	SaveLayout();
 
 	LOG_OUTPUT("Destroying ImGui");
 	ImGui_ImplSdlGL2_Shutdown();
@@ -189,12 +189,12 @@ bool EditorUI::CleanUp()
 
 void EditorUI::OnLoadConfig(JSON_Doc * config)
 {
-	getDockContext()->LoadLayout(config);
+
 }
 
 void EditorUI::OnSaveConfig(JSON_Doc * config)
 {
-	getDockContext()->SaveLayout(config);
+
 }
 
 void EditorUI::ImGuiInput(SDL_Event* ev)
@@ -207,6 +207,35 @@ void EditorUI::ImGuiInput(SDL_Event* ev)
 void EditorUI::AddEditor(EditorElement * el)
 {
 	editor_elements.push_back(el);
+}
+
+void EditorUI::LoadLayout()
+{
+	if (layout == nullptr)
+		layout = App->json->LoadJSON("layout.json");
+
+	if (layout == nullptr)
+		layout = App->json->CreateJSON("layout.json");
+
+	if (layout != nullptr)
+	{
+		getDockContext()->LoadLayout(layout);
+	}
+}
+
+void EditorUI::SaveLayout()
+{
+	if (layout == nullptr)
+		layout = App->json->LoadJSON("layout.json");
+
+	if (layout == nullptr)
+		layout = App->json->CreateJSON("layout.json");
+
+	if (layout != nullptr)
+	{
+		getDockContext()->SaveLayout(layout);
+		layout->Save();
+	}
 }
 
 
