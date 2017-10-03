@@ -17,11 +17,15 @@
         "brightness": 1
     },
     "input": {
-        "console": "[",
+        "console": "",
         "profiler": "",
         "configuration": "C"
     },
     "editor": {
         "current_layout": "default"
-    }
+    },
+    "array": [
+        true,
+        "lol"
+    ]
 }

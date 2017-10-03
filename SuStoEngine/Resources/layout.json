@@ -139,5 +139,8 @@
             "next_tab": -1,
             "parent": 5
         }
+    },
+    "editor": {
+        "current_layout": "default"
     }
 }

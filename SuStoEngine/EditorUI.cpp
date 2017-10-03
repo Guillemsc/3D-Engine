@@ -61,7 +61,7 @@ bool EditorUI::Awake()
 
 	// ---------------
 
-	SetCurrentLayout();
+	LoadLayoutsInfo();
 	LoadCurrentLayout();
 
 	return ret;
@@ -172,7 +172,7 @@ bool EditorUI::CleanUp()
 {
 	bool ret = true;
 
-	SaveCurrentLayout();
+	SaveLayoutsInfo();
 
 	LOG_OUTPUT("Destroying ImGui");
 	ImGui_ImplSdlGL2_Shutdown();
@@ -188,14 +188,45 @@ bool EditorUI::CleanUp()
 	return ret;
 }
 
+void EditorUI::LoadLayoutsInfo()
+{
+	if (layout == nullptr)
+		layout = App->json->LoadJSON("layout.json");
+
+	if (layout != nullptr)
+	{
+		SetCurrentLayout(layout->GetString("editor.current_layout", ""));
+	}
+	else
+	{
+		SetCurrentLayout();
+	}
+}
+
+void EditorUI::SaveLayoutsInfo()
+{
+	if (layout == nullptr)
+		layout = App->json->LoadJSON("layout.json");
+
+	if (layout == nullptr)
+		layout = App->json->CreateJSON("layout.json");
+
+	if (layout != nullptr)
+	{
+		layout->SetString("editor.current_layout", current_layout.c_str());
+	}
+
+	SaveCurrentLayout();
+}
+
 void EditorUI::OnLoadConfig(JSON_Doc * config)
 {
-	SetCurrentLayout(config->GetString("editor.current_layout", ""));
+
 }
 
 void EditorUI::OnSaveConfig(JSON_Doc * config)
 {
-	config->SetString("editor.current_layout", current_layout.c_str());
+
 }
 
 void EditorUI::ImGuiInput(SDL_Event* ev)
@@ -239,9 +270,6 @@ void EditorUI::SetCurrentLayout(const char * current)
 
 void EditorUI::LoadCurrentLayout()
 {
-	if (layout == nullptr)
-		layout = App->json->LoadJSON("layout.json");
-
 	if (layout != nullptr)
 	{
 		layout->MoveToRoot();
@@ -252,12 +280,6 @@ void EditorUI::LoadCurrentLayout()
 
 void EditorUI::SaveCurrentLayout()
 {
-	if (layout == nullptr)
-		layout = App->json->LoadJSON("layout.json");
-
-	if (layout == nullptr)
-		layout = App->json->CreateJSON("layout.json");
-
 	if (layout != nullptr)
 	{
 		layout->MoveToRoot();

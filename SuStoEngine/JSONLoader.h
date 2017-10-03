@@ -13,10 +13,18 @@ public:
 	void SetString(string set, const char* str);
 	void SetBool(string set, bool bo);
 	void SetNumber(string set, double nu);
-	void SetArray(const char* set);
-	const char* GetString(const char* str, const char* defaul = "");
-	bool GetBool(const char* bo, bool defaul = false);
-	double GetNumber(const char* nu, double defaul = 0);
+	const char* GetString(string str, const char* defaul = "");
+	bool GetBool(string bo, bool defaul = false);
+	double GetNumber(string nu, double defaul = 0);
+
+	void SetArray(string set);
+	void AddStringToArray(string arr, const char* str);
+	void AddBoolToArray(string arr, bool bo);
+	void AddNumberToArray(string arr, double set);
+	int GetArrayCount(string set);
+	const char* GetStringFromArray(string arr, int index);
+	bool GetBoolFromArray(string arr, int index);
+	double GetNumberFromArray(string arr, int index);
 
 	bool MoveToSection(string set);
 	void MoveToRoot();
@@ -28,6 +36,7 @@ public:
 
 private:
 	bool FindValue(const char* str, json_value_type type);
+	bool FindArrayValue(const char* array, int index, json_value_type type);
 
 private:
 	JSON_Value*  value = nullptr;

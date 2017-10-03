@@ -145,40 +145,135 @@ void JSON_Doc::SetNumber(string set, double nu)
 	json_object_dotset_number(object, set.c_str(), nu);
 }
 
-void JSON_Doc::SetArray(const char * set)
+void JSON_Doc::SetArray(string set)
 {
 	JSON_Value* va = json_value_init_array();
 	JSON_Array* arr = json_value_get_array(va);
 
-	json_object_dotset_value(object, set, va);
+	json_object_dotset_value(object, set.c_str(), va);
 }
 
-const char * JSON_Doc::GetString(const char * str, const char* defaul)
+int JSON_Doc::GetArrayCount(string set)
+{
+	int ret = 0;
+
+	JSON_Array* array = json_object_get_array(root, set.c_str());
+
+	if (array != nullptr)
+	{
+		ret = json_array_get_count(array);
+	}
+
+	return ret;
+}
+
+const char * JSON_Doc::GetStringFromArray(string arr, int index)
+{
+	const char* ret = nullptr;
+
+	JSON_Array* array = json_object_get_array(root, arr.c_str());
+
+	if (array != nullptr)
+	{
+		if (FindArrayValue(arr.c_str(), index, json_value_type::JSONString))
+		{
+			ret = json_array_get_string(array, index);
+		}
+	}
+
+	return ret;
+}
+
+bool JSON_Doc::GetBoolFromArray(string arr, int index)
+{
+	bool ret = false;
+
+	JSON_Array* array = json_object_get_array(root, arr.c_str());
+
+	if (array != nullptr)
+	{
+		if (FindArrayValue(arr.c_str(), index, json_value_type::JSONBoolean))
+		{
+			ret = json_array_get_boolean(array, index);
+		}
+	}
+
+	return ret;
+}
+
+double JSON_Doc::GetNumberFromArray(string arr, int index)
+{
+	double ret = 0;
+
+	JSON_Array* array = json_object_get_array(root, arr.c_str());
+
+	if (array != nullptr)
+	{
+		if (FindArrayValue(arr.c_str(), index, json_value_type::JSONNumber))
+		{
+			ret = json_array_get_number(array, index);
+		}
+	}
+
+	return ret;
+}
+
+void JSON_Doc::AddStringToArray(string arr, const char * str)
+{
+	JSON_Array* array = json_object_get_array(root, arr.c_str());
+
+	if (array != nullptr)
+	{
+		json_array_append_string(array, str);
+	}
+}
+
+void JSON_Doc::AddBoolToArray(string arr, bool bo)
+{
+	JSON_Array* array = json_object_get_array(root, arr.c_str());
+
+	if (array != nullptr)
+	{
+		json_array_append_boolean(array, bo);
+	}
+}
+
+void JSON_Doc::AddNumberToArray(string arr, double set)
+{
+	JSON_Array* array = json_object_get_array(root, arr.c_str());
+
+	if (array != nullptr)
+	{
+		json_array_append_number(array, set);
+	}
+}
+
+const char * JSON_Doc::GetString(string str, const char* defaul)
 {
 	const char* ret = defaul;
 
-	if(FindValue(str, json_value_type::JSONString))
-		ret = json_object_dotget_string(object, str);
+	if(FindValue(str.c_str(), json_value_type::JSONString))
+		ret = json_object_dotget_string(object, str.c_str());
 
 	return ret;
 }
 
-bool JSON_Doc::GetBool(const char * str, bool defaul)
+bool JSON_Doc::GetBool(string str, bool defaul)
 {
 	bool ret = defaul;
 
-	if (FindValue(str, json_value_type::JSONBoolean))
-		ret = json_object_dotget_boolean(object, str);
+	if (FindValue(str.c_str(), json_value_type::JSONBoolean))
+		ret = json_object_dotget_boolean(object, str.c_str());
 
 	return ret;
 }
 
-double JSON_Doc::GetNumber(const char * str, double defaul)
+double JSON_Doc::GetNumber(string str, double defaul)
 {
 	double ret = defaul;
 
-	if (FindValue(str, json_value_type::JSONNumber))
-		ret = json_object_dotget_number(object, str);
+	if (FindValue(str.c_str(), json_value_type::JSONNumber))
+		ret = json_object_dotget_number(object, str.c_str());
 
 	return ret;
 }
@@ -231,6 +326,23 @@ bool JSON_Doc::FindValue(const char * str, json_value_type type)
 
 	if (val != nullptr && json_value_get_type(val) == type)
 		ret = true;
+
+	return ret;
+}
+
+bool JSON_Doc::FindArrayValue(const char * arr, int index, json_value_type type)
+{
+	bool ret = false;
+
+	JSON_Array* array = json_object_get_array(root, arr);
+
+	if (array != nullptr)
+	{
+		JSON_Value* val = json_array_get_value(array, index);
+
+		if (val != nullptr && json_value_get_type(val) == type)
+			ret = true;
+	}
 
 	return ret;
 }
