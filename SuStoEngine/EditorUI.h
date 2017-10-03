@@ -49,6 +49,7 @@ public:
 
 	Console* GetConsole();
 
+	void AddExistingLayout(const char* layout);
 	void SetCurrentLayout(const char* current = "");
 	void LoadCurrentLayout();
 	void SaveCurrentLayout();

@@ -154,7 +154,7 @@ bool EditorUI::Update()
 	{
 		ImGui::ShowTestWindow();
 	}
-	
+
 	return ret;
 }
 
@@ -190,12 +190,12 @@ bool EditorUI::CleanUp()
 
 void EditorUI::OnLoadConfig(JSON_Doc * config)
 {
-
+	SetCurrentLayout(config->GetString("editor.current_layout", ""));
 }
 
 void EditorUI::OnSaveConfig(JSON_Doc * config)
 {
-
+	config->SetString("editor.current_layout", current_layout.c_str());
 }
 
 void EditorUI::ImGuiInput(SDL_Event* ev)
@@ -208,6 +208,19 @@ void EditorUI::ImGuiInput(SDL_Event* ev)
 void EditorUI::AddEditor(EditorElement * el)
 {
 	editor_elements.push_back(el);
+}
+
+void EditorUI::AddExistingLayout(const char * layout)
+{
+	for (list<string>::iterator it = layouts.begin(); it != layouts.end(); it++)
+	{
+		if (TextCmp((*it).c_str(), layout))
+		{
+			return;
+		}
+	}
+
+	layouts.push_back(layout);
 }
 
 void EditorUI::SetCurrentLayout(const char * current)

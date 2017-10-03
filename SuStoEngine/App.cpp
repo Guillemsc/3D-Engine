@@ -174,6 +174,8 @@ bool Application::CleanUp()
 {
 	bool ret = true;
 
+	SaveConfig();
+
 	for (list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rend(); it++)
 	{
 		ret = (*it)->CleanUp();
