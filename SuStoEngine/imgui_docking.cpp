@@ -1062,6 +1062,8 @@ using namespace ImGui;
 	void DockContext::SaveLayout(JSON_Doc * json, char* layout_name)
 	{
 		json->SetNumber("DockLayout.Docks_Size", m_docks.size());
+		json->AddSection(layout_name);
+		json->MoveToSection(layout_name);
 
 		for (int i = 0; i < m_docks.size(); ++i) 
 		{
@@ -1113,6 +1115,7 @@ using namespace ImGui;
 			m_docks.push_back(new_dock);
 		}
 
+		json->MoveToSection(layout_name);
 
 		for (int i = 0; i < docks; i++) 
 		{
