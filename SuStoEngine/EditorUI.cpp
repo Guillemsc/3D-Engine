@@ -214,9 +214,6 @@ void EditorUI::LoadLayout()
 	if (layout == nullptr)
 		layout = App->json->LoadJSON("layout.json");
 
-	if (layout == nullptr)
-		layout = App->json->CreateJSON("layout.json");
-
 	if (layout != nullptr)
 	{
 		getDockContext()->LoadLayout(layout);

@@ -149,7 +149,7 @@ struct DockContext
 	void SetDockSlotPosition(ImGuiDockSlot slot, Dock dock);
 
 	void SaveLayout(JSON_Doc* config);
-	bool LoadLayout(JSON_Doc* config);
+	void LoadLayout(JSON_Doc* config);
 };
 
 #endif

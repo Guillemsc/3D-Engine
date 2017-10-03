@@ -1091,9 +1091,14 @@ using namespace ImGui;
 		}
 	}
 
-	bool DockContext::LoadLayout(JSON_Doc * config)
+	void DockContext::LoadLayout(JSON_Doc * json)
 	{
-		return false;
+		int docks = json->GetNumber("DockLayout.Docks_Size", m_docks.size());
+
+		for (int i = 0; i < docks; ++i)
+		{
+
+		}
 	}
 
 
