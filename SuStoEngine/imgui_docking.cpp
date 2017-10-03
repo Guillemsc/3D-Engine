@@ -1059,7 +1059,7 @@ using namespace ImGui;
 		return idx < 0 ? nullptr : m_docks[(int)idx]; 
 	}
 
-	void DockContext::SaveLayout(JSON_Doc * json)
+	void DockContext::SaveLayout(JSON_Doc * json, char* layout_name)
 	{
 		json->SetNumber("DockLayout.Docks_Size", m_docks.size());
 
@@ -1096,7 +1096,7 @@ using namespace ImGui;
 		}
 	}
 
-	void DockContext::LoadLayout(JSON_Doc * json)
+	void DockContext::LoadLayout(JSON_Doc * json, char* layout_name)
 	{
 		for (int i = 0; i < m_docks.size(); ++i)
 		{
@@ -1106,12 +1106,13 @@ using namespace ImGui;
 		m_docks.clear();
 
 		int docks = json->GetNumber("DockLayout.Docks_Size", m_docks.size());
-
+		
 		for (int i = 0; i < docks; ++i)
 		{
 			Dock *new_dock = (Dock *)MemAlloc(sizeof(Dock));
 			m_docks.push_back(new_dock);
 		}
+
 
 		for (int i = 0; i < docks; i++) 
 		{

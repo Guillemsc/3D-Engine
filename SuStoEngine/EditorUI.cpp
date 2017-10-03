@@ -216,6 +216,7 @@ void EditorUI::LoadLayout()
 
 	if (layout != nullptr)
 	{
+		layout->MoveToRoot();
 		getDockContext()->LoadLayout(layout);
 	}
 }
@@ -230,6 +231,7 @@ void EditorUI::SaveLayout()
 
 	if (layout != nullptr)
 	{
+		layout->MoveToRoot();
 		getDockContext()->SaveLayout(layout);
 		layout->Save();
 	}
