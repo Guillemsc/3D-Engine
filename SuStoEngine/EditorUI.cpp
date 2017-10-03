@@ -61,7 +61,8 @@ bool EditorUI::Awake()
 
 	// ---------------
 
-	LoadLayout();
+	SetCurrentLayout();
+	LoadCurrentLayout();
 
 	return ret;
 }
@@ -209,24 +210,28 @@ void EditorUI::AddEditor(EditorElement * el)
 	editor_elements.push_back(el);
 }
 
-void EditorUI::LoadLayout(const char* layout_name)
+void EditorUI::SetCurrentLayout(const char * current)
+{
+	for (list<string>::iterator it = layouts.begin(); it != layouts.end(); it++)
+	{
+		if (TextCmp((*it).c_str(), current))
+		{
+			current_layout = current;
+			return;
+		}
+	}
+
+	current_layout = "default";
+}
+
+void EditorUI::LoadCurrentLayout()
 {
 	if (layout == nullptr)
 		layout = App->json->LoadJSON("layout.json");
 
 	if (layout != nullptr)
 	{
-		current_layout = "default";
 		layout->MoveToRoot();
-
-		for (list<string>::iterator it = layouts.begin(); it != layouts.end(); it++)
-		{
-			if (TextCmp((*it).c_str(), layout_name))
-			{
-				current_layout = layout_name;
-				break;
-			}
-		}
 
 		getDockContext()->LoadLayout(layout, current_layout.c_str());
 	}
@@ -244,15 +249,8 @@ void EditorUI::SaveCurrentLayout()
 	{
 		layout->MoveToRoot();
 
-		for (list<string>::iterator it = layouts.begin(); it != layouts.end(); it++)
-		{
-			if (TextCmp((*it).c_str(), current_layout.c_str()))
-			{
-				getDockContext()->SaveLayout(layout, current_layout.c_str());
-				layout->Save();
-				return;
-			}
-		}
+		getDockContext()->SaveLayout(layout, current_layout.c_str());
+		layout->Save();
 	}
 }
 

@@ -49,7 +49,8 @@ public:
 
 	Console* GetConsole();
 
-	void LoadLayout(const char* layout = "");
+	void SetCurrentLayout(const char* current = "");
+	void LoadCurrentLayout();
 	void SaveCurrentLayout();
 	void SaveNewLayout(const char* layout);
 
