@@ -1113,7 +1113,8 @@ using namespace ImGui;
 			m_docks.push_back(new_dock);
 		}
 
-		for (int i = 0; i < docks; i++) {
+		for (int i = 0; i < docks; i++) 
+		{
 			std::string di = "Dock" + std::to_string(i) + ".";
 
 			m_docks[i]->label = _strdup(json->GetString((di + "Label").c_str()));
@@ -1123,7 +1124,8 @@ using namespace ImGui;
 			m_docks[i]->opened = json->GetBool((di + "opened").c_str());
 			std::string str = json->GetString((di + "location").c_str());
 			int j = 0;
-			for (std::string::iterator it = str.begin(); it != str.end(); it++) {
+			for (std::string::iterator it = str.begin(); it != str.end(); it++) 
+			{
 				m_docks[i]->location[j] = *it;
 				j++;
 			}

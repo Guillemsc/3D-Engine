@@ -28,30 +28,26 @@ void EngineTest::Draw()
 	if (!visible)
 		return;
 
-	if (!igBeginDock("Engine Tests", &visible, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	if (igBeginDock("Engine Tests", &visible, 0))
 	{
-		// Early out if the window is collapsed, as an optimization.
-		ImGui::End();
-		return;
-	}
+		ImGui::Separator();
 
-	ImGui::Separator();
-
-	if (ImGui::CollapsingHeader("Random Number Generation"))
-	{
-		ImGui::InputFloat2("Min | Max", range_demo.ptr(), 2);
-		ImGui::InputInt("Number of generations", &quantity_demo);
-
-		if (ImGui::Button("Generate", { 400, 30 }))
+		if (ImGui::CollapsingHeader("Random Number Generation"))
 		{
-			GenerateRandomNumbers(range_demo, quantity_demo);
+			ImGui::InputFloat2("Min | Max", range_demo.ptr(), 2);
+			ImGui::InputInt("Number of generations", &quantity_demo);
+
+			if (ImGui::Button("Generate", { 400, 30 }))
+			{
+				GenerateRandomNumbers(range_demo, quantity_demo);
+			}
+
 		}
 
-	}
-
-	if (ImGui::CollapsingHeader("Geometry math test"))
-	{
-		GeometryMathTest();
+		if (ImGui::CollapsingHeader("Geometry math test"))
+		{
+			GeometryMathTest();
+		}
 	}
 
 	igEndDock();

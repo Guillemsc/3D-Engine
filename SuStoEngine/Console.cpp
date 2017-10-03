@@ -79,8 +79,8 @@ void Console::Draw()
 	}
 
 	// Keep focus on text input
-	if (ImGui::IsItemHovered() || (ImGui::IsRootWindowOrAnyChildFocused() && !ImGui::IsAnyItemActive() && !ImGui::IsMouseClicked(0)))
-		ImGui::SetKeyboardFocusHere(-1);
+	//if (ImGui::IsItemHovered() || (ImGui::IsRootWindowOrAnyChildFocused() && !ImGui::IsAnyItemActive() && !ImGui::IsMouseClicked(0)))
+	//	ImGui::SetKeyboardFocusHere(-1);
 
 	// Submit button
 	ImGui::SameLine();
