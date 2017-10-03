@@ -122,6 +122,7 @@ JSON_Doc::JSON_Doc(JSON_Value * _value, JSON_Object * _object, const char* _path
 {
 	value = _value;
 	object = _object;
+	root = _object;
 	path = _path;
 }
 
@@ -180,6 +181,31 @@ double JSON_Doc::GetNumber(const char * str, double defaul)
 		ret = json_object_dotget_number(object, str);
 
 	return ret;
+}
+
+bool JSON_Doc::MoveToSection(string set)
+{
+	bool ret = false;
+
+	JSON_Object* obj = json_object_get_object(object, set.c_str());
+
+	if (obj != nullptr)
+	{
+		object = obj;
+		ret = true;
+	}
+
+	return ret;
+}
+
+void JSON_Doc::MoveToRoot()
+{
+	object = root;
+}
+
+void JSON_Doc::AddSection(string set)
+{
+	json_object_set_value(object, set.c_str(), json_value_init_object());
 }
 
 const char * JSON_Doc::GetPath()

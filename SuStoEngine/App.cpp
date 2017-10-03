@@ -206,11 +206,13 @@ void Application::LoadConfig()
 
 	if (config != nullptr)
 	{
+		config->MoveToRoot();
+
 		const char* title = config->GetString("app.title", "No title");
 		const char* organization = config->GetString("app.organization", "No org");
 		const char* version = config->GetString("app.version", "No version");
 		int max_fps = config->GetNumber("app.max_fps", 60);
-		
+
 		SetAppName(title);
 		SetAppOrganization(organization);
 		SetVersion(version);
@@ -227,6 +229,8 @@ void Application::SaveConfig(Module* module)
 {
 	if (config != nullptr)
 	{
+		config->MoveToRoot();
+
 		config->SetString("app.title", App->GetAppName());
 		config->SetString("app.organization", App->GetAppOrganization());
 		config->SetNumber("app.max_fps", App->GetMaxFps());

@@ -18,6 +18,10 @@ public:
 	bool GetBool(const char* bo, bool defaul = false);
 	double GetNumber(const char* nu, double defaul = 0);
 
+	bool MoveToSection(string set);
+	void MoveToRoot();
+	void AddSection(string set);
+
 	const char* GetPath();
 	void Save();
 	void CleanUp();
@@ -28,6 +32,7 @@ private:
 private:
 	JSON_Value*  value = nullptr;
 	JSON_Object* object = nullptr;
+	JSON_Object* root = nullptr;
 	const char*  path;
 };
 
