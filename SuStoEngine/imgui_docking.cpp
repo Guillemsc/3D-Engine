@@ -1054,6 +1054,11 @@ using namespace ImGui;
 		}
 	}
 
+	DockContext::Dock* DockContext::getDockByIndex(int idx) 
+	{ 
+		return idx < 0 ? nullptr : m_docks[(int)idx]; 
+	}
+
 	void DockContext::SaveLayout(JSON_Doc * json)
 	{
 		json->SetNumber("DockLayout.Docks_Size", m_docks.size());
@@ -1093,11 +1098,47 @@ using namespace ImGui;
 
 	void DockContext::LoadLayout(JSON_Doc * json)
 	{
+		for (int i = 0; i < m_docks.size(); ++i)
+		{
+			m_docks[i]->~Dock();
+			MemFree(m_docks[i]);
+		}
+		m_docks.clear();
+
 		int docks = json->GetNumber("DockLayout.Docks_Size", m_docks.size());
 
 		for (int i = 0; i < docks; ++i)
 		{
+			Dock *new_dock = (Dock *)MemAlloc(sizeof(Dock));
+			m_docks.push_back(new_dock);
+		}
 
+		for (int i = 0; i < docks; i++) {
+			std::string di = "Dock" + std::to_string(i) + ".";
+
+			m_docks[i]->label = _strdup(json->GetString((di + "Label").c_str()));
+			m_docks[i]->id = ImHash(m_docks[i]->label, 0);
+			m_docks[i]->status = (Status_)(int)json->GetNumber((di + "status").c_str());
+			m_docks[i]->active = json->GetBool((di + "active").c_str());
+			m_docks[i]->opened = json->GetBool((di + "opened").c_str());
+			std::string str = json->GetString((di + "location").c_str());
+			int j = 0;
+			for (std::string::iterator it = str.begin(); it != str.end(); it++) {
+				m_docks[i]->location[j] = *it;
+				j++;
+			}
+			m_docks[i]->location[j] = '\0';
+			m_docks[i]->children[0] = getDockByIndex(json->GetNumber((di + "child0").c_str()));
+			m_docks[i]->children[1] = getDockByIndex(json->GetNumber((di + "child1").c_str()));
+			m_docks[i]->prev_tab = getDockByIndex(json->GetNumber((di + "prev_tab").c_str()));
+			m_docks[i]->next_tab = getDockByIndex(json->GetNumber((di + "next_tab").c_str()));
+			m_docks[i]->parent = getDockByIndex(json->GetNumber((di + "parent").c_str()));
+			m_docks[i]->pos.x = json->GetNumber((di + "pos_X").c_str());
+			m_docks[i]->pos.y = json->GetNumber((di + "pos_Y").c_str());
+			m_docks[i]->size.x = json->GetNumber((di + "size_X").c_str());
+			m_docks[i]->size.y = json->GetNumber((di + "size_Y").c_str());
+
+			//tryDockToStoredLocation(*m_docks[i]);
 		}
 	}
 

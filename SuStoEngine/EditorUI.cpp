@@ -43,12 +43,12 @@ bool EditorUI::Awake()
 	LoadStyle("blue_yellow");
 
 	// Editor elements
-	console = new Console(false);
+	console = new Console(true);
 	configuration = new Configuration(true);
 	about = new About(false);
 	profiler_viewer = new ProfilerViewer(true);
-	engine_test = new EngineTest(false);
-	hardware = new Hardware(true);
+	engine_test = new EngineTest(true);
+	hardware = new Hardware(false);
 	game = new Game(true);
 
 	AddEditor(game);

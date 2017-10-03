@@ -148,6 +148,8 @@ struct DockContext
 
 	void SetDockSlotPosition(ImGuiDockSlot slot, Dock dock);
 
+	DockContext::Dock * getDockByIndex(int idx);
+
 	void SaveLayout(JSON_Doc* config);
 	void LoadLayout(JSON_Doc* config);
 };
