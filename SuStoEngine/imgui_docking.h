@@ -150,8 +150,8 @@ struct DockContext
 
 	DockContext::Dock * getDockByIndex(int idx);
 
-	void SaveLayout(JSON_Doc* config, char* layout_name = "default");
-	void LoadLayout(JSON_Doc* config, char* layout_name = "default");
+	void SaveLayout(JSON_Doc* config, const char* layout_name = "default");
+	void LoadLayout(JSON_Doc* config, const char* layout_name = "default");
 };
 
 #endif

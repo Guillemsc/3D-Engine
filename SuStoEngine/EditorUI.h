@@ -49,8 +49,9 @@ public:
 
 	Console* GetConsole();
 
-	void LoadLayout();
-	void SaveLayout();
+	void LoadLayout(const char* layout = "");
+	void SaveCurrentLayout();
+	void SaveNewLayout(const char* layout);
 
 private:
 	void AddEditor(EditorElement* el);
@@ -58,6 +59,7 @@ private:
 private:
 	JSON_Doc*			 layout = nullptr;
 	std::list<string>	 layouts;
+	string				 current_layout;
 
 	Console*             console = nullptr;
 	Configuration*       configuration = nullptr;

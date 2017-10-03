@@ -171,7 +171,7 @@ bool EditorUI::CleanUp()
 {
 	bool ret = true;
 
-	SaveLayout();
+	SaveCurrentLayout();
 
 	LOG_OUTPUT("Destroying ImGui");
 	ImGui_ImplSdlGL2_Shutdown();
@@ -209,19 +209,30 @@ void EditorUI::AddEditor(EditorElement * el)
 	editor_elements.push_back(el);
 }
 
-void EditorUI::LoadLayout()
+void EditorUI::LoadLayout(const char* layout_name)
 {
 	if (layout == nullptr)
 		layout = App->json->LoadJSON("layout.json");
 
 	if (layout != nullptr)
 	{
+		current_layout = "default";
 		layout->MoveToRoot();
-		getDockContext()->LoadLayout(layout);
+
+		for (list<string>::iterator it = layouts.begin(); it != layouts.end(); it++)
+		{
+			if (TextCmp((*it).c_str(), layout_name))
+			{
+				current_layout = layout_name;
+				break;
+			}
+		}
+
+		getDockContext()->LoadLayout(layout, current_layout.c_str());
 	}
 }
 
-void EditorUI::SaveLayout()
+void EditorUI::SaveCurrentLayout()
 {
 	if (layout == nullptr)
 		layout = App->json->LoadJSON("layout.json");
@@ -232,9 +243,32 @@ void EditorUI::SaveLayout()
 	if (layout != nullptr)
 	{
 		layout->MoveToRoot();
-		getDockContext()->SaveLayout(layout);
-		layout->Save();
+
+		for (list<string>::iterator it = layouts.begin(); it != layouts.end(); it++)
+		{
+			if (TextCmp((*it).c_str(), current_layout.c_str()))
+			{
+				getDockContext()->SaveLayout(layout, current_layout.c_str());
+				layout->Save();
+				return;
+			}
+		}
 	}
+}
+
+void EditorUI::SaveNewLayout(const char * layout)
+{
+	for (list<string>::iterator it = layouts.begin(); it != layouts.end(); it++)
+	{
+		if (TextCmp((*it).c_str(), layout))
+		{
+			return;
+		}
+	}
+
+	layouts.push_back(layout);
+	current_layout = layout;
+	SaveCurrentLayout();
 }
 
 
