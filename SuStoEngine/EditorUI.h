@@ -57,6 +57,7 @@ private:
 
 private:
 	JSON_Doc*			 layout = nullptr;
+	std::list<string>	 layouts;
 
 	Console*             console = nullptr;
 	Configuration*       configuration = nullptr;
@@ -71,7 +72,6 @@ private:
 	bool				 workspace_visible = false;
 
 	bool                 show_imgui_test_window	= false;
-	
 };
 
 #endif // __j1FILESYSTEM_H__

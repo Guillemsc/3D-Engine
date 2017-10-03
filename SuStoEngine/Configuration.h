@@ -38,6 +38,7 @@ private:
 	bool  borderless = false;
 	bool  fulldekstop = false;
 	bool  maximized = false;
+	bool  vsync = false;
 	int   display_size_width = 0;
 	int   display_size_height = 0;
 

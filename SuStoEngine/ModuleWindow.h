@@ -41,6 +41,7 @@ public:
 	bool GetMaximized();
 	void SetBrightness(float set);
 	float GetBrightness();
+	void SetVsync(bool set);
 	bool GetVsync();
 
 //private:

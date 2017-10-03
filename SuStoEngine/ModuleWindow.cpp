@@ -35,6 +35,7 @@ void ModuleWindow::OnLoadConfig(JSON_Doc * config)
 	borderless = config->GetBool("window.borderless", false);
 	full_dekstop = config->GetBool("window.fulldekstop", false);
 	maximized = config->GetBool("window.maximized", false);
+	SetVsync(config->GetBool("window.vsync", true));
 	brightness = config->GetNumber("window.brightness", 1.0f);
 }
 
@@ -48,6 +49,7 @@ void ModuleWindow::OnSaveConfig(JSON_Doc * config)
 	config->SetBool("window.fulldekstop", full_dekstop);
 	config->SetBool("window.maximized", maximized);
 	config->SetNumber("window.brightness", GetBrightness());
+	config->SetBool("window.vsync", GetVsync());
 }
 
 // Called before render is available
@@ -282,6 +284,12 @@ void ModuleWindow::SetBrightness(float set)
 float ModuleWindow::GetBrightness()
 {
 	return SDL_GetWindowBrightness(window);
+}
+
+void ModuleWindow::SetVsync(bool set)
+{
+	vsync = set;
+	SDL_GL_SetSwapInterval(vsync);
 }
 
 bool ModuleWindow::GetVsync()

@@ -13,6 +13,7 @@
         "borderless": false,
         "fulldekstop": false,
         "maximized": true,
+        "vsync": false,
         "brightness": 1
     },
     "input": {

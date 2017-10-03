@@ -182,6 +182,7 @@ bool Application::CleanUp()
 	}
 
 	profiler->CleanUp();
+	delete profiler;
 
 	return ret;
 }

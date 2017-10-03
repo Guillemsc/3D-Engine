@@ -31,6 +31,7 @@ void Configuration::Start()
 	borderless = App->window->GetBorderless();
 	fulldekstop = App->window->GetFullDekstop();
 	maximized = App->window->GetMaximized();
+	vsync = App->window->GetVsync();
 	App->window->GetWindowSize(display_size_width, display_size_height);
 	console_binding = App->input->GetKeyBinding("console");
 }
@@ -58,11 +59,6 @@ void Configuration::Draw()
 
 	if (igBeginDock("Configuration", &visible, 0))
 	{
-		if(ImGui::Button("Save Changes"))
-		{
-			App->SaveConfig();
-		}
-
 		// ---------------------------------------------------------------------
 		// App -----------------------------------------------------------------
 		// ---------------------------------------------------------------------
@@ -146,6 +142,12 @@ void Configuration::Draw()
 				App->window->SetMaximized(maximized);
 				App->SaveConfig(App->window);
 			}
+			ImGui::SameLine();
+			if (ImGui::Checkbox("VSync", &vsync))
+			{
+				App->window->SetVsync(vsync);
+				App->SaveConfig(App->window);
+			}
 		}
 
 		// ---------------------------------------------------------------------
@@ -182,7 +184,7 @@ void Configuration::Draw()
 					console_binding = ToUpperCase(input);
 					App->input->SetKeyBinding(console_binding.c_str(), "console");
 					App->input->ClearKeyboardInput();
-					App->SaveConfig();
+					App->SaveConfig(App->input);
 				}
 			}
 
