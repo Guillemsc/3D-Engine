@@ -142,10 +142,22 @@ bool EditorUI::Update()
 			ImGui::Separator();
 			for (list<string>::iterator it = layouts.begin(); it != layouts.end(); it++)
 			{
-				if (ImGui::MenuItem((*it).c_str()))
+				ImGui::Text((*it).c_str());
+				ImGui::SameLine();
+				if (ImGui::SmallButton("Set"))
 				{
 					SetCurrentLayout((*it).c_str());
 					LoadCurrentLayout();
+				}
+				ImGui::SameLine();
+				if (ImGui::SmallButton("x"))
+				{
+					SetCurrentLayout();
+					RemoveLayout((*it).c_str());
+
+					it = layouts.erase(it);
+					if (layouts.empty())
+						break;
 				}
 			}
 			ImGui::Separator();
@@ -344,14 +356,11 @@ void EditorUI::SaveNewLayout(const char * layout)
 	SaveCurrentLayout();
 }
 
-void EditorUI::RemoveLayout(const char * layout)
+void EditorUI::RemoveLayout(const char * lay)
 {
-	for (list<string>::iterator it = layouts.begin(); it != layouts.end(); it++)
+	if (layout != nullptr)
 	{
-		if (TextCmp((*it).c_str(), layout))
-		{
-			return;
-		}
+		layout->RemoveSection(lay);
 	}
 }
 

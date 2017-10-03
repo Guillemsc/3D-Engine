@@ -27,6 +27,7 @@ public:
 	double GetNumberFromArray(string arr, int index);
 
 	bool MoveToSection(string set);
+	void RemoveSection(string set);
 	void MoveToRoot();
 	void AddSection(string set);
 

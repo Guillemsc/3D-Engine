@@ -293,6 +293,11 @@ bool JSON_Doc::MoveToSection(string set)
 	return ret;
 }
 
+void JSON_Doc::RemoveSection(string set)
+{
+	json_object_remove(object, set.c_str());
+}
+
 void JSON_Doc::MoveToRoot()
 {
 	object = root;
