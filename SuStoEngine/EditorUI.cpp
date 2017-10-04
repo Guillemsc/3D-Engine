@@ -144,18 +144,20 @@ bool EditorUI::Update()
 			{
 				ImGui::Text((*it).c_str());
 				ImGui::SameLine();
+				ImGui::PushID((*it).c_str());
 				if (ImGui::SmallButton("Set"))
 				{
 					SetCurrentLayout((*it).c_str());
 					LoadCurrentLayout();
 				}
+				ImGui::PopID();
 				ImGui::SameLine();
 				if (ImGui::SmallButton("x"))
 				{
 					SetCurrentLayout();
 					RemoveLayout((*it).c_str());
-
 					it = layouts.erase(it);
+					SaveLayoutsInfo();
 					if (layouts.empty())
 						break;
 				}
@@ -168,6 +170,7 @@ bool EditorUI::Update()
 				if (!TextCmp(layout_name, ""))
 				{
 					SaveNewLayout(layout_name);
+					SaveLayoutsInfo();
 				}
 			}
 
@@ -261,6 +264,7 @@ void EditorUI::SaveLayoutsInfo()
 	{
 		layout->SetString("editor.current_layout", current_layout.c_str());
 
+		layout->ClearArray("layouts");
 		layout->SetArray("layouts");
 		for (list<string>::iterator it = layouts.begin(); it != layouts.end(); it++)
 		{
@@ -361,6 +365,7 @@ void EditorUI::RemoveLayout(const char * lay)
 	if (layout != nullptr)
 	{
 		layout->RemoveSection(lay);
+		layout->Save();
 	}
 }
 

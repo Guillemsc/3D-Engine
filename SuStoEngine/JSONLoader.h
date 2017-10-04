@@ -18,6 +18,7 @@ public:
 	double GetNumber(string nu, double defaul = 0);
 
 	void SetArray(string set);
+	void ClearArray(string arr);
 	void AddStringToArray(string arr, const char* str);
 	void AddBoolToArray(string arr, bool bo);
 	void AddNumberToArray(string arr, double set);

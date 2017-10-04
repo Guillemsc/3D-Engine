@@ -153,6 +153,16 @@ void JSON_Doc::SetArray(string set)
 	json_object_dotset_value(object, set.c_str(), va);
 }
 
+void JSON_Doc::ClearArray(string arr)
+{
+	JSON_Array* array = json_object_get_array(root, arr.c_str());
+
+	if (array != nullptr)
+	{
+		json_array_clear(array);
+	}
+}
+
 int JSON_Doc::GetArrayCount(string set)
 {
 	int ret = 0;
