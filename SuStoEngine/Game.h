@@ -22,6 +22,9 @@ private:
 	DockContext* dock;
 	bool first_time = true;
 
+	int win_size_x = 0;
+	int win_size_y = 0;
+
 };
 
 #endif

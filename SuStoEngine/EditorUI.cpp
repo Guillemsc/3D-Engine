@@ -87,7 +87,7 @@ bool EditorUI::PreUpdate()
 	// ImGui new frame
 	ImGui_ImplSdlGL2_NewFrame(App->window->window);
 
-	igBeginWorkspace(&workspace_visible, ImVec2(0, 23), ImVec2(App->window->GetWindowSize().x, App->window->GetWindowSize().y - 23), 
+	igBeginWorkspace(&workspace_visible, ImVec2(-3, 21), ImVec2(App->window->GetWindowSize().x, App->window->GetWindowSize().y - 21),
 		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBringToFrontOnFocus);
 
 	return ret;
@@ -559,9 +559,9 @@ void EditorUI::LoadStyle(char * name)
 
 	else if (TextCmp(name, "blue_yellow"))
 	{
-		style->WindowPadding = ImVec2(15, 15);
-		style->WindowRounding = 1.0f;
-		style->FramePadding = ImVec2(5, 5);
+		style->WindowPadding = ImVec2(6, 15);
+		style->WindowRounding = 10.0f;
+		style->FramePadding = ImVec2(3, 4);
 		style->FrameRounding = 4.0f;
 		style->ItemSpacing = ImVec2(12, 8);
 		style->ItemInnerSpacing = ImVec2(8, 6);
@@ -570,6 +570,8 @@ void EditorUI::LoadStyle(char * name)
 		style->ScrollbarRounding = 9.0f;
 		style->GrabMinSize = 5.0f;
 		style->GrabRounding = 1.0f;
+		style->WindowMinSize = ImVec2(10, 10);
+		style->GrabMinSize = 17;
 
 		style->Colors[ImGuiCol_Text] = ImVec4(0.90f, 0.90f, 0.90f, 1.00f);
 		style->Colors[ImGuiCol_TextDisabled] = ImVec4(0.60f, 0.60f, 0.60f, 1.00f);
@@ -577,7 +579,7 @@ void EditorUI::LoadStyle(char * name)
 		style->Colors[ImGuiCol_ChildWindowBg] = ImVec4(0.16f, 0.18f, 0.20f, 1.00f);
 		style->Colors[ImGuiCol_PopupBg] = ImVec4(0.15f, 0.16f, 0.17f, 1.00f);
 		style->Colors[ImGuiCol_Border] = ImVec4(0.15f, 0.16f, 0.17f, 1.00f);
-		style->Colors[ImGuiCol_BorderShadow] = ImVec4(0.15f, 0.16f, 0.17f, 1.00f);
+		style->Colors[ImGuiCol_BorderShadow] = ImVec4(0.14f, 0.14f, 0.15f, 1.00f);
 		style->Colors[ImGuiCol_FrameBg] = ImVec4(0.34f, 0.34f, 0.34f, 0.80f);
 		style->Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.47f, 0.47f, 0.47f, 0.40f);
 		style->Colors[ImGuiCol_FrameBgActive] = ImVec4(0.66f, 0.66f, 0.66f, 0.45f);

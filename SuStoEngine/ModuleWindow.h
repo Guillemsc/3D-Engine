@@ -8,6 +8,7 @@
 #define SCREEN_SIZE 1
 
 class Application;
+class Cursor;
 
 class ModuleWindow : public Module
 {
@@ -43,6 +44,7 @@ public:
 	float GetBrightness();
 	void SetVsync(bool set);
 	bool GetVsync();
+	Cursor* GetCursor();
 
 //private:
 	SDL_Window* GenerateWindow(SDL_Window* window, SDL_Surface* surface, const char* name, Uint32 flags, vec2 pos = { SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED }, vec2 size = { 500, 500 }, float brightness = 1.0f);
@@ -55,15 +57,17 @@ public:
 	SDL_Surface* screen_surface = nullptr;
 
 private:
-	int   width = 0;
-	int   height = 0;
-	bool  fullscreen = false;
-	bool  resizable = false;
-	bool  borderless = false;
-	bool  full_dekstop = false;
-	bool  maximized = true;
-	float brightness = 0.0f;
-	bool  vsync = false;
+	Cursor* cursor = nullptr;
+
+	int     width = 0;
+	int     height = 0;
+	bool    fullscreen = false;
+	bool    resizable = false;
+	bool    borderless = false;
+	bool    full_dekstop = false;
+	bool    maximized = true;
+	float   brightness = 0.0f;
+	bool    vsync = false;
 };
 
 #endif // __ModuleWindow_H__

@@ -3,6 +3,7 @@
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
 #include "JSONLoader.h"
+#include "Cursor.h"
 
 ModuleWindow::ModuleWindow(bool start_enabled) : Module(start_enabled)
 {
@@ -85,6 +86,9 @@ bool ModuleWindow::Awake()
 		if (window == nullptr)
 			ret = false;
 	}
+	
+	// Create cursor
+	cursor = new Cursor();
 
 	return ret;
 }
@@ -93,6 +97,8 @@ bool ModuleWindow::Awake()
 bool ModuleWindow::CleanUp()
 {
 	LOG_OUTPUT("Destroying SDL window and quitting all SDL systems");
+
+	delete cursor;
 
 	//Destroy window
 	if(window != NULL)
@@ -295,4 +301,9 @@ void ModuleWindow::SetVsync(bool set)
 bool ModuleWindow::GetVsync()
 {
 	return vsync;
+}
+
+Cursor * ModuleWindow::GetCursor()
+{
+	return cursor;
 }

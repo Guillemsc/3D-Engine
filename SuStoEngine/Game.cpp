@@ -27,9 +27,12 @@ void Game::Draw()
 	
 	ImVec2 size = ImGui::GetContentRegionAvail();
 
-	if (0 != size.x && 0 != size.y) 
+	if (win_size_x != size.x || win_size_y != size.y)
 	{
 		App->renderer3D->OnResize(size.x, size.y);
+
+		win_size_x = size.x;
+		win_size_y = size.y;
 	}
 
 	ImGui::Image((void*)App->renderer3D->fbo_texture->GetTexture(), size, ImVec2(0, 1), ImVec2(1, 0));

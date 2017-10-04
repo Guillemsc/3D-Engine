@@ -360,6 +360,9 @@
     <ClInclude Include="resource.h">
       <Filter>Sources</Filter>
     </ClInclude>
+    <ClInclude Include="Cursor.h">
+      <Filter>Sources\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -562,6 +565,9 @@
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Cursor.cpp">
+      <Filter>Sources\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
