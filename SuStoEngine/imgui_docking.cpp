@@ -1100,8 +1100,10 @@ using namespace ImGui;
 		json->MoveToRoot();
 	}
 
-	void DockContext::LoadLayout(JSON_Doc * json, const char* layout_name)
+	bool DockContext::LoadLayout(JSON_Doc * json, const char* layout_name)
 	{
+		bool ret = true;
+
 		for (int i = 0; i < m_docks.size(); ++i)
 		{
 			m_docks[i]->~Dock();
@@ -1149,8 +1151,14 @@ using namespace ImGui;
 				//tryDockToStoredLocation(*m_docks[i]);
 			}
 		}
+		else
+		{
+			ret = false;
+		}
 
 		json->MoveToRoot();
+
+		return ret;
 	}
 
 

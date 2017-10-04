@@ -115,7 +115,9 @@ bool EditorUI::Update()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::MenuItem("Quit", "Alt+F4")) { App->EndApp(); }
+			if (ImGui::MenuItem("Quit", "Alt+F4")) 
+				App->EndApp(); 
+
 			ImGui::EndMenu();
 		}
 
@@ -140,27 +142,38 @@ bool EditorUI::Update()
 			ImGui::Text("Current: %s", current_layout.c_str());
 
 			ImGui::Separator();
-			for (list<string>::iterator it = layouts.begin(); it != layouts.end(); it++)
+			for (list<string>::iterator it = layouts.begin(); it != layouts.end();)
 			{
 				ImGui::Text((*it).c_str());
+
 				ImGui::SameLine();
-				ImGui::PushID((*it).c_str());
+
+				string id = (*it) + "set";
+				ImGui::PushID(id.c_str());
 				if (ImGui::SmallButton("Set"))
 				{
 					SetCurrentLayout((*it).c_str());
 					LoadCurrentLayout();
 				}
 				ImGui::PopID();
+
 				ImGui::SameLine();
+
+				id = (*it) + "x";
+				ImGui::PushID(id.c_str());
 				if (ImGui::SmallButton("x"))
 				{
 					SetCurrentLayout();
 					RemoveLayout((*it).c_str());
 					it = layouts.erase(it);
 					SaveLayoutsInfo();
-					if (layouts.empty())
-						break;
 				}
+				else
+				{
+					++it;
+				}
+
+				ImGui::PopID();
 			}
 			ImGui::Separator();
 
