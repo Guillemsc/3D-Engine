@@ -98,6 +98,7 @@ bool ModuleWindow::CleanUp()
 {
 	LOG_OUTPUT("Destroying SDL window and quitting all SDL systems");
 
+	cursor->CleanUp();
 	delete cursor;
 
 	//Destroy window
