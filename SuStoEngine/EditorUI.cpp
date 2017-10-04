@@ -560,7 +560,7 @@ void EditorUI::LoadStyle(char * name)
 	else if (TextCmp(name, "blue_yellow"))
 	{
 		style->WindowPadding = ImVec2(15, 15);
-		style->WindowRounding = 5.0f;
+		style->WindowRounding = 1.0f;
 		style->FramePadding = ImVec2(5, 5);
 		style->FrameRounding = 4.0f;
 		style->ItemSpacing = ImVec2(12, 8);
@@ -569,7 +569,7 @@ void EditorUI::LoadStyle(char * name)
 		style->ScrollbarSize = 15.0f;
 		style->ScrollbarRounding = 9.0f;
 		style->GrabMinSize = 5.0f;
-		style->GrabRounding = 3.0f;
+		style->GrabRounding = 1.0f;
 
 		style->Colors[ImGuiCol_Text] = ImVec4(0.90f, 0.90f, 0.90f, 1.00f);
 		style->Colors[ImGuiCol_TextDisabled] = ImVec4(0.60f, 0.60f, 0.60f, 1.00f);
