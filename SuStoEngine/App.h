@@ -16,6 +16,7 @@ class ModuleInput;
 class ModuleAudio;
 class ModuleRenderer3D;
 class ModuleCamera3D;
+class ModuleGameObject;
 class EditorUI;
 class DebugScene;
 class Configuration;
@@ -70,6 +71,7 @@ public:
 	ModuleAudio*       audio = nullptr;
 	ModuleRenderer3D*  renderer3D = nullptr;
 	ModuleCamera3D*    camera = nullptr;
+	ModuleGameObject*  gameobj = nullptr;
 	EditorUI*		   editorUI	= nullptr;
 	DebugScene*        debug_scene = nullptr;
 

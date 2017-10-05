@@ -65,10 +65,6 @@ private:
 	void AddEditor(EditorElement* el);
 
 private:
-	JSON_Doc*			 layout = nullptr;
-	std::list<string>	 layouts;
-	string				 current_layout;
-
 	Console*             console = nullptr;
 	Configuration*       configuration = nullptr;
 	About*               about = nullptr;
@@ -78,6 +74,10 @@ private:
 	Game*				 game = nullptr;
 
 	list<EditorElement*> editor_elements;
+
+	JSON_Doc*			 layout = nullptr;
+	std::list<string>	 layouts;
+	string				 current_layout;
 
 	bool				 workspace_visible = false;
 

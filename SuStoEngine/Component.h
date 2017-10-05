@@ -14,6 +14,8 @@ public:
 	Component(ComponentType type, GameObject* owner);
 	virtual ~Component();
 
+	virtual void Update() {};
+
 	GameObject* GetOwner();
 	ComponentType GetType();
 

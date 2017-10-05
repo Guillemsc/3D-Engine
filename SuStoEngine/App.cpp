@@ -4,6 +4,7 @@
 #include "ModuleAudio.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
+#include "ModuleGameObject.h"
 #include "DebugScene.h"
 #include "XMLLoader.h"
 #include "JSONLoader.h"
@@ -23,6 +24,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	audio = new ModuleAudio();
 	renderer3D = new ModuleRenderer3D();
 	camera = new ModuleCamera3D();
+	gameobj = new ModuleGameObject();
 	debug_scene = new DebugScene();
 	editorUI = new EditorUI();
 
@@ -37,6 +39,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(camera);
 	AddModule(input);
 	AddModule(audio);
+	AddModule(gameobj);
 
 	AddModule(editorUI);
 	AddModule(debug_scene);

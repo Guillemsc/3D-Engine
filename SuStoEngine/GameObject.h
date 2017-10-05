@@ -11,6 +11,8 @@ public:
 	GameObject();
 	virtual ~GameObject();
 
+	void Update();
+
 	void Enable();
 	void Disable();
 	bool GetEnabled();

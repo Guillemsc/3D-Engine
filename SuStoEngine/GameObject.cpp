@@ -7,6 +7,9 @@ GameObject::GameObject()
 GameObject::~GameObject()
 {
 }
+void GameObject::Update()
+{
+}
 void GameObject::Enable()
 {
 	if (!enabled)
