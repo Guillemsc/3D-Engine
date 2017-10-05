@@ -5,9 +5,9 @@
 #include "ModuleInput.h"
 #include "mmgr\mmgr.h"
 #include "SDL/include/SDL.h"
-#include "glut\glut.h"
 #include "imgui_docking.h"
-
+#include <gl\GLU.h>
+#include <gl\GL.h>
 
 Configuration::Configuration(bool start_enabled) : EditorElement(start_enabled)
 {

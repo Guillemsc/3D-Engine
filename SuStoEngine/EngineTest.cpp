@@ -5,7 +5,6 @@
 #include "Primitive.h"
 #include "Functions.h"
 #include "Console.h"
-#include "glut\glut.h"
 #include "imgui_docking.h"
 
 EngineTest::EngineTest(bool start_enabled) : EditorElement(start_enabled)
