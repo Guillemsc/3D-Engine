@@ -7,6 +7,7 @@
 #include "Primitive.h"
 #include "GeometryMath.h"
 #include "Globals.h"
+#include "ModuleRenderer3D.h"
 
 DebugScene::DebugScene(bool start_enabled) : Module(start_enabled)
 {
@@ -44,10 +45,7 @@ bool DebugScene::Update()
 {
 	bool ret = true;
 
-	PPlane p(0, 10, 0, 0);
-	p.axis = true;
-	p.Render();
-
+	App->renderer3D->DrawGrid(100);
 
 	return ret;
 }

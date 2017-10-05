@@ -15,7 +15,6 @@ public:
 
 private:
 	void GenerateRandomNumbers(float2 range, int quantity);
-	void GeometryMathTest();
 
 private:
 	// Random generator
