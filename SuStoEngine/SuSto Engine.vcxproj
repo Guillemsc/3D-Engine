@@ -193,6 +193,7 @@
     <ClInclude Include="stb_textedit.h" />
     <ClInclude Include="stb_truetype.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="XMLLoader.h" />
   </ItemGroup>
   <ItemGroup>
@@ -263,6 +264,7 @@
     <ClCompile Include="ProfilerViewer.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="XMLLoader.cpp" />
   </ItemGroup>
   <ItemGroup>

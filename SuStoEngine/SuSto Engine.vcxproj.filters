@@ -49,6 +49,9 @@
     <Filter Include="Sources\Components\gpudetect">
       <UniqueIdentifier>{49c97a4b-1bdb-49c2-a920-81cd0a1b296d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\GameObject">
+      <UniqueIdentifier>{99ae2367-b349-443b-94d3-f8aebcab11e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleAudio.h">
@@ -363,6 +366,9 @@
     <ClInclude Include="Cursor.h">
       <Filter>Sources\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Sources\GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -568,6 +574,9 @@
     </ClCompile>
     <ClCompile Include="Cursor.cpp">
       <Filter>Sources\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Sources\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
