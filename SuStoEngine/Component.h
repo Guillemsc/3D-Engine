@@ -1,8 +1,6 @@
 #ifndef __Component_H__
 #define __Component_H__
 
-#include "GeometryMath.h"
-
 class GameObject;
 
 enum ComponentType

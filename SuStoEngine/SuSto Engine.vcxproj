@@ -93,6 +93,7 @@
     <ClInclude Include="About.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="ComponentTransform.h" />
     <ClInclude Include="Configuration.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="Cursor.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="About.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="ComponentTransform.cpp" />
     <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="Cursor.cpp" />
