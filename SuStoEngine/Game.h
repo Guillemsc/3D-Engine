@@ -25,6 +25,7 @@ private:
 	int win_size_x = 0;
 	int win_size_y = 0;
 
+	uint my_id = 0;
 };
 
 #endif
