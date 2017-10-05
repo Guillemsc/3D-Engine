@@ -40,7 +40,7 @@ bool Component::GetEnabled()
 
 void Component::SetEnabled(bool set)
 {
-	set ? Enable() : Disable;
+	set ? Enable() : Disable();
 }
 
 void Component::Destroy()
@@ -55,5 +55,5 @@ GameObject * Component::GetOwner()
 
 ComponentType Component::GetType()
 {
-	return type);
+	return type;
 }
