@@ -103,6 +103,7 @@
     <ClInclude Include="EngineTest.h" />
     <ClInclude Include="FBO.h" />
     <ClInclude Include="Functions.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="gpudetect\DeviceId.h" />
@@ -211,6 +212,7 @@
     <ClCompile Include="EngineTest.cpp" />
     <ClCompile Include="FBO.cpp" />
     <ClCompile Include="Functions.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="gpudetect\DeviceId.cpp" />
     <ClCompile Include="Hardware.cpp" />
