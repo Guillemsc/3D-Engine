@@ -58,9 +58,7 @@ void Game::Start()
 		10.f, 0.f, 5.f
 	};
 
-	glGenBuffers(1, (GLuint*)&(my_id));
-	glBindBuffer(GL_ARRAY_BUFFER, my_id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 36 * 3, vertices, GL_STATIC_DRAW);
+	App->renderer3D->LoadBuffer(1, vertices, 108);
 }
 
 void Game::Draw()
@@ -147,13 +145,7 @@ void Game::Draw()
 
 	glLineWidth(1.0f);
 
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, my_id);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	// … draw other buffers
-	glDrawArrays(GL_TRIANGLES, 0, 36 * 3);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	App->renderer3D->DrawBuffer(1, 108);
 
 	igEndDock();
 }

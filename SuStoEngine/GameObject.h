@@ -28,8 +28,9 @@ public:
 private:
 
 private:
-	bool enabled = false;
-	int	 id = 0;
+	const char* name = nullptr;
+	bool		enabled = false;
+	int			id = 0;
 	std::list<Component*> components;
 };
 

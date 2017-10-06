@@ -187,6 +187,24 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 }
 
+void ModuleRenderer3D::LoadBuffer(int id, float* vertices, int size)
+{
+	glGenBuffers(1, (GLuint*)&(id));
+	glBindBuffer(GL_ARRAY_BUFFER, id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, vertices, GL_STATIC_DRAW);
+}
+
+void ModuleRenderer3D::DrawBuffer(int id, int size)
+{
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, id);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	// … draw other buffers
+	glDrawArrays(GL_TRIANGLES, 0, size);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 void ModuleRenderer3D::DrawGrid(int HALF_GRID_SIZE)
 {
 	glBegin(GL_LINES);

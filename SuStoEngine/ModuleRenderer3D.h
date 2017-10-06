@@ -20,6 +20,10 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
+
+	void LoadBuffer(int id, float* vertices, int size);
+	void DrawBuffer(int id, int size);
+
 	void DrawGrid(int HALF_GRID_SIZE);
 
 public:
