@@ -29,7 +29,7 @@ bool ModuleGameObject::Update()
 {
 	bool ret = true;
 
-	for (list<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end();)
+	for (list<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
 	{
 		(*it)->Update();
 	}
@@ -50,7 +50,7 @@ bool ModuleGameObject::CleanUp()
 {
 	bool ret = true;
 
-	for (list<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); it++)
+	for (list<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
 	{
 		Destroy((*it));
 	}
@@ -65,6 +65,7 @@ GameObject * ModuleGameObject::Create()
 {
 	GameObject* game_object = new GameObject();
 
+	game_object->SetId(game_objects.size());
 	game_objects.push_back(game_object);
 
 	return game_object;
@@ -73,6 +74,11 @@ GameObject * ModuleGameObject::Create()
 void ModuleGameObject::Destroy(GameObject * go)
 {
 	to_delete.push_back(go);
+}
+
+list<GameObject*> ModuleGameObject::GetListGameObjects()
+{
+	return game_objects;
 }
 
 void ModuleGameObject::DestroyGameObjects()

@@ -3,8 +3,8 @@
 
 #include "EditorUI.h"
 #include "Module.h"
+#include "imgui.h"
 
-struct ImVec4;
 struct DockContext;
 
 class Game : public EditorElement
@@ -17,7 +17,7 @@ public:
 	void Draw();
 
 public:
-
+	ImVec4 GetRect();
 private:
 	DockContext* dock;
 	bool first_time = true;
@@ -26,6 +26,9 @@ private:
 	int win_size_y = 0;
 
 	uint my_id = 0;
+
+	ImVec2 position;
+	ImVec2 size_;
 };
 
 #endif

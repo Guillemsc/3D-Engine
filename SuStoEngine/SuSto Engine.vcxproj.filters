@@ -381,6 +381,12 @@
     <ClInclude Include="ComponentPrimitive.h">
       <Filter>Sources\GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="Hierarchy.h">
+      <Filter>Sources\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Inspector.h">
+      <Filter>Sources\Editor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -601,6 +607,12 @@
     </ClCompile>
     <ClCompile Include="ComponentPrimitive.cpp">
       <Filter>Sources\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Hierarchy.cpp">
+      <Filter>Sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Inspector.cpp">
+      <Filter>Sources\Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

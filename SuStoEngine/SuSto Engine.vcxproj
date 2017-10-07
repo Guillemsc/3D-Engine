@@ -110,11 +110,13 @@
     <ClInclude Include="gpudetect\DeviceId.h" />
     <ClInclude Include="gpudetect\dxgi1_4.h" />
     <ClInclude Include="Hardware.h" />
+    <ClInclude Include="Hierarchy.h" />
     <ClInclude Include="imconfig.h" />
     <ClInclude Include="imgui.h" />
     <ClInclude Include="imgui_docking.h" />
     <ClInclude Include="imgui_impl_sdl.h" />
     <ClInclude Include="imgui_internal.h" />
+    <ClInclude Include="Inspector.h" />
     <ClInclude Include="JSONLoader.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="GeometryMath.h" />
@@ -219,11 +221,13 @@
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="gpudetect\DeviceId.cpp" />
     <ClCompile Include="Hardware.cpp" />
+    <ClCompile Include="Hierarchy.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="imgui_demo.cpp" />
     <ClCompile Include="imgui_docking.cpp" />
     <ClCompile Include="imgui_draw.cpp" />
     <ClCompile Include="imgui_impl_sdl.cpp" />
+    <ClCompile Include="Inspector.cpp" />
     <ClCompile Include="JSONLoader.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="log.cpp" />

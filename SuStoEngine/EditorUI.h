@@ -11,6 +11,10 @@ class ProfilerViewer;
 class EngineTest;
 class Hardware;
 class Game;
+class Hierarchy;
+class Inspector;
+
+class ImVec4;
 
 class EditorElement
 {
@@ -61,6 +65,8 @@ public:
 
 	void RemoveLayout(const char* layout);
 
+	ImVec4 GameRect();
+
 private:
 	void AddEditor(EditorElement* el);
 
@@ -72,6 +78,8 @@ private:
 	EngineTest*          engine_test = nullptr;
 	Hardware*			 hardware = nullptr;
 	Game*				 game = nullptr;
+	Hierarchy*			 hierarchy = nullptr;
+	Inspector*			 inspector = nullptr;
 
 	list<EditorElement*> editor_elements;
 

@@ -1,7 +1,10 @@
 #include "GameObject.h"
+#include "App.h"
+#include "imgui.h"
 
 GameObject::GameObject()
 {
+	LOG_OUTPUT("Game Object Created");
 }
 
 GameObject::~GameObject()
@@ -10,6 +13,7 @@ GameObject::~GameObject()
 void GameObject::Update()
 {
 }
+
 void GameObject::Enable()
 {
 	if (!enabled)
@@ -57,3 +61,15 @@ Component * GameObject::FindComponentByType(ComponentType type)
 {
 	return nullptr;
 }
+
+void GameObject::SetId(int _id)
+{
+	id = _id;
+}
+
+void GameObject::HierarchyView()
+{
+	ImGui::Text("GameObject_%d", id);
+	
+}
+

@@ -13,6 +13,8 @@
 #include "ProfilerViewer.h"
 #include "Hardware.h"
 #include "Game.h"
+#include "Hierarchy.h"
+#include "Inspector.h"
 #include "JSONLoader.h"
 
 //https://github.com/ocornut/imgui/issues/351
@@ -51,6 +53,8 @@ bool EditorUI::Awake()
 	engine_test = new EngineTest(true);
 	hardware = new Hardware(false);
 	game = new Game(true);
+	hierarchy = new Hierarchy(true);
+	inspector = new Inspector(true);
 
 	AddEditor(game);
 	AddEditor(console);
@@ -59,6 +63,8 @@ bool EditorUI::Awake()
 	AddEditor(profiler_viewer);
 	AddEditor(engine_test);
 	AddEditor(hardware);
+	AddEditor(hierarchy);
+	AddEditor(inspector);
 
 	// ---------------
 
@@ -124,6 +130,8 @@ bool EditorUI::Update()
 		if (ImGui::BeginMenu("Window"))
 		{
 			ImGui::MenuItem("Console", "º", &console->visible);
+
+			ImGui::MenuItem("Hierarchy", NULL, &hierarchy->visible);
 
 			ImGui::MenuItem("Configuration", "c", &configuration->visible);
 
@@ -380,6 +388,11 @@ void EditorUI::RemoveLayout(const char * lay)
 		layout->RemoveSection(lay);
 		layout->Save();
 	}
+}
+
+ImVec4 EditorUI::GameRect()
+{
+	return game->GetRect();
 }
 
 
