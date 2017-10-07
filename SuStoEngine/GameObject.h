@@ -36,7 +36,6 @@ private:
 	bool		enabled = false;
 	int			id = 0;
 	std::list<Component*> components;
-	char* name;
 };
 
 #endif

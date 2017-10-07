@@ -1,24 +1,24 @@
 {
     "DockLayout": {
-        "Docks_Size": 8
+        "Docks_Size": 11
     },
     "default": {
         "Dock0": {
             "ID": "0",
             "Label": "Game",
-            "pos_X": 368,
+            "pos_X": 544,
             "pos_Y": 36,
-            "size_X": 1197,
+            "size_X": 1021,
             "size_Y": 720,
             "status": 0,
             "active": true,
             "opened": true,
-            "location": "012",
+            "location": "0012",
             "child0": -1,
             "child1": -1,
             "prev_tab": -1,
             "next_tab": -1,
-            "parent": 7
+            "parent": 10
         },
         "Dock1": {
             "ID": "1",
@@ -42,7 +42,7 @@
             "Label": "Configuration",
             "pos_X": 3,
             "pos_Y": 36,
-            "size_X": 365,
+            "size_X": 293,
             "size_Y": 720,
             "status": 0,
             "active": true,
@@ -62,13 +62,13 @@
             "size_X": 346,
             "size_Y": 720,
             "status": 0,
-            "active": true,
+            "active": false,
             "opened": true,
             "location": "02",
             "child0": -1,
             "child1": -1,
             "prev_tab": 4,
-            "next_tab": -1,
+            "next_tab": 9,
             "parent": 6
         },
         "Dock4": {
@@ -134,10 +134,61 @@
             "opened": false,
             "location": "12",
             "child0": 2,
-            "child1": 0,
+            "child1": 10,
             "prev_tab": -1,
             "next_tab": -1,
             "parent": 6
+        },
+        "Dock8": {
+            "ID": "8",
+            "Label": "Hierarchy",
+            "pos_X": 296,
+            "pos_Y": 36,
+            "size_X": 248,
+            "size_Y": 720,
+            "status": 0,
+            "active": true,
+            "opened": true,
+            "location": "1012",
+            "child0": -1,
+            "child1": -1,
+            "prev_tab": -1,
+            "next_tab": -1,
+            "parent": 10
+        },
+        "Dock9": {
+            "ID": "9",
+            "Label": "Inspector",
+            "pos_X": 1565,
+            "pos_Y": 36,
+            "size_X": 346,
+            "size_Y": 720,
+            "status": 0,
+            "active": true,
+            "opened": true,
+            "location": "02",
+            "child0": -1,
+            "child1": -1,
+            "prev_tab": 3,
+            "next_tab": -1,
+            "parent": 6
+        },
+        "Dock10": {
+            "ID": "10",
+            "Label": "DOCK",
+            "pos_X": 296,
+            "pos_Y": 36,
+            "size_X": 1269,
+            "size_Y": 720,
+            "status": 0,
+            "active": true,
+            "opened": false,
+            "location": "012",
+            "child0": 8,
+            "child1": 0,
+            "prev_tab": -1,
+            "next_tab": -1,
+            "parent": 7
         }
     },
     "editor": {
