@@ -384,6 +384,9 @@
     <ClInclude Include="Hierarchy.h">
       <Filter>Sources\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="Inspector.h">
+      <Filter>Sources\Editor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -606,6 +609,9 @@
       <Filter>Sources\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Hierarchy.cpp">
+      <Filter>Sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Inspector.cpp">
       <Filter>Sources\Editor</Filter>
     </ClCompile>
   </ItemGroup>

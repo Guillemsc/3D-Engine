@@ -12,6 +12,8 @@ class EngineTest;
 class Hardware;
 class Game;
 class Hierarchy;
+class Inspector;
+
 class ImVec4;
 
 class EditorElement
@@ -77,6 +79,7 @@ private:
 	Hardware*			 hardware = nullptr;
 	Game*				 game = nullptr;
 	Hierarchy*			 hierarchy = nullptr;
+	Inspector*			 inspector = nullptr;
 
 	list<EditorElement*> editor_elements;
 

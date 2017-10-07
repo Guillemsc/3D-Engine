@@ -14,6 +14,7 @@
 #include "Hardware.h"
 #include "Game.h"
 #include "Hierarchy.h"
+#include "Inspector.h"
 #include "JSONLoader.h"
 
 //https://github.com/ocornut/imgui/issues/351
@@ -53,6 +54,7 @@ bool EditorUI::Awake()
 	hardware = new Hardware(false);
 	game = new Game(true);
 	hierarchy = new Hierarchy(true);
+	inspector = new Inspector(true);
 
 	AddEditor(game);
 	AddEditor(console);
@@ -62,6 +64,7 @@ bool EditorUI::Awake()
 	AddEditor(engine_test);
 	AddEditor(hardware);
 	AddEditor(hierarchy);
+	AddEditor(inspector);
 
 	// ---------------
 

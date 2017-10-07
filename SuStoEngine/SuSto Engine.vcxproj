@@ -116,6 +116,7 @@
     <ClInclude Include="imgui_docking.h" />
     <ClInclude Include="imgui_impl_sdl.h" />
     <ClInclude Include="imgui_internal.h" />
+    <ClInclude Include="Inspector.h" />
     <ClInclude Include="JSONLoader.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="GeometryMath.h" />
@@ -226,6 +227,7 @@
     <ClCompile Include="imgui_docking.cpp" />
     <ClCompile Include="imgui_draw.cpp" />
     <ClCompile Include="imgui_impl_sdl.cpp" />
+    <ClCompile Include="Inspector.cpp" />
     <ClCompile Include="JSONLoader.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="log.cpp" />
