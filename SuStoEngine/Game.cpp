@@ -6,7 +6,6 @@
 #include "ModuleRenderer3D.h"
 #include "FBO.h"
 
-
 Game::Game(bool start_enabled)
 {
 }

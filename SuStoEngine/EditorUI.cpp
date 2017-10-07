@@ -128,6 +128,8 @@ bool EditorUI::Update()
 		{
 			ImGui::MenuItem("Console", "º", &console->visible);
 
+			ImGui::MenuItem("Hierarchy", NULL, &hierarchy->visible);
+
 			ImGui::MenuItem("Configuration", "c", &configuration->visible);
 
 			ImGui::MenuItem("Profiler", "p", &profiler_viewer->visible);

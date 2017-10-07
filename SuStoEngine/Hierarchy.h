@@ -4,7 +4,9 @@
 #include "EditorUI.h"
 #include "Module.h"
 
-struct ImVec4;
+class DockContext;
+class GameObject;
+
 class Hierarchy : public EditorElement
 {
 public:
@@ -15,8 +17,10 @@ public:
 	void Draw();
 
 public:
+	std::list<GameObject*> game_objects;
 
 private:
+	DockContext* dock;
 
 };
 
