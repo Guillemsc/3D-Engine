@@ -21,6 +21,8 @@ public:
 	GameObject* Create();
 	void Destroy(GameObject* go);
 
+	list<GameObject*> GetListGameObjects();
+
 private:
 	void DestroyGameObjects();
 

@@ -2,6 +2,7 @@
 
 ComponentTransfrom::ComponentTransfrom(GameObject * owner) : Component(ComponentType::TRANSFORM, owner)
 {
+	LOG_OUTPUT("Component Transform Created");
 }
 
 ComponentTransfrom::~ComponentTransfrom()

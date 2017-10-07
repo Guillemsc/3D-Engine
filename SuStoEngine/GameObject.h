@@ -25,12 +25,17 @@ public:
 
 	Component* FindComponentByType(ComponentType type);
 
-private:
+	void SetId(int _id);
 
+	void HierarchyView();
+
+public:
+	
 private:
 	bool enabled = false;
 	int	 id = 0;
 	std::list<Component*> components;
+	char* name;
 };
 
 #endif

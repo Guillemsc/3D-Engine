@@ -17,11 +17,11 @@ public:
 	void Draw();
 
 public:
-	std::list<GameObject*> game_objects;
 
 private:
 	DockContext* dock;
-
+	bool create_game_object = false;
+	bool create_cube_object = false;
 };
 
 #endif
