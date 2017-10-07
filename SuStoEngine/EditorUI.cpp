@@ -13,6 +13,7 @@
 #include "ProfilerViewer.h"
 #include "Hardware.h"
 #include "Game.h"
+#include "Hierarchy.h"
 #include "JSONLoader.h"
 
 //https://github.com/ocornut/imgui/issues/351
@@ -51,6 +52,7 @@ bool EditorUI::Awake()
 	engine_test = new EngineTest(true);
 	hardware = new Hardware(false);
 	game = new Game(true);
+	hierarchy = new Hierarchy(true);
 
 	AddEditor(game);
 	AddEditor(console);
@@ -59,6 +61,7 @@ bool EditorUI::Awake()
 	AddEditor(profiler_viewer);
 	AddEditor(engine_test);
 	AddEditor(hardware);
+	AddEditor(hierarchy);
 
 	// ---------------
 

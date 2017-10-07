@@ -11,6 +11,7 @@ class ProfilerViewer;
 class EngineTest;
 class Hardware;
 class Game;
+class Hierarchy;
 
 class EditorElement
 {
@@ -72,6 +73,7 @@ private:
 	EngineTest*          engine_test = nullptr;
 	Hardware*			 hardware = nullptr;
 	Game*				 game = nullptr;
+	Hierarchy*			 hierarchy = nullptr;
 
 	list<EditorElement*> editor_elements;
 
