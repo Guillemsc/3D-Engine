@@ -12,6 +12,7 @@ class EngineTest;
 class Hardware;
 class Game;
 class Hierarchy;
+class ImVec4;
 
 class EditorElement
 {
@@ -61,6 +62,8 @@ public:
 	void SaveNewLayout(const char* layout);
 
 	void RemoveLayout(const char* layout);
+
+	ImVec4 GameRect();
 
 private:
 	void AddEditor(EditorElement* el);

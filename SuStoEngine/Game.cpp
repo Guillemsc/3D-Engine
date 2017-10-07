@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "imgui.h"
+
 #include "imgui_docking.h"
 #include "App.h"
 #include "ModuleWindow.h"
@@ -17,6 +17,8 @@ Game::~Game()
 void Game::Start()
 {
 	dock = getDockContext();
+	position = { 0, 0 };
+	size_ = { 0, 0 };
 
 	static float vertices[108] = {
 		10.f, 0.f, 0.f,
@@ -69,6 +71,8 @@ void Game::Draw()
 	igBeginDock("Game", &a, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 	
 	ImVec2 size = ImGui::GetContentRegionAvail();
+	size_ = size;
+	position = ImGui::GetWindowPos();
 
 	if (win_size_x != size.x || win_size_y != size.y)
 	{
@@ -155,4 +159,9 @@ void Game::Draw()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	igEndDock();
+}
+
+ImVec4 Game::GetRect()
+{
+	return ImVec4(position.x, position.y, size_.x, size_.y);
 }

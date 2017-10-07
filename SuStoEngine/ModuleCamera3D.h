@@ -41,4 +41,7 @@ private:
 	float max_following_dist = 0;
 	float following_height = 0;
 	float displacement = 0;
+
+	// Camera Movement
+	bool is_inside_rect = false;
 };

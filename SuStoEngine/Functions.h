@@ -4,6 +4,8 @@
 #include <list>
 #include <string>
 
+class ImVec2;
+class ImVec4;
 // -----------------------------------------
 // -----------------------------------------
 
@@ -38,5 +40,7 @@ int GetRandomValue(int range_1, int range_2);
 
 // Returns a random float given a range;
 float GetRandomValue(float range_1, float range_2);
+
+bool PointInRect(ImVec2 point_xywh, ImVec4 rect_xywh);
 
 #endif //__FUNCTIONS_H__

@@ -30,4 +30,5 @@ public:
 
 	FBO* fbo_texture;
 	uint texture_id;
+
 };

@@ -387,6 +387,11 @@ void EditorUI::RemoveLayout(const char * lay)
 	}
 }
 
+ImVec4 EditorUI::GameRect()
+{
+	return game->GetRect();
+}
+
 
 void EditorUI::LoadStyle(char * name)
 {

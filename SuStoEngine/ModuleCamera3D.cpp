@@ -2,6 +2,9 @@
 #include "App.h"
 #include "ModuleInput.h"
 #include "ModuleCamera3D.h"
+#include "EditorUI.h"
+#include "Game.h"
+#include "imgui.h"
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
@@ -78,8 +81,12 @@ bool ModuleCamera3D::Update()
 	Reference += newPos;
 
 	// Mouse motion ----------------
-
-	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_DOWN || App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_UP)
+	{
+		is_inside_rect = PointInRect(ImGui::GetMousePos(), App->editorUI->GameRect());
+	}	
+	
+	if (is_inside_rect && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
 		int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
