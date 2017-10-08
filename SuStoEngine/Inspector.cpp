@@ -36,6 +36,14 @@ void Inspector::Draw()
 		
 		ImGui::BeginMenuBar();
 
+		if (ImGui::BeginMenu("Add Component"))
+		{
+			ImGui::MenuItem("Add Transform");
+			ImGui::MenuItem("Add Primitive");
+			ImGui::MenuItem("Add Other1");
+			ImGui::MenuItem("Add Other2");
+			ImGui::EndMenu();
+		}
 
 		ImGui::EndMenuBar();
 	}
