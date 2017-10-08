@@ -1,8 +1,8 @@
 #include "ComponentPrimitive.h"
 
-ComponentPrimitive::ComponentPrimitive(ComponentType type, GameObject * owner) : Component(type, owner)
+ComponentPrimitive::ComponentPrimitive(GameObject * owner) : Component(PRIMITIVE, owner)
 {
-
+	LOG_OUTPUT("Component Primitive Created");
 }
 
 ComponentPrimitive::~ComponentPrimitive()

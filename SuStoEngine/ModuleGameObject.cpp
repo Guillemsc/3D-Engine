@@ -13,6 +13,10 @@ bool ModuleGameObject::Awake()
 	bool ret = true;
 
 	LOG_OUTPUT("Creating Module GameObject");
+	for (int i = 0; i < 250; ++i) {
+		selected_go[i] = false;
+	}
+
 
 	return ret;
 }

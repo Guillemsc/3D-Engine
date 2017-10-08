@@ -6,7 +6,8 @@ class GameObject;
 
 enum ComponentType
 {
-	TRANSFORM
+	TRANSFORM,
+	PRIMITIVE
 };
 
 class Component

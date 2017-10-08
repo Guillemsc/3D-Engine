@@ -47,16 +47,12 @@ void Hierarchy::Draw()
 
 	if (create_game_object || create_cube_object) 
 	{
-		int i = 0;
-		while (i != 20) {
-			GameObject* tmp = App->gameobj->Create();
-			i++;
-		}
+		GameObject* tmp = App->gameobj->Create();
 
 		if (create_cube_object) 
 		{
 			LOG_OUTPUT("Cube Created");
-
+			
 			create_cube_object = false;
 		}
 

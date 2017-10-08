@@ -13,7 +13,7 @@ enum PrimitiveType
 class ComponentPrimitive : public Component
 {
 public:
-	ComponentPrimitive(ComponentType type, GameObject* owner);
+	ComponentPrimitive(GameObject* owner);
 	virtual ~ComponentPrimitive();
 
 	void Update();

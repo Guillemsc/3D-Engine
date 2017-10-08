@@ -17,6 +17,8 @@ public:
 	void Draw();
 
 public:
+	bool is_selected = false;
+	GameObject* selected_go = nullptr;
 
 private:
 	DockContext* dock;

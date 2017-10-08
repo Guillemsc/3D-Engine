@@ -27,6 +27,7 @@ private:
 	void DestroyGameObjects();
 
 public:
+	bool selected_go[250];
 
 private:
 	list<GameObject*> game_objects;

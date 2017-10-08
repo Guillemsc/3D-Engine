@@ -25,6 +25,7 @@ public:
 
 	Component* FindComponentByType(ComponentType type);
 
+	int GetId();
 	void SetId(int _id);
 
 	void HierarchyView();
