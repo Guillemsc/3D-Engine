@@ -25,6 +25,9 @@ public:
 
 	Component* FindComponentByType(ComponentType type);
 
+	const char* GetName() const;
+	void SetName(const char* new_name);
+
 	int GetId();
 	void SetId(int _id);
 
@@ -33,7 +36,7 @@ public:
 public:
 	
 private:
-	const char* name = nullptr;
+	char		name[25] = "";
 	bool		enabled = false;
 	int			id = 0;
 	std::list<Component*> components;

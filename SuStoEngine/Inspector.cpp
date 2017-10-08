@@ -27,7 +27,17 @@ void Inspector::Draw()
 
 	if (selected_go)
 	{
-		ImGui::Text("GameObject_%d", selected_go->GetId());
+		// Text Input To Rename the GameObject
+		char name[25];
+		sprintf_s(name, 25, selected_go->GetName());
+		if (ImGui::InputText("", name, 25, ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue))
+			selected_go->SetName(name);
+
+		
+		ImGui::BeginMenuBar();
+
+
+		ImGui::EndMenuBar();
 	}
 	
 	igEndDock();

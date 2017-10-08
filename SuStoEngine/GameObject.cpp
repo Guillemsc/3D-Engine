@@ -84,6 +84,16 @@ Component * GameObject::FindComponentByType(ComponentType type)
 	return nullptr;
 }
 
+const char * GameObject::GetName() const
+{
+	return name;
+}
+
+void GameObject::SetName(const char * new_name)
+{
+	sprintf_s(name, 25, new_name);
+}
+
 int GameObject::GetId()
 {
 	return id;
@@ -92,12 +102,11 @@ int GameObject::GetId()
 void GameObject::SetId(int _id)
 {
 	id = _id;
+	sprintf_s(name, 25, "GameObject_%d", id);
 }
 
 void GameObject::HierarchyView()
 {
-	char name[25];
-	sprintf_s(name, 25, "GameObject_%d", id);
 	bool tmp = App->gameobj->selected_go[id];
 	ImGui::Selectable(name, &App->gameobj->selected_go[id]);
 
