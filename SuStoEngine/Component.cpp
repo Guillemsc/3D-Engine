@@ -43,6 +43,11 @@ void Component::SetEnabled(bool set)
 	set ? Enable() : Disable();
 }
 
+void Component::SetName(const char * new_name)
+{
+	sprintf_s(name, 25, new_name);
+}
+
 void Component::Destroy()
 {
 	OnDestroy();
@@ -56,4 +61,9 @@ GameObject * Component::GetOwner()
 ComponentType Component::GetType()
 {
 	return type;
+}
+
+char* Component::GetName()
+{
+	return name;
 }

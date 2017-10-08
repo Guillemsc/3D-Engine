@@ -20,12 +20,16 @@ public:
 
 	GameObject* GetOwner();
 	ComponentType GetType();
+	char* GetName();
 
 	void Enable();
 	void Disable();
 	bool GetEnabled();
 	void SetEnabled(bool set);
+	void SetName(const char* new_name);
 	void Destroy();
+
+	virtual void InspectorDraw() {};
 
 private:
 	virtual void OnCreate() {};
@@ -37,6 +41,7 @@ private:
 	bool		  enabled = false;
 	GameObject*   owner = nullptr;
 	ComponentType type;
+	char		  name[25] = "";
 };
 
 #endif

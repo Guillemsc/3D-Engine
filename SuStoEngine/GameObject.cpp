@@ -51,23 +51,26 @@ void GameObject::CleanUp()
 
 void GameObject::AddComponent(ComponentType type)
 {
+	Component* tmp = nullptr;
+
 	switch (type)
 	{
 	case TRANSFORM:
 	{
-		ComponentTransfrom* c_transform = new ComponentTransfrom(this);
-		components.push_back(c_transform);
+		tmp = new ComponentTransfrom(this);		
 	}
 		break;
 	case PRIMITIVE:
 	{
-		ComponentPrimitive* c_primitive = new ComponentPrimitive(this);
-		components.push_back(c_primitive);
+		tmp = new ComponentPrimitive(this);
 	}
 		break;
 	default:
 		break;
 	}
+	
+	if (tmp != nullptr)
+		components.push_back(tmp);
 }
 
 void GameObject::RemoveComponent(ComponentType type)
@@ -76,7 +79,7 @@ void GameObject::RemoveComponent(ComponentType type)
 
 std::list<Component*> GameObject::GetComponents()
 {
-	return std::list<Component*>();
+	return components;
 }
 
 Component * GameObject::FindComponentByType(ComponentType type)

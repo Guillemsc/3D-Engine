@@ -27,25 +27,35 @@ void Inspector::Draw()
 
 	if (selected_go)
 	{
+		ImGui::BeginMenuBar();
+			if (ImGui::BeginMenu("Add Component"))
+			{
+				if (ImGui::MenuItem("Add Transform"))
+					selected_go->AddComponent(TRANSFORM);
+				if (ImGui::MenuItem("Add Primitive"))
+					selected_go->AddComponent(PRIMITIVE);
+				ImGui::MenuItem("Add Other1");
+				ImGui::MenuItem("Add Other2");
+				ImGui::EndMenu();
+			}
+		ImGui::EndMenuBar();
+
 		// Text Input To Rename the GameObject
 		char name[25];
 		sprintf_s(name, 25, selected_go->GetName());
 		if (ImGui::InputText("", name, 25, ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue))
 			selected_go->SetName(name);
 
-		
-		ImGui::BeginMenuBar();
+		ImGui::Separator();
 
-		if (ImGui::BeginMenu("Add Component"))
+		list<Component*> components = selected_go->GetComponents();
+		for (list<Component*>::iterator it = components.begin(); it != components.end(); ++it)
 		{
-			ImGui::MenuItem("Add Transform");
-			ImGui::MenuItem("Add Primitive");
-			ImGui::MenuItem("Add Other1");
-			ImGui::MenuItem("Add Other2");
-			ImGui::EndMenu();
+			(*it)->InspectorDraw();
 		}
-
-		ImGui::EndMenuBar();
+		
+		
+		
 	}
 	
 	igEndDock();

@@ -16,6 +16,8 @@ public:
 	float3 GetRotation();
 	float3 GetScale();
 
+	void InspectorDraw();
+
 private:
 	void OnCreate();
 	void OnDestroy();

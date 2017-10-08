@@ -19,6 +19,7 @@ public:
 	void Update();
 	
 	void Cube();
+	void InspectorDraw();
 
 private:
 	void OnCreate();
