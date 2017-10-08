@@ -2,15 +2,16 @@
 #define __GameObject_H__
 
 #include <iostream>
-#include <list>
+#include <vector>
 #include "Component.h"
 
 class GameObject
 {
 public:
-	GameObject();
+	GameObject(int id);
 	virtual ~GameObject();
 
+	void Start();
 	void Update();
 
 	void Enable();
@@ -21,17 +22,16 @@ public:
 
 	void AddComponent(ComponentType type);
 	void RemoveComponent(ComponentType type);
-	std::list<Component*> GetComponents();
+	std::vector<Component*> GetComponents();
 
 	Component* FindComponentByType(ComponentType type);
 
 	const char* GetName() const;
 	void SetName(const char* new_name);
+	void SetSelected(bool set);
 
 	int GetId();
-	void SetId(int _id);
-
-	void HierarchyView();
+	bool GetSelected();
 
 public:
 	
@@ -39,7 +39,11 @@ private:
 	char		name[25] = "";
 	bool		enabled = false;
 	int			id = 0;
-	std::list<Component*> components;
+	bool		selected = false;
+
+	std::vector<Component*> components;
+
+	GameObject* parent = nullptr;
 };
 
 #endif

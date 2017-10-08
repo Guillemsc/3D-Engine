@@ -4,6 +4,7 @@
 #include <string>
 #include "Globals.h"
 #include "Profiler.h"
+#include "IDGenerator.h"
 #include "Module.h"
 
 class Profiler;
@@ -78,6 +79,7 @@ public:
 	std::list<string>  logs;
 
 	Profiler*		   profiler = nullptr;
+	IDGen*		       id = nullptr;
 
 	std::list<Module*> modules;
 

@@ -16,6 +16,7 @@
 #include "Hierarchy.h"
 #include "Inspector.h"
 #include "JSONLoader.h"
+#include "ModuleGameObject.h"
 
 //https://github.com/ocornut/imgui/issues/351
 
@@ -124,6 +125,26 @@ bool EditorUI::Update()
 			if (ImGui::MenuItem("Quit", "Alt+F4")) 
 				App->EndApp(); 
 
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Edit"))
+		{
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("GameObject"))
+		{
+			if (ImGui::MenuItem("Create Empty"))
+			{
+				App->gameobj->Create();
+			}
+
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Component"))
+		{
 			ImGui::EndMenu();
 		}
 

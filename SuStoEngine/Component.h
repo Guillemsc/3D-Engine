@@ -20,7 +20,7 @@ public:
 
 	GameObject* GetOwner();
 	ComponentType GetType();
-	char* GetName();
+	const char* GetName();
 
 	void Enable();
 	void Disable();
@@ -41,7 +41,7 @@ private:
 	bool		  enabled = false;
 	GameObject*   owner = nullptr;
 	ComponentType type;
-	char		  name[25] = "";
+	const char*   name = nullptr;
 };
 
 #endif

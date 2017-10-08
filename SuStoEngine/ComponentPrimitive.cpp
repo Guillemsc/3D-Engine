@@ -18,8 +18,6 @@ void ComponentPrimitive::Update()
 void ComponentPrimitive::Cube()
 {
 	type = CUBE;
-
-
 }
 
 void ComponentPrimitive::InspectorDraw()

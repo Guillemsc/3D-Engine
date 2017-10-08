@@ -1,4 +1,6 @@
 #include "ModuleGameObject.h"
+#include "App.h"
+#include "IDGenerator.h"
 
 ModuleGameObject::ModuleGameObject(bool enabled)
 {
@@ -34,7 +36,7 @@ bool ModuleGameObject::Update()
 {
 	bool ret = true;
 
-	for (list<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
+	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
 	{
 		(*it)->Update();
 	}
@@ -55,7 +57,7 @@ bool ModuleGameObject::CleanUp()
 {
 	bool ret = true;
 
-	for (list<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
+	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
 	{
 		Destroy((*it));
 	}
@@ -68,10 +70,10 @@ bool ModuleGameObject::CleanUp()
 
 GameObject * ModuleGameObject::Create()
 {
-	GameObject* game_object = new GameObject();
+	GameObject* game_object = new GameObject(App->id->NewId("gameobject"));
 
-	game_object->SetId(game_objects.size());
 	game_objects.push_back(game_object);
+	game_object->Start();
 
 	return game_object;
 }
@@ -81,16 +83,55 @@ void ModuleGameObject::Destroy(GameObject * go)
 	to_delete.push_back(go);
 }
 
-list<GameObject*> ModuleGameObject::GetListGameObjects()
+vector<GameObject*> ModuleGameObject::GetListGameObjects()
 {
 	return game_objects;
 }
 
+void ModuleGameObject::AddGameObjectToSelected(GameObject * go)
+{
+	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
+	{
+		if ((*it) == go)
+			return;
+	}
+
+	go->SetSelected(true);
+	selected.push_back(go);
+}
+
+void ModuleGameObject::RemoveGameObjectFromSelected(GameObject * go)
+{
+	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
+	{
+		if ((*it) == go)
+		{
+			go->SetSelected(false);
+			selected.erase(it);
+			return;
+		}
+	}
+}
+
+void ModuleGameObject::ClearSelection()
+{
+	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end();)
+	{
+		(*it)->SetSelected(false);
+		it = selected.erase(it);
+	}
+}
+
+vector<GameObject*> ModuleGameObject::GetSelectedGameObjects()
+{
+	return selected;
+}
+
 void ModuleGameObject::DestroyGameObjects()
 {
-	for (list<GameObject*>::iterator to_del = to_delete.begin(); to_del != to_delete.end();)
+	for (vector<GameObject*>::iterator to_del = to_delete.begin(); to_del != to_delete.end();)
 	{
-		for (list<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end();)
+		for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end();)
 		{
 			if ((*to_del) == (*it))
 			{
@@ -101,6 +142,7 @@ void ModuleGameObject::DestroyGameObjects()
 				++it;
 		}
 
+		RemoveGameObjectFromSelected(*to_del);
 
 		(*to_del)->CleanUp();
 		delete (*to_del);

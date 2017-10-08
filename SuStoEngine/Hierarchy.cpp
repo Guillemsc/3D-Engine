@@ -4,6 +4,7 @@
 #include "ModuleGameObject.h"
 #include "App.h"
 #include "Inspector.h"
+#include "ModuleInput.h"
 
 Hierarchy::Hierarchy(bool start_enabled)
 {
@@ -31,43 +32,49 @@ void Hierarchy::Draw()
 	{
 		if (ImGui::BeginMenu("+"))
 		{
-			ImGui::MenuItem("Create GameObject", NULL, &create_game_object);
+			ImGui::MenuItem("Create empty GameObject", NULL, &create_empty_game_object);
 			ImGui::MenuItem("Create Cube GameObject", NULL, &create_cube_object);
 			ImGui::EndMenu();
 		}
 		ImGui::EndMenuBar();
 	}
 	
-	list<GameObject*> game_objects = App->gameobj->GetListGameObjects();
-	for (list<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it) 
+	vector<GameObject*> game_objects = App->gameobj->GetListGameObjects();
+	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
 	{
-		(*it)->HierarchyView();
-		if (App->gameobj->selected_go[(*it)->GetId()] && App->editorUI->GetInspector()->is_selected)
+		ImGui::PushID((*it)->GetId());
+
+		if(ImGui::Selectable((*it)->GetName(), (*it)->GetSelected()))
 		{
-			App->editorUI->GetInspector()->SetGameObjectInspected(*it);
-			App->editorUI->GetInspector()->is_selected = false;
+			// If ctrl is pressed do multiselection
+			if (App->input->GetKeyRepeat(SDL_SCANCODE_LCTRL) || App->input->GetKeyRepeat(SDL_SCANCODE_RCTRL))
+			{
+				App->gameobj->AddGameObjectToSelected((*it));
+			}
+
+			// If shift is pressed do fill gap selection
+			else if (App->input->GetKeyRepeat(SDL_SCANCODE_LSHIFT) || App->input->GetKeyRepeat(SDL_SCANCODE_RSHIFT))
+			{
+
+			}
+
+			// Monoselection
+			else
+			{
+				App->gameobj->ClearSelection();
+				App->gameobj->AddGameObjectToSelected((*it));
+			}
 		}
-		else if (!App->gameobj->selected_go[(*it)->GetId()] && App->editorUI->GetInspector()->is_selected)
-		{
-			App->editorUI->GetInspector()->SetGameObjectInspected(nullptr);
-			App->editorUI->GetInspector()->is_selected = false;
-		}
+
+		ImGui::PopID();
 	}
 
 	igEndDock(); 
 
-	if (create_game_object || create_cube_object) 
+	if (create_empty_game_object)
 	{
-		GameObject* tmp = App->gameobj->Create();
-
-		if (create_cube_object) 
-		{
-			LOG_OUTPUT("Cube Created");
-			
-			create_cube_object = false;
-		}
-
-		create_game_object = false;
+		App->gameobj->Create();
+		create_empty_game_object = false;
 	}
 
 }

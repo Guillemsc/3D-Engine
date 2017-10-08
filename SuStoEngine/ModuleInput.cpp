@@ -6,6 +6,7 @@
 #include "EditorUI.h"
 #include "JSONLoader.h"
 
+// SDL_GetScancode: https://wiki.libsdl.org/SDL_Keycode
 // To use PS3 Controller install this driver https://github.com/nefarius/ScpToolkit/releases/tag/v1.6.238.16010
 
 #define MAX_KEYS 300
@@ -356,7 +357,6 @@ KEY_STATE ModuleInput::GetMouseButton(int id) const
 	return mouse_buttons[id];
 }
 
-// char -> SDL_GetScancode: https://wiki.libsdl.org/SDL_Keycode
 int ModuleInput::CharToKey(const char * key)
 {
 	return SDL_GetScancodeFromKey(SDL_GetKeyFromName(key));

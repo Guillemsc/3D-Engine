@@ -387,6 +387,9 @@
     <ClInclude Include="Inspector.h">
       <Filter>Sources\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="IDGenerator.h">
+      <Filter>Sources\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -613,6 +616,9 @@
     </ClCompile>
     <ClCompile Include="Inspector.cpp">
       <Filter>Sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="IDGenerator.cpp">
+      <Filter>Sources\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

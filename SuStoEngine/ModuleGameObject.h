@@ -21,7 +21,13 @@ public:
 	GameObject* Create();
 	void Destroy(GameObject* go);
 
-	list<GameObject*> GetListGameObjects();
+	vector<GameObject*> GetListGameObjects();
+
+	void AddGameObjectToSelected(GameObject* go);
+	void RemoveGameObjectFromSelected(GameObject* go);
+	void ClearSelection();
+
+	vector<GameObject*> GetSelectedGameObjects();
 
 private:
 	void DestroyGameObjects();
@@ -31,8 +37,9 @@ public:
 	bool all_false[250];
 
 private:
-	list<GameObject*> game_objects;
-	list<GameObject*> to_delete;
+	vector<GameObject*> game_objects;
+	vector<GameObject*> to_delete;
+	vector<GameObject*> selected;
 
 };
 

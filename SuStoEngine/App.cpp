@@ -48,6 +48,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(renderer3D);
 
 	profiler = new Profiler();
+	id = new IDGen();
 	SetDebugMode(true);
 }
 

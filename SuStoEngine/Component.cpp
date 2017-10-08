@@ -45,7 +45,7 @@ void Component::SetEnabled(bool set)
 
 void Component::SetName(const char * new_name)
 {
-	sprintf_s(name, 25, new_name);
+	name = new_name;
 }
 
 void Component::Destroy()
@@ -63,7 +63,7 @@ ComponentType Component::GetType()
 	return type;
 }
 
-char* Component::GetName()
+const char* Component::GetName()
 {
 	return name;
 }

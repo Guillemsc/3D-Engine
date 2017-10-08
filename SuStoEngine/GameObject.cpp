@@ -7,14 +7,25 @@
 #include "ModuleGameObject.h"
 #include "Inspector.h"
 
-GameObject::GameObject()
+GameObject::GameObject(int _id)
 {
-	LOG_OUTPUT("Game Object Created");
+	id = _id;
 }
 
 GameObject::~GameObject()
 {
 }
+
+void GameObject::Start()
+{
+	LOG_OUTPUT("Game Object Created");
+
+	SetName("GameObject");
+
+	ComponentTransfrom* trans = new ComponentTransfrom(this);
+	components.push_back(trans);
+}
+
 void GameObject::Update()
 {
 }
@@ -55,16 +66,12 @@ void GameObject::AddComponent(ComponentType type)
 
 	switch (type)
 	{
-	case TRANSFORM:
-	{
-		tmp = new ComponentTransfrom(this);		
-	}
+		case PRIMITIVE:
+		{
+			tmp = new ComponentPrimitive(this);
+		}
 		break;
-	case PRIMITIVE:
-	{
-		tmp = new ComponentPrimitive(this);
-	}
-		break;
+
 	default:
 		break;
 	}
@@ -77,7 +84,7 @@ void GameObject::RemoveComponent(ComponentType type)
 {
 }
 
-std::list<Component*> GameObject::GetComponents()
+std::vector<Component*> GameObject::GetComponents()
 {
 	return components;
 }
@@ -97,30 +104,19 @@ void GameObject::SetName(const char * new_name)
 	sprintf_s(name, 25, new_name);
 }
 
+void GameObject::SetSelected(bool set)
+{
+	selected = set;
+}
+
 int GameObject::GetId()
 {
 	return id;
 }
 
-void GameObject::SetId(int _id)
+bool GameObject::GetSelected()
 {
-	id = _id;
-	sprintf_s(name, 25, "GameObject_%d", id);
+	return selected;
 }
 
-void GameObject::HierarchyView()
-{
-	bool tmp = App->gameobj->selected_go[id];
-	ImGui::Selectable(name, &App->gameobj->selected_go[id]);
-
-	if (tmp != App->gameobj->selected_go[id])
-	{
-		for (int i = 0; i < 250; ++i) 
-		{
-			if (i != id)
-				App->gameobj->selected_go[i] = App->gameobj->all_false[i];
-		}
-		App->editorUI->GetInspector()->is_selected = true;
-	}
-}
 

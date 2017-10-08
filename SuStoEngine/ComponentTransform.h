@@ -12,9 +12,9 @@ public:
 	ComponentTransfrom(GameObject* owner);
 	virtual ~ComponentTransfrom();
 
-	float3 GetPosition();
-	float3 GetRotation();
-	float3 GetScale();
+	float3 GetLocalPosition();
+	float3 GetLocalRotationEuler();
+	float3 GetLocalScale();
 
 	void InspectorDraw();
 
@@ -24,8 +24,10 @@ private:
 	void OnEnable();
 	void OnDisable();
 
+	void ResetLocalMatrix();
+
 public:
-	float4x4 transform;
+	float4x4 local_transform;
 
 };
 
