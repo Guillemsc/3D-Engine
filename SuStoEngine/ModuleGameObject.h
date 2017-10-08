@@ -28,6 +28,7 @@ private:
 
 public:
 	bool selected_go[250];
+	bool all_false[250];
 
 private:
 	list<GameObject*> game_objects;

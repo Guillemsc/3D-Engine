@@ -52,6 +52,7 @@ public:
 	void LoadStyle(char* name);
 
 	Console* GetConsole();
+	Inspector* GetInspector();
 
 	void LoadLayoutsInfo();
 	void SaveLayoutsInfo();

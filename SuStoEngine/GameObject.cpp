@@ -5,6 +5,7 @@
 #include "ComponentPrimitive.h"
 #include "ComponentTransform.h"
 #include "ModuleGameObject.h"
+#include "Inspector.h"
 
 GameObject::GameObject()
 {
@@ -97,6 +98,17 @@ void GameObject::HierarchyView()
 {
 	char name[25];
 	sprintf_s(name, 25, "GameObject_%d", id);
+	bool tmp = App->gameobj->selected_go[id];
 	ImGui::Selectable(name, &App->gameobj->selected_go[id]);
+
+	if (tmp != App->gameobj->selected_go[id])
+	{
+		for (int i = 0; i < 250; ++i) 
+		{
+			if (i != id)
+				App->gameobj->selected_go[i] = App->gameobj->all_false[i];
+		}
+		App->editorUI->GetInspector()->is_selected = true;
+	}
 }
 

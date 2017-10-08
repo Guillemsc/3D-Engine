@@ -637,3 +637,8 @@ Console * EditorUI::GetConsole()
 	return console;
 }
 
+Inspector * EditorUI::GetInspector()
+{
+	return inspector;
+}
+

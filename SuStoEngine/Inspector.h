@@ -16,8 +16,11 @@ public:
 	void Start();
 	void Draw();
 
+	void SetGameObjectInspected(GameObject* go);
+
 public:
 	bool is_selected = false;
+
 	GameObject* selected_go = nullptr;
 
 private:

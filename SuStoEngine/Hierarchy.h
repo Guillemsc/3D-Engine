@@ -22,6 +22,8 @@ private:
 	DockContext* dock;
 	bool create_game_object = false;
 	bool create_cube_object = false;
+
+	bool first_time_selected = true;
 };
 
 #endif

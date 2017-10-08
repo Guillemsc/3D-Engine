@@ -3,6 +3,7 @@
 #include "imgui_docking.h"
 #include "ModuleGameObject.h"
 #include "App.h"
+#include "Inspector.h"
 
 Hierarchy::Hierarchy(bool start_enabled)
 {
@@ -40,7 +41,17 @@ void Hierarchy::Draw()
 	list<GameObject*> game_objects = App->gameobj->GetListGameObjects();
 	for (list<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it) 
 	{
-		(*it)->HierarchyView();	
+		(*it)->HierarchyView();
+		if (App->gameobj->selected_go[(*it)->GetId()] && App->editorUI->GetInspector()->is_selected)
+		{
+			App->editorUI->GetInspector()->SetGameObjectInspected(*it);
+			App->editorUI->GetInspector()->is_selected = false;
+		}
+		else if (!App->gameobj->selected_go[(*it)->GetId()] && App->editorUI->GetInspector()->is_selected)
+		{
+			App->editorUI->GetInspector()->SetGameObjectInspected(nullptr);
+			App->editorUI->GetInspector()->is_selected = false;
+		}
 	}
 
 	igEndDock(); 

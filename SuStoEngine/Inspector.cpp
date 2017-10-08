@@ -1,6 +1,7 @@
 #include "Inspector.h"
 #include "imgui.h"
 #include "imgui_docking.h"
+#include "GameObject.h"
 #include "App.h"
 
 Inspector::Inspector(bool start_enabled)
@@ -24,6 +25,15 @@ void Inspector::Draw()
 
 	igBeginDock("Inspector", &inspector_bool, ImGuiWindowFlags_MenuBar);
 
+	if (selected_go)
+	{
+		ImGui::Text("GameObject_%d", selected_go->GetId());
+	}
 	
 	igEndDock();
+}
+
+void Inspector::SetGameObjectInspected(GameObject * go)
+{
+	selected_go = go;
 }
