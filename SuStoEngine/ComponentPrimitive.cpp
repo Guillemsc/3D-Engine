@@ -275,23 +275,18 @@ void ComponentPrimitive::Cylinder()
 			Cylinder_indices.push_back(strips * 2 - 1);
 			Cylinder_indices.push_back(strips - 1);
 		}
-	}
 
-	// Bottom
-	for (int i = strips - 1; i >= 0; --i)
-	{
+
+		//
 		Cylinder_indices.push_back(i);
-		Cylinder_indices.push_back(strips-1+1);
+		Cylinder_indices.push_back(strips - 1 + 1);
 
 		if (i != 0)
 			Cylinder_indices.push_back(i - 1);
 		else
 			Cylinder_indices.push_back(strips - 1);
-	}
 
-	// Top
-	for (int i = strips - 1; i >= 0; --i)
-	{
+		//
 		Cylinder_indices.push_back(i + strips);
 		Cylinder_indices.push_back(strips - 1 + 2);
 
@@ -300,6 +295,30 @@ void ComponentPrimitive::Cylinder()
 		else
 			Cylinder_indices.push_back(strips + strips - 1);
 	}
+
+	//// Bottom
+	//for (int i = strips - 1; i >= 0; --i)
+	//{
+	//	Cylinder_indices.push_back(i);
+	//	Cylinder_indices.push_back(strips-1+1);
+
+	//	if (i != 0)
+	//		Cylinder_indices.push_back(i - 1);
+	//	else
+	//		Cylinder_indices.push_back(strips - 1);
+	//}
+
+	//// Top
+	//for (int i = strips - 1; i >= 0; --i)
+	//{
+	//	Cylinder_indices.push_back(i + strips);
+	//	Cylinder_indices.push_back(strips - 1 + 2);
+
+	//	if (i != 0)
+	//		Cylinder_indices.push_back(i + strips - 1);
+	//	else
+	//		Cylinder_indices.push_back(strips + strips - 1);
+	//}
 
 	int i = 0;
 }
