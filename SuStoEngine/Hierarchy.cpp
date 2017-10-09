@@ -73,7 +73,11 @@ void Hierarchy::Draw()
 
 	if (create_empty_game_object)
 	{
-		App->gameobj->Create();
+		GameObject* go = App->gameobj->Create();
+
+		App->gameobj->ClearSelection();
+		App->gameobj->AddGameObjectToSelected(go);
+
 		create_empty_game_object = false;
 	}
 
@@ -81,6 +85,9 @@ void Hierarchy::Draw()
 	{
 		GameObject* go = App->gameobj->Create();
 		go->AddComponent(PRIMITIVE);
+
+		App->gameobj->ClearSelection();
+		App->gameobj->AddGameObjectToSelected(go);
 
 		create_cube_object = false;
 	}

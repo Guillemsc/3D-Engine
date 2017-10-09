@@ -18,7 +18,7 @@ ComponentPrimitive::~ComponentPrimitive()
 
 void ComponentPrimitive::Start()
 {
-	SetPrimitive(ICUBE);
+	SetPrimitive(VCUBE);
 }
 
 void ComponentPrimitive::Update()
@@ -35,7 +35,7 @@ void ComponentPrimitive::Update()
 		App->renderer3D->DrawIndexBuffer(GL_QUADS, &Sphere_indices[0], Sphere_indices.size(), &Sphere_vertices[0]);
 		break;
 	case CYLINDER:
-		App->renderer3D->DrawIndexBuffer(GL_QUADS, &Sphere_indices[0], Sphere_indices.size(), &Sphere_vertices[0]);
+		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, &Cylinder_indices[0], Cylinder_indices.size(), &Cylinder_vertices[0]);
 		break;
 	}
 }
@@ -201,11 +201,13 @@ void ComponentPrimitive::Sphere()
 }
 void ComponentPrimitive::Cylinder()
 {
+	type = CYLINDER;
+
 	float radius = 0.5f;
 	float height = 1.0f;
 	float strips = 10;
 
-	float R = 0.5 / 360;
+	float R = 360 / strips;
 
 	for (int i = 0; i < strips; i++)
 	{
@@ -229,24 +231,36 @@ void ComponentPrimitive::Cylinder()
 		Cylinder_vertices.push_back(z);
 	}
 
-	bool down = true;
-	for (int i = strips - 1; i >= 0; i--)
+	//bool first = true;
+	//for (int i = strips - 1; i >= 0; --i)
+	//{
+	//	if (first)
+	//	{
+	//		Cylinder_indices.push_back(i);
+	//		Cylinder_indices.push_back(i + strips);
+
+	//		--i;
+
+	//		Cylinder_indices.push_back(i + strips);
+	//		Cylinder_indices.push_back(i);
+
+	//		first = false;
+	//	}
+	//	else
+	//	{
+	//		Cylinder_indices.push_back(i + strips);
+	//		Cylinder_indices.push_back(i);
+	//	}
+	//}
+
+	for (int i = strips - 1; i >= 0; --i)
 	{
-		if (down)
-		{
-			Cylinder_indices.push_back(i);
-			Cylinder_indices.push_back(i + strips);
-
-			down = false;
-		}
-		else
-		{
-			Cylinder_indices.push_back(i + strips);
-			Cylinder_indices.push_back(i);
-
-			down = true;
-		}
+		Cylinder_indices.push_back(i);
+		Cylinder_indices.push_back(i + strips - 1);
+		Cylinder_indices.push_back(i + strips - 1);
 	}
+
+	int i = 0;
 }
 
 void ComponentPrimitive::InspectorDraw(std::vector<Component*> components)
