@@ -411,7 +411,7 @@ void EditorUI::RemoveLayout(const char * lay)
 	}
 }
 
-ImVec4 EditorUI::GameRect()
+float4 EditorUI::GameRect()
 {
 	return game->GetRect();
 }

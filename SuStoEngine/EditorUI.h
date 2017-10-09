@@ -66,7 +66,7 @@ public:
 
 	void RemoveLayout(const char* layout);
 
-	ImVec4 GameRect();
+	float4 GameRect();
 
 private:
 	void AddEditor(EditorElement* el);

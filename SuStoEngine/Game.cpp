@@ -18,7 +18,6 @@ void Game::Start()
 {
 	dock = getDockContext();
 	position = { 0, 0 };
-	size_ = { 0, 0 };
 
 	static float vertices[108] = {
 		10.f, 0.f, 0.f,
@@ -68,19 +67,20 @@ void Game::Draw()
 
 	igBeginDock("Game", &a, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 	
-	ImVec2 size = ImGui::GetContentRegionAvail();
-	size_ = size;
-	position = ImGui::GetWindowPos();
+	size = float2(ImGui::GetContentRegionAvail().y, ImGui::GetContentRegionAvail().x);
+	position = float2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
 
-	if (win_size_x != size.x || win_size_y != size.y)
+
+	// Keep in mind that ImGui has w and z inverted (x, y, z, w)
+	if (saved_size.x != size.x || saved_size.x != size.y)
 	{
-		App->renderer3D->OnResize(size.x, size.y);
+		App->renderer3D->OnResize(size.y, size.x);
 
-		win_size_x = size.x;
-		win_size_y = size.y;
+		saved_size.x = size.x;
+		saved_size.y = size.y;
 	}
 
-	ImGui::Image((void*)App->renderer3D->fbo_texture->GetTexture(), size, ImVec2(0, 1), ImVec2(1, 0));
+	ImGui::Image((void*)App->renderer3D->fbo_texture->GetTexture(), ImVec2(size.y, size.x), ImVec2(0, 1), ImVec2(1, 0));
 
 	glLineWidth(2.0f);
 	glBegin(GL_TRIANGLES);
@@ -153,7 +153,7 @@ void Game::Draw()
 	igEndDock();
 }
 
-ImVec4 Game::GetRect()
+float4 Game::GetRect()
 {
-	return ImVec4(position.x, position.y, size_.x, size_.y);
+	return float4(position.x, position.y, size.x, size.y);
 }

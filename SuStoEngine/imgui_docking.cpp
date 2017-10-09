@@ -1232,6 +1232,7 @@ using namespace ImGui;
 				m_docks[i]->status = (Status_)(int)json->GetNumber((di + "status").c_str());
 				m_docks[i]->active = json->GetBool((di + "active").c_str());
 				m_docks[i]->opened = json->GetBool((di + "opened").c_str());
+
 				std::string str = json->GetString((di + "location").c_str());
 				int j = 0;
 				for (std::string::iterator it = str.begin(); it != str.end(); it++)

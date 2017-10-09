@@ -17,18 +17,16 @@ public:
 	void Draw();
 
 public:
-	ImVec4 GetRect();
+	float4 GetRect();
 private:
 	DockContext* dock;
 	bool first_time = true;
 
-	int win_size_x = 0;
-	int win_size_y = 0;
-
 	uint my_id = 0;
 
-	ImVec2 position;
-	ImVec2 size_;
+	float2 position;
+	float2 size;
+	float2 saved_size;
 };
 
 #endif

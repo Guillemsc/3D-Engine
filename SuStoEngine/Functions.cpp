@@ -104,12 +104,10 @@ float GetRandomValue(float range_1, float range_2)
 	return dis(gen);
 }
 
-bool PointInRect(ImVec2 point_xywh, ImVec4 rect_xywh)
+bool PointInRect(float2 point_xy, float4 rect_xywh)
 {
-	bool ret = false;
+	if (point_xy.x > rect_xywh.x && point_xy.x < rect_xywh.x + rect_xywh.w && point_xy.y > rect_xywh.y && point_xy.y < rect_xywh.y + rect_xywh.z)
+		return true;
 
-	if (point_xywh.x > rect_xywh.x && point_xywh.y > rect_xywh.y && point_xywh.x < rect_xywh.x + rect_xywh.w && point_xywh.y < rect_xywh.y + rect_xywh.w)
-		ret = true;
-
-	return ret;
+	return false;
 }

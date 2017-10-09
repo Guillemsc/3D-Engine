@@ -81,10 +81,8 @@ bool ModuleCamera3D::Update()
 	Reference += newPos;
 
 	// Mouse motion ----------------
-	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_DOWN || App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_UP)
-	{
-		is_inside_rect = PointInRect(ImGui::GetMousePos(), App->editorUI->GameRect());
-	}	
+	
+	is_inside_rect = PointInRect(float2(App->input->GetMouseX(), App->input->GetMouseY()), App->editorUI->GameRect());
 	
 	if (is_inside_rect && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
