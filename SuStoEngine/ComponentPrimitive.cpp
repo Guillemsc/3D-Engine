@@ -40,7 +40,7 @@ void ComponentPrimitive::Update()
 	case ARROW:
 		break;
 	case RAY:
-		App->renderer3D->DrawIndexBuffer(GL_LINE, &Ray_indices[0], 2, &Ray_vertices[0]);
+		App->renderer3D->DrawIndexBuffer(GL_LINES, &Ray_indices[0], 2, &Ray_vertices[0]);
 		break;
 	case PLANE:
 		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, plane_index, plane_index_count, plane_vertices);
