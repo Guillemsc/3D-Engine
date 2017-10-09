@@ -32,10 +32,10 @@ void ComponentPrimitive::Update()
 		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, iCube_index, iCube_index_count, iCube_vertices);
 		break;
 	case SPHERE:
-		App->renderer3D->DrawIndexBuffer(GL_QUADS, &indices[0], indices.size(), &vertices[0]);
+		App->renderer3D->DrawIndexBuffer(GL_QUADS, &Sphere_indices[0], Sphere_indices.size(), &Sphere_vertices[0]);
 		break;
 	case CYLINDER:
-		
+		App->renderer3D->DrawIndexBuffer(GL_QUADS, &Sphere_indices[0], Sphere_indices.size(), &Sphere_vertices[0]);
 		break;
 	}
 }
@@ -172,9 +172,9 @@ void ComponentPrimitive::Sphere()
 	float const S = 1. / (float)(sectors - 1);
 	int r, s;
 
-	vertices.resize(rings * sectors * 3);
+	Sphere_vertices.resize(rings * sectors * 3);
 
-	std::vector<float>::iterator v = vertices.begin();
+	std::vector<float>::iterator v = Sphere_vertices.begin();
 
 	for (r = 0; r < rings; r++) for (s = 0; s < sectors; s++) 
 	{
@@ -187,9 +187,9 @@ void ComponentPrimitive::Sphere()
 		*v++ = z * radius;
 	}
 
-	indices.resize(rings * sectors * 4);
+	Sphere_indices.resize(rings * sectors * 4);
 
-	std::vector<uint>::iterator i = indices.begin();
+	std::vector<uint>::iterator i = Sphere_indices.begin();
 
 	for (r = 0; r < rings - 1; r++) for (s = 0; s < sectors - 1; s++) 
 	{
@@ -201,12 +201,63 @@ void ComponentPrimitive::Sphere()
 }
 void ComponentPrimitive::Cylinder()
 {
+	float radius = 0.5f;
+	float height = 1.0f;
+	float strips = 10;
 
+	float R = 0.5 / 360;
+
+	for (int i = 0; i < strips; i++)
+	{
+		float x = cos(R*i*DEGTORAD) * radius;
+		float y = -height /2;
+		float z = sin(R*i*DEGTORAD) * radius;
+
+		Cylinder_vertices.push_back(x);
+		Cylinder_vertices.push_back(y);
+		Cylinder_vertices.push_back(z);
+	}
+
+	for (int i = 0; i < strips; i++)
+	{
+		float x = cos(R*i*DEGTORAD) * radius;
+		float y = height / 2;
+		float z = sin(R*i*DEGTORAD) * radius;
+
+		Cylinder_vertices.push_back(x);
+		Cylinder_vertices.push_back(y);
+		Cylinder_vertices.push_back(z);
+	}
+
+	bool down = true;
+	for (int i = strips - 1; i >= 0; i--)
+	{
+		if (down)
+		{
+			Cylinder_indices.push_back(i);
+			Cylinder_indices.push_back(i + strips);
+
+			down = false;
+		}
+		else
+		{
+			Cylinder_indices.push_back(i + strips);
+			Cylinder_indices.push_back(i);
+
+			down = true;
+		}
+	}
 }
 
 void ComponentPrimitive::InspectorDraw(std::vector<Component*> components)
 {
 	ImGui::Text(GetName());
+
+
+	if (ImGui::Combo("Primitives", &current, "VCube\0ICube\0Sphere\0Cylinder\0Arrow\0Ray\0Plane"))
+	{
+		SetPrimitive(static_cast<PrimitiveType>(current + 1));
+	}
 }
 
 void ComponentPrimitive::OnEnable()

@@ -40,6 +40,7 @@ private:
 public:
 private:
 	PrimitiveType type = VCUBE;
+	int			  current = 0;
 
 	// Cube vertices
 	float*	      vCube_vertices = nullptr;
@@ -52,8 +53,12 @@ private:
 	int			  iCube_index_count = 0;
 
 	// Sphere
-	std::vector<float> vertices;
-	std::vector<uint>  indices;
+	std::vector<float> Sphere_vertices;
+	std::vector<uint>  Sphere_indices;
+
+	// Cylinder
+	std::vector<float> Cylinder_vertices;
+	std::vector<uint>  Cylinder_indices;
 };
 
 #endif
