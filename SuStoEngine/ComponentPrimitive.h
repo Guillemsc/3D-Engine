@@ -15,7 +15,7 @@ enum PrimitiveType
 	ARROW,
 	RAY,
 	PLANE,
-	CONE,
+	CONE
 };
 
 class ComponentPrimitive : public Component
