@@ -60,6 +60,8 @@ void Inspector::Draw()
 			}
 
 			(*it)->InspectorDraw(same_components);
+
+			ImGui::Separator();
 		}
 	}
 	
