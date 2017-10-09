@@ -11,11 +11,10 @@ enum PrimitiveType
 	VCUBE,
 	ICUBE,
 	SPHERE,
-	PLANE,
 	CYLINDER,
 	ARROW,
 	RAY,
-	PLANE,
+	PLANE
 };
 
 class ComponentPrimitive : public Component
