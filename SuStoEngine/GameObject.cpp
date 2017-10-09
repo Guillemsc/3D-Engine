@@ -23,6 +23,7 @@ void GameObject::Start()
 	SetName("GameObject");
 
 	AddComponent(TRANSFORM);
+	transform = FindComponentByType(TRANSFORM);
 }
 
 void GameObject::Update()

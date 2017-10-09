@@ -34,6 +34,9 @@ void ComponentPrimitive::Update()
 	case SPHERE:
 		App->renderer3D->DrawIndexBuffer(GL_QUADS, &indices[0], indices.size(), &vertices[0]);
 		break;
+	case CYLINDER:
+		
+		break;
 	}
 }
 
@@ -53,6 +56,9 @@ void ComponentPrimitive::SetPrimitive(PrimitiveType type)
 		break;
 	case SPHERE:
 		Sphere();
+		break;
+	case CYLINDER:
+		Cylinder();
 		break;
 	}
 }
@@ -189,6 +195,11 @@ void ComponentPrimitive::Sphere()
 		*i++ = (r + 1) * sectors + s;
 	}
 }
+void ComponentPrimitive::Cylinder()
+{
+
+}
+
 void ComponentPrimitive::InspectorDraw(std::vector<Component*> components)
 {
 	ImGui::Text(GetName());

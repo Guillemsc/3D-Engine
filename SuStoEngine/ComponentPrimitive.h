@@ -11,6 +11,7 @@ enum PrimitiveType
 	VCUBE,
 	ICUBE,
 	SPHERE,
+	CYLINDER,
 };
 
 class ComponentPrimitive : public Component
@@ -31,6 +32,7 @@ private:
 	void VertexCube();
 	void IndexCube();
 	void Sphere();
+	void Cylinder();
 
 	void OnEnable();
 	void OnDisable();
