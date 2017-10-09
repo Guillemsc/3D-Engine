@@ -18,7 +18,7 @@ ComponentPrimitive::~ComponentPrimitive()
 
 void ComponentPrimitive::Start()
 {
-	SetPrimitive(SPHERE);
+	SetPrimitive(PLANE);
 }
 
 void ComponentPrimitive::Update()
@@ -34,6 +34,8 @@ void ComponentPrimitive::Update()
 	case SPHERE:
 		App->renderer3D->DrawIndexBuffer(GL_QUADS, &indices[0], indices.size(), &vertices[0]);
 		break;
+	case PLANE:
+		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, plane_index, plane_index_count, plane_vertices);
 	}
 }
 
@@ -53,6 +55,9 @@ void ComponentPrimitive::SetPrimitive(PrimitiveType type)
 		break;
 	case SPHERE:
 		Sphere();
+		break;
+	case PLANE:
+		Plane();
 		break;
 	}
 }
@@ -189,6 +194,33 @@ void ComponentPrimitive::Sphere()
 		*i++ = (r + 1) * sectors + s;
 	}
 }
+
+void ComponentPrimitive::Plane()
+{
+	type = PLANE;
+
+	plane_vertices_count = 15;
+	static float v[15] =
+	{
+		-0.5f,	0.f,	0.5f,
+		-0.5f,	0.f,	-0.5f,
+		0.5f,	0.f,	-0.5f,
+
+		0.5f,	0.f,	-0.5f,
+		0.5f,	0.f,	0.5f,
+	};
+
+	plane_vertices = v;
+
+	plane_index_count = 6;
+	static unsigned int v2[6]
+	{
+		0,1,2, 3,4,0
+	};
+
+	plane_index = v2;
+}
+
 void ComponentPrimitive::InspectorDraw(std::vector<Component*> components)
 {
 	ImGui::Text(GetName());

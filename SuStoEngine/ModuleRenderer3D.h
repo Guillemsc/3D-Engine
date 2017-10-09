@@ -26,6 +26,8 @@ public:
 
 	void DrawIndexBuffer(unsigned int glmode, unsigned int* index, int index_size, float* vertices);
 
+	void DrawPlane(float pos_x, float pos_y, float pos_z, int width, int height);
+
 	void DrawGrid(int HALF_GRID_SIZE);
 
 public:
