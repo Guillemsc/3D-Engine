@@ -284,10 +284,9 @@ void ComponentPrimitive::Cylinder()
 	Cylinder_vertices.push_back(y);
 	Cylinder_vertices.push_back(z);
 
-
-	// Body
 	for (int i = strips - 1; i >= 0; --i)
 	{
+		// Body
 		Cylinder_indices.push_back(i);
 		Cylinder_indices.push_back(i + strips);
 
@@ -312,23 +311,18 @@ void ComponentPrimitive::Cylinder()
 			Cylinder_indices.push_back(strips * 2 - 1);
 			Cylinder_indices.push_back(strips - 1);
 		}
-	}
 
-	// Bottom
-	for (int i = strips - 1; i >= 0; --i)
-	{
+
+		// Bottom
 		Cylinder_indices.push_back(i);
-		Cylinder_indices.push_back(strips-1+1);
+		Cylinder_indices.push_back(strips - 1 + 1);
 
 		if (i != 0)
 			Cylinder_indices.push_back(i - 1);
 		else
 			Cylinder_indices.push_back(strips - 1);
-	}
 
-	// Top
-	for (int i = strips - 1; i >= 0; --i)
-	{
+		// Top
 		Cylinder_indices.push_back(i + strips);
 		Cylinder_indices.push_back(strips - 1 + 2);
 
