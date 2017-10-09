@@ -7,6 +7,7 @@
 #include "App.h"
 #include "ModuleWindow.h"
 #include "Cursor.h"
+#include "EditorUI.h"
 
 #define DRAG_BUTTON_SIZE 30
 

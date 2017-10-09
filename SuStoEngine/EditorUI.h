@@ -82,7 +82,7 @@ private:
 	Hierarchy*			 hierarchy = nullptr;
 	Inspector*			 inspector = nullptr;
 
-	list<EditorElement*> editor_elements;
+	vector<EditorElement*> editor_elements;
 
 	JSON_Doc*			 layout = nullptr;
 	std::list<string>	 layouts;

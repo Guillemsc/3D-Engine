@@ -22,8 +22,7 @@ void GameObject::Start()
 
 	SetName("GameObject");
 
-	ComponentTransfrom* trans = new ComponentTransfrom(this);
-	components.push_back(trans);
+	AddComponent(TRANSFORM);
 }
 
 void GameObject::Update()
@@ -62,13 +61,21 @@ void GameObject::CleanUp()
 
 void GameObject::AddComponent(ComponentType type)
 {
-	Component* tmp = nullptr;
+	if (ContainsComponent(type))
+		return;
+
+	Component* ret = nullptr;
 
 	switch (type)
 	{
+		case TRANSFORM:
+		{
+			ret = new ComponentTransfrom(this);
+		}
+		break;
 		case PRIMITIVE:
 		{
-			tmp = new ComponentPrimitive(this);
+			ret = new ComponentPrimitive(this);
 		}
 		break;
 
@@ -76,12 +83,31 @@ void GameObject::AddComponent(ComponentType type)
 		break;
 	}
 	
-	if (tmp != nullptr)
-		components.push_back(tmp);
+	if (ret != nullptr)
+	{
+		ret->Start();
+		components.push_back(ret);
+	}
 }
 
 void GameObject::RemoveComponent(ComponentType type)
 {
+}
+
+bool GameObject::ContainsComponent(ComponentType type)
+{
+	bool ret = false;
+
+	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
+	{
+		if ((*it)->GetType() == type)
+		{
+			ret = true;
+			break;
+		}
+	}
+
+	return ret;
 }
 
 std::vector<Component*> GameObject::GetComponents()
@@ -91,7 +117,18 @@ std::vector<Component*> GameObject::GetComponents()
 
 Component * GameObject::FindComponentByType(ComponentType type)
 {
-	return nullptr;
+	Component* ret = nullptr;
+
+	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
+	{
+		if ((*it)->GetType() == type)
+		{
+			ret = *it;
+			break;
+		}
+	}
+
+	return ret;
 }
 
 const char * GameObject::GetName() const

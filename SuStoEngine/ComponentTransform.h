@@ -12,22 +12,24 @@ public:
 	ComponentTransfrom(GameObject* owner);
 	virtual ~ComponentTransfrom();
 
-	float3 GetLocalPosition();
-	float3 GetLocalRotationEuler();
-	float3 GetLocalScale();
+	void Start();
+	void Update();
+	void CleanUp();
 
-	void InspectorDraw();
+	float3 GetPosition();
+	float3 GetRotationEuler();
+	float3 GetScale();
+
+	void InspectorDraw(std::vector<Component*> components);
 
 private:
-	void OnCreate();
-	void OnDestroy();
 	void OnEnable();
 	void OnDisable();
 
-	void ResetLocalMatrix();
+	void ResetTransformMatrix();
 
 public:
-	float4x4 local_transform;
+	float4x4 transform;
 
 };
 

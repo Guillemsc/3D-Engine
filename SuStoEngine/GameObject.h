@@ -22,6 +22,7 @@ public:
 
 	void AddComponent(ComponentType type);
 	void RemoveComponent(ComponentType type);
+	bool ContainsComponent(ComponentType type);
 	std::vector<Component*> GetComponents();
 
 	Component* FindComponentByType(ComponentType type);

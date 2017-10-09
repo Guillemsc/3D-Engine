@@ -19,7 +19,7 @@ public:
 	void Update();
 	
 	void Cube();
-	void InspectorDraw();
+	void InspectorDraw(std::vector<Component*> components);
 
 private:
 	void OnCreate();

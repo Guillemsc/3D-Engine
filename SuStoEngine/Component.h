@@ -2,6 +2,8 @@
 #define __Component_H__
 
 #include "Globals.h"
+#include <vector>
+
 class GameObject;
 
 enum ComponentType
@@ -16,7 +18,9 @@ public:
 	Component(ComponentType type, GameObject* owner);
 	virtual ~Component();
 
+	virtual void Start() {};
 	virtual void Update() {};
+	virtual void CleanUp() {};
 
 	GameObject* GetOwner();
 	ComponentType GetType();
@@ -29,7 +33,7 @@ public:
 	void SetName(const char* new_name);
 	void Destroy();
 
-	virtual void InspectorDraw() {};
+	virtual void InspectorDraw(std::vector<Component*> components) {};
 
 private:
 	virtual void OnCreate() {};

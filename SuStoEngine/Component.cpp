@@ -6,8 +6,6 @@ Component::Component(ComponentType _type, GameObject* _owner)
 	owner = _owner;
 
 	enabled = true;
-
-	OnCreate();
 }
 
 Component::~Component()

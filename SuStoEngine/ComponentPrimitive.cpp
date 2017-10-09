@@ -1,5 +1,6 @@
 #include "ComponentPrimitive.h"
 #include "imgui.h"
+#include <vector>
 
 ComponentPrimitive::ComponentPrimitive(GameObject * owner) : Component(PRIMITIVE, owner)
 {
@@ -18,9 +19,11 @@ void ComponentPrimitive::Update()
 void ComponentPrimitive::Cube()
 {
 	type = CUBE;
+
+
 }
 
-void ComponentPrimitive::InspectorDraw()
+void ComponentPrimitive::InspectorDraw(std::vector<Component*> components)
 {
 	ImGui::Text(GetName());
 }

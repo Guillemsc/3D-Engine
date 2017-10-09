@@ -79,7 +79,7 @@ bool EditorUI::Start()
 {
 	bool ret = true;
 
-	for (list<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
+	for (vector<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
 	{
 		(*it)->Start();
 	}
@@ -105,7 +105,7 @@ bool EditorUI::Update()
 	bool ret = true;
 
 	// Draw editor elements
-	for (list<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
+	for (vector<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
 	{
 		(*it)->Draw();
 	}
@@ -262,7 +262,7 @@ bool EditorUI::CleanUp()
 	LOG_OUTPUT("Destroying ImGui");
 	ImGui_ImplSdlGL2_Shutdown();
 
-	for (list<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
+	for (vector<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
 	{
 		(*it)->CleanUp();
 		delete (*it);

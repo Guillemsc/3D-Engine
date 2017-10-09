@@ -58,7 +58,7 @@ void Game::Start()
 		10.f, 0.f, 5.f
 	};
 
-	App->renderer3D->LoadBuffer(1, vertices, 108);
+	App->renderer3D->LoadVertexBuffer(1, vertices, 108);
 }
 
 void Game::Draw()

@@ -26,6 +26,7 @@ typedef enum ImGuiDockSlot
 
 struct DockContext;
 class JSON_Doc;
+class EditorElement;
 
 extern void igBeginWorkspace(bool *open, ImVec2 pos, ImVec2 size, ImGuiWindowFlags flags);
 extern void igEndWorkspace();
@@ -151,7 +152,7 @@ struct DockContext
 	DockContext::Dock * getDockByIndex(int idx);
 
 	void SaveLayout(JSON_Doc* config, const char* layout_name = "default");
-	bool LoadLayout(JSON_Doc* config, const char* layout_name = "default");
+	bool LoadLayout(JSON_Doc* config, const char* layout_name);
 };
 
 #endif

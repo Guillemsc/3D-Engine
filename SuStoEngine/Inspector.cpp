@@ -28,48 +28,40 @@ void Inspector::Draw()
 
 	vector<GameObject*> selected = App->gameobj->GetSelectedGameObjects();
 
-	if (selected.size() == 1)
+	ImGui::Separator();
+
+	if (selected.size() >= 1)
 	{
-		// Draw
-		if (ImGui::BeginMenuBar())
-		{
-			if (ImGui::BeginMenu("Add Component"))
-			{
-				if (ImGui::MenuItem("Add Transform"))
-					selected[0]->AddComponent(TRANSFORM);
-				if (ImGui::MenuItem("Add Primitive"))
-					selected[0]->AddComponent(PRIMITIVE);
-				ImGui::MenuItem("Add Other1");
-				ImGui::MenuItem("Add Other2");
-				ImGui::EndMenu();
-			}
-			ImGui::EndMenuBar();
-		}
-		// Text Input To Rename the GameObject
+		// Text rename
 		char name[25];
 		sprintf_s(name, 25, selected[0]->GetName());
-		if (ImGui::InputText("", name, 25, ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_EnterReturnsTrue))
+		if (ImGui::InputText("", name, 25, ImGuiInputTextFlags_AutoSelectAll))
 			selected[0]->SetName(name);
 
 		ImGui::Separator();
 
 		vector<Component*> components = selected[0]->GetComponents();
+
 		for (vector<Component*>::iterator it = components.begin(); it != components.end(); ++it)
 		{
-			(*it)->InspectorDraw();
+			vector<Component*> same_components;
+
+			if (selected.size() > 1)
+			{
+				for (vector<GameObject*>::iterator obj = ++selected.begin(); obj != selected.end(); obj++)
+				{
+					Component* comp = (*obj)->FindComponentByType((*it)->GetType());
+
+					if (comp != nullptr)
+					{
+						same_components.push_back(comp);
+					}
+				}
+			}
+
+			(*it)->InspectorDraw(same_components);
 		}
 	}
-	else if (selected.size() > 1)
-	{
-		for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
-		{
-
-		}
-
-		// Draw taking in account multiple GameObjects selected !!!!
-	}
-
-	
 	
 	igEndDock();
 }
