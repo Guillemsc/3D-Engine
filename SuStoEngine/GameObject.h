@@ -35,6 +35,7 @@ public:
 	bool GetSelected();
 
 public:
+	Component* transform = nullptr;
 	
 private:
 	char		name[25] = "";

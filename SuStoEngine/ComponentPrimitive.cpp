@@ -36,6 +36,9 @@ void ComponentPrimitive::Update()
 		break;
 	case PLANE:
 		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, plane_index, plane_index_count, plane_vertices);
+		break;
+	case CYLINDER:
+		break;
 	}
 }
 
@@ -59,6 +62,9 @@ void ComponentPrimitive::SetPrimitive(PrimitiveType type)
 	case PLANE:
 		Plane();
 		break;
+	case CYLINDER:
+		Cylinder();
+		break;
 	}
 }
 
@@ -66,56 +72,58 @@ void ComponentPrimitive::VertexCube()
 {
 	type = VCUBE;
 
+	float size = 1;
+
 	vCube_vertices_count = 108;
 	static float v[108] = 
 	{
-		-0.5f, -0.5f, 0.5f,
-		0.5f, -0.5f, 0.5f,
-		0.5f, 0.5f, 0.5f,
+		-size / 2, -size / 2, size / 2,
+		size / 2, -size / 2, size / 2,
+		size / 2, size / 2, size / 2,
 
-		-0.5f, -0.5f, 0.5f,
-		0.5f, 0.5f, 0.5f,
-		-0.5f, 0.5f, 0.5f,
+		-size / 2, -size / 2, size / 2,
+		size / 2, size / 2, size / 2,
+		-size / 2, size / 2, size / 2,
 
-		0.5f, -0.5f, 0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, 0.5f, 0.5f,
+		size / 2, -size / 2, size / 2,
+		size / 2, -size / 2, -size / 2,
+		size / 2, size / 2, size / 2,
 
-		0.5f, -0.5f, -0.5f,
-		0.5f, 0.5f, -0.5f,
-		0.5f, 0.5f, 0.5f,
+		size / 2, -size / 2, -size / 2,
+		size / 2, size / 2, -size / 2,
+		size / 2, size / 2, size / 2,
 
-		0.5f, -0.5f, -0.5f,
-		-0.5f, 0.5f, -0.5f,
-		0.5f, 0.5f, -0.5f,
+		size / 2, -size / 2, -size / 2,
+		-size / 2, size / 2, -size / 2,
+		size / 2, size / 2, -size / 2,
 
-		-0.5f, 0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
+		-size / 2, size / 2, -size / 2,
+		size / 2, -size / 2, -size / 2,
+		-size / 2, -size / 2, -size / 2,
 
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, 0.5f, -0.5f,
-		-0.5f, 0.5f, 0.5f,
+		-size / 2, -size / 2, -size / 2,
+		-size / 2, size / 2, -size / 2,
+		-size / 2, size / 2, size / 2,
 
-		-0.5f, -0.5f, 0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, 0.5f, 0.5f,
+		-size / 2, -size / 2, size / 2,
+		-size / 2, -size / 2, -size / 2,
+		-size / 2, size / 2, size / 2,
 
-		0.5f, 0.5f, 0.5f,
-		0.5f, 0.5f, -0.5f,
-		-0.5f, 0.5f, 0.5f,
+		size / 2, size / 2, size / 2,
+		size / 2, size / 2, -size / 2,
+		-size / 2, size / 2, size / 2,
 
-		-0.5f, 0.5f, -0.5f,
-		-0.5f, 0.5f, 0.5f,
-		0.5f, 0.5f, -0.5f,
+		-size / 2, size / 2, -size / 2,
+		-size / 2, size / 2, size / 2,
+		size / 2, size / 2, -size / 2,
 
-		-0.5f, -0.5f, 0.5f,
-		0.5f, -0.5f, 0.5f,
-		0.5f, -0.5f, -0.5f,
+		-size / 2, -size / 2, size / 2,
+		size / 2, -size / 2, size / 2,
+		size / 2, -size / 2, -size / 2,
 
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f, 0.5f,
-		0.5f, -0.5f, -0.5f,
+		-size / 2, -size / 2, -size / 2,
+		-size / 2, -size / 2, size / 2,
+		size / 2, -size / 2, -size / 2,
 	};
 
 	vCube_vertices = v;
@@ -127,17 +135,19 @@ void ComponentPrimitive::IndexCube()
 {
 	type = ICUBE;
 
+	float size = 1;
+
 	iCube_vertices_count = 24;
 	static float v[24] =
 	{
-		0.5f, 0.5f, 0.5f,
-		-0.5f, 0.5f, 0.5f,
-		-0.5f, -0.5f, 0.5f,
-		0.5f, -0.5f, 0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, 0.5f, -0.5f,
-		-0.5f, 0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f
+		size / 2, size / 2, size / 2,
+		-size / 2, size / 2, size / 2,
+		-size / 2, -size / 2, size / 2,
+		size / 2, -size / 2, size / 2,
+		size / 2, -size / 2, -size / 2,
+		size / 2, size / 2, -size / 2,
+		-size / 2, size / 2, -size / 2,
+		-size / 2, -size / 2, -size / 2
 	};
 
 	iCube_vertices = v;
@@ -199,26 +209,35 @@ void ComponentPrimitive::Plane()
 {
 	type = PLANE;
 
-	plane_vertices_count = 15;
-	static float v[15] =
+	plane_vertices_count = 36;
+	
+	static float v[36] =
 	{
-		-0.5f,	0.f,	0.5f,
-		-0.5f,	0.f,	-0.5f,
-		0.5f,	0.f,	-0.5f,
+		0.5f,	0.f,	0.5f, // 0
+		0.5f,	0.f,	-0.5f, // 1
+		-0.5f,	0.f,	-0.5f, // 2
 
-		0.5f,	0.f,	-0.5f,
-		0.5f,	0.f,	0.5f,
+		-0.5f,	0.f,	0.5f, // 3
+		-1.5f,	0.f,	-0.5f,//4
+		-1.5f,	0.f,	0.5f,//5
 	};
 
 	plane_vertices = v;
 
-	plane_index_count = 6;
-	static unsigned int v2[6]
+	plane_index_count = 12;
+	
+	static unsigned int v2[12]
 	{
-		0,1,2, 3,4,0
+		0,1,2, 2,3,0, // i, i+1, i+1 | i, i+1, i-3
+		3,2,4, 4,5,3  // 
 	};
 
 	plane_index = v2;
+}
+
+void ComponentPrimitive::Cylinder()
+{
+
 }
 
 void ComponentPrimitive::InspectorDraw(std::vector<Component*> components)

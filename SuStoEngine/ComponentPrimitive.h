@@ -11,7 +11,8 @@ enum PrimitiveType
 	VCUBE,
 	ICUBE,
 	SPHERE,
-	PLANE
+	PLANE,
+	CYLINDER,
 };
 
 class ComponentPrimitive : public Component
@@ -33,6 +34,7 @@ private:
 	void IndexCube();
 	void Sphere();
 	void Plane();
+	void Cylinder();
 
 	void OnEnable();
 	void OnDisable();
@@ -56,7 +58,7 @@ private:
 	std::vector<uint>  indices;
 
 	// Plane
-	float*		  plane_vertices = nullptr;
+	float*		  plane_vertices;
 	int			  plane_vertices_count = 0;
 	unsigned int* plane_index = nullptr;
 	int			  plane_index_count = 0;
