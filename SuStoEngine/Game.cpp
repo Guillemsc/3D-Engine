@@ -18,47 +18,6 @@ void Game::Start()
 {
 	dock = getDockContext();
 	position = { 0, 0 };
-
-	static float vertices[108] = {
-		10.f, 0.f, 0.f,
-		10.f, 0.f, 5.f,
-		10.f, 5.f, 0.f,
-		10.f, 0.f, 5.f,
-		10.f, 5.f, 5.f,
-		10.f, 5.f, 0.f,
-		10.f, 0.f, 5.f,
-		15.f, 0.f, 5.f,
-		10.f, 5.f, 5.f,
-		15.f, 0.f, 5.f,
-		15.f, 5.f, 5.f,
-		10.f, 5.f, 5.f,
-		15.f, 0.f, 5.f,
-		15.f, 0.f, 0.f,
-		15.f, 5.f, 5.f,
-		15.f, 0.f, 0.f,
-		15.f, 5.f, 0.f,
-		15.f, 5.f, 5.f,
-		15.f, 0.f, 0.f,
-		10.f, 0.f, 0.f,
-		10.f, 5.f, 0.f,
-		15.f, 0.f, 0.f,
-		10.f, 5.f, 0.f,
-		15.f, 5.f, 0.f,
-		10.f, 5.f, 0.f,
-		10.f, 5.f, 5.f,
-		15.f, 5.f, 0.f,
-		10.f, 5.f, 5.f,
-		15.f, 5.f, 5.f,
-		15.f, 5.f, 0.f,
-		15.f, 0.f, 5.f,
-		15.f, 0.f, 0.f,
-		10.f, 0.f, 5.f,
-		15.f, 0.f, 0.f,
-		10.f, 0.f, 0.f,
-		10.f, 0.f, 5.f
-	};
-
-	App->renderer3D->LoadVertexBuffer(1, vertices, 108);
 }
 
 void Game::Draw()
@@ -82,73 +41,71 @@ void Game::Draw()
 
 	ImGui::Image((void*)App->renderer3D->fbo_texture->GetTexture(), ImVec2(size.y, size.x), ImVec2(0, 1), ImVec2(1, 0));
 
-	glLineWidth(2.0f);
-	glBegin(GL_TRIANGLES);
-	
-	glColor3f(255.f, 0.f, 0.f);
-	glVertex3f(0.f, 0.f, 0.f);
-	glVertex3f(0.f, 0.f, 5.f);
-	glVertex3f(0.f, 5.f, 0.f);
-	
-	glColor3f(0.f, 255.f, 0.f);
-	glVertex3f(0.f, 0.f, 5.f);
-	glVertex3f(0.f, 5.f, 5.f);
-	glVertex3f(0.f, 5.f, 0.f); 
+	//glLineWidth(2.0f);
+	//glBegin(GL_TRIANGLES);
+	//
+	//glColor3f(255.f, 0.f, 0.f);
+	//glVertex3f(0.f, 0.f, 0.f);
+	//glVertex3f(0.f, 0.f, 5.f);
+	//glVertex3f(0.f, 5.f, 0.f);
+	//
+	//glColor3f(0.f, 255.f, 0.f);
+	//glVertex3f(0.f, 0.f, 5.f);
+	//glVertex3f(0.f, 5.f, 5.f);
+	//glVertex3f(0.f, 5.f, 0.f); 
 
-	glColor3f(0.f, 0.f, 255.f);
-	glVertex3f(0.f, 0.f, 5.f);
-	glVertex3f(5.f, 0.f, 5.f);
-	glVertex3f(0.f, 5.f, 5.f);
+	//glColor3f(0.f, 0.f, 255.f);
+	//glVertex3f(0.f, 0.f, 5.f);
+	//glVertex3f(5.f, 0.f, 5.f);
+	//glVertex3f(0.f, 5.f, 5.f);
 
-	glColor3f(255.f, 255.f, 0.f);
-	glVertex3f(5.f, 0.f, 5.f);
-	glVertex3f(5.f, 5.f, 5.f);
-	glVertex3f(0.f, 5.f, 5.f);
+	//glColor3f(255.f, 255.f, 0.f);
+	//glVertex3f(5.f, 0.f, 5.f);
+	//glVertex3f(5.f, 5.f, 5.f);
+	//glVertex3f(0.f, 5.f, 5.f);
 
-	glColor3f(0.f, 255.f, 255.f);
-	glVertex3f(5.f, 0.f, 5.f);
-	glVertex3f(5.f, 0.f, 0.f);
-	glVertex3f(5.f, 5.f, 5.f);
+	//glColor3f(0.f, 255.f, 255.f);
+	//glVertex3f(5.f, 0.f, 5.f);
+	//glVertex3f(5.f, 0.f, 0.f);
+	//glVertex3f(5.f, 5.f, 5.f);
 
-	glColor3f(255.f, 0.f, 255.f);
-	glVertex3f(5.f, 0.f, 0.f);
-	glVertex3f(5.f, 5.f, 0.f);
-	glVertex3f(5.f, 5.f, 5.f);
+	//glColor3f(255.f, 0.f, 255.f);
+	//glVertex3f(5.f, 0.f, 0.f);
+	//glVertex3f(5.f, 5.f, 0.f);
+	//glVertex3f(5.f, 5.f, 5.f);
 
-	glColor3f(0.f, 0.f, 0.f);
-	glVertex3f(5.f, 0.f, 0.f);
-	glVertex3f(0.f, 0.f, 0.f);
-	glVertex3f(0.f, 5.f, 0.f);
+	//glColor3f(0.f, 0.f, 0.f);
+	//glVertex3f(5.f, 0.f, 0.f);
+	//glVertex3f(0.f, 0.f, 0.f);
+	//glVertex3f(0.f, 5.f, 0.f);
 
-	glColor3f(255.f, 255.f, 255.f);
-	glVertex3f(5.f, 0.f, 0.f);
-	glVertex3f(0.f, 5.f, 0.f);
-	glVertex3f(5.f, 5.f, 0.f);
+	//glColor3f(255.f, 255.f, 255.f);
+	//glVertex3f(5.f, 0.f, 0.f);
+	//glVertex3f(0.f, 5.f, 0.f);
+	//glVertex3f(5.f, 5.f, 0.f);
 
-	glColor3f(255.f, 255.f/2, 0.f);
-	glVertex3f(0.f, 5.f, 0.f);
-	glVertex3f(0.f, 5.f, 5.f);
-	glVertex3f(5.f, 5.f, 0.f);
+	//glColor3f(255.f, 255.f/2, 0.f);
+	//glVertex3f(0.f, 5.f, 0.f);
+	//glVertex3f(0.f, 5.f, 5.f);
+	//glVertex3f(5.f, 5.f, 0.f);
 
-	glColor3f(0.f, 255.f/2, 255.f);
-	glVertex3f(0.f, 5.f, 5.f);
-	glVertex3f(5.f, 5.f, 5.f);
-	glVertex3f(5.f, 5.f, 0.f);
+	//glColor3f(0.f, 255.f/2, 255.f);
+	//glVertex3f(0.f, 5.f, 5.f);
+	//glVertex3f(5.f, 5.f, 5.f);
+	//glVertex3f(5.f, 5.f, 0.f);
 
-	glColor3f(0.f, 255.f/2, 0.f);
-	glVertex3f(5.f, 0.f, 5.f);
-	glVertex3f(5.f, 0.f, 0.f);
-	glVertex3f(0.f, 0.f, 5.f);
+	//glColor3f(0.f, 255.f/2, 0.f);
+	//glVertex3f(5.f, 0.f, 5.f);
+	//glVertex3f(5.f, 0.f, 0.f);
+	//glVertex3f(0.f, 0.f, 5.f);
 
-	glColor3f(0.f, 0.f, 255.f/2);
-	glVertex3f(5.f, 0.f, 0.f);
-	glVertex3f(0.f, 0.f, 0.f);
-	glVertex3f(0.f, 0.f, 5.f);
-	glEnd();
+	//glColor3f(0.f, 0.f, 255.f/2);
+	//glVertex3f(5.f, 0.f, 0.f);
+	//glVertex3f(0.f, 0.f, 0.f);
+	//glVertex3f(0.f, 0.f, 5.f);
+	//glEnd();
 
-	glLineWidth(1.0f);
-
-	App->renderer3D->DrawBuffer(1, 108);
+	//glLineWidth(1.0f);
 
 	igEndDock();
 }

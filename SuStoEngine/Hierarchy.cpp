@@ -77,4 +77,12 @@ void Hierarchy::Draw()
 		create_empty_game_object = false;
 	}
 
+	if (create_cube_object)
+	{
+		GameObject* go = App->gameobj->Create();
+		go->AddComponent(PRIMITIVE);
+
+		create_cube_object = false;
+	}
+
 }

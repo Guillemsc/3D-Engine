@@ -187,6 +187,8 @@ bool Application::CleanUp()
 		if (!ret) return false;
 	}
 
+	delete id;
+
 	profiler->CleanUp();
 	delete profiler;
 

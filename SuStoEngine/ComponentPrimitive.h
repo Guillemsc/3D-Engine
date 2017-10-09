@@ -16,20 +16,26 @@ public:
 	ComponentPrimitive(GameObject* owner);
 	virtual ~ComponentPrimitive();
 
+	void Start();
 	void Update();
+	void CleanUp();
 	
-	void Cube();
+	void VertexCube();
+	void IndexCube();
 	void InspectorDraw(std::vector<Component*> components);
 
 private:
-	void OnCreate();
-	void OnDestroy();
 	void OnEnable();
 	void OnDisable();
 
 public:
 private:
 	PrimitiveType type = CUBE;
+	float*	      vertices = nullptr;
+	int			  vertices_count = 0;
+
+	float*		  index = nullptr;
+	int			  index_count = 0;
 };
 
 #endif

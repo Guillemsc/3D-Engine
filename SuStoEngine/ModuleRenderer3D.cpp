@@ -207,9 +207,11 @@ void ModuleRenderer3D::DrawVertexBuffer(int id, int size)
 
 void ModuleRenderer3D::LoadIndexBuffer(int id, float* index, int size)
 {
+	glEnableClientState(GL_VERTEX_ARRAY);
 	glGenBuffers(1, (GLuint*) &(id));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*size, index, GL_STATIC_DRAW);
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void ModuleRenderer3D::DrawIndexBuffer(int id, int size)

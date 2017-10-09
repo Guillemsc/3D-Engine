@@ -27,6 +27,10 @@ void GameObject::Start()
 
 void GameObject::Update()
 {
+	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
+	{
+		(*it)->Update();
+	}
 }
 
 void GameObject::Enable()

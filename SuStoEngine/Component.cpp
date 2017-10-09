@@ -10,7 +10,7 @@ Component::Component(ComponentType _type, GameObject* _owner)
 
 Component::~Component()
 {
-	Destroy();
+
 }
 
 void Component::Enable()
@@ -44,11 +44,6 @@ void Component::SetEnabled(bool set)
 void Component::SetName(const char * new_name)
 {
 	name = new_name;
-}
-
-void Component::Destroy()
-{
-	OnDestroy();
 }
 
 GameObject * Component::GetOwner()

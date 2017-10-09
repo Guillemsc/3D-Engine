@@ -31,13 +31,10 @@ public:
 	bool GetEnabled();
 	void SetEnabled(bool set);
 	void SetName(const char* new_name);
-	void Destroy();
 
 	virtual void InspectorDraw(std::vector<Component*> components) {};
 
 private:
-	virtual void OnCreate() {};
-	virtual void OnDestroy() {};
 	virtual void OnEnable() {};
 	virtual void OnDisable() {};
 
