@@ -24,8 +24,7 @@ public:
 	void LoadVertexBuffer(int id, float* vertices, int size);
 	void DrawVertexBuffer(int id, int size);
 
-	void LoadIndexBuffer(int id, float* index, int size);
-	void DrawIndexBuffer(int id, int size);
+	void DrawIndexBuffer(int id, unsigned int* index, int index_size, float* vertices);
 
 	void DrawGrid(int HALF_GRID_SIZE);
 
