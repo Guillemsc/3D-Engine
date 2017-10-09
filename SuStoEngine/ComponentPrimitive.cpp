@@ -18,7 +18,7 @@ ComponentPrimitive::~ComponentPrimitive()
 
 void ComponentPrimitive::Start()
 {
-	SetPrimitive(PLANE);
+	SetPrimitive(VCUBE);
 }
 
 void ComponentPrimitive::Update()
@@ -34,9 +34,6 @@ void ComponentPrimitive::Update()
 	case SPHERE:
 		App->renderer3D->DrawIndexBuffer(GL_QUADS, &Sphere_indices[0], Sphere_indices.size(), &Sphere_vertices[0]);
 		break;
-	case PLANE:
-		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, plane_index, plane_index_count, plane_vertices);
-		break;
 	case CYLINDER:
 		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, &Cylinder_indices[0], Cylinder_indices.size(), &Cylinder_vertices[0]);
 		break;
@@ -44,6 +41,9 @@ void ComponentPrimitive::Update()
 		break;
 	case RAY:
 		App->renderer3D->DrawIndexBuffer(GL_LINE, &Ray_indices[0], 2, &Ray_vertices[0]);
+		break;
+	case PLANE:
+		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, plane_index, plane_index_count, plane_vertices);
 		break;
 	}
 }
@@ -67,6 +67,9 @@ void ComponentPrimitive::SetPrimitive(PrimitiveType type)
 		break;
 	case PLANE:
 		Plane();
+		break;
+	case RAY:
+		Ray();
 		break;
 	case CYLINDER:
 		Cylinder();
@@ -342,20 +345,33 @@ void ComponentPrimitive::Cylinder()
 
 void ComponentPrimitive::Ray()
 {
+	type = RAY;
+
 	float start_x = 0;
-	float start_y = 0;
+	float start_y = 10;
 	float start_z = 0;
 
 	float end_x = 0;
-	float end_y = 0;
+	float end_y = -10;
 	float end_z = 0;
+
+	Ray_vertices[0] = start_x;
+	Ray_vertices[1] = start_y;
+	Ray_vertices[2] = start_z;
+
+	Ray_vertices[3] = end_x;
+	Ray_vertices[4] = end_y;
+	Ray_vertices[5] = end_z;
+
+	Ray_indices[0] = 0;
+	Ray_indices[1] = 1;
 }
 
 void ComponentPrimitive::InspectorDraw(std::vector<Component*> components)
 {
 	ImGui::Text(GetName());
 
-	if (ImGui::Combo("Primitives", &current, "VCube\0ICube\0Sphere\0Cylinder\0Arrow\0Ray\0Plane"))
+	if (ImGui::Combo("Primitives", &current, "VCube\0ICube\0Sphere\0Cylinder\0Arrow\0Ray\0Plane\0"))
 	{
 		SetPrimitive(static_cast<PrimitiveType>(current + 1));
 	}
