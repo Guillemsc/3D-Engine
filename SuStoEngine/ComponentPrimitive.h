@@ -14,7 +14,8 @@ enum PrimitiveType
 	CYLINDER,
 	ARROW,
 	RAY,
-	PLANE
+	PLANE,
+	FRUSTUM
 };
 
 class ComponentPrimitive : public Component
@@ -38,6 +39,7 @@ private:
 	void Plane();
 	void Cylinder();
 	void Ray();
+	void Frustum();
 
 	void OnEnable();
 	void OnDisable();
@@ -77,6 +79,12 @@ private:
 	// Ray
 	float Ray_vertices[6];
 	uint  Ray_indices[2];
+
+	// Frustum
+	float*		  frustum_vertices;
+	int			  frustum_vertices_count = 0;
+	unsigned int* frustum_index = nullptr;
+	int			  frustum_index_count = 0;
 };
 
 #endif

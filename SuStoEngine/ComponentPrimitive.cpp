@@ -45,6 +45,9 @@ void ComponentPrimitive::Update()
 	case PLANE:
 		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, plane_index, plane_index_count, plane_vertices);
 		break;
+	case FRUSTUM:
+		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, frustum_index, frustum_index_count, frustum_vertices);
+		break;
 	}
 }
 
@@ -73,6 +76,9 @@ void ComponentPrimitive::SetPrimitive(PrimitiveType type)
 		break;
 	case CYLINDER:
 		Cylinder();
+		break;
+	case FRUSTUM:
+		Frustum();
 		break;
 	}
 }
@@ -367,11 +373,67 @@ void ComponentPrimitive::Ray()
 	Ray_indices[1] = 1;
 }
 
+void ComponentPrimitive::Frustum()
+{
+	type = FRUSTUM;
+
+	frustum_vertices_count = 36;
+
+	static float v[36] =
+	{
+		-5.f,	5.f,	0.f,		//0
+		5.f,	5.f,	0.f,		//1
+		-5.f,	-5.f,	0.f,		//2
+		5.f,	-5.f,	0.f,		//3
+
+		-20.f,	20.f,	-20.f,		//4
+		20.f,	20.f,	-20.f,		//5
+		-20.f,	-20.f,	-20.f,		//6
+		20.f,	-20.f,	-20.f,		//7
+	};
+
+	frustum_vertices = v;
+
+	frustum_index_count = 12;
+
+	static unsigned int v2[36]
+	{
+		0,2,1,	2,3,1,
+		7,4,5,	7,6,4,
+		4,0,5,	5,0,1,
+		5,1,7,	7,1,3,
+		2,6,3,	3,6,7,
+		2,4,6,	2,0,4
+	};
+
+	frustum_index = v2;
+	/*frustrum vertices_indices =
+		{
+		-5.f, 5.f, 0.f,     //v0
+			5.f, 5.f, 0.f,     //v1
+			-5.f, -5.f, 0.f,    //v2
+			5.f, -5.f, 0.f,    //v3
+			
+			-20.f, 20.f, -20.f, //v4
+			20.f, 20.f, -20.f, //v5
+			-20.f, -20.f, -20.f,//v6
+			20.f, -20.f, -20.f,//v7
+			
+					 //INDICES
+			0, 2, 1, 2, 3, 1,
+			7, 4, 5, 7, 6, 4,
+			4, 0, 5, 5, 0, 1,
+			5, 1, 7, 7, 1, 3,
+			2, 6, 3, 3, 6, 7,
+			2, 4, 6, 2, 0, 4
+			};*/
+}
+
 void ComponentPrimitive::InspectorDraw(std::vector<Component*> components)
 {
 	ImGui::Text(GetName());
 
-	if (ImGui::Combo("Primitives", &current, "VCube\0ICube\0Sphere\0Cylinder\0Arrow\0Ray\0Plane\0"))
+	if (ImGui::Combo("Primitives", &current, "VCube\0ICube\0Sphere\0Cylinder\0Arrow\0Ray\0Plane\0Frustum\0"))
 	{
 		SetPrimitive(static_cast<PrimitiveType>(current + 1));
 	}
