@@ -9,7 +9,8 @@ enum PrimitiveType
 {
 	NO_VALUE,
 	VCUBE,
-	ICUBE
+	ICUBE,
+	SPHERE,
 };
 
 class ComponentPrimitive : public Component
@@ -29,6 +30,7 @@ public:
 private:
 	void VertexCube();
 	void IndexCube();
+	void Sphere();
 
 	void OnEnable();
 	void OnDisable();
@@ -46,6 +48,10 @@ private:
 	int			  iCube_vertices_count = 0;
 	unsigned int* iCube_index = nullptr;
 	int			  iCube_index_count = 0;
+
+	// Sphere
+	std::vector<float> vertices;
+	std::vector<uint>  indices;
 };
 
 #endif

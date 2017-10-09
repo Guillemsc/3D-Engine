@@ -206,13 +206,13 @@ void ModuleRenderer3D::DrawVertexBuffer(int id, int size)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void ModuleRenderer3D::DrawIndexBuffer(int id, unsigned int* index, int index_size, float* vertices)
+void ModuleRenderer3D::DrawIndexBuffer(unsigned int glmode, unsigned int* index, int index_size, float* vertices)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	glVertexPointer(3, GL_FLOAT, 0, vertices);
 
-	glDrawElements(GL_TRIANGLES, index_size, GL_UNSIGNED_INT, index);
+	glDrawElements((GLenum)glmode, index_size, GL_UNSIGNED_INT, index);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 }

@@ -1,6 +1,8 @@
 #include "ComponentPrimitive.h"
 #include "App.h"
 #include "ModuleRenderer3D.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 #include "imgui.h"
 #include <vector>
 
@@ -16,7 +18,7 @@ ComponentPrimitive::~ComponentPrimitive()
 
 void ComponentPrimitive::Start()
 {
-	SetPrimitive(VCUBE);
+	SetPrimitive(SPHERE);
 }
 
 void ComponentPrimitive::Update()
@@ -27,7 +29,10 @@ void ComponentPrimitive::Update()
 		App->renderer3D->DrawVertexBuffer(type, vCube_vertices_count);
 		break;
 	case ICUBE:
-		App->renderer3D->DrawIndexBuffer(type, iCube_index, iCube_index_count, iCube_vertices);
+		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, iCube_index, iCube_index_count, iCube_vertices);
+		break;
+	case SPHERE:
+		App->renderer3D->DrawIndexBuffer(GL_QUADS, &indices[0], indices.size(), &vertices[0]);
 		break;
 	}
 }
@@ -45,6 +50,9 @@ void ComponentPrimitive::SetPrimitive(PrimitiveType type)
 		break;
 	case ICUBE:
 		IndexCube();
+		break;
+	case SPHERE:
+		Sphere();
 		break;
 	}
 }
@@ -141,6 +149,45 @@ void ComponentPrimitive::IndexCube()
 	};
 
 	iCube_index = v2;
+}
+void ComponentPrimitive::Sphere()
+{
+	type = SPHERE;
+
+	float radius = 0.5f;
+	uint rings = 10;
+	uint sectors = 10;
+
+	float const R = 1. / (float)(rings - 1);
+	float const S = 1. / (float)(sectors - 1);
+	int r, s;
+
+	vertices.resize(rings * sectors * 3);
+
+	std::vector<float>::iterator v = vertices.begin();
+
+	for (r = 0; r < rings; r++) for (s = 0; s < sectors; s++) 
+	{
+		float const y = sin(-M_PI_2 + M_PI * r * R);
+		float const x = cos(2 * M_PI * s * S) * sin(M_PI * r * R);
+		float const z = sin(2 * M_PI * s * S) * sin(M_PI * r * R);
+
+		*v++ = x * radius;
+		*v++ = y * radius;
+		*v++ = z * radius;
+	}
+
+	indices.resize(rings * sectors * 4);
+
+	std::vector<uint>::iterator i = indices.begin();
+
+	for (r = 0; r < rings - 1; r++) for (s = 0; s < sectors - 1; s++) 
+	{
+		*i++ = r * sectors + s;
+		*i++ = r * sectors + (s + 1);
+		*i++ = (r + 1) * sectors + (s + 1);
+		*i++ = (r + 1) * sectors + s;
+	}
 }
 void ComponentPrimitive::InspectorDraw(std::vector<Component*> components)
 {
