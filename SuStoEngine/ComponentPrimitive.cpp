@@ -18,7 +18,7 @@ ComponentPrimitive::~ComponentPrimitive()
 
 void ComponentPrimitive::Start()
 {
-	SetPrimitive(SPHERE);
+	SetPrimitive(ICUBE);
 }
 
 void ComponentPrimitive::Update()
@@ -67,56 +67,58 @@ void ComponentPrimitive::VertexCube()
 {
 	type = VCUBE;
 
+	float size = 1;
+
 	vCube_vertices_count = 108;
 	static float v[108] = 
 	{
-		-0.5f, -0.5f, 0.5f,
-		0.5f, -0.5f, 0.5f,
-		0.5f, 0.5f, 0.5f,
+		-size / 2, -size / 2, size / 2,
+		size / 2, -size / 2, size / 2,
+		size / 2, size / 2, size / 2,
 
-		-0.5f, -0.5f, 0.5f,
-		0.5f, 0.5f, 0.5f,
-		-0.5f, 0.5f, 0.5f,
+		-size / 2, -size / 2, size / 2,
+		size / 2, size / 2, size / 2,
+		-size / 2, size / 2, size / 2,
 
-		0.5f, -0.5f, 0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, 0.5f, 0.5f,
+		size / 2, -size / 2, size / 2,
+		size / 2, -size / 2, -size / 2,
+		size / 2, size / 2, size / 2,
 
-		0.5f, -0.5f, -0.5f,
-		0.5f, 0.5f, -0.5f,
-		0.5f, 0.5f, 0.5f,
+		size / 2, -size / 2, -size / 2,
+		size / 2, size / 2, -size / 2,
+		size / 2, size / 2, size / 2,
 
-		0.5f, -0.5f, -0.5f,
-		-0.5f, 0.5f, -0.5f,
-		0.5f, 0.5f, -0.5f,
+		size / 2, -size / 2, -size / 2,
+		-size / 2, size / 2, -size / 2,
+		size / 2, size / 2, -size / 2,
 
-		-0.5f, 0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
+		-size / 2, size / 2, -size / 2,
+		size / 2, -size / 2, -size / 2,
+		-size / 2, -size / 2, -size / 2,
 
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, 0.5f, -0.5f,
-		-0.5f, 0.5f, 0.5f,
+		-size / 2, -size / 2, -size / 2,
+		-size / 2, size / 2, -size / 2,
+		-size / 2, size / 2, size / 2,
 
-		-0.5f, -0.5f, 0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, 0.5f, 0.5f,
+		-size / 2, -size / 2, size / 2,
+		-size / 2, -size / 2, -size / 2,
+		-size / 2, size / 2, size / 2,
 
-		0.5f, 0.5f, 0.5f,
-		0.5f, 0.5f, -0.5f,
-		-0.5f, 0.5f, 0.5f,
+		size / 2, size / 2, size / 2,
+		size / 2, size / 2, -size / 2,
+		-size / 2, size / 2, size / 2,
 
-		-0.5f, 0.5f, -0.5f,
-		-0.5f, 0.5f, 0.5f,
-		0.5f, 0.5f, -0.5f,
+		-size / 2, size / 2, -size / 2,
+		-size / 2, size / 2, size / 2,
+		size / 2, size / 2, -size / 2,
 
-		-0.5f, -0.5f, 0.5f,
-		0.5f, -0.5f, 0.5f,
-		0.5f, -0.5f, -0.5f,
+		-size / 2, -size / 2, size / 2,
+		size / 2, -size / 2, size / 2,
+		size / 2, -size / 2, -size / 2,
 
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f, 0.5f,
-		0.5f, -0.5f, -0.5f,
+		-size / 2, -size / 2, -size / 2,
+		-size / 2, -size / 2, size / 2,
+		size / 2, -size / 2, -size / 2,
 	};
 
 	vCube_vertices = v;
@@ -128,17 +130,19 @@ void ComponentPrimitive::IndexCube()
 {
 	type = ICUBE;
 
+	float size = 1;
+
 	iCube_vertices_count = 24;
 	static float v[24] =
 	{
-		0.5f, 0.5f, 0.5f,
-		-0.5f, 0.5f, 0.5f,
-		-0.5f, -0.5f, 0.5f,
-		0.5f, -0.5f, 0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, 0.5f, -0.5f,
-		-0.5f, 0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f
+		size / 2, size / 2, size / 2,
+		-size / 2, size / 2, size / 2,
+		-size / 2, -size / 2, size / 2,
+		size / 2, -size / 2, size / 2,
+		size / 2, -size / 2, -size / 2,
+		size / 2, size / 2, -size / 2,
+		-size / 2, size / 2, -size / 2,
+		-size / 2, -size / 2, -size / 2
 	};
 
 	iCube_vertices = v;
