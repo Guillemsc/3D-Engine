@@ -13,6 +13,9 @@ enum PrimitiveType
 	SPHERE,
 	PLANE,
 	CYLINDER,
+	ARROW,
+	RAY,
+	PLANE,
 };
 
 class ComponentPrimitive : public Component
@@ -35,6 +38,7 @@ private:
 	void Sphere();
 	void Plane();
 	void Cylinder();
+	void Ray();
 
 	void OnEnable();
 	void OnDisable();
@@ -70,6 +74,10 @@ private:
 	// Cylinder
 	std::vector<float> Cylinder_vertices;
 	std::vector<uint>  Cylinder_indices;
+
+	// Ray
+	float Ray_vertices[6];
+	uint  Ray_indices[2];
 };
 
 #endif

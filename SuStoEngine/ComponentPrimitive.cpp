@@ -40,6 +40,13 @@ void ComponentPrimitive::Update()
 	case CYLINDER:
 		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, &Cylinder_indices[0], Cylinder_indices.size(), &Cylinder_vertices[0]);
 		break;
+	case ARROW:
+		break;
+	case RAY:
+		App->renderer3D->DrawIndexBuffer(GL_LINE, &Ray_indices[0], 2, &Ray_vertices[0]);
+		break;
+	case PLANE:
+		break;
 	}
 }
 
@@ -333,6 +340,17 @@ void ComponentPrimitive::Cylinder()
 	}
 
 	int i = 0;
+}
+
+void ComponentPrimitive::Ray()
+{
+	float start_x = 0;
+	float start_y = 0;
+	float start_z = 0;
+
+	float end_x = 0;
+	float end_y = 0;
+	float end_z = 0;
 }
 
 void ComponentPrimitive::InspectorDraw(std::vector<Component*> components)
