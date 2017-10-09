@@ -48,6 +48,9 @@ void ComponentPrimitive::Update()
 	case FRUSTUM:
 		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, frustum_index, frustum_index_count, frustum_vertices);
 		break;
+	case CONE:
+		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, &Cone_indices[0], Cone_indices.size(), &Cone_vertices[0]);
+		break;
 	}
 }
 
@@ -79,6 +82,9 @@ void ComponentPrimitive::SetPrimitive(PrimitiveType type)
 		break;
 	case FRUSTUM:
 		Frustum();
+		break;
+	case CONE:
+		Cone();
 		break;
 	}
 }
@@ -413,12 +419,12 @@ void ComponentPrimitive::Frustum()
 			5.f, 5.f, 0.f,     //v1
 			-5.f, -5.f, 0.f,    //v2
 			5.f, -5.f, 0.f,    //v3
-			
+
 			-20.f, 20.f, -20.f, //v4
 			20.f, 20.f, -20.f, //v5
 			-20.f, -20.f, -20.f,//v6
 			20.f, -20.f, -20.f,//v7
-			
+
 					 //INDICES
 			0, 2, 1, 2, 3, 1,
 			7, 4, 5, 7, 6, 4,
@@ -429,11 +435,73 @@ void ComponentPrimitive::Frustum()
 			};*/
 }
 
+void ComponentPrimitive::Cone()
+{
+	type = CONE;
+
+	float radius = 0.5f;
+	float height = 1.0f;
+	float strips = 15;
+
+	float R = 360 / strips;
+
+	for (int i = 0; i < strips; i++)
+	{
+		float x = cos(R*i*DEGTORAD) * radius;
+		float y = -height / 2;
+		float z = sin(R*i*DEGTORAD) * radius;
+
+		Cone_vertices.push_back(x);
+		Cone_vertices.push_back(y);
+		Cone_vertices.push_back(z);
+	}
+
+	float x = 0;
+	float y = -height / 2;
+	float z = 0;
+
+	Cone_vertices.push_back(x);
+	Cone_vertices.push_back(y);
+	Cone_vertices.push_back(z);
+
+	x = 0;
+	y = +height / 2;
+	z = 0;
+
+	Cone_vertices.push_back(x);
+	Cone_vertices.push_back(y);
+	Cone_vertices.push_back(z);
+
+
+	for (int i = strips - 1; i >= 0; --i)
+	{
+		// Bottom
+		Cone_indices.push_back(i);
+		Cone_indices.push_back(strips);
+
+		if (i != 0)
+			Cone_indices.push_back(i - 1);
+		else
+			Cone_indices.push_back(strips - 1);
+
+		//Sides
+		Cone_indices.push_back(i);
+		Cone_indices.push_back(strips+1);
+
+		if (i != 0)
+			Cone_indices.push_back(i - 1);
+		else
+			Cone_indices.push_back(strips - 1);
+	}
+
+}
+
 void ComponentPrimitive::InspectorDraw(std::vector<Component*> components)
 {
 	ImGui::Text(GetName());
 
-	if (ImGui::Combo("Primitives", &current, "VCube\0ICube\0Sphere\0Cylinder\0Arrow\0Ray\0Plane\0Frustum\0"))
+
+	if (ImGui::Combo("Primitives", &current, "VCube\0ICube\0Sphere\0Cylinder\0Arrow\0Ray\0Plane\0Frustum\0Cone\0"))
 	{
 		SetPrimitive(static_cast<PrimitiveType>(current + 1));
 	}
