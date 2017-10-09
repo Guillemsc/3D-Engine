@@ -11,7 +11,6 @@ enum PrimitiveType
 	VCUBE,
 	ICUBE,
 	SPHERE,
-	PLANE,
 	CYLINDER,
 	ARROW,
 	RAY,
