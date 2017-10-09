@@ -205,7 +205,7 @@ void ComponentPrimitive::Cylinder()
 
 	float radius = 0.5f;
 	float height = 1.0f;
-	float strips = 10;
+	float strips = 15;
 
 	float R = 360 / strips;
 
@@ -231,33 +231,74 @@ void ComponentPrimitive::Cylinder()
 		Cylinder_vertices.push_back(z);
 	}
 
-	//bool first = true;
-	//for (int i = strips - 1; i >= 0; --i)
-	//{
-	//	if (first)
-	//	{
-	//		Cylinder_indices.push_back(i);
-	//		Cylinder_indices.push_back(i + strips);
+	float x = 0;
+	float y = -height / 2;
+	float z = 0;
 
-	//		--i;
+	Cylinder_vertices.push_back(x);
+	Cylinder_vertices.push_back(y);
+	Cylinder_vertices.push_back(z);
 
-	//		Cylinder_indices.push_back(i + strips);
-	//		Cylinder_indices.push_back(i);
+	x = 0;
+	y = height / 2;
+	z = 0;
 
-	//		first = false;
-	//	}
-	//	else
-	//	{
-	//		Cylinder_indices.push_back(i + strips);
-	//		Cylinder_indices.push_back(i);
-	//	}
-	//}
+	Cylinder_vertices.push_back(x);
+	Cylinder_vertices.push_back(y);
+	Cylinder_vertices.push_back(z);
 
+
+	// Body
 	for (int i = strips - 1; i >= 0; --i)
 	{
 		Cylinder_indices.push_back(i);
-		Cylinder_indices.push_back(i + strips - 1);
-		Cylinder_indices.push_back(i + strips - 1);
+		Cylinder_indices.push_back(i + strips);
+
+		if (i != 0)
+		{
+			Cylinder_indices.push_back(i + strips - 1);
+		}
+		else
+		{
+			Cylinder_indices.push_back(strips*2 - 1);
+		}
+
+		Cylinder_indices.push_back(i);
+
+		if (i != 0)
+		{
+			Cylinder_indices.push_back(i + strips - 1);
+			Cylinder_indices.push_back(i - 1);
+		}
+		else
+		{
+			Cylinder_indices.push_back(strips * 2 - 1);
+			Cylinder_indices.push_back(strips - 1);
+		}
+	}
+
+	// Bottom
+	for (int i = strips - 1; i >= 0; --i)
+	{
+		Cylinder_indices.push_back(i);
+		Cylinder_indices.push_back(strips-1+1);
+
+		if (i != 0)
+			Cylinder_indices.push_back(i - 1);
+		else
+			Cylinder_indices.push_back(strips - 1);
+	}
+
+	// Top
+	for (int i = strips - 1; i >= 0; --i)
+	{
+		Cylinder_indices.push_back(i + strips);
+		Cylinder_indices.push_back(strips - 1 + 2);
+
+		if (i != 0)
+			Cylinder_indices.push_back(i + strips - 1);
+		else
+			Cylinder_indices.push_back(strips + strips - 1);
 	}
 
 	int i = 0;
@@ -266,7 +307,6 @@ void ComponentPrimitive::Cylinder()
 void ComponentPrimitive::InspectorDraw(std::vector<Component*> components)
 {
 	ImGui::Text(GetName());
-
 
 	if (ImGui::Combo("Primitives", &current, "VCube\0ICube\0Sphere\0Cylinder\0Arrow\0Ray\0Plane"))
 	{
