@@ -45,8 +45,6 @@ void ComponentPrimitive::Update()
 	case RAY:
 		App->renderer3D->DrawIndexBuffer(GL_LINE, &Ray_indices[0], 2, &Ray_vertices[0]);
 		break;
-	case PLANE:
-		break;
 	}
 }
 
