@@ -40,10 +40,13 @@ void ComponentPrimitive::Update()
 	case ARROW:
 		break;
 	case RAY:
-		App->renderer3D->DrawIndexBuffer(GL_LINE, &Ray_indices[0], 2, &Ray_vertices[0]);
+		App->renderer3D->DrawIndexBuffer(GL_LINES, &Ray_indices[0], 2, &Ray_vertices[0]);
 		break;
 	case PLANE:
 		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, plane_index, plane_index_count, plane_vertices);
+		break;
+	case CONE:
+		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, &Cone_indices[0], Cone_indices.size(), &Cone_vertices[0]);
 		break;
 	}
 }
@@ -73,6 +76,9 @@ void ComponentPrimitive::SetPrimitive(PrimitiveType type)
 		break;
 	case CYLINDER:
 		Cylinder();
+		break;
+	case CONE:
+		Cone();
 		break;
 	}
 }
@@ -367,11 +373,72 @@ void ComponentPrimitive::Ray()
 	Ray_indices[1] = 1;
 }
 
+void ComponentPrimitive::Cone()
+{
+	type = CONE;
+
+	float radius = 0.5f;
+	float height = 1.0f;
+	float strips = 15;
+
+	float R = 360 / strips;
+
+	for (int i = 0; i < strips; i++)
+	{
+		float x = cos(R*i*DEGTORAD) * radius;
+		float y = -height / 2;
+		float z = sin(R*i*DEGTORAD) * radius;
+
+		Cone_vertices.push_back(x);
+		Cone_vertices.push_back(y);
+		Cone_vertices.push_back(z);
+	}
+
+	float x = 0;
+	float y = -height / 2;
+	float z = 0;
+
+	Cone_vertices.push_back(x);
+	Cone_vertices.push_back(y);
+	Cone_vertices.push_back(z);
+
+	x = 0;
+	y = +height / 2;
+	z = 0;
+
+	Cone_vertices.push_back(x);
+	Cone_vertices.push_back(y);
+	Cone_vertices.push_back(z);
+
+
+	for (int i = strips - 1; i >= 0; --i)
+	{
+		// Bottom
+		Cone_indices.push_back(i);
+		Cone_indices.push_back(strips);
+
+		if (i != 0)
+			Cone_indices.push_back(i - 1);
+		else
+			Cone_indices.push_back(strips - 1);
+
+		//Sides
+		Cone_indices.push_back(i);
+		Cone_indices.push_back(strips+1);
+
+		if (i != 0)
+			Cone_indices.push_back(i - 1);
+		else
+			Cone_indices.push_back(strips - 1);
+	}
+
+}
+
 void ComponentPrimitive::InspectorDraw(std::vector<Component*> components)
 {
 	ImGui::Text(GetName());
 
-	if (ImGui::Combo("Primitives", &current, "VCube\0ICube\0Sphere\0Cylinder\0Arrow\0Ray\0Plane\0"))
+	if (ImGui::Combo("Primitives", &current, "VCube\0ICube\0Sphere\0Cylinder\0Arrow\0Ray\0Plane\0Cone\0"))
 	{
 		SetPrimitive(static_cast<PrimitiveType>(current + 1));
 	}

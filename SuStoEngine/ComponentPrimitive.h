@@ -15,6 +15,7 @@ enum PrimitiveType
 	ARROW,
 	RAY,
 	PLANE,
+	CONE,
 };
 
 class ComponentPrimitive : public Component
@@ -38,6 +39,7 @@ private:
 	void Plane();
 	void Cylinder();
 	void Ray();
+	void Cone();
 
 	void OnEnable();
 	void OnDisable();
@@ -57,16 +59,13 @@ private:
 	unsigned int* iCube_index = nullptr;
 	int			  iCube_index_count = 0;
 
-	// Sphere
-	std::vector<float> vertices;
-	std::vector<uint>  indices;
-
 	// Plane
 	float*		  plane_vertices;
 	int			  plane_vertices_count = 0;
 	unsigned int* plane_index = nullptr;
 	int			  plane_index_count = 0;
 
+	// Sphere
 	std::vector<float> Sphere_vertices;
 	std::vector<uint>  Sphere_indices;
 
@@ -77,6 +76,11 @@ private:
 	// Ray
 	float Ray_vertices[6];
 	uint  Ray_indices[2];
+
+	// Cone
+	std::vector<float> Cone_vertices;
+	std::vector<uint>  Cone_indices;
+
 };
 
 #endif
