@@ -52,3 +52,23 @@ bool GeometryLoader::CleanUp()
 
 	return ret;
 }
+
+{
+	bool ret = false;
+
+	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
+	if (scene != nullptr && scene->HasMeshes())
+	{
+		// Use scene->mNumMeshes to iterate on scene->mMeshes array
+		for (int i = 0; i < scene->mNumMeshes; ++i) 
+		{
+			
+		}
+		aiReleaseImport(scene);
+		ret = true;
+	}
+	else
+		LOG_OUTPUT("Error loading scene %s", full_path);
+
+	return ret;
+}

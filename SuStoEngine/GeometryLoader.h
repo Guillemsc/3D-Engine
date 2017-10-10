@@ -28,6 +28,7 @@ public:
 	bool Update();
 	bool CleanUp();
 
+	bool LoadFile(const char* full_path) const;
 private:
 
 public:
