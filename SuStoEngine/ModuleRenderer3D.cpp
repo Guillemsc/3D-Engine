@@ -230,7 +230,7 @@ void ModuleRenderer3D::DrawIndexBuffer(unsigned int glmode, int index_id, int in
 
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_id); // id index
+	glBindBuffer(GL_ARRAY_BUFFER, index_id); // id index
 
 	glDrawElements((GLenum)glmode, index_size, GL_UNSIGNED_INT, NULL);
 
