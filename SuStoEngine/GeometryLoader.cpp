@@ -90,12 +90,13 @@ bool GeometryLoader::LoadFile(const char * full_path)
 			{
 				new_mesh.num_indices = current_mesh->mNumFaces * 3;
 				new_mesh.indices = new uint[new_mesh.num_indices]; // assume each face is a triangle
+
 				for (uint i = 0; i < current_mesh->mNumFaces; ++i)
 				{
 					if (current_mesh->mFaces[i].mNumIndices != 3)
 					{
 						LOG_OUTPUT("WARNING, geometry face with != 3 indices!");
-						assert(current_mesh->mFaces[i].mNumIndices != 3, "GUILLEM LA XUPA, AH Y NO HAY 3 INDICES");
+						assert(current_mesh->mFaces[i].mNumIndices != 3, "WARNING, geometry face with != 3 indices!");
 					}
 					else
 						memcpy(&new_mesh.indices[i * 3], current_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
@@ -108,8 +109,6 @@ bool GeometryLoader::LoadFile(const char * full_path)
 
 			meshes.push_back(new_mesh);
 		}
-
-		
 
 		aiReleaseImport(scene);
 		ret = true;
@@ -133,7 +132,7 @@ Mesh::Mesh(uint _id_vertices, uint _num_indices, uint * _indices, uint _id_indic
 void Mesh::LoadToMemory()
 {
 	if(id_vertices == 0)
-		id_vertices = App->renderer3D->LoadBuffer(vertices, num_vertices);
+		id_vertices = App->renderer3D->LoadBuffer(vertices, num_vertices*3);
 
 	if(id_indices == 0)
 		id_indices = App->renderer3D->LoadBuffer(indices, num_indices);

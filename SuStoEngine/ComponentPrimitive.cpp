@@ -18,18 +18,18 @@ ComponentPrimitive::~ComponentPrimitive()
 
 void ComponentPrimitive::Start()
 {
-	SetPrimitive(VCUBE);
+	SetPrimitive(ICUBE);
 }
 
 void ComponentPrimitive::Update()
 {
-	//switch (type)
-	//{
-	//case VCUBE:
-	//	App->renderer3D->DrawVertexBuffer(type, vCube_vertices_count);
-	//	break;
+	switch (type)
+	{
+	/*case VCUBE:
+		App->renderer3D->DrawVertexBuffer(type, vCube_vertices_count);
+		break;*/
 	//case ICUBE:
-	//	App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, iCube_index, iCube_index_count, iCube_vertices);
+	//	App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, 2, iCube_index_count, 1);
 	//	break;
 	//case SPHERE:
 	//	App->renderer3D->DrawIndexBuffer(GL_QUADS, &Sphere_indices[0], Sphere_indices.size(), &Sphere_vertices[0]);
@@ -51,7 +51,7 @@ void ComponentPrimitive::Update()
 	//case CONE:
 	//	App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, &Cone_indices[0], Cone_indices.size(), &Cone_vertices[0]);
 	//	break;
-	//}
+	}
 }
 
 void ComponentPrimitive::CleanUp()
@@ -173,6 +173,8 @@ void ComponentPrimitive::IndexCube()
 
 	iCube_vertices = v;
 
+	App->renderer3D->LoadBuffer(iCube_vertices, iCube_vertices_count);
+
 	iCube_index_count = 36;
 	static unsigned int v2[36]
 	{ 
@@ -185,6 +187,8 @@ void ComponentPrimitive::IndexCube()
 	};
 
 	iCube_index = v2;
+
+	App->renderer3D->LoadBuffer(iCube_index, iCube_index_count);
 }
 void ComponentPrimitive::Sphere()
 {

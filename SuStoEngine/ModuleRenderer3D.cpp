@@ -226,16 +226,18 @@ void ModuleRenderer3D::DrawVertexBuffer(int id, int size)
 void ModuleRenderer3D::DrawIndexBuffer(unsigned int glmode, int index_id, int index_size, int vertex_id)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_id); // id vertex
 
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_id); // id vertex
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	glBindBuffer(GL_ARRAY_BUFFER, index_id); // id index
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_id); // id index
 
 	glDrawElements((GLenum)glmode, index_size, GL_UNSIGNED_INT, NULL);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void ModuleRenderer3D::DrawPlane(float pos_x, float pos_y, float pos_z, int width, int height)
