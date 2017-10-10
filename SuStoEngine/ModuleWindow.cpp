@@ -83,6 +83,9 @@ bool ModuleWindow::Awake()
 
 		window = GenerateWindow(window, screen_surface, App->GetAppName(), flags, vec2(SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED), vec2( 0, 0), brightness);
 
+		SDL_Surface* icon = SDL_LoadBMP("spooky.bmp");
+		SDL_SetWindowIcon(window, icon);
+
 		if (window == nullptr)
 			ret = false;
 	}

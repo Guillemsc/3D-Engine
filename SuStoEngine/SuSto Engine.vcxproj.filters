@@ -360,9 +360,6 @@
     <ClInclude Include="Game.h">
       <Filter>Sources\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
     <ClInclude Include="Cursor.h">
       <Filter>Sources\Components</Filter>
     </ClInclude>
@@ -642,10 +639,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Resource.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="spooky.ico" />
     <Image Include="icon1.ico">
       <Filter>Sources</Filter>
     </Image>
