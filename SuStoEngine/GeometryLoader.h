@@ -8,6 +8,7 @@
 
 struct Mesh
 {
+	Mesh() {};
 	Mesh(uint id_vertices, uint num_indices, uint* indices, uint id_indices, uint num_vertices, float* vertices);
 
 	uint   id_vertices = 0; // id in VRAM

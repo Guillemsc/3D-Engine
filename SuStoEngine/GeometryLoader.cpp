@@ -63,7 +63,15 @@ bool GeometryLoader::LoadFile(const char * full_path) const
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
 		for (int i = 0; i < scene->mNumMeshes; ++i)
 		{
+			Mesh new_mesh;
 
+			// copy vertices
+			aiMesh* current_mesh = scene->mMeshes[i];
+			new_mesh.num_vertices = current_mesh->mNumVertices;
+			new_mesh.vertices = new float[new_mesh.num_vertices * 3];
+			memcpy(new_mesh.vertices, current_mesh->mVertices, sizeof(float) * new_mesh.num_vertices * 3);
+
+			LOG_OUTPUT("New mesh with %d vertices", new_mesh.num_vertices);
 		}
 		aiReleaseImport(scene);
 		ret = true;
