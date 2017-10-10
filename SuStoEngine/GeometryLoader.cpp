@@ -53,6 +53,7 @@ bool GeometryLoader::CleanUp()
 	return ret;
 }
 
+bool GeometryLoader::LoadFile(const char * full_path) const
 {
 	bool ret = false;
 
