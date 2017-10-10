@@ -48,7 +48,7 @@ bool EditorUI::Awake()
 
 	// Editor elements
 	console = new Console(true);
-	configuration = new Configuration(true);
+	configuration = new Configuration(false);
 	about = new About(false);
 	profiler_viewer = new ProfilerViewer(true);
 	engine_test = new EngineTest(true);

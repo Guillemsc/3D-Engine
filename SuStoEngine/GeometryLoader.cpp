@@ -31,6 +31,8 @@ bool GeometryLoader::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
+	LoadFile("warrior.FBX");
+
 	return ret;
 }
 
@@ -60,6 +62,8 @@ bool GeometryLoader::LoadFile(const char * full_path) const
 	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
+		LOG_OUTPUT("LOADING %d MESHES", scene->mNumMeshes);
+
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
 		for (int i = 0; i < scene->mNumMeshes; ++i)
 		{
@@ -67,12 +71,32 @@ bool GeometryLoader::LoadFile(const char * full_path) const
 
 			// copy vertices
 			aiMesh* current_mesh = scene->mMeshes[i];
+
 			new_mesh.num_vertices = current_mesh->mNumVertices;
 			new_mesh.vertices = new float[new_mesh.num_vertices * 3];
 			memcpy(new_mesh.vertices, current_mesh->mVertices, sizeof(float) * new_mesh.num_vertices * 3);
 
 			LOG_OUTPUT("New mesh with %d vertices", new_mesh.num_vertices);
+
+			// copy faces
+			if (current_mesh->HasFaces())
+			{
+				new_mesh.num_indices = current_mesh->mNumFaces * 3;
+				new_mesh.indices = new uint[new_mesh.num_indices]; // assume each face is a triangle
+				for (uint i = 0; i < current_mesh->mNumFaces; ++i)
+				{
+					if (current_mesh->mFaces[i].mNumIndices != 3)
+					{
+						LOG_OUTPUT("WARNING, geometry face with != 3 indices!");
+						assert(current_mesh->mFaces[i].mNumIndices != 3, "GUILLEM LA XUPA, AH Y NO HAY 3 INDICES");
+					}
+					else
+						memcpy(&new_mesh.indices[i * 3], current_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
+				}
+			}
+			LOG_OUTPUT("New mesh with %d indices", new_mesh.num_indices);
 		}
+
 		aiReleaseImport(scene);
 		ret = true;
 	}
