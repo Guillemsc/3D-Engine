@@ -8,12 +8,14 @@
 
 struct Mesh
 {
-	uint id_vertices = 0; // id in VRAM
-	uint num_indices = 0;
-	uint* indices = nullptr;
+	Mesh(uint id_vertices, uint num_indices, uint* indices, uint id_indices, uint num_vertices, float* vertices);
 
-	uint id_indices = 0; // id in VRAM
-	uint num_vertices = 0;
+	uint   id_vertices = 0; // id in VRAM
+	uint   num_indices = 0;
+	uint*  indices = nullptr;
+
+	uint   id_indices = 0; // id in VRAM
+	uint   num_vertices = 0;
 	float* vertices = nullptr;
 };
 
@@ -27,6 +29,8 @@ public:
 	bool Start();
 	bool Update();
 	bool CleanUp();
+
+
 
 private:
 
