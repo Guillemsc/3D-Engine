@@ -198,6 +198,17 @@ int ModuleRenderer3D::LoadBuffer(float* vertices, int size)
 	return id;
 }
 
+int ModuleRenderer3D::LoadBuffer(uint * vertices, int size)
+{
+	int id = 0;
+
+	glGenBuffers(1, (GLuint*)&(id));
+	glBindBuffer(GL_ARRAY_BUFFER, id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(uint) * size, vertices, GL_STATIC_DRAW);
+
+	return id;
+}
+
 void ModuleRenderer3D::DrawVertexBuffer(int id, int size)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
