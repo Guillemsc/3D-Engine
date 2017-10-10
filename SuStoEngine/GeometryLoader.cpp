@@ -126,7 +126,8 @@ Mesh::Mesh(uint _id_vertices, uint _num_indices, uint * _indices, uint _id_indic
 
 void Mesh::LoadToMemory()
 {
-
+	id_vertices = App->renderer3D->LoadBuffer(vertices, num_vertices);
+	id_indices = App->renderer3D->LoadBuffer(indices, num_indices);
 }
 
 void Mesh::Draw()
