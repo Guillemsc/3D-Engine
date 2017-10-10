@@ -19,12 +19,7 @@ void Inspector::Start()
 
 void Inspector::Draw()
 {
-	static bool inspector_bool = true;
-
-	if (!visible)
-		return;
-
-	igBeginDock("Inspector", &inspector_bool, ImGuiWindowFlags_MenuBar);
+	igBeginDock("Inspector", &visible, ImGuiWindowFlags_MenuBar);
 
 	vector<GameObject*> selected = App->gameobj->GetSelectedGameObjects();
 

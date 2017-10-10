@@ -1190,7 +1190,11 @@ using namespace ImGui;
 			json->SetNumber(di + "prev_tab", getDockIndex(dock.prev_tab));
 			json->SetNumber(di + "next_tab", getDockIndex(dock.next_tab));
 
-			if (dock.parent == nullptr && &dock != getRootDock()) 
+			if (dock.parent == nullptr && !dock.opened)
+			{
+				json->SetNumber(di + "parent", -1);
+			}
+			else if (dock.parent == nullptr && &dock != getRootDock()) 
 			{
 				json->SetNumber(di + "parent", getDockIndex(getRootDock()));
 			}
