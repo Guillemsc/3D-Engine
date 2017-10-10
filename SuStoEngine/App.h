@@ -22,6 +22,7 @@ class EditorUI;
 class DebugScene;
 class Configuration;
 class GeometryLoader;
+class TextureLoader;
 
 class Application
 {
@@ -76,6 +77,7 @@ public:
 	EditorUI*		   editorUI	= nullptr;
 	DebugScene*        debug_scene = nullptr;
 	GeometryLoader*	   geometry = nullptr;
+	TextureLoader*	   texture = nullptr;
 
 	std::list<string>  logs;
 

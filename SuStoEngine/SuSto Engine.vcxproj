@@ -199,6 +199,7 @@
     <ClInclude Include="stb_rect_pack.h" />
     <ClInclude Include="stb_textedit.h" />
     <ClInclude Include="stb_truetype.h" />
+    <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="XMLLoader.h" />
@@ -278,6 +279,7 @@
     <ClCompile Include="Profiler.cpp" />
     <ClCompile Include="ProfilerViewer.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
+    <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="XMLLoader.cpp" />
