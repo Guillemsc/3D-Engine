@@ -187,11 +187,15 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void ModuleRenderer3D::LoadBuffer(int id, float* vertices, int size)
+int ModuleRenderer3D::LoadBuffer(float* vertices, int size)
 {
+	int id = 0;
+
 	glGenBuffers(1, (GLuint*)&(id));
 	glBindBuffer(GL_ARRAY_BUFFER, id);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, vertices, GL_STATIC_DRAW);
+
+	return id;
 }
 
 void ModuleRenderer3D::DrawVertexBuffer(int id, int size)
