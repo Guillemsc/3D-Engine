@@ -19,11 +19,11 @@ enum PrimitiveType
 	CONE
 };
 
-class ComponentPrimitive : public Component
+class ComponentGizmos : public Component
 {
 public:
-	ComponentPrimitive(GameObject* owner);
-	virtual ~ComponentPrimitive();
+	ComponentGizmos(GameObject* owner);
+	virtual ~ComponentGizmos();
 
 	void Start();
 	void Update();
@@ -62,7 +62,7 @@ private:
 	int			  iCube_index_count = 0;
 
 	// Plane
-	float*		  plane_vertices;
+	float*		  plane_vertices = nullptr;
 	int			  plane_vertices_count = 0;
 	unsigned int* plane_index = nullptr;
 	int			  plane_index_count = 0;
@@ -80,7 +80,7 @@ private:
 	uint  Ray_indices[2];
 
 	// Frustum
-	float*		  frustum_vertices;
+	float*		  frustum_vertices = nullptr;
 	int			  frustum_vertices_count = 0;
 	unsigned int* frustum_index = nullptr;
 	int			  frustum_index_count = 0;

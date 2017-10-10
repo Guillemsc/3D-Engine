@@ -2,7 +2,7 @@
 #include "App.h"
 #include "imgui.h"
 #include "Component.h"
-#include "ComponentPrimitive.h"
+#include "ComponentGizmos.h"
 #include "ComponentTransform.h"
 #include "ModuleGameObject.h"
 #include "Inspector.h"
@@ -80,7 +80,7 @@ void GameObject::AddComponent(ComponentType type)
 		break;
 		case PRIMITIVE:
 		{
-			ret = new ComponentPrimitive(this);
+			ret = new ComponentGizmos(this);
 		}
 		break;
 

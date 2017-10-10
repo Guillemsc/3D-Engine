@@ -1,4 +1,4 @@
-#include "ComponentPrimitive.h"
+#include "ComponentGizmos.h"
 #include "App.h"
 #include "ModuleRenderer3D.h"
 #include <gl/GL.h>
@@ -6,22 +6,22 @@
 #include "imgui.h"
 #include <vector>
 
-ComponentPrimitive::ComponentPrimitive(GameObject * owner) : Component(PRIMITIVE, owner)
+ComponentGizmos::ComponentGizmos(GameObject * owner) : Component(PRIMITIVE, owner)
 {
 	LOG_OUTPUT("Component Primitive Created");
 	SetName("Primitive");
 }
 
-ComponentPrimitive::~ComponentPrimitive()
+ComponentGizmos::~ComponentGizmos()
 {
 }
 
-void ComponentPrimitive::Start()
+void ComponentGizmos::Start()
 {
 	SetPrimitive(VCUBE);
 }
 
-void ComponentPrimitive::Update()
+void ComponentGizmos::Update()
 {
 	switch (type)
 	{
@@ -54,11 +54,11 @@ void ComponentPrimitive::Update()
 	}
 }
 
-void ComponentPrimitive::CleanUp()
+void ComponentGizmos::CleanUp()
 {
 }
 
-void ComponentPrimitive::SetPrimitive(PrimitiveType type)
+void ComponentGizmos::SetPrimitive(PrimitiveType type)
 {
 	switch (type)
 	{
@@ -89,7 +89,7 @@ void ComponentPrimitive::SetPrimitive(PrimitiveType type)
 	}
 }
 
-void ComponentPrimitive::VertexCube()
+void ComponentGizmos::VertexCube()
 {
 	type = VCUBE;
 
@@ -152,7 +152,7 @@ void ComponentPrimitive::VertexCube()
 	App->renderer3D->LoadVertexBuffer(type, vCube_vertices, vCube_vertices_count);
 }
 
-void ComponentPrimitive::IndexCube()
+void ComponentGizmos::IndexCube()
 {
 	type = ICUBE;
 
@@ -186,7 +186,7 @@ void ComponentPrimitive::IndexCube()
 
 	iCube_index = v2;
 }
-void ComponentPrimitive::Sphere()
+void ComponentGizmos::Sphere()
 {
 	type = SPHERE;
 
@@ -226,7 +226,7 @@ void ComponentPrimitive::Sphere()
 	}
 }
 
-void ComponentPrimitive::Plane()
+void ComponentGizmos::Plane()
 {
 	type = PLANE;
 
@@ -256,7 +256,7 @@ void ComponentPrimitive::Plane()
 	plane_index = v2;
 }
 
-void ComponentPrimitive::Cylinder()
+void ComponentGizmos::Cylinder()
 {
 	type = CYLINDER;
 
@@ -355,7 +355,7 @@ void ComponentPrimitive::Cylinder()
 	int i = 0;
 }
 
-void ComponentPrimitive::Ray()
+void ComponentGizmos::Ray()
 {
 	type = RAY;
 
@@ -379,7 +379,7 @@ void ComponentPrimitive::Ray()
 	Ray_indices[1] = 1;
 }
 
-void ComponentPrimitive::Frustum()
+void ComponentGizmos::Frustum()
 {
 	type = FRUSTUM;
 
@@ -435,7 +435,7 @@ void ComponentPrimitive::Frustum()
 			};*/
 }
 
-void ComponentPrimitive::Cone()
+void ComponentGizmos::Cone()
 {
 	type = CONE;
 
@@ -496,7 +496,7 @@ void ComponentPrimitive::Cone()
 
 }
 
-void ComponentPrimitive::InspectorDraw(std::vector<Component*> components)
+void ComponentGizmos::InspectorDraw(std::vector<Component*> components)
 {
 	ImGui::Text(GetName());
 
@@ -507,10 +507,10 @@ void ComponentPrimitive::InspectorDraw(std::vector<Component*> components)
 	}
 }
 
-void ComponentPrimitive::OnEnable()
+void ComponentGizmos::OnEnable()
 {
 }
 
-void ComponentPrimitive::OnDisable()
+void ComponentGizmos::OnDisable()
 {
 }
