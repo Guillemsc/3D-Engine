@@ -211,6 +211,16 @@ int ModuleRenderer3D::LoadBuffer(uint * vertices, int size)
 	return id;
 }
 
+int ModuleRenderer3D::LoadTextureBuffer(uint* texture, int size)
+{
+	int id = 0;
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(size, texture);	glBindTexture(GL_TEXTURE_2D, *texture);
+
+	return id;
+}
+
 void ModuleRenderer3D::DrawVertexBuffer(int id, int size)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
