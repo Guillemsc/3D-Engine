@@ -61,9 +61,9 @@ bool GeometryLoader::LoadFile(const char * full_path) const
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
-		for (int i = 0; i < scene->mNumMeshes; ++i) 
+		for (int i = 0; i < scene->mNumMeshes; ++i)
 		{
-			
+
 		}
 		aiReleaseImport(scene);
 		ret = true;
@@ -72,4 +72,14 @@ bool GeometryLoader::LoadFile(const char * full_path) const
 		LOG_OUTPUT("Error loading scene %s", full_path);
 
 	return ret;
+}
+
+Mesh::Mesh(uint _id_vertices, uint _num_indices, uint * _indices, uint _id_indices, uint _num_vertices, float * _vertices)
+{
+	id_vertices = _id_vertices;
+	num_indices = _num_indices;
+	indices = _indices;
+	id_indices = _id_indices;
+	num_vertices = _num_vertices;
+	vertices = _vertices;
 }
