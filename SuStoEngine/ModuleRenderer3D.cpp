@@ -194,6 +194,7 @@ int ModuleRenderer3D::LoadBuffer(float* vertices, int size)
 	glGenBuffers(1, (GLuint*)&(id));
 	glBindBuffer(GL_ARRAY_BUFFER, id);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, vertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	return id;
 }
@@ -205,6 +206,7 @@ int ModuleRenderer3D::LoadBuffer(uint * vertices, int size)
 	glGenBuffers(1, (GLuint*)&(id));
 	glBindBuffer(GL_ARRAY_BUFFER, id);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(uint) * size, vertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	return id;
 }

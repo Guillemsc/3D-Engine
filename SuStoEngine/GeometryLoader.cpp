@@ -1,7 +1,8 @@
 #include "GeometryLoader.h"
 #include "App.h"
 #include "ModuleRenderer3D.h"
-#include "IDGenerator.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
@@ -100,10 +101,12 @@ bool GeometryLoader::LoadFile(const char * full_path)
 			LOG_OUTPUT("New mesh with %d indices", new_mesh.num_indices);
 
 			// Add mesh to vector<Mesh> meshes
+			new_mesh.LoadToMemory();
+
 			meshes.push_back(new_mesh);
 		}
 
-
+		
 
 		aiReleaseImport(scene);
 		ret = true;
@@ -126,10 +129,15 @@ Mesh::Mesh(uint _id_vertices, uint _num_indices, uint * _indices, uint _id_indic
 
 void Mesh::LoadToMemory()
 {
-	id_vertices = App->renderer3D->LoadBuffer(vertices, num_vertices);
-	id_indices = App->renderer3D->LoadBuffer(indices, num_indices);
+	if(id_vertices == 0)
+		id_vertices = App->renderer3D->LoadBuffer(vertices, num_vertices);
+
+	if(id_indices == 0)
+		id_indices = App->renderer3D->LoadBuffer(indices, num_indices);
 }
 
 void Mesh::Draw()
 {
+	if (id_indices != 0 && id_vertices != 0)
+		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, id_indices, num_indices, id_vertices);
 }
