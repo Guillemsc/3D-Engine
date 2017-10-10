@@ -11,6 +11,9 @@ struct Mesh
 	Mesh() {};
 	Mesh(uint id_vertices, uint num_indices, uint* indices, uint id_indices, uint num_vertices, float* vertices);
 
+	void LoadToMemory();
+	void Draw();
+
 	uint   id_vertices = 0; // id in VRAM
 	uint   num_indices = 0;
 	uint*  indices = nullptr;
@@ -31,8 +34,10 @@ public:
 	bool Update();
 	bool CleanUp();
 
-	bool LoadFile(const char* full_path) const;
+	bool LoadFile(const char* full_path);
+
 private:
+	vector<Mesh> meshes;
 
 public:
 

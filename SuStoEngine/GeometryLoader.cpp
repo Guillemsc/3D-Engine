@@ -1,4 +1,7 @@
 #include "GeometryLoader.h"
+#include "App.h"
+#include "ModuleRenderer3D.h"
+#include "IDGenerator.h"
 
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
@@ -55,7 +58,7 @@ bool GeometryLoader::CleanUp()
 	return ret;
 }
 
-bool GeometryLoader::LoadFile(const char * full_path) const
+bool GeometryLoader::LoadFile(const char * full_path)
 {
 	bool ret = false;
 
@@ -95,7 +98,12 @@ bool GeometryLoader::LoadFile(const char * full_path) const
 				}
 			}
 			LOG_OUTPUT("New mesh with %d indices", new_mesh.num_indices);
+
+			// Add mesh to vector<Mesh> meshes
+			meshes.push_back(new_mesh);
 		}
+
+
 
 		aiReleaseImport(scene);
 		ret = true;
@@ -114,4 +122,13 @@ Mesh::Mesh(uint _id_vertices, uint _num_indices, uint * _indices, uint _id_indic
 	id_indices = _id_indices;
 	num_vertices = _num_vertices;
 	vertices = _vertices;
+}
+
+void Mesh::LoadToMemory()
+{
+
+}
+
+void Mesh::Draw()
+{
 }
