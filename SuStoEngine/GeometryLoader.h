@@ -6,6 +6,17 @@
 
 #define DEFAULT_MUSIC_FADE_TIME 2.0f
 
+struct Mesh
+{
+	uint id_vertices = 0; // id in VRAM
+	uint num_indices = 0;
+	uint* indices = nullptr;
+
+	uint id_indices = 0; // id in VRAM
+	uint num_vertices = 0;
+	float* vertices = nullptr;
+};
+
 class GeometryLoader : public Module
 {
 public:
@@ -18,6 +29,8 @@ public:
 	bool CleanUp();
 
 private:
+
+public:
 
 };
 
