@@ -21,7 +21,7 @@ class ModuleGameObject;
 class EditorUI;
 class DebugScene;
 class Configuration;
-
+class GeometryLoader;
 
 class Application
 {
@@ -75,6 +75,7 @@ public:
 	ModuleGameObject*  gameobj = nullptr;
 	EditorUI*		   editorUI	= nullptr;
 	DebugScene*        debug_scene = nullptr;
+	GeometryLoader*	   geometry = nullptr;
 
 	std::list<string>  logs;
 

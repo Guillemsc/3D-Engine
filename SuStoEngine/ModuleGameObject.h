@@ -32,10 +32,6 @@ public:
 private:
 	void DestroyGameObjects();
 
-public:
-	bool selected_go[250];
-	bool all_false[250];
-
 private:
 	vector<GameObject*> game_objects;
 	vector<GameObject*> to_delete;

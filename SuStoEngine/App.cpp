@@ -10,6 +10,7 @@
 #include "JSONLoader.h"
 #include "EditorUI.h"
 #include "Configuration.h"
+#include "GeometryLoader.h"
 #include "imgui.h"
 
 #include "mmgr\nommgr.h"
@@ -27,6 +28,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	gameobj = new ModuleGameObject();
 	debug_scene = new DebugScene();
 	editorUI = new EditorUI();
+	geometry = new GeometryLoader();
 
 	// The order of calls is very important!
 	// Modules will Awake() Start() and Update in this order
@@ -40,6 +42,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(input);
 	AddModule(audio);
 	AddModule(gameobj);
+	AddModule(geometry);
 
 	AddModule(editorUI);
 	AddModule(debug_scene);

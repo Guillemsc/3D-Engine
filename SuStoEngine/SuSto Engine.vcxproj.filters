@@ -387,6 +387,9 @@
     <ClInclude Include="IDGenerator.h">
       <Filter>Sources\Components</Filter>
     </ClInclude>
+    <ClInclude Include="GeometryLoader.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -616,6 +619,9 @@
     </ClCompile>
     <ClCompile Include="IDGenerator.cpp">
       <Filter>Sources\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryLoader.cpp">
+      <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
