@@ -44,7 +44,10 @@ bool GeometryLoader::Update()
 {
 	bool ret = true;
 
-	
+	for(vector<Mesh>::iterator it = meshes.begin(); it != meshes.end(); it++)
+	{
+		(*it).Draw();
+	}
 
 	return ret;
 }
