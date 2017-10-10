@@ -375,6 +375,9 @@
     <ClInclude Include="ModuleGameObject.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentPrimitive.h">
+      <Filter>Sources\GameObject</Filter>
+    </ClInclude>
     <ClInclude Include="Hierarchy.h">
       <Filter>Sources\Editor</Filter>
     </ClInclude>
@@ -383,9 +386,6 @@
     </ClInclude>
     <ClInclude Include="IDGenerator.h">
       <Filter>Sources\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentGizmos.h">
-      <Filter>Sources\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -605,6 +605,9 @@
     <ClCompile Include="ModuleGameObject.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="ComponentPrimitive.cpp">
+      <Filter>Sources\GameObject</Filter>
+    </ClCompile>
     <ClCompile Include="Hierarchy.cpp">
       <Filter>Sources\Editor</Filter>
     </ClCompile>
@@ -613,9 +616,6 @@
     </ClCompile>
     <ClCompile Include="IDGenerator.cpp">
       <Filter>Sources\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentGizmos.cpp">
-      <Filter>Sources\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

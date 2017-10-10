@@ -1,6 +1,6 @@
 {
     "DockLayout": {
-        "Docks_Size": 11
+        "Docks_Size": 10
     },
     "default": {
         "Dock0": {
@@ -25,17 +25,17 @@
             "Label": "Console",
             "pos_X": 3,
             "pos_Y": 664,
-            "size_X": 834,
+            "size_X": 1668,
             "size_Y": 308,
             "status": 0,
             "active": true,
             "opened": true,
-            "location": "13",
+            "location": "3",
             "child0": -1,
             "child1": -1,
             "prev_tab": -1,
             "next_tab": -1,
-            "parent": 10
+            "parent": 5
         },
         "Dock2": {
             "ID": "2",
@@ -44,32 +44,32 @@
             "pos_Y": 36,
             "size_X": 246,
             "size_Y": 628,
-            "status": 0,
+            "status": 1,
             "active": false,
             "opened": true,
             "location": "112",
             "child0": -1,
             "child1": -1,
-            "prev_tab": 7,
+            "prev_tab": -1,
             "next_tab": -1,
-            "parent": 9
+            "parent": 5
         },
         "Dock3": {
             "ID": "3",
             "Label": "Profiler",
-            "pos_X": 837,
-            "pos_Y": 664,
-            "size_X": 834,
-            "size_Y": 308,
+            "pos_X": 1361,
+            "pos_Y": 36,
+            "size_X": 310,
+            "size_Y": 628,
             "status": 0,
-            "active": true,
+            "active": false,
             "opened": true,
-            "location": "03",
+            "location": "02",
             "child0": -1,
             "child1": -1,
             "prev_tab": -1,
-            "next_tab": -1,
-            "parent": 10
+            "next_tab": 4,
+            "parent": 6
         },
         "Dock4": {
             "ID": "4",
@@ -84,7 +84,7 @@
             "location": "02",
             "child0": -1,
             "child1": -1,
-            "prev_tab": -1,
+            "prev_tab": 3,
             "next_tab": 8,
             "parent": 6
         },
@@ -100,7 +100,7 @@
             "opened": false,
             "location": "-1",
             "child0": 6,
-            "child1": 10,
+            "child1": 1,
             "prev_tab": -1,
             "next_tab": -1,
             "parent": -1
@@ -117,7 +117,7 @@
             "opened": false,
             "location": "2",
             "child0": 9,
-            "child1": 4,
+            "child1": 3,
             "prev_tab": -1,
             "next_tab": -1,
             "parent": 5
@@ -136,7 +136,7 @@
             "child0": -1,
             "child1": -1,
             "prev_tab": -1,
-            "next_tab": 2,
+            "next_tab": -1,
             "parent": 9
         },
         "Dock8": {
@@ -172,23 +172,6 @@
             "prev_tab": -1,
             "next_tab": -1,
             "parent": 6
-        },
-        "Dock10": {
-            "ID": "10",
-            "Label": "DOCK",
-            "pos_X": 3,
-            "pos_Y": 664,
-            "size_X": 1668,
-            "size_Y": 308,
-            "status": 0,
-            "active": true,
-            "opened": false,
-            "location": "3",
-            "child0": 1,
-            "child1": 3,
-            "prev_tab": -1,
-            "next_tab": -1,
-            "parent": 5
         }
     },
     "editor": {
