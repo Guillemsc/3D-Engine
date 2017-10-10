@@ -23,35 +23,35 @@ void ComponentPrimitive::Start()
 
 void ComponentPrimitive::Update()
 {
-	switch (type)
-	{
-	case VCUBE:
-		App->renderer3D->DrawVertexBuffer(type, vCube_vertices_count);
-		break;
-	case ICUBE:
-		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, iCube_index, iCube_index_count, iCube_vertices);
-		break;
-	case SPHERE:
-		App->renderer3D->DrawIndexBuffer(GL_QUADS, &Sphere_indices[0], Sphere_indices.size(), &Sphere_vertices[0]);
-		break;
-	case CYLINDER:
-		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, &Cylinder_indices[0], Cylinder_indices.size(), &Cylinder_vertices[0]);
-		break;
-	case ARROW:
-		break;
-	case RAY:
-		App->renderer3D->DrawIndexBuffer(GL_LINES, &Ray_indices[0], 2, &Ray_vertices[0]);
-		break;
-	case PLANE:
-		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, plane_index, plane_index_count, plane_vertices);
-		break;
-	case FRUSTUM:
-		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, frustum_index, frustum_index_count, frustum_vertices);
-		break;
-	case CONE:
-		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, &Cone_indices[0], Cone_indices.size(), &Cone_vertices[0]);
-		break;
-	}
+	//switch (type)
+	//{
+	//case VCUBE:
+	//	App->renderer3D->DrawVertexBuffer(type, vCube_vertices_count);
+	//	break;
+	//case ICUBE:
+	//	App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, iCube_index, iCube_index_count, iCube_vertices);
+	//	break;
+	//case SPHERE:
+	//	App->renderer3D->DrawIndexBuffer(GL_QUADS, &Sphere_indices[0], Sphere_indices.size(), &Sphere_vertices[0]);
+	//	break;
+	//case CYLINDER:
+	//	App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, &Cylinder_indices[0], Cylinder_indices.size(), &Cylinder_vertices[0]);
+	//	break;
+	//case ARROW:
+	//	break;
+	//case RAY:
+	//	App->renderer3D->DrawIndexBuffer(GL_LINES, &Ray_indices[0], 2, &Ray_vertices[0]);
+	//	break;
+	//case PLANE:
+	//	App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, plane_index, plane_index_count, plane_vertices);
+	//	break;
+	//case FRUSTUM:
+	//	App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, frustum_index, frustum_index_count, frustum_vertices);
+	//	break;
+	//case CONE:
+	//	App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, &Cone_indices[0], Cone_indices.size(), &Cone_vertices[0]);
+	//	break;
+	//}
 }
 
 void ComponentPrimitive::CleanUp()
@@ -149,7 +149,7 @@ void ComponentPrimitive::VertexCube()
 
 	vCube_vertices = v;
 
-	App->renderer3D->LoadVertexBuffer(type, vCube_vertices, vCube_vertices_count);
+	//App->renderer3D->LoadVertexBuffer(type, vCube_vertices, vCube_vertices_count);
 }
 
 void ComponentPrimitive::IndexCube()

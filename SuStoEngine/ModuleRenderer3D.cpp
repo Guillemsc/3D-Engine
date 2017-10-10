@@ -187,7 +187,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void ModuleRenderer3D::LoadVertexBuffer(int id, float* vertices, int size)
+void ModuleRenderer3D::LoadBuffer(int id, float* vertices, int size)
 {
 	glGenBuffers(1, (GLuint*)&(id));
 	glBindBuffer(GL_ARRAY_BUFFER, id);
@@ -206,15 +206,19 @@ void ModuleRenderer3D::DrawVertexBuffer(int id, int size)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void ModuleRenderer3D::DrawIndexBuffer(unsigned int glmode, unsigned int* index, int index_size, float* vertices)
+void ModuleRenderer3D::DrawIndexBuffer(unsigned int glmode, int index_id, int index_size, int vertex_id)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_id); // id vertex
 
-	glVertexPointer(3, GL_FLOAT, 0, vertices);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	glDrawElements((GLenum)glmode, index_size, GL_UNSIGNED_INT, index);
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_id); // id index
+
+	glDrawElements((GLenum)glmode, index_size, GL_UNSIGNED_INT, NULL);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void ModuleRenderer3D::DrawPlane(float pos_x, float pos_y, float pos_z, int width, int height)

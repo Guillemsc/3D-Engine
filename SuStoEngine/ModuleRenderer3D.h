@@ -21,10 +21,9 @@ public:
 
 	void OnResize(int width, int height);
 
-	void LoadVertexBuffer(int id, float* vertices, int size);
+	void LoadBuffer(int id, float* vertices, int size);
 	void DrawVertexBuffer(int id, int size);
-
-	void DrawIndexBuffer(unsigned int glmode, unsigned int* index, int index_size, float* vertices);
+	void DrawIndexBuffer(unsigned int glmode, int index_id, int index_size, int vertex_id);
 
 	void DrawPlane(float pos_x, float pos_y, float pos_z, int width, int height);
 
