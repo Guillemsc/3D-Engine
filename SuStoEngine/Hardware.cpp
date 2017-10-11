@@ -50,16 +50,16 @@ void Hardware::Start()
 
 void Hardware::Draw()
 {
-	if (!visible)
-		return;
-
 	ImGuiStyle * style = &ImGui::GetStyle();
 	ImVec4 sec_colour = style->Colors[ImGuiCol_ComboBg];
 	sec_colour.x += +0.2f;
 	sec_colour.y += +0.2f;
 	sec_colour.z += +0.2f;
 
-	if (ImGui::Begin("Hardware"))
+	if (!visible)
+		return;
+
+	if (ImGui::Begin("Hardware", &visible, ImGuiWindowFlags_AlwaysAutoResize))
 	{
 		ImGui::Text("SDL_Version:");
 		ImGui::SameLine();

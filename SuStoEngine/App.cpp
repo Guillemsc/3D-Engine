@@ -19,7 +19,6 @@
 
 //TODO
 //- Improve camera orbit(max rotation up and down does not work)
-//- Mouse zoom with wheel
 //- Camera focus object with f key
 //- Log geometry on console
 //- Finish configuration input key binding
@@ -33,6 +32,8 @@
 //- Unload meshes whith another drag and drop
 
 //DONE
+//- Mouse zoom with wheel
+
 
 /*DELIVERY
 1. The build should be compiled in Release with all (and only) the material needed for execution

@@ -353,10 +353,6 @@ using namespace ImGui;
 		{
 			App->window->GetCursor()->SizeNS();
 		}
-		else
-		{
-			App->window->GetCursor()->Arrow();
-		}
 	}
 
 

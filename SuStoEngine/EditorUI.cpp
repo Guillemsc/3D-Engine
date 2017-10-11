@@ -150,9 +150,13 @@ bool EditorUI::Update()
 
 		if (ImGui::BeginMenu("Window"))
 		{
-			ImGui::MenuItem("Console", "º", &console->visible);
+			ImGui::MenuItem("Game", NULL, &game->visible);
 
 			ImGui::MenuItem("Hierarchy", NULL, &hierarchy->visible);
+
+			ImGui::MenuItem("Inspector", NULL, &inspector->visible);
+
+			ImGui::MenuItem("Console", "º", &console->visible);
 
 			ImGui::MenuItem("Configuration", "c", &configuration->visible);
 

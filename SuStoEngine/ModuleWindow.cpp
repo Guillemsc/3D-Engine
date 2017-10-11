@@ -96,6 +96,15 @@ bool ModuleWindow::Awake()
 	return ret;
 }
 
+bool ModuleWindow::Update()
+{
+	bool ret = true;
+
+	cursor->SetCurrentCursor();
+
+	return ret;
+}
+
 // Called before quitting
 bool ModuleWindow::CleanUp()
 {

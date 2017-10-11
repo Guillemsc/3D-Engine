@@ -24,9 +24,6 @@ void EngineTest::Start()
 
 void EngineTest::Draw()
 {
-	if (!visible)
-		return;
-
 	if (igBeginDock("Engine Tests", &visible, 0))
 	{
 		ImGui::Separator();

@@ -44,9 +44,6 @@ void Configuration::Draw()
 		return;
 	}
 
-	if (!visible)
-		return;
-
 	ImGuiStyle * style = &ImGui::GetStyle();
 	ImVec4 sec_colour = style->Colors[ImGuiCol_ComboBg];
 	sec_colour.x += +0.2f;

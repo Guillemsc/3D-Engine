@@ -28,11 +28,7 @@ void Console::Draw()
 	if (App->input->GetKeyBindingDown("console"))
 	{
 		visible = !visible;
-		return;
 	}
-	
-	if (!visible)
-		return;
 
 	igBeginDock("Console", &visible, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 		

@@ -4,6 +4,8 @@
 #include "ModuleCamera3D.h"
 #include "EditorUI.h"
 #include "Game.h"
+#include "ModuleWindow.h"
+#include "Cursor.h"
 #include "imgui.h"
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
@@ -76,6 +78,8 @@ bool ModuleCamera3D::Update()
 
 	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
+		App->window->GetCursor()->Hand();
+
 		if (App->input->GetKeyRepeat(SDL_SCANCODE_W))
 			MoveFront(speed);
 
@@ -110,6 +114,8 @@ bool ModuleCamera3D::Update()
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_LALT) || App->input->GetKeyRepeat(SDL_SCANCODE_RALT))
 			{
 				Orbit(vec3(0, 0, 0), App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
+
+				App->window->GetCursor()->SizeAll();
 			}
 			else
 			{

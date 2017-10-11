@@ -19,7 +19,9 @@ public:
 	void SizeNS();
 	void SizeAll();
 	void Hand();
-	void No();
+	void SetShowCursor(bool set);
+
+	void SetCurrentCursor();
 
 	void CleanUp();
 
@@ -35,6 +37,10 @@ private:
 	SDL_Cursor* sizeall = nullptr;
 	SDL_Cursor* hand = nullptr;
 
+	SDL_Cursor* cursor_to_set = nullptr;
+	SDL_Cursor* current_cursor = nullptr;
+
+	bool show = true;
 };
 
 #endif //__j1TIMER_H__

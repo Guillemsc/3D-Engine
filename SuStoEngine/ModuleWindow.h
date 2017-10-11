@@ -21,6 +21,7 @@ public:
 	void OnLoadConfig(JSON_Doc* config);
 	void OnSaveConfig(JSON_Doc* config);
 	bool Awake();
+	bool Update();
 	bool CleanUp();
 
 	void SetTitle(const char* title);

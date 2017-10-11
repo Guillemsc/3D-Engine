@@ -22,9 +22,7 @@ void Game::Start()
 
 void Game::Draw()
 {
-	bool a = true;
-
-	igBeginDock("Game", &a, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+	igBeginDock("Game", &visible, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 	
 	size = float2(ImGui::GetContentRegionAvail().y, ImGui::GetContentRegionAvail().x);
 	position = float2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);

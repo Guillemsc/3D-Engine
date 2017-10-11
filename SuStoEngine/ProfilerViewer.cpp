@@ -26,13 +26,11 @@ void ProfilerViewer::Draw()
 	if (App->input->GetKeyBindingDown("profiler"))
 	{
 		visible = !visible;
-		return;
 	}
 
 	if (!visible)
 	{
 		record = false;
-		return;
 	}
 
 	ImGui::SetNextWindowSize(ImVec2(400, 800), 2);
