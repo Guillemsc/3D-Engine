@@ -66,7 +66,6 @@ bool ModuleCamera3D::Update()
 	float speed = camera_speed * App->GetDT();
 
 	if (App->input->GetKeyRepeat(SDL_SCANCODE_LSHIFT))
-		speed = 8.0f * App->GetDT();
 		speed = camera_speed/2 * App->GetDT();
 
 	if (App->input->GetKeyRepeat(SDL_SCANCODE_R))
