@@ -100,4 +100,7 @@ private:
 	int				   mouse_wheel = 0;
 	int				   mouse_x_motion = 0;
 	int				   mouse_y_motion = 0;
+
+public:
+	bool			   right_clicking = false;
 };

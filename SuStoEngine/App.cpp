@@ -32,6 +32,45 @@
 //- Texutre informationo on inspector
 //- Unload meshes whith another drag and drop
 
+//DONE
+
+/*DELIVERY
+1. The build should be compiled in Release with all (and only) the material needed for execution
+(including sample geometries to load).
+2. There must be a text file called “README.md” containing info about the engine, author, a link to the
+github repository and license. Any special instructions for execution should be included in this file.
+3. Your own models must be exported as FBX with one channel diffuse texture in PNG format.
+4. It should accept drag&drop of FBX files and PNG textures (only to show the last dropped)
+5. It should feature Unity-like camera controls:
+	a. Right click turns on “WASD” fps-like movement
+	b. Mouse wheel should zoom in and out
+	c. Alt+Left click should orbit the object
+	d. Pressing “f” should focus the camera around the geometry
+6. Have a console window that should LOG the geometry loading process
+7. There must be a configuration window containing at least:
+	a. A graph for the frames per second
+	b. Configuration for all variables on each module (renderer, window, input and textures)
+	c. There must be information output with FPS graph, memory consumption, hardware detection
+	and software versions (SDL, OpenGL, Devil).
+8. The camera must adapt to the size of the geometry after being dropped to move far or close
+depending on the scale of the geometry.
+9. There must be a general menu with option to quit, visit the github page, and get info about the
+engine (“About”). It should also be able to turn on/off editor windows
+10. A properties window with three sections: transformation, geometry and texture. All should give
+information about the current loaded meshes and texture (triangle count, texture size, position,
+rotation and scale).
+11. If the FBX file contains multiple meshes, the system must be able to load all of them without
+applying transformations. It should only need to load one texture at a time.
+*/
+
+/* DONE ---- NUMBER
+	5.a
+	5.b
+	5.c
+	6.
+
+*/
+
 Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
 	xml = new XMLLoader();

@@ -193,6 +193,9 @@ bool ModuleInput::PreUpdate()
 			text_input.insert(text_input.size(), e.text.text);
 			break;
 
+		case SDL_DROPFILE:
+			// Drag and Drop Event
+			break;
 		}
 	}
 	

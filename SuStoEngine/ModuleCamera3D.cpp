@@ -74,18 +74,20 @@ bool ModuleCamera3D::Update()
 	if (App->input->GetKeyRepeat(SDL_SCANCODE_F))
 		MoveDown(speed);
 
-	if (App->input->GetKeyRepeat(SDL_SCANCODE_W))
-		MoveFront(speed);
+	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+	{
+		if (App->input->GetKeyRepeat(SDL_SCANCODE_W))
+			MoveFront(speed);
 
-	if (App->input->GetKeyRepeat(SDL_SCANCODE_S)) 
-		MoveBack(speed);
+		if (App->input->GetKeyRepeat(SDL_SCANCODE_S))
+			MoveBack(speed);
 
-	if (App->input->GetKeyRepeat(SDL_SCANCODE_A))
-		MoveLeft(speed);
+		if (App->input->GetKeyRepeat(SDL_SCANCODE_A))
+			MoveLeft(speed);
 
-	if (App->input->GetKeyRepeat(SDL_SCANCODE_D))
-		MoveRight(speed);
-
+		if (App->input->GetKeyRepeat(SDL_SCANCODE_D))
+			MoveRight(speed);
+	}
 
 	if (IsMouseInsideWindow())
 	{
