@@ -12,11 +12,15 @@ ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 
 	CalculateViewMatrix();
 
+	// Normalized vectors that define the direction of X, Y and Z
 	X = vec3(1.0f, 0.0f, 0.0f);
 	Y = vec3(0.0f, 1.0f, 0.0f);
 	Z = vec3(0.0f, 0.0f, 1.0f);
 
-	Position = vec3(0.0f, 0.0f, 5.0f);
+	// Position of the camera X, Y and Z
+	Position = vec3(0.0f, 0.0f, 0.0f);
+
+	// Reference point in which is rotating from
 	Reference = vec3(0.0f, 0.0f, 0.0f);
 
 	camera_distance = 0;
@@ -84,8 +88,20 @@ bool ModuleCamera3D::Update()
 	
 	is_inside_rect = PointInRect(float2(App->input->GetMouseX(), App->input->GetMouseY()), App->editorUI->GameRect());
 	
+	if (is_inside_rect && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT
+		&& (App->input->GetKeyRepeat(SDL_SCANCODE_LALT) || App->input->GetKeyRepeat(SDL_SCANCODE_RALT)))
+	{
+
+	}
+
 	if (is_inside_rect && App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
+		if (App->input->GetKeyRepeat(SDL_SCANCODE_LALT) || App->input->GetKeyRepeat(SDL_SCANCODE_RALT))
+		{
+			LookAt(vec3(0, 0, 0));
+			Reference = vec3(0, 0, 0);
+		}
+
 		int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
 
@@ -117,7 +133,11 @@ bool ModuleCamera3D::Update()
 		}
 
 		Position = Reference + Z * length(Position);
+
 	}
+
+
+
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
 
@@ -169,14 +189,6 @@ void ModuleCamera3D::Move(const vec3 &Movement)
 float* ModuleCamera3D::GetViewMatrix()
 {
 	return &ViewMatrix;
-}
-
-void ModuleCamera3D::Follow(PhysBody3D * body, float min, float max, float height, float _displacement)
-{
-	min_following_dist = min;
-	max_following_dist = max;
-	following_height = height;
-	displacement = _displacement;
 }
 
 // -----------------------------------------------------------------
