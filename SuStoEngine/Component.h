@@ -9,7 +9,8 @@ class GameObject;
 enum ComponentType
 {
 	TRANSFORM,
-	PRIMITIVE
+	PRIMITIVE,
+	MESH,
 };
 
 class Component

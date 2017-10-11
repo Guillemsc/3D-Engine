@@ -4,6 +4,7 @@
 #include "Component.h"
 #include "ComponentPrimitive.h"
 #include "ComponentTransform.h"
+#include "ComponentMesh.h"
 #include "ModuleGameObject.h"
 #include "Inspector.h"
 
@@ -76,6 +77,11 @@ void GameObject::AddComponent(ComponentType type)
 		case TRANSFORM:
 		{
 			ret = new ComponentTransfrom(this);
+		}
+		break;
+		case MESH:
+		{
+			ret = new ComponentMesh(this);
 		}
 		break;
 		case PRIMITIVE:

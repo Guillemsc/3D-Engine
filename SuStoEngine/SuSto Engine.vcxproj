@@ -93,6 +93,7 @@
     <ClInclude Include="About.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="ComponentMesh.h" />
     <ClInclude Include="ComponentPrimitive.h" />
     <ClInclude Include="ComponentTransform.h" />
     <ClInclude Include="Configuration.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="About.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="ComponentMesh.cpp" />
     <ClCompile Include="ComponentPrimitive.cpp" />
     <ClCompile Include="ComponentTransform.cpp" />
     <ClCompile Include="Configuration.cpp" />
