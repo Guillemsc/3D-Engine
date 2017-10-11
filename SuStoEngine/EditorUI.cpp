@@ -157,6 +157,8 @@ bool EditorUI::Update()
 			ImGui::MenuItem("Configuration", "c", &configuration->visible);
 
 			ImGui::MenuItem("Profiler", "p", &profiler_viewer->visible);
+	
+			ImGui::MenuItem("Hardware", NULL, &hardware->visible);
 
 			ImGui::EndMenu();
 		}

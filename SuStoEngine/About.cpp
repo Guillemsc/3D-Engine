@@ -51,7 +51,7 @@ void About::Draw()
 			ImGui::Text("Version"); ImGui::NextColumn();
 			ImGui::Separator();
 			const char* name[NUM_LIBRARIES] = { "SDL", "MathGeoLib", "ImGui", "Parson", "OpenGL", "Glew", "Devil", "Assimp", "mmgr" };
-			const char* version[NUM_LIBRARIES] = { "v2.0.4", "v1.5", "v1.52", "---", "v2.1", "v2.0", "v1.7.8", "---", "---" };
+			const char* version[NUM_LIBRARIES] = { "v2.0.4", "v1.5", "v1.52", "2017 version", "v2.1", "v2.0", "v1.7.8", "", "" };
 			static int selected = -1;
 			for (int i = 0; i < NUM_LIBRARIES; i++)
 			{

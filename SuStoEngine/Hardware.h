@@ -4,7 +4,9 @@
 #include "EditorUI.h"
 #include "Module.h"
 
+struct DockContext;
 struct ImVec4;
+
 class Hardware : public EditorElement
 {
 public:
@@ -17,6 +19,8 @@ public:
 public:
 
 private:
+	DockContext* dock;
+
 	string sdl_ver;
 	string cpus;
 	string sys_ram;

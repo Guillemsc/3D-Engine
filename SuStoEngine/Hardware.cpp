@@ -1,5 +1,6 @@
 #include "Hardware.h"
 #include "imgui.h"
+#include "imgui_docking.h"
 #include "App.h"
 #include "Globals.h"
 #include "Profiler.h"
@@ -58,36 +59,36 @@ void Hardware::Draw()
 	sec_colour.y += +0.2f;
 	sec_colour.z += +0.2f;
 
-	if (ImGui::Begin("Hardware", &visible, ImGuiWindowFlags_AlwaysAutoResize))
+	if (ImGui::Begin("Hardware"))
 	{
-		ImGui::Text("SDL_Version:"); 
-		ImGui::SameLine(); 
+		ImGui::Text("SDL_Version:");
+		ImGui::SameLine();
 		ImGui::TextColored(sec_colour, sdl_ver.c_str());
 
 		ImGui::Separator();
 
-		ImGui::Text("CPUs: "); 
-		ImGui::SameLine(); 
+		ImGui::Text("CPUs: ");
+		ImGui::SameLine();
 		ImGui::TextColored(sec_colour, cpus.c_str());
 
-		ImGui::Text("System RAM:"); 
-		ImGui::SameLine(); 
+		ImGui::Text("System RAM:");
+		ImGui::SameLine();
 		ImGui::TextColored(sec_colour, sys_ram.c_str());
 
-		ImGui::Text("Caps:"); 
-		ImGui::SameLine(); 
+		ImGui::Text("Caps:");
+		ImGui::SameLine();
 		ImGui::TextColored(sec_colour, caps.c_str());
 
 		ImGui::Separator();
 
 		GraphicsDeviceInfo info = App->profiler->GetInfo();
 
-		ImGui::Text("GPU:");  
-		ImGui::SameLine(); 
+		ImGui::Text("GPU:");
+		ImGui::SameLine();
 		ImGui::TextColored(sec_colour, "Vendor %d Device %d", info.vendor_id, info.device_id);
 
-		ImGui::Text("Brand:"); 
-		ImGui::SameLine(); 
+		ImGui::Text("Brand:");
+		ImGui::SameLine();
 		ImGui::TextColored(sec_colour, info.brand);
 
 		ImGui::Separator();
