@@ -17,6 +17,21 @@
 #include "mmgr\nommgr.h"
 #include "mmgr\mmgr.h"
 
+//TODO
+//- Improve camera orbit(max rotation up and down does not work)
+//- Mouse zoom with wheel
+//- Camera focus object with f key
+//- Log geometry on console
+//- Finish configuration input key binding
+//- Make render pipeline 
+//- Improve configuration render
+//- Drag and drop fbx file
+//- Drag and drop texture
+//- Automatic zoom and focus on dragged fbx
+//- Mesh information on inspector
+//- Texutre informationo on inspector
+//- Unload meshes whith another drag and drop
+
 Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
 	xml = new XMLLoader();
