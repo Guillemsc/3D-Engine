@@ -87,32 +87,38 @@ bool ModuleCamera3D::Update()
 		MoveRight(speed);
 
 
+	if (IsMouseInsideWindow())
+	{
+		mouse_movement = true;
+	}
 
 	// Mouse motion ----------------
-	if (App->input->GetMouseWheel() == 1)
+	if (mouse_movement)
 	{
-		MoveFront(wheel_speed);
-	}
-	else if (App->input->GetMouseWheel() == -1)
-	{
-		MoveBack(wheel_speed);
-	}
-
-	if (App->input->GetKeyRepeat(SDL_SCANCODE_LALT) || App->input->GetKeyRepeat(SDL_SCANCODE_RALT))
-	{
-		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+		if (App->input->GetMouseWheel() == 1)
 		{
-			Orbit(vec3(0, 0, 0), App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
+			MoveFront(wheel_speed);
+		}
+		else if (App->input->GetMouseWheel() == -1)
+		{
+			MoveBack(wheel_speed);
+		}
+		else if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+		{
+			if (App->input->GetKeyRepeat(SDL_SCANCODE_LALT) || App->input->GetKeyRepeat(SDL_SCANCODE_RALT))
+			{
+				Orbit(vec3(0, 0, 0), App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
+			}
+			else
+			{
+				Rotate(App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
+			}
+		}
+		else
+		{
+			mouse_movement = false;
 		}
 	}
-	else
-	{
-		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
-		{
-			Rotate(App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
-		}
-	}
-
 
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
