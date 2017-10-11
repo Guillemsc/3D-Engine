@@ -271,16 +271,6 @@ void ModuleRenderer3D::DrawTextureBuffer(uint id)
 
 void ModuleRenderer3D::DrawPlane(float pos_x, float pos_y, float pos_z, int width, int height)
 {
-	/*glBegin(GL_TRIANGLE_STRIP);
-	glColor3f(0.75f, 0.75f, 0.75f);
-
-	for (int i = 0; i < width; ++i) 
-	{
-		for (int j = 0; j < height; ++j)
-		{
-			
-		}
-	}*/
 	glBegin(GL_QUADS);
 	int size = width*height;
 
@@ -295,20 +285,6 @@ void ModuleRenderer3D::DrawPlane(float pos_x, float pos_y, float pos_z, int widt
 	glEnd();
 }
 
-/*	Arrow
-glBegin(GL_QUADS);
-int size = width*height/2;
-
-for (int i = -size; i <= size; i++)
-{
-glVertex3f((float)i + pos_x, pos_y, (float)-size + pos_z);
-glVertex3f((float)i + pos_x, pos_y, (float)size + pos_z);
-
-glVertex3f((float)-size + pos_x, pos_y, (float)i + pos_z);
-glVertex3f((float)size + pos_x, pos_y, (float)i + pos_z);
-}
-glEnd();
-*/
 void ModuleRenderer3D::DrawGrid(int HALF_GRID_SIZE)
 {
 	glBegin(GL_LINES);

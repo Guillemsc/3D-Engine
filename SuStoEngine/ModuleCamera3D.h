@@ -23,15 +23,27 @@ public:
 private:
 	void CalculateViewMatrix();
 
+	void MoveFront(float speed);
+	void MoveBack(float speed);
+	void MoveLeft(float speed);
+	void MoveRight(float speed);
+	void MoveUp(float speed);
+	void MoveDown(float speed);
+
+	void Orbit(vec3 orbit_center, float motion_x, float motion_y);
+	void Rotate(float motion_x, float motion_y);
+
+	bool IsMouseInsideWindow() const;
+
 public:
 	vec3 X, Y, Z, Position, Reference;
 
-	float camera_distance = 0;
-
 private:
-
 	mat4x4 ViewMatrix, ViewMatrixInverse;
 
 	// Camera Movement
-	bool is_inside_rect = false;
+	bool  mouse_movement = false;
+	float camera_speed = 0.0f;
+	float wheel_speed = 0.0f;
+	float mouse_sensitivity = 0.0f;
 };

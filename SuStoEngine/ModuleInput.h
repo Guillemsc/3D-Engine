@@ -69,7 +69,7 @@ public:
 
 	int GetMouseX() const;
 	int GetMouseY() const;
-	int GetMouseZ() const;
+	int GetMouseWheel() const;
 	int GetMouseXMotion() const;
 	int GetMouseYMotion() const;
 
@@ -97,7 +97,7 @@ private:
 
 	int				   mouse_x = 0;
 	int				   mouse_y = 0;
-	int				   mouse_z = 0;
+	int				   mouse_wheel = 0;
 	int				   mouse_x_motion = 0;
 	int				   mouse_y_motion = 0;
 };

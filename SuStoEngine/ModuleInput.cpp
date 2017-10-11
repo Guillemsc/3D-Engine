@@ -119,7 +119,7 @@ bool ModuleInput::PreUpdate()
 
 	mouse_x /= SCREEN_SIZE;
 	mouse_y /= SCREEN_SIZE;
-	mouse_z = 0;
+	mouse_wheel = 0;
 
 	for (int i = 0; i < 5; ++i)
 	{
@@ -178,7 +178,7 @@ bool ModuleInput::PreUpdate()
 			break;
 
 		case SDL_MOUSEWHEEL:
-			mouse_z = e.wheel.y;
+			mouse_wheel = e.wheel.y;
 			break;
 
 		case SDL_MOUSEMOTION:
@@ -397,9 +397,9 @@ int ModuleInput::GetMouseY() const
 	return mouse_y;
 }
 
-int ModuleInput::GetMouseZ() const
+int ModuleInput::GetMouseWheel() const
 {
-	return mouse_x;
+	return mouse_wheel;
 }
 
 int ModuleInput::GetMouseXMotion() const
