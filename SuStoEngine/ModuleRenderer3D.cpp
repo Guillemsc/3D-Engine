@@ -187,9 +187,9 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-int ModuleRenderer3D::LoadBuffer(float* vertices, int size)
+uint ModuleRenderer3D::LoadBuffer(float* vertices, uint size)
 {
-	int id = 0;
+	uint id = 0;
 
 	glGenBuffers(1, (GLuint*)&(id));
 	glBindBuffer(GL_ARRAY_BUFFER, id);
@@ -199,9 +199,9 @@ int ModuleRenderer3D::LoadBuffer(float* vertices, int size)
 	return id;
 }
 
-int ModuleRenderer3D::LoadBuffer(uint * vertices, int size)
+uint ModuleRenderer3D::LoadBuffer(uint * vertices, uint size)
 {
-	int id = 0;
+	uint id = 0;
 
 	glGenBuffers(1, (GLuint*)&(id));
 	glBindBuffer(GL_ARRAY_BUFFER, id);
@@ -211,17 +211,26 @@ int ModuleRenderer3D::LoadBuffer(uint * vertices, int size)
 	return id;
 }
 
-int ModuleRenderer3D::LoadTextureBuffer(uint* texture, int size)
+uint ModuleRenderer3D::LoadTextureBuffer(uint* texture, uint size, int width, int height, uint wrap_s, uint wrap_t, uint mag, uint min)
 {
-	int id = 0;
+	uint id = 0;
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(size, texture);	glBindTexture(GL_TEXTURE_2D, *texture);
+	glGenTextures(size, (GLuint*)&(id));
+	glBindTexture(GL_TEXTURE_2D, id);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, texture);
 
 	return id;
 }
 
-void ModuleRenderer3D::DrawVertexBuffer(int id, int size)
+void ModuleRenderer3D::DrawVertexBuffer(uint id, uint size)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, id);
@@ -233,7 +242,7 @@ void ModuleRenderer3D::DrawVertexBuffer(int id, int size)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void ModuleRenderer3D::DrawIndexBuffer(unsigned int glmode, int index_id, int index_size, int vertex_id)
+void ModuleRenderer3D::DrawIndexBuffer(uint glmode, uint index_id, uint index_size, uint vertex_id)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -248,6 +257,16 @@ void ModuleRenderer3D::DrawIndexBuffer(unsigned int glmode, int index_id, int in
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void ModuleRenderer3D::DrawTextureBuffer(uint id)
+{
+	glEnable(GL_TEXTURE_2D);
+
+	glBindTexture(GL_TEXTURE_2D, id);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
 }
 
 void ModuleRenderer3D::DrawPlane(float pos_x, float pos_y, float pos_z, int width, int height)

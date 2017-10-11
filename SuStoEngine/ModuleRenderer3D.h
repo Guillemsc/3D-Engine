@@ -21,12 +21,13 @@ public:
 
 	void OnResize(int width, int height);
 
-	int LoadBuffer(float* vertices, int size);
-	int LoadBuffer(uint* vertices, int size);
-	int LoadTextureBuffer(uint* texture, int size);
+	uint LoadBuffer(float* vertices, uint size);
+	uint LoadBuffer(uint* vertices, uint size);
+	uint LoadTextureBuffer(uint* texture, uint size, int width, int height, uint wrap_s, uint wrap_t, uint mag, uint min);
 
-	void DrawVertexBuffer(int id, int size);
-	void DrawIndexBuffer(unsigned int glmode, int index_id, int index_size, int vertex_id);
+	void DrawVertexBuffer(uint id, uint size);
+	void DrawIndexBuffer(uint glmode, uint index_id, uint index_size, uint vertex_id);
+	void DrawTextureBuffer(uint id);
 
 	void DrawPlane(float pos_x, float pos_y, float pos_z, int width, int height);
 

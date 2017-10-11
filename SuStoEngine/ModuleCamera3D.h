@@ -23,14 +23,12 @@ public:
 	void Follow(PhysBody3D* body, float min, float max, float height, float displacement);
 
 private:
-
 	void CalculateViewMatrix();
 
 public:
-
 	vec3 X, Y, Z, Position, Reference;
 
-	float camera_distance			= 0;
+	float camera_distance = 0;
 
 private:
 
