@@ -101,6 +101,10 @@ bool ModuleCamera3D::Update()
 			LookAt(vec3(0, 0, 0));
 			Reference = vec3(0, 0, 0);
 		}
+		else
+		{
+			Reference = Position;
+		}
 
 		int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
@@ -127,13 +131,12 @@ bool ModuleCamera3D::Update()
 
 			if (Y.y < 0.0f)
 			{
-				Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-				Y = cross(Z, X);
+				//Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+				//Y = cross(Z, X);
 			}
 		}
 
 		Position = Reference + Z * length(Position);
-
 	}
 
 
