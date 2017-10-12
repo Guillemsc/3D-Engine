@@ -4,6 +4,7 @@
 #include "imgui.h"
 #include "ModuleInput.h"
 #include "ModuleCamera3D.h"
+#include "ModuleRenderer3D.h"
 #include "mmgr\mmgr.h"
 #include "SDL/include/SDL.h"
 #include "imgui_docking.h"
@@ -225,71 +226,93 @@ void Configuration::Draw()
 void Configuration::OpenGLOptions()
 {
 	// Checkboxes
-	ImGui::Checkbox("GL_DEPTH_TEST", &gl_depth);		
+	if (ImGui::Checkbox("Depht test", &gl_depth))
+	{
+		App->renderer3D->SetDepthTest(gl_depth);
+	}
+	ImGui::SameLine();
+	if (ImGui::Checkbox("Color material", &gl_color_material))
+	{
+		App->renderer3D->SetColorMaterial(gl_color_material);
+	}
 	
-	ImGui::Checkbox("GL_LIGHTING", &gl_lighting);				ImGui::SameLine();
-	ImGui::Checkbox("GL_COLOR_MATERIAL", &gl_color_material);
-		// Lighting Functionalities
-		if (gl_lighting)
-		{
-			GLenum light_type = GL_AMBIENT;
-			GLenum light_num = GL_LIGHT0;
-			ImGui::Combo("Lighting types", &lighting_type, "Ambient\0Diffuse\0Specular\0", 3);
-			switch (lighting_type)
-			{
-			case 0:
-				light_type_ptr = ambient;
-				light_num = GL_LIGHT0;
-				break;
-			case 1:
-				light_type_ptr = diffuse;
-				light_num = GL_LIGHT1;
-				break;
-			case 2:
-				light_type_ptr = specular;
-				light_num = GL_LIGHT2;
-				break;
-			}
-			
-			ImGui::ColorPicker4("Ambient color##4", light_type_ptr, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview, NULL);
-			GLfloat	light_properties[] = { light_type_ptr[0], light_type_ptr[1], light_type_ptr[2], light_type_ptr[3] };
+	if (ImGui::Checkbox("Cull face", &gl_cull_face))
+	{
+		App->renderer3D->SetCullFace(gl_cull_face);
+	}
 
-			if (ImGui::Button("Submit"))
-			{
-				glLightfv(light_num, light_type, light_properties);
-				glEnable(light_num);
-			}
-			
-		}
-	
-	ImGui::Checkbox("GL_CULL_FACE", &gl_cull_face);				ImGui::SameLine();
-	ImGui::Checkbox("GL_TEXTURE_2D", &gl_texture_2d);
+	if (ImGui::Checkbox("Fill render", &fill_mode))
+	{
+		wireframe_mode = false;
+		point_mode = false;
+		App->renderer3D->SetPoligonModeFill();
+	}
+	ImGui::SameLine();
+	if (ImGui::Checkbox("Wireframe render ", &wireframe_mode))
+	{
+		fill_mode = false;
+		point_mode = false;
+		App->renderer3D->SetPoligonModeWireframe();
+	}
+	ImGui::SameLine();
+	if (ImGui::Checkbox("Point render", &point_mode))
+	{
+		fill_mode = false;
+		wireframe_mode = false;
+		App->renderer3D->SetPoligonModePoints();
+	}
 
-	ImGui::Checkbox("FILL RENDER", &fill_mode);					ImGui::SameLine();
-	ImGui::Checkbox("WIREFRAME RENDER", &wireframe_mode);		ImGui::SameLine();
-	ImGui::Checkbox("POINT RENDER", &point_mode);				
-	//---------------------------------
-
-	//---------------------------------
-	// Slider
 	if (point_mode)
 	{
 		ImGui::SliderFloat("Point Size", &point_size_slider, 0, 10);
-		glPointSize(point_size_slider);
+		App->renderer3D->SetPoligonModePoints(point_size_slider);
 	}
+	
 
-	if (gl_depth && !glIsEnabled(GL_DEPTH_TEST))
-		glEnable(GL_DEPTH_TEST);
-	else if (!gl_depth && glIsEnabled(GL_DEPTH_TEST))
-		glDisable(GL_DEPTH_TEST);
+		//// Lighting Functionalities
+		//if (1)
+		//{
+		//	GLenum light_type = GL_AMBIENT;
+		//	GLenum light_num = GL_LIGHT0;
+		//	ImGui::Combo("Lighting types", &lighting_type, "Ambient\0Diffuse\0Specular\0", 3);
+		//	switch (lighting_type)
+		//	{
+		//	case 0:
+		//		light_type_ptr = ambient;
+		//		light_num = GL_LIGHT0;
+		//		break;
+		//	case 1:
+		//		light_type_ptr = diffuse;
+		//		light_num = GL_LIGHT1;
+		//		break;
+		//	case 2:
+		//		light_type_ptr = specular;
+		//		light_num = GL_LIGHT2;
+		//		break;
+		//	}
+		//	
+		//	ImGui::ColorPicker4("Ambient color##4", light_type_ptr, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview, NULL);
+		//	GLfloat	light_properties[] = { light_type_ptr[0], light_type_ptr[1], light_type_ptr[2], light_type_ptr[3] };
 
-	if (gl_cull_face && !glIsEnabled(GL_CULL_FACE))				// https://www.khronos.org/opengl/wiki/Face_Culling
-	{
-		glCullFace(GL_FRONT); 									// void glCullFace(GLenum mode​); mode​ can be set to GL_FRONT, GL_BACK, or GL_FRONT_AND_BACK.
-		glEnable(GL_CULL_FACE);									// The latter will cull all triangles. Culling both faces will only cull triangles (since only they have faces).
-	}
-	else if (!gl_cull_face && glIsEnabled(GL_CULL_FACE))
-		glDisable(GL_CULL_FACE);
+		//	if (ImGui::Button("Submit"))
+		//	{
+		//		glLightfv(light_num, light_type, light_properties);
+		//		glEnable(light_num);
+		//	}
+		//	
+		//}
+			
+	//---------------------------------
+
+	//---------------------------------
+
+	//if (gl_cull_face && !glIsEnabled(GL_CULL_FACE))				// https://www.khronos.org/opengl/wiki/Face_Culling
+	//{
+	//	glCullFace(GL_FRONT); 									// void glCullFace(GLenum mode​); mode​ can be set to GL_FRONT, GL_BACK, or GL_FRONT_AND_BACK.
+	//	glEnable(GL_CULL_FACE);									// The latter will cull all triangles. Culling both faces will only cull triangles (since only they have faces).
+	//}
+	//else if (!gl_cull_face && glIsEnabled(GL_CULL_FACE))
+	//	glDisable(GL_CULL_FACE);
 
 	// Lighting and Color Material
 	/* _________________________________________________________________GOOD SETTINGS_________________________________________________________________
@@ -306,51 +329,46 @@ void Configuration::OpenGLOptions()
 	Set the glMaterial Emission colour to 0, 0, 0, 1
 	Set the glColor to whatever colour you want each polygon to basically appear to be.That sets the Ambient and Diffuse to the same value - which is what you generally want.
 	*/
-	if (gl_lighting && !glIsEnabled(GL_LIGHTING))				// https://www.khronos.org/opengl/wiki/How_lighting_works
-		glEnable(GL_LIGHTING);
-	else if (!gl_lighting && glIsEnabled(GL_LIGHTING))
-		glDisable(GL_LIGHTING);
+	//if (gl_color_material && !glIsEnabled(GL_COLOR_MATERIAL))	// https://www.khronos.org/opengl/wiki/How_lighting_works
+	//{
+	//	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);		// void glColorMaterial (GLenum face, GLenum mode); 
+	//	glEnable(GL_COLOR_MATERIAL);
+	//}
+	//else if (!gl_color_material && glIsEnabled(GL_COLOR_MATERIAL))
+	//	glDisable(GL_COLOR_MATERIAL);
 
-	if (gl_color_material && !glIsEnabled(GL_COLOR_MATERIAL))	// https://www.khronos.org/opengl/wiki/How_lighting_works
-	{
-		glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);		// void glColorMaterial (GLenum face, GLenum mode); 
-		glEnable(GL_COLOR_MATERIAL);
-	}
-	else if (!gl_color_material && glIsEnabled(GL_COLOR_MATERIAL))
-		glDisable(GL_COLOR_MATERIAL);
-
-	if (gl_texture_2d && !glIsEnabled(GL_TEXTURE_2D))			// https://www.khronos.org/opengl/wiki/Texture
-		glEnable(GL_TEXTURE_2D);
-	else if (!gl_texture_2d && glIsEnabled(GL_TEXTURE_2D))
-		glDisable(GL_TEXTURE_2D);
+	//if (gl_texture_2d && !glIsEnabled(GL_TEXTURE_2D))			// https://www.khronos.org/opengl/wiki/Texture
+	//	glEnable(GL_TEXTURE_2D);
+	//else if (!gl_texture_2d && glIsEnabled(GL_TEXTURE_2D))
+	//	glDisable(GL_TEXTURE_2D);
 
 	// Full 
-	if (fill_mode && poly_mode != gl_fill)					// https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glPolygonMode.xml
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);			// void glPolygonMode(GLenum face, GLenum mode);
-		poly_mode = gl_fill;								// face:	Specifies the polygons that mode applies to. Must be GL_FRONT for front-facing polygons, 	
-		wireframe_mode = false;								//			GL_BACK for back-facing polygons, or GL_FRONT_AND_BACK for front- and back-facing polygons.	
-		point_mode = false;									// mode:	Specifies how polygons will be rasterized. Accepted values are GL_POINT, GL_LINE, and GL_FILL.
-	} 														//			The initial value is GL_FILL for both front- and back-facing polygons.	
+		// https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glPolygonMode.xml
+	
+		// void glPolygonMode(GLenum face, GLenum mode);
+		// face:	Specifies the polygons that mode applies to. Must be GL_FRONT for front-facing polygons, 	
+		//			GL_BACK for back-facing polygons, or GL_FRONT_AND_BACK for front- and back-facing polygons.	
+		// mode:	Specifies how polygons will be rasterized. Accepted values are GL_POINT, GL_LINE, and GL_FILL.
+		//			The initial value is GL_FILL for both front- and back-facing polygons.	
 
-															// Wireframe											
-	if (wireframe_mode && poly_mode != gl_line)
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		poly_mode = gl_line;
-		fill_mode = false;
-		point_mode = false;
-	}
+		// Wireframe											
+	
+	
+	
+	
+	
+	
+	
 
-	// Point											
-	if (point_mode && poly_mode != gl_point)
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-		poly_mode = gl_point;
-		fill_mode = false;
-		wireframe_mode = false;
-	}
+	
+	
+	
+	
+	
+	
+	
+	
 
-	if (!point_mode && !wireframe_mode && !fill_mode)
-		fill_mode = true;
+	
+	
 }

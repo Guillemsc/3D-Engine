@@ -26,10 +26,13 @@ public:
 public:
 
 private:
+	// App
 	char  name_input_buffer[255];
 	char  organization_input_buffer[255];
 	char  version_input_buffer[255];
 	int   max_fps = 0;
+
+	// Window
 	int   window_width = 0;
 	int   window_height = 0;
 	float brightness = 0.0f;
@@ -41,6 +44,8 @@ private:
 	bool  vsync = false;
 	int   display_size_width = 0;
 	int   display_size_height = 0;
+
+	// Camera
 	float mouse_sensitivity = 0.0f;
 	float wheel_speed = 0.0f;
 	float camera_speed = 0.0f;
@@ -52,7 +57,6 @@ private:
 	// OpenGL Options
 	bool gl_depth = true;
 	bool gl_cull_face = false;
-	bool gl_lighting = false;
 	bool gl_color_material = true;
 	bool gl_texture_2d = false;
 	bool fill_mode = true;

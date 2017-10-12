@@ -22,7 +22,7 @@ public:
 	void OnResize(int width, int height);
 
 	void SetPoligonModeWireframe();
-	void SetPoligonModePoints();
+	void SetPoligonModePoints(float point_size = 4.0f);
 	void SetPoligonModeFill();
 	void SetDepthTest(bool set);
 	void SetCullFace(bool set);
@@ -65,11 +65,4 @@ public:
 	bool wireframe = false;
 	bool points = false;
 	bool fill = false;
-
-	bool depth_test = false;
-	bool cull_face = false;
-	bool lighting = false;
-	bool texture_2d = false;
-	bool color_material = false;
-
 };

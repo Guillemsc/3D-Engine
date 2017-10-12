@@ -163,13 +163,13 @@ bool ModuleRenderer3D::PostUpdate()
 	// Draw Scene
 
 	// Disable light
-	glDisable(GL_LIGHTING);
+	SetLightingState(false);
 
 	// Draw editor
 	App->editorUI->DrawEditor();
 
 	// Enable light
-	glEnable(GL_LIGHTING);
+	SetLightingState(true);
 
 	SDL_GL_SwapWindow(App->window->window);
 	return true;
@@ -205,13 +205,14 @@ void ModuleRenderer3D::SetPoligonModeWireframe()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
-void ModuleRenderer3D::SetPoligonModePoints()
+void ModuleRenderer3D::SetPoligonModePoints(float point_size)
 {
 	bool wireframe = false;
 	bool points = true;
 	bool fill = false;
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+	glPointSize(point_size);
 }
 
 void ModuleRenderer3D::SetPoligonModeFill()
@@ -225,9 +226,7 @@ void ModuleRenderer3D::SetPoligonModeFill()
 
 void ModuleRenderer3D::SetDepthTest(bool set)
 {
-	depth_test = set;
-
-	if (depth_test)
+	if (set)
 		glEnable(GL_DEPTH_TEST);
 	else
 		glDisable(GL_DEPTH_TEST);
@@ -235,9 +234,7 @@ void ModuleRenderer3D::SetDepthTest(bool set)
 
 void ModuleRenderer3D::SetCullFace(bool set)
 {
-	cull_face = set;
-
-	if (cull_face)
+	if (set)
 		glEnable(GL_CULL_FACE);
 	else
 		glDisable(GL_CULL_FACE);
@@ -245,9 +242,7 @@ void ModuleRenderer3D::SetCullFace(bool set)
 
 void ModuleRenderer3D::SetLightingState(bool set)
 {
-	lighting = set;
-
-	if (lighting)
+	if (set)
 		glEnable(GL_LIGHTING);
 	else
 		glDisable(GL_LIGHTING);
@@ -255,7 +250,7 @@ void ModuleRenderer3D::SetLightingState(bool set)
 
 void ModuleRenderer3D::SetTexture2D(bool set)
 {
-	if (texture_2d)
+	if (set)
 		glEnable(GL_TEXTURE_2D);
 	else
 		glDisable(GL_TEXTURE_2D);
@@ -263,9 +258,7 @@ void ModuleRenderer3D::SetTexture2D(bool set)
 
 void ModuleRenderer3D::SetColorMaterial(bool set)
 {
-	color_material = set;
-
-	if (color_material)
+	if (set)
 		glEnable(GL_COLOR_MATERIAL);
 	else
 		glDisable(GL_COLOR_MATERIAL);
@@ -288,27 +281,27 @@ bool ModuleRenderer3D::GetPoligonModeFill()
 
 bool ModuleRenderer3D::GetDepthTest()
 {
-	return depth_test;
+	return glIsEnabled(GL_DEPTH_TEST);
 }
 
 bool ModuleRenderer3D::GetCullFace()
 {
-	return cull_face;
+	return glIsEnabled(GL_CULL_FACE);
 }
 
 bool ModuleRenderer3D::GetLightingState()
 {
-	return lighting;
+	return glIsEnabled(GL_LIGHTING);
 }
 
 bool ModuleRenderer3D::GetTexture2D()
 {
-	return texture_2d;
+	return glIsEnabled(GL_TEXTURE_2D);
 }
 
 bool ModuleRenderer3D::GetColorMaterial()
 {
-	return color_material;
+	return glIsEnabled(GL_COLOR_MATERIAL);
 }
 
 uint ModuleRenderer3D::LoadBuffer(float* vertices, uint size)
