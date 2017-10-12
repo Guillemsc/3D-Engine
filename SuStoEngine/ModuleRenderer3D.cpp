@@ -160,7 +160,16 @@ bool ModuleRenderer3D::PostUpdate()
 	fbo_texture->Unbind();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	// Draw Scene
+
+	// Disable light
+	glDisable(GL_LIGHTING);
+
+	// Draw editor
 	App->editorUI->DrawEditor();
+
+	// Enable light
+	glEnable(GL_LIGHTING);
 
 	SDL_GL_SwapWindow(App->window->window);
 	return true;
@@ -185,6 +194,121 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
 	glLoadMatrixf(&ProjectionMatrix);
 	glMatrixMode(GL_MODELVIEW);
+}
+
+void ModuleRenderer3D::SetPoligonModeWireframe()
+{
+	bool wireframe = true;
+	bool points = false;
+	bool fill = false;
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+}
+
+void ModuleRenderer3D::SetPoligonModePoints()
+{
+	bool wireframe = false;
+	bool points = true;
+	bool fill = false;
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+}
+
+void ModuleRenderer3D::SetPoligonModeFill()
+{
+	bool wireframe = false;
+	bool points = false;
+	bool fill = true;
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
+void ModuleRenderer3D::SetDepthTest(bool set)
+{
+	depth_test = set;
+
+	if (depth_test)
+		glEnable(GL_DEPTH_TEST);
+	else
+		glDisable(GL_DEPTH_TEST);
+}
+
+void ModuleRenderer3D::SetCullFace(bool set)
+{
+	cull_face = set;
+
+	if (cull_face)
+		glEnable(GL_CULL_FACE);
+	else
+		glDisable(GL_CULL_FACE);
+}
+
+void ModuleRenderer3D::SetLightingState(bool set)
+{
+	lighting = set;
+
+	if (lighting)
+		glEnable(GL_LIGHTING);
+	else
+		glDisable(GL_LIGHTING);
+}
+
+void ModuleRenderer3D::SetTexture2D(bool set)
+{
+	if (texture_2d)
+		glEnable(GL_TEXTURE_2D);
+	else
+		glDisable(GL_TEXTURE_2D);
+}
+
+void ModuleRenderer3D::SetColorMaterial(bool set)
+{
+	color_material = set;
+
+	if (color_material)
+		glEnable(GL_COLOR_MATERIAL);
+	else
+		glDisable(GL_COLOR_MATERIAL);
+}
+
+bool ModuleRenderer3D::GetPoligonModeWireframe()
+{
+	return wireframe;
+}
+
+bool ModuleRenderer3D::GetPoligonModePoints()
+{
+	return points;
+}
+
+bool ModuleRenderer3D::GetPoligonModeFill()
+{
+	return fill;
+}
+
+bool ModuleRenderer3D::GetDepthTest()
+{
+	return depth_test;
+}
+
+bool ModuleRenderer3D::GetCullFace()
+{
+	return cull_face;
+}
+
+bool ModuleRenderer3D::GetLightingState()
+{
+	return lighting;
+}
+
+bool ModuleRenderer3D::GetTexture2D()
+{
+	return texture_2d;
+}
+
+bool ModuleRenderer3D::GetColorMaterial()
+{
+	return color_material;
 }
 
 uint ModuleRenderer3D::LoadBuffer(float* vertices, uint size)

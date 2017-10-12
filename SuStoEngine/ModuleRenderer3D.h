@@ -21,6 +21,24 @@ public:
 
 	void OnResize(int width, int height);
 
+	void SetPoligonModeWireframe();
+	void SetPoligonModePoints();
+	void SetPoligonModeFill();
+	void SetDepthTest(bool set);
+	void SetCullFace(bool set);
+	void SetLightingState(bool set);
+	void SetTexture2D(bool set);
+	void SetColorMaterial(bool set);
+
+	bool GetPoligonModeWireframe();
+	bool GetPoligonModePoints();
+	bool GetPoligonModeFill();
+	bool GetDepthTest();
+	bool GetCullFace();
+	bool GetLightingState();
+	bool GetTexture2D();
+	bool GetColorMaterial();
+
 	uint LoadBuffer(float* vertices, uint size);
 	uint LoadBuffer(uint* vertices, uint size);
 	uint LoadTextureBuffer(uint * texture, uint size, int width, int height, uint wrap_s, uint wrap_t, uint mag, uint min);
@@ -43,5 +61,15 @@ public:
 
 	FBO* fbo_texture;
 	uint texture_id;
+
+	bool wireframe = false;
+	bool points = false;
+	bool fill = false;
+
+	bool depth_test = false;
+	bool cull_face = false;
+	bool lighting = false;
+	bool texture_2d = false;
+	bool color_material = false;
 
 };
