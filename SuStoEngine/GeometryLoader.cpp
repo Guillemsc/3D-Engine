@@ -1,6 +1,7 @@
 #include "GeometryLoader.h"
 #include "App.h"
 #include "ModuleRenderer3D.h"
+#include "Functions.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
@@ -54,10 +55,21 @@ bool GeometryLoader::CleanUp()
 {
 	bool ret = true;
 
+	UnloadAllFiles();
+
 	// detach log stream
 	aiDetachAllLogStreams();
 
 	return ret;
+}
+
+void GeometryLoader::OnLoadFile(const char* file_path, const char* file_extension)
+{
+	if (TextCmp("fbx", file_extension))
+	{
+		UnloadAllFiles();
+		LoadFile(file_path);
+	}
 }
 
 bool GeometryLoader::LoadFile(const char * full_path)
@@ -121,6 +133,29 @@ bool GeometryLoader::LoadFile(const char * full_path)
 	return ret;
 }
 
+void GeometryLoader::UnloadFile(Mesh mesh)
+{
+	for (vector<Mesh>::iterator it = meshes.begin(); it != meshes.end(); it++)
+	{
+		if ((*it) == mesh)
+		{
+			(*it).UnloadFromMemory();
+			meshes.erase(it);
+			break;
+		}
+	}
+}
+
+void GeometryLoader::UnloadAllFiles()
+{
+	for (vector<Mesh>::iterator it = meshes.begin(); it != meshes.end();)
+	{
+		(*it).UnloadFromMemory();
+		it = meshes.erase(it);
+	
+	}
+}
+
 Mesh::Mesh(uint _id_vertices, uint _num_indices, uint * _indices, uint _id_indices, uint _num_vertices, float * _vertices)
 {
 	id_vertices = _id_vertices;
@@ -138,6 +173,21 @@ void Mesh::LoadToMemory()
 
 	if(id_indices == 0)
 		id_indices = App->renderer3D->LoadBuffer(indices, num_indices);
+}
+
+void Mesh::UnloadFromMemory()
+{
+	if (id_vertices != 0)
+	{
+		App->renderer3D->UnloadBuffer(id_vertices, num_vertices * 3);
+		id_vertices = 0;
+	}
+
+	if (id_indices != 0)
+	{
+		App->renderer3D->UnloadBuffer(id_indices, num_indices);
+		id_indices = 0;
+	}
 }
 
 void Mesh::Draw()

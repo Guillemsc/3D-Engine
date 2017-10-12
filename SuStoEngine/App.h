@@ -42,6 +42,8 @@ public:
 	void SaveConfig(Module* module = nullptr);
 	JSON_Doc* GetConfig();
 
+	void LoadFile(const char* filename);
+
 	void EndApp();
 	float GetDT();
 	void SetAppName(const char* name);
