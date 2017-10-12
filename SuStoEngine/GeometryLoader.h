@@ -23,13 +23,15 @@ struct Mesh
 	void UnloadFromMemory();
 	void Draw();
 
-	uint   id_vertices = 0; // id in VRAM
-	uint   num_indices = 0;
-	uint*  indices = nullptr;
+	void CleanUp();
 
-	uint   id_indices = 0; // id in VRAM
+	uint   id_vertices = 0; // id in VRAM
 	uint   num_vertices = 0;
 	float* vertices = nullptr;
+
+	uint   id_indices = 0; // id in VRAM
+	uint   num_indices = 0;
+	uint*  indices = nullptr;
 };
 
 class GeometryLoader : public Module
@@ -45,11 +47,11 @@ public:
 	void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension);
 
 	bool LoadFile(const char* full_path, bool as_new_gameobject = false);
-	void UnloadFile(Mesh mesh);
+	void UnloadFile(Mesh* mesh);
 	void UnloadAllFiles();
 
 private:
-	vector<Mesh> meshes;
+	vector<Mesh*> meshes;
 public:
 
 };

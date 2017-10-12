@@ -16,7 +16,7 @@ public:
 	void Update();
 	void CleanUp();
 
-	void SetMesh(Mesh mesh);
+	void SetMesh(Mesh* mesh);
 
 	void InspectorDraw(std::vector<Component*> components);
 
@@ -26,7 +26,7 @@ private:
 
 public:
 private:
-	Mesh mesh;
+	Mesh* mesh = nullptr;
 	bool has_mesh = false;;
 
 };

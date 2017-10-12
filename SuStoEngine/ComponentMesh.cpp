@@ -20,7 +20,7 @@ void ComponentMesh::Start()
 void ComponentMesh::Update()
 {
 	if (has_mesh);
-		mesh.Draw();
+		mesh->Draw();
 }
 
 void ComponentMesh::CleanUp()
@@ -29,7 +29,7 @@ void ComponentMesh::CleanUp()
 		App->geometry->UnloadFile(mesh);
 }
 
-void ComponentMesh::SetMesh(Mesh _mesh)
+void ComponentMesh::SetMesh(Mesh* _mesh)
 {
 	mesh = _mesh;
 	has_mesh = true;
@@ -38,6 +38,17 @@ void ComponentMesh::SetMesh(Mesh _mesh)
 void ComponentMesh::InspectorDraw(std::vector<Component*> components)
 {
 	ImGui::Text(GetName());
+
+	if (!has_mesh)
+	{
+		ImGui::Text("No mesh loaded");
+		return;
+	}
+
+	ImGui::Text("Id vertices: %d", mesh->id_vertices);
+	ImGui::Text("Num vertices: %d", mesh->num_vertices);
+	ImGui::Text("Id indices %d:", mesh->id_indices);
+	ImGui::Text("Num indices: %d", mesh->num_indices);
 }
 
 void ComponentMesh::OnEnable()

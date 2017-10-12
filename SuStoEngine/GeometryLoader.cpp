@@ -35,7 +35,9 @@ bool GeometryLoader::Start()
 	bool ret = true;
 
 	// Stream log messages to Debug window
-	
+	struct aiLogStream stream;
+	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
+	aiAttachLogStream(&stream);
 
 	LoadFile("BakerHouse.FBX", true);
 
@@ -46,9 +48,9 @@ bool GeometryLoader::Update()
 {
 	bool ret = true;
 
-	for(vector<Mesh>::iterator it = meshes.begin(); it != meshes.end(); it++)
+	for(vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end(); it++)
 	{
-		(*it).Draw();
+		(*it)->Draw();
 	}
 
 	return ret;
@@ -79,34 +81,29 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 {
 	bool ret = false;
 
-	struct aiLogStream stream;
-	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
-	aiAttachLogStream(&stream);
-
 	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		LOG_OUTPUT("LOADING %d MESHES", scene->mNumMeshes);
-		LOG_OUTPUT(stream.user)
-		// Use scene->mNumMeshes to iterate on scene->mMeshes array
+
 		for (int i = 0; i < scene->mNumMeshes; ++i)
 		{
-			Mesh new_mesh;
+			Mesh* new_mesh = new Mesh();
 
 			// copy vertices
 			aiMesh* current_mesh = scene->mMeshes[i];
 
-			new_mesh.num_vertices = current_mesh->mNumVertices;
-			new_mesh.vertices = new float[new_mesh.num_vertices * 3];
-			memcpy(new_mesh.vertices, current_mesh->mVertices, sizeof(float) * new_mesh.num_vertices * 3);
+			new_mesh->num_vertices = current_mesh->mNumVertices;
+			new_mesh->vertices = new float[new_mesh->num_vertices * 3];
+			memcpy(new_mesh->vertices, current_mesh->mVertices, sizeof(float) * new_mesh->num_vertices * 3);
 
-			LOG_OUTPUT("New mesh with %d vertices", new_mesh.num_vertices);
+			LOG_OUTPUT("New mesh with %d vertices", new_mesh->num_vertices);
 
 			// copy faces
 			if (current_mesh->HasFaces())
 			{
-				new_mesh.num_indices = current_mesh->mNumFaces * 3;
-				new_mesh.indices = new uint[new_mesh.num_indices]; // assume each face is a triangle
+				new_mesh->num_indices = current_mesh->mNumFaces * 3;
+				new_mesh->indices = new uint[new_mesh->num_indices]; // assume each face is a triangle
 
 				for (uint i = 0; i < current_mesh->mNumFaces; ++i)
 				{
@@ -116,13 +113,13 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 						assert(current_mesh->mFaces[i].mNumIndices != 3, "WARNING, geometry face with != 3 indices!");
 					}
 					else
-						memcpy(&new_mesh.indices[i * 3], current_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
+						memcpy(&new_mesh->indices[i * 3], current_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
 				}
 			}
-			LOG_OUTPUT("New mesh with %d indices", new_mesh.num_indices);
+			LOG_OUTPUT("New mesh with %d indices", new_mesh->num_indices);
 
 			// Add mesh to vector<Mesh> meshes
-			new_mesh.LoadToMemory();
+			new_mesh->LoadToMemory();
 
 			meshes.push_back(new_mesh);
 
@@ -148,17 +145,13 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 	return ret;
 }
 
-void GeometryLoader::UnloadFile(Mesh mesh)
+void GeometryLoader::UnloadFile(Mesh* mesh)
 {
-	for (vector<Mesh>::iterator it = meshes.begin(); it != meshes.end(); it++)
+	for (vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end(); it++)
 	{
 		if ((*it) == mesh)
 		{
-			(*it).UnloadFromMemory();
-
-			delete (*it).vertices;
-			delete (*it).indices;
-
+			(*it)->CleanUp();
 			meshes.erase(it);
 			break;
 		}
@@ -167,9 +160,9 @@ void GeometryLoader::UnloadFile(Mesh mesh)
 
 void GeometryLoader::UnloadAllFiles()
 {
-	for (vector<Mesh>::iterator it = meshes.begin(); it != meshes.end();)
+	for (vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end();)
 	{
-		(*it).UnloadFromMemory();
+		(*it)->CleanUp();;
 		it = meshes.erase(it);
 	
 	}
@@ -213,4 +206,23 @@ void Mesh::Draw()
 {
 	if (id_indices != 0 && id_vertices != 0)
 		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, id_indices, num_indices, id_vertices);
+}
+
+void Mesh::CleanUp()
+{
+	UnloadFromMemory();
+
+	if(vertices != nullptr)
+		delete[] vertices;
+
+	if(indices != nullptr)
+		delete[] indices;
+
+	id_vertices = 0; 
+	num_indices = 0;
+	indices = nullptr;
+
+	id_indices = 0; 
+	num_vertices = 0;
+	vertices = nullptr;
 }
