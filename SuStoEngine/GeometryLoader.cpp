@@ -31,9 +31,7 @@ bool GeometryLoader::Start()
 	bool ret = true;
 
 	// Stream log messages to Debug window
-	struct aiLogStream stream;
-	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
-	aiAttachLogStream(&stream);
+	
 
 	LoadFile("BakerHouse.FBX");
 
@@ -66,11 +64,15 @@ bool GeometryLoader::LoadFile(const char * full_path)
 {
 	bool ret = false;
 
+	struct aiLogStream stream;
+	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
+	aiAttachLogStream(&stream);
+
 	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		LOG_OUTPUT("LOADING %d MESHES", scene->mNumMeshes);
-
+		LOG_OUTPUT(stream.user)
 		// Use scene->mNumMeshes to iterate on scene->mMeshes array
 		for (int i = 0; i < scene->mNumMeshes; ++i)
 		{

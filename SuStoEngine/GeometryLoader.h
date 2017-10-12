@@ -35,7 +35,6 @@ public:
 
 private:
 	vector<Mesh> meshes;
-
 public:
 
 };

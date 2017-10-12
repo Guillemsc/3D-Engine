@@ -215,6 +215,18 @@ uint ModuleRenderer3D::LoadTextureBuffer(uint* texture, uint size, int width, in
 {
 	uint id = 0;
 
+	GLubyte checkImage[64][64][4];
+
+	for (int i = 0; i < 64; i++) {
+		for (int j = 0; j < 64; j++) {
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkImage[i][j][0] = (GLubyte)c;
+			checkImage[i][j][1] = (GLubyte)c;
+			checkImage[i][j][2] = (GLubyte)c;
+			checkImage[i][j][3] = (GLubyte)255;
+		}
+	}
+
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glGenTextures(size, (GLuint*)&(id));
 	glBindTexture(GL_TEXTURE_2D, id);

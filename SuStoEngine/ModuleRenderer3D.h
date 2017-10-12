@@ -23,7 +23,7 @@ public:
 
 	uint LoadBuffer(float* vertices, uint size);
 	uint LoadBuffer(uint* vertices, uint size);
-	uint LoadTextureBuffer(uint* texture, uint size, int width, int height, uint wrap_s, uint wrap_t, uint mag, uint min);
+	uint LoadTextureBuffer(uint * texture, uint size, int width, int height, uint wrap_s, uint wrap_t, uint mag, uint min);
 
 	void DrawVertexBuffer(uint id, uint size);
 	void DrawIndexBuffer(uint glmode, uint index_id, uint index_size, uint vertex_id);
