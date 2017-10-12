@@ -9,7 +9,7 @@
 #include "Cursor.h"
 #include "EditorUI.h"
 
-#define DRAG_BUTTON_SIZE 30
+#define DRAG_BUTTON_SIZE 23
 
 // Window drag
 // Tab bar

@@ -55,9 +55,11 @@ bool ModuleCamera3D::Start()
 // -----------------------------------------------------------------
 bool ModuleCamera3D::CleanUp()
 {
+	bool ret = true;
+
 	LOG_OUTPUT("Cleaning camera");
 
-	return true;
+	return ret;
 }
 
 // -----------------------------------------------------------------
