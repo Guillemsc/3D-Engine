@@ -41,6 +41,9 @@ private:
 	bool  vsync = false;
 	int   display_size_width = 0;
 	int   display_size_height = 0;
+	float mouse_sensitivity = 0.0f;
+	float wheel_speed = 0.0f;
+	float camera_speed = 0.0f;
 
 	// Rebind
 	string console_binding;

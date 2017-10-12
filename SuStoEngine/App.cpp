@@ -23,16 +23,16 @@
 //- Finish configuration input key binding
 //- Make render pipeline 
 //- Improve configuration render
-//- Drag and drop fbx file
 //- Drag and drop texture
 //- Automatic zoom and focus on dragged fbx
 //- Mesh information on inspector
 //- Texutre informationo on inspector
-//- Unload meshes whith another drag and drop
 
 //DONE
 //- Mouse zoom with wheel
 //- Improve camera orbit(max rotation up and down does not work)
+//- Drag and drop fbx file
+//- Unload meshes whith another drag and drop
 
 
 /*DELIVERY

@@ -15,6 +15,17 @@ public:
 	bool Update();
 	bool CleanUp();
 
+	void OnLoadConfig(JSON_Doc* config);
+	void OnSaveConfig(JSON_Doc* config);
+
+	void SetMouseSensitivity(float set);
+	void SetWheelSpeed(float set);
+	void SetCameraSpeed(float set);
+
+	float GetMouseSensitivity();
+	float GetWheelSpeed();
+	float GetCameraSpeed();
+
 	void Focus(vec3 focus, float distance);
 
 	float* GetViewMatrix();

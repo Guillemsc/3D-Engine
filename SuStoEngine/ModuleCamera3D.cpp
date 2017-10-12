@@ -7,6 +7,7 @@
 #include "ModuleWindow.h"
 #include "Cursor.h"
 #include "imgui.h"
+#include "JSONLoader.h"
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
@@ -47,10 +48,6 @@ bool ModuleCamera3D::Start()
 
 	LOG_OUTPUT("Setting up the camera");
 
-	camera_speed = 20.0f;
-	wheel_speed = 5.0f;
-	mouse_sensitivity = 0.25f;
-
 	return ret;
 }
 
@@ -62,6 +59,50 @@ bool ModuleCamera3D::CleanUp()
 	LOG_OUTPUT("Cleaning camera");
 
 	return ret;
+}
+
+void ModuleCamera3D::OnLoadConfig(JSON_Doc * config)
+{
+	mouse_sensitivity = config->GetNumber("camera.mouse_sensitivity", 0.25f);
+	wheel_speed = config->GetNumber("camera.wheel_speed", 5.0f);
+	camera_speed = config->GetNumber("camera.camera_speed", 20.0f);
+}
+
+void ModuleCamera3D::OnSaveConfig(JSON_Doc * config)
+{
+	config->SetNumber("camera.mouse_sensitivity", mouse_sensitivity);
+	config->SetNumber("camera.wheel_speed", wheel_speed);
+	config->SetNumber("camera.camera_speed", camera_speed);
+}
+
+void ModuleCamera3D::SetMouseSensitivity(float set)
+{
+	mouse_sensitivity = set;
+}
+
+void ModuleCamera3D::SetWheelSpeed(float set)
+{
+	wheel_speed = set;
+}
+
+void ModuleCamera3D::SetCameraSpeed(float set)
+{
+	camera_speed = set;
+}
+
+float ModuleCamera3D::GetMouseSensitivity()
+{
+	return mouse_sensitivity;
+}
+
+float ModuleCamera3D::GetWheelSpeed()
+{
+	return wheel_speed;
+}
+
+float ModuleCamera3D::GetCameraSpeed()
+{
+	return camera_speed;
 }
 
 // -----------------------------------------------------------------

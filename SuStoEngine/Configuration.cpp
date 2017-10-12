@@ -3,6 +3,7 @@
 #include "ModuleWindow.h"
 #include "imgui.h"
 #include "ModuleInput.h"
+#include "ModuleCamera3D.h"
 #include "mmgr\mmgr.h"
 #include "SDL/include/SDL.h"
 #include "imgui_docking.h"
@@ -34,6 +35,9 @@ void Configuration::Start()
 	vsync = App->window->GetVsync();
 	App->window->GetWindowSize(display_size_width, display_size_height);
 	console_binding = App->input->GetKeyBinding("console");
+	mouse_sensitivity = App->camera->GetMouseSensitivity();
+	wheel_speed = App->camera->GetWheelSpeed();
+	camera_speed = App->camera->GetCameraSpeed();
 }
 
 void Configuration::Draw()
@@ -148,7 +152,7 @@ void Configuration::Draw()
 		}
 
 		// ---------------------------------------------------------------------
-		// Renderer -----------------------------------------------------------------
+		// Renderer ------------------------------------------------------------
 		// ---------------------------------------------------------------------
 		if (ImGui::CollapsingHeader("Render", ImGuiTreeNodeFlags_DefaultOpen))
 		{
@@ -156,7 +160,7 @@ void Configuration::Draw()
 		}
 
 		// ---------------------------------------------------------------------
-		// Input -----------------------------------------------------------------
+		// Input ---------------------------------------------------------------
 		// ---------------------------------------------------------------------
 		if (ImGui::CollapsingHeader("Input", ImGuiTreeNodeFlags_DefaultOpen))
 		{
@@ -188,6 +192,30 @@ void Configuration::Draw()
 			// Configuration
 
 			// Profiler
+		}
+
+		// ---------------------------------------------------------------------
+		// Camera --------------------------------------------------------------
+		// ---------------------------------------------------------------------
+		if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			if (ImGui::SliderFloat("Mouse sensitivity", &mouse_sensitivity, 0.01f, 1))
+			{
+				App->camera->SetMouseSensitivity(mouse_sensitivity);
+				App->SaveConfig(App->camera);
+			}
+
+			if (ImGui::SliderFloat("Wheel speed", &wheel_speed, 0.01f, 15))
+			{
+				App->camera->SetWheelSpeed(wheel_speed);
+				App->SaveConfig(App->camera);
+			}
+
+			if (ImGui::SliderFloat("Camera speed", &camera_speed, 0.01f, 100))
+			{
+				App->camera->SetCameraSpeed(camera_speed);
+				App->SaveConfig(App->camera);
+			}
 		}
 	}
 
