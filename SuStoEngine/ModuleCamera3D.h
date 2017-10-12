@@ -15,6 +15,8 @@ public:
 	bool Update();
 	bool CleanUp();
 
+	void Focus(vec3 focus, float distance);
+
 	float* GetViewMatrix();
 
 private:

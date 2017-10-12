@@ -24,6 +24,8 @@ ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 
 	// Reference point in which is rotating from
 	Reference = vec3(0.0f, 0.0f, 0.0f);
+
+	Focus(vec3(0.0f, 0.0f, 0.0f), 10);
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -125,6 +127,11 @@ bool ModuleCamera3D::Update()
 		{
 			mouse_movement = false;
 		}
+	}
+
+	if (App->input->GetKeyDown("p"))
+	{
+		Focus(vec3(0, 0, 0), 10);
 	}
 
 	// Recalculate matrix -------------
@@ -233,6 +240,13 @@ void ModuleCamera3D::MoveDown(float speed)
 	newPos.y -= speed;
 	Position += newPos;
 	Reference += newPos;
+}
+
+void ModuleCamera3D::Focus(vec3 focus, float distance)
+{
+	Reference = focus;
+
+	Position = Reference + Z * distance;
 }
 
 void ModuleCamera3D::Orbit(vec3 orbit_center, float motion_x, float motion_y)

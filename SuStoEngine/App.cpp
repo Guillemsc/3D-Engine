@@ -18,7 +18,6 @@
 #include "mmgr\mmgr.h"
 
 //TODO
-//- Improve camera orbit(max rotation up and down does not work)
 //- Camera focus object with f key
 //- Log geometry on console
 //- Finish configuration input key binding
@@ -33,6 +32,7 @@
 
 //DONE
 //- Mouse zoom with wheel
+//- Improve camera orbit(max rotation up and down does not work)
 
 
 /*DELIVERY
