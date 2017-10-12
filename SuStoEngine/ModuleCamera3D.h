@@ -15,9 +15,6 @@ public:
 	bool Update();
 	bool CleanUp();
 
-	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
-	void LookAt(const vec3 &Spot);
-	void Move(const vec3 &Movement);
 	float* GetViewMatrix();
 
 private:
@@ -32,6 +29,10 @@ private:
 
 	void Orbit(vec3 orbit_center, float motion_x, float motion_y);
 	void Rotate(float motion_x, float motion_y);
+
+	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
+	void LookAt(const vec3 &Spot);
+	void Move(const vec3 &Movement);
 
 	bool IsMouseInsideWindow() const;
 

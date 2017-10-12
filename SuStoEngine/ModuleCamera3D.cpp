@@ -76,23 +76,6 @@ bool ModuleCamera3D::Update()
 	if (App->input->GetKeyRepeat(SDL_SCANCODE_F))
 		MoveDown(speed);
 
-	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
-	{
-		App->window->GetCursor()->Hand();
-
-		if (App->input->GetKeyRepeat(SDL_SCANCODE_W))
-			MoveFront(speed);
-
-		if (App->input->GetKeyRepeat(SDL_SCANCODE_S))
-			MoveBack(speed);
-
-		if (App->input->GetKeyRepeat(SDL_SCANCODE_A))
-			MoveLeft(speed);
-
-		if (App->input->GetKeyRepeat(SDL_SCANCODE_D))
-			MoveRight(speed);
-	}
-
 	if (IsMouseInsideWindow())
 	{
 		mouse_movement = true;
@@ -111,6 +94,20 @@ bool ModuleCamera3D::Update()
 		}
 		else if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 		{
+			App->window->GetCursor()->Hand();
+
+			if (App->input->GetKeyRepeat(SDL_SCANCODE_W))
+				MoveFront(speed);
+
+			if (App->input->GetKeyRepeat(SDL_SCANCODE_S))
+				MoveBack(speed);
+
+			if (App->input->GetKeyRepeat(SDL_SCANCODE_A))
+				MoveLeft(speed);
+
+			if (App->input->GetKeyRepeat(SDL_SCANCODE_D))
+				MoveRight(speed);
+
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_LALT) || App->input->GetKeyRepeat(SDL_SCANCODE_RALT))
 			{
 				Orbit(vec3(0, 0, 0), App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
