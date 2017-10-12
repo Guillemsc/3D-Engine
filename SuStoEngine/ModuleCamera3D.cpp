@@ -126,7 +126,11 @@ bool ModuleCamera3D::Update()
 	}
 
 	// Recalculate matrix -------------
+	//LOG_OUTPUT("X:%f, %f, %f  Y:%f, %f, %f   Z:%f, %f, %f ", X.x, X.y, X.z, Y.x, Y.y, Y.z, Z.x, Z.y, Z.z);
+
+	LOG_OUTPUT("5. %f %f %f", X.x, X.y, X.z);
 	CalculateViewMatrix();
+	LOG_OUTPUT("6. %f %f %f", X.x, X.y, X.z);
 
 	return ret;
 }
@@ -235,18 +239,18 @@ void ModuleCamera3D::MoveDown(float speed)
 
 void ModuleCamera3D::Orbit(vec3 orbit_center, float motion_x, float motion_y)
 {
-	LookAt(vec3(0, 0, 0));
-	orbit_center;
+	Reference = orbit_center;
 
 	int dx = -motion_x;
 	int dy = -motion_y;
 
-	Position -= orbit_center;
+	Position -= Reference;
 
 	if (dx != 0)
 	{
 		float DeltaX = (float)dx * mouse_sensitivity;
-
+		
+		// Rotate arround the y axis
 		X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
 		Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
 		Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
@@ -256,27 +260,22 @@ void ModuleCamera3D::Orbit(vec3 orbit_center, float motion_x, float motion_y)
 	{
 		float DeltaY = (float)dy * mouse_sensitivity;
 
+		// Rotate arround the X direction
 		Y = rotate(Y, DeltaY, X);
 		Z = rotate(Z, DeltaY, X);
-
-		if (Y.y < 0.0f)
-		{
-			//Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-			//Y = cross(Z, X);
-		}
 	}
 
-	Position = orbit_center + Z * length(Position);
+	Position = Reference + Z * length(Position);
 }
 
 void ModuleCamera3D::Rotate(float motion_x, float motion_y)
 {
+	Reference = Position;
+
 	int dx = -motion_x;
 	int dy = -motion_y;
 
-	vec3 ref = Position;
-
-	Position -= ref;
+	Position -= Reference;
 
 	if (dx != 0)
 	{
@@ -295,7 +294,7 @@ void ModuleCamera3D::Rotate(float motion_x, float motion_y)
 		Z = rotate(Z, DeltaY, X);
 	}
 
-	Position = ref + Z * length(Position);
+	Position = Reference + Z * length(Position);
 }
 
 bool ModuleCamera3D::IsMouseInsideWindow() const

@@ -120,6 +120,7 @@ bool ModuleInput::PreUpdate()
 	mouse_x /= SCREEN_SIZE;
 	mouse_y /= SCREEN_SIZE;
 	mouse_wheel = 0;
+	mouse_x_motion = mouse_y_motion = 0;
 
 	for (int i = 0; i < 5; ++i)
 	{
@@ -138,8 +139,6 @@ bool ModuleInput::PreUpdate()
 				mouse_buttons[i] = KEY_IDLE;
 		}
 	}
-
- 	mouse_x_motion = mouse_y_motion = 0;
 	
 	bool quit = false;
 	SDL_Event e;
