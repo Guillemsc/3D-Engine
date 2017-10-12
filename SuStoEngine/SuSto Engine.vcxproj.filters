@@ -638,7 +638,9 @@
     <ClCompile Include="ComponentMesh.cpp">
       <Filter>Sources\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentTexture.cpp" />
+    <ClCompile Include="ComponentTexture.cpp">
+      <Filter>Sources\GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">

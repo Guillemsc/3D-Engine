@@ -34,7 +34,7 @@ bool TextureLoader::Start()
 {
 	bool ret = true;
 
-	LoadTexture("Baker_house.png");
+	//LoadTexture("Baker_house.png");
 
 	return ret;
 }
