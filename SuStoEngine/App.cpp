@@ -68,7 +68,8 @@ applying transformations. It should only need to load one texture at a time.
 	5.a
 	5.b
 	5.c
-	6.
+	5.d
+	
 
 */
 

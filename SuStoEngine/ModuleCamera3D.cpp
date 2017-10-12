@@ -74,11 +74,7 @@ bool ModuleCamera3D::Update()
 	if (App->input->GetKeyRepeat(SDL_SCANCODE_LSHIFT))
 		speed = camera_speed/2 * App->GetDT();
 
-	if (App->input->GetKeyRepeat(SDL_SCANCODE_R))
-		MoveUp(speed);
-
-	if (App->input->GetKeyRepeat(SDL_SCANCODE_F))
-		MoveDown(speed);
+	
 
 	if (IsMouseInsideWindow())
 	{
@@ -99,6 +95,12 @@ bool ModuleCamera3D::Update()
 		else if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 		{
 			App->window->GetCursor()->Hand();
+
+			if (App->input->GetKeyRepeat(SDL_SCANCODE_Z))
+				MoveUp(speed);
+
+			if (App->input->GetKeyRepeat(SDL_SCANCODE_X))
+				MoveDown(speed);
 
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_W))
 				MoveFront(speed);
@@ -129,7 +131,7 @@ bool ModuleCamera3D::Update()
 		}
 	}
 
-	if (App->input->GetKeyDown("p"))
+	if (App->input->GetKeyDown("f"))
 	{
 		Focus(vec3(0, 0, 0), 10);
 	}
