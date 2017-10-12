@@ -57,6 +57,8 @@ bool GeometryLoader::CleanUp()
 {
 	bool ret = true;
 
+	UnloadAllFiles();
+
 	// detach log stream
 	aiDetachAllLogStreams();
 
