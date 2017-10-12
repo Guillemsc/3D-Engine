@@ -126,11 +126,7 @@ bool ModuleCamera3D::Update()
 	}
 
 	// Recalculate matrix -------------
-	//LOG_OUTPUT("X:%f, %f, %f  Y:%f, %f, %f   Z:%f, %f, %f ", X.x, X.y, X.z, Y.x, Y.y, Y.z, Z.x, Z.y, Z.z);
-
-	LOG_OUTPUT("5. %f %f %f", X.x, X.y, X.z);
 	CalculateViewMatrix();
-	LOG_OUTPUT("6. %f %f %f", X.x, X.y, X.z);
 
 	return ret;
 }
