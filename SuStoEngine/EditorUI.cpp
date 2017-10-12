@@ -145,6 +145,17 @@ bool EditorUI::Update()
 
 		if (ImGui::BeginMenu("Component"))
 		{
+			if (App->gameobj->GetSelectedGameObjects().size() > 0)
+			{
+				vector<GameObject*> selected = App->gameobj->GetSelectedGameObjects();
+
+				if (ImGui::MenuItem("Add Primitive"))
+					selected[0]->AddComponent(PRIMITIVE);
+				if (ImGui::MenuItem("Add Texture"))
+					selected[0]->AddComponent(TEXTURE);
+				if (ImGui::MenuItem("Add Mesh"))
+					selected[0]->AddComponent(TEXTURE);
+			}
 			ImGui::EndMenu();
 		}
 

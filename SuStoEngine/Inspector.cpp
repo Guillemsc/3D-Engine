@@ -27,6 +27,20 @@ void Inspector::Draw()
 
 	if (selected.size() >= 1)
 	{
+		ImGui::BeginMenuBar();
+		if (ImGui::BeginMenu("Add Component"))
+		{
+			if (ImGui::MenuItem("Add Primitive"))
+				selected[0]->AddComponent(PRIMITIVE);
+			if (ImGui::MenuItem("Add Texture"))
+				selected[0]->AddComponent(TEXTURE);
+			if (ImGui::MenuItem("Add Mesh"))
+				selected[0]->AddComponent(TEXTURE);
+
+			ImGui::EndMenu();
+		}
+		ImGui::EndMenuBar();
+
 		// Text rename
 		char name[25];
 		sprintf_s(name, 25, selected[0]->GetName());
