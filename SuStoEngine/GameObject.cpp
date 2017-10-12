@@ -5,6 +5,7 @@
 #include "ComponentPrimitive.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
+#include "ComponentTexture.h"
 #include "ModuleGameObject.h"
 #include "Inspector.h"
 
@@ -89,7 +90,11 @@ void GameObject::AddComponent(ComponentType type)
 			ret = new ComponentPrimitive(this);
 		}
 		break;
-
+		case TEXTURE:
+		{
+			ret = new ComponentTexture(this);
+		}
+		break;
 	default:
 		break;
 	}

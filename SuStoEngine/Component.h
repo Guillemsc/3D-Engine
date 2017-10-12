@@ -11,6 +11,7 @@ enum ComponentType
 	TRANSFORM,
 	PRIMITIVE,
 	MESH,
+	TEXTURE
 };
 
 class Component
