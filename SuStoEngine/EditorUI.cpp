@@ -122,6 +122,9 @@ bool EditorUI::Update()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::MenuItem("Open in Explorer", ""))
+				App->GoToFolder(App->GetBasePath());
+
 			if (ImGui::MenuItem("Quit", "Alt+F4")) 
 				App->EndApp(); 
 

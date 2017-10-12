@@ -48,4 +48,6 @@ bool PointInRect(float2 point_xy, float4 rect_xywh);
 // Returns the file extension without the "."
 std::string GetFileExtension(const char* file_name);
 
+std::string GetFileName(const char* file_path);
+
 #endif //__FUNCTIONS_H__

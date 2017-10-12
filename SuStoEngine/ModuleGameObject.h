@@ -20,6 +20,7 @@ public:
 
 	GameObject* Create();
 	void Destroy(GameObject* go);
+	void DestroyAllGameObjects();
 
 	vector<GameObject*> GetListGameObjects();
 

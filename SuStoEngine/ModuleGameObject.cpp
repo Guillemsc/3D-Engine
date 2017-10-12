@@ -58,7 +58,6 @@ bool ModuleGameObject::CleanUp()
 	{
 		Destroy((*it));
 	}
-	game_objects.clear();
 
 	DestroyGameObjects();
 
@@ -78,6 +77,14 @@ GameObject * ModuleGameObject::Create()
 void ModuleGameObject::Destroy(GameObject * go)
 {
 	to_delete.push_back(go);
+}
+
+void ModuleGameObject::DestroyAllGameObjects()
+{
+	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
+	{
+		Destroy((*it));
+	}
 }
 
 vector<GameObject*> ModuleGameObject::GetListGameObjects()

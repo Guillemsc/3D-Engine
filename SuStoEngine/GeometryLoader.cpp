@@ -2,6 +2,9 @@
 #include "App.h"
 #include "ModuleRenderer3D.h"
 #include "Functions.h"
+#include "GameObject.h"
+#include "ModuleGameObject.h"
+#include "ComponentMesh.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
@@ -34,7 +37,7 @@ bool GeometryLoader::Start()
 	// Stream log messages to Debug window
 	
 
-	LoadFile("BakerHouse.FBX");
+	LoadFile("BakerHouse.FBX", true);
 
 	return ret;
 }
@@ -63,16 +66,16 @@ bool GeometryLoader::CleanUp()
 	return ret;
 }
 
-void GeometryLoader::OnLoadFile(const char* file_path, const char* file_extension)
+void GeometryLoader::OnLoadFile(const char* file_path, const char* file_name, const char* file_extension)
 {
 	if (TextCmp("fbx", file_extension))
 	{
-		UnloadAllFiles();
-		LoadFile(file_path);
+		App->gameobj->DestroyAllGameObjects();
+		LoadFile(file_path, true);
 	}
 }
 
-bool GeometryLoader::LoadFile(const char * full_path)
+bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 {
 	bool ret = false;
 
@@ -122,6 +125,18 @@ bool GeometryLoader::LoadFile(const char * full_path)
 			new_mesh.LoadToMemory();
 
 			meshes.push_back(new_mesh);
+
+			// Create GameObjects
+			if (as_new_gameobject)
+			{
+				string name = GetFileName(full_path); name += "_"; name += std::to_string(i);
+
+				GameObject* go = App->gameobj->Create();
+				go->SetName(name.c_str());
+				go->AddComponent(MESH);
+				ComponentMesh* component = (ComponentMesh*)go->FindComponentByType(MESH);
+				component->SetMesh(new_mesh);
+			}
 		}
 
 		aiReleaseImport(scene);
@@ -140,6 +155,10 @@ void GeometryLoader::UnloadFile(Mesh mesh)
 		if ((*it) == mesh)
 		{
 			(*it).UnloadFromMemory();
+
+			delete (*it).vertices;
+			delete (*it).indices;
+
 			meshes.erase(it);
 			break;
 		}

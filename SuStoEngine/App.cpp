@@ -324,13 +324,14 @@ JSON_Doc* Application::GetConfig()
 	return config;
 }
 
-void Application::LoadFile(const char * filename)
+void Application::LoadFile(const char * filepath)
 {
-	string extension = GetFileExtension(filename);
+	string name = GetFileName(filepath);
+	string extension = GetFileExtension(name.c_str());
 
 	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
-		(*it)->OnLoadFile(filename, extension.c_str());
+		(*it)->OnLoadFile(filepath, name.c_str(), extension.c_str());
 	}
 }
 
@@ -405,6 +406,11 @@ SDL_version Application::GetSDLVersion()
 	return version;
 }
 
+const char * Application::GetBasePath()
+{
+	return SDL_GetBasePath();
+}
+
 void Application::SetDebugMode(bool set)
 {
 	debug_mode = set;
@@ -413,6 +419,11 @@ void Application::SetDebugMode(bool set)
 void Application::GoToBrowser(const char* url)
 {
 	ShellExecute(NULL, "open", url, NULL, NULL, SW_SHOWMAXIMIZED);
+}
+
+void Application::GoToFolder(const char * folder)
+{
+	ShellExecute(NULL, "open", folder, NULL, NULL, SW_SHOWMAXIMIZED);
 }
 
 void Application::AddModule(Module* mod)

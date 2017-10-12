@@ -64,6 +64,12 @@ void GameObject::SetEnabled(bool set)
 
 void GameObject::CleanUp()
 {
+	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it)
+	{
+		(*it)->CleanUp();
+		delete(*it);
+		it = components.erase(it);
+	}
 }
 
 void GameObject::AddComponent(ComponentType type)
@@ -149,12 +155,12 @@ Component * GameObject::FindComponentByType(ComponentType type)
 
 const char * GameObject::GetName() const
 {
-	return name;
+	return name.c_str();
 }
 
-void GameObject::SetName(const char * new_name)
+void GameObject::SetName(string set)
 {
-	sprintf_s(name, 25, new_name);
+	name = set;
 }
 
 void GameObject::SetSelected(bool set)

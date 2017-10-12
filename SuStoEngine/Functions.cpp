@@ -119,7 +119,6 @@ string GetFileExtension(const char * file_name)
 	bool adding = false;
 	for (int i = 0; file_name[i] != '\0'; i++)
 	{
-		char a = file_name[i];
 		if (file_name[i] == '.')
 		{
 			ret.clear();
@@ -129,6 +128,24 @@ string GetFileExtension(const char * file_name)
 
 		if (adding)
 			ret += file_name[i];
+	}
+
+	return ret;
+}
+
+std::string GetFileName(const char * file_path)
+{
+	string ret;
+
+	for (int i = 0; file_path[i] != '\0'; i++)
+	{
+		if (file_path[i] == '\\')
+		{
+			ret.clear();
+			continue;
+		}
+
+		ret += file_path[i];
 	}
 
 	return ret;

@@ -1,4 +1,6 @@
 #include "ComponentMesh.h"
+#include "App.h"
+#include "GeometryLoader.h"
 #include "imgui.h"
 
 ComponentMesh::ComponentMesh(GameObject * owner) : Component(MESH, owner)
@@ -23,6 +25,8 @@ void ComponentMesh::Update()
 
 void ComponentMesh::CleanUp()
 {
+	if(has_mesh)
+		App->geometry->UnloadFile(mesh);
 }
 
 void ComponentMesh::SetMesh(Mesh _mesh)

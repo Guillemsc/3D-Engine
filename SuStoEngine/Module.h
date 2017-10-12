@@ -59,7 +59,7 @@ public:
 	virtual void OnLoadConfig(JSON_Doc* config) {};
 	virtual void OnSaveConfig(JSON_Doc* config) {};
 
-	virtual void OnLoadFile(const char* file_path, const char* file_extension) {};
+	virtual void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension) {};
 
 	void SetName(const char* set_name) { name = set_name; }
 	const char* GetName() { return name.c_str(); };

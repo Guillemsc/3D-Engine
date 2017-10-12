@@ -42,9 +42,9 @@ public:
 	bool Start();
 	bool Update();
 	bool CleanUp();
-	void OnLoadFile(const char* file_path, const char* file_extension);
+	void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension);
 
-	bool LoadFile(const char* full_path);
+	bool LoadFile(const char* full_path, bool as_new_gameobject = false);
 	void UnloadFile(Mesh mesh);
 	void UnloadAllFiles();
 

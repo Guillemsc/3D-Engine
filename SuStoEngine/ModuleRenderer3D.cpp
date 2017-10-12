@@ -245,7 +245,7 @@ uint ModuleRenderer3D::LoadTextureBuffer(uint* texture, uint size, int width, in
 void ModuleRenderer3D::UnloadBuffer(uint id, uint size)
 {
 	if(id != 0)
-		glDeleteBuffers(size, &id);
+		glDeleteBuffers(1, (GLuint*)&id);
 }
 
 void ModuleRenderer3D::DrawVertexBuffer(uint id, uint size)

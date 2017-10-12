@@ -57,8 +57,10 @@ public:
 	void SetVersion(const char* version);
 	const char* GetVersion();
 	SDL_version GetSDLVersion();
+	const char* GetBasePath();
 
 	void GoToBrowser(const char* url);
+	void GoToFolder(const char* folder);
 
 private:
 	void AddModule(Module* mod);

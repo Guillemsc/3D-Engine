@@ -28,7 +28,7 @@ public:
 	Component* FindComponentByType(ComponentType type);
 
 	const char* GetName() const;
-	void SetName(const char* new_name);
+	void SetName(std::string set);
 	void SetSelected(bool set);
 
 	int GetId();
@@ -38,7 +38,7 @@ public:
 	Component* transform = nullptr;
 	
 private:
-	char		name[25] = "";
+	std::string name;
 	bool		enabled = false;
 	int			id = 0;
 	bool		selected = false;
