@@ -324,6 +324,18 @@ JSON_Doc* Application::GetConfig()
 	return config;
 }
 
+void Application::LoadFile(const char * filename)
+{
+	string extension = GetFileExtension(filename);
+
+	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
+	{
+		(*it)->OnLoadFile(filename, extension.c_str());
+	}
+}
+
+
+
 void Application::EndApp()
 {
 	end_app = true;

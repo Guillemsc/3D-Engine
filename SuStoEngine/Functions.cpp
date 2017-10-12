@@ -111,3 +111,25 @@ bool PointInRect(float2 point_xy, float4 rect_xywh)
 
 	return false;
 }
+
+string GetFileExtension(const char * file_name)
+{
+	string ret;
+
+	bool adding = false;
+	for (int i = 0; file_name[i] != '\0'; i++)
+	{
+		char a = file_name[i];
+		if (file_name[i] == '.')
+		{
+			ret.clear();
+			adding = true;
+			continue;
+		}
+
+		if (adding)
+			ret += file_name[i];
+	}
+
+	return ret;
+}

@@ -230,6 +230,12 @@ uint ModuleRenderer3D::LoadTextureBuffer(uint* texture, uint size, int width, in
 	return id;
 }
 
+void ModuleRenderer3D::UnloadBuffer(uint id, uint size)
+{
+	if(id != 0)
+		glDeleteBuffers(size, &id);
+}
+
 void ModuleRenderer3D::DrawVertexBuffer(uint id, uint size)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);

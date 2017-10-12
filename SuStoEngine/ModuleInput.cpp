@@ -193,7 +193,7 @@ bool ModuleInput::PreUpdate()
 			break;
 
 		case SDL_DROPFILE:
-			// Drag and Drop Event
+			App->LoadFile(e.drop.file);
 			break;
 		}
 	}
