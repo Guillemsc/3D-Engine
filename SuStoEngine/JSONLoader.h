@@ -14,25 +14,25 @@ public:
 	void SetBool(string set, bool bo);
 	void SetNumber(string set, double nu);
 	const char* GetString(string str, const char* defaul = "");
-	bool GetBool(string bo, bool defaul = false);
-	double GetNumber(string nu, double defaul = 0);
+	const bool GetBool(string bo, bool defaul = false);
+	const double GetNumber(string nu, double defaul = 0);
 
 	void SetArray(string set);
 	void ClearArray(string arr);
 	void AddStringToArray(string arr, const char* str);
 	void AddBoolToArray(string arr, bool bo);
 	void AddNumberToArray(string arr, double set);
-	int GetArrayCount(string set);
+	const int GetArrayCount(string set) const;
 	const char* GetStringFromArray(string arr, int index);
-	bool GetBoolFromArray(string arr, int index);
-	double GetNumberFromArray(string arr, int index);
+	const bool GetBoolFromArray(string arr, int index);
+	const double GetNumberFromArray(string arr, int index);
 
 	bool MoveToSection(string set);
 	void RemoveSection(string set);
 	void MoveToRoot();
 	void AddSection(string set);
 
-	const char* GetPath();
+	const char* GetPath() const;
 	void Save();
 	void CleanUp();
 

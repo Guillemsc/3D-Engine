@@ -163,7 +163,7 @@ void JSON_Doc::ClearArray(string arr)
 	}
 }
 
-int JSON_Doc::GetArrayCount(string set)
+const int JSON_Doc::GetArrayCount(string set) const
 {
 	int ret = 0;
 
@@ -194,7 +194,7 @@ const char * JSON_Doc::GetStringFromArray(string arr, int index)
 	return ret;
 }
 
-bool JSON_Doc::GetBoolFromArray(string arr, int index)
+const bool JSON_Doc::GetBoolFromArray(string arr, int index)
 {
 	bool ret = false;
 
@@ -211,7 +211,7 @@ bool JSON_Doc::GetBoolFromArray(string arr, int index)
 	return ret;
 }
 
-double JSON_Doc::GetNumberFromArray(string arr, int index)
+const double JSON_Doc::GetNumberFromArray(string arr, int index)
 {
 	double ret = 0;
 
@@ -268,7 +268,7 @@ const char * JSON_Doc::GetString(string str, const char* defaul)
 	return ret;
 }
 
-bool JSON_Doc::GetBool(string str, bool defaul)
+const bool JSON_Doc::GetBool(string str, bool defaul)
 {
 	bool ret = defaul;
 
@@ -278,7 +278,7 @@ bool JSON_Doc::GetBool(string str, bool defaul)
 	return ret;
 }
 
-double JSON_Doc::GetNumber(string str, double defaul)
+const double JSON_Doc::GetNumber(string str, double defaul)
 {
 	double ret = defaul;
 
@@ -318,7 +318,7 @@ void JSON_Doc::AddSection(string set)
 	json_object_set_value(object, set.c_str(), json_value_init_object());
 }
 
-const char * JSON_Doc::GetPath()
+const char * JSON_Doc::GetPath() const
 {
 	return path;
 }

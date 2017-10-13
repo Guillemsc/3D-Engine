@@ -47,12 +47,12 @@ public:
 	void OnLoadConfig(JSON_Doc* config);
 	void OnSaveConfig(JSON_Doc* config);
 
-	void ImGuiInput(SDL_Event* ev);
+	void ImGuiInput(SDL_Event* const ev);
 
-	void LoadStyle(char* name);
+	void LoadStyle(const char* name);
 
-	Console* GetConsole();
-	Inspector* GetInspector();
+	Console* GetConsole() const;
+	Inspector* GetInspector() const;
 
 	void LoadLayoutsInfo();
 	void SaveLayoutsInfo();
@@ -66,7 +66,7 @@ public:
 
 	void RemoveLayout(const char* layout);
 
-	float4 GameRect();
+	const float4 GameRect() const;
 
 private:
 	void AddEditor(EditorElement* el);

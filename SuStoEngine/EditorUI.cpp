@@ -347,7 +347,7 @@ void EditorUI::OnSaveConfig(JSON_Doc * config)
 
 }
 
-void EditorUI::ImGuiInput(SDL_Event* ev)
+void EditorUI::ImGuiInput(SDL_Event* const ev)
 {
 	// ImGui Input
 	ImGui_ImplSdlGL2_ProcessEvent(ev);
@@ -431,13 +431,13 @@ void EditorUI::RemoveLayout(const char * lay)
 	}
 }
 
-float4 EditorUI::GameRect()
+const float4 EditorUI::GameRect() const
 {
 	return game->GetRect();
 }
 
 
-void EditorUI::LoadStyle(char * name)
+void EditorUI::LoadStyle(const char * name)
 {
 	ImGuiStyle * style = &ImGui::GetStyle();
 
@@ -673,12 +673,12 @@ void EditorUI::LoadStyle(char * name)
 	}
 }
 
-Console * EditorUI::GetConsole()
+Console * EditorUI::GetConsole() const
 {
 	return console;
 }
 
-Inspector * EditorUI::GetInspector()
+Inspector * EditorUI::GetInspector() const
 {
 	return inspector;
 }
