@@ -153,3 +153,23 @@ uint Texture::GetId()
 {
 	return id;
 }
+
+void Texture::AddUser()
+{
+	used_by++;
+}
+
+void Texture::DeleteUser()
+{
+	used_by--;
+}
+
+int Texture::UsedBy()
+{
+	return used_by;
+}
+
+bool Texture::IsUsed()
+{
+	return used_by != 0 ? true : false;
+}

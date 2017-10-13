@@ -135,7 +135,7 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 			// Create GameObjects
 			if (as_new_gameobject)
 			{
-				string name = GetFileName(full_path); name += "_"; name += std::to_string(i);
+				string name = GetFileNameFromFilePath(full_path); name += "_"; name += std::to_string(i);
 
 				GameObject* go = App->gameobj->Create();
 				go->SetName(name.c_str());
@@ -150,10 +150,14 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 		// -------------------------------------------
 		aiMaterial* material = scene->mMaterials[0];
 
-		aiString path;
-		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-		App->LoadFile(path.C_Str());
+		string path = GetPathFromFilePath(full_path);
 
+		// DIFUSE -------------------------
+		aiString file;
+		material->GetTexture(aiTextureType_DIFFUSE, 0, &file);
+		path += file.C_Str();
+
+		App->LoadFile(path.c_str());
 
 		// -------------------------------------------
 		// RELEASE -----------------------------------

@@ -133,7 +133,7 @@ string GetFileExtension(const char * file_name)
 	return ret;
 }
 
-std::string GetFileName(const char * file_path)
+std::string GetFileNameFromFilePath(const char * file_path)
 {
 	string ret;
 
@@ -145,6 +145,28 @@ std::string GetFileName(const char * file_path)
 			continue;
 		}
 
+		ret += file_path[i];
+	}
+
+	return ret;
+}
+
+std::string GetPathFromFilePath(const char * file_path)
+{
+	string ret;
+
+	int last = 0;
+	for (int i = 0; file_path[i] != '\0'; i++)
+	{
+		if (file_path[i] == '\\' || file_path[i] == '/')
+		{
+			last = i;
+			last++;
+		}
+	}
+
+	for (int i = 0; i < last && file_path[i] != '\0'; i++)
+	{
 		ret += file_path[i];
 	}
 

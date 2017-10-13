@@ -49,7 +49,9 @@ bool PointInRect(float2 point_xy, float4 rect_xywh);
 std::string GetFileExtension(const char* file_name);
 
 // Returns only the file name from a file path like C:\\something\filename.exten
-std::string GetFileName(const char* file_path);
+std::string GetFileNameFromFilePath(const char* file_path);
+
+std::string GetPathFromFilePath(const char* file_path);
 
 std::string ProcessFilePath(const char* file_path);
 

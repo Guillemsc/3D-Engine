@@ -14,10 +14,17 @@ public:
 
 	uint GetId();
 
+	void AddUser();
+	void DeleteUser();
+	int	 UsedBy();
+	bool IsUsed();
+
 private:
 	uint id = 0;
 	uint width = 0;
 	uint height = 0;
+
+	int  used_by = 0;
 };
 
 class TextureLoader : public Module

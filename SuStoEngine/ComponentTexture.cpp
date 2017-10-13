@@ -26,14 +26,21 @@ void ComponentTexture::CleanUp()
 {
 	if (has_texture)
 	{
-		App->texture->UnloadTexture(texture);
+		texture->DeleteUser();
+
+		if(!texture->IsUsed())
+			App->texture->UnloadTexture(texture);
 	}
 }
 
 void ComponentTexture::SetTexture(Texture* text)
 {
-	texture = text;
-	has_texture = true;
+	if (text != nullptr && texture != text)
+	{
+		texture = text;
+		text->AddUser();
+		has_texture = true;
+	}
 }
 
 Texture * ComponentTexture::GetTexture()
@@ -52,6 +59,7 @@ void ComponentTexture::InspectorDraw(std::vector<Component*> components)
 	}
 
 	ImGui::Text("Id texture: %d", texture->GetId());
+	ImGui::Text("Used by %d GameObjects", texture->UsedBy());
 }
 
 void ComponentTexture::OnEnable()
