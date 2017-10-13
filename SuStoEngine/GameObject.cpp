@@ -54,15 +54,24 @@ void GameObject::Draw()
 	
 	if (component_mesh != nullptr)
 	{
+		// Vertex
 		glEnableClientState(GL_VERTEX_ARRAY);
-
 		glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdVertices()); // id vertex
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
+		// UV
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdUV());
+		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+
+		// Index
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdIndices()); // id index
 
+		// Draw
 		glDrawElements((GLenum)GL_TRIANGLES, component_mesh->GetMesh()->GetNumIndices(), GL_UNSIGNED_INT, NULL);
 
+		// Disable
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisableClientState(GL_VERTEX_ARRAY);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);

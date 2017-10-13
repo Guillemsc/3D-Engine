@@ -78,18 +78,25 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 
 	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
 
+	uint id_vertices = 0;
+	uint id_indices = 0;
+	uint id_uv = 0;
+
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		LOG_OUTPUT("LOADING %d MESHES", scene->mNumMeshes);
 		
 		for (int i = 0; i < scene->mNumMeshes; ++i)
 		{
-			// copy vertices
 			aiMesh* current_mesh = scene->mMeshes[i];
 
 			uint* indices = new uint[current_mesh->mNumFaces * 3];
 
-			// copy faces
+			// VERTICES		
+			id_vertices = App->renderer3D->LoadBuffer((float*)current_mesh->mVertices, current_mesh->mNumVertices * 3);
+			
+
+			// INDICES
 			if (current_mesh->HasFaces())
 			{
 				// Assume each face is a triangle
@@ -103,16 +110,20 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 					else
 						memcpy(&indices[i * 3], current_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
 				}
+
+				id_indices = App->renderer3D->LoadBuffer(indices, current_mesh->mNumFaces * 3);
+
+				delete[] indices;
 			}
 
-			// Load to VRAM
-			uint id_vertices = App->renderer3D->LoadBuffer((float*)current_mesh->mVertices, current_mesh->mNumVertices * 3);
-			uint id_indices = App->renderer3D->LoadBuffer(indices, current_mesh->mNumFaces * 3);
+			// UVS
+			if (current_mesh->HasTextureCoords(0))
+			{
+				id_uv = App->renderer3D->LoadBuffer((float*)current_mesh->mTextureCoords, current_mesh->mNumVertices * 3);
+			}
 
 			// Save info
-			Mesh* new_mesh = new Mesh(id_vertices, current_mesh->mNumVertices, id_indices, current_mesh->mNumFaces * 3);
-
-			delete[] indices;
+			Mesh* new_mesh = new Mesh(id_vertices, current_mesh->mNumVertices, id_indices, current_mesh->mNumFaces * 3, id_uv, current_mesh->mNumVertices * 3);
 
 			LOG_OUTPUT("New mesh with %d vertices", current_mesh->mNumVertices);
 			LOG_OUTPUT("New mesh with %d indices", current_mesh->mNumFaces * 3);
@@ -185,14 +196,16 @@ void GeometryLoader::UnloadAllFiles()
 	}
 }
 
-Mesh::Mesh(uint _id_vertices, uint _num_vertices, uint _id_indices, uint _num_indices)
+Mesh::Mesh(uint _id_vertices, uint _num_vertices, uint _id_indices, uint _num_indices, uint _id_uv, uint _num_uvs)
 {
 	num_vertices = _num_vertices;
 	num_indices = _num_indices;
 
-	// Load to memory
 	id_vertices = _id_vertices; 
 	id_indices = _id_indices;	
+
+	id_uv = _id_uv;
+	num_uvs = _num_uvs;
 }
 
 bool Mesh::operator==(Mesh mesh)
@@ -233,4 +246,14 @@ uint Mesh::GetIdIndices()
 uint Mesh::GetNumIndices()
 {
 	return num_indices;
+}
+
+uint Mesh::GetIdUV()
+{
+	return id_uv;
+}
+
+uint Mesh::GetNumUVs()
+{
+	return num_uvs;
 }

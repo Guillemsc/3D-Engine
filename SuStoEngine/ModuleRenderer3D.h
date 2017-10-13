@@ -39,8 +39,8 @@ public:
 	const bool GetTexture2D() const;
 	const bool GetColorMaterial() const;
 
-	uint LoadBuffer(float* vertices, uint size);
-	uint LoadBuffer(uint* vertices, uint size);
+	uint LoadBuffer(float* elements, uint size);
+	uint LoadBuffer(uint* elements, uint size);
 	uint LoadTextureBuffer(const void* texture, uint size, int format, int width, int height, uint wrap_s, uint wrap_t, uint mag, uint min);
 	void UnloadBuffer(uint id, uint size);
 

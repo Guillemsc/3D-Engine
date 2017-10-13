@@ -80,7 +80,6 @@ bool TextureLoader::LoadTexture(const char * full_path)
 
 		ilDeleteImages(1, &id);
 
-
 		// CUSTOM GAME OBJECT TEXTURE LOADING FOR THIS ASSIGNMENT
 
 		vector<GameObject*> go = App->gameobj->GetListGameObjects();

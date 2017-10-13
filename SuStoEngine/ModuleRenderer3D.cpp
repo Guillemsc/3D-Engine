@@ -304,25 +304,25 @@ const bool ModuleRenderer3D::GetColorMaterial() const
 	return glIsEnabled(GL_COLOR_MATERIAL);
 }
 
-uint ModuleRenderer3D::LoadBuffer(float* vertices, uint size)
+uint ModuleRenderer3D::LoadBuffer(float* elements, uint size)
 {
 	uint id = 0;
 
 	glGenBuffers(1, (GLuint*)&(id));
 	glBindBuffer(GL_ARRAY_BUFFER, id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * size, elements, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	return id;
 }
 
-uint ModuleRenderer3D::LoadBuffer(uint * vertices, uint size)
+uint ModuleRenderer3D::LoadBuffer(uint * elements, uint size)
 {
 	uint id = 0;
 
 	glGenBuffers(1, (GLuint*)&(id));
 	glBindBuffer(GL_ARRAY_BUFFER, id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(uint) * size, vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(uint) * size, elements, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	return id;
@@ -332,20 +332,10 @@ uint ModuleRenderer3D::LoadTextureBuffer(const void* texture, uint size, int for
 {
 	uint id = 0;
 
-	//GLubyte checkImage[64][64][4];
-
-	//for (int i = 0; i < 64; i++) {
-	//	for (int j = 0; j < 64; j++) {
-	//		int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-	//		checkImage[i][j][0] = (GLubyte)c;
-	//		checkImage[i][j][1] = (GLubyte)c;
-	//		checkImage[i][j][2] = (GLubyte)c;
-	//		checkImage[i][j][3] = (GLubyte)255;
-	//	}
-	//}
+	glEnable(GL_TEXTURE_2D);
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, (GLuint*)&(id));
+	glGenTextures(size, (GLuint*)&(id));
 	glBindTexture(GL_TEXTURE_2D, id);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s);
@@ -353,8 +343,9 @@ uint ModuleRenderer3D::LoadTextureBuffer(const void* texture, uint size, int for
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height,
-		format, GL_RGBA, GL_UNSIGNED_BYTE, texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, texture);
+
+	glDisable(GL_TEXTURE_2D);
 
 	return id;
 }
