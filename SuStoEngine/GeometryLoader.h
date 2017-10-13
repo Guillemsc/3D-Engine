@@ -3,27 +3,28 @@
 
 #include "Module.h"
 
-struct Mesh
+class Mesh
 {
-	Mesh() {};
-	Mesh(uint id_vertices, uint num_indices, uint* indices, uint id_indices, uint num_vertices, float* vertices);
+public:
+	Mesh(uint _num_vertices, float* _vertices, uint _num_indices, uint* _indices);
 
-	bool operator == (Mesh mesh)
-	{
-		bool ret = false;
-
-		if (id_vertices == mesh.id_vertices && num_indices == mesh.num_indices && indices == mesh.indices
-			&& id_indices == mesh.id_indices && num_vertices == mesh.num_vertices && vertices == mesh.vertices)
-			ret = true;
-
-		return ret;
-	}
-
-	void LoadToMemory();
-	void UnloadFromMemory();
+	bool operator == (Mesh mesh);
 
 	void CleanUp();
 
+	uint GetIdVertices();
+	uint GetNumVertices();
+	float* GetVertices();
+
+	uint GetIdIndices();
+	uint GetNumIndices();
+	uint* GetIndices();
+
+private:
+	void LoadToMemory();
+	void UnloadFromMemory();
+
+private:
 	uint   id_vertices = 0; // id in VRAM
 	uint   num_vertices = 0;
 	float* vertices = nullptr;

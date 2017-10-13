@@ -34,7 +34,7 @@ void ComponentMesh::SetMesh(Mesh* _mesh)
 	has_mesh = true;
 }
 
-const Mesh * ComponentMesh::GetMesh() const
+Mesh * ComponentMesh::GetMesh() const
 {
 	return mesh;
 }
@@ -49,10 +49,10 @@ void ComponentMesh::InspectorDraw(std::vector<Component*> components)
 		return;
 	}
 
-	ImGui::Text("Id vertices: %d", mesh->id_vertices);
-	ImGui::Text("Num vertices: %d", mesh->num_vertices);
-	ImGui::Text("Id indices %d:", mesh->id_indices);
-	ImGui::Text("Num indices: %d", mesh->num_indices);
+	ImGui::Text("Id vertices: %d", mesh->GetIdVertices());
+	ImGui::Text("Num vertices: %d", mesh->GetNumVertices());
+	ImGui::Text("Id indices: %d", mesh->GetIdIndices());
+	ImGui::Text("Num indices: %d", mesh->GetNumIndices());
 }
 
 void ComponentMesh::OnEnable()

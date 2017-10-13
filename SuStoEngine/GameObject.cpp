@@ -55,12 +55,12 @@ void GameObject::Draw()
 	{
 		glEnableClientState(GL_VERTEX_ARRAY);
 
-		glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->id_vertices); // id vertex
+		glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdVertices()); // id vertex
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, component_mesh->GetMesh()->id_indices); // id index
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdIndices()); // id index
 
-		glDrawElements((GLenum)GL_TRIANGLES, component_mesh->GetMesh()->num_indices, GL_UNSIGNED_INT, NULL);
+		glDrawElements((GLenum)GL_TRIANGLES, component_mesh->GetMesh()->GetNumIndices(), GL_UNSIGNED_INT, NULL);
 
 		glDisableClientState(GL_VERTEX_ARRAY);
 
