@@ -73,6 +73,8 @@ bool TextureLoader::LoadTexture(const char * full_path)
 
 		ret = ilutGLBindTexImage();
 		ilDeleteImages(1, &id);
+
+		//Texture* texture = new Texture(textureID, );
 	}
 	else
 	{
@@ -80,4 +82,11 @@ bool TextureLoader::LoadTexture(const char * full_path)
 	}
 
 	return ret;
+}
+
+Texture::Texture(uint _id, uint _width, uint _height)
+{
+	id = _id;
+	width = _width;
+	height = _height;
 }

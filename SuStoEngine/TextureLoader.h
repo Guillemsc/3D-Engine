@@ -6,12 +6,14 @@
 class Texture
 {
 public:
-	Texture();
+	Texture(uint id, uint width, uint height);
+	
+private:
 
-	int id = 0;
-	int width = 0;
-	int height = 0;
-	uint* data = nullptr;
+private:
+	uint id = 0;
+	uint width = 0;
+	uint height = 0;
 };
 
 class TextureLoader : public Module

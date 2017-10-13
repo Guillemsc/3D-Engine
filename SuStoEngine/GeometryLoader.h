@@ -6,7 +6,7 @@
 class Mesh
 {
 public:
-	Mesh(uint _num_vertices, float* _vertices, uint _num_indices, uint* _indices);
+	Mesh(uint id_vertices, uint num_vertices, uint id_indices, uint num_indices);
 
 	bool operator == (Mesh mesh);
 
@@ -14,24 +14,15 @@ public:
 
 	uint GetIdVertices();
 	uint GetNumVertices();
-	float* GetVertices();
-
 	uint GetIdIndices();
 	uint GetNumIndices();
-	uint* GetIndices();
-
-private:
-	void LoadToMemory();
-	void UnloadFromMemory();
 
 private:
 	uint   id_vertices = 0; // id in VRAM
 	uint   num_vertices = 0;
-	float* vertices = nullptr;
 
 	uint   id_indices = 0; // id in VRAM
 	uint   num_indices = 0;
-	uint*  indices = nullptr;
 };
 
 class GeometryLoader : public Module

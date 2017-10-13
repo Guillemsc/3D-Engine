@@ -105,8 +105,12 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 				}
 			}
 
+			// Load to VRAM
+			uint id_vertices = App->renderer3D->LoadBuffer((float*)current_mesh->mVertices, current_mesh->mNumVertices * 3);
+			uint id_indices = App->renderer3D->LoadBuffer(indices, current_mesh->mNumFaces * 3);
 
-			Mesh* new_mesh = new Mesh(current_mesh->mNumVertices, (float*)current_mesh->mVertices, current_mesh->mNumFaces * 3, indices);
+			// Save info
+			Mesh* new_mesh = new Mesh(id_vertices, current_mesh->mNumVertices, id_indices, current_mesh->mNumFaces * 3);
 
 			delete[] indices;
 
@@ -143,6 +147,17 @@ void GeometryLoader::UnloadFile(Mesh* mesh)
 	{
 		if ((*it) == mesh)
 		{
+			// Unload from memory
+			if ((*it)->GetIdVertices() != 0)
+			{
+				App->renderer3D->UnloadBuffer((*it)->GetIdVertices(), (*it)->GetNumVertices()*3);
+			}
+
+			if ((*it)->GetIdIndices() != 0)
+			{
+				App->renderer3D->UnloadBuffer((*it)->GetIdIndices(), (*it)->GetNumIndices());
+			}
+
 			(*it)->CleanUp();
 			meshes.erase(it);
 			break;
@@ -154,77 +169,50 @@ void GeometryLoader::UnloadAllFiles()
 {
 	for (vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end();)
 	{
+		// Unload from memory
+		if ((*it)->GetIdVertices() != 0)
+		{
+			App->renderer3D->UnloadBuffer((*it)->GetIdVertices(), (*it)->GetNumVertices() * 3);
+		}
+
+		if ((*it)->GetIdIndices() != 0)
+		{
+			App->renderer3D->UnloadBuffer((*it)->GetIdIndices(), (*it)->GetNumIndices());
+		}
+
 		(*it)->CleanUp();;
 		it = meshes.erase(it);
-	
 	}
 }
 
-Mesh::Mesh(uint _num_vertices, float * _vertices, uint _num_indices, uint * _indices)
+Mesh::Mesh(uint _id_vertices, uint _num_vertices, uint _id_indices, uint _num_indices)
 {
 	num_vertices = _num_vertices;
-	vertices = new float[_num_vertices * 3];
-	memcpy(vertices, _vertices, sizeof(float) * num_vertices * 3);
-
 	num_indices = _num_indices;
-	indices = new uint[_num_indices];
-	memcpy(indices, _indices, sizeof(uint) * _num_indices);
 
-	LoadToMemory();
+	// Load to memory
+	id_vertices = _id_vertices; 
+	id_indices = _id_indices;	
 }
 
 bool Mesh::operator==(Mesh mesh)
 {
 	bool ret = false;
 
-	if (id_vertices == mesh.id_vertices && num_indices == mesh.num_indices && indices == mesh.indices
-		&& id_indices == mesh.id_indices && num_vertices == mesh.num_vertices && vertices == mesh.vertices)
+	if (id_vertices == mesh.id_vertices && num_indices == mesh.num_indices
+		&& id_indices == mesh.id_indices && num_vertices == mesh.num_vertices)
 		ret = true;
 
 	return ret;
 }
 
-void Mesh::LoadToMemory()
-{
-	if(id_vertices == 0)
-		id_vertices = App->renderer3D->LoadBuffer(vertices, num_vertices*3);
-
-	if(id_indices == 0)
-		id_indices = App->renderer3D->LoadBuffer(indices, num_indices);
-}
-
-void Mesh::UnloadFromMemory()
-{
-	if (id_vertices != 0)
-	{
-		App->renderer3D->UnloadBuffer(id_vertices, num_vertices * 3);
-		id_vertices = 0;
-	}
-
-	if (id_indices != 0)
-	{
-		App->renderer3D->UnloadBuffer(id_indices, num_indices);
-		id_indices = 0;
-	}
-}
-
 void Mesh::CleanUp()
 {
-	UnloadFromMemory();
-
-	if(vertices != nullptr)
-		delete[] vertices;
-
-	if(indices != nullptr)
-		delete[] indices;
-
 	id_vertices = 0; 
 	num_indices = 0;
-	indices = nullptr;
 
 	id_indices = 0; 
 	num_vertices = 0;
-	vertices = nullptr;
 }
 
 uint Mesh::GetIdVertices()
@@ -237,11 +225,6 @@ uint Mesh::GetNumVertices()
 	return num_vertices;
 }
 
-float * Mesh::GetVertices()
-{
-	return vertices;
-}
-
 uint Mesh::GetIdIndices()
 {
 	return id_indices;
@@ -250,9 +233,4 @@ uint Mesh::GetIdIndices()
 uint Mesh::GetNumIndices()
 {
 	return num_indices;
-}
-
-uint * Mesh::GetIndices()
-{
-	return indices;
 }
