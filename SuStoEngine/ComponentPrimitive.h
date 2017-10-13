@@ -29,7 +29,7 @@ public:
 	void Update();
 	void CleanUp();
 
-	void SetPrimitive(PrimitiveType type);
+	void SetPrimitive(const PrimitiveType& type);
 	
 	void InspectorDraw(std::vector<Component*> components);
 

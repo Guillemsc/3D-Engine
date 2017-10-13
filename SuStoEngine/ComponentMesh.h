@@ -17,7 +17,7 @@ public:
 	void CleanUp();
 
 	void SetMesh(Mesh* mesh);
-	Mesh* GetMesh();
+	const Mesh* GetMesh() const;
 
 	void InspectorDraw(std::vector<Component*> components);
 

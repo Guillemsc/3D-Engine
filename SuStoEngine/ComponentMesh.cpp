@@ -34,7 +34,7 @@ void ComponentMesh::SetMesh(Mesh* _mesh)
 	has_mesh = true;
 }
 
-Mesh * ComponentMesh::GetMesh()
+const Mesh * ComponentMesh::GetMesh() const
 {
 	return mesh;
 }

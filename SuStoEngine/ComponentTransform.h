@@ -16,9 +16,9 @@ public:
 	void Update();
 	void CleanUp();
 
-	float3 GetPosition();
-	float3 GetRotationEuler();
-	float3 GetScale();
+	const float3 GetPosition() const;
+	const float3 GetRotationEuler() const;
+	const float3 GetScale() const;
 
 	void InspectorDraw(std::vector<Component*> components);
 

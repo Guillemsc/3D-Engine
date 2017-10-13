@@ -31,12 +31,12 @@ void Component::Disable()
 	}
 }
 
-bool Component::GetEnabled()
+const bool Component::GetEnabled() const
 {
 	return enabled;
 }
 
-void Component::SetEnabled(bool set)
+void Component::SetEnabled(const bool& set)
 {
 	set ? Enable() : Disable();
 }
@@ -46,17 +46,17 @@ void Component::SetName(const char * new_name)
 	name = new_name;
 }
 
-GameObject * Component::GetOwner()
+const GameObject * Component::GetOwner() const
 {
 	return owner;
 }
 
-ComponentType Component::GetType()
+const ComponentType Component::GetType() const
 {
 	return type;
 }
 
-const char* Component::GetName()
+const char* Component::GetName() const
 {
 	return name;
 }

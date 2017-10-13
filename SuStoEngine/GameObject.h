@@ -17,23 +17,23 @@ public:
 
 	void Enable();
 	void Disable();
-	bool GetEnabled();
-	void SetEnabled(bool set);
+	const bool GetEnabled() const;
+	void SetEnabled(const bool& set);
 	void CleanUp();
 
 	void AddComponent(ComponentType type);
 	void RemoveComponent(ComponentType type);
 	bool ContainsComponent(ComponentType type);
-	std::vector<Component*> GetComponents();
+	const std::vector<Component*> GetComponents() const;
 
 	Component* FindComponentByType(ComponentType type);
 
 	const char* GetName() const;
-	void SetName(std::string set);
-	void SetSelected(bool set);
+	void SetName(const std::string& set);
+	void SetSelected(const bool& set);
 
-	int GetId();
-	bool GetSelected();
+	const int GetId() const;
+	const bool GetSelected() const;
 
 public:
 	Component* transform = nullptr;

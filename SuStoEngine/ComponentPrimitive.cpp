@@ -58,7 +58,7 @@ void ComponentPrimitive::CleanUp()
 {
 }
 
-void ComponentPrimitive::SetPrimitive(PrimitiveType type)
+void ComponentPrimitive::SetPrimitive(const PrimitiveType& type)
 {
 	switch (type)
 	{

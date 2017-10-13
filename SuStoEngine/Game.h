@@ -17,7 +17,7 @@ public:
 	void Draw();
 
 public:
-	float4 GetRect();
+	const float4 GetRect() const;
 private:
 	DockContext* dock;
 	bool first_time = true;

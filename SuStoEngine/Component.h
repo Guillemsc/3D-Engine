@@ -24,14 +24,14 @@ public:
 	virtual void Update() {};
 	virtual void CleanUp() {};
 
-	GameObject* GetOwner();
-	ComponentType GetType();
-	const char* GetName();
+	const GameObject* GetOwner() const;
+	const ComponentType GetType() const;
+	const char* GetName() const;
 
 	void Enable();
 	void Disable();
-	bool GetEnabled();
-	void SetEnabled(bool set);
+	const bool GetEnabled() const;
+	void SetEnabled(const bool& set);
 	void SetName(const char* new_name);
 
 	virtual void InspectorDraw(std::vector<Component*> components) {};

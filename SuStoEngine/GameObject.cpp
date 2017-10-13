@@ -88,12 +88,12 @@ void GameObject::Disable()
 	}
 }
 
-bool GameObject::GetEnabled()
+const bool GameObject::GetEnabled() const
 {
 	return enabled;
 }
 
-void GameObject::SetEnabled(bool set)
+void GameObject::SetEnabled(const bool& set)
 {
 	set ? Enable() : Disable();
 }
@@ -168,7 +168,7 @@ bool GameObject::ContainsComponent(ComponentType type)
 	return ret;
 }
 
-std::vector<Component*> GameObject::GetComponents()
+const std::vector<Component*> GameObject::GetComponents() const
 {
 	return components;
 }
@@ -194,22 +194,22 @@ const char * GameObject::GetName() const
 	return name.c_str();
 }
 
-void GameObject::SetName(string set)
+void GameObject::SetName(const string& set)
 {
 	name = set;
 }
 
-void GameObject::SetSelected(bool set)
+void GameObject::SetSelected(const bool& set)
 {
 	selected = set;
 }
 
-int GameObject::GetId()
+const int GameObject::GetId() const
 {
 	return id;
 }
 
-bool GameObject::GetSelected()
+const bool GameObject::GetSelected() const
 {
 	return selected;
 }

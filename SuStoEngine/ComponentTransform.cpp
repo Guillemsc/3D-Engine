@@ -32,17 +32,17 @@ void ComponentTransfrom::OnDisable()
 {
 }
 
-float3 ComponentTransfrom::GetPosition()
+const float3 ComponentTransfrom::GetPosition() const
 {
 	return float3(transform[3][0], transform[3][1], transform[3][2]);
 }
 
-float3 ComponentTransfrom::GetRotationEuler()
+const float3 ComponentTransfrom::GetRotationEuler() const
 {
 	return float3(0, 0, 0);
 }
 
-float3 ComponentTransfrom::GetScale()
+const float3 ComponentTransfrom::GetScale() const
 {
 	float x = Sqrt(Pow(transform[0][0], 2) + Pow(transform[0][1], 2) + Pow(transform[0][2], 2));
 	float y = Sqrt(Pow(transform[1][0], 2) + Pow(transform[1][1], 2) + Pow(transform[1][2], 2));
