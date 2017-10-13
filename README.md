@@ -40,6 +40,20 @@ It will only show the options if a GameObject of the hierarchy is selected.
   * _**Test Window**_: Opens the imgui test window.
 * **FPS**: Show the current framerate.
 
+### Game
+* **Camera Movement**
+  * _**Right Click + W, A, S, D**_: Move **forward**, **Left**, **backward** or **right**, respectively.
+  * _**Right Click + Z, X**_: Move **up** or **down**, respectively
+  * _**Mouse Scroll**_: Move the camera forward or backwards.
+  * _**Alt + Left Click + Mouse Movement**_: Camera orbits the object.
+  * _**Right Click + Mouse Movement**_: Camera moves.
+  * _**F**_: Centers the view to the mesh.
+* **Other functionalities**
+  * _**Drag and Drop**_: if an fbx is dropped into the engine, it will be rendered. A PNG texture can be dropped to.
+ 
+### Hierarchy
+
+
 ## License
 MIT License
 
