@@ -27,7 +27,7 @@ struct KeyBinding
 	int         key;
 	KEY_STATE   state = KEY_IDLE;
 
-	bool operator == (KeyBinding bin)
+	bool operator == (const KeyBinding& bin)
 	{
 		if (key == bin.key)
 			return true;
@@ -47,12 +47,12 @@ public:
 	bool PreUpdate();
 	bool CleanUp();
 
-	bool GetKeyDown(int id);
-	bool GetKeyRepeat(int id);
-	bool GetKeyUp(int id);
-	bool GetKeyDown(const char* key);
-	bool GetKeyRepeat(const char* key);
-	bool GetKeyUp(const char* key);
+	const bool GetKeyDown(int id);
+	const bool GetKeyRepeat(int id);
+	const bool GetKeyUp(int id);
+	const bool GetKeyDown(const char* key);
+	const bool GetKeyRepeat(const char* key);
+	const bool GetKeyUp(const char* key);
 
 	bool GetKeyBindingDown(const char* binding_name);
 	bool GetKeyBindingRepeat(const char* binding_name);

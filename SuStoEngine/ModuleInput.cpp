@@ -212,7 +212,7 @@ bool ModuleInput::CleanUp()
 	return ret;
 }
 
-bool ModuleInput::GetKeyDown(int id)
+const bool ModuleInput::GetKeyDown(int id)
 {
 	if (!keys_down.empty())
 	{
@@ -226,7 +226,7 @@ bool ModuleInput::GetKeyDown(int id)
 	return false;
 }
 
-bool ModuleInput::GetKeyRepeat(int id)
+const bool ModuleInput::GetKeyRepeat(int id)
 {
 	if (!keys_repeat.empty())
 	{
@@ -240,7 +240,7 @@ bool ModuleInput::GetKeyRepeat(int id)
 	return false;
 }
 
-bool ModuleInput::GetKeyUp(int id)
+const bool ModuleInput::GetKeyUp(int id)
 {
 	if (!keys_up.empty())
 	{
@@ -254,17 +254,17 @@ bool ModuleInput::GetKeyUp(int id)
 	return false;
 }
 
-bool ModuleInput::GetKeyDown(const char * key)
+const bool ModuleInput::GetKeyDown(const char * key)
 {
 	return GetKeyDown(CharToKey(key));
 }
 
-bool ModuleInput::GetKeyRepeat(const char * key)
+const bool ModuleInput::GetKeyRepeat(const char * key)
 {
 	return GetKeyRepeat(CharToKey(key));
 }
 
-bool ModuleInput::GetKeyUp(const char * key)
+const bool ModuleInput::GetKeyUp(const char * key)
 {
 	return GetKeyUp(CharToKey(key));
 }

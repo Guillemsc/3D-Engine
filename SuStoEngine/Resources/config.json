@@ -17,7 +17,7 @@
         "brightness": 1
     },
     "input": {
-        "console": "",
+        "console": "`",
         "profiler": "",
         "configuration": "C"
     },

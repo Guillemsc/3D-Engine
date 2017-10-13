@@ -22,13 +22,13 @@ public:
 	void Destroy(GameObject* go);
 	void DestroyAllGameObjects();
 
-	vector<GameObject*> GetListGameObjects();
+	const vector<GameObject*> GetListGameObjects() const;
 
 	void AddGameObjectToSelected(GameObject* go);
 	void RemoveGameObjectFromSelected(GameObject* go);
 	void ClearSelection();
 
-	vector<GameObject*> GetSelectedGameObjects();
+	const vector<GameObject*> GetSelectedGameObjects() const;
 
 private:
 	void DestroyGameObjects();

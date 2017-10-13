@@ -88,7 +88,7 @@ void ModuleGameObject::DestroyAllGameObjects()
 	}
 }
 
-vector<GameObject*> ModuleGameObject::GetListGameObjects()
+const vector<GameObject*> ModuleGameObject::GetListGameObjects() const
 {
 	return game_objects;
 }
@@ -127,7 +127,7 @@ void ModuleGameObject::ClearSelection()
 	}
 }
 
-vector<GameObject*> ModuleGameObject::GetSelectedGameObjects()
+const vector<GameObject*> ModuleGameObject::GetSelectedGameObjects() const
 {
 	return selected;
 }
