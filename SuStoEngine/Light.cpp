@@ -12,7 +12,7 @@ void Light::Init()
 	glLightfv(ref, GL_DIFFUSE, &diffuse);
 }
 
-void Light::SetPos(float x, float y, float z)
+void Light::SetPos(const float& x, const float& y, const float& z)
 {
 	position.x = x;
 	position.y = y;

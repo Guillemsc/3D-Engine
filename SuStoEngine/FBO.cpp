@@ -102,7 +102,7 @@ void FBO::Draw()
 	//Future method to draw all the elements to the texture
 }
 
-uint FBO::GetTexture() const
+const uint FBO::GetTexture() const
 {
 	return fbo;
 }

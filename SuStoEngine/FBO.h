@@ -17,7 +17,7 @@ public:
 	void Bind();
 	void Unbind();
 	void Draw();
-	GLuint GetTexture() const;
+	const GLuint GetTexture() const;
 
 private:
 	void Destroy();

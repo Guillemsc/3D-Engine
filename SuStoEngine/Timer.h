@@ -8,14 +8,14 @@ public:
 	~Timer();
 
 	void Start();
-	int Read() const;
-	float ReadSec() const;
-	void AddTime(float sec);
+	const int Read() const;
+	const float ReadSec() const;
+	void AddTime(const float& sec);
 	void Stop();
 	void PauseOn();
 	void PauseOff();
 
-	bool IsActive();
+	const bool IsActive() const;
 
 
 private:

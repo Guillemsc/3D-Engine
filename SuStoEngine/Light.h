@@ -8,7 +8,7 @@ struct Light
 	Light();
 
 	void Init();
-	void SetPos(float x, float y, float z);
+	void SetPos(const float& x, const float& y, const float& z);
 	void Active(bool active);
 	void Render();
 

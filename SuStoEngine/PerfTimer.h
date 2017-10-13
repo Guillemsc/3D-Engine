@@ -9,9 +9,9 @@ public:
 	PerfTimer();
 
 	void Start();
-	void AddTime(float ms);
-	double ReadMs() const;
-	int ReadTicks() const;
+	void AddTime(const float& ms);
+	const double ReadMs() const;
+	const int ReadTicks() const;
 
 private:
 	double     started_at = 0;

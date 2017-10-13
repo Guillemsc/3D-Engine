@@ -24,7 +24,7 @@ void Timer::Start()
 }
 
 // ---------------------------------------------
-int Timer::Read() const
+const int Timer::Read() const
 {
 	if (active)
 	{
@@ -38,12 +38,12 @@ int Timer::Read() const
 }
 
 // ---------------------------------------------
-float Timer::ReadSec() const
+const float Timer::ReadSec() const
 {
 	return float(Read()) / 1000.0f;
 }
 
-void Timer::AddTime(float sec)
+void Timer::AddTime(const float& sec)
 {
 	started_at -= (sec * 1000);
 }
@@ -73,7 +73,7 @@ void Timer::PauseOff()
 	}
 }
 
-bool Timer::IsActive()
+const bool Timer::IsActive() const
 {
 	return active;
 }
