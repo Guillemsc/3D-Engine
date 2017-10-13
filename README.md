@@ -52,7 +52,17 @@ It will only show the options if a GameObject of the hierarchy is selected.
   * _**Drag and Drop**_: if an fbx is dropped into the engine, it will be rendered. A PNG texture can be dropped to.
  
 ### Hierarchy
+GameObjects are shown at the hierarchy. There, they can be selected (by right clicking) and created (with a button above the list of GameObject.
 
+### Inspector
+At the inspecotr it is posible to look at the components of a selected GameObject, which would be its transform, the mesh and the texture component (the last two being optional for the GameObject).
+
+### Console
+The console prints the log of the engine, and also admits commands. At the momement, there are two commands:
+* _**.Clear**_: clears the log of the console.
+* _**.Help**_: Shows a list of commands.
+
+### Configuration
 
 ## License
 MIT License
