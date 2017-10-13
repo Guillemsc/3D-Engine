@@ -75,32 +75,32 @@ void ModuleCamera3D::OnSaveConfig(JSON_Doc * config)
 	config->SetNumber("camera.camera_speed", camera_speed);
 }
 
-void ModuleCamera3D::SetMouseSensitivity(float set)
+void ModuleCamera3D::SetMouseSensitivity(const float& set)
 {
 	mouse_sensitivity = set;
 }
 
-void ModuleCamera3D::SetWheelSpeed(float set)
+void ModuleCamera3D::SetWheelSpeed(const float& set)
 {
 	wheel_speed = set;
 }
 
-void ModuleCamera3D::SetCameraSpeed(float set)
+void ModuleCamera3D::SetCameraSpeed(const float& set)
 {
 	camera_speed = set;
 }
 
-float ModuleCamera3D::GetMouseSensitivity()
+const float ModuleCamera3D::GetMouseSensitivity() const
 {
 	return mouse_sensitivity;
 }
 
-float ModuleCamera3D::GetWheelSpeed()
+const float ModuleCamera3D::GetWheelSpeed() const
 {
 	return wheel_speed;
 }
 
-float ModuleCamera3D::GetCameraSpeed()
+const float ModuleCamera3D::GetCameraSpeed() const
 {
 	return camera_speed;
 }
@@ -225,7 +225,7 @@ void ModuleCamera3D::Move(const vec3 &Movement)
 }
 
 // -----------------------------------------------------------------
-float* ModuleCamera3D::GetViewMatrix()
+const float* ModuleCamera3D::GetViewMatrix() const
 {
 	return &ViewMatrix;
 }
@@ -237,7 +237,7 @@ void ModuleCamera3D::CalculateViewMatrix()
 	ViewMatrixInverse = inverse(ViewMatrix);
 }
 
-void ModuleCamera3D::MoveFront(float speed)
+void ModuleCamera3D::MoveFront(const float& speed)
 {
 	vec3 newPos(0, 0, 0);
 	newPos -= Z * speed;
@@ -245,7 +245,7 @@ void ModuleCamera3D::MoveFront(float speed)
 	Reference += newPos;
 }
 
-void ModuleCamera3D::MoveBack(float speed)
+void ModuleCamera3D::MoveBack(const float& speed)
 {
 	vec3 newPos(0, 0, 0);
 	newPos += Z * speed;
@@ -253,7 +253,7 @@ void ModuleCamera3D::MoveBack(float speed)
 	Reference += newPos;
 }
 
-void ModuleCamera3D::MoveLeft(float speed)
+void ModuleCamera3D::MoveLeft(const float& speed)
 {
 	vec3 newPos(0, 0, 0);
 	newPos -= X * speed;
@@ -261,7 +261,7 @@ void ModuleCamera3D::MoveLeft(float speed)
 	Reference += newPos;
 }
 
-void ModuleCamera3D::MoveRight(float speed)
+void ModuleCamera3D::MoveRight(const float& speed)
 {
 	vec3 newPos(0, 0, 0);
 	newPos += X * speed;
@@ -269,7 +269,7 @@ void ModuleCamera3D::MoveRight(float speed)
 	Reference += newPos;
 }
 
-void ModuleCamera3D::MoveUp(float speed)
+void ModuleCamera3D::MoveUp(const float& speed)
 {
 	vec3 newPos(0, 0, 0);
 	newPos.y += speed;
@@ -277,7 +277,7 @@ void ModuleCamera3D::MoveUp(float speed)
 	Reference += newPos;
 }
 
-void ModuleCamera3D::MoveDown(float speed)
+void ModuleCamera3D::MoveDown(const float& speed)
 {
 	vec3 newPos(0, 0, 0);
 	newPos.y -= speed;
@@ -285,14 +285,14 @@ void ModuleCamera3D::MoveDown(float speed)
 	Reference += newPos;
 }
 
-void ModuleCamera3D::Focus(vec3 focus, float distance)
+void ModuleCamera3D::Focus(const vec3& focus, const float& distance)
 {
 	Reference = focus;
 
 	Position = Reference + Z * distance;
 }
 
-void ModuleCamera3D::Orbit(vec3 orbit_center, float motion_x, float motion_y)
+void ModuleCamera3D::Orbit(const vec3& orbit_center, const float& motion_x, const float& motion_y)
 {
 	Reference = orbit_center;
 
@@ -323,7 +323,7 @@ void ModuleCamera3D::Orbit(vec3 orbit_center, float motion_x, float motion_y)
 	Position = Reference + Z * length(Position);
 }
 
-void ModuleCamera3D::Rotate(float motion_x, float motion_y)
+void ModuleCamera3D::Rotate(const float& motion_x, const float& motion_y)
 {
 	Reference = Position;
 
@@ -352,7 +352,7 @@ void ModuleCamera3D::Rotate(float motion_x, float motion_y)
 	Position = Reference + Z * length(Position);
 }
 
-bool ModuleCamera3D::IsMouseInsideWindow() const
+const bool ModuleCamera3D::IsMouseInsideWindow() const
 {
 	return PointInRect(float2(App->input->GetMouseX(), App->input->GetMouseY()), App->editorUI->GameRect());
 }

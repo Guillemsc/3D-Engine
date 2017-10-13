@@ -18,36 +18,36 @@ public:
 	void OnLoadConfig(JSON_Doc* config);
 	void OnSaveConfig(JSON_Doc* config);
 
-	void SetMouseSensitivity(float set);
-	void SetWheelSpeed(float set);
-	void SetCameraSpeed(float set);
+	void SetMouseSensitivity(const float& set);
+	void SetWheelSpeed(const float& set);
+	void SetCameraSpeed(const float& set);
 
-	float GetMouseSensitivity();
-	float GetWheelSpeed();
-	float GetCameraSpeed();
+	const float GetMouseSensitivity() const;
+	const float GetWheelSpeed() const;
+	const float GetCameraSpeed() const;
 
-	void Focus(vec3 focus, float distance);
+	void Focus(const vec3& focus, const float& distance);
 
-	float* GetViewMatrix();
+	const float* GetViewMatrix() const;
 
 private:
 	void CalculateViewMatrix();
 
-	void MoveFront(float speed);
-	void MoveBack(float speed);
-	void MoveLeft(float speed);
-	void MoveRight(float speed);
-	void MoveUp(float speed);
-	void MoveDown(float speed);
+	void MoveFront(const float& speed);
+	void MoveBack(const float& speed);
+	void MoveLeft(const float& speed);
+	void MoveRight(const float& speed);
+	void MoveUp(const float& speed);
+	void MoveDown(const float& speed);
 
-	void Orbit(vec3 orbit_center, float motion_x, float motion_y);
-	void Rotate(float motion_x, float motion_y);
+	void Orbit(const vec3& orbit_center, const float& motion_x, const float& motion_y);
+	void Rotate(const float& motion_x, const float& motion_y);
 
-	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
-	void LookAt(const vec3 &Spot);
-	void Move(const vec3 &Movement);
+	void Look(const vec3& Position, const vec3& Reference, bool RotateAroundReference = false);
+	void LookAt(const vec3& Spot);
+	void Move(const vec3& Movement);
 
-	bool IsMouseInsideWindow() const;
+	const bool IsMouseInsideWindow() const;
 
 public:
 	vec3 X, Y, Z, Position, Reference;
