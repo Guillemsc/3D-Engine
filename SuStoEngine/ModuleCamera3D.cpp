@@ -155,15 +155,18 @@ bool ModuleCamera3D::Update()
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_D))
 				MoveRight(speed);
 
+			else
+			{
+				Rotate(App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
+			}
+		}
+		else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
+		{
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_LALT) || App->input->GetKeyRepeat(SDL_SCANCODE_RALT))
 			{
 				Orbit(vec3(0, 0, 0), App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
 
 				App->window->GetCursor()->SizeAll();
-			}
-			else
-			{
-				Rotate(App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
 			}
 		}
 		else
