@@ -52,6 +52,17 @@ bool TextureLoader::CleanUp()
 {
 	bool ret = true;
 
+	for (vector<Texture*>::iterator it = textures.begin(); it != textures.end();)
+	{
+		if ((*it)->GetId() != 0)
+			App->renderer3D->UnloadTextureBuffer((*it)->GetId(), 1);
+
+		(*it)->CleanUp();
+		delete (*it);
+
+		it = textures.erase(it);
+	}
+
 	return ret;
 }
 
@@ -118,10 +129,12 @@ void TextureLoader::UnloadTexture(Texture * text)
 	{
 		if ((*it) == text)
 		{
-			if(text->GetId() != 0)
-				App->renderer3D->UnloadTextureBuffer(text->GetId(), 1);
+			if((*it)->GetId() != 0)
+				App->renderer3D->UnloadTextureBuffer((*it)->GetId(), 1);
 
-			text->CleanUp();
+			(*it)->CleanUp();
+
+			delete(*it);
 			textures.erase(it);
 			break;
 		}
