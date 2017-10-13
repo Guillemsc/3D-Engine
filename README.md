@@ -63,6 +63,13 @@ The console prints the log of the engine, and also admits commands. At the momem
 * _**.Help**_: Shows a list of commands.
 
 ### Configuration
+At the configuration the user can change some variables for the sake of the use of the editor. The most remarkable things are the Fill mode, the wireframe mode and the point mode, which are used to change the mode the meshes are shown at the game window.
+
+### Profiler
+Mainly, the user can look at the memory usage and the framerate within the profiler window.
+
+### Hardware
+The hardware windows shows the capabilities of the hardware used by the user.
 
 ## License
 MIT License
