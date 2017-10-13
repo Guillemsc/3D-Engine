@@ -7,6 +7,7 @@
 #include "ComponentMesh.h"
 #include "ComponentTexture.h"
 #include "ModuleGameObject.h"
+#include "TextureLoader.h"
 #include "Inspector.h"
 
 #include "Glew/include/glew.h" 
@@ -46,7 +47,7 @@ void GameObject::Draw()
 
 	if (component_texture != nullptr)
 	{
-		//glBindTexture(GL_TEXTURE_2D, component_texture);
+		glBindTexture(GL_TEXTURE_2D, component_texture->GetTexture()->GetId());
 	}
 
 	ComponentMesh* component_mesh = (ComponentMesh*)FindComponentByType(MESH);

@@ -24,6 +24,16 @@ void ComponentTexture::CleanUp()
 {
 }
 
+void ComponentTexture::SetTexture(Texture* text)
+{
+	texture = text;
+}
+
+Texture * ComponentTexture::GetTexture()
+{
+	return texture;
+}
+
 void ComponentTexture::InspectorDraw(std::vector<Component*> components)
 {
 	ImGui::Text(GetName());

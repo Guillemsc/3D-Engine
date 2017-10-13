@@ -1,6 +1,9 @@
 #include "TextureLoader.h"
 #include "App.h"
 #include "ModuleRenderer3D.h"
+#include "GameObject.h"
+#include "ModuleGameObject.h"
+#include "ComponentTexture.h"
 
 #include "Devil\include\il.h"
 #include "Devil\include\ilu.h"
@@ -72,9 +75,25 @@ bool TextureLoader::LoadTexture(const char * full_path)
 		iluGetImageInfo(&ImageInfo);
 
 		ret = ilutGLBindTexImage();
+
+		Texture* texture = new Texture(textureID, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT));
+
 		ilDeleteImages(1, &id);
 
-		//Texture* texture = new Texture(textureID, );
+
+		// CUSTOM GAME OBJECT TEXTURE LOADING FOR THIS ASSIGNMENT
+
+		vector<GameObject*> go = App->gameobj->GetListGameObjects();
+
+		for (vector<GameObject*>::iterator it = go.begin(); it != go.end(); it++)
+		{
+			(*it)->AddComponent(TEXTURE);
+			ComponentTexture* comp = (ComponentTexture*)(*it)->FindComponentByType(TEXTURE);
+
+			comp->SetTexture(texture);
+		}
+
+		// ------------------------------------------------------
 	}
 	else
 	{
@@ -89,4 +108,9 @@ Texture::Texture(uint _id, uint _width, uint _height)
 	id = _id;
 	width = _width;
 	height = _height;
+}
+
+uint Texture::GetId()
+{
+	return id;
 }

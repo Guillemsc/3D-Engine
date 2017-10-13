@@ -8,7 +8,7 @@ class Texture
 public:
 	Texture(uint id, uint width, uint height);
 	
-private:
+	uint GetId();
 
 private:
 	uint id = 0;
@@ -30,7 +30,7 @@ public:
 	bool LoadTexture(const char* full_path);
 
 private:
-
+	vector<Texture*> textures;
 
 public:
 
