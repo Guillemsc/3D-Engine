@@ -39,7 +39,7 @@ bool GeometryLoader::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	LoadFile("BakerHouse.FBX", true);
+	LoadFile("BakerHouse.fbx", true);
 
 	return ret;
 }
@@ -68,7 +68,7 @@ void GeometryLoader::OnLoadFile(const char* file_path, const char* file_name, co
 	if (TextCmp("fbx", file_extension))
 	{
 		App->gameobj->DestroyAllGameObjects();
-		LoadFile(file_path, true);
+		LoadFile(file_name, true);
 	}
 }
 
@@ -80,7 +80,7 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		LOG_OUTPUT("LOADING %d MESHES", scene->mNumMeshes);
-
+		
 		for (int i = 0; i < scene->mNumMeshes; ++i)
 		{
 			Mesh* new_mesh = new Mesh();
