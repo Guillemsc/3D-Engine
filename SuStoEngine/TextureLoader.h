@@ -3,6 +3,16 @@
 
 #include "Module.h"
 
+class Texture
+{
+public:
+	Texture();
+
+	int id = 0;
+	int width = 0;
+	int height = 0;
+};
+
 class TextureLoader : public Module
 {
 public:
