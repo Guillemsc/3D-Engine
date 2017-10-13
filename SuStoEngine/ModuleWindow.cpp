@@ -153,7 +153,7 @@ void ModuleWindow::SetTitle(const char* title)
 	SDL_SetWindowTitle(window, title);
 }
 
-void ModuleWindow::SetWindowSize(int _width, int _height)
+void ModuleWindow::SetWindowSize(const int _width, const int _height)
 {
 	if (_width > 0 && _height > 0)
 	{
@@ -171,7 +171,7 @@ void ModuleWindow::GetWindowSize(int & width, int & height)
 	SDL_GetWindowSize(window, &width, &height);
 }
 
-vec2 ModuleWindow::GetWindowSize()
+const vec2 ModuleWindow::GetWindowSize()
 {
 	int w, h;
 	GetWindowSize(w, h);
@@ -191,14 +191,14 @@ void ModuleWindow::GetDisplaySize(int & width, int & height)
 	height = dm.h;
 }
 
-vec2 ModuleWindow::GetDisplaySize()
+const vec2 ModuleWindow::GetDisplaySize()
 {
 	int x, y;
 	GetDisplaySize(x, y);
 	return vec2(x, y);
 }
 
-void ModuleWindow::SetFullscreen(bool set)
+void ModuleWindow::SetFullscreen(const bool& set)
 {
 	fullscreen = set;
 
@@ -212,22 +212,22 @@ void ModuleWindow::SetFullscreen(bool set)
 	SDL_SetWindowFullscreen(window, flags);
 }
 
-bool ModuleWindow::GetFullscreen()
+const bool ModuleWindow::GetFullscreen() const
 {
 	return fullscreen;
 }
 
-void ModuleWindow::SetResizable(bool set)
+void ModuleWindow::SetResizable(const bool& set)
 {
 	resizable = set;
 }
 
-bool ModuleWindow::GetResizable()
+const bool ModuleWindow::GetResizable() const
 {
 	return resizable;
 }
 
-void ModuleWindow::SetBorderless(bool set)
+void ModuleWindow::SetBorderless(const bool& set)
 {
 	if (!fullscreen && !full_dekstop)
 	{
@@ -236,12 +236,12 @@ void ModuleWindow::SetBorderless(bool set)
 	}
 }
 
-bool ModuleWindow::GetBorderless()
+const bool ModuleWindow::GetBorderless() const
 {
 	return borderless;
 }
 
-void ModuleWindow::SetFullDekstop(bool set)
+void ModuleWindow::SetFullDekstop(const bool& set)
 {
 	full_dekstop = set;
 
@@ -260,12 +260,12 @@ void ModuleWindow::SetFullDekstop(bool set)
 	}
 }
 
-bool ModuleWindow::GetFullDekstop()
+const bool ModuleWindow::GetFullDekstop() const
 {
 	return full_dekstop;
 }
 
-void ModuleWindow::SetMaximized(bool set)
+void ModuleWindow::SetMaximized(const bool& set)
 {
 	maximized = set;
 
@@ -275,7 +275,7 @@ void ModuleWindow::SetMaximized(bool set)
 		SDL_RestoreWindow(window);
 }
 
-bool ModuleWindow::GetMaximized()
+const bool ModuleWindow::GetMaximized()
 {
 	Uint32 flags = SDL_GetWindowFlags(window);
 
@@ -287,7 +287,7 @@ bool ModuleWindow::GetMaximized()
 	return maximized;
 }
 
-void ModuleWindow::SetBrightness(float set)
+void ModuleWindow::SetBrightness(float& set)
 {
 	if (set > 1)
 		set = 1;
@@ -300,23 +300,23 @@ void ModuleWindow::SetBrightness(float set)
 	SDL_SetWindowBrightness(window, set);
 }
 
-float ModuleWindow::GetBrightness()
+const float ModuleWindow::GetBrightness() const
 {
 	return SDL_GetWindowBrightness(window);
 }
 
-void ModuleWindow::SetVsync(bool set)
+void ModuleWindow::SetVsync(const bool& set)
 {
 	vsync = set;
 	SDL_GL_SetSwapInterval(vsync);
 }
 
-bool ModuleWindow::GetVsync()
+const bool ModuleWindow::GetVsync() const
 {
 	return vsync;
 }
 
-Cursor * ModuleWindow::GetCursor()
+Cursor * ModuleWindow::GetCursor() const
 {
 	return cursor;
 }

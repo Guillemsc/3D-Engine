@@ -28,24 +28,24 @@ public:
 
 	void SetWindowSize(int width, int height);
 	void GetWindowSize(int &width, int &height);
-	vec2 GetWindowSize();
+	const vec2 GetWindowSize();
 	void GetDisplaySize(int &width, int &height);
-	vec2 GetDisplaySize();
-	void SetFullscreen(bool set);
-	bool GetFullscreen();
-	void SetResizable(bool set);
-	bool GetResizable();
-	void SetBorderless(bool set);
-	bool GetBorderless();
-	void SetFullDekstop(bool set);
-	bool GetFullDekstop();
-	void SetMaximized(bool set);
-	bool GetMaximized();
-	void SetBrightness(float set);
-	float GetBrightness();
-	void SetVsync(bool set);
-	bool GetVsync();
-	Cursor* GetCursor();
+	const vec2 GetDisplaySize();
+	void SetFullscreen(const bool& set);
+	const bool GetFullscreen() const;
+	void SetResizable(const bool& set);
+	const bool GetResizable() const;
+	void SetBorderless(const bool& set);
+	const bool GetBorderless() const;
+	void SetFullDekstop(const bool& set);
+	const bool GetFullDekstop() const;
+	void SetMaximized(const bool& set);
+	const bool GetMaximized();
+	void SetBrightness(float& set);
+	const float GetBrightness() const;
+	void SetVsync(const bool& set);
+	const bool GetVsync() const;
+	Cursor* GetCursor() const;
 
 //private:
 	SDL_Window* GenerateWindow(SDL_Window* window, SDL_Surface* surface, const char* name, Uint32 flags, vec2 pos = { SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED }, vec2 size = { 500, 500 }, float brightness = 1.0f);
