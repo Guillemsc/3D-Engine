@@ -9,6 +9,37 @@ Link to the **Guillem Sunyer**'s Github page ![https://github.com/Guillemsc](htt
 
 Link to the **Simón Stoyanov**'s Github page ![https://github.com/SimonStoyanov](https://github.com/SimonStoyanov)
 
+
+## Game Engine Instructions
+### Main Menu Bar
+* **File**
+  * _**Open in Explorer**_: Opens the container of the Engine.
+  * _**Quit (Alt + F4)**_: Exits the application.
+* **Game Object**
+  * _**Create Empty**_: Creates an empty GameObject and puts it into the hierarchy.
+* **Component**
+It will only show the options if a GameObject of the hierarchy is selected.
+  * _**Add Mesh**_: Adds a component mesh to the selected GameObject.
+  * _**Add Texture**_: Adds a component texture to the selected GameObject.
+* **Window**
+  * _**Game**_
+  * _**Hierarchy**_
+  * _**Inspector**_
+  * _**Console**_
+  * _**Configuration (C)**_
+  * _**Profiler (P)**_
+  * _**Hardware**_
+* **Help**
+  * _**About SuSto Engine**_
+* **Layouts**
+  * _**Current Layout**_: Shows the layout that is using the engine at the moment.
+  * _**List of Layouts**_: A list of layouts that can be assigned when clicking the _Set_ Button or be deleted with the _X_ Button.
+  * _**Input Layout**_: By clicking the button _Save Layout_ and assigning a name at the text input, a layout will be added to the list of layouts above.
+* **Debug**
+  * _**Engine Test**_: Opens the engine test window.
+  * _**Test Window**_: Opens the imgui test window.
+* **FPS**: Show the current framerate.
+
 ## License
 MIT License
 
@@ -31,5 +62,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-## Game Engine Instructions
