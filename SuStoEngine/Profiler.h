@@ -12,11 +12,11 @@ public:
 	void Start();
 	void Finish();
 
-	int GetLastFrameTick();
-	int GetLastFrameMs();
+	const int GetLastFrameTick() const;
+	const int GetLastFrameMs() const;
 
-	std::vector<int> GetTicksList();
-	std::vector<int> GetMsList();
+	const std::vector<int> GetTicksList() const;
+	const std::vector<int> GetMsList() const;
 
 public:
 	std::string name;
@@ -55,38 +55,38 @@ public:
 	void UpdateStart();
 	void UpdateFinish();
 
-	void SetMaxFps(int fps);
-	int GetMaxFps();
-	float GetFrameTime();
-	int GetFPS();
-	float GetAvgFPS();
-	int GetFramesSinceStartup();
-	int GetTimeSinceStartup();
+	void SetMaxFps(int const &fps);
+	const int GetMaxFps() const;
+	const float GetFrameTime() const;
+	const int GetFPS() const;
+	const float GetAvgFPS() const;
+	const int GetFramesSinceStartup() const;
+	const int GetTimeSinceStartup() const;
 
 	void StartProfile(bool startup, const char* name, ...);
 	void AddToProfile(const char* name, ...);
 	void FinishProfile(const char * name, ...);
 	Profile* GetProfile(const char* name, ...);
 
-	int GetProfilesCount();
-	std::vector<float> GetFramesVector();
-	std::vector<Profile*> GetProfilesList();
-	std::vector<float> GetMemoryVector();
+	int GetProfilesCount() const;
+	std::vector<float> GetFramesVector() const;
+	std::vector<Profile*> GetProfilesList() const;
+	std::vector<float> GetMemoryVector() const;
 
-	int GetCpuCount();
-	int GetCpuCacheLineSize();
-	int GetSystemRam();
-	bool Has3DNow();
-	bool HasAVX();
-	bool HasAVX2();
-	bool HasAltiVec();
-	bool HasMMX();
-	bool HasRDTSC();
-	bool HasSSE();
-	bool HasSSE2();
-	bool HasSSE3();
-	bool HasSSE41();
-	bool HasSSE42();
+	const int GetCpuCount() const;
+	const int GetCpuCacheLineSize() const;
+	const int GetSystemRam() const;
+	const bool Has3DNow() const;
+	const bool HasAVX() const;
+	const bool HasAVX2() const;
+	const bool HasAltiVec() const;
+	const bool HasMMX() const;
+	const bool HasRDTSC() const;
+	const bool HasSSE() const;
+	const bool HasSSE2() const;
+	const bool HasSSE3() const;
+	const bool HasSSE41()  const;
+	const bool HasSSE42() const;
 	GraphicsDeviceInfo GetInfo();
 
 private:

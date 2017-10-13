@@ -96,7 +96,7 @@ void Profiler::UpdateFinish()
 	// -----------
 }
 
-void Profiler::SetMaxFps(int fps)
+void Profiler::SetMaxFps(int const &fps)
 {
 	if (fps > 0)
 	{
@@ -105,32 +105,32 @@ void Profiler::SetMaxFps(int fps)
 	}
 }
 
-int Profiler::GetMaxFps()
+const int Profiler::GetMaxFps() const
 {
 	return max_fps;
 }
 
-float Profiler::GetFrameTime()
+const float Profiler::GetFrameTime() const
 {
 	return update_ms;
 }
 
-int Profiler::GetFPS()
+const int Profiler::GetFPS() const
 {
 	return last_second_frames;
 }
 
-float Profiler::GetAvgFPS()
+const float Profiler::GetAvgFPS() const
 {
 	return avg_fps*1000;
 }
 
-int Profiler::GetFramesSinceStartup()
+const int Profiler::GetFramesSinceStartup() const
 {
 	return frames_since_startup;
 }
 
-int Profiler::GetTimeSinceStartup()
+const int Profiler::GetTimeSinceStartup() const
 {
 	return SDL_GetTicks();
 }
@@ -232,92 +232,92 @@ Profile* Profiler::GetProfile(const char * name, ...)
 	return nullptr;
 }
 
-int Profiler::GetProfilesCount()
+int Profiler::GetProfilesCount() const
 {
 	return profiles.size();
 }
 
-std::vector<float> Profiler::GetFramesVector()
+std::vector<float> Profiler::GetFramesVector() const
 {
 	return frames;
 }
 
-std::vector<Profile*> Profiler::GetProfilesList()
+std::vector<Profile*> Profiler::GetProfilesList() const
 {
 	return profiles;
 }
 
-std::vector<float> Profiler::GetMemoryVector()
+std::vector<float> Profiler::GetMemoryVector() const
 {
 	return memory;
 }
 
-int Profiler::GetCpuCount()
+const int Profiler::GetCpuCount() const
 {
 	return SDL_GetCPUCount();
 }
 
-int Profiler::GetCpuCacheLineSize()
+const int Profiler::GetCpuCacheLineSize() const
 {
 	return SDL_GetCPUCacheLineSize();
 }
 
-int Profiler::GetSystemRam()
+const int Profiler::GetSystemRam() const
 {
 	return SDL_GetSystemRAM();
 }
 
-bool Profiler::Has3DNow()
+const bool Profiler::Has3DNow() const
 {
 	return SDL_Has3DNow();
 }
 
-bool Profiler::HasAVX()
+const bool Profiler::HasAVX() const
 {
 	return SDL_HasAVX();
 }
 
-bool Profiler::HasAVX2()
+const bool Profiler::HasAVX2() const
 {
 	return SDL_HasAVX2();
 }
 
-bool Profiler::HasAltiVec()
+const bool Profiler::HasAltiVec() const
 {
 	return SDL_HasAltiVec();
 }
 
-bool Profiler::HasMMX()
+const bool Profiler::HasMMX() const
 {
 	return SDL_HasMMX();
 }
 
-bool Profiler::HasRDTSC()
+const bool Profiler::HasRDTSC() const
 {
 	return SDL_HasRDTSC();
 }
 
-bool Profiler::HasSSE()
+const bool Profiler::HasSSE() const
 {
 	return SDL_HasSSE();
 }
 
-bool Profiler::HasSSE2()
+const bool Profiler::HasSSE2() const
 {
 	return SDL_HasSSE2();
 }
 
-bool Profiler::HasSSE3()
+const bool Profiler::HasSSE3() const
 {
 	return SDL_HasSSE3();
 }
 
-bool Profiler::HasSSE41()
+const bool Profiler::HasSSE41() const
 {
 	return SDL_HasSSE41();
 }
 
-bool Profiler::HasSSE42()
+const bool Profiler::HasSSE42() const
 {
 	return SDL_HasSSE42();
 }
@@ -356,7 +356,7 @@ void Profile::Finish()
 	}
 }
 
-int Profile::GetLastFrameTick()
+const int Profile::GetLastFrameTick() const
 {
 	int ret = 0;
 
@@ -368,7 +368,7 @@ int Profile::GetLastFrameTick()
 	return ret;
 }
 
-int Profile::GetLastFrameMs()
+const int Profile::GetLastFrameMs() const
 {
 	int ret = 0;
 
@@ -380,12 +380,12 @@ int Profile::GetLastFrameMs()
 	return ret;
 }
 
-std::vector<int> Profile::GetTicksList()
+const std::vector<int> Profile::GetTicksList() const
 {
 	return ticks;
 }
 
-std::vector<int> Profile::GetMsList()
+const std::vector<int> Profile::GetMsList() const
 {
 	return ms;
 }

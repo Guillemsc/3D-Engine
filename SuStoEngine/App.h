@@ -40,20 +40,20 @@ public:
 
 	void LoadConfig();
 	void SaveConfig(Module* module = nullptr);
-	JSON_Doc* GetConfig();
+	JSON_Doc* GetConfig() const;
 
 	void LoadFile(const char* filename);
 
 	void EndApp();
-	float GetDT();
+	float GetDT() const;
 	void SetAppName(const char* name);
-	const char* GetAppName();
+	const char* GetAppName() const;
 	void SetAppOrganization(const char* name);
 	const char* GetAppOrganization();
-	void SetMaxFps(int set);
-	int GetMaxFps();
+	void SetMaxFps(int const &set);
+	int GetMaxFps() const;
 	void SetDebugMode(bool set);
-	bool GetDebugMode();
+	bool GetDebugMode() const;
 	void SetVersion(const char* version);
 	const char* GetVersion();
 	SDL_version GetSDLVersion();

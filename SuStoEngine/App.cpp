@@ -319,7 +319,7 @@ void Application::SaveConfig(Module* module)
 	}
 }
 
-JSON_Doc* Application::GetConfig()
+JSON_Doc* Application::GetConfig() const
 {
 	return config;
 }
@@ -342,7 +342,7 @@ void Application::EndApp()
 	end_app = true;
 }
 
-float Application::GetDT()
+float Application::GetDT() const
 {
 	return profiler->GetFrameTime()/1000;
 }
@@ -356,7 +356,7 @@ void Application::SetAppName(const char* name)
 	}
 }
 
-const char * Application::GetAppName()
+const char * Application::GetAppName() const
 {
 	return title.c_str();
 }
@@ -374,17 +374,17 @@ const char * Application::GetAppOrganization()
 	return organization.c_str();
 }
 
-void Application::SetMaxFps(int set)
+void Application::SetMaxFps(int const &set)
 {
 	profiler->SetMaxFps(set);
 }
 
-int Application::GetMaxFps()
+int Application::GetMaxFps() const
 {
 	return profiler->GetMaxFps();
 }
 
-bool Application::GetDebugMode()
+bool Application::GetDebugMode() const
 {
 	return debug_mode;
 }
