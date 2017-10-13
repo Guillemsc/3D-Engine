@@ -328,24 +328,24 @@ uint ModuleRenderer3D::LoadBuffer(uint * vertices, uint size)
 	return id;
 }
 
-uint ModuleRenderer3D::LoadTextureBuffer(uint* texture, uint size, int width, int height, uint wrap_s, uint wrap_t, uint mag, uint min)
+uint ModuleRenderer3D::LoadTextureBuffer(const void* texture, uint size, int format, int width, int height, uint wrap_s, uint wrap_t, uint mag, uint min)
 {
 	uint id = 0;
 
-	GLubyte checkImage[64][64][4];
+	//GLubyte checkImage[64][64][4];
 
-	for (int i = 0; i < 64; i++) {
-		for (int j = 0; j < 64; j++) {
-			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-			checkImage[i][j][0] = (GLubyte)c;
-			checkImage[i][j][1] = (GLubyte)c;
-			checkImage[i][j][2] = (GLubyte)c;
-			checkImage[i][j][3] = (GLubyte)255;
-		}
-	}
+	//for (int i = 0; i < 64; i++) {
+	//	for (int j = 0; j < 64; j++) {
+	//		int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+	//		checkImage[i][j][0] = (GLubyte)c;
+	//		checkImage[i][j][1] = (GLubyte)c;
+	//		checkImage[i][j][2] = (GLubyte)c;
+	//		checkImage[i][j][3] = (GLubyte)255;
+	//	}
+	//}
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(size, (GLuint*)&(id));
+	glGenTextures(1, (GLuint*)&(id));
 	glBindTexture(GL_TEXTURE_2D, id);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s);
@@ -353,8 +353,8 @@ uint ModuleRenderer3D::LoadTextureBuffer(uint* texture, uint size, int width, in
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height,
-		0, GL_RGBA, GL_UNSIGNED_BYTE, texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height,
+		format, GL_RGBA, GL_UNSIGNED_BYTE, texture);
 
 	return id;
 }

@@ -77,6 +77,7 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 	bool ret = false;
 
 	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
+
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		LOG_OUTPUT("LOADING %d MESHES", scene->mNumMeshes);

@@ -34,7 +34,7 @@ bool TextureLoader::Start()
 {
 	bool ret = true;
 
-	//LoadTexture("Baker_house.png");
+	LoadTexture("Baker_house.png");
 
 	return ret;
 }
@@ -57,21 +57,22 @@ bool TextureLoader::LoadTexture(const char * full_path)
 {
 	bool ret = true;
 	
-	uint* id = nullptr;
+	ILuint id;				
+	GLuint textureID;								
 
-	ILuint image_id;
-	ilGenImages(1, &image_id);
-	ilBindImage(image_id);
+	ilGenImages(1, &id);
+	ilBindImage(id);
 
 	if (ilLoadImage(full_path))
 	{
-		App->renderer3D->LoadTextureBuffer(id, 1, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), GL_TEXTURE_WRAP_S, GL_TEXTURE_WRAP_T, GL_TEXTURE_MAG_FILTER, GL_TEXTURE_MIN_FILTER);
+		textureID = App->renderer3D->LoadTextureBuffer(ilGetData(), 1, ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
+			GL_TEXTURE_WRAP_S, GL_TEXTURE_WRAP_T, GL_TEXTURE_MAG_FILTER, GL_TEXTURE_MIN_FILTER);
 
 		ILinfo ImageInfo;
 		iluGetImageInfo(&ImageInfo);
 
 		ret = ilutGLBindTexImage();
-		ilDeleteImages(1, &image_id);
+		ilDeleteImages(1, &id);
 	}
 	else
 	{

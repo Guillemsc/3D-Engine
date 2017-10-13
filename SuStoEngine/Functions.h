@@ -53,4 +53,6 @@ std::string GetFileName(const char* file_path);
 
 std::string ProcessFilePath(const char* file_path);
 
+std::wstring utf8_to_utf16(const std::string& utf8);
+
 #endif //__FUNCTIONS_H__
