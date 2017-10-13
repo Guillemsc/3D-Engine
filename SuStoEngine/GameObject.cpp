@@ -9,6 +9,8 @@
 #include "ModuleGameObject.h"
 #include "Inspector.h"
 
+#include "Glew/include/glew.h" 
+
 GameObject::GameObject(int _id)
 {
 	id = _id;
@@ -34,6 +36,40 @@ void GameObject::Update()
 	{
 		(*it)->Update();
 	}
+}
+
+void GameObject::Draw()
+{
+	glEnable(GL_TEXTURE_2D);
+
+	ComponentTexture* component_texture = (ComponentTexture*)FindComponentByType(TEXTURE);
+
+	if (component_texture != nullptr)
+	{
+		//glBindTexture(GL_TEXTURE_2D, component_texture);
+	}
+
+	ComponentMesh* component_mesh = (ComponentMesh*)FindComponentByType(MESH);
+	
+	if (component_mesh != nullptr)
+	{
+		glEnableClientState(GL_VERTEX_ARRAY);
+
+		glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->id_vertices); // id vertex
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, component_mesh->GetMesh()->id_indices); // id index
+
+		glDrawElements((GLenum)GL_TRIANGLES, component_mesh->GetMesh()->num_indices, GL_UNSIGNED_INT, NULL);
+
+		glDisableClientState(GL_VERTEX_ARRAY);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
 }
 
 void GameObject::Enable()

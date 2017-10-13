@@ -13,6 +13,7 @@ public:
 
 	void Start();
 	void Update();
+	void Draw();
 
 	void Enable();
 	void Disable();

@@ -48,11 +48,6 @@ bool GeometryLoader::Update()
 {
 	bool ret = true;
 
-	for(vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end(); it++)
-	{
-		(*it)->Draw();
-	}
-
 	return ret;
 }
 
@@ -200,12 +195,6 @@ void Mesh::UnloadFromMemory()
 		App->renderer3D->UnloadBuffer(id_indices, num_indices);
 		id_indices = 0;
 	}
-}
-
-void Mesh::Draw()
-{
-	if (id_indices != 0 && id_vertices != 0)
-		App->renderer3D->DrawIndexBuffer(GL_TRIANGLES, id_indices, num_indices, id_vertices);
 }
 
 void Mesh::CleanUp()

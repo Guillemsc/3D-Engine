@@ -21,7 +21,6 @@ struct Mesh
 
 	void LoadToMemory();
 	void UnloadFromMemory();
-	void Draw();
 
 	void CleanUp();
 

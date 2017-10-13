@@ -365,45 +365,6 @@ void ModuleRenderer3D::UnloadBuffer(uint id, uint size)
 		glDeleteBuffers(1, (GLuint*)&id);
 }
 
-void ModuleRenderer3D::DrawVertexBuffer(uint id, uint size)
-{
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, id);
-
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glDrawArrays(GL_TRIANGLES, 0, size);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-void ModuleRenderer3D::DrawIndexBuffer(uint glmode, uint index_id, uint index_size, uint vertex_id)
-{
-	glEnableClientState(GL_VERTEX_ARRAY);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_id); // id vertex
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_id); // id index
-
-	glDrawElements((GLenum)glmode, index_size, GL_UNSIGNED_INT, NULL);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
-void ModuleRenderer3D::DrawTextureBuffer(uint id)
-{
-	glEnable(GL_TEXTURE_2D);
-
-	glBindTexture(GL_TEXTURE_2D, id);
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glDisable(GL_TEXTURE_2D);
-}
-
 void ModuleRenderer3D::DrawPlane(float pos_x, float pos_y, float pos_z, int width, int height)
 {
 	glBegin(GL_QUADS);
