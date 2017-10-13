@@ -139,9 +139,27 @@ std::string GetFileName(const char * file_path)
 
 	for (int i = 0; file_path[i] != '\0'; i++)
 	{
-		if (file_path[i] == '\\')
+		if (file_path[i] == '\\' || file_path[i] == '/')
 		{
 			ret.clear();
+			continue;
+		}
+
+		ret += file_path[i];
+	}
+
+	return ret;
+}
+
+std::string ProcessFilePath(const char * file_path)
+{
+		string ret;
+
+	for (int i = 0; file_path[i] != '\0'; i++)
+	{
+		if (file_path[i] == '\\')
+		{
+			ret += '/';
 			continue;
 		}
 

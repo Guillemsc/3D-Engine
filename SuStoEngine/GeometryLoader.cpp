@@ -68,7 +68,7 @@ void GeometryLoader::OnLoadFile(const char* file_path, const char* file_name, co
 	if (TextCmp("fbx", file_extension))
 	{
 		App->gameobj->DestroyAllGameObjects();
-		LoadFile(file_name, true);
+		LoadFile(file_path, true);
 	}
 }
 

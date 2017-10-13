@@ -51,4 +51,6 @@ std::string GetFileExtension(const char* file_name);
 // Returns only the file name from a file path like C:\\something\filename.exten
 std::string GetFileName(const char* file_path);
 
+std::string ProcessFilePath(const char* file_path);
+
 #endif //__FUNCTIONS_H__
