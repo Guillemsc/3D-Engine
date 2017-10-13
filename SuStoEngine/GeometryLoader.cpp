@@ -85,6 +85,13 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		LOG_OUTPUT("LOADING %d MESHES", scene->mNumMeshes);
+
+		aiMaterial* material = scene->mMaterials[0];
+
+		aiString path;
+		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+
+		App->LoadFile(path.C_Str());
 		
 		for (int i = 0; i < scene->mNumMeshes; ++i)
 		{
@@ -119,7 +126,7 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 			// UVS
 			if (current_mesh->HasTextureCoords(0))
 			{
-				id_uv = App->renderer3D->LoadBuffer((float*)current_mesh->mTextureCoords, current_mesh->mNumVertices * 3);
+				id_uv = App->renderer3D->LoadBuffer((float*)current_mesh->mTextureCoords[0], current_mesh->mNumVertices * 3);
 			}
 
 			// Save info

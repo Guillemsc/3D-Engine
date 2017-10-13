@@ -37,7 +37,7 @@ bool TextureLoader::Start()
 {
 	bool ret = true;
 
-	LoadTexture("Baker_house.png");
+	//LoadTexture("Baker_house.png");
 
 	return ret;
 }
@@ -63,25 +63,26 @@ bool TextureLoader::LoadTexture(const char * full_path)
 	ILuint id;				
 	GLuint textureID;								
 
-	ilGenImages(1, &id);
-	ilBindImage(id);
-
-	if (ilLoadImage(full_path))
+	if (ilLoad(IL_TYPE_UNKNOWN, full_path))
 	{
-		textureID = App->renderer3D->LoadTextureBuffer(ilGetData(), 1, ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
-			GL_TEXTURE_WRAP_S, GL_TEXTURE_WRAP_T, GL_TEXTURE_MAG_FILTER, GL_TEXTURE_MIN_FILTER);
-
 		ILinfo ImageInfo;
 		iluGetImageInfo(&ImageInfo);
 
-		ret = ilutGLBindTexImage();
+		if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
+		{
+			iluFlipImage();
+		}
+
+		ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+
+		textureID = App->renderer3D->LoadTextureBuffer(ilGetData(), 1, ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
+			GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
 
 		Texture* texture = new Texture(textureID, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT));
 
 		ilDeleteImages(1, &id);
 
 		// CUSTOM GAME OBJECT TEXTURE LOADING FOR THIS ASSIGNMENT
-
 		vector<GameObject*> go = App->gameobj->GetListGameObjects();
 
 		for (vector<GameObject*>::iterator it = go.begin(); it != go.end(); it++)

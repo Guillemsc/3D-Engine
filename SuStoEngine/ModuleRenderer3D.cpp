@@ -129,6 +129,8 @@ bool ModuleRenderer3D::Awake()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
+	SetTexture2D(true);
+
 	return ret;
 }
 
@@ -316,6 +318,8 @@ uint ModuleRenderer3D::LoadBuffer(float* elements, uint size)
 	return id;
 }
 
+
+
 uint ModuleRenderer3D::LoadBuffer(uint * elements, uint size)
 {
 	uint id = 0;
@@ -332,8 +336,6 @@ uint ModuleRenderer3D::LoadTextureBuffer(const void* texture, uint size, int for
 {
 	uint id = 0;
 
-	glEnable(GL_TEXTURE_2D);
-
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glGenTextures(size, (GLuint*)&(id));
 	glBindTexture(GL_TEXTURE_2D, id);
@@ -344,8 +346,6 @@ uint ModuleRenderer3D::LoadTextureBuffer(const void* texture, uint size, int for
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, texture);
-
-	glDisable(GL_TEXTURE_2D);
 
 	return id;
 }

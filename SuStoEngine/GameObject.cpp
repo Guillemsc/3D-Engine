@@ -41,8 +41,6 @@ void GameObject::Update()
 
 void GameObject::Draw()
 {
-	glEnable(GL_TEXTURE_2D);
-
 	ComponentTexture* component_texture = (ComponentTexture*)FindComponentByType(TEXTURE);
 
 	if (component_texture != nullptr)
@@ -56,7 +54,7 @@ void GameObject::Draw()
 	{
 		// Vertex
 		glEnableClientState(GL_VERTEX_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdVertices()); // id vertex
+		glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdVertices());
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 		// UV
@@ -65,7 +63,7 @@ void GameObject::Draw()
 		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 
 		// Index
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdIndices()); // id index
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdIndices());
 
 		// Draw
 		glDrawElements((GLenum)GL_TRIANGLES, component_mesh->GetMesh()->GetNumIndices(), GL_UNSIGNED_INT, NULL);
@@ -79,7 +77,6 @@ void GameObject::Draw()
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glDisable(GL_TEXTURE_2D);
 }
 
 void GameObject::Enable()
