@@ -27,6 +27,7 @@ private:
 
 public:
 	Texture* texture = nullptr;
+	bool	 has_texture = false;
 
 };
 

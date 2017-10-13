@@ -86,24 +86,19 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 	{
 		LOG_OUTPUT("LOADING %d MESHES", scene->mNumMeshes);
 
-		//aiMaterial* material = scene->mMaterials[0];
-
-		//aiString path;
-		//material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-
-		//App->LoadFile(path.C_Str());
-		
+		// -------------------------------------------
+		// LOAD MESH ---------------------------------
+		// -------------------------------------------
 		for (int i = 0; i < scene->mNumMeshes; ++i)
 		{
 			aiMesh* current_mesh = scene->mMeshes[i];
 
 			uint* indices = new uint[current_mesh->mNumFaces * 3];
 
-			// VERTICES		
+			// VERTICES ----------------
 			id_vertices = App->renderer3D->LoadBuffer((float*)current_mesh->mVertices, current_mesh->mNumVertices * 3);
-			
 
-			// INDICES
+			// INDICES -----------------
 			if (current_mesh->HasFaces())
 			{
 				// Assume each face is a triangle
@@ -123,14 +118,14 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 				delete[] indices;
 			}
 
-			// UVS
+			// UVS ----------------------
 			if (current_mesh->HasTextureCoords(0))
 			{
 				id_uv = App->renderer3D->LoadBuffer((float*)current_mesh->mTextureCoords[0], current_mesh->mNumVertices * 3);
 			}
 
 			// Save info
-			Mesh* new_mesh = new Mesh(id_vertices, current_mesh->mNumVertices, id_indices, current_mesh->mNumFaces * 3, id_uv, current_mesh->mNumVertices * 3);
+			Mesh* new_mesh = new Mesh(id_vertices, current_mesh->mNumVertices, id_indices, current_mesh->mNumFaces * 3, id_uv, current_mesh->mNumVertices);
 
 			LOG_OUTPUT("New mesh with %d vertices", current_mesh->mNumVertices);
 			LOG_OUTPUT("New mesh with %d indices", current_mesh->mNumFaces * 3);
@@ -150,6 +145,19 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 			}
 		}
 
+		// -------------------------------------------
+		// LOAD TEXTURES -----------------------------
+		// -------------------------------------------
+		aiMaterial* material = scene->mMaterials[0];
+
+		aiString path;
+		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+		App->LoadFile(path.C_Str());
+
+
+		// -------------------------------------------
+		// RELEASE -----------------------------------
+		// -------------------------------------------
 		aiReleaseImport(scene);
 		ret = true;
 	}
@@ -168,12 +176,17 @@ void GeometryLoader::UnloadFile(Mesh* mesh)
 			// Unload from memory
 			if ((*it)->GetIdVertices() != 0)
 			{
-				App->renderer3D->UnloadBuffer((*it)->GetIdVertices(), (*it)->GetNumVertices()*3);
+				App->renderer3D->UnloadBuffer((*it)->GetIdVertices(), (*it)->GetNumVertices() * 3);
 			}
 
 			if ((*it)->GetIdIndices() != 0)
 			{
 				App->renderer3D->UnloadBuffer((*it)->GetIdIndices(), (*it)->GetNumIndices());
+			}
+
+			if ((*it)->GetIdUV() != 0)
+			{
+				App->renderer3D->UnloadBuffer((*it)->GetIdUV(), (*it)->GetNumUVs() * 3);
 			}
 
 			(*it)->CleanUp();
@@ -196,6 +209,11 @@ void GeometryLoader::UnloadAllFiles()
 		if ((*it)->GetIdIndices() != 0)
 		{
 			App->renderer3D->UnloadBuffer((*it)->GetIdIndices(), (*it)->GetNumIndices());
+		}
+
+		if ((*it)->GetIdUV() != 0)
+		{
+			App->renderer3D->UnloadBuffer((*it)->GetIdUV(), (*it)->GetNumUVs() * 3);
 		}
 
 		(*it)->CleanUp();;

@@ -8,6 +8,10 @@ class Texture
 public:
 	Texture(uint id, uint width, uint height);
 	
+	bool operator == (Texture* text);
+
+	void CleanUp();
+
 	uint GetId();
 
 private:
@@ -26,8 +30,10 @@ public:
 	bool Start();
 	bool Update();
 	bool CleanUp();
+	void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension);
 
 	bool LoadTexture(const char* full_path);
+	void UnloadTexture(Texture* text);
 
 private:
 	vector<Texture*> textures;

@@ -157,6 +157,15 @@ void GameObject::AddComponent(ComponentType type)
 
 void GameObject::RemoveComponent(ComponentType type)
 {
+	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
+	{
+		if ((*it)->GetType() == type)
+		{
+			(*it)->CleanUp();
+			components.erase(it);
+			break;
+		}
+	}
 }
 
 bool GameObject::ContainsComponent(ComponentType type)

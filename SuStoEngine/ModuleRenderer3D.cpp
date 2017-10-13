@@ -356,6 +356,11 @@ void ModuleRenderer3D::UnloadBuffer(uint id, uint size)
 		glDeleteBuffers(1, (GLuint*)&id);
 }
 
+void ModuleRenderer3D::UnloadTextureBuffer(uint id, uint size)
+{
+	glDeleteTextures(size, &id);
+}
+
 void ModuleRenderer3D::DrawPlane(float pos_x, float pos_y, float pos_z, int width, int height)
 {
 	glBegin(GL_QUADS);

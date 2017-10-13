@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "ModuleGameObject.h"
 #include "ComponentTexture.h"
+#include "Functions.h"
 
 #include "Devil\include\il.h"
 #include "Devil\include\ilu.h"
@@ -37,8 +38,6 @@ bool TextureLoader::Start()
 {
 	bool ret = true;
 
-	//LoadTexture("Baker_house.png");
-
 	return ret;
 }
 
@@ -54,6 +53,14 @@ bool TextureLoader::CleanUp()
 	bool ret = true;
 
 	return ret;
+}
+
+void TextureLoader::OnLoadFile(const char * file_path, const char * file_name, const char * file_extension)
+{
+	if (TextCmp("png", file_extension))
+	{
+		LoadTexture(file_path);
+	}
 }
 
 bool TextureLoader::LoadTexture(const char * full_path)
@@ -82,17 +89,19 @@ bool TextureLoader::LoadTexture(const char * full_path)
 
 		ilDeleteImages(1, &id);
 
+		textures.push_back(texture);
+
 		// CUSTOM GAME OBJECT TEXTURE LOADING FOR THIS ASSIGNMENT
 		vector<GameObject*> go = App->gameobj->GetListGameObjects();
 
 		for (vector<GameObject*>::iterator it = go.begin(); it != go.end(); it++)
 		{
+			(*it)->RemoveComponent(TEXTURE);
 			(*it)->AddComponent(TEXTURE);
 			ComponentTexture* comp = (ComponentTexture*)(*it)->FindComponentByType(TEXTURE);
 
 			comp->SetTexture(texture);
 		}
-
 		// ------------------------------------------------------
 	}
 	else
@@ -103,11 +112,41 @@ bool TextureLoader::LoadTexture(const char * full_path)
 	return ret;
 }
 
+void TextureLoader::UnloadTexture(Texture * text)
+{
+	for (vector<Texture*>::iterator it = textures.begin(); it != textures.end(); it++)
+	{
+		if ((*it) == text)
+		{
+			if(text->GetId() != 0)
+				App->renderer3D->UnloadTextureBuffer(text->GetId(), 1);
+
+			text->CleanUp();
+			textures.erase(it);
+			break;
+		}
+	}
+}
+
 Texture::Texture(uint _id, uint _width, uint _height)
 {
 	id = _id;
 	width = _width;
 	height = _height;
+}
+
+bool Texture::operator==(Texture * text)
+{
+	bool ret = false;
+
+	if (id == text->id && width == text->width && height == text->height)
+		ret = true;
+
+	return ret;
+}
+
+void Texture::CleanUp()
+{
 }
 
 uint Texture::GetId()

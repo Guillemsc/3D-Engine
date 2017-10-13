@@ -48,6 +48,7 @@ public:
 	uint LoadBuffer(uint* elements, uint size);
 	uint LoadTextureBuffer(const void* texture, uint size, int format, int width, int height, uint wrap_s, uint wrap_t, uint mag, uint min);
 	void UnloadBuffer(uint id, uint size);
+	void UnloadTextureBuffer(uint id, uint size);
 
 	void DrawPlane(float pos_x, float pos_y, float pos_z, int width, int height);
 
