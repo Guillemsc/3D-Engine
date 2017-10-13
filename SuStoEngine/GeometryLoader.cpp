@@ -86,12 +86,12 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 	{
 		LOG_OUTPUT("LOADING %d MESHES", scene->mNumMeshes);
 
-		aiMaterial* material = scene->mMaterials[0];
+		//aiMaterial* material = scene->mMaterials[0];
 
-		aiString path;
-		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+		//aiString path;
+		//material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 
-		App->LoadFile(path.C_Str());
+		//App->LoadFile(path.C_Str());
 		
 		for (int i = 0; i < scene->mNumMeshes; ++i)
 		{
