@@ -196,7 +196,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void ModuleRenderer3D::SetPoligonModeWireframe()
+void ModuleRenderer3D::SetPoligonModeWireframe() const
 {
 	bool wireframe = true;
 	bool points = false;
@@ -205,7 +205,7 @@ void ModuleRenderer3D::SetPoligonModeWireframe()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
-void ModuleRenderer3D::SetPoligonModePoints(float point_size)
+void ModuleRenderer3D::SetPoligonModePoints(float point_size) const
 {
 	bool wireframe = false;
 	bool points = true;
@@ -215,7 +215,7 @@ void ModuleRenderer3D::SetPoligonModePoints(float point_size)
 	glPointSize(point_size);
 }
 
-void ModuleRenderer3D::SetPoligonModeFill()
+void ModuleRenderer3D::SetPoligonModeFill() const
 {
 	bool wireframe = false;
 	bool points = false;
@@ -224,7 +224,7 @@ void ModuleRenderer3D::SetPoligonModeFill()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
-void ModuleRenderer3D::SetDepthTest(bool set)
+void ModuleRenderer3D::SetDepthTest(const bool& set) const
 {
 	if (set)
 		glEnable(GL_DEPTH_TEST);
@@ -232,7 +232,7 @@ void ModuleRenderer3D::SetDepthTest(bool set)
 		glDisable(GL_DEPTH_TEST);
 }
 
-void ModuleRenderer3D::SetCullFace(bool set)
+void ModuleRenderer3D::SetCullFace(const bool& set) const
 {
 	if (set)
 		glEnable(GL_CULL_FACE);
@@ -240,7 +240,7 @@ void ModuleRenderer3D::SetCullFace(bool set)
 		glDisable(GL_CULL_FACE);
 }
 
-void ModuleRenderer3D::SetLightingState(bool set)
+void ModuleRenderer3D::SetLightingState(const bool& set) const
 {
 	if (set)
 		glEnable(GL_LIGHTING);
@@ -248,7 +248,7 @@ void ModuleRenderer3D::SetLightingState(bool set)
 		glDisable(GL_LIGHTING);
 }
 
-void ModuleRenderer3D::SetTexture2D(bool set)
+void ModuleRenderer3D::SetTexture2D(const bool& set) const
 {
 	if (set)
 		glEnable(GL_TEXTURE_2D);
@@ -256,7 +256,7 @@ void ModuleRenderer3D::SetTexture2D(bool set)
 		glDisable(GL_TEXTURE_2D);
 }
 
-void ModuleRenderer3D::SetColorMaterial(bool set)
+void ModuleRenderer3D::SetColorMaterial(const bool& set) const
 {
 	if (set)
 		glEnable(GL_COLOR_MATERIAL);
@@ -264,42 +264,42 @@ void ModuleRenderer3D::SetColorMaterial(bool set)
 		glDisable(GL_COLOR_MATERIAL);
 }
 
-bool ModuleRenderer3D::GetPoligonModeWireframe()
+const bool ModuleRenderer3D::GetPoligonModeWireframe() const
 {
 	return wireframe;
 }
 
-bool ModuleRenderer3D::GetPoligonModePoints()
+const bool ModuleRenderer3D::GetPoligonModePoints() const
 {
 	return points;
 }
 
-bool ModuleRenderer3D::GetPoligonModeFill()
+const bool ModuleRenderer3D::GetPoligonModeFill() const
 {
 	return fill;
 }
 
-bool ModuleRenderer3D::GetDepthTest()
+const bool ModuleRenderer3D::GetDepthTest() const
 {
 	return glIsEnabled(GL_DEPTH_TEST);
 }
 
-bool ModuleRenderer3D::GetCullFace()
+const bool ModuleRenderer3D::GetCullFace() const
 {
 	return glIsEnabled(GL_CULL_FACE);
 }
 
-bool ModuleRenderer3D::GetLightingState()
+const bool ModuleRenderer3D::GetLightingState() const
 {
 	return glIsEnabled(GL_LIGHTING);
 }
 
-bool ModuleRenderer3D::GetTexture2D()
+const bool ModuleRenderer3D::GetTexture2D() const
 {
 	return glIsEnabled(GL_TEXTURE_2D);
 }
 
-bool ModuleRenderer3D::GetColorMaterial()
+const bool ModuleRenderer3D::GetColorMaterial() const
 {
 	return glIsEnabled(GL_COLOR_MATERIAL);
 }

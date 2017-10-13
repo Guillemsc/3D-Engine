@@ -21,23 +21,23 @@ public:
 
 	void OnResize(int width, int height);
 
-	void SetPoligonModeWireframe();
-	void SetPoligonModePoints(float point_size = 4.0f);
-	void SetPoligonModeFill();
-	void SetDepthTest(bool set);
-	void SetCullFace(bool set);
-	void SetLightingState(bool set);
-	void SetTexture2D(bool set);
-	void SetColorMaterial(bool set);
+	void SetPoligonModeWireframe() const;
+	void SetPoligonModePoints(float point_size = 4.0f) const;
+	void SetPoligonModeFill() const;
+	void SetDepthTest(const bool& set) const;
+	void SetCullFace(const bool& set) const;
+	void SetLightingState(const bool& set) const;
+	void SetTexture2D(const bool& set) const;
+	void SetColorMaterial(const bool& set) const;
 
-	bool GetPoligonModeWireframe();
-	bool GetPoligonModePoints();
-	bool GetPoligonModeFill();
-	bool GetDepthTest();
-	bool GetCullFace();
-	bool GetLightingState();
-	bool GetTexture2D();
-	bool GetColorMaterial();
+	const bool GetPoligonModeWireframe() const;
+	const bool GetPoligonModePoints() const;
+	const bool GetPoligonModeFill() const;
+	const bool GetDepthTest() const;
+	const bool GetCullFace() const;
+	const bool GetLightingState() const;
+	const bool GetTexture2D() const;
+	const bool GetColorMaterial() const;
 
 	uint LoadBuffer(float* vertices, uint size);
 	uint LoadBuffer(uint* vertices, uint size);
