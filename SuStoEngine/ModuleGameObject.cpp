@@ -85,6 +85,9 @@ void ModuleGameObject::DestroyAllGameObjects()
 	{
 		Destroy((*it));
 	}
+
+	// Temp
+	DestroyGameObjects();
 }
 
 const vector<GameObject*> ModuleGameObject::GetListGameObjects() const
