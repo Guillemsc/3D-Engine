@@ -1,48 +1,55 @@
 #include "ComponentTransform.h"
 #include "imgui.h"
 
-ComponentTransfrom::ComponentTransfrom(GameObject * owner) : Component(ComponentType::TRANSFORM, owner)
+ComponentTransform::ComponentTransform(GameObject * owner) : Component(ComponentType::TRANSFORM, owner)
 {
 	LOG_OUTPUT("Component Transform Created");
 	SetName("Transform");
 }
 
-ComponentTransfrom::~ComponentTransfrom()
+ComponentTransform::~ComponentTransform()
 {
 }
 
-void ComponentTransfrom::Start()
+void ComponentTransform::Start()
 {
 	ResetTransformMatrix();
 }
 
-void ComponentTransfrom::Update()
+void ComponentTransform::Update()
 {
 }
 
-void ComponentTransfrom::CleanUp()
+void ComponentTransform::CleanUp()
 {
 }
 
-void ComponentTransfrom::OnEnable()
+const void ComponentTransform::SetPosition(float3 & pos)
+{
+	transform[3][0] = pos.x;
+	transform[3][1] = pos.y;
+	transform[3][2] = pos.z;
+}
+
+void ComponentTransform::OnEnable()
 {
 }
 
-void ComponentTransfrom::OnDisable()
+void ComponentTransform::OnDisable()
 {
 }
 
-const float3 ComponentTransfrom::GetPosition() const
+const float3 ComponentTransform::GetPosition() const
 {
 	return float3(transform[3][0], transform[3][1], transform[3][2]);
 }
 
-const float3 ComponentTransfrom::GetRotationEuler() const
+const float3 ComponentTransform::GetRotationEuler() const
 {
 	return float3(0, 0, 0);
 }
 
-const float3 ComponentTransfrom::GetScale() const
+const float3 ComponentTransform::GetScale() const
 {
 	float x = Sqrt(Pow(transform[0][0], 2) + Pow(transform[0][1], 2) + Pow(transform[0][2], 2));
 	float y = Sqrt(Pow(transform[1][0], 2) + Pow(transform[1][1], 2) + Pow(transform[1][2], 2));
@@ -51,7 +58,7 @@ const float3 ComponentTransfrom::GetScale() const
 	return float3(x, y, z);
 }
 
-void ComponentTransfrom::ResetTransformMatrix()
+void ComponentTransform::ResetTransformMatrix()
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -62,7 +69,7 @@ void ComponentTransfrom::ResetTransformMatrix()
 	}
 }
 
-void ComponentTransfrom::InspectorDraw(std::vector<Component*> components)
+void ComponentTransform::InspectorDraw(std::vector<Component*> components)
 {
 	ImGui::Text(GetName());
 

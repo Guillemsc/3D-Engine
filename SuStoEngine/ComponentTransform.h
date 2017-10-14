@@ -6,15 +6,17 @@
 
 class GameObject;
 
-class ComponentTransfrom : public Component
+class ComponentTransform : public Component
 {
 public:
-	ComponentTransfrom(GameObject* owner);
-	virtual ~ComponentTransfrom();
+	ComponentTransform(GameObject* owner);
+	virtual ~ComponentTransform();
 
 	void Start();
 	void Update();
 	void CleanUp();
+
+	const void SetPosition(float3& pos);
 
 	const float3 GetPosition() const;
 	const float3 GetRotationEuler() const;

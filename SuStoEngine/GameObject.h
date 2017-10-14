@@ -5,6 +5,8 @@
 #include <vector>
 #include "Component.h"
 
+#include "ComponentTransform.h"
+
 class GameObject
 {
 public:
@@ -36,7 +38,7 @@ public:
 	const bool GetSelected() const;
 
 public:
-	Component* transform = nullptr;
+	ComponentTransform* transform = nullptr;
 	
 private:
 	std::string name;

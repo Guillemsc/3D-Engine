@@ -1,6 +1,10 @@
 #include "ComponentMesh.h"
 #include "App.h"
 #include "GeometryLoader.h"
+#include "Component.h"
+#include "ComponentTransform.h"
+#include "GeometryMath.h"
+#include "GameObject.h"
 #include "imgui.h"
 
 ComponentMesh::ComponentMesh(GameObject * owner) : Component(MESH, owner)
@@ -31,7 +35,12 @@ void ComponentMesh::CleanUp()
 void ComponentMesh::SetMesh(Mesh* _mesh)
 {
 	mesh = _mesh;
-	has_mesh = true;
+
+	if (mesh != nullptr)
+	{
+		has_mesh = true;
+		GetOwner()->transform->SetPosition(GetMesh()->GetBBox().CenterPoint());
+	}
 }
 
 Mesh * ComponentMesh::GetMesh() const

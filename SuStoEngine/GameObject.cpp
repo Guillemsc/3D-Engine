@@ -28,7 +28,7 @@ void GameObject::Start()
 	SetName("GameObject");
 
 	AddComponent(TRANSFORM);
-	transform = FindComponentByType(TRANSFORM);
+	transform = (ComponentTransform*)FindComponentByType(TRANSFORM);
 }
 
 void GameObject::Update()
@@ -126,7 +126,7 @@ void GameObject::AddComponent(ComponentType type)
 	{
 		case TRANSFORM:
 		{
-			ret = new ComponentTransfrom(this);
+			ret = new ComponentTransform(this);
 		}
 		break;
 		case MESH:

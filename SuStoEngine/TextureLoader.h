@@ -2,6 +2,7 @@
 #define __TEXTURELOADER_H__
 
 #include "Module.h"
+#include "GeometryMath.h"
 
 class Texture
 {
@@ -13,6 +14,7 @@ public:
 	void CleanUp();
 
 	uint GetId();
+	float2 GetSize();
 
 	void AddUser();
 	void DeleteUser();
@@ -20,9 +22,8 @@ public:
 	bool IsUsed();
 
 private:
-	uint id = 0;
-	uint width = 0;
-	uint height = 0;
+	uint   id = 0;
+	float2 size = float2(0, 0);
 
 	int  used_by = 0;
 };

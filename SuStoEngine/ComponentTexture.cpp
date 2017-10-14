@@ -60,6 +60,8 @@ void ComponentTexture::InspectorDraw(std::vector<Component*> components)
 
 	ImGui::Text("Id texture: %d", texture->GetId());
 	ImGui::Text("Used by %d GameObjects", texture->UsedBy());
+	ImGui::Text("Preview:");
+	ImGui::Image((ImTextureID)texture->GetId(), ImVec2(200, 200));
 }
 
 void ComponentTexture::OnEnable()

@@ -144,15 +144,15 @@ void TextureLoader::UnloadTexture(Texture * text)
 Texture::Texture(uint _id, uint _width, uint _height)
 {
 	id = _id;
-	width = _width;
-	height = _height;
+	size.x = _width;
+	size.y = _height;
 }
 
-bool Texture::operator==(Texture * text)
+bool Texture::operator==(Texture* text)
 {
 	bool ret = false;
 
-	if (id == text->id && width == text->width && height == text->height)
+	if (id == text->id && size.x == text->size.x && size.y == text->size.y)
 		ret = true;
 
 	return ret;
@@ -165,6 +165,11 @@ void Texture::CleanUp()
 uint Texture::GetId()
 {
 	return id;
+}
+
+float2 Texture::GetSize()
+{
+	return size;
 }
 
 void Texture::AddUser()
