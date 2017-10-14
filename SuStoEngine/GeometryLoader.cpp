@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "ModuleGameObject.h"
 #include "ComponentMesh.h"
+#include "ModuleCamera3D.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
@@ -98,6 +99,24 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 			// VERTICES ----------------
 			id_vertices = App->renderer3D->LoadBuffer((float*)current_mesh->mVertices, current_mesh->mNumVertices * 3);
 
+			// Get mesh size
+			float3 size(0, 0, 0);
+			for (int i = 0; i < current_mesh->mNumVertices; i++)
+			{
+				int x = current_mesh->mVertices[i].x;
+				int y = current_mesh->mVertices[i].y;
+				int z = current_mesh->mVertices[i].z;
+
+				if (x > size.x)
+					size.x = x;
+
+				if (y > size.y)
+					size.y = y;
+
+				if (z > size.z)
+					size.z = z;
+			}
+
 			// INDICES -----------------
 			if (current_mesh->HasFaces())
 			{
@@ -125,7 +144,11 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 			}
 
 			// Save info
-			Mesh* new_mesh = new Mesh(id_vertices, current_mesh->mNumVertices, id_indices, current_mesh->mNumFaces * 3, id_uv, current_mesh->mNumVertices);
+			Mesh* new_mesh = new Mesh(
+				id_vertices, current_mesh->mNumVertices, 
+				id_indices, current_mesh->mNumFaces * 3,
+				id_uv, current_mesh->mNumVertices, 
+				size);
 
 			LOG_OUTPUT("New mesh with %d vertices", current_mesh->mNumVertices);
 			LOG_OUTPUT("New mesh with %d indices", current_mesh->mNumFaces * 3);
@@ -164,6 +187,44 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 		// -------------------------------------------
 		aiReleaseImport(scene);
 		ret = true;
+
+		// CUSTOM GAME OBJECT BEHAVEOUR FOR THIS ASSIGNMENT
+		vector<GameObject*> gobjects = App->gameobj->GetListGameObjects();
+		float3 max_size = float3(0, 0, 0);
+		for (vector<GameObject*>::iterator it = gobjects.begin(); it != gobjects.end(); it++)
+		{
+			ComponentMesh* cmesh = (ComponentMesh*)(*it)->FindComponentByType(MESH);
+
+			if (cmesh != nullptr)
+			{
+				int x = cmesh->GetMesh()->GetSize().x;
+				int y = cmesh->GetMesh()->GetSize().y;
+				int z = cmesh->GetMesh()->GetSize().z;
+
+				if (x > max_size.x)
+					max_size.x = x;
+
+				if (y > max_size.y)
+					max_size.y = y;
+
+				if (z > max_size.z)
+					max_size.z = z;
+			}
+		}
+
+		float max_distance = 0;
+
+		if (max_distance < max_size.x)
+			max_distance = max_size.x;
+
+		if (max_distance < max_size.y)
+			max_distance = max_size.y;
+
+		if (max_distance < max_size.z)
+			max_distance = max_size.z;
+
+		App->camera->Focus(vec3(0, 0, 0), max_distance*2.7f);
+		// ------------------------------------------------
 	}
 	else
 		LOG_OUTPUT("Error loading scene %s", full_path);
@@ -225,7 +286,7 @@ void GeometryLoader::UnloadAllFiles()
 	}
 }
 
-Mesh::Mesh(uint _id_vertices, uint _num_vertices, uint _id_indices, uint _num_indices, uint _id_uv, uint _num_uvs)
+Mesh::Mesh(uint _id_vertices, uint _num_vertices, uint _id_indices, uint _num_indices, uint _id_uv, uint _num_uvs, float3 _size)
 {
 	num_vertices = _num_vertices;
 	num_indices = _num_indices;
@@ -235,6 +296,8 @@ Mesh::Mesh(uint _id_vertices, uint _num_vertices, uint _id_indices, uint _num_in
 
 	id_uv = _id_uv;
 	num_uvs = _num_uvs;
+
+	size = _size;
 }
 
 bool Mesh::operator==(Mesh mesh)
@@ -285,4 +348,9 @@ uint Mesh::GetIdUV()
 uint Mesh::GetNumUVs()
 {
 	return num_uvs;
+}
+
+float3 Mesh::GetSize()
+{
+	return size;
 }
