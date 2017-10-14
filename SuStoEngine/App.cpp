@@ -328,7 +328,7 @@ void Application::LoadFile(const char * filepath)
 {
 	string path = ProcessFilePath(filepath);
 	string name = GetFileNameFromFilePath(filepath);
-	string extension = GetFileExtension(name.c_str());
+	string extension = ToLowerCase(GetFileExtension(name.c_str()));
 
 	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{

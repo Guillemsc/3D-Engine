@@ -155,10 +155,8 @@ bool ModuleCamera3D::Update()
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_D))
 				MoveRight(speed);
 
-			else
-			{
-				Rotate(App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
-			}
+			Rotate(App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
+			
 		}
 		else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
 		{

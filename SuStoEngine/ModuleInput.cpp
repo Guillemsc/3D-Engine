@@ -23,7 +23,7 @@ ModuleInput::ModuleInput(bool start_enabled) : Module(start_enabled)
 // Destructor
 ModuleInput::~ModuleInput()
 {
-	delete[] keyboard;
+
 }
 
 void ModuleInput::OnLoadConfig(JSON_Doc* config)
@@ -209,6 +209,9 @@ bool ModuleInput::CleanUp()
 	bool ret = true;
 
 	LOG_OUTPUT("Quitting SDL input event subsystem");
+
+	delete[] keyboard;
+
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 
 	return ret;
