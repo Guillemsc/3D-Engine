@@ -23,6 +23,7 @@ class DebugScene;
 class Configuration;
 class GeometryLoader;
 class TextureLoader;
+class FileSystem;
 
 class Application
 {
@@ -82,6 +83,7 @@ public:
 	DebugScene*        debug_scene = nullptr;
 	GeometryLoader*	   geometry = nullptr;
 	TextureLoader*	   texture = nullptr;
+	FileSystem*		   file_system = nullptr;
 
 	std::list<string>  logs;
 

@@ -12,6 +12,7 @@
 #include "Configuration.h"
 #include "GeometryLoader.h"
 #include "TextureLoader.h"
+#include "ModuleFileSystem.h"
 #include "imgui.h"
 
 #include "mmgr\nommgr.h"
@@ -87,6 +88,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	editorUI = new EditorUI();
 	geometry = new GeometryLoader();
 	texture = new TextureLoader();
+	file_system = new FileSystem();
 
 	// The order of calls is very important!
 	// Modules will Awake() Start() and Update in this order
@@ -102,6 +104,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(gameobj);
 	AddModule(geometry);
 	AddModule(texture);
+	AddModule(file_system);
 
 	AddModule(editorUI);
 	AddModule(debug_scene);

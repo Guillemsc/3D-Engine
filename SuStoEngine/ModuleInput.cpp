@@ -194,8 +194,8 @@ bool ModuleInput::PreUpdate()
 
 		case SDL_DROPFILE:
 			string file = e.drop.file;
-			SDL_free(e.drop.file);
 			App->LoadFile(file.c_str());
+			SDL_free(e.drop.file);
 			break;
 		}
 	}
