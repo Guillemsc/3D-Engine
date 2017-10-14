@@ -223,7 +223,7 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 		if (max_distance < max_size.z)
 			max_distance = max_size.z;
 
-		App->camera->Focus(vec3(0, 0, 0), max_distance + 8);
+		App->camera->Focus(vec3(0, 0, 0), max_distance*2.7f);
 		// ------------------------------------------------
 	}
 	else
