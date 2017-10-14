@@ -2,6 +2,7 @@
 
 FileSystem::FileSystem(bool start_enabled)
 {
+	SetName("File System");
 }
 
 FileSystem::~FileSystem()

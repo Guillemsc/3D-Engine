@@ -16,6 +16,7 @@
 
 TextureLoader::TextureLoader(bool start_enabled)
 {
+	SetName("TextureLoader");
 }
 
 TextureLoader::~TextureLoader()
@@ -25,6 +26,8 @@ TextureLoader::~TextureLoader()
 bool TextureLoader::Awake()
 {
 	bool ret = true;
+
+	LOG_OUTPUT("Loading TextureLoader Module");
 
 	ilInit();
 	iluInit();

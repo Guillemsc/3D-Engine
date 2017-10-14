@@ -18,6 +18,7 @@
 
 GeometryLoader::GeometryLoader(bool start_enabled) : Module(start_enabled)
 {
+	SetName("Geometry Loader");
 }
 
 GeometryLoader::~GeometryLoader()
@@ -27,6 +28,8 @@ GeometryLoader::~GeometryLoader()
 bool GeometryLoader::Awake()
 {
 	bool ret = true;
+
+	LOG_OUTPUT("Loading GeometryLoader Module");
 
 	return ret;
 }

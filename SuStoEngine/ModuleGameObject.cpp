@@ -4,6 +4,7 @@
 
 ModuleGameObject::ModuleGameObject(bool enabled)
 {
+	SetName("GameObject");
 }
 
 ModuleGameObject::~ModuleGameObject()
@@ -15,8 +16,6 @@ bool ModuleGameObject::Awake()
 	bool ret = true;
 
 	LOG_OUTPUT("Creating Module GameObject");	
-
-	SetName("GameObject");
 
 	return ret;
 }
