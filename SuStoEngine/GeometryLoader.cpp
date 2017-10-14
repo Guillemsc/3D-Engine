@@ -102,24 +102,6 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 			// VERTICES ----------------
 			id_vertices = App->renderer3D->LoadBuffer((float*)current_mesh->mVertices, current_mesh->mNumVertices * 3);
 
-			// Get mesh size
-			float3 size(0, 0, 0);
-			for (int i = 0; i < current_mesh->mNumVertices; i++)
-			{
-				int x = current_mesh->mVertices[i].x;
-				int y = current_mesh->mVertices[i].y;
-				int z = current_mesh->mVertices[i].z;
-
-				if (x > size.x)
-					size.x = x;
-
-				if (y > size.y)
-					size.y = y;
-
-				if (z > size.z)
-					size.z = z;
-			}
-
 			// INDICES -----------------
 			if (current_mesh->HasFaces())
 			{
