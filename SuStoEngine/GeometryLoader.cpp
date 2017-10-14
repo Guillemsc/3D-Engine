@@ -143,12 +143,19 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 				id_uv = App->renderer3D->LoadBuffer((float*)current_mesh->mTextureCoords[0], current_mesh->mNumVertices * 3);
 			}
 
-			// Save info
+			// AABB ---------------------
+			AABB bbox;
+			bbox.SetNegativeInfinity();
+			bbox.Enclose((float3*)current_mesh->mVertices, current_mesh->mNumVertices);
+
+			// --------------------------
+
+			// Save info ----------------
 			Mesh* new_mesh = new Mesh(
 				id_vertices, current_mesh->mNumVertices, 
 				id_indices, current_mesh->mNumFaces * 3,
 				id_uv, current_mesh->mNumVertices, 
-				size);
+				bbox);
 
 			LOG_OUTPUT("New mesh with %d vertices", current_mesh->mNumVertices);
 			LOG_OUTPUT("New mesh with %d indices", current_mesh->mNumFaces * 3);
@@ -190,40 +197,22 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 
 		// CUSTOM GAME OBJECT BEHAVEOUR FOR THIS ASSIGNMENT
 		vector<GameObject*> gobjects = App->gameobj->GetListGameObjects();
-		float3 max_size = float3(0, 0, 0);
+		
+		float max_size = 0;
 		for (vector<GameObject*>::iterator it = gobjects.begin(); it != gobjects.end(); it++)
 		{
 			ComponentMesh* cmesh = (ComponentMesh*)(*it)->FindComponentByType(MESH);
 
 			if (cmesh != nullptr)
 			{
-				int x = cmesh->GetMesh()->GetSize().x;
-				int y = cmesh->GetMesh()->GetSize().y;
-				int z = cmesh->GetMesh()->GetSize().z;
+				float size = cmesh->GetMesh()->GetBBox().Size().Length();
 
-				if (x > max_size.x)
-					max_size.x = x;
-
-				if (y > max_size.y)
-					max_size.y = y;
-
-				if (z > max_size.z)
-					max_size.z = z;
+				if (size > max_size)
+					max_size = size;
 			}
 		}
 
-		float max_distance = 0;
-
-		if (max_distance < max_size.x)
-			max_distance = max_size.x;
-
-		if (max_distance < max_size.y)
-			max_distance = max_size.y;
-
-		if (max_distance < max_size.z)
-			max_distance = max_size.z;
-
-		App->camera->Focus(vec3(0, 0, 0), max_distance*2.7f);
+		App->camera->Focus(vec3(0, 0, 0), max_size*1.2f);
 		// ------------------------------------------------
 	}
 	else
@@ -286,7 +275,7 @@ void GeometryLoader::UnloadAllFiles()
 	}
 }
 
-Mesh::Mesh(uint _id_vertices, uint _num_vertices, uint _id_indices, uint _num_indices, uint _id_uv, uint _num_uvs, float3 _size)
+Mesh::Mesh(uint _id_vertices, uint _num_vertices, uint _id_indices, uint _num_indices, uint _id_uv, uint _num_uvs, AABB _bbox)
 {
 	num_vertices = _num_vertices;
 	num_indices = _num_indices;
@@ -297,7 +286,8 @@ Mesh::Mesh(uint _id_vertices, uint _num_vertices, uint _id_indices, uint _num_in
 	id_uv = _id_uv;
 	num_uvs = _num_uvs;
 
-	size = _size;
+	bbox.SetNegativeInfinity();
+	bbox = _bbox;
 }
 
 bool Mesh::operator==(Mesh mesh)
@@ -350,7 +340,7 @@ uint Mesh::GetNumUVs()
 	return num_uvs;
 }
 
-float3 Mesh::GetSize()
+AABB Mesh::GetBBox()
 {
-	return size;
+	return bbox;
 }

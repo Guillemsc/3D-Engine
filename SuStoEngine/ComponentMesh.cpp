@@ -54,7 +54,6 @@ void ComponentMesh::InspectorDraw(std::vector<Component*> components)
 	ImGui::Text("Id indices: %d", mesh->GetIdIndices());
 	ImGui::Text("Num indices: %d", mesh->GetNumIndices());
 	ImGui::Text("Id uv: %d", mesh->GetIdUV());
-	ImGui::Text("Size: X:%f, Y:%f, Z:%f", mesh->GetSize().x, mesh->GetSize().y, mesh->GetSize().z);
 }
 
 void ComponentMesh::OnEnable()

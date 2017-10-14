@@ -7,7 +7,7 @@
 class Mesh
 {
 public:
-	Mesh(uint id_vertices, uint num_vertices, uint id_indices, uint num_indices, uint id_uv, uint num_uvs, math::float3 size);
+	Mesh(uint id_vertices, uint num_vertices, uint id_indices, uint num_indices, uint id_uv, uint num_uvs, AABB bbox);
 
 	bool operator == (Mesh mesh);
 
@@ -19,7 +19,7 @@ public:
 	uint GetNumIndices();
 	uint GetIdUV();
 	uint GetNumUVs();
-	float3 GetSize();
+	AABB GetBBox();
 
 private:
 	uint   id_vertices = 0; // id in VRAM
@@ -31,7 +31,7 @@ private:
 	uint   id_uv = 0;
 	uint   num_uvs = 0;
 
-	float3 size = float3(0, 0, 0);
+	AABB   bbox;
 };
 
 class GeometryLoader : public Module
