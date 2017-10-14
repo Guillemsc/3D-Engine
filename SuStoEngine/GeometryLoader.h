@@ -2,11 +2,12 @@
 #define __GEOMETRYLOADER_H__
 
 #include "Module.h"
+#include "GeometryMath.h"
 
 class Mesh
 {
 public:
-	Mesh(uint id_vertices, uint num_vertices, uint id_indices, uint num_indices, uint id_uv, uint num_uvs);
+	Mesh(uint id_vertices, uint num_vertices, uint id_indices, uint num_indices, uint id_uv, uint num_uvs, math::float3 size);
 
 	bool operator == (Mesh mesh);
 
@@ -18,6 +19,7 @@ public:
 	uint GetNumIndices();
 	uint GetIdUV();
 	uint GetNumUVs();
+	float3 GetSize();
 
 private:
 	uint   id_vertices = 0; // id in VRAM
@@ -28,6 +30,8 @@ private:
 
 	uint   id_uv = 0;
 	uint   num_uvs = 0;
+
+	float3 size = float3(0, 0, 0);
 };
 
 class GeometryLoader : public Module
