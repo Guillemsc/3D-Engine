@@ -46,7 +46,6 @@ void Configuration::Draw()
 	if (App->input->GetKeyBindingDown("configuration"))
 	{
 		visible = !visible;
-		return;
 	}
 
 	ImGuiStyle * style = &ImGui::GetStyle();
@@ -59,171 +58,171 @@ void Configuration::Draw()
 	ImGui::SetNextWindowPos(ImVec2(window_width - window_width / 4, 23), 2);
 	ImGui::SetNextWindowSize(ImVec2(window_width / 4, window_height - 23), 2);
 
-	if (igBeginDock("Configuration", &visible, 0))
+	igBeginDock("Configuration", &visible, 0);
+	
+	// ---------------------------------------------------------------------
+	// App -----------------------------------------------------------------
+	// ---------------------------------------------------------------------
+	if (ImGui::CollapsingHeader("App", ImGuiTreeNodeFlags_DefaultOpen))
 	{
-		// ---------------------------------------------------------------------
-		// App -----------------------------------------------------------------
-		// ---------------------------------------------------------------------
-		if (ImGui::CollapsingHeader("App", ImGuiTreeNodeFlags_DefaultOpen))
+		if (ImGui::InputText("App Name", name_input_buffer, 254))
 		{
-			if (ImGui::InputText("App Name", name_input_buffer, 254))
-			{
-				App->SetAppName(name_input_buffer);
-				App->SaveConfig();
-			}
-
-			if (ImGui::InputText("Organization", organization_input_buffer, 254))
-			{
-				App->SetAppOrganization(organization_input_buffer);
-				App->SaveConfig();
-			}
-			if (ImGui::InputText("Version", version_input_buffer, 254))
-			{
-				App->SetVersion(version_input_buffer);
-				App->SaveConfig();
-			}
-			if (ImGui::SliderInt("Max FPS", &max_fps, 0, 999))
-			{
-				App->SetMaxFps(max_fps);
-				App->SaveConfig();
-			}
+			App->SetAppName(name_input_buffer);
+			App->SaveConfig();
 		}
 
-		// ---------------------------------------------------------------------
-		// Window --------------------------------------------------------------
-		// ---------------------------------------------------------------------
-		if (ImGui::CollapsingHeader("Window", ImGuiTreeNodeFlags_DefaultOpen))
+		if (ImGui::InputText("Organization", organization_input_buffer, 254))
 		{
-			if (ImGui::SliderFloat("Brightness", &brightness, 0, 1))
-			{
-				App->window->SetBrightness(brightness);
-				App->SaveConfig(App->window);
-			}
-			if (ImGui::InputInt("Width", &window_width, 100))
-			{
-				if (window_width > display_size_width)
-					window_width = display_size_width;
-
-				App->window->SetWindowSize(window_width, window_height);
-				App->SaveConfig(App->window);
-			}
-			if (ImGui::InputInt("Height", &window_height, 100))
-			{
-				if (window_height > display_size_height)
-					window_height = display_size_height;
-
-				App->window->SetWindowSize(window_width, window_height);
-				App->SaveConfig(App->window);
-			}
-			if (ImGui::Checkbox("Fullscren", &fullscreen))
-			{
-				App->window->SetFullscreen(fullscreen);
-				App->SaveConfig(App->window);
-			}
-			ImGui::SameLine();
-			if (ImGui::Checkbox("Resizable", &resizable))
-			{
-				App->window->SetResizable(resizable);
-				App->SaveConfig(App->window);
-			}
-			if (ImGui::Checkbox("Borderless", &borderless))
-			{
-				App->window->SetBorderless(borderless);
-				App->SaveConfig(App->window);
-			}
-			ImGui::SameLine();
-			if (ImGui::Checkbox("Full Dekstop", &fulldekstop))
-			{
-				App->window->SetFullDekstop(fulldekstop);
-				App->SaveConfig(App->window);
-			}
-
-			maximized = App->window->GetMaximized();
-			if (ImGui::Checkbox("Maximized", &maximized))
-			{
-				App->window->SetMaximized(maximized);
-				App->SaveConfig(App->window);
-			}
-			ImGui::SameLine();
-			if (ImGui::Checkbox("VSync", &vsync))
-			{
-				App->window->SetVsync(vsync);
-				App->SaveConfig(App->window);
-			}
+			App->SetAppOrganization(organization_input_buffer);
+			App->SaveConfig();
 		}
-
-		// ---------------------------------------------------------------------
-		// Renderer ------------------------------------------------------------
-		// ---------------------------------------------------------------------
-		if (ImGui::CollapsingHeader("Render", ImGuiTreeNodeFlags_DefaultOpen))
+		if (ImGui::InputText("Version", version_input_buffer, 254))
 		{
-			OpenGLOptions();
+			App->SetVersion(version_input_buffer);
+			App->SaveConfig();
 		}
-
-		// ---------------------------------------------------------------------
-		// Input ---------------------------------------------------------------
-		// ---------------------------------------------------------------------
-		if (ImGui::CollapsingHeader("Input", ImGuiTreeNodeFlags_DefaultOpen))
+		if (ImGui::SliderInt("Max FPS", &max_fps, 0, 999))
 		{
-			ImGui::Text("Mouse: x:%d, y:%d", App->input->GetMouseX(), App->input->GetMouseY());
-
-
-
-			ImGui::Separator();
-			// Console
-			ImGui::TextColored(sec_colour, "[ %s ]", console_binding.c_str());
-			ImGui::SameLine();
-			if (ImGui::SmallButton("Rebind"))
-			{
-				console_rebind = true;
-			}
-			ImGui::SameLine();
-			ImGui::Text("Console"); 
-
-			if (console_rebind)
-			{
-				console_binding = "PREESS A KEY";
-
-				string input;
-				if (App->input->GetKeyboardInput(input))
-				{
-					console_rebind = false;
-					console_binding = ToUpperCase(input);
-					App->input->SetKeyBinding(console_binding.c_str(), "console");
-					App->input->ClearKeyboardInput();
-					App->SaveConfig(App->input);
-				}
-			}
-
-			// Configuration
-
-			// Profiler
-		}
-
-		// ---------------------------------------------------------------------
-		// Camera --------------------------------------------------------------
-		// ---------------------------------------------------------------------
-		if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen))
-		{
-			if (ImGui::SliderFloat("Mouse sensitivity", &mouse_sensitivity, 0.01f, 1))
-			{
-				App->camera->SetMouseSensitivity(mouse_sensitivity);
-				App->SaveConfig(App->camera);
-			}
-
-			if (ImGui::SliderFloat("Wheel speed", &wheel_speed, 0.01f, 15))
-			{
-				App->camera->SetWheelSpeed(wheel_speed);
-				App->SaveConfig(App->camera);
-			}
-
-			if (ImGui::SliderFloat("Camera speed", &camera_speed, 0.01f, 100))
-			{
-				App->camera->SetCameraSpeed(camera_speed);
-				App->SaveConfig(App->camera);
-			}
+			App->SetMaxFps(max_fps);
+			App->SaveConfig();
 		}
 	}
+
+	// ---------------------------------------------------------------------
+	// Window --------------------------------------------------------------
+	// ---------------------------------------------------------------------
+	if (ImGui::CollapsingHeader("Window", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		if (ImGui::SliderFloat("Brightness", &brightness, 0, 1))
+		{
+			App->window->SetBrightness(brightness);
+			App->SaveConfig(App->window);
+		}
+		if (ImGui::InputInt("Width", &window_width, 100))
+		{
+			if (window_width > display_size_width)
+				window_width = display_size_width;
+
+			App->window->SetWindowSize(window_width, window_height);
+			App->SaveConfig(App->window);
+		}
+		if (ImGui::InputInt("Height", &window_height, 100))
+		{
+			if (window_height > display_size_height)
+				window_height = display_size_height;
+
+			App->window->SetWindowSize(window_width, window_height);
+			App->SaveConfig(App->window);
+		}
+		if (ImGui::Checkbox("Fullscren", &fullscreen))
+		{
+			App->window->SetFullscreen(fullscreen);
+			App->SaveConfig(App->window);
+		}
+		ImGui::SameLine();
+		if (ImGui::Checkbox("Resizable", &resizable))
+		{
+			App->window->SetResizable(resizable);
+			App->SaveConfig(App->window);
+		}
+		if (ImGui::Checkbox("Borderless", &borderless))
+		{
+			App->window->SetBorderless(borderless);
+			App->SaveConfig(App->window);
+		}
+		ImGui::SameLine();
+		if (ImGui::Checkbox("Full Dekstop", &fulldekstop))
+		{
+			App->window->SetFullDekstop(fulldekstop);
+			App->SaveConfig(App->window);
+		}
+
+		maximized = App->window->GetMaximized();
+		if (ImGui::Checkbox("Maximized", &maximized))
+		{
+			App->window->SetMaximized(maximized);
+			App->SaveConfig(App->window);
+		}
+		ImGui::SameLine();
+		if (ImGui::Checkbox("VSync", &vsync))
+		{
+			App->window->SetVsync(vsync);
+			App->SaveConfig(App->window);
+		}
+	}
+
+	// ---------------------------------------------------------------------
+	// Renderer ------------------------------------------------------------
+	// ---------------------------------------------------------------------
+	if (ImGui::CollapsingHeader("Render", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		OpenGLOptions();
+	}
+
+	// ---------------------------------------------------------------------
+	// Input ---------------------------------------------------------------
+	// ---------------------------------------------------------------------
+	if (ImGui::CollapsingHeader("Input", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		ImGui::Text("Mouse: x:%d, y:%d", App->input->GetMouseX(), App->input->GetMouseY());
+
+
+
+		ImGui::Separator();
+		// Console
+		ImGui::TextColored(sec_colour, "[ %s ]", console_binding.c_str());
+		ImGui::SameLine();
+		if (ImGui::SmallButton("Rebind"))
+		{
+			console_rebind = true;
+		}
+		ImGui::SameLine();
+		ImGui::Text("Console"); 
+
+		if (console_rebind)
+		{
+			console_binding = "PREESS A KEY";
+
+			string input;
+			if (App->input->GetKeyboardInput(input))
+			{
+				console_rebind = false;
+				console_binding = ToUpperCase(input);
+				App->input->SetKeyBinding(console_binding.c_str(), "console");
+				App->input->ClearKeyboardInput();
+				App->SaveConfig(App->input);
+			}
+		}
+
+		// Configuration
+
+		// Profiler
+	}
+
+	// ---------------------------------------------------------------------
+	// Camera --------------------------------------------------------------
+	// ---------------------------------------------------------------------
+	if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		if (ImGui::SliderFloat("Mouse sensitivity", &mouse_sensitivity, 0.01f, 1))
+		{
+			App->camera->SetMouseSensitivity(mouse_sensitivity);
+			App->SaveConfig(App->camera);
+		}
+
+		if (ImGui::SliderFloat("Wheel speed", &wheel_speed, 0.01f, 15))
+		{
+			App->camera->SetWheelSpeed(wheel_speed);
+			App->SaveConfig(App->camera);
+		}
+
+		if (ImGui::SliderFloat("Camera speed", &camera_speed, 0.01f, 100))
+		{
+			App->camera->SetCameraSpeed(camera_speed);
+			App->SaveConfig(App->camera);
+		}
+	}
+	
 
 	igEndDock();
 }

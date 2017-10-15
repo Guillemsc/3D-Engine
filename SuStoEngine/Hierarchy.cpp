@@ -20,51 +20,50 @@ void Hierarchy::Start()
 
 void Hierarchy::Draw()
 {
-	if (igBeginDock("Hierarchy", &visible, ImGuiWindowFlags_MenuBar))
+	igBeginDock("Hierarchy", &visible, ImGuiWindowFlags_MenuBar);
+	
+	// Menu
+	if (ImGui::BeginMenuBar())
 	{
-
-		// Menu
-		if (ImGui::BeginMenuBar())
+		if (ImGui::BeginMenu("+"))
 		{
-			if (ImGui::BeginMenu("+"))
-			{
-				ImGui::MenuItem("Create empty GameObject", NULL, &create_empty_game_object);
-				ImGui::MenuItem("Create Primitive", NULL, &create_cube_object);
-				ImGui::EndMenu();
-			}
-			ImGui::EndMenuBar();
+			ImGui::MenuItem("Create empty GameObject", NULL, &create_empty_game_object);
+			ImGui::MenuItem("Create Primitive", NULL, &create_cube_object);
+			ImGui::EndMenu();
 		}
-
-		vector<GameObject*> game_objects = App->gameobj->GetListGameObjects();
-		for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
-		{
-			ImGui::PushID((*it)->GetId());
-
-			if (ImGui::Selectable((*it)->GetName(), (*it)->GetSelected()))
-			{
-				// If ctrl is pressed do multiselection
-				if (App->input->GetKeyRepeat(SDL_SCANCODE_LCTRL) || App->input->GetKeyRepeat(SDL_SCANCODE_RCTRL))
-				{
-					App->gameobj->AddGameObjectToSelected((*it));
-				}
-
-				// If shift is pressed do fill gap selection
-				else if (App->input->GetKeyRepeat(SDL_SCANCODE_LSHIFT) || App->input->GetKeyRepeat(SDL_SCANCODE_RSHIFT))
-				{
-
-				}
-
-				// Monoselection
-				else
-				{
-					App->gameobj->ClearSelection();
-					App->gameobj->AddGameObjectToSelected((*it));
-				}
-			}
-
-			ImGui::PopID();
-		}
+		ImGui::EndMenuBar();
 	}
+
+	vector<GameObject*> game_objects = App->gameobj->GetListGameObjects();
+	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
+	{
+		ImGui::PushID((*it)->GetId());
+
+		if (ImGui::Selectable((*it)->GetName(), (*it)->GetSelected()))
+		{
+			// If ctrl is pressed do multiselection
+			if (App->input->GetKeyRepeat(SDL_SCANCODE_LCTRL) || App->input->GetKeyRepeat(SDL_SCANCODE_RCTRL))
+			{
+				App->gameobj->AddGameObjectToSelected((*it));
+			}
+
+			// If shift is pressed do fill gap selection
+			else if (App->input->GetKeyRepeat(SDL_SCANCODE_LSHIFT) || App->input->GetKeyRepeat(SDL_SCANCODE_RSHIFT))
+			{
+
+			}
+
+			// Monoselection
+			else
+			{
+				App->gameobj->ClearSelection();
+				App->gameobj->AddGameObjectToSelected((*it));
+			}
+		}
+
+		ImGui::PopID();
+	}
+	
 
 	igEndDock(); 
 

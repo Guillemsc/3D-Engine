@@ -36,10 +36,48 @@ using namespace ImGui;
 		{
 			location[0] = 0;
 			children[0] = children[1] = nullptr;
+			first = true;
+			label = nullptr;
+			id = 0;
+			next_tab = nullptr;
+			prev_tab = nullptr;
+			children[2];
+			parent = nullptr;
+			active = false;
+			pos = ImVec2(0, 0);
+			size = ImVec2(-1, -1);
+			status = Status_::Status_Float;
+			last_frame = 0;
+			invalid_frames = 0;
+			location[16];
+			opened = false;
+			first = true;
 		}
 
 
 		DockContext::Dock::~Dock() { MemFree(label); }
+
+		void DockContext::Dock::Start()
+		{
+			location[0] = 0;
+			children[0] = children[1] = nullptr;
+			first = true;
+			label = nullptr;
+			id = 0;
+			next_tab = nullptr;
+			prev_tab = nullptr;
+			children[2];
+			parent = nullptr;
+			active = false;
+			pos = ImVec2(0, 0);
+			size = ImVec2(-1, -1);
+			status = Status_::Status_Float;
+			last_frame = 0;
+			invalid_frames = 0;
+			location[16];
+			opened = false;
+			first = true;
+		}
 
 		ImVec2 DockContext::Dock::getMinSize()
 		{
@@ -175,6 +213,18 @@ using namespace ImGui;
 
 	DockContext::~DockContext() {}
 
+	void DockContext::Start()
+	{
+		m_drag_offset = ImVec2(0, 0);
+		m_current = nullptr;
+		m_next_parent = nullptr;
+		m_last_frame = 0;
+		m_end_action = EndAction_::EndAction_None;
+		m_workspace_pos = ImVec2(0, 0);
+		m_workspace_size = ImVec2(0, 0);
+		m_next_dock_slot = ImGuiDockSlot_Tab;
+	}
+
 	DockContext::Dock& DockContext::getDock(const char* label, bool opened)
 	{
 		ImU32 id = ImHash(label, 0);
@@ -184,6 +234,7 @@ using namespace ImGui;
 		}
 
 		Dock* new_dock = (Dock*)MemAlloc(sizeof(Dock));
+		new_dock->Start();
 		IM_PLACEMENT_NEW(new_dock) Dock();
 		m_docks.push_back(new_dock);
 		new_dock->label = ImStrdup(label);
@@ -1160,9 +1211,10 @@ using namespace ImGui;
 
 	void DockContext::SaveLayout(JSON_Doc * json, const char* layout_name)
 	{
-		json->SetNumber("DockLayout.Docks_Size", m_docks.size());
 		json->AddSection(layout_name);
 		json->MoveToSection(layout_name);
+
+		json->SetNumber("Docks_Size", m_docks.size());
 
 		for (int i = 0; i < m_docks.size(); ++i) 
 		{
@@ -1177,8 +1229,8 @@ using namespace ImGui;
 			json->SetNumber(di + "size_X", (int)dock.size.x);
 			json->SetNumber(di + "size_Y", (int)dock.size.y);
 			json->SetNumber(di + "status", (int)dock.status);
-			json->SetBool(di + "active", dock.active ? true : false);
-			json->SetBool(di + "opened", dock.opened ? true : false);
+			json->SetBool(di + "active", dock.active);
+			json->SetBool(di + "opened", dock.opened);
 			fillLocation(dock);
 			json->SetString(di + "location", strlen(dock.location) ? dock.location : "-1");
 			json->SetNumber(di + "child0", getDockIndex(dock.children[0]));
@@ -1213,17 +1265,19 @@ using namespace ImGui;
 			MemFree(m_docks[i]);
 		}
 		m_docks.clear();
-
-		int docks = json->GetNumber("DockLayout.Docks_Size", m_docks.size());
-		
-		for (int i = 0; i < docks; ++i)
-		{
-			Dock *new_dock = (Dock *)MemAlloc(sizeof(Dock));
-			m_docks.push_back(new_dock);
-		}
+	
 
 		if (json->MoveToSection(layout_name))
 		{
+			int docks = json->GetNumber("Docks_Size", m_docks.size());
+
+			for (int i = 0; i < docks; ++i)
+			{
+				Dock *new_dock = (Dock*)MemAlloc(sizeof(Dock));
+				new_dock->Start();
+				m_docks.push_back(new_dock);
+			}
+
 			for (int i = 0; i < docks; i++)
 			{
 				std::string di = "Dock" + std::to_string(i) + ".";
@@ -1251,8 +1305,6 @@ using namespace ImGui;
 				m_docks[i]->pos.y = json->GetNumber((di + "pos_Y").c_str());
 				m_docks[i]->size.x = json->GetNumber((di + "size_X").c_str());
 				m_docks[i]->size.y = json->GetNumber((di + "size_Y").c_str());
-
-				//tryDockToStoredLocation(*m_docks[i]);
 			}
 		}
 		else
@@ -1284,6 +1336,8 @@ void igSetNextDock(ImGuiDockSlot slot) {
 
 void igBeginWorkspace(bool *open, ImVec2 pos, ImVec2 size, ImGuiWindowFlags flags)
 {
+	g_dock.Start();
+
 	ImGui::SetNextWindowPos(pos);
 	ImGui::SetNextWindowSize(size);
 

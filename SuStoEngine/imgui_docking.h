@@ -65,6 +65,8 @@ struct DockContext
 		Dock();
 		~Dock();
 
+		void Start();
+
 		ImVec2 getMinSize();
 		bool isHorizontal() const;
 		void setParent(Dock* dock);
@@ -79,36 +81,37 @@ struct DockContext
 		void setChildrenPosSize(const ImVec2& _pos, const ImVec2& _size);
 		void setPosSize(const ImVec2& _pos, const ImVec2& _size);
 
-		char* label;
-		ImU32 id;
-		Dock* next_tab;
-		Dock* prev_tab;
+		char* label = nullptr;
+		ImU32 id = 0;
+		Dock* next_tab = nullptr;
+		Dock* prev_tab = nullptr;
 		Dock* children[2];
-		Dock* parent;
-		bool active;
+		Dock* parent = nullptr;
+		bool active = false;
 		ImVec2 pos;
 		ImVec2 size;
-		Status_ status;
-		int last_frame;
-		int invalid_frames;
+		Status_ status = Status_::Status_Float;
+		int last_frame = 0;
+		int invalid_frames = 0;
 		char location[16];
-		bool opened;
-		bool first;
+		bool opened = false;
+		bool first = true;
 	};
-
 
 	ImVector<Dock*> m_docks;
 	ImVec2 m_drag_offset;
-	Dock* m_current;
-	Dock *m_next_parent;
-	int m_last_frame;
-	EndAction_ m_end_action;
+	Dock* m_current = nullptr;
+	Dock *m_next_parent = nullptr;
+	int m_last_frame = 0;
+	EndAction_ m_end_action = EndAction_::EndAction_None;
 	ImVec2 m_workspace_pos;
 	ImVec2 m_workspace_size;
 	ImGuiDockSlot m_next_dock_slot;
 
 	DockContext();
 	~DockContext();
+
+	void Start();
 
 	Dock& getDock(const char* label, bool opened);
 

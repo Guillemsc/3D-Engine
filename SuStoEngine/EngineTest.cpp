@@ -24,23 +24,22 @@ void EngineTest::Start()
 
 void EngineTest::Draw()
 {
-	if (igBeginDock("Engine Tests", &visible, 0))
+	igBeginDock("Engine Tests", &visible, 0);
+	
+	ImGui::Separator();
+
+	if (ImGui::CollapsingHeader("Random Number Generation"))
 	{
-		ImGui::Separator();
+		ImGui::InputFloat2("Min | Max", range_demo.ptr(), 2);
+		ImGui::InputInt("Number of generations", &quantity_demo);
 
-		if (ImGui::CollapsingHeader("Random Number Generation"))
+		if (ImGui::Button("Generate", { 400, 30 }))
 		{
-			ImGui::InputFloat2("Min | Max", range_demo.ptr(), 2);
-			ImGui::InputInt("Number of generations", &quantity_demo);
-
-			if (ImGui::Button("Generate", { 400, 30 }))
-			{
-				GenerateRandomNumbers(range_demo, quantity_demo);
-			}
-
+			GenerateRandomNumbers(range_demo, quantity_demo);
 		}
-	}
 
+	}
+	
 	igEndDock();
 }
 
