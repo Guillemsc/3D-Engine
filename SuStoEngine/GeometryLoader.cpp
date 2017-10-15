@@ -103,10 +103,7 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 
 			uint* indices = new uint[current_mesh->mNumFaces * 3];
 
-			// VERTICES ----------------
-			id_vertices = App->renderer3D->LoadBuffer((float*)current_mesh->mVertices, current_mesh->mNumVertices * 3);
-
-			// INDICES -----------------
+			// Load indices from faces ---------------
 			if (current_mesh->HasFaces())
 			{
 				// Assume each face is a triangle
@@ -120,32 +117,20 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 					else
 						memcpy(&indices[i * 3], current_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
 				}
-
-				id_indices = App->renderer3D->LoadBuffer(indices, current_mesh->mNumFaces * 3);
-
-				delete[] indices;
 			}
 
-			// UVS ----------------------
-			if (current_mesh->HasTextureCoords(0))
-			{
-				id_uv = App->renderer3D->LoadBuffer((float*)current_mesh->mTextureCoords[0], current_mesh->mNumVertices * 3);
-			}
-
-			// AABB ---------------------
-			AABB bbox;
-			bbox.SetNegativeInfinity();
-			bbox.Enclose((float3*)current_mesh->mVertices, current_mesh->mNumVertices);
-
-			// Save info ----------------
+			// Create mesh --------------
 			Mesh* new_mesh = new Mesh(
-				id_vertices, current_mesh->mNumVertices, 
-				id_indices, current_mesh->mNumFaces * 3,
-				id_uv, current_mesh->mNumVertices, 
-				bbox);
+				(float*)current_mesh->mVertices, current_mesh->mNumVertices,
+				indices, current_mesh->mNumFaces * 3,
+				(float*)current_mesh->mTextureCoords[0], current_mesh->mNumVertices);
+
+			delete[] indices;
 
 			LOG_OUTPUT("New mesh with %d vertices", current_mesh->mNumVertices);
 			LOG_OUTPUT("New mesh with %d indices", current_mesh->mNumFaces * 3);
+
+			new_mesh->LoadToMemory();
 
 			meshes.push_back(new_mesh);
 
@@ -214,22 +199,6 @@ void GeometryLoader::UnloadFile(Mesh* mesh)
 	{
 		if ((*it) == mesh)
 		{
-			// Unload from memory
-			if ((*it)->GetIdVertices() != 0)
-			{
-				App->renderer3D->UnloadBuffer((*it)->GetIdVertices(), (*it)->GetNumVertices() * 3);
-			}
-
-			if ((*it)->GetIdIndices() != 0)
-			{
-				App->renderer3D->UnloadBuffer((*it)->GetIdIndices(), (*it)->GetNumIndices());
-			}
-
-			if ((*it)->GetIdUV() != 0)
-			{
-				App->renderer3D->UnloadBuffer((*it)->GetIdUV(), (*it)->GetNumUVs() * 3);
-			}
-
 			(*it)->CleanUp();
 			meshes.erase(it);
 			break;
@@ -241,49 +210,64 @@ void GeometryLoader::UnloadAllFiles()
 {
 	for (vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end();)
 	{
-		// Unload from memory
-		if ((*it)->GetIdVertices() != 0)
-		{
-			App->renderer3D->UnloadBuffer((*it)->GetIdVertices(), (*it)->GetNumVertices() * 3);
-		}
-
-		if ((*it)->GetIdIndices() != 0)
-		{
-			App->renderer3D->UnloadBuffer((*it)->GetIdIndices(), (*it)->GetNumIndices());
-		}
-
-		if ((*it)->GetIdUV() != 0)
-		{
-			App->renderer3D->UnloadBuffer((*it)->GetIdUV(), (*it)->GetNumUVs() * 3);
-		}
-
 		(*it)->CleanUp();;
 		it = meshes.erase(it);
 	}
 }
 
-Mesh::Mesh(uint _id_vertices, uint _num_vertices, uint _id_indices, uint _num_indices, uint _id_uv, uint _num_uvs, AABB _bbox)
+Mesh::Mesh(float* _vertices, uint _num_vertices, uint* _indices, uint _num_indices, float* _uvs, uint _num_uvs)
 {
-	num_vertices = _num_vertices;
-	num_indices = _num_indices;
+	if (_num_vertices > 0)
+	{
+		// Vertices
+		vertices = new float[_num_vertices * 3];
+		memcpy(vertices, _vertices, sizeof(float) * _num_vertices * 3);
+		num_vertices = _num_vertices;
 
-	id_vertices = _id_vertices; 
-	id_indices = _id_indices;	
+		if (_num_indices > 0)
+		{
+			// Indices
+			indices = new uint[_num_indices];
+			memcpy(indices, _indices, sizeof(uint) * _num_indices);
+			num_indices = _num_indices;
+		}
 
-	id_uv = _id_uv;
-	num_uvs = _num_uvs;
+		if (_num_uvs > 0)
+		{
+			// UVs
+			uvs = new float[_num_uvs * 3];
+			memcpy(uvs, _uvs, sizeof(float) * _num_uvs * 3);
+			num_uvs = _num_uvs;
+		}
 
-	bbox.SetNegativeInfinity();
-	bbox = _bbox;
+		// Bbox
+		bbox.SetNegativeInfinity();
+		bbox.Enclose((float3*)vertices, _num_vertices);
+	}
 }
 
 void Mesh::CleanUp()
 {
-	id_vertices = 0; 
-	num_indices = 0;
+	// Unload from vram
+	UnloadFromMemory();
 
-	id_indices = 0; 
+	// Vertices
+	id_vertices = 0;
 	num_vertices = 0;
+	if (vertices != nullptr)
+		delete[] vertices;
+
+	// Indices
+	id_indices = 0;
+	num_indices = 0;
+	if (indices != nullptr)
+		delete[] indices;
+
+	// UVs
+	id_uv = 0;
+	num_uvs = 0;
+	if (uvs != nullptr)
+		delete[] uvs;
 }
 
 uint Mesh::GetIdVertices()
@@ -319,4 +303,37 @@ uint Mesh::GetNumUVs()
 AABB Mesh::GetBBox()
 {
 	return bbox;
+}
+
+void Mesh::LoadToMemory()
+{
+	if(id_vertices == 0 && vertices != nullptr)
+		id_vertices = App->renderer3D->LoadBuffer(vertices, num_vertices * 3);
+
+	if(id_indices == 0 && indices != nullptr)
+		id_indices = App->renderer3D->LoadBuffer(indices, num_indices);
+
+	if(id_uv == 0 && uvs != nullptr)
+		id_uv = App->renderer3D->LoadBuffer(uvs, num_uvs * 3);
+}
+
+void Mesh::UnloadFromMemory()
+{
+	if (id_vertices != 0)
+	{
+		App->renderer3D->UnloadBuffer(id_vertices, num_vertices * 3);
+		id_vertices = 0;
+	}
+	
+	if (id_indices != 0)
+	{
+		App->renderer3D->UnloadBuffer(id_indices, num_indices);
+		id_indices = 0;
+	}
+
+	if (id_uv != 0)
+	{
+		App->renderer3D->UnloadBuffer(id_uv, num_uvs * 3);
+		id_uv = 0;
+	}
 }

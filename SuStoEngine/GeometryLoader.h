@@ -26,7 +26,7 @@ public:
 class Mesh
 {
 public:
-	Mesh(uint id_vertices, uint num_vertices, uint id_indices, uint num_indices, uint id_uv, uint num_uvs, AABB bbox);
+	Mesh(float* vertices, uint num_vertices, uint* indices, uint num_indices, float* uvs, uint num_uvs);
 
 	void CleanUp();
 
@@ -38,15 +38,21 @@ public:
 	uint GetNumUVs();
 	AABB GetBBox();
 
+	void LoadToMemory();
+	void UnloadFromMemory();
+
 private:
 	uint   id_vertices = 0; // id in VRAM
 	uint   num_vertices = 0;
+	float* vertices = nullptr;
 
 	uint   id_indices = 0; // id in VRAM
 	uint   num_indices = 0;
+	uint*  indices = nullptr;
 
 	uint   id_uv = 0;
 	uint   num_uvs = 0;
+	float* uvs = nullptr;
 
 	AABB   bbox;
 };
