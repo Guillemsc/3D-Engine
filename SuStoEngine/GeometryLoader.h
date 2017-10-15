@@ -4,12 +4,29 @@
 #include "Module.h"
 #include "GeometryMath.h"
 
+#include "Assimp\include\DefaultLogger.hpp"
+
+class AssimpLogger : public Assimp::LogStream
+{
+public:
+	AssimpLogger()
+	{
+
+	}
+	~AssimpLogger()
+	{}
+	void write(const char* message)
+	{
+		log(__FILE__, __LINE__, "%s\n", message);
+	}
+
+};
+
+
 class Mesh
 {
 public:
 	Mesh(uint id_vertices, uint num_vertices, uint id_indices, uint num_indices, uint id_uv, uint num_uvs, AABB bbox);
-
-	bool operator == (Mesh mesh);
 
 	void CleanUp();
 

@@ -39,6 +39,10 @@ bool GeometryLoader::Start()
 	bool ret = true;
 
 	// Stream log messages to Debug window
+	Assimp::DefaultLogger::create();
+	const uint severity = Assimp::Logger::Debugging | Assimp::Logger::Info | Assimp::Logger::Err | Assimp::Logger::Warn;
+	Assimp::DefaultLogger::get()->attachStream(new AssimpLogger(), severity);
+
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
@@ -61,7 +65,7 @@ bool GeometryLoader::CleanUp()
 
 	UnloadAllFiles();
 
-	// detach log stream
+	// Detach log stream
 	aiDetachAllLogStreams();
 
 	return ret;
@@ -132,8 +136,6 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 			AABB bbox;
 			bbox.SetNegativeInfinity();
 			bbox.Enclose((float3*)current_mesh->mVertices, current_mesh->mNumVertices);
-
-			// --------------------------
 
 			// Save info ----------------
 			Mesh* new_mesh = new Mesh(
@@ -273,17 +275,6 @@ Mesh::Mesh(uint _id_vertices, uint _num_vertices, uint _id_indices, uint _num_in
 
 	bbox.SetNegativeInfinity();
 	bbox = _bbox;
-}
-
-bool Mesh::operator==(Mesh mesh)
-{
-	bool ret = false;
-
-	if (id_vertices == mesh.id_vertices && num_indices == mesh.num_indices
-		&& id_indices == mesh.id_indices && num_vertices == mesh.num_vertices)
-		ret = true;
-
-	return ret;
 }
 
 void Mesh::CleanUp()
