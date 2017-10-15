@@ -1,10 +1,21 @@
-Info,  T4948: Load BakerHouse.fbx
-Info,  T4948: Found a matching importer for this file format: Autodesk FBX Importer.
-Info,  T4948: Import root directory is '.\'
-Warn,  T4948: FBX-DOM (TOK_KEY, offset 0xd7b7) shading mode not recognized: Phong
-Info,  T4948: Entering post processing pipeline
-Info,  T4948: Points: 0, Lines: 0, Triangles: 2, Polygons: 0 (Meshes, X = removed)
-Info,  T4948: CalcTangentsProcess finished. Tangents have been calculated
-Info,  T4948: JoinVerticesProcess finished | Verts in: 3075 out: 1801 | ~41.4%
-Info,  T4948: Cache relevant are 2 meshes (1025 faces). Average output ACMR is 1.757073
-Info,  T4948: Leaving post processing pipeline
+Info,  T20444: Load BakerHouse.fbx
+Info,  T20444: Found a matching importer for this file format: Autodesk FBX Importer.
+Info,  T20444: Import root directory is '.\'
+Warn,  T20444: FBX-DOM (TOK_KEY, offset 0xd7b7) shading mode not recognized: Phong
+Info,  T20444: Entering post processing pipeline
+Info,  T20444: Points: 0, Lines: 0, Triangles: 2, Polygons: 0 (Meshes, X = removed)
+Info,  T20444: CalcTangentsProcess finished. Tangents have been calculated
+Info,  T20444: JoinVerticesProcess finished | Verts in: 3075 out: 1801 | ~41.4%
+Info,  T20444: Cache relevant are 2 meshes (1025 faces). Average output ACMR is 1.757073
+Info,  T20444: Leaving post processing pipeline
+Info,  T20444: Load C:/Users/Guillem/Desktop/ACB90.fbx.FBX
+Info,  T20444: Found a matching importer for this file format: Autodesk FBX Importer.
+Info,  T20444: Import root directory is 'C:/Users/Guillem/Desktop\'
+Info,  T20444: FBX: ignoring empty AnimationStack (using IK?): Take 001
+Info,  T20444: FBX: generating full transformation chain for node: Mesh_0010
+Info,  T20444: Entering post processing pipeline
+Info,  T20444: Points: 0, Lines: 0, Triangles: 1, Polygons: 0 (Meshes, X = removed)
+Info,  T20444: CalcTangentsProcess finished. Tangents have been calculated
+Info,  T20444: JoinVerticesProcess finished | Verts in: 4182 out: 1461 | ~65.1%
+Info,  T20444: Cache relevant are 1 meshes (1394 faces). Average output ACMR is 1.144189
+Info,  T20444: Leaving post processing pipeline
