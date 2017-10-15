@@ -67,7 +67,7 @@ void Hardware::Draw()
 
 		ImGui::Separator();
 
-		ImGui::Text("CPUs: ");
+		ImGui::Text("CPUs:");
 		ImGui::SameLine();
 		ImGui::TextColored(sec_colour, cpus.c_str());
 
