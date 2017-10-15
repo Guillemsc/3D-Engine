@@ -47,7 +47,7 @@ bool GeometryLoader::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	LoadFile("BakerHouse.fbx", true);
+	LoadFile("Models/BakerHouse/BakerHouse.fbx", true);
 
 	return ret;
 }
