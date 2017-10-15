@@ -84,15 +84,13 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 {
 	bool ret = false;
 
+	LOG_OUTPUT("\nStarting mesh scene Loading -------------------- \n\n");
 	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
-
-	uint id_vertices = 0;
-	uint id_indices = 0;
-	uint id_uv = 0;
+	LOG_OUTPUT("Finishing mesh scene Loading ---------------------");
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
-	LOG_OUTPUT("\nStarting mesh scene Loading -------------------- \n\n");
+		LOG_OUTPUT("\nLOADING %d MESHES", scene->mNumMeshes);
 
 		// -------------------------------------------
 		// LOAD MESH ---------------------------------
@@ -112,6 +110,8 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 					if (current_mesh->mFaces[i].mNumIndices != 3)
 					{
 						LOG_OUTPUT("WARNING, geometry face with != 3 indices!");
+						LOG_OUTPUT("Error loading scene %s", full_path);
+						return false;
 					}
 					else
 						memcpy(&indices[i * 3], current_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
@@ -153,6 +153,7 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 
 		string path = GetPathFromFilePath(full_path);
 
+		// Difuse -------------------
 		aiString file;
 		material->GetTexture(aiTextureType_DIFFUSE, 0, &file);
 		path += file.C_Str();
@@ -186,7 +187,10 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 		// ------------------------------------------------
 	}
 	else
+	{
 		LOG_OUTPUT("Error loading scene %s", full_path);
+		ret = false;
+	}
 
 	return ret;
 }
@@ -253,16 +257,19 @@ void Mesh::CleanUp()
 	id_vertices = 0;
 	num_vertices = 0;
 	if (vertices != nullptr)
+		RELEASE_ARRAY(vertices);
 
 	// Indices
 	id_indices = 0;
 	num_indices = 0;
 	if (indices != nullptr)
+		RELEASE_ARRAY(indices);
 
 	// UVs
 	id_uv = 0;
 	num_uvs = 0;
 	if (uvs != nullptr)
+		RELEASE_ARRAY(uvs);
 }
 
 uint Mesh::GetIdVertices()
