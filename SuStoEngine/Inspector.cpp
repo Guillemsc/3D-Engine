@@ -66,7 +66,10 @@ void Inspector::Draw()
 				}
 			}
 
-			(*it)->InspectorDraw(same_components);
+			if (ImGui::CollapsingHeader((*it)->GetName(), ImGuiTreeNodeFlags_DefaultOpen))
+			{
+				(*it)->InspectorDraw(same_components);
+			}
 
 			ImGui::Separator();
 		}

@@ -50,8 +50,6 @@ Texture * ComponentTexture::GetTexture()
 
 void ComponentTexture::InspectorDraw(std::vector<Component*> components)
 {
-	ImGui::Text(GetName());
-
 	if (!has_texture)
 	{
 		ImGui::Text("No texture loaded");

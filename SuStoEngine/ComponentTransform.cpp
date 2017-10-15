@@ -71,8 +71,6 @@ void ComponentTransform::ResetTransformMatrix()
 
 void ComponentTransform::InspectorDraw(std::vector<Component*> components)
 {
-	ImGui::Text(GetName());
-
 	float position[3];
 	position[0] = GetPosition().x;
 	position[1] = GetPosition().y;

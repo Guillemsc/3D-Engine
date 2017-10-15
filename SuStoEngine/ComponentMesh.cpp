@@ -50,8 +50,6 @@ Mesh * ComponentMesh::GetMesh() const
 
 void ComponentMesh::InspectorDraw(std::vector<Component*> components)
 {
-	ImGui::Text(GetName());
-
 	if (!has_mesh)
 	{
 		ImGui::Text("No mesh loaded");

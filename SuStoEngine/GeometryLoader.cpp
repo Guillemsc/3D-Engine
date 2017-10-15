@@ -82,111 +82,135 @@ void GeometryLoader::OnLoadFile(const char* file_path, const char* file_name, co
 
 bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 {
-	bool ret = false;
+	bool ret = true;
 
 	LOG_OUTPUT("\nStarting mesh scene Loading -------------------- \n\n");
 	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
 	LOG_OUTPUT("Finishing mesh scene Loading ---------------------");
 
-	if (scene != nullptr && scene->HasMeshes())
+	if (scene == nullptr)
+		ret = false;
+	
+	if (ret && !scene->HasMeshes())
+	{
+		LOG_OUTPUT("WARNING, scene has no meshes!");
+		ret = false;
+	}
+
+	if (ret)
 	{
 		LOG_OUTPUT("\nLOADING %d MESHES", scene->mNumMeshes);
 
 		// -------------------------------------------
 		// LOAD MESH ---------------------------------
 		// -------------------------------------------
-		for (int i = 0; i < scene->mNumMeshes; ++i)
+		for (int i = 0; i < scene->mNumMeshes && ret; ++i)
 		{
 			aiMesh* current_mesh = scene->mMeshes[i];
 
 			uint* indices = new uint[current_mesh->mNumFaces * 3];
 
 			// Load indices from faces ---------------
-			if (current_mesh->HasFaces())
+			if (!current_mesh->HasFaces())
 			{
-				// Assume each face is a triangle
-				for (uint i = 0; i < current_mesh->mNumFaces; ++i)
+				LOG_OUTPUT("WARNING, geometry has no faces!");
+				ret = false;
+			}
+
+			// Assume each face is a triangle
+			for (uint i = 0; i < current_mesh->mNumFaces && ret; ++i)
+			{
+				if (current_mesh->mFaces[i].mNumIndices == 3)
 				{
-					if (current_mesh->mFaces[i].mNumIndices != 3)
-					{
-						LOG_OUTPUT("WARNING, geometry face with != 3 indices!");
-						LOG_OUTPUT("Error loading scene %s", full_path);
-						return false;
-					}
-					else
-						memcpy(&indices[i * 3], current_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
+					memcpy(&indices[i * 3], current_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
+				}
+				else
+				{
+					LOG_OUTPUT("WARNING, geometry face with != 3 indices!");
+					ret = false;
+				}
+			}
+			
+
+			// Create mesh --------------
+			if (ret)
+			{
+				Mesh* new_mesh = new Mesh(
+					(float*)current_mesh->mVertices, current_mesh->mNumVertices,
+					indices, current_mesh->mNumFaces * 3,
+					(float*)current_mesh->mTextureCoords[0], current_mesh->mNumVertices);
+
+				new_mesh->LoadToMemory();
+
+				meshes.push_back(new_mesh);
+
+				LOG_OUTPUT("New mesh with %d vertices", current_mesh->mNumVertices);
+				LOG_OUTPUT("New mesh with %d indices", current_mesh->mNumFaces * 3);
+
+				// Create GameObjects
+				if (as_new_gameobject)
+				{
+					string name = GetFileNameFromFilePath(full_path); name += "_"; name += std::to_string(i);
+
+					GameObject* go = App->gameobj->Create();
+					go->SetName(name.c_str());
+					go->AddComponent(MESH);
+					ComponentMesh* component = (ComponentMesh*)go->FindComponentByType(MESH);
+					component->SetMesh(new_mesh);
 				}
 			}
 
-			// Create mesh --------------
-			Mesh* new_mesh = new Mesh(
-				(float*)current_mesh->mVertices, current_mesh->mNumVertices,
-				indices, current_mesh->mNumFaces * 3,
-				(float*)current_mesh->mTextureCoords[0], current_mesh->mNumVertices);
-
 			delete[] indices;
-
-			LOG_OUTPUT("New mesh with %d vertices", current_mesh->mNumVertices);
-			LOG_OUTPUT("New mesh with %d indices", current_mesh->mNumFaces * 3);
-
-			new_mesh->LoadToMemory();
-
-			meshes.push_back(new_mesh);
-
-			// Create GameObjects
-			if (as_new_gameobject)
-			{
-				string name = GetFileNameFromFilePath(full_path); name += "_"; name += std::to_string(i);
-
-				GameObject* go = App->gameobj->Create();
-				go->SetName(name.c_str());
-				go->AddComponent(MESH);
-				ComponentMesh* component = (ComponentMesh*)go->FindComponentByType(MESH);
-				component->SetMesh(new_mesh);
-			}
 		}
 
 		// -------------------------------------------
 		// LOAD TEXTURES -----------------------------
 		// -------------------------------------------
-		aiMaterial* material = scene->mMaterials[0];
+		if (ret)
+		{
+			aiMaterial* material = scene->mMaterials[0];
 
-		string path = GetPathFromFilePath(full_path);
+			string path = GetPathFromFilePath(full_path);
 
-		// Difuse -------------------
-		aiString file;
-		material->GetTexture(aiTextureType_DIFFUSE, 0, &file);
-		path += file.C_Str();
+			// Difuse -------------------
+			aiString file;
+			material->GetTexture(aiTextureType_DIFFUSE, 0, &file);
+			path += file.C_Str();
 
-		App->LoadFile(path.c_str());
+			App->LoadFile(path.c_str());
+		}
 
 		// -------------------------------------------
 		// RELEASE -----------------------------------
 		// -------------------------------------------
-		aiReleaseImport(scene);
-		ret = true;
+		if(scene != nullptr)
+			aiReleaseImport(scene);
 
 		// CUSTOM GAME OBJECT BEHAVEOUR FOR THIS ASSIGNMENT
-		vector<GameObject*> gobjects = App->gameobj->GetListGameObjects();
-		
-		float max_size = 0;
-		for (vector<GameObject*>::iterator it = gobjects.begin(); it != gobjects.end(); it++)
+		if (ret)
 		{
-			ComponentMesh* cmesh = (ComponentMesh*)(*it)->FindComponentByType(MESH);
+			vector<GameObject*> gobjects = App->gameobj->GetListGameObjects();
 
-			if (cmesh != nullptr)
+			float max_size = 0;
+			for (vector<GameObject*>::iterator it = gobjects.begin(); it != gobjects.end(); ++it)
 			{
-				float size = cmesh->GetMesh()->GetBBox().Size().Length();
+				ComponentMesh* cmesh = (ComponentMesh*)(*it)->FindComponentByType(MESH);
 
-				if (size > max_size)
-					max_size = size;
+				if (cmesh != nullptr)
+				{
+					float size = cmesh->GetMesh()->GetBBox().Size().Length();
+
+					if (size > max_size)
+						max_size = size;
+				}
 			}
-		}
 
-		App->camera->Focus(vec3(0, 0, 0), max_size*1.2f);
+			App->camera->Focus(vec3(0, 0, 0), max_size*1.2f);
+		}
 		// ------------------------------------------------
 	}
-	else
+	
+	if(!ret)
 	{
 		LOG_OUTPUT("Error loading scene %s", full_path);
 		ret = false;
@@ -197,7 +221,7 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 
 void GeometryLoader::UnloadFile(Mesh* mesh)
 {
-	for (vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end(); it++)
+	for (vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end(); ++it)
 	{
 		if ((*it) == mesh)
 		{

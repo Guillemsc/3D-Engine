@@ -165,6 +165,11 @@ void Configuration::Draw()
 		// ---------------------------------------------------------------------
 		if (ImGui::CollapsingHeader("Input", ImGuiTreeNodeFlags_DefaultOpen))
 		{
+			ImGui::Text("Mouse: x:%d, y:%d", App->input->GetMouseX(), App->input->GetMouseY());
+
+
+
+			ImGui::Separator();
 			// Console
 			ImGui::TextColored(sec_colour, "[ %s ]", console_binding.c_str());
 			ImGui::SameLine();
