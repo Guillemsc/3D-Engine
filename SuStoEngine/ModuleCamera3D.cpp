@@ -133,7 +133,8 @@ bool ModuleCamera3D::Update()
 		{
 			MoveBack(wheel_speed);
 		}
-		else if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+
+		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 		{
 			App->window->GetCursor()->Hand();
 
@@ -162,6 +163,12 @@ bool ModuleCamera3D::Update()
 		{
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_LALT) || App->input->GetKeyRepeat(SDL_SCANCODE_RALT))
 			{
+				if (App->input->GetKeyRepeat(SDL_SCANCODE_W))
+					MoveFront(speed);
+
+				if (App->input->GetKeyRepeat(SDL_SCANCODE_S))
+					MoveBack(speed);
+
 				Orbit(vec3(0, 0, 0), App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
 
 				App->window->GetCursor()->SizeAll();

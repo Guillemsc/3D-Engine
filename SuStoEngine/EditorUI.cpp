@@ -152,8 +152,6 @@ bool EditorUI::Update()
 			{
 				vector<GameObject*> selected = App->gameobj->GetSelectedGameObjects();
 
-				if (ImGui::MenuItem("Add Primitive"))
-					selected[0]->AddComponent(PRIMITIVE);
 				if (ImGui::MenuItem("Add Texture"))
 					selected[0]->AddComponent(TEXTURE);
 				if (ImGui::MenuItem("Add Mesh"))
@@ -201,6 +199,7 @@ bool EditorUI::Update()
 				ImGui::PushID(id.c_str());
 				if (ImGui::SmallButton("Set"))
 				{
+					SaveCurrentLayout();
 					SetCurrentLayout((*it).c_str());
 					LoadCurrentLayout();
 				}

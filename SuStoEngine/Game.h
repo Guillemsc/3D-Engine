@@ -15,6 +15,7 @@ public:
 
 	void Start();
 	void Draw();
+	void CleanUp();
 
 public:
 	const float4 GetRect() const;

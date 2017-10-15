@@ -34,6 +34,9 @@ public:
 	void SetLightingState(const bool& set) const;
 	void SetTexture2D(const bool& set) const;
 	void SetColorMaterial(const bool& set) const;
+	void SetAmbientLight(const bool & enabled, const float color[4]) const;
+	void SetDiffuseLight(const bool & enabled, const float color[4]) const;
+	void SetSpecularLight(const bool & enabled, const float color[4]) const;
 
 	const bool GetPoligonModeWireframe() const;
 	const bool GetPoligonModePoints() const;

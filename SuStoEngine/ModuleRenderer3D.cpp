@@ -159,6 +159,8 @@ bool ModuleRenderer3D::PreUpdate()
 // PostUpdate present buffer to screen
 bool ModuleRenderer3D::PostUpdate()
 {
+	bool ret = true;
+
 	fbo_texture->Unbind();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -173,8 +175,10 @@ bool ModuleRenderer3D::PostUpdate()
 	// Enable light
 	SetLightingState(true);
 
+	// Swap
 	SDL_GL_SwapWindow(App->window->window);
-	return true;
+
+	return ret;
 }
 
 // Called before quitting
@@ -183,6 +187,10 @@ bool ModuleRenderer3D::CleanUp()
 	bool ret = true;
 
 	LOG_OUTPUT("Destroying 3D Renderer");
+
+	fbo_texture->Unbind();
+	RELEASE(fbo_texture);
+
 	SDL_GL_DeleteContext(context);
 
 	return ret;
@@ -266,6 +274,36 @@ void ModuleRenderer3D::SetColorMaterial(const bool& set) const
 		glDisable(GL_COLOR_MATERIAL);
 }
 
+void ModuleRenderer3D::SetAmbientLight(const bool & enabled, const float color[4]) const
+{
+	glLightfv(GL_LIGHT0, GL_AMBIENT, color);
+
+	if (enabled)
+		glEnable(GL_LIGHT0);
+	else
+		glDisable(GL_LIGHT0);
+}
+
+void ModuleRenderer3D::SetDiffuseLight(const bool & enabled, const float color[4]) const
+{
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, color);
+
+	if (enabled)
+		glEnable(GL_LIGHT1);
+	else
+		glDisable(GL_LIGHT1);
+}
+
+void ModuleRenderer3D::SetSpecularLight(const bool & enabled, const float color[4]) const
+{
+	glLightfv(GL_LIGHT2, GL_SPECULAR, color);
+
+	if (enabled)
+		glEnable(GL_LIGHT2);
+	else
+		glDisable(GL_LIGHT2);
+}
+
 const bool ModuleRenderer3D::GetPoligonModeWireframe() const
 {
 	return wireframe;
@@ -317,8 +355,6 @@ uint ModuleRenderer3D::LoadBuffer(float* elements, uint size)
 
 	return id;
 }
-
-
 
 uint ModuleRenderer3D::LoadBuffer(uint * elements, uint size)
 {

@@ -41,6 +41,10 @@ void Game::Draw()
 	igEndDock();
 }
 
+void Game::CleanUp()
+{
+}
+
 const float4 Game::GetRect() const
 {
 	return float4(position.x, position.y, size.x, size.y);

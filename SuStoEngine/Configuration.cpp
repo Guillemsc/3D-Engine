@@ -235,12 +235,12 @@ void Configuration::OpenGLOptions()
 	{
 		App->renderer3D->SetColorMaterial(gl_color_material);
 	}
-	
+	ImGui::SameLine();
 	if (ImGui::Checkbox("Cull face", &gl_cull_face))
 	{
 		App->renderer3D->SetCullFace(gl_cull_face);
 	}
-
+	ImGui::Separator();
 	if (ImGui::Checkbox("Fill render", &fill_mode))
 	{
 		wireframe_mode = false;
@@ -267,108 +267,37 @@ void Configuration::OpenGLOptions()
 		ImGui::SliderFloat("Point Size", &point_size_slider, 0, 10);
 		App->renderer3D->SetPoligonModePoints(point_size_slider);
 	}
-	
+	ImGui::Separator();
+	if(ImGui::Checkbox("Ambient", &ambient))
+	{
+		App->renderer3D->SetAmbientLight(ambient, ambient_color);
+	}
 
-		//// Lighting Functionalities
-		//if (1)
-		//{
-		//	GLenum light_type = GL_AMBIENT;
-		//	GLenum light_num = GL_LIGHT0;
-		//	ImGui::Combo("Lighting types", &lighting_type, "Ambient\0Diffuse\0Specular\0", 3);
-		//	switch (lighting_type)
-		//	{
-		//	case 0:
-		//		light_type_ptr = ambient;
-		//		light_num = GL_LIGHT0;
-		//		break;
-		//	case 1:
-		//		light_type_ptr = diffuse;
-		//		light_num = GL_LIGHT1;
-		//		break;
-		//	case 2:
-		//		light_type_ptr = specular;
-		//		light_num = GL_LIGHT2;
-		//		break;
-		//	}
-		//	
-		//	ImGui::ColorPicker4("Ambient color##4", light_type_ptr, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview, NULL);
-		//	GLfloat	light_properties[] = { light_type_ptr[0], light_type_ptr[1], light_type_ptr[2], light_type_ptr[3] };
+	if (ambient)
+	{
+		ImGui::ColorPicker4("Ambient color##4", ambient_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview, NULL);
+		App->renderer3D->SetAmbientLight(ambient, ambient_color);
+	}
 
-		//	if (ImGui::Button("Submit"))
-		//	{
-		//		glLightfv(light_num, light_type, light_properties);
-		//		glEnable(light_num);
-		//	}
-		//	
-		//}
-			
-	//---------------------------------
+	if (ImGui::Checkbox("Diffuse", &diffuse))
+	{
+		App->renderer3D->SetDiffuseLight(diffuse, diffuse_color);
+	}
 
-	//---------------------------------
+	if (diffuse)
+	{
+		ImGui::ColorPicker4("Difuse color##4", diffuse_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview, NULL);
+		App->renderer3D->SetDiffuseLight(diffuse, diffuse_color);
+	}
 
-	//if (gl_cull_face && !glIsEnabled(GL_CULL_FACE))				// https://www.khronos.org/opengl/wiki/Face_Culling
-	//{
-	//	glCullFace(GL_FRONT); 									// void glCullFace(GLenum mode​); mode​ can be set to GL_FRONT, GL_BACK, or GL_FRONT_AND_BACK.
-	//	glEnable(GL_CULL_FACE);									// The latter will cull all triangles. Culling both faces will only cull triangles (since only they have faces).
-	//}
-	//else if (!gl_cull_face && glIsEnabled(GL_CULL_FACE))
-	//	glDisable(GL_CULL_FACE);
+	if (ImGui::Checkbox("Specular", &specular))
+	{
+		App->renderer3D->SetSpecularLight(specular, specular_color);
+	}
 
-	// Lighting and Color Material
-	/* _________________________________________________________________GOOD SETTINGS_________________________________________________________________
-	Set GL_LIGHT_0's position to something like 45 degrees to the 'vertical'. Coordinate (1,1,0) should work nicely in most cases.
-	Set GL_LIGHT_0's Ambient color to 0,0,0,1
-	Set GL_LIGHT_0's Diffuse color to 1,1,1,1
-	Set GL_LIGHT_0's Specular color to 1,1,1,1
-	Set the glLightModel global ambient to 0.2, 0.2, 0.2, 1 (this is the default).
-	Don't set any other glLight or glLightModel options - just let them default.
-	Enable GL_LIGHTING and GL_LIGHT_0.
-	Enable GL_COLOR_MATERIAL and set glColorMaterial to GL_AMBIENT_AND_DIFFUSE.This means that glMaterial will control the polygon's specular and
-	emission colours and the ambient and diffuse will both be set using glColor.
-	Set the glMaterial Specular colour to 1, 1, 1, 1
-	Set the glMaterial Emission colour to 0, 0, 0, 1
-	Set the glColor to whatever colour you want each polygon to basically appear to be.That sets the Ambient and Diffuse to the same value - which is what you generally want.
-	*/
-	//if (gl_color_material && !glIsEnabled(GL_COLOR_MATERIAL))	// https://www.khronos.org/opengl/wiki/How_lighting_works
-	//{
-	//	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);		// void glColorMaterial (GLenum face, GLenum mode); 
-	//	glEnable(GL_COLOR_MATERIAL);
-	//}
-	//else if (!gl_color_material && glIsEnabled(GL_COLOR_MATERIAL))
-	//	glDisable(GL_COLOR_MATERIAL);
-
-	//if (gl_texture_2d && !glIsEnabled(GL_TEXTURE_2D))			// https://www.khronos.org/opengl/wiki/Texture
-	//	glEnable(GL_TEXTURE_2D);
-	//else if (!gl_texture_2d && glIsEnabled(GL_TEXTURE_2D))
-	//	glDisable(GL_TEXTURE_2D);
-
-	// Full 
-		// https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glPolygonMode.xml
-	
-		// void glPolygonMode(GLenum face, GLenum mode);
-		// face:	Specifies the polygons that mode applies to. Must be GL_FRONT for front-facing polygons, 	
-		//			GL_BACK for back-facing polygons, or GL_FRONT_AND_BACK for front- and back-facing polygons.	
-		// mode:	Specifies how polygons will be rasterized. Accepted values are GL_POINT, GL_LINE, and GL_FILL.
-		//			The initial value is GL_FILL for both front- and back-facing polygons.	
-
-		// Wireframe											
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
+	if (specular)
+	{
+		ImGui::ColorPicker4("Specular color##4", specular_color, ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_RGB | ImGuiColorEditFlags_AlphaPreview, NULL);
+		App->renderer3D->SetSpecularLight(specular, specular_color);
+	}	
 }

@@ -54,7 +54,7 @@ private:
 	string console_binding;
 	bool console_rebind = false;
 
-	// OpenGL Options
+	// Renderer
 	bool gl_depth = true;
 	bool gl_cull_face = false;
 	bool gl_color_material = true;
@@ -62,15 +62,13 @@ private:
 	bool fill_mode = true;
 	bool wireframe_mode = false;
 	bool point_mode = false;
-	polygon_mode poly_mode = polygon_mode::gl_fill;
 	float point_size_slider = 1;
-
-	int lighting_type = 0;
-	float ambient[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	float diffuse[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	float specular[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	float* light_type_ptr = ambient;
-
+	bool ambient = true;
+	bool diffuse = false;
+	bool specular = false;
+	float ambient_color[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	float diffuse_color[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	float specular_color[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 };
 
 #endif

@@ -67,11 +67,7 @@ applying transformations. It should only need to load one texture at a time.
 */
 
 /* DONE ---- NUMBER
-	5.a
-	5.b
-	5.c
-	5.d
-	9.
+	1, 2, 3, 4, 5, 6, 
 
 */
 
