@@ -13,7 +13,8 @@ ComponentTransform::~ComponentTransform()
 
 void ComponentTransform::Start()
 {
-	ResetTransformMatrix();
+	transform_local.SetIdentity();
+	transform_global.SetIdentity();
 }
 
 void ComponentTransform::Update()
@@ -26,9 +27,9 @@ void ComponentTransform::CleanUp()
 
 const void ComponentTransform::SetPosition(float3 & pos)
 {
-	transform[3][0] = pos.x;
-	transform[3][1] = pos.y;
-	transform[3][2] = pos.z;
+	transform_local[3][0] = pos.x;
+	transform_local[3][1] = pos.y;
+	transform_local[3][2] = pos.z;
 }
 
 void ComponentTransform::OnEnable()
@@ -41,7 +42,7 @@ void ComponentTransform::OnDisable()
 
 const float3 ComponentTransform::GetPosition() const
 {
-	return float3(transform[3][0], transform[3][1], transform[3][2]);
+	return float3(transform_local[3][0], transform_local[3][1], transform_local[3][2]);
 }
 
 const float3 ComponentTransform::GetRotationEuler() const
@@ -51,22 +52,11 @@ const float3 ComponentTransform::GetRotationEuler() const
 
 const float3 ComponentTransform::GetScale() const
 {
-	float x = Sqrt(Pow(transform[0][0], 2) + Pow(transform[0][1], 2) + Pow(transform[0][2], 2));
-	float y = Sqrt(Pow(transform[1][0], 2) + Pow(transform[1][1], 2) + Pow(transform[1][2], 2));
-	float z = Sqrt(Pow(transform[2][0], 2) + Pow(transform[2][1], 2) + Pow(transform[2][2], 2));
+	float x = Sqrt(Pow(transform_local[0][0], 2) + Pow(transform_local[0][1], 2) + Pow(transform_local[0][2], 2));
+	float y = Sqrt(Pow(transform_local[1][0], 2) + Pow(transform_local[1][1], 2) + Pow(transform_local[1][2], 2));
+	float z = Sqrt(Pow(transform_local[2][0], 2) + Pow(transform_local[2][1], 2) + Pow(transform_local[2][2], 2));
 
 	return float3(x, y, z);
-}
-
-void ComponentTransform::ResetTransformMatrix()
-{
-	for (int i = 0; i < 4; i++)
-	{
-		for (int y = 0; y < 4; y++)
-		{
-			transform[i][y] = 0;
-		}
-	}
 }
 
 void ComponentTransform::InspectorDraw(std::vector<Component*> components)
