@@ -42,7 +42,7 @@ public:
 	const std::vector<GameObject*> GetChilds() const;
 	const uint GetChildsCount() const;
 	const void SetParentToNull();
-	void EraseChild(GameObject* child);
+	void EraseChild(GameObject* child, bool send_child_to_root = true);
 	void AddChild(GameObject* child);
 
 public:

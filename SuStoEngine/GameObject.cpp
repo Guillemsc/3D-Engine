@@ -29,6 +29,7 @@ void GameObject::Start()
 
 	AddComponent(TRANSFORM);
 	transform = (ComponentTransform*)FindComponentByType(TRANSFORM);
+	App->gameobj->GetRoot()->AddChild(this);
 }
 
 void GameObject::Update()
@@ -261,18 +262,23 @@ const void GameObject::SetParentToNull()
 	parent = nullptr;
 }
 
-void GameObject::EraseChild(GameObject * child)
+void GameObject::EraseChild(GameObject * child, bool send_child_to_root)
 {
 	for (vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); ++it)
 	{		
 		if ((*it) == child)
 		{
-			(*it)->SetParentToNull();
+			// Clean
+			child->SetParentToNull();
 			childs.erase(it);
+
+			// Add to root
+			if(send_child_to_root)
+				App->gameobj->GetRoot()->AddChild(child);
+
 			break;
 		}
 	}
-
 }
 
 void GameObject::AddChild(GameObject * child)
@@ -280,9 +286,11 @@ void GameObject::AddChild(GameObject * child)
 	if (child == nullptr)
 		return;
 
+	// Clean from parent
 	if (child->parent != nullptr)
-		child->parent->EraseChild(child);
+		child->parent->EraseChild(child, false);
 	
+	// Add new parent
 	child->parent = this;
 	childs.push_back(child);
 }

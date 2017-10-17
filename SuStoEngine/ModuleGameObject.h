@@ -28,6 +28,8 @@ public:
 	void RemoveGameObjectFromSelected(GameObject* go);
 	void ClearSelection();
 
+	GameObject* GetRoot();
+
 	const vector<GameObject*> GetSelectedGameObjects() const;
 
 private:
@@ -37,6 +39,7 @@ private:
 	vector<GameObject*> game_objects;
 	vector<GameObject*> to_delete;
 	vector<GameObject*> selected;
+	GameObject*			root = nullptr;
 };
 
 #endif // !_MODULE_GAME_OBJECT_H_

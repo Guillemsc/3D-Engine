@@ -34,14 +34,11 @@ void Hierarchy::Draw()
 		ImGui::EndMenuBar();
 	}
 	
-	vector<GameObject*> game_objects = App->gameobj->GetListGameObjects();
+	vector<GameObject*> game_objects = App->gameobj->GetRoot()->GetChilds();
 
 	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); it++)
 	{
-		if ((*it)->GetParent() == nullptr)
-		{
-			PrintGoAndChildsRecursive((*it));
-		}
+		PrintGoAndChildsRecursive((*it));
 	}
 
 	igEndDock(); 

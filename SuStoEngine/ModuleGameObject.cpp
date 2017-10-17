@@ -5,6 +5,8 @@
 ModuleGameObject::ModuleGameObject(bool enabled)
 {
 	SetName("GameObject");
+
+	root = new GameObject(-1);
 }
 
 ModuleGameObject::~ModuleGameObject()
@@ -60,6 +62,9 @@ bool ModuleGameObject::CleanUp()
 	}
 
 	DestroyGameObjects();
+
+	root->CleanUp();
+	delete root;
 
 	return ret;
 }
@@ -133,6 +138,11 @@ void ModuleGameObject::ClearSelection()
 		(*it)->SetSelected(false);
 		it = selected.erase(it);
 	}
+}
+
+GameObject * ModuleGameObject::GetRoot()
+{
+	return root;
 }
 
 const vector<GameObject*> ModuleGameObject::GetSelectedGameObjects() const
