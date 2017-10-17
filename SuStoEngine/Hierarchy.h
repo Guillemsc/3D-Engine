@@ -16,7 +16,8 @@ public:
 	void Start();
 	void Draw();
 
-public:
+private:
+	void PrintGoAndChilds(GameObject* go);
 
 private:
 	DockContext* dock;

@@ -34,58 +34,103 @@ void Hierarchy::Draw()
 		ImGui::EndMenuBar();
 	}
 
-	vector<GameObject*> game_objects = App->gameobj->GetListGameObjects();
-	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
-	{
-		ImGui::PushID((*it)->GetId());
+	PrintGoAndChilds(App->gameobj->GetRoot());
 
-		if (ImGui::Selectable((*it)->GetName(), (*it)->GetSelected()))
-		{
-			// If ctrl is pressed do multiselection
-			if (App->input->GetKeyRepeat(SDL_SCANCODE_LCTRL) || App->input->GetKeyRepeat(SDL_SCANCODE_RCTRL))
-			{
-				App->gameobj->AddGameObjectToSelected((*it));
-			}
+	//vector<GameObject*> game_objects = App->gameobj->GetRoot()->GetChilds();
 
-			// If shift is pressed do fill gap selection
-			else if (App->input->GetKeyRepeat(SDL_SCANCODE_LSHIFT) || App->input->GetKeyRepeat(SDL_SCANCODE_RSHIFT))
-			{
+	//PrintChilds(App->gameobj->GetRoot());
 
-			}
+	//for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); it++)
+	//{
+	//	ImGui::TreeNodeEx((*it)->GetName()
+	//}
 
-			// Monoselection
-			else
-			{
-				App->gameobj->ClearSelection();
-				App->gameobj->AddGameObjectToSelected((*it));
-			}
-		}
+	//vector<GameObject*> game_objects = App->gameobj->GetListGameObjects();
+	//for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
+	//{
+	//	ImGui::PushID((*it)->GetId());
 
-		ImGui::PopID();
-	}
+	//	if (ImGui::TreeNodeEx((*it)->GetName(), 0))
+	//	{
+	//		// If ctrl is pressed do multiselection
+	//		if (App->input->GetKeyRepeat(SDL_SCANCODE_LCTRL) || App->input->GetKeyRepeat(SDL_SCANCODE_RCTRL))
+	//		{
+	//			App->gameobj->AddGameObjectToSelected((*it));
+	//		}
+
+	//		// If shift is pressed do fill gap selection
+	//		else if (App->input->GetKeyRepeat(SDL_SCANCODE_LSHIFT) || App->input->GetKeyRepeat(SDL_SCANCODE_RSHIFT))
+	//		{
+
+	//		}
+
+	//		// Monoselection
+	//		else
+	//		{
+	//			App->gameobj->ClearSelection();
+	//			App->gameobj->AddGameObjectToSelected((*it));
+	//		}
+	//		ImGui::TreePop();
+	//	}
+	//	ImGui::PopID();
+	//}
 	
 
 	igEndDock(); 
 
-	if (create_empty_game_object)
+	//if (create_empty_game_object)
+	//{
+	//	GameObject* go = App->gameobj->Create();
+
+	//	App->gameobj->ClearSelection();
+	//	App->gameobj->AddGameObjectToSelected(go);
+
+	//	create_empty_game_object = false;
+	//}
+
+	//if (create_cube_object)
+	//{
+	//	GameObject* go = App->gameobj->Create();
+	//	go->AddComponent(PRIMITIVE);
+
+	//	App->gameobj->ClearSelection();
+	//	App->gameobj->AddGameObjectToSelected(go);
+
+	//	create_cube_object = false;
+	//}
+
+}
+
+void Hierarchy::PrintGoAndChilds(GameObject * go)
+{
+	if (go == nullptr)
+		return;
+
+	if (go == App->gameobj->GetRoot())
 	{
-		GameObject* go = App->gameobj->Create();
+		vector<GameObject*> childs = go->GetChilds();
 
-		App->gameobj->ClearSelection();
-		App->gameobj->AddGameObjectToSelected(go);
-
-		create_empty_game_object = false;
+		for (vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
+		{
+			PrintGoAndChilds(*it);
+		}
 	}
-
-	if (create_cube_object)
+	else
 	{
-		GameObject* go = App->gameobj->Create();
-		go->AddComponent(PRIMITIVE);
+		ImGui::PushID(go->GetId());
 
-		App->gameobj->ClearSelection();
-		App->gameobj->AddGameObjectToSelected(go);
+		if (ImGui::TreeNodeEx(go->GetName(), 0))
+		{
+			vector<GameObject*> childs = go->GetChilds();
 
-		create_cube_object = false;
+			for (vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
+			{
+				PrintGoAndChilds(*it);
+			}
+
+			ImGui::TreePop();
+		}
+
+		ImGui::PopID();
 	}
-
 }

@@ -29,6 +29,8 @@ void GameObject::Start()
 
 	AddComponent(TRANSFORM);
 	transform = (ComponentTransform*)FindComponentByType(TRANSFORM);
+
+	App->gameobj->GetRoot()->AddChild(this);
 }
 
 void GameObject::Update()
@@ -45,35 +47,41 @@ void GameObject::Draw()
 
 	if (component_material != nullptr)
 	{
-		glBindTexture(GL_TEXTURE_2D, component_material->GetTexture()->GetId());
+		if (component_material->HasTexture())
+		{
+			glBindTexture(GL_TEXTURE_2D, component_material->GetTexture()->GetId());
+		}
 	}
 
 	ComponentMesh* component_mesh = (ComponentMesh*)FindComponentByType(MESH);
 	
 	if (component_mesh != nullptr)
 	{
-		// Vertex
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdVertices());
-		glVertexPointer(3, GL_FLOAT, 0, NULL);
+		if (component_mesh->HasMesh())
+		{
+			// Vertex
+			glEnableClientState(GL_VERTEX_ARRAY);
+			glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdVertices());
+			glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-		// UV
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdUV());
-		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+			// UV
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdUV());
+			glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 
-		// Index
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdIndices());
+			// Index
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdIndices());
 
-		// Draw
-		glDrawElements((GLenum)GL_TRIANGLES, component_mesh->GetMesh()->GetNumIndices(), GL_UNSIGNED_INT, NULL);
+			// Draw
+			glDrawElements((GLenum)GL_TRIANGLES, component_mesh->GetMesh()->GetNumIndices(), GL_UNSIGNED_INT, NULL);
 
-		// Disable
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
+			// Disable
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+			glDisableClientState(GL_VERTEX_ARRAY);
 
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		}
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -245,6 +253,11 @@ const std::vector<GameObject*> GameObject::GetChilds() const
 	return childs;
 }
 
+const uint GameObject::GetChildsCount() const
+{
+	return childs.size();
+}
+
 const void GameObject::SetParentToNull()
 {
 	parent = nullptr;
@@ -256,12 +269,21 @@ void GameObject::EraseChild(GameObject * child)
 	{		
 		if ((*it) == child)
 		{
-			(*it)->SetParentToNull();
+			(*it)->parent = App->gameobj->GetRoot();
 			childs.erase(it);
 			break;
 		}
 	}
 
+}
+
+void GameObject::AddChild(GameObject * child)
+{
+	if (child == nullptr)
+		return;
+
+	child->parent = this;
+	childs.push_back(child);
 }
 
 

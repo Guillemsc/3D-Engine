@@ -5,6 +5,9 @@
 ModuleGameObject::ModuleGameObject(bool enabled)
 {
 	SetName("GameObject");
+
+	// Root GameObject
+	root = new GameObject(-1);
 }
 
 ModuleGameObject::~ModuleGameObject()
@@ -61,6 +64,10 @@ bool ModuleGameObject::CleanUp()
 
 	DestroyGameObjects();
 
+	// Delete root
+	root->CleanUp();
+	delete root;
+
 	return ret;
 }
 
@@ -88,6 +95,11 @@ void ModuleGameObject::DestroyAllGameObjects()
 
 	// Temp
 	DestroyGameObjects();
+}
+
+GameObject * ModuleGameObject::GetRoot()
+{
+	return root;
 }
 
 const vector<GameObject*> ModuleGameObject::GetListGameObjects() const

@@ -40,8 +40,10 @@ public:
 	const GameObject* GetParent() const;
 	GameObject* GetParent();
 	const std::vector<GameObject*> GetChilds() const;
+	const uint GetChildsCount() const;
 	const void SetParentToNull();
 	void EraseChild(GameObject* child);
+	void AddChild(GameObject* child);
 
 public:
 	ComponentTransform* transform = nullptr;

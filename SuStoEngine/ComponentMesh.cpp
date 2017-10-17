@@ -48,6 +48,11 @@ Mesh * ComponentMesh::GetMesh() const
 	return mesh;
 }
 
+const bool ComponentMesh::HasMesh() const
+{
+	return has_mesh;
+}
+
 void ComponentMesh::InspectorDraw(std::vector<Component*> components)
 {
 	if (!has_mesh)

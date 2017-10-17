@@ -18,6 +18,7 @@ public:
 
 	void SetMesh(Mesh* mesh);
 	Mesh* GetMesh() const;
+	const bool HasMesh() const;
 
 	void InspectorDraw(std::vector<Component*> components);
 
