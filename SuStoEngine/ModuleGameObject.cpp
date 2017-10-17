@@ -167,7 +167,7 @@ void ModuleGameObject::DestroyGameObjects()
 		// Reset parent
 		if ((*to_del)->GetParent() != nullptr)
 		{
-			(*to_del)->GetParent()->EraseChild(*to_del);
+			(*to_del)->GetParent()->EraseChild(*to_del, false);
 		}
 
 		// Delete from list
