@@ -34,6 +34,7 @@ void Hierarchy::Draw()
 		ImGui::EndMenuBar();
 	}
 	
+	// Draw game objects from root recursively
 	vector<GameObject*> game_objects = App->gameobj->GetRoot()->GetChilds();
 
 	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); it++)
@@ -43,6 +44,7 @@ void Hierarchy::Draw()
 
 	igEndDock(); 
 
+	// Create
 	if (create_empty_game_object)
 	{
 		GameObject* go = App->gameobj->Create();
@@ -71,6 +73,9 @@ void Hierarchy::PrintGoAndChildsRecursive(GameObject * go)
 	if (go == nullptr)
 		return;
 
+	// ------------------------
+	// Flags ------------------
+	// ------------------------
 	uint flags = ImGuiTreeNodeFlags_OpenOnArrow;
 
 	if(go->GetSelected())
@@ -79,9 +84,14 @@ void Hierarchy::PrintGoAndChildsRecursive(GameObject * go)
 	if (go->GetChildsCount() == 0)
 		flags |= ImGuiTreeNodeFlags_Leaf;
 
+	// ------------------------
+	// Draw line --------------
+	// ------------------------
 	bool opened = ImGui::TreeNodeEx(go->GetName(), flags);
 
-	// Input
+	// ------------------------
+	// Input ------------------
+	// ------------------------
 	if (ImGui::IsItemClicked(0))
 	{
 		//If ctrl is pressed do multiselection
@@ -104,7 +114,9 @@ void Hierarchy::PrintGoAndChildsRecursive(GameObject * go)
 		}
 	}
 
-	// Recursive draw childs
+	// ------------------------
+	// Draw childs recursive --
+	// ------------------------ 
 	if (opened)
 	{
 		vector<GameObject*> childs = go->GetChilds();
