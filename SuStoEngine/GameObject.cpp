@@ -29,7 +29,6 @@ void GameObject::Start()
 
 	AddComponent(TRANSFORM);
 	transform = (ComponentTransform*)FindComponentByType(TRANSFORM);
-	App->gameobj->GetRoot()->AddChild(this);
 }
 
 void GameObject::Update()

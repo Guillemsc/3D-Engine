@@ -104,6 +104,7 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 		string file_name = GetFileNameFromFilePath(full_path);
 
 		GameObject* parent = nullptr;
+
 		if (as_new_gameobject)
 		{
 			parent = App->gameobj->Create();
@@ -159,6 +160,20 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 				// Create GameObjects
 				if (as_new_gameobject)
 				{
+					aiVector3D translation;
+					aiVector3D scaling;
+					aiQuaternion rotation;
+
+					aiNode* node = scene->mRootNode->mChildren[i];
+					if (node != nullptr)
+					{
+						scene->mRootNode->mTransformation.Decompose(scaling, rotation, translation);
+						float3 pos(translation.x, translation.y, translation.z);
+						float3 scale(scaling.x, scaling.y, scaling.z);
+						Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
+					}
+
+
 					string name = file_name; name += "_"; name += std::to_string(i) += "_"; name += std::to_string(i);
 
 					GameObject* go = App->gameobj->Create();
