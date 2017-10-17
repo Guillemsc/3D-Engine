@@ -152,10 +152,10 @@ bool EditorUI::Update()
 			{
 				vector<GameObject*> selected = App->gameobj->GetSelectedGameObjects();
 
-				if (ImGui::MenuItem("Add Texture"))
-					selected[0]->AddComponent(TEXTURE);
+				if (ImGui::MenuItem("Add Material"))
+					selected[0]->AddComponent(MATERIAL);
 				if (ImGui::MenuItem("Add Mesh"))
-					selected[0]->AddComponent(TEXTURE);
+					selected[0]->AddComponent(MESH);
 			}
 			ImGui::EndMenu();
 		}

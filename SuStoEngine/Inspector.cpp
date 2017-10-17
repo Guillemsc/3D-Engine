@@ -30,10 +30,10 @@ void Inspector::Draw()
 		ImGui::BeginMenuBar();
 		if (ImGui::BeginMenu("Add Component"))
 		{
-			if (ImGui::MenuItem("Add Texture"))
-				selected[0]->AddComponent(TEXTURE);
+			if (ImGui::MenuItem("Add Material"))
+				selected[0]->AddComponent(MATERIAL);
 			if (ImGui::MenuItem("Add Mesh"))
-				selected[0]->AddComponent(TEXTURE);
+				selected[0]->AddComponent(MESH);
 
 			ImGui::EndMenu();
 		}

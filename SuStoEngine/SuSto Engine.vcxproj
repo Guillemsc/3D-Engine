@@ -95,7 +95,7 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="ComponentMesh.h" />
     <ClInclude Include="ComponentPrimitive.h" />
-    <ClInclude Include="ComponentTexture.h" />
+    <ClInclude Include="ComponentMaterial.h" />
     <ClInclude Include="ComponentTransform.h" />
     <ClInclude Include="Configuration.h" />
     <ClInclude Include="Console.h" />
@@ -213,7 +213,7 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="ComponentMesh.cpp" />
     <ClCompile Include="ComponentPrimitive.cpp" />
-    <ClCompile Include="ComponentTexture.cpp" />
+    <ClCompile Include="ComponentMaterial.cpp" />
     <ClCompile Include="ComponentTransform.cpp" />
     <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="Console.cpp" />

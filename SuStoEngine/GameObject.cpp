@@ -5,7 +5,7 @@
 #include "ComponentPrimitive.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
-#include "ComponentTexture.h"
+#include "ComponentMaterial.h"
 #include "ModuleGameObject.h"
 #include "TextureLoader.h"
 #include "Inspector.h"
@@ -41,11 +41,11 @@ void GameObject::Update()
 
 void GameObject::Draw()
 {
-	ComponentTexture* component_texture = (ComponentTexture*)FindComponentByType(TEXTURE);
+	ComponentMaterial* component_material = (ComponentMaterial*)FindComponentByType(MATERIAL);
 
-	if (component_texture != nullptr)
+	if (component_material != nullptr)
 	{
-		glBindTexture(GL_TEXTURE_2D, component_texture->GetTexture()->GetId());
+		glBindTexture(GL_TEXTURE_2D, component_material->GetTexture()->GetId());
 	}
 
 	ComponentMesh* component_mesh = (ComponentMesh*)FindComponentByType(MESH);
@@ -139,9 +139,9 @@ void GameObject::AddComponent(ComponentType type)
 			ret = new ComponentPrimitive(this);
 		}
 		break;
-		case TEXTURE:
+		case MATERIAL:
 		{
-			ret = new ComponentTexture(this);
+			ret = new ComponentMaterial(this);
 		}
 		break;
 	default:
@@ -256,6 +256,7 @@ void GameObject::EraseChild(GameObject * child)
 	{		
 		if ((*it) == child)
 		{
+			(*it)->SetParentToNull();
 			childs.erase(it);
 			break;
 		}

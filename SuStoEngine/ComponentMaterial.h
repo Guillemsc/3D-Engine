@@ -1,5 +1,5 @@
-#ifndef __ComponentTexture_H__
-#define __ComponentTexture_H__
+#ifndef __ComponentMaterial_H__
+#define __ComponentMaterial_H__
 
 #include "Component.h"
 #include "GeometryMath.h"
@@ -7,11 +7,11 @@
 class GameObject;
 class Texture;
 
-class ComponentTexture : public Component
+class ComponentMaterial : public Component
 {
 public:
-	ComponentTexture(GameObject* owner);
-	virtual ~ComponentTexture();
+	ComponentMaterial(GameObject* owner);
+	virtual ~ComponentMaterial();
 
 	void Start();
 	void Update();
@@ -19,6 +19,7 @@ public:
 
 	void SetTexture(Texture* text);
 	Texture* GetTexture();
+	const bool HasTexture() const;
 
 	void InspectorDraw(std::vector<Component*> components);
 

@@ -138,20 +138,24 @@ void ModuleGameObject::DestroyGameObjects()
 {
 	for (vector<GameObject*>::iterator to_del = to_delete.begin(); to_del != to_delete.end();)
 	{
+		// Add childs to delete
 		vector<GameObject*> childs = (*to_del)->GetChilds();
 		if (childs.size() > 0)
 		{	
-			for (vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); ++it) {
-				to_delete.push_back(*it);
+			for (vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); ++it) 
+			{
+				Destroy(*it);
 				(*it)->SetParentToNull();
 			}
 		}
 
+		// Reset parent
 		if ((*to_del)->GetParent() != nullptr)
 		{
 			(*to_del)->GetParent()->EraseChild(*to_del);
 		}
 
+		// Delete from list
 		for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end();)
 		{
 			if ((*to_del) == (*it))
@@ -163,8 +167,10 @@ void ModuleGameObject::DestroyGameObjects()
 				++it;
 		}
 
+		// Delete from selected
 		RemoveGameObjectFromSelected(*to_del);
 
+		// Free
 		(*to_del)->CleanUp();
 		delete (*to_del);
 

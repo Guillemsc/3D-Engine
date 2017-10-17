@@ -3,7 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "GameObject.h"
 #include "ModuleGameObject.h"
-#include "ComponentTexture.h"
+#include "ComponentMaterial.h"
 #include "Functions.h"
 
 #include "Devil\include\il.h"
@@ -110,9 +110,9 @@ bool TextureLoader::LoadTexture(const char * full_path)
 
 		for (vector<GameObject*>::iterator it = go.begin(); it != go.end(); it++)
 		{
-			(*it)->RemoveComponent(TEXTURE);
-			(*it)->AddComponent(TEXTURE);
-			ComponentTexture* comp = (ComponentTexture*)(*it)->FindComponentByType(TEXTURE);
+			(*it)->RemoveComponent(MATERIAL);
+			(*it)->AddComponent(MATERIAL);
+			ComponentMaterial* comp = (ComponentMaterial*)(*it)->FindComponentByType(MATERIAL);
 
 			comp->SetTexture(texture);
 		}
