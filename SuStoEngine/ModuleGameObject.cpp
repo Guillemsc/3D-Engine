@@ -5,9 +5,6 @@
 ModuleGameObject::ModuleGameObject(bool enabled)
 {
 	SetName("GameObject");
-
-	// Root GameObject
-	root = new GameObject(-1);
 }
 
 ModuleGameObject::~ModuleGameObject()
@@ -64,10 +61,6 @@ bool ModuleGameObject::CleanUp()
 
 	DestroyGameObjects();
 
-	// Delete root
-	root->CleanUp();
-	delete root;
-
 	return ret;
 }
 
@@ -83,6 +76,12 @@ GameObject * ModuleGameObject::Create()
 
 void ModuleGameObject::Destroy(GameObject * go)
 {
+	for (vector<GameObject*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it)
+	{
+		if (go == (*it))
+			return;
+	}
+
 	to_delete.push_back(go);
 }
 
@@ -95,11 +94,6 @@ void ModuleGameObject::DestroyAllGameObjects()
 
 	// Temp
 	DestroyGameObjects();
-}
-
-GameObject * ModuleGameObject::GetRoot()
-{
-	return root;
 }
 
 const vector<GameObject*> ModuleGameObject::GetListGameObjects() const
@@ -152,14 +146,13 @@ void ModuleGameObject::DestroyGameObjects()
 	{
 		// Add childs to delete
 		vector<GameObject*> childs = (*to_del)->GetChilds();
-		if (childs.size() > 0)
-		{	
-			for (vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); ++it) 
-			{
-				Destroy(*it);
-				(*it)->SetParentToNull();
-			}
+		
+		for (vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); ++it) 
+		{
+			Destroy(*it);
+			(*it)->SetParentToNull();
 		}
+		
 
 		// Reset parent
 		if ((*to_del)->GetParent() != nullptr)

@@ -101,6 +101,15 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 	{
 		LOG_OUTPUT("\nLOADING %d MESHES", scene->mNumMeshes);
 
+		string file_name = GetFileNameFromFilePath(full_path);
+
+		GameObject* parent = nullptr;
+		if (as_new_gameobject)
+		{
+			parent = App->gameobj->Create();
+			parent->SetName(file_name);
+		}
+
 		// -------------------------------------------
 		// LOAD MESH ---------------------------------
 		// -------------------------------------------
@@ -150,13 +159,15 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 				// Create GameObjects
 				if (as_new_gameobject)
 				{
-					string name = GetFileNameFromFilePath(full_path); name += "_"; name += std::to_string(i);
+					string name = file_name; name += "_"; name += std::to_string(i) += "_"; name += std::to_string(i);
 
 					GameObject* go = App->gameobj->Create();
 					go->SetName(name.c_str());
 					go->AddComponent(MESH);
 					ComponentMesh* component = (ComponentMesh*)go->FindComponentByType(MESH);
 					component->SetMesh(new_mesh);
+
+					parent->AddChild(go);
 				}
 			}
 

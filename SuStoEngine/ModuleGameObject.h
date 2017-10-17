@@ -21,7 +21,6 @@ public:
 	GameObject* Create();
 	void Destroy(GameObject* go);
 	void DestroyAllGameObjects();
-	GameObject* GetRoot();
 
 	const vector<GameObject*> GetListGameObjects() const;
 
@@ -38,7 +37,6 @@ private:
 	vector<GameObject*> game_objects;
 	vector<GameObject*> to_delete;
 	vector<GameObject*> selected;
-	GameObject*	        root = nullptr;
 };
 
 #endif // !_MODULE_GAME_OBJECT_H_

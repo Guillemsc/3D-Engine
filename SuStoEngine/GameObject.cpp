@@ -29,8 +29,6 @@ void GameObject::Start()
 
 	AddComponent(TRANSFORM);
 	transform = (ComponentTransform*)FindComponentByType(TRANSFORM);
-
-	App->gameobj->GetRoot()->AddChild(this);
 }
 
 void GameObject::Update()
@@ -269,7 +267,7 @@ void GameObject::EraseChild(GameObject * child)
 	{		
 		if ((*it) == child)
 		{
-			(*it)->parent = App->gameobj->GetRoot();
+			(*it)->SetParentToNull();
 			childs.erase(it);
 			break;
 		}
@@ -282,6 +280,9 @@ void GameObject::AddChild(GameObject * child)
 	if (child == nullptr)
 		return;
 
+	if (child->parent != nullptr)
+		child->parent->EraseChild(child);
+	
 	child->parent = this;
 	childs.push_back(child);
 }

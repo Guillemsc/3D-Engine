@@ -618,7 +618,7 @@ void EditorUI::LoadStyle(const char * name)
 		style->FrameRounding = 4.0f;
 		style->ItemSpacing = ImVec2(12, 8);
 		style->ItemInnerSpacing = ImVec2(8, 6);
-		style->IndentSpacing = 25.0f;
+		style->IndentSpacing = 9.0f;
 		style->ScrollbarSize = 15.0f;
 		style->ScrollbarRounding = 9.0f;
 		style->GrabMinSize = 5.0f;

@@ -33,104 +33,90 @@ void Hierarchy::Draw()
 		}
 		ImGui::EndMenuBar();
 	}
-
-	PrintGoAndChilds(App->gameobj->GetRoot());
-
-	//vector<GameObject*> game_objects = App->gameobj->GetRoot()->GetChilds();
-
-	//PrintChilds(App->gameobj->GetRoot());
-
-	//for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); it++)
-	//{
-	//	ImGui::TreeNodeEx((*it)->GetName()
-	//}
-
-	//vector<GameObject*> game_objects = App->gameobj->GetListGameObjects();
-	//for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
-	//{
-	//	ImGui::PushID((*it)->GetId());
-
-	//	if (ImGui::TreeNodeEx((*it)->GetName(), 0))
-	//	{
-	//		// If ctrl is pressed do multiselection
-	//		if (App->input->GetKeyRepeat(SDL_SCANCODE_LCTRL) || App->input->GetKeyRepeat(SDL_SCANCODE_RCTRL))
-	//		{
-	//			App->gameobj->AddGameObjectToSelected((*it));
-	//		}
-
-	//		// If shift is pressed do fill gap selection
-	//		else if (App->input->GetKeyRepeat(SDL_SCANCODE_LSHIFT) || App->input->GetKeyRepeat(SDL_SCANCODE_RSHIFT))
-	//		{
-
-	//		}
-
-	//		// Monoselection
-	//		else
-	//		{
-	//			App->gameobj->ClearSelection();
-	//			App->gameobj->AddGameObjectToSelected((*it));
-	//		}
-	//		ImGui::TreePop();
-	//	}
-	//	ImGui::PopID();
-	//}
 	
+	vector<GameObject*> game_objects = App->gameobj->GetListGameObjects();
+
+	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); it++)
+	{
+		if ((*it)->GetParent() == nullptr)
+		{
+			PrintGoAndChildsRecursive((*it));
+		}
+	}
 
 	igEndDock(); 
 
-	//if (create_empty_game_object)
-	//{
-	//	GameObject* go = App->gameobj->Create();
+	if (create_empty_game_object)
+	{
+		GameObject* go = App->gameobj->Create();
 
-	//	App->gameobj->ClearSelection();
-	//	App->gameobj->AddGameObjectToSelected(go);
+		App->gameobj->ClearSelection();
+		App->gameobj->AddGameObjectToSelected(go);
 
-	//	create_empty_game_object = false;
-	//}
+		create_empty_game_object = false;
+	}
 
-	//if (create_cube_object)
-	//{
-	//	GameObject* go = App->gameobj->Create();
-	//	go->AddComponent(PRIMITIVE);
+	if (create_cube_object)
+	{
+		GameObject* go = App->gameobj->Create();
+		go->AddComponent(PRIMITIVE);
 
-	//	App->gameobj->ClearSelection();
-	//	App->gameobj->AddGameObjectToSelected(go);
+		App->gameobj->ClearSelection();
+		App->gameobj->AddGameObjectToSelected(go);
 
-	//	create_cube_object = false;
-	//}
+		create_cube_object = false;
+	}
 
 }
 
-void Hierarchy::PrintGoAndChilds(GameObject * go)
+void Hierarchy::PrintGoAndChildsRecursive(GameObject * go)
 {
 	if (go == nullptr)
 		return;
 
-	if (go == App->gameobj->GetRoot())
+	uint flags = ImGuiTreeNodeFlags_OpenOnArrow;
+
+	if(go->GetSelected())
+		flags |= ImGuiTreeNodeFlags_Selected;
+
+	if (go->GetChildsCount() == 0)
+		flags |= ImGuiTreeNodeFlags_Leaf;
+
+	bool opened = ImGui::TreeNodeEx(go->GetName(), flags);
+
+	// Input
+	if (ImGui::IsItemClicked(0))
+	{
+		//If ctrl is pressed do multiselection
+		if (App->input->GetKeyRepeat(SDL_SCANCODE_LCTRL) || App->input->GetKeyRepeat(SDL_SCANCODE_RCTRL))
+		{
+			App->gameobj->AddGameObjectToSelected(go);
+		}
+
+		// If shift is pressed do fill gap selection
+		else if (App->input->GetKeyRepeat(SDL_SCANCODE_LSHIFT) || App->input->GetKeyRepeat(SDL_SCANCODE_RSHIFT))
+		{
+
+		}
+
+		// Monoselection
+		else
+		{
+			App->gameobj->ClearSelection();
+			App->gameobj->AddGameObjectToSelected(go);
+		}
+	}
+
+	// Recursive draw childs
+	if (opened)
 	{
 		vector<GameObject*> childs = go->GetChilds();
 
 		for (vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
 		{
-			PrintGoAndChilds(*it);
-		}
-	}
-	else
-	{
-		ImGui::PushID(go->GetId());
-
-		if (ImGui::TreeNodeEx(go->GetName(), 0))
-		{
-			vector<GameObject*> childs = go->GetChilds();
-
-			for (vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
-			{
-				PrintGoAndChilds(*it);
-			}
-
-			ImGui::TreePop();
+			PrintGoAndChildsRecursive(*it);
 		}
 
-		ImGui::PopID();
+		ImGui::TreePop();
 	}
 }
