@@ -13,7 +13,7 @@ ComponentTransform::~ComponentTransform()
 
 void ComponentTransform::Start()
 {
-	ResetTransformMatrix();
+	transform = transform.zero;
 }
 
 void ComponentTransform::Update()
@@ -56,17 +56,6 @@ const float3 ComponentTransform::GetScale() const
 	float z = Sqrt(Pow(transform[2][0], 2) + Pow(transform[2][1], 2) + Pow(transform[2][2], 2));
 
 	return float3(x, y, z);
-}
-
-void ComponentTransform::ResetTransformMatrix()
-{
-	for (int i = 0; i < 4; i++)
-	{
-		for (int y = 0; y < 4; y++)
-		{
-			transform[i][y] = 0;
-		}
-	}
 }
 
 void ComponentTransform::InspectorDraw(std::vector<Component*> components)

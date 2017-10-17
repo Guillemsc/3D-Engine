@@ -28,8 +28,6 @@ private:
 	void OnEnable();
 	void OnDisable();
 
-	void ResetTransformMatrix();
-
 public:
 	float4x4 transform;
 
