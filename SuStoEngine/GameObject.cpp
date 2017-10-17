@@ -230,4 +230,37 @@ const bool GameObject::GetSelected() const
 	return selected;
 }
 
+const GameObject* GameObject::GetParent() const
+{
+	return parent;
+}
+
+GameObject* GameObject::GetParent()
+{
+	return parent;
+}
+
+const std::vector<GameObject*> GameObject::GetChilds() const
+{
+	return childs;
+}
+
+const void GameObject::SetParentToNull()
+{
+	parent = nullptr;
+}
+
+void GameObject::EraseChild(GameObject * child)
+{
+	for (vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); ++it)
+	{		
+		if ((*it) == child)
+		{
+			childs.erase(it);
+			break;
+		}
+	}
+
+}
+
 

@@ -37,6 +37,12 @@ public:
 	const int GetId() const;
 	const bool GetSelected() const;
 
+	const GameObject* GetParent() const;
+	GameObject* GetParent();
+	const std::vector<GameObject*> GetChilds() const;
+	const void SetParentToNull();
+	void EraseChild(GameObject* child);
+
 public:
 	ComponentTransform* transform = nullptr;
 	
@@ -49,6 +55,7 @@ private:
 	std::vector<Component*> components;
 
 	GameObject* parent = nullptr;
+	std::vector<GameObject*> childs;
 };
 
 #endif
