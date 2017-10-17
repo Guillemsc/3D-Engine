@@ -49,6 +49,7 @@ private:
 	std::vector<Component*> components;
 
 	GameObject* parent = nullptr;
+	vector<GameObject*> childs;
 };
 
 #endif

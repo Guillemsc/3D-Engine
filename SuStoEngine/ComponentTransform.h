@@ -29,7 +29,8 @@ private:
 	void OnDisable();
 
 public:
-	float4x4 transform;
+	float4x4 transform_local;
+	float4x4 transform_global;
 
 };
 
