@@ -17,6 +17,7 @@ public:
 	void CleanUp();
 
 	const void SetPosition(float3& pos);
+	const void SetRotationQuat(Quat& quater);
 
 	const float3 GetPosition() const;
 	const float3 GetRotationEuler() const;
@@ -29,9 +30,7 @@ private:
 	void OnDisable();
 
 public:
-	float4x4 transform_local;
-	float4x4 transform_global;
-
+	float4x4 transform;
 };
 
 #endif

@@ -160,6 +160,16 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 				// Create GameObjects
 				if (as_new_gameobject)
 				{
+					string name = file_name; name += "_"; name += std::to_string(i) += "_"; name += std::to_string(i);
+
+					GameObject* go = App->gameobj->Create();
+					go->SetName(name.c_str());
+					go->AddComponent(MESH);
+					ComponentMesh* component = (ComponentMesh*)go->FindComponentByType(MESH);
+					component->SetMesh(new_mesh);
+
+					parent->AddChild(go);
+
 					aiVector3D translation;
 					aiVector3D scaling;
 					aiQuaternion rotation;
@@ -172,17 +182,9 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 						float3 scale(scaling.x, scaling.y, scaling.z);
 						Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 					}
-
-
-					string name = file_name; name += "_"; name += std::to_string(i) += "_"; name += std::to_string(i);
-
-					GameObject* go = App->gameobj->Create();
-					go->SetName(name.c_str());
-					go->AddComponent(MESH);
-					ComponentMesh* component = (ComponentMesh*)go->FindComponentByType(MESH);
-					component->SetMesh(new_mesh);
-
-					parent->AddChild(go);
+					
+					go->transform->SetPosition(float3(translation.x, translation.y, translation.z));
+					go->transform->SetRotationQuat(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 				}
 			}
 
