@@ -19,6 +19,7 @@ public:
 	const void SetPosition(float3& pos);
 	const void SetRotationQuat(Quat& quater);
 
+	const float4x4 GetTransform() const;
 	const float3 GetPosition() const;
 	const float3 GetRotationEuler() const;
 	const float3 GetScale() const;

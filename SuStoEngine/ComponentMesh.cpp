@@ -23,7 +23,7 @@ void ComponentMesh::Start()
 
 void ComponentMesh::Update()
 {
-
+	GetMesh()->GetBBox().Transform(GetOwner()->transform->GetTransform());
 }
 
 void ComponentMesh::CleanUp()

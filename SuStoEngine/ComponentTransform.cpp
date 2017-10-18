@@ -44,6 +44,11 @@ void ComponentTransform::OnDisable()
 {
 }
 
+const float4x4 ComponentTransform::GetTransform() const
+{
+	return transform;
+}
+
 const float3 ComponentTransform::GetPosition() const
 {
 	return float3(transform[3][0], transform[3][1], transform[3][2]);
@@ -65,23 +70,17 @@ const float3 ComponentTransform::GetScale() const
 
 void ComponentTransform::InspectorDraw(std::vector<Component*> components)
 {
-	float position[3];
-	position[0] = GetPosition().x;
-	position[1] = GetPosition().y;
-	position[2] = GetPosition().z;
+	float3 position = GetPosition();
+	float3 rotation = GetRotationEuler();
+	float3 scale = GetScale();
 
-	float rotation[3];
-	rotation[0] = GetRotationEuler().x;
-	rotation[1] = GetRotationEuler().y;
-	rotation[2] = GetRotationEuler().z;
+	if (ImGui::InputFloat3("Position", (float*)&position))
+		SetPosition(position);
+	if (ImGui::InputFloat3("Rotation", (float*)&rotation))
+		SetRotationQuat(Quat::FromEulerXYZ(rotation.x, rotation.y, rotation.z));
+	if (ImGui::InputFloat3("Scale", (float*)&scale)) {
 
-	float scale[3];
-	scale[0] = GetScale().x;
-	scale[1] = GetScale().y;
-	scale[2] = GetScale().z;
+	}
 
-	ImGui::InputFloat3("Position", position);
-	ImGui::InputFloat3("Rotation", rotation);
-	ImGui::InputFloat3("Scale", scale);
 }
 
