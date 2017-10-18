@@ -39,7 +39,6 @@ void ComponentMesh::SetMesh(Mesh* _mesh)
 	if (mesh != nullptr)
 	{
 		has_mesh = true;
-		GetOwner()->transform->SetPosition(GetMesh()->GetBBox().CenterPoint());
 	}
 }
 

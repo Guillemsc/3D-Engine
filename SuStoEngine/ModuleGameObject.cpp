@@ -136,6 +136,14 @@ void ModuleGameObject::ClearSelection()
 	}
 }
 
+void ModuleGameObject::DestroySelectedGameObjects()
+{
+	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); it++)
+	{
+		App->gameobj->Destroy((*it));
+	}
+}
+
 GameObject * ModuleGameObject::GetRoot()
 {
 	return root;

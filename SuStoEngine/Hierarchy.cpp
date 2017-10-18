@@ -92,7 +92,7 @@ void Hierarchy::PrintGoAndChildsRecursive(GameObject * go)
 	// ------------------------
 	// Input ------------------
 	// ------------------------
-	if (ImGui::IsItemClicked(0))
+	if (ImGui::IsItemClicked(0) || ImGui::IsItemClicked(1))
 	{
 		//If ctrl is pressed do multiselection
 		if (App->input->GetKeyRepeat(SDL_SCANCODE_LCTRL) || App->input->GetKeyRepeat(SDL_SCANCODE_RCTRL))
@@ -109,9 +109,22 @@ void Hierarchy::PrintGoAndChildsRecursive(GameObject * go)
 		// Monoselection
 		else
 		{
-			App->gameobj->ClearSelection();
-			App->gameobj->AddGameObjectToSelected(go);
+			if (!ImGui::IsItemClicked(1) || !go->GetSelected())
+			{
+				App->gameobj->ClearSelection();
+				App->gameobj->AddGameObjectToSelected(go);
+			}
 		}
+	}
+
+	if (ImGui::BeginPopupContextItem("HerarchyPopup"))
+	{
+		if (ImGui::Button("Delete"))
+		{
+			App->gameobj->DestroySelectedGameObjects();
+		}
+
+		ImGui::EndPopup();
 	}
 
 	// ------------------------

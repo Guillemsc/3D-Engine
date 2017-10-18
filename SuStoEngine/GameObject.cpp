@@ -9,6 +9,7 @@
 #include "ModuleGameObject.h"
 #include "TextureLoader.h"
 #include "Inspector.h"
+#include "ModuleRenderer3D.h"
 
 
 #include "Glew/include/glew.h" 
@@ -42,6 +43,12 @@ void GameObject::Update()
 
 void GameObject::Draw()
 {
+	App->renderer3D->DrawAxis(transform->GetPosition(), transform->GetRotationEuler());
+
+	// Push matrix
+	glPushMatrix();
+	glMultMatrixf(transform->GetTransform().ptr());
+
 	ComponentMaterial* component_material = (ComponentMaterial*)FindComponentByType(MATERIAL);
 
 	if (component_material != nullptr)
@@ -82,8 +89,12 @@ void GameObject::Draw()
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		}
 	}
-
+	
+	// Reset
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	// Pop matrix
+	glPopMatrix();
 }
 
 void GameObject::Enable()

@@ -6,6 +6,7 @@
 
 #include "Glew\Include\glew.h"
 #include "SDL/include/SDL_opengl.h"
+#include "GeometryMath.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
@@ -52,6 +53,8 @@ public:
 	uint LoadTextureBuffer(const void* texture, uint size, int format, int width, int height, uint wrap_s, uint wrap_t, uint mag, uint min);
 	void UnloadBuffer(uint id, uint size);
 	void UnloadTextureBuffer(uint id, uint size);
+
+	void DrawAxis(float3 position, float3 rotation);
 
 	void DrawPlane(float pos_x, float pos_y, float pos_z, int width, int height);
 

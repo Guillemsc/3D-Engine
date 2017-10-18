@@ -27,6 +27,7 @@ public:
 	void AddGameObjectToSelected(GameObject* go);
 	void RemoveGameObjectFromSelected(GameObject* go);
 	void ClearSelection();
+	void DestroySelectedGameObjects();
 
 	GameObject* GetRoot();
 

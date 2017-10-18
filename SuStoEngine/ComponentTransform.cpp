@@ -61,11 +61,7 @@ const float3 ComponentTransform::GetRotationEuler() const
 
 const float3 ComponentTransform::GetScale() const
 {
-	float x = Sqrt(Pow(transform[0][0], 2) + Pow(transform[0][1], 2) + Pow(transform[0][2], 2));
-	float y = Sqrt(Pow(transform[1][0], 2) + Pow(transform[1][1], 2) + Pow(transform[1][2], 2));
-	float z = Sqrt(Pow(transform[2][0], 2) + Pow(transform[2][1], 2) + Pow(transform[2][2], 2));
-
-	return float3(x, y, z);
+	return transform.GetScale();
 }
 
 void ComponentTransform::InspectorDraw(std::vector<Component*> components)

@@ -103,6 +103,7 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 
 		string file_name = GetFileNameFromFilePath(full_path);
 
+		// Parent GameObject
 		GameObject* parent = nullptr;
 
 		if (as_new_gameobject)
@@ -170,21 +171,21 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 
 					parent->AddChild(go);
 
-					aiVector3D translation;
-					aiVector3D scaling;
-					aiQuaternion rotation;
+					//aiVector3D translation;
+					//aiVector3D scaling;
+					//aiQuaternion rotation;
 
-					aiNode* node = scene->mRootNode->mChildren[i];
-					if (node != nullptr)
-					{
-						scene->mRootNode->mTransformation.Decompose(scaling, rotation, translation);
-						float3 pos(translation.x, translation.y, translation.z);
-						float3 scale(scaling.x, scaling.y, scaling.z);
-						Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
-					}
-					
-					go->transform->SetPosition(float3(translation.x, translation.y, translation.z));
-					go->transform->SetRotationQuat(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
+					//aiNode* node = scene->mRootNode->mChildren[i];
+					//if (node != nullptr)
+					//{
+					//	scene->mRootNode->mTransformation.Decompose(scaling, rotation, translation);
+					//	float3 pos(translation.x, translation.y, translation.z);
+					//	float3 scale(scaling.x, scaling.y, scaling.z);
+					//	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
+					//}
+					//
+					//go->transform->SetPosition(float3(translation.x, translation.y, translation.z));
+					//go->transform->SetRotationQuat(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 				}
 			}
 
