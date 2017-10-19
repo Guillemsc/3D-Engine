@@ -1,5 +1,7 @@
 #include "ComponentTransform.h"
 #include "imgui.h"
+#include "App.h"
+#include "ModuleInput.h"
 
 ComponentTransform::ComponentTransform(GameObject * owner) : Component(ComponentType::TRANSFORM, owner)
 {
@@ -117,13 +119,14 @@ void ComponentTransform::InspectorDraw(std::vector<Component*> components)
 	float3 rotation = GetRotationEuler();
 	float3 scale = GetScale();
 
-	if (ImGui::InputFloat3("Position", (float*)&position))
+	if (ImGui::DragFloat3("Position", (float*)&position, 0.1f))
 		SetPosition(position);
 
-	if (ImGui::InputFloat3("Rotation", (float*)&rotation))
+	if (ImGui::DragFloat3("Rotation", (float*)&rotation, 0.1f))
 		SetRotation(rotation);
 
-	if (ImGui::InputFloat3("Scale", (float*)&scale))
+	if (ImGui::DragFloat3("Scale", (float*)&scale, 0.1f))
 		SetScale(scale);
+
 }
 

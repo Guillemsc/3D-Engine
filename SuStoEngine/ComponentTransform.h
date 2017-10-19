@@ -46,6 +46,7 @@ private:
 	float3   local_scale;
 
 	float4x4 global_transform;
+
 };
 
 #endif
