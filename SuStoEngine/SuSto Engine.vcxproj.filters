@@ -52,6 +52,9 @@
     <Filter Include="Sources\GameObject">
       <UniqueIdentifier>{99ae2367-b349-443b-94d3-f8aebcab11e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Importer">
+      <UniqueIdentifier>{75424721-2dd7-49d4-966b-8416936704ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleAudio.h">
@@ -400,6 +403,18 @@
       <Filter>Sources\Modules</Filter>
     </ClInclude>
     <ClInclude Include="ComponentMaterial.h">
+      <Filter>Sources\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Importer.h">
+      <Filter>Sources\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureImporter.h">
+      <Filter>Sources\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshImporter.h">
+      <Filter>Sources\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentCamera.h">
       <Filter>Sources\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
