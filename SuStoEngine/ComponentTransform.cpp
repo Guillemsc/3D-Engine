@@ -13,11 +13,13 @@ ComponentTransform::~ComponentTransform()
 
 void ComponentTransform::Start()
 {
-	transform.SetIdentity();
+	local_transform.SetIdentity();
+	global_transform.SetIdentity();
 }
 
 void ComponentTransform::Update()
 {
+	float4x4 a = local_transform * local_transform;
 }
 
 void ComponentTransform::CleanUp()
@@ -26,14 +28,14 @@ void ComponentTransform::CleanUp()
 
 const void ComponentTransform::SetPosition(float3 & pos)
 {
-	transform[3][0] = pos.x;
-	transform[3][1] = pos.y;
-	transform[3][2] = pos.z;
+	local_transform[3][0] = pos.x;
+	local_transform[3][1] = pos.y;
+	local_transform[3][2] = pos.z;
 }
 
-const void ComponentTransform::SetRotationQuat(Quat & quater)
+const void ComponentTransform::SetRotation(const Quat & quater)
 {
-	transform.FromQuat(quater);
+	local_transform.FromQuat(quater);
 }
 
 void ComponentTransform::OnEnable()
@@ -44,24 +46,34 @@ void ComponentTransform::OnDisable()
 {
 }
 
-const float4x4 ComponentTransform::GetTransform() const
+const float4x4 ComponentTransform::GetLocalTransform() const
 {
-	return transform;
+	return local_transform;
+}
+
+const void ComponentTransform::SetLocalTransform(const float4x4 & transform)
+{
+	local_transform = transform;
+}
+
+const float4x4 ComponentTransform::GetGlobalTransform() const
+{
+	return global_transform;
 }
 
 const float3 ComponentTransform::GetPosition() const
 {
-	return float3(transform[3][0], transform[3][1], transform[3][2]);
+	return float3(local_transform[3][0], local_transform[3][1], local_transform[3][2]);
 }
 
 const float3 ComponentTransform::GetRotationEuler() const
 {
-	return transform.ToEulerXYZ();
+	return local_transform.ToEulerXYZ();
 }
 
 const float3 ComponentTransform::GetScale() const
 {
-	return transform.GetScale();
+	return local_transform.GetScale();
 }
 
 void ComponentTransform::InspectorDraw(std::vector<Component*> components)
@@ -72,9 +84,12 @@ void ComponentTransform::InspectorDraw(std::vector<Component*> components)
 
 	if (ImGui::InputFloat3("Position", (float*)&position))
 		SetPosition(position);
+
 	if (ImGui::InputFloat3("Rotation", (float*)&rotation))
-		SetRotationQuat(Quat::FromEulerXYZ(rotation.x, rotation.y, rotation.z));
-	if (ImGui::InputFloat3("Scale", (float*)&scale)) {
+		SetRotation(Quat::FromEulerXYZ(rotation.x, rotation.y, rotation.z));
+
+	if (ImGui::InputFloat3("Scale", (float*)&scale)) 
+	{
 
 	}
 

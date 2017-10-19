@@ -8,6 +8,8 @@ class GameObject;
 
 class ComponentTransform : public Component
 {
+	friend class GameObject;
+
 public:
 	ComponentTransform(GameObject* owner);
 	virtual ~ComponentTransform();
@@ -16,10 +18,12 @@ public:
 	void Update();
 	void CleanUp();
 
-	const void SetPosition(float3& pos);
-	const void SetRotationQuat(Quat& quater);
+	const float4x4 GetLocalTransform() const;
+	const void SetLocalTransform(const float4x4& transform);
+	const float4x4 GetGlobalTransform() const;
 
-	const float4x4 GetTransform() const;
+	const void SetPosition(float3& pos);
+	const void SetRotation(const Quat& quater);
 	const float3 GetPosition() const;
 	const float3 GetRotationEuler() const;
 	const float3 GetScale() const;
@@ -30,8 +34,9 @@ private:
 	void OnEnable();
 	void OnDisable();
 
-public:
-	float4x4 transform;
+private:
+	float4x4 local_transform;
+	float4x4 global_transform;
 };
 
 #endif

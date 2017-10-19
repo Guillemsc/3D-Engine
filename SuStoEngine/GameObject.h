@@ -45,6 +45,8 @@ public:
 	void EraseChild(GameObject* child, bool send_child_to_root = true);
 	void AddChild(GameObject* child);
 
+	void RecursiveCalcGlobalTransform();
+
 public:
 	ComponentTransform* transform = nullptr;
 	

@@ -47,7 +47,7 @@ void GameObject::Draw()
 
 	// Push matrix
 	glPushMatrix();
-	glMultMatrixf(transform->GetTransform().ptr());
+	glMultMatrixf(transform->GetGlobalTransform().ptr());
 
 	ComponentMaterial* component_material = (ComponentMaterial*)FindComponentByType(MATERIAL);
 
@@ -284,8 +284,12 @@ void GameObject::EraseChild(GameObject * child, bool send_child_to_root)
 			childs.erase(it);
 
 			// Add to root
-			if(send_child_to_root)
+			if (send_child_to_root)
+			{
 				App->gameobj->GetRoot()->AddChild(child);
+
+				child->transform->global_transform = child->transform->local_transform;
+			}
 
 			break;
 		}
@@ -304,6 +308,22 @@ void GameObject::AddChild(GameObject * child)
 	// Add new parent
 	child->parent = this;
 	childs.push_back(child);
+}
+
+void GameObject::RecursiveCalcGlobalTransform()
+{
+	if (parent != nullptr)
+	{
+		transform->global_transform = parent->transform->global_transform * transform->local_transform;
+	}
+
+	if (!childs.empty())
+	{
+		for (vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
+		{
+			(*it)->RecursiveCalcGlobalTransform();
+		}
+	}
 }
 
 

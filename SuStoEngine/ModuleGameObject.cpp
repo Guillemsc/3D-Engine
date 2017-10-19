@@ -6,7 +6,9 @@ ModuleGameObject::ModuleGameObject(bool enabled)
 {
 	SetName("GameObject");
 
+	// Root GameObject
 	root = new GameObject(-1);
+	root->Start();
 	root->SetName("Root");
 }
 
@@ -27,6 +29,7 @@ bool ModuleGameObject::PreUpdate()
 {
 	bool ret = true;
 
+	root->RecursiveCalcGlobalTransform();
 
 	return ret;
 }
@@ -47,6 +50,8 @@ bool ModuleGameObject::Update()
 bool ModuleGameObject::PostUpdate()
 {
 	bool ret = true;
+
+
 
 	DestroyGameObjects();
 

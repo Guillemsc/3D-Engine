@@ -5,7 +5,7 @@
 
 FileSystem::FileSystem(bool start_enabled)
 {
-	SetName("File System");
+	SetName("FileSystem");
 
 	assets_path = CreateFolder(App->GetBasePath(), "Assets");
 	library_path = CreateFolder(App->GetBasePath(), "Library");
@@ -77,7 +77,7 @@ string FileSystem::CreateFolder(const char * path, const char * name)
 		}
 		else if (error == ERROR_PATH_NOT_FOUND)
 		{
-			LOG_OUTPUT("Error creating folder (Path not found): %s", path)
+			LOG_OUTPUT("Error creating folder (path not found): %s", path)
 		}
 	}
 	else
@@ -113,7 +113,7 @@ void FileSystem::FileMove(const char * filepath, const char * new_path, bool rep
 	}
 }
 
-void FileSystem::FileCopyPaste(const char * filepath, const char * new_path, bool replace_existing)
+void FileSystem::FileCopyPaste(const char * filepath, const char * new_path)
 {
 	string path = new_path;
 
@@ -123,19 +123,23 @@ void FileSystem::FileCopyPaste(const char * filepath, const char * new_path, boo
 	}
 
 	path += GetFileNameFromFilePath(filepath);
-
-	if (!replace_existing)
+	
+	if (CopyFile(filepath, path.c_str(), false))
 	{
-		if (CopyFile(filepath, path.c_str(), false))
-		{
-			LOG_OUTPUT("Error moving file:[%s] to [%s]", filepath, path.c_str())
-		}
+		LOG_OUTPUT("Error moving file:[%s] to [%s]", filepath, path.c_str())
 	}
-	else
+	
+}
+
+void FileSystem::FileDelete(const char * filepath)
+{
+	if (DeleteFile(filepath) == 0)
 	{
-	/*	if (CopyFileEx(filepath, path.c_str(),COPYFILE_REPLACE))
+		DWORD error = GetLastError();
+
+		if (error == ERROR_FILE_NOT_FOUND)
 		{
-			LOG_OUTPUT("Error moving file:[%s] to [%s]", filepath, path.c_str())
-		}*/
+			LOG_OUTPUT("Error deleting file (path not found)): %s", filepath);
+		}
 	}
 }
