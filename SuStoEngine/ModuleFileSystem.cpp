@@ -7,9 +7,9 @@ FileSystem::FileSystem(bool start_enabled)
 {
 	SetName("FileSystem");
 
-	assets_path = CreateFolder("Resources", "Assets");
+	assets_path = CreateFolder(App->GetBasePath(), "Assets");
 	library_path = CreateFolder(App->GetBasePath(), "Library");
-	CreateFolder("Assets", "Meshes");
+	library_mesh_path = CreateFolder(library_path.c_str(), "Meshes");
 }
 
 FileSystem::~FileSystem()
@@ -27,8 +27,8 @@ bool FileSystem::Start()
 {
 	bool ret = true;
 
-	string file = library_path;
-	file += "Meshes\\test.susto";
+	string file = library_mesh_path;
+	file += "test.susto";
 	SaveFile(file.c_str(), "What are you doing with your life?");
 
 	return ret;
@@ -71,22 +71,24 @@ string FileSystem::CreateFolder(const char * path, const char * name)
 
 	filepath += name;
 
+	DWORD error = GetLastError();
+
 	if (CreateDirectory(filepath.c_str(), NULL) == 0)
 	{
-		DWORD error = GetLastError();
-
-		if (error == ERROR_ALREADY_EXISTS)
-		{
-			LOG_OUTPUT("Error creating folder (Folder aleady exists): %s", filepath.c_str())
-			ret = filepath;
-		}
-		else if (error == ERROR_PATH_NOT_FOUND)
-		{
-			LOG_OUTPUT("Error creating folder (path not found): %s", path)
-		}
+		error = GetLastError();
 	}
-	else
-		ret = filepath;
+
+	if (error == ERROR_PATH_NOT_FOUND)
+	{
+		LOG_OUTPUT("Error creating folder (path not found): %s", path);
+		return ret;
+	}
+	else if (error == ERROR_ALREADY_EXISTS)
+	{
+		LOG_OUTPUT("Error creating folder (Folder aleady exists): %s", filepath.c_str())
+	}
+
+	ret = filepath + '\\';
 
 	return ret;
 }
@@ -153,7 +155,8 @@ bool FileSystem::SaveFile(const char * name, const char* file_content)
 {
 	bool ret = false;
 
-	HANDLE h = CreateFile(name,    // name of the file
+	HANDLE h = CreateFile(
+		name,		   // name of the file
 		GENERIC_WRITE, // open for writing
 		0,             // sharing mode, none in this case
 		0,             // use default security descriptor
@@ -163,13 +166,13 @@ bool FileSystem::SaveFile(const char * name, const char* file_content)
 
 	if (h)
 	{
-		int i = strlen(file_content);
 		WriteFile(h, file_content, strlen(file_content), 0, NULL);
 		CloseHandle(h);
 		ret = true;
 	}
-	else {
-		LOG_OUTPUT("ERROR: FILE NOT SAVED CORRECTLY");
+	else 
+	{
+		LOG_OUTPUT("Error saving file %s: ", name);
 	}
 
 	return ret;
