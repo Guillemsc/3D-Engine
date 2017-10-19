@@ -38,7 +38,7 @@ private:
 
 private:
 	vector<GameObject*> game_objects;
-	vector<GameObject*> to_delete;
+	list<GameObject*> to_delete;
 	vector<GameObject*> selected;
 	GameObject*			root = nullptr;
 };
