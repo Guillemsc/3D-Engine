@@ -149,7 +149,8 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 				Mesh* new_mesh = new Mesh(
 					(float*)current_mesh->mVertices, current_mesh->mNumVertices,
 					indices, current_mesh->mNumFaces * 3,
-					(float*)current_mesh->mTextureCoords[0], current_mesh->mNumVertices);
+					(float*)current_mesh->mTextureCoords[0], current_mesh->mNumVertices,
+					file_name.c_str());
 
 				new_mesh->LoadToMemory();
 
@@ -270,7 +271,7 @@ void GeometryLoader::UnloadAllFiles()
 	}
 }
 
-Mesh::Mesh(float* _vertices, uint _num_vertices, uint* _indices, uint _num_indices, float* _uvs, uint _num_uvs)
+Mesh::Mesh(float* _vertices, uint _num_vertices, uint* _indices, uint _num_indices, float* _uvs, uint _num_uvs, const char* filename)
 {
 	if (_num_vertices > 0)
 	{
@@ -294,6 +295,8 @@ Mesh::Mesh(float* _vertices, uint _num_vertices, uint* _indices, uint _num_indic
 			memcpy(uvs, _uvs, sizeof(float) * _num_uvs * 3);
 			num_uvs = _num_uvs;
 		}
+
+		file_name = filename;
 
 		// Bbox
 		bbox.SetNegativeInfinity();
@@ -360,6 +363,21 @@ AABB Mesh::GetBBox()
 	return bbox;
 }
 
+const char * Mesh::GetFilename()
+{
+	return file_name;
+}
+
+float * Mesh::GetVertices()
+{
+	return vertices;
+}
+
+uint * Mesh::GetIndices()
+{
+	return indices;
+}
+
 void Mesh::LoadToMemory()
 {
 	if(id_vertices == 0 && vertices != nullptr)
@@ -391,4 +409,52 @@ void Mesh::UnloadFromMemory()
 		App->renderer3D->UnloadBuffer(id_uv, num_uvs * 3);
 		id_uv = 0;
 	}
+}
+
+bool MeshImporter::Import(const char * file, const char * path, std::string & output_file)
+{
+	bool ret = false;
+
+	return ret;
+}
+
+bool MeshImporter::Import(const void * buffer, uint size, std::string & output_file)
+{
+	bool ret = false;
+
+	return ret;
+}
+
+bool MeshImporter::Load(const char * exported_file, Mesh * resource)
+{
+	bool ret = false;
+
+	return ret;
+}
+
+bool MeshImporter::Save(const char * path, vector<Mesh*> meshes)
+{
+	bool ret = false;
+
+	for (vector<Mesh*>::iterator mesh = meshes.begin(); mesh != meshes.end(); ++mesh)
+	{
+		uint ranges[2] = { (*mesh)->GetNumVertices(), (*mesh)->GetNumIndices() };
+		uint size = sizeof(ranges) + sizeof(uint) * (*mesh)->GetNumIndices() + sizeof(float) * (*mesh)->GetNumVertices() * 3;
+		char* data = new char[size]; // Allocate
+		char* cursor = data;
+		uint bytes = sizeof(ranges); // First store ranges
+		memcpy(cursor, ranges, bytes);
+
+		cursor += bytes; // Store indices
+		bytes = sizeof(uint) * (*mesh)->GetNumIndices();
+		memcpy(cursor, (*mesh)->GetIndices(), bytes);
+
+		cursor += bytes; // Store vertices
+		bytes = sizeof(float) * (*mesh)->GetNumVertices();
+		memcpy(cursor, (*mesh)->GetVertices(), bytes);
+
+	}
+	
+
+	return ret;
 }
