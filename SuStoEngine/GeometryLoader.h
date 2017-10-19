@@ -26,7 +26,7 @@ public:
 class Mesh
 {
 public:
-	Mesh(float* vertices, uint num_vertices, uint* indices, uint num_indices, float* uvs, uint num_uvs);
+	Mesh(float* vertices, uint num_vertices, uint* indices, uint num_indices, float* uvs, uint num_uvs, const char* filename);
 
 	void CleanUp();
 
@@ -38,10 +38,16 @@ public:
 	uint GetNumUVs();
 	AABB GetBBox();
 
+	const char* GetFilename();
+	float* GetVertices();
+	uint* GetIndices();
+
 	void LoadToMemory();
 	void UnloadFromMemory();
 
 private:
+	const char* file_name;
+
 	uint   id_vertices = 0; 
 	uint   num_vertices = 0;
 	float* vertices = nullptr;
@@ -77,6 +83,18 @@ private:
 	vector<Mesh*> meshes;
 
 public:
+
+};
+
+#include "Importer.h"
+
+class MeshImporter : public Importer
+{
+public:
+	bool Import(const char* file, const char* path, std::string& output_file);
+	bool Import(const void* buffer, uint size, std::string& output_file);
+	bool Load(const char* exported_file, Mesh* resource);
+	bool Save(const char* path, vector<Mesh*> meshes);
 
 };
 
