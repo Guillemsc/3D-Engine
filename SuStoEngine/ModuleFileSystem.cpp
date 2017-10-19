@@ -26,6 +26,20 @@ bool FileSystem::Start()
 {
 	bool ret = true;
 
+	HANDLE h = CreateFile("test.susto",    // name of the file
+		GENERIC_WRITE, // open for writing
+		0,             // sharing mode, none in this case
+		0,             // use default security descriptor
+		CREATE_ALWAYS, // overwrite if exists
+		FILE_ATTRIBUTE_NORMAL,
+		0);
+	
+	char s[] = "This is a test";
+	int i, j;
+
+	WriteFile(h, s, sizeof(s), 0, NULL);
+	CloseHandle(h);
+
 	return ret;
 }
 
