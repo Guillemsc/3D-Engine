@@ -7,8 +7,9 @@ FileSystem::FileSystem(bool start_enabled)
 {
 	SetName("FileSystem");
 
-	assets_path = CreateFolder(App->GetBasePath(), "Assets");
+	assets_path = CreateFolder("Resources", "Assets");
 	library_path = CreateFolder(App->GetBasePath(), "Library");
+	CreateFolder("Assets", "Meshes");
 }
 
 FileSystem::~FileSystem()
@@ -25,6 +26,10 @@ bool FileSystem::Awake()
 bool FileSystem::Start()
 {
 	bool ret = true;
+
+	string file = library_path;
+	file += "Meshes\\test.susto";
+	SaveFile(file.c_str(), "What are you doing with your life?");
 
 	return ret;
 }
@@ -142,4 +147,30 @@ void FileSystem::FileDelete(const char * filepath)
 			LOG_OUTPUT("Error deleting file (path not found)): %s", filepath);
 		}
 	}
+}
+
+bool FileSystem::SaveFile(const char * name, const char* file_content)
+{
+	bool ret = false;
+
+	HANDLE h = CreateFile(name,    // name of the file
+		GENERIC_WRITE, // open for writing
+		0,             // sharing mode, none in this case
+		0,             // use default security descriptor
+		CREATE_ALWAYS, // overwrite if exists
+		FILE_ATTRIBUTE_NORMAL,
+		0);
+
+	if (h)
+	{
+		int i = strlen(file_content);
+		WriteFile(h, file_content, strlen(file_content), 0, NULL);
+		CloseHandle(h);
+		ret = true;
+	}
+	else {
+		LOG_OUTPUT("ERROR: FILE NOT SAVED CORRECTLY");
+	}
+
+	return ret;
 }
