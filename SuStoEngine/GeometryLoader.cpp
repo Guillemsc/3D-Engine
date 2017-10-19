@@ -453,6 +453,9 @@ bool MeshImporter::Save(const char * path, vector<Mesh*> meshes)
 		bytes = sizeof(float) * (*mesh)->GetNumVertices();
 		memcpy(cursor, (*mesh)->GetVertices(), bytes);
 
+		string filename = (*mesh)->GetFilename();
+	
+
 	}
 	
 
