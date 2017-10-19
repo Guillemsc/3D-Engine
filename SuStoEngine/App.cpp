@@ -73,6 +73,7 @@ applying transformations. It should only need to load one texture at a time.
 
 Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
+	file_system = new FileSystem();
 	xml = new XMLLoader();
 	json = new JSONLoader();
 	window = new ModuleWindow();
@@ -85,7 +86,6 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	editorUI = new EditorUI();
 	geometry = new GeometryLoader();
 	texture = new TextureLoader();
-	file_system = new FileSystem();
 
 	// The order of calls is very important!
 	// Modules will Awake() Start() and Update in this order

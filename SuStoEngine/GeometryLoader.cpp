@@ -8,6 +8,7 @@
 #include "ModuleCamera3D.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
+#include "ModuleFileSystem.h"
 
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
@@ -102,6 +103,8 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 		LOG_OUTPUT("\nLOADING %d MESHES", scene->mNumMeshes);
 
 		string file_name = GetFileNameFromFilePath(full_path);
+
+		App->file_system->FileCopyPaste(full_path, App->file_system->GetAssetsPath().c_str());
 
 		// Parent GameObject
 		GameObject* parent = nullptr;

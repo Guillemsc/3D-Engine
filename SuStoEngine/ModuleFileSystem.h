@@ -14,12 +14,19 @@ public:
 	bool Update();
 	bool CleanUp();
 
-	bool CopyToExplorer(const char * full_path, const char * destination);
+	string CreateFolder(const char* path, const char* name);
+	void FileMove(const char* filepath, const char* new_path, bool replace_existing = true);
+	void FileCopyPaste(const char* filepath, const char* new_path, bool replace_existing = false);
 
+	string GetAssetsPath();
+	string GetLibraryPath();
 
 private:
 
 public:
+	string assets_path;
+	string library_path;
+
 
 };
 
