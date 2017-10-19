@@ -7,8 +7,9 @@ FileSystem::FileSystem(bool start_enabled)
 {
 	SetName("FileSystem");
 
-	assets_path = CreateFolder(App->GetBasePath(), "Assets");
+	assets_path = CreateFolder("Resources", "Assets");
 	library_path = CreateFolder(App->GetBasePath(), "Library");
+	CreateFolder("Assets", "Meshes");
 }
 
 FileSystem::~FileSystem()
@@ -26,7 +27,9 @@ bool FileSystem::Start()
 {
 	bool ret = true;
 
-	SaveFile("test.susto", "What are you doing with your life?");
+	string file = library_path;
+	file += "Meshes\\test.susto";
+	SaveFile(file.c_str(), "What are you doing with your life?");
 
 	return ret;
 }
@@ -161,7 +164,7 @@ bool FileSystem::SaveFile(const char * name, const char* file_content)
 	if (h)
 	{
 		int i = strlen(file_content);
-		WriteFile(h, file_content, strlen(file_content) - 1, 0, NULL);
+		WriteFile(h, file_content, strlen(file_content), 0, NULL);
 		CloseHandle(h);
 		ret = true;
 	}
