@@ -47,7 +47,7 @@ void GameObject::Draw()
 
 	// Push matrix
 	glPushMatrix();
-	glMultMatrixf(transform->GetGlobalTransform().ptr());
+	glMultMatrixf(transform->GetGlobalTransform().Transposed().ptr());
 
 	ComponentMaterial* component_material = (ComponentMaterial*)FindComponentByType(MATERIAL);
 

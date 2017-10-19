@@ -239,13 +239,13 @@
             "size_X": 1576,
             "size_Y": 284,
             "status": 0,
-            "active": true,
+            "active": false,
             "opened": true,
             "location": "31",
             "child0": -1,
             "child1": -1,
             "prev_tab": -1,
-            "next_tab": -1,
+            "next_tab": 4,
             "parent": 7
         },
         "Dock2": {
@@ -289,15 +289,15 @@
             "pos_Y": 718,
             "size_X": 1576,
             "size_Y": 284,
-            "status": 1,
-            "active": false,
-            "opened": false,
+            "status": 0,
+            "active": true,
+            "opened": true,
             "location": "31",
             "child0": -1,
             "child1": -1,
-            "prev_tab": -1,
+            "prev_tab": 1,
             "next_tab": -1,
-            "parent": -1
+            "parent": 7
         },
         "Dock5": {
             "ID": "5",

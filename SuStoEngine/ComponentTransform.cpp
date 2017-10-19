@@ -14,6 +14,11 @@ ComponentTransform::~ComponentTransform()
 void ComponentTransform::Start()
 {
 	local_transform.SetIdentity();
+	local_position = float3(0, 0, 0);
+	local_rotation_euler = float3(0, 0, 0);
+	local_rotation_quat = Quat::identity;
+	local_scale = float3(1, 1, 1);
+
 	global_transform.SetIdentity();
 }
 
@@ -26,29 +31,41 @@ void ComponentTransform::CleanUp()
 {
 }
 
-const void ComponentTransform::SetPosition(float3 & pos)
-{
-	local_transform[3][0] = pos.x;
-	local_transform[3][1] = pos.y;
-	local_transform[3][2] = pos.z;
-}
-
-const void ComponentTransform::SetRotation(const Quat & quater)
-{
-	local_transform.FromQuat(quater);
-}
-
-void ComponentTransform::OnEnable()
-{
-}
-
-void ComponentTransform::OnDisable()
-{
-}
-
 const float4x4 ComponentTransform::GetLocalTransform() const
 {
 	return local_transform;
+}
+
+const void ComponentTransform::SetPosition(const float3 & pos)
+{
+	local_position = pos;
+
+	RecalculateLocalTransform();
+}
+
+const void ComponentTransform::SetRotation(const float3 & rotation)
+{
+	float3 diff = rotation - local_rotation_euler;
+	Quat quat_diff = Quat::FromEulerXYZ(diff.x*DEGTORAD, diff.y*DEGTORAD, diff.z*DEGTORAD);
+	local_rotation_quat = local_rotation_quat * quat_diff;
+	local_rotation_euler = rotation;
+
+	RecalculateLocalTransform();
+}
+
+const void ComponentTransform::SetRotation(const Quat & quat)
+{
+	local_rotation_quat = quat;
+	local_rotation_euler = local_rotation_quat.ToEulerXYZ();
+
+	RecalculateLocalTransform();
+}
+
+const void ComponentTransform::SetScale(const float3 & scale)
+{
+	local_scale = scale;
+
+	RecalculateLocalTransform();
 }
 
 const void ComponentTransform::SetLocalTransform(const float4x4 & transform)
@@ -63,17 +80,35 @@ const float4x4 ComponentTransform::GetGlobalTransform() const
 
 const float3 ComponentTransform::GetPosition() const
 {
-	return float3(local_transform[3][0], local_transform[3][1], local_transform[3][2]);
+	return local_position;
 }
 
 const float3 ComponentTransform::GetRotationEuler() const
 {
-	return local_transform.ToEulerXYZ();
+	return local_rotation_euler;
+}
+
+const Quat ComponentTransform::GetRotationQuat() const
+{
+	return local_rotation_quat;
 }
 
 const float3 ComponentTransform::GetScale() const
 {
-	return local_transform.GetScale();
+	return local_scale;
+}
+
+void ComponentTransform::RecalculateLocalTransform()
+{
+	local_transform = float4x4::FromTRS(local_position, local_rotation_quat, local_scale);
+}
+
+void ComponentTransform::OnEnable()
+{
+}
+
+void ComponentTransform::OnDisable()
+{
 }
 
 void ComponentTransform::InspectorDraw(std::vector<Component*> components)
@@ -86,12 +121,9 @@ void ComponentTransform::InspectorDraw(std::vector<Component*> components)
 		SetPosition(position);
 
 	if (ImGui::InputFloat3("Rotation", (float*)&rotation))
-		SetRotation(Quat::FromEulerXYZ(rotation.x, rotation.y, rotation.z));
+		SetRotation(rotation);
 
-	if (ImGui::InputFloat3("Scale", (float*)&scale)) 
-	{
-
-	}
-
+	if (ImGui::InputFloat3("Scale", (float*)&scale))
+		SetScale(scale);
 }
 
