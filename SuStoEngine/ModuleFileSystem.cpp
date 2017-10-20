@@ -27,10 +27,6 @@ bool FileSystem::Start()
 {
 	bool ret = true;
 
-	string file = library_mesh_path;
-	file += "test.susto";
-	SaveFile(file.c_str(), "What are you doing with your life?");
-
 	return ret;
 }
 
@@ -151,12 +147,18 @@ void FileSystem::FileDelete(const char * filepath)
 	}
 }
 
-bool FileSystem::SaveFile(const char * name, const char* file_content)
+bool FileSystem::SaveFile(const char * path, const char* file_content, const char* name, const char* extension)
 {
 	bool ret = false;
 
+	string file = path;
+	file += name;
+	file += ".";
+	file += extension;
+
+
 	HANDLE h = CreateFile(
-		name,		   // name of the file
+		file.c_str(),		   // name of the file
 		GENERIC_WRITE, // open for writing
 		0,             // sharing mode, none in this case
 		0,             // use default security descriptor

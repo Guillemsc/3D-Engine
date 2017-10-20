@@ -64,6 +64,9 @@ bool GeometryLoader::CleanUp()
 {
 	bool ret = true;
 
+	MeshImporter importer;
+	importer.Save(App->file_system->library_mesh_path.c_str(), meshes);
+
 	UnloadAllFiles();
 
 	// Detach log stream
@@ -456,7 +459,12 @@ bool MeshImporter::Save(const char * path, vector<Mesh*> meshes)
 
 		string filename = (*mesh)->GetFilename();
 	
-
+		char* content = "This is a test";
+		if (App->file_system->SaveFile(path, content, "new_test", "susto") == false)
+		{
+			return false;
+		}
+		ret = true;
 	}
 	
 

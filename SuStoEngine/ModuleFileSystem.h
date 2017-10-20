@@ -18,7 +18,7 @@ public:
 	void FileMove(const char* filepath, const char* new_path, bool replace_existing = true);
 	void FileCopyPaste(const char* filepath, const char* new_path);
 	void FileDelete(const char* filepath);
-	bool SaveFile(const char * name, const char * file_content);
+	bool SaveFile(const char * path, const char * file_content, const char * name, const char * extension);
 
 	string GetAssetsPath();
 	string GetLibraryPath();
