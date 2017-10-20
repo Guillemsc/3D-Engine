@@ -5,6 +5,7 @@
 #include "ComponentTransform.h"
 #include "GeometryMath.h"
 #include "GameObject.h"
+#include "ModuleRenderer3D.h"
 #include "imgui.h"
 
 ComponentMesh::ComponentMesh(GameObject * owner) : Component(MESH, owner)
@@ -50,6 +51,14 @@ Mesh * ComponentMesh::GetMesh() const
 const bool ComponentMesh::HasMesh() const
 {
 	return has_mesh;
+}
+
+void ComponentMesh::DrawBBox()
+{
+	if (has_mesh)
+	{
+		App->renderer3D->GetDebugDraw()->DrawBox(mesh->GetBBox().CenterPoint(), mesh->GetBBox().Size(), float3(0, 255, 0));
+	}
 }
 
 void ComponentMesh::InspectorDraw(std::vector<Component*> components)

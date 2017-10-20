@@ -93,6 +93,14 @@ void GameObject::Draw()
 
 	// Pop matrix
 	glPopMatrix();
+
+	if (component_mesh != nullptr && component_mesh->HasMesh())
+	{
+		component_mesh->DrawBBox();
+	}
+
+	// Pop matrix
+	glPopMatrix();
 }
 
 void GameObject::Enable()
