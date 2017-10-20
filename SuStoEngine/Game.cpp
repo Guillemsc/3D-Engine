@@ -36,7 +36,7 @@ void Game::Draw()
 		saved_size.y = size.y;
 	}
 
-	ImGui::Image((void*)App->renderer3D->fbo_texture->GetTexture(), ImVec2(size.y, size.x), ImVec2(0, 1), ImVec2(1, 0));
+	ImGui::Image((void*)App->renderer3D->GetScreenTexture(), ImVec2(size.y, size.x), ImVec2(0, 1), ImVec2(1, 0));
 
 	igEndDock();
 }

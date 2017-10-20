@@ -43,4 +43,4 @@ private:
 	bool show = true;
 };
 
-#endif //__j1TIMER_H__
+#endif //__CURSOR_H__

@@ -101,6 +101,7 @@
     <ClInclude Include="Configuration.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="Cursor.h" />
+    <ClInclude Include="DebugDraw.h" />
     <ClInclude Include="DebugScene.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="EditorUI.h" />
@@ -222,6 +223,7 @@
     <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="Cursor.cpp" />
+    <ClCompile Include="DebugDraw.cpp" />
     <ClCompile Include="DebugScene.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="EditorUI.cpp" />

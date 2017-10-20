@@ -131,6 +131,8 @@ bool ModuleRenderer3D::Awake()
 
 	SetTexture2D(true);
 
+	debug_draw = new DebugDraw();
+
 	return ret;
 }
 
@@ -188,6 +190,8 @@ bool ModuleRenderer3D::CleanUp()
 
 	LOG_OUTPUT("Destroying 3D Renderer");
 
+	delete debug_draw;
+
 	fbo_texture->Unbind();
 	RELEASE(fbo_texture);
 
@@ -204,6 +208,16 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
 	glLoadMatrixf(&ProjectionMatrix);
 	glMatrixMode(GL_MODELVIEW);
+}
+
+uint ModuleRenderer3D::GetScreenTexture()
+{
+	return fbo_texture->GetTexture();
+}
+
+DebugDraw * ModuleRenderer3D::GetDebugDraw()
+{
+	return debug_draw;
 }
 
 void ModuleRenderer3D::SetPoligonModeWireframe() const
@@ -395,50 +409,6 @@ void ModuleRenderer3D::UnloadBuffer(uint id, uint size)
 void ModuleRenderer3D::UnloadTextureBuffer(uint id, uint size)
 {
 	glDeleteTextures(size, &id);
-}
-
-void ModuleRenderer3D::DrawAxis(float3 position, float3 rotation)
-{
-	// save previous matrix
-	glPushMatrix();
-	// clear matrix
-	glLoadIdentity();
-	// apply rotations
-	//glRotatef(rotation.x, 1.0, 0.0, 0.0);
-	//glRotatef(rotation.y, 0.0, 1.0, 0.0);
-	//glRotatef(rotation.z, 0.0, 0.0, 1.0);
-	// move the axes to the screen corner
-	glTranslatef(0, 0, 0);
-	// draw our axes
-	glBegin(GL_LINES);
-	// draw line for x axis
-	glVertex3f(0.0, 0.0, 0.0);
-	glVertex3f(1.0, 0.0, 0.0);
-	// draw line for y axis
-	glVertex3f(0.0, 0.0, 0.0);
-	glVertex3f(0.0, 1.0, 0.0);
-	// draw line for Z axis
-	glVertex3f(0.0, 0.0, 0.0);
-	glVertex3f(0.0, 0.0, 1.0);
-	glEnd();
-	// load the previous matrix
-	glPopMatrix();
-}
-
-void ModuleRenderer3D::DrawPlane(float pos_x, float pos_y, float pos_z, int width, int height)
-{
-	glBegin(GL_QUADS);
-	int size = width*height;
-
-	for (int i = 0; i <= size; i++)
-	{
-		glVertex3f((float)i + pos_x, pos_y, (float)size + pos_z);
-		glVertex3f((float)i + pos_x, pos_y, (float)size + pos_z);
-
-		glVertex3f((float)-size + pos_x, pos_y, (float)i + pos_z);
-		glVertex3f((float)size + pos_x, pos_y, (float)i + pos_z);
-	}
-	glEnd();
 }
 
 void ModuleRenderer3D::DrawGrid(int HALF_GRID_SIZE)

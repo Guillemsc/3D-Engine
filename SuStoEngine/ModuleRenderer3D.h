@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "glmath.h"
 #include "Light.h"
+#include "DebugDraw.h"
 
 #include "Glew\Include\glew.h"
 #include "SDL/include/SDL_opengl.h"
@@ -13,6 +14,7 @@
 #define MAX_LIGHTS 8
 
 class FBO;
+class DebugDraw;
 
 class ModuleRenderer3D : public Module
 {
@@ -26,6 +28,8 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
+	uint GetScreenTexture();
+	DebugDraw* GetDebugDraw();
 
 	void SetPoligonModeWireframe() const;
 	void SetPoligonModePoints(float point_size = 4.0f) const;
@@ -54,13 +58,9 @@ public:
 	void UnloadBuffer(uint id, uint size);
 	void UnloadTextureBuffer(uint id, uint size);
 
-	void DrawAxis(float3 position, float3 rotation);
-
-	void DrawPlane(float pos_x, float pos_y, float pos_z, int width, int height);
-
 	void DrawGrid(int HALF_GRID_SIZE);
 
-public:
+private:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
@@ -72,4 +72,6 @@ public:
 	bool wireframe = false;
 	bool points = false;
 	bool fill = false;
+
+	DebugDraw* debug_draw = nullptr;
 };

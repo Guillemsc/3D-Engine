@@ -8,6 +8,7 @@
 #include "GeometryMath.h"
 #include "Globals.h"
 #include "ModuleRenderer3D.h"
+//#include "DebugDraw.h"
 
 DebugScene::DebugScene(bool start_enabled) : Module(start_enabled)
 {
@@ -46,6 +47,7 @@ bool DebugScene::Update()
 	bool ret = true;
 
 	App->renderer3D->DrawGrid(100);
+	App->renderer3D->GetDebugDraw()->DrawCross(float3(0, 0, 0), 1);
 
 	return ret;
 }

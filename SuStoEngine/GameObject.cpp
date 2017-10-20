@@ -10,7 +10,7 @@
 #include "TextureLoader.h"
 #include "Inspector.h"
 #include "ModuleRenderer3D.h"
-
+#include "DebugDraw.h"
 
 #include "Glew/include/glew.h" 
 
@@ -43,8 +43,6 @@ void GameObject::Update()
 
 void GameObject::Draw()
 {
-	App->renderer3D->DrawAxis(transform->GetPosition(), transform->GetRotationEuler());
-
 	// Push matrix
 	glPushMatrix();
 	glMultMatrixf(transform->GetGlobalTransform().Transposed().ptr());
