@@ -166,7 +166,7 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 				// Create GameObjects
 				if (as_new_gameobject)
 				{
-					string name = file_name; name += "_"; name += std::to_string(i) += "_"; name += std::to_string(i);
+					string name = file_name; name += "_"; name += std::to_string(i);
 
 					GameObject* go = App->gameobj->Create();
 					go->SetName(name.c_str());

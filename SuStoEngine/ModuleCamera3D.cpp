@@ -364,3 +364,56 @@ const bool ModuleCamera3D::IsMouseInsideWindow() const
 {
 	return PointInRect(float2(App->input->GetMouseX(), App->input->GetMouseY()), App->editorUI->GameRect());
 }
+
+Camera3D::Camera3D()
+{
+	frustum.pos = float3::zero;
+	frustum.front = float3::unitZ;
+	frustum.up = float3::unitY;
+
+	frustum.nearPlaneDistance = 0.1f;
+	frustum.farPlaneDistance = 1000.0f;
+	frustum.verticalFov = DEGTORAD * 60.0f;
+}
+
+void Camera3D::SetNearPlaneDistance(const float & set)
+{
+	if (set > 0 && set < frustum.farPlaneDistance)
+		frustum.nearPlaneDistance = set;
+}
+
+void Camera3D::SetFarPlaneDistance(const float & set)
+{
+	if (set < 0 && set > frustum.nearPlaneDistance)
+		frustum.farPlaneDistance = set;
+}
+
+void Camera3D::SetVerticalFOV(const float & set)
+{
+	frustum.verticalFov = DEGTORAD * set;
+}
+
+const float Camera3D::GetNearPlaneFistance() const
+{
+	return frustum.nearPlaneDistance;
+}
+
+const float Camera3D::GetFarPlaneDistance() const
+{
+	return frustum.farPlaneDistance;
+}
+
+const float Camera3D::GetVerticalFOV() const
+{
+	return frustum.verticalFov * RADTODEG;
+}
+
+const float4x4 Camera3D::GetViewMatrix() const
+{
+	return frustum.ViewMatrix();
+}
+
+const float4x4 Camera3D::GetProjectionMatrix() const
+{
+	return frustum.ProjectionMatrix();
+}

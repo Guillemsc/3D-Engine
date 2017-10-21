@@ -6,6 +6,7 @@
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
+#include "ComponentCamera.h"
 #include "ModuleGameObject.h"
 #include "TextureLoader.h"
 #include "Inspector.h"
@@ -158,16 +159,22 @@ void GameObject::AddComponent(ComponentType type)
 			ret = new ComponentMesh(this);
 		}
 		break;
-		case PRIMITIVE:
-		{
-			ret = new ComponentPrimitive(this);
-		}
-		break;
 		case MATERIAL:
 		{
 			ret = new ComponentMaterial(this);
 		}
 		break;
+		case CAMERA:
+		{
+			ret = new ComponentCamera(this);
+		}
+		break;
+		case PRIMITIVE:
+		{
+			ret = new ComponentPrimitive(this);
+		}
+		break;
+
 	default:
 		break;
 	}

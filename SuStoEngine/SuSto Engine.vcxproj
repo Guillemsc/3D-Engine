@@ -216,6 +216,7 @@
     <ClCompile Include="About.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="ComponentCamera.cpp" />
     <ClCompile Include="ComponentMesh.cpp" />
     <ClCompile Include="ComponentPrimitive.cpp" />
     <ClCompile Include="ComponentMaterial.cpp" />

@@ -2,7 +2,26 @@
 
 #include "Module.h"
 #include "Globals.h"
+#include "GeometryMath.h"
 #include "glmath.h"
+
+class Camera3D
+{
+public:
+	Camera3D();
+
+	void SetNearPlaneDistance(const float& set);
+	void SetFarPlaneDistance(const float& set);
+	void SetVerticalFOV(const float& set);
+	const float GetNearPlaneFistance() const;
+	const float GetFarPlaneDistance() const;
+	const float GetVerticalFOV() const;
+	const float4x4 GetViewMatrix() const;
+	const float4x4 GetProjectionMatrix() const;
+
+private:
+	Frustum frustum;
+};
 
 class ModuleCamera3D : public Module
 {

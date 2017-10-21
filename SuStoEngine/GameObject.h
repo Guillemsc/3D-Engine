@@ -46,6 +46,7 @@ public:
 	void AddChild(GameObject* child);
 
 	void RecursiveCalcGlobalTransform();
+	void RecursiveCalcBBoxTransform();
 
 public:
 	ComponentTransform* transform = nullptr;

@@ -1,4 +1,5 @@
 #include "DebugDraw.h"
+#include "Globals.h"
 #include "Glew\Include\glew.h"
 #include "SDL/include/SDL_opengl.h"
 #include <gl/GL.h>
@@ -25,6 +26,28 @@ void DebugDraw::DrawCross(float3 center, float size)
 
 	lines[4] = float3(center.x, center.y, center.z - half_size); colors[4] = float3(0, 0, 255);
 	lines[5] = float3(center.x, center.y, center.z + half_size); colors[5] = float3(0, 0, 255);
+
+	DrawLinesList(lines, s, 3, colors);
+
+	delete[] lines;
+	delete[] colors;
+}
+
+void DebugDraw::DrawAxis(float3 center, float size)
+{
+	const int s = 6;
+
+	float3* lines = new float3[s];
+	float3* colors = new float3[s];
+
+	lines[0] = float3(center.x, center.y, center.z); colors[0] = float3(255, 0, 0);
+	lines[1] = float3(center.x + size, center.y, center.z); colors[1] = float3(255, 0, 0);
+
+	lines[2] = float3(center.x, center.y, center.z); colors[2] = float3(0, 255, 0);
+	lines[3] = float3(center.x, center.y + size, center.z); colors[3] = float3(0, 255, 0);
+
+	lines[4] = float3(center.x, center.y, center.z); colors[4] = float3(0, 0, 255);
+	lines[5] = float3(center.x, center.y, center.z + size); colors[5] = float3(0, 0, 255);
 
 	DrawLinesList(lines, s, 3, colors);
 
@@ -82,7 +105,55 @@ void DebugDraw::DrawBox(float3 center, float3 size, float3 color)
 		colors[i] = color;
 	}
 
-	DrawLinesList(lines, s, 3, colors);
+	DrawLinesList(lines, s, 2, colors);
+
+	delete[] lines;
+	delete[] colors;
+}
+
+void DebugDraw::DrawCone(float3 center, float radius, float height)
+{
+	int strips = 10;
+
+	const int s = strips*2;
+
+	float3* lines = new float3[s];
+	float3* colors = new float3[s];
+
+	float angle_per_slice = 360 / strips;
+
+	for (int i = 0; i < strips; i++)
+	{
+		float x = cos(angle_per_slice*i*DEGTORAD) * radius;
+		float z = sin(angle_per_slice*i*DEGTORAD) * radius;
+
+		lines[0 + i] = float3(center.x, center.y + height/2, center.z);
+		lines[1 + i] = float3(center.x + x, center.y - height / 2, center.z + z);
+	}
+
+	for (int i = 0; i < s; i++)
+	{
+		colors[i] = float3(0, 0, 0);
+	}
+
+	DrawLinesList(lines, s, 2, colors);
+
+	delete[] lines;
+	delete[] colors;
+}
+
+void DebugDraw::DrawArrow(float3 start, float lenght, float radius, float3 color)
+{
+	const int s = 2;
+
+	float3* lines = new float3[s];
+	float3* colors = new float3[s];
+
+	lines[0] = float3(start.x, start.y, start.z);
+	lines[0] = float3(start.x, start.y + lenght, start.z);
+
+
+
 
 	delete[] lines;
 	delete[] colors;
