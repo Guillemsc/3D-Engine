@@ -19,6 +19,19 @@ public:
 	const float4x4 GetViewMatrix() const;
 	const float4x4 GetProjectionMatrix() const;
 
+	void MoveFront(const float& speed);
+	void MoveBack(const float& speed);
+	void MoveRight(const float& speed);
+	void MoveLeft(const float& speed);
+	void MoveUp(const float& speed);
+	void MoveDown(const float& speed);
+
+	void Orbit(const float3& rotate_center, const float& motion_x, const float& motion_y);
+	void Rotate(const float& motion_x, const float& motion_y);
+	void Focus(const float3& focus_center, const float& distance);
+
+	void Look(const float3& look_pos);
+
 private:
 	Frustum frustum;
 };
@@ -45,34 +58,17 @@ public:
 	const float GetWheelSpeed() const;
 	const float GetCameraSpeed() const;
 
-	void Focus(const vec3& focus, const float& distance);
+	void SetCurrentCamera(const Camera3D* set);
+	Camera3D* GetCurrentCamera() const;
 
 	const float* GetViewMatrix() const;
 
 private:
-	void CalculateViewMatrix();
-
-	void MoveFront(const float& speed);
-	void MoveBack(const float& speed);
-	void MoveLeft(const float& speed);
-	void MoveRight(const float& speed);
-	void MoveUp(const float& speed);
-	void MoveDown(const float& speed);
-
-	void Orbit(const vec3& orbit_center, const float& motion_x, const float& motion_y);
-	void Rotate(const float& motion_x, const float& motion_y);
-
-	void Look(const vec3& Position, const vec3& Reference, bool RotateAroundReference = false);
-	void LookAt(const vec3& Spot);
-	void Move(const vec3& Movement);
-
 	const bool IsMouseInsideWindow() const;
 
-public:
-	vec3 X, Y, Z, Position, Reference;
-
 private:
-	mat4x4 ViewMatrix, ViewMatrixInverse;
+	Camera3D* editor_camera = nullptr;
+	Camera3D* current_camera = nullptr;
 
 	// Camera Movement
 	bool  mouse_movement = false;

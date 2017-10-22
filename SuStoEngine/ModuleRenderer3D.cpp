@@ -7,7 +7,7 @@
 #include "EditorUI.h"
 #include "FBO.h"
 #include "SDL/include/SDL_opengl.h"
-#include <gl/GL.h>
+#include <gl/GL.h>direction_matrix
 #include <gl/GLU.h>
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
@@ -150,7 +150,7 @@ bool ModuleRenderer3D::PreUpdate()
 	glLoadMatrixf(App->camera->GetViewMatrix());
 
 	// light 0 on cam pos
-	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
+	//lights[0].SetPos(App->camera->, App->camera->Position.y, App->camera->Position.z);
 
 	for (uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
