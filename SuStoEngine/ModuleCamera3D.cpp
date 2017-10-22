@@ -208,7 +208,7 @@ const bool ModuleCamera3D::IsMouseInsideWindow() const
 
 Camera3D::Camera3D()
 {
-	frustum.pos = float3::zero;
+	frustum.pos = float3(0, 0, -1);
 	frustum.front = float3::unitZ;
 	frustum.up = float3::unitY;
 	frustum.verticalFov = 0;
@@ -389,8 +389,8 @@ void Camera3D::Look(const float3 & look_pos)
 
 void Camera3D::Focus(const float3 & focus_center, const float & distance)
 {
-	Look(focus_center);
-
 	float3 dir = frustum.pos - focus_center;
 	frustum.pos = dir.Normalized() * distance;
+
+	Look(focus_center);
 }

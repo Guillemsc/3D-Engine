@@ -26,7 +26,7 @@ void Component::Disable()
 {
 	if (enabled)
 	{
-		enabled = true;
+		enabled = false;
 		OnDisable();
 	}
 }

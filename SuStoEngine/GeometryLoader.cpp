@@ -239,7 +239,7 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 				}
 			}
 
-			//App->camera->Focus(vec3(0, 0, 0), max_size*1.2f);
+			App->camera->GetEditorCamera()->Focus(float3(0, 0, 0), max_size*1.2f);
 		}
 		// ------------------------------------------------
 	}

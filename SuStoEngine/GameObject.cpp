@@ -38,7 +38,8 @@ void GameObject::Update()
 {
 	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
 	{
-		(*it)->Update();
+		if((*it)->GetEnabled())
+			(*it)->Update();
 	}
 }
 
@@ -50,7 +51,7 @@ void GameObject::Draw()
 
 	ComponentMaterial* component_material = (ComponentMaterial*)FindComponentByType(MATERIAL);
 
-	if (component_material != nullptr)
+	if (component_material != nullptr && component_material->GetEnabled())
 	{
 		if (component_material->HasTexture())
 		{
@@ -60,7 +61,7 @@ void GameObject::Draw()
 
 	ComponentMesh* component_mesh = (ComponentMesh*)FindComponentByType(MESH);
 	
-	if (component_mesh != nullptr)
+	if (component_mesh != nullptr && component_mesh->GetEnabled())
 	{
 		if (component_mesh->HasMesh())
 		{
