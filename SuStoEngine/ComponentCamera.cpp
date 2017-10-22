@@ -26,7 +26,7 @@ void ComponentCamera::Update()
 {
 	float3 corners[8];
 	camera->GetCorners(corners);
-	App->renderer3D->GetDebugDraw()->DrawBox(corners);
+	App->renderer3D->GetDebugDraw()->DrawFrustum(corners);
 }
 
 void ComponentCamera::CleanUp()

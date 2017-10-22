@@ -3,6 +3,7 @@
 
 #include "Globals.h"
 #include <vector>
+#include "GeometryMath.h"
 
 class GameObject;
 
@@ -35,6 +36,7 @@ public:
 	void SetEnabled(const bool& set);
 	void SetName(const char* new_name);
 
+	virtual void OnGetBoundingBox(AABB &bbox) {};
 	virtual void InspectorDraw(std::vector<Component*> components) {};
 
 private:

@@ -20,8 +20,7 @@ public:
 	Mesh* GetMesh() const;
 	const bool HasMesh() const;
 
-	void DrawBBox();
-
+	void OnGetBoundingBox(AABB& box);
 	void InspectorDraw(std::vector<Component*> components);
 
 private:

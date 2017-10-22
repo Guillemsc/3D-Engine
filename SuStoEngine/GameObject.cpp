@@ -96,13 +96,10 @@ void GameObject::Draw()
 	// Pop matrix
 	glPopMatrix();
 
-	if (component_mesh != nullptr && component_mesh->HasMesh())
-	{
-		component_mesh->DrawBBox();
-	}
-
 	// Pop matrix
 	glPopMatrix();
+
+	DrawBBox();
 }
 
 void GameObject::Enable()
@@ -338,6 +335,31 @@ void GameObject::RecursiveCalcGlobalTransform()
 			(*it)->RecursiveCalcGlobalTransform();
 		}
 	}
+}
+
+void GameObject::RecursiveCalcBBox()
+{
+	local_bbox.SetNegativeInfinity();
+
+	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
+		(*it)->OnGetBoundingBox(local_bbox);
+
+	if (local_bbox.IsFinite())
+		local_bbox.Transform(transform->GetGlobalTransform());
+	
+	if (!childs.empty())
+	{
+		for (vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
+		{
+			(*it)->RecursiveCalcBBox();
+		}
+	}
+}
+
+void GameObject::DrawBBox()
+{
+	if(local_bbox.IsFinite())
+		App->renderer3D->GetDebugDraw()->DrawBox(local_bbox.CenterPoint(), local_bbox.Size(), float3(20, 255, 20));
 }
 
 

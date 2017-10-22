@@ -24,12 +24,7 @@ void ComponentMesh::Start()
 
 void ComponentMesh::Update()
 {
-	if (has_mesh)
-	{
-		GetMesh()->GetBBox().Transform(GetOwner()->transform->GetLocalTransform());
 
-		DrawBBox();
-	}
 }
 
 void ComponentMesh::CleanUp()
@@ -58,11 +53,11 @@ const bool ComponentMesh::HasMesh() const
 	return has_mesh;
 }
 
-void ComponentMesh::DrawBBox()
+void ComponentMesh::OnGetBoundingBox(AABB& box)
 {
 	if (has_mesh)
 	{
-		App->renderer3D->GetDebugDraw()->DrawBox(mesh->GetBBox().CenterPoint(), mesh->GetBBox().Size(), float3(0, 255, 0));
+		box.Enclose(mesh->GetBBox());
 	}
 }
 

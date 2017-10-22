@@ -1,10 +1,10 @@
-Info,  T19564: Load Models/BakerHouse/BakerHouse.fbx
-Info,  T19564: Found a matching importer for this file format: Autodesk FBX Importer.
-Info,  T19564: Import root directory is 'Models/BakerHouse\'
-Warn,  T19564: FBX-DOM (TOK_KEY, offset 0xd7b7) shading mode not recognized: Phong
-Info,  T19564: Entering post processing pipeline
-Info,  T19564: Points: 0, Lines: 0, Triangles: 2, Polygons: 0 (Meshes, X = removed)
-Info,  T19564: CalcTangentsProcess finished. Tangents have been calculated
-Info,  T19564: JoinVerticesProcess finished | Verts in: 3075 out: 1801 | ~41.4%
-Info,  T19564: Cache relevant are 2 meshes (1025 faces). Average output ACMR is 1.757073
-Info,  T19564: Leaving post processing pipeline
+Info,  T36760: Load Models/BakerHouse/BakerHouse.fbx
+Info,  T36760: Found a matching importer for this file format: Autodesk FBX Importer.
+Info,  T36760: Import root directory is 'Models/BakerHouse\'
+Warn,  T36760: FBX-DOM (TOK_KEY, offset 0xd7b7) shading mode not recognized: Phong
+Info,  T36760: Entering post processing pipeline
+Info,  T36760: Points: 0, Lines: 0, Triangles: 2, Polygons: 0 (Meshes, X = removed)
+Info,  T36760: CalcTangentsProcess finished. Tangents have been calculated
+Info,  T36760: JoinVerticesProcess finished | Verts in: 3075 out: 1801 | ~41.4%
+Info,  T36760: Cache relevant are 2 meshes (1025 faces). Average output ACMR is 1.757073
+Info,  T36760: Leaving post processing pipeline

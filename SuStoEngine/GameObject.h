@@ -46,7 +46,10 @@ public:
 	void AddChild(GameObject* child);
 
 	void RecursiveCalcGlobalTransform();
-	void RecursiveCalcBBoxTransform();
+	void RecursiveCalcBBox();
+
+private:
+	void DrawBBox();
 
 public:
 	ComponentTransform* transform = nullptr;
@@ -61,6 +64,8 @@ private:
 
 	GameObject* parent = nullptr;
 	std::vector<GameObject*> childs;
+
+	AABB	     local_bbox;
 };
 
 #endif

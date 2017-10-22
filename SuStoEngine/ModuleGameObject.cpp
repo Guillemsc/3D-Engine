@@ -30,6 +30,7 @@ bool ModuleGameObject::PreUpdate()
 	bool ret = true;
 
 	root->RecursiveCalcGlobalTransform();
+	root->RecursiveCalcBBox();
 
 	return ret;
 }
