@@ -217,12 +217,9 @@ Camera3D::Camera3D()
 	frustum.nearPlaneDistance = 0;
 
 	SetNearPlaneDistance(0.1f);
-	SetFarPlaneDistance(1000.0f);
+	SetFarPlaneDistance(50.0f);
 	SetAspectRatio(1.3f);
 	SetFOV(60);
-	frustum.nearPlaneDistance = 0.1f;
-	frustum.farPlaneDistance = 1000.0f;
-	frustum.verticalFov = DEGTORAD * 120.0f;
 }
 
 void Camera3D::SetPosition(const float3 & pos)
@@ -233,6 +230,11 @@ void Camera3D::SetPosition(const float3 & pos)
 const float3 Camera3D::GetPosition()
 {
 	return frustum.pos;
+}
+
+void Camera3D::GetCorners(float3* corners)
+{
+	frustum.GetCornerPoints(corners);
 }
 
 void Camera3D::SetNearPlaneDistance(const float & set)

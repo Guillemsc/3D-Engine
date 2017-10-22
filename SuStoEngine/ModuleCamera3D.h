@@ -13,6 +13,8 @@ public:
 	void SetPosition(const float3& pos);
 	const float3 GetPosition();
 
+	void GetCorners(float3* corners);
+
 	void SetNearPlaneDistance(const float& set);
 	void SetFarPlaneDistance(const float& set);
 	void SetFOV(const float& set);

@@ -1,9 +1,15 @@
 #include "ComponentCamera.h"
 #include "GameObject.h"
 #include "ModuleCamera3D.h"
+#include "App.h"
+#include "ModuleRenderer3D.h"
+#include "DebugDraw.h"
 
 ComponentCamera::ComponentCamera(GameObject * owner) : Component(CAMERA, owner)
 {
+	LOG_OUTPUT("Component Camera Created");
+	SetName("Camera");
+
 	camera = new Camera3D();
 }
 
@@ -18,7 +24,9 @@ void ComponentCamera::Start()
 
 void ComponentCamera::Update()
 {
-
+	float3 corners[8];
+	camera->GetCorners(corners);
+	App->renderer3D->GetDebugDraw()->DrawBox(corners);
 }
 
 void ComponentCamera::CleanUp()

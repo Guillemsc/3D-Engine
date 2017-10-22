@@ -34,6 +34,8 @@ void Inspector::Draw()
 				selected[0]->AddComponent(MATERIAL);
 			if (ImGui::MenuItem("Add Mesh"))
 				selected[0]->AddComponent(MESH);
+			if (ImGui::MenuItem("Add Camera"))
+				selected[0]->AddComponent(CAMERA);
 
 			ImGui::EndMenu();
 		}

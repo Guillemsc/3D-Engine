@@ -24,7 +24,12 @@ void ComponentMesh::Start()
 
 void ComponentMesh::Update()
 {
-	GetMesh()->GetBBox().Transform(GetOwner()->transform->GetLocalTransform());
+	if (has_mesh)
+	{
+		GetMesh()->GetBBox().Transform(GetOwner()->transform->GetLocalTransform());
+
+		DrawBBox();
+	}
 }
 
 void ComponentMesh::CleanUp()
