@@ -10,12 +10,17 @@ class Camera3D
 public:
 	Camera3D();
 
+	void SetPosition(const float3& pos);
+	const float3 GetPosition();
+
 	void SetNearPlaneDistance(const float& set);
 	void SetFarPlaneDistance(const float& set);
-	void SetVerticalFOV(const float& set);
+	void SetFOV(const float& set);
+	void SetAspectRatio(const float& set);
 	const float GetNearPlaneFistance() const;
 	const float GetFarPlaneDistance() const;
 	const float GetVerticalFOV() const;
+	const float GetHorizontalFOV() const;
 	const float4x4 GetViewMatrix() const;
 	const float4x4 GetProjectionMatrix() const;
 
@@ -34,6 +39,7 @@ public:
 
 private:
 	Frustum frustum;
+	float	aspect_ratio = 0.0f;
 };
 
 class ModuleCamera3D : public Module
@@ -50,6 +56,8 @@ public:
 	void OnLoadConfig(JSON_Doc* config);
 	void OnSaveConfig(JSON_Doc* config);
 
+	Camera3D* GetEditorCamera() const;
+
 	void SetMouseSensitivity(const float& set);
 	void SetWheelSpeed(const float& set);
 	void SetCameraSpeed(const float& set);
@@ -58,7 +66,7 @@ public:
 	const float GetWheelSpeed() const;
 	const float GetCameraSpeed() const;
 
-	void SetCurrentCamera(const Camera3D* set);
+	void SetCurrentCamera(Camera3D* set);
 	Camera3D* GetCurrentCamera() const;
 
 	const float* GetViewMatrix() const;

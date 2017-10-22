@@ -65,6 +65,11 @@ void ModuleCamera3D::OnSaveConfig(JSON_Doc * config)
 	config->SetNumber("camera.camera_speed", camera_speed);
 }
 
+Camera3D * ModuleCamera3D::GetEditorCamera() const
+{
+	return editor_camera;
+}
+
 void ModuleCamera3D::SetMouseSensitivity(const float& set)
 {
 	mouse_sensitivity = set;
@@ -95,13 +100,15 @@ const float ModuleCamera3D::GetCameraSpeed() const
 	return camera_speed;
 }
 
-void ModuleCamera3D::SetCurrentCamera(const Camera3D * set)
+void ModuleCamera3D::SetCurrentCamera(Camera3D * set)
 {
+	if (set != nullptr)
+		current_camera = set;
 }
 
 Camera3D * ModuleCamera3D::GetCurrentCamera() const
 {
-	return nullptr;
+	return current_camera;
 }
 
 const float * ModuleCamera3D::GetViewMatrix() const
@@ -114,7 +121,7 @@ bool ModuleCamera3D::Update()
 {
 	bool ret = true;
 
-	if (current_camera == nullptr)
+	if (editor_camera == nullptr)
 		return true;
 
 	float speed = camera_speed * App->GetDT();
@@ -132,11 +139,11 @@ bool ModuleCamera3D::Update()
 	{
 		if (App->input->GetMouseWheel() == 1)
 		{
-			current_camera->MoveFront(wheel_speed);
+			editor_camera->MoveFront(wheel_speed);
 		}
 		else if (App->input->GetMouseWheel() == -1)
 		{
-			current_camera->MoveBack(wheel_speed);
+			editor_camera->MoveBack(wheel_speed);
 		}
 
 		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
@@ -144,24 +151,24 @@ bool ModuleCamera3D::Update()
 			App->window->GetCursor()->Hand();
 
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_Z))
-				current_camera->MoveUp(speed);
+				editor_camera->MoveUp(speed);
 
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_X))
-				current_camera->MoveDown(speed);
+				editor_camera->MoveDown(speed);
 
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_W))
-				current_camera->MoveFront(speed);
+				editor_camera->MoveFront(speed);
 
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_S))
-				current_camera->MoveBack(speed);
+				editor_camera->MoveBack(speed);
 
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_A))
-				current_camera->MoveLeft(speed);
+				editor_camera->MoveLeft(speed);
 
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_D))
-				current_camera->MoveRight(speed);
+				editor_camera->MoveRight(speed);
 
-			current_camera->Rotate(-App->input->GetMouseXMotion()*mouse_sensitivity*0.01f, -App->input->GetMouseYMotion()*mouse_sensitivity*0.01f);
+			editor_camera->Rotate(-App->input->GetMouseXMotion()*mouse_sensitivity*0.01f, -App->input->GetMouseYMotion()*mouse_sensitivity*0.01f);
 			
 		}
 		else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
@@ -169,13 +176,13 @@ bool ModuleCamera3D::Update()
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_LALT) || App->input->GetKeyRepeat(SDL_SCANCODE_RALT))
 			{
 				if (App->input->GetKeyRepeat(SDL_SCANCODE_W))
-					current_camera->MoveFront(speed);
+					editor_camera->MoveFront(speed);
 
 				if (App->input->GetKeyRepeat(SDL_SCANCODE_S))
-					current_camera->MoveBack(speed);
+					editor_camera->MoveBack(speed);
 
-				current_camera->Orbit(float3(0, 0, 0), -App->input->GetMouseXMotion()*mouse_sensitivity*0.01f, -App->input->GetMouseYMotion()*mouse_sensitivity*0.01f);
-				current_camera->Look(float3(0, 0, 0));
+				editor_camera->Orbit(float3(0, 0, 0), -App->input->GetMouseXMotion()*mouse_sensitivity*0.01f, -App->input->GetMouseYMotion()*mouse_sensitivity*0.01f);
+				editor_camera->Look(float3(0, 0, 0));
 
 				App->window->GetCursor()->SizeAll();
 			}
@@ -188,7 +195,7 @@ bool ModuleCamera3D::Update()
 
 	if (App->input->GetKeyDown("f"))
 	{
-		current_camera->Focus(float3(0, 0, 0), 10);
+		editor_camera->Focus(float3(0, 0, 0), 10);
 	}
 
 	return ret;
@@ -204,10 +211,28 @@ Camera3D::Camera3D()
 	frustum.pos = float3::zero;
 	frustum.front = float3::unitZ;
 	frustum.up = float3::unitY;
+	frustum.verticalFov = 0;
+	frustum.horizontalFov = 0;
+	frustum.farPlaneDistance = 0;
+	frustum.nearPlaneDistance = 0;
 
+	SetNearPlaneDistance(0.1f);
+	SetFarPlaneDistance(1000.0f);
+	SetAspectRatio(1.3f);
+	SetFOV(60);
 	frustum.nearPlaneDistance = 0.1f;
 	frustum.farPlaneDistance = 1000.0f;
-	frustum.verticalFov = DEGTORAD * 60.0f;
+	frustum.verticalFov = DEGTORAD * 120.0f;
+}
+
+void Camera3D::SetPosition(const float3 & pos)
+{
+	frustum.pos = pos;
+}
+
+const float3 Camera3D::GetPosition()
+{
+	return frustum.pos;
 }
 
 void Camera3D::SetNearPlaneDistance(const float & set)
@@ -222,9 +247,18 @@ void Camera3D::SetFarPlaneDistance(const float & set)
 		frustum.farPlaneDistance = set;
 }
 
-void Camera3D::SetVerticalFOV(const float & set)
+void Camera3D::SetFOV(const float & set)
 {
 	frustum.verticalFov = DEGTORAD * set;
+	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspect_ratio);
+}
+
+void Camera3D::SetAspectRatio(const float & set)
+{
+	aspect_ratio = set;
+
+	if(frustum.horizontalFov > 0 && frustum.verticalFov > 0)
+		frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspect_ratio);
 }
 
 const float Camera3D::GetNearPlaneFistance() const
@@ -240,6 +274,11 @@ const float Camera3D::GetFarPlaneDistance() const
 const float Camera3D::GetVerticalFOV() const
 {
 	return frustum.verticalFov * RADTODEG;
+}
+
+const float Camera3D::GetHorizontalFOV() const
+{
+	return frustum.horizontalFov;
 }
 
 const float4x4 Camera3D::GetViewMatrix() const
