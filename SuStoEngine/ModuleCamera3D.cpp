@@ -208,16 +208,18 @@ const bool ModuleCamera3D::IsMouseInsideWindow() const
 
 Camera3D::Camera3D()
 {
+	frustum.type = FrustumType::PerspectiveFrustum;
 	frustum.pos = float3(0, 0, -1);
 	frustum.front = float3::unitZ;
 	frustum.up = float3::unitY;
 	frustum.verticalFov = 0;
 	frustum.horizontalFov = 0;
-	frustum.farPlaneDistance = 0;
+	frustum.farPlaneDistance = 1.0f;
 	frustum.nearPlaneDistance = 0;
+	aspect_ratio = 0;
 
 	SetNearPlaneDistance(0.1f);
-	SetFarPlaneDistance(50.0f);
+	SetFarPlaneDistance(100.0f);
 	SetAspectRatio(1.3f);
 	SetFOV(60);
 }
@@ -245,21 +247,27 @@ void Camera3D::SetNearPlaneDistance(const float & set)
 
 void Camera3D::SetFarPlaneDistance(const float & set)
 {
-	if (set < 0 && set > frustum.nearPlaneDistance)
+	if (set > 0 && set > frustum.nearPlaneDistance)
 		frustum.farPlaneDistance = set;
 }
 
 void Camera3D::SetFOV(const float & set)
 {
-	frustum.verticalFov = DEGTORAD * set;
-	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspect_ratio);
+	if(set > 0)
+		frustum.verticalFov = DEGTORAD * set;
+
+	if (aspect_ratio > 0)
+		frustum.horizontalFov = frustum.verticalFov * aspect_ratio;
+	/*	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspect_ratio);*/ //  wtf is this?
+
+	float aspect_ration = frustum.AspectRatio();
 }
 
 void Camera3D::SetAspectRatio(const float & set)
 {
 	aspect_ratio = set;
 
-	if(frustum.horizontalFov > 0 && frustum.verticalFov > 0)
+	if(frustum.verticalFov > 0)
 		frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspect_ratio);
 }
 

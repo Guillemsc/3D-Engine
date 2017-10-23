@@ -8,7 +8,7 @@
 #include "GeometryMath.h"
 #include "Globals.h"
 #include "ModuleRenderer3D.h"
-//#include "DebugDraw.h"
+#include "ModuleGameObject.h"
 
 DebugScene::DebugScene(bool start_enabled) : Module(start_enabled)
 {
@@ -21,6 +21,10 @@ DebugScene::~DebugScene()
 bool DebugScene::Awake()
 {
 	bool ret = true;
+
+	GameObject* go = App->gameobj->Create();
+
+	go->AddComponent(CAMERA);
 
 	return ret;
 }
