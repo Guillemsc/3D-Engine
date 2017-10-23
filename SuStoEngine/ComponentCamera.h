@@ -17,6 +17,8 @@ public:
 	void Update();
 	void CleanUp();;
 
+	Camera3D* GetCamera() const;
+
 	void InspectorDraw(std::vector<Component*> components);
 
 private:

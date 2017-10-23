@@ -34,6 +34,11 @@ void ComponentCamera::CleanUp()
 	delete camera;
 }
 
+Camera3D * ComponentCamera::GetCamera() const
+{
+	return camera;
+}
+
 void ComponentCamera::InspectorDraw(std::vector<Component*> components)
 {
 }

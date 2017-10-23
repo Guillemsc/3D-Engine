@@ -9,6 +9,8 @@
 #include "Globals.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleGameObject.h"
+#include "ComponentCamera.h"
+#include "ModuleCamera3D.h"
 
 DebugScene::DebugScene(bool start_enabled) : Module(start_enabled)
 {
@@ -23,8 +25,9 @@ bool DebugScene::Awake()
 	bool ret = true;
 
 	GameObject* go = App->gameobj->Create();
-
 	go->AddComponent(CAMERA);
+	ComponentCamera* c = (ComponentCamera*)go->FindComponentByType(CAMERA);
+	c->GetCamera()->SetFarPlaneDistance(100.0f);
 
 	return ret;
 }

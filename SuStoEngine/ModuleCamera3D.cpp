@@ -219,7 +219,7 @@ Camera3D::Camera3D()
 	aspect_ratio = 0;
 
 	SetNearPlaneDistance(0.1f);
-	SetFarPlaneDistance(100.0f);
+	SetFarPlaneDistance(500.0f);
 	SetAspectRatio(1.3f);
 	SetFOV(60);
 }
@@ -299,6 +299,18 @@ const float4x4 Camera3D::GetViewMatrix() const
 const float4x4 Camera3D::GetProjectionMatrix() const
 {
 	return frustum.ProjectionMatrix();
+}
+
+const float * Camera3D::GetOpenGLViewMatrix() const
+{
+	static float4x4 view = frustum.ViewMatrix();
+	view.Transpose();
+	return view.ptr();
+}
+
+const float * Camera3D::GetOpenGLProjectionMatrix() const
+{
+	return frustum.ProjectionMatrix().Transposed().ptr();
 }
 
 void Camera3D::MoveFront(const float & speed)
