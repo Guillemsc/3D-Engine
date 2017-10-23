@@ -29,8 +29,8 @@ ModuleInput::~ModuleInput()
 void ModuleInput::OnLoadConfig(JSON_Doc* config)
 {
 	SetKeyBinding(config->GetString("input.console", "º"), "console");
-	SetKeyBinding(config->GetString("input.profiler", "p"), "profiler");
-	SetKeyBinding(config->GetString("input.configuration", "c"), "configuration");
+	SetKeyBinding(config->GetString("input.profiler", ""), "profiler");
+	SetKeyBinding(config->GetString("input.configuration", ""), "configuration");
 }
 
 void ModuleInput::OnSaveConfig(JSON_Doc * config)

@@ -24,6 +24,10 @@ void ComponentCamera::Start()
 
 void ComponentCamera::Update()
 {
+	camera->SetPosition(GetOwner()->transform->GetPosition());
+	camera->SetZDir(GetOwner()->transform->GetGlobalTransform().WorldZ());
+	camera->SetYDir(GetOwner()->transform->GetGlobalTransform().WorldY());
+
 	float3 corners[8];
 	camera->GetCorners(corners);
 	App->renderer3D->GetDebugDraw()->DrawFrustum(corners);
