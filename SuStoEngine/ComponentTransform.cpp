@@ -58,7 +58,7 @@ const void ComponentTransform::SetRotation(const float3 & rotation)
 const void ComponentTransform::SetRotation(const Quat & quat)
 {
 	local_rotation_quat = quat;
-	local_rotation_euler = local_rotation_quat.ToEulerXYZ();
+	local_rotation_euler = local_rotation_quat.ToEulerXYZ() * RADTODEG;
 
 	RecalculateLocalTransform();
 }

@@ -4,8 +4,6 @@
 #include "Globals.h"
 #include "Primitive.h"
 
-struct PhysBody3D;
-struct PhysMotor3D;
 
 class DebugScene : public Module
 {
@@ -18,11 +16,10 @@ public:
 	bool Update();
 	bool CleanUp();
 
-	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
-
 public:
 
-public:
+private:
+
 
 
 };

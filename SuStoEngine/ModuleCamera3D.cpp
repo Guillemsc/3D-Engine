@@ -111,6 +111,11 @@ Camera3D * ModuleCamera3D::GetCurrentCamera() const
 	return current_camera;
 }
 
+void ModuleCamera3D::SetCurrentCameraToEditorCamera()
+{
+	current_camera = editor_camera;
+}
+
 const float * ModuleCamera3D::GetViewMatrix() const
 {
 	return current_camera->GetViewMatrix().Transposed().ptr();

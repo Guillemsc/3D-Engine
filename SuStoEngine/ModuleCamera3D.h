@@ -75,6 +75,7 @@ public:
 
 	void SetCurrentCamera(Camera3D* set);
 	Camera3D* GetCurrentCamera() const;
+	void SetCurrentCameraToEditorCamera();
 
 	const float* GetViewMatrix() const;
 

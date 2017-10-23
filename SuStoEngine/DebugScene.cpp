@@ -11,6 +11,7 @@
 #include "ModuleGameObject.h"
 #include "ComponentCamera.h"
 #include "ModuleCamera3D.h"
+#include "ModuleInput.h"
 
 DebugScene::DebugScene(bool start_enabled) : Module(start_enabled)
 {
@@ -26,8 +27,8 @@ bool DebugScene::Awake()
 
 	GameObject* go = App->gameobj->Create();
 	go->AddComponent(CAMERA);
-	ComponentCamera* c = (ComponentCamera*)go->FindComponentByType(CAMERA);
-	c->GetCamera()->SetFarPlaneDistance(100.0f);
+	ComponentCamera* cam = (ComponentCamera*)go->FindComponentByType(CAMERA);
+	cam->GetCamera()->SetFarPlaneDistance(100.0f);
 
 	return ret;
 }
@@ -60,8 +61,4 @@ bool DebugScene::Update()
 	//App->renderer3D->GetDebugDraw()->DrawCone(float3(-6, 10, 0));
 
 	return ret;
-}
-
-void DebugScene::OnCollision(PhysBody3D * body1, PhysBody3D * body2)
-{
 }

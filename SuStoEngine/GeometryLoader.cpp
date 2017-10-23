@@ -114,6 +114,22 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 		{
 			parent = App->gameobj->Create();
 			parent->SetName(file_name);
+
+			aiVector3D translation;
+			aiVector3D scaling;
+			aiQuaternion rotation;
+			if (scene->mRootNode != nullptr)
+			{
+				scene->mRootNode->mTransformation.Decompose(scaling, rotation, translation);
+				float3 pos(translation.x, translation.y, translation.z);
+				float3 scale(scaling.x, scaling.y, scaling.z);
+				Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
+			}
+
+			parent->transform->SetPosition(float3(translation.x, translation.y, translation.z));
+			parent->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
+			//parent->transform->SetScale(float3(scaling.x, scaling.y, scaling.z));
+		
 		}
 
 		// -------------------------------------------
@@ -176,21 +192,23 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 
 					parent->AddChild(go);
 
-					//aiVector3D translation;
-					//aiVector3D scaling;
-					//aiQuaternion rotation;
+					// Set mesh pos, rot and scale
+					aiVector3D translation;
+					aiVector3D scaling;
+					aiQuaternion rotation;
 
-					//aiNode* node = scene->mRootNode->mChildren[i];
-					//if (node != nullptr)
-					//{
-					//	scene->mRootNode->mTransformation.Decompose(scaling, rotation, translation);
-					//	float3 pos(translation.x, translation.y, translation.z);
-					//	float3 scale(scaling.x, scaling.y, scaling.z);
-					//	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
-					//}
-					//
-					//go->transform->SetPosition(float3(translation.x, translation.y, translation.z));
-					//go->transform->SetRotationQuat(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
+					aiNode* node = scene->mRootNode->mChildren[i];
+					if (node != nullptr)
+					{
+						node->mTransformation.Decompose(scaling, rotation, translation);
+						float3 pos(translation.x, translation.y, translation.z);
+						float3 scale(scaling.x, scaling.y, scaling.z);
+						Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
+					}
+					
+					go->transform->SetPosition(float3(translation.x, translation.y, translation.z));
+					go->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
+					//go->transform->SetScale(float3(scaling.x, scaling.y, scaling.z));
 				}
 			}
 
@@ -260,6 +278,7 @@ void GeometryLoader::UnloadFile(Mesh* mesh)
 		if ((*it) == mesh)
 		{
 			(*it)->CleanUp();
+			delete *it;
 			meshes.erase(it);
 			break;
 		}
@@ -270,7 +289,8 @@ void GeometryLoader::UnloadAllFiles()
 {
 	for (vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end();)
 	{
-		(*it)->CleanUp();;
+		(*it)->CleanUp();
+		delete *it;
 		it = meshes.erase(it);
 	}
 }
