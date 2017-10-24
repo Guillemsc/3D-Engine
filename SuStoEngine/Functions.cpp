@@ -139,7 +139,7 @@ std::string GetFilenameWithoutExtension(const char * file_name)
 
 	for (int i = 0; file_name[i] != '\0'; i++)
 	{
-		if (file_name[i] == '.')
+		if (file_name[i] == '.' || file_name[i] == '_')
 		{
 			break;
 		}
