@@ -38,7 +38,7 @@ public:
 	uint GetNumUVs();
 	AABB GetBBox();
 
-	const char* GetFilename();
+	string GetFilename();
 	float* GetVertices();
 	uint* GetIndices();
 
@@ -46,7 +46,7 @@ public:
 	void UnloadFromMemory();
 
 private:
-	const char* file_name;
+	string file_name;
 
 	uint   id_vertices = 0; 
 	uint   num_vertices = 0;

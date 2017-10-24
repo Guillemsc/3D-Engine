@@ -387,7 +387,7 @@ AABB Mesh::GetBBox()
 	return bbox;
 }
 
-const char * Mesh::GetFilename()
+string Mesh::GetFilename()
 {
 	return file_name;
 }
@@ -477,7 +477,7 @@ bool MeshImporter::Save(const char * path, vector<Mesh*> meshes)
 		bytes = sizeof(float) * (*mesh)->GetNumVertices();
 		memcpy(cursor, (*mesh)->GetVertices(), bytes);
 
-		//const char* name = (*mesh)->GetFilename();
+		string name = (*mesh)->GetFilename();
 
 		//fopen
 		if (App->file_system->SaveFile(path, data, "Test", "susto") == false)
