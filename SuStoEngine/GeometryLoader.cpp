@@ -7,8 +7,7 @@
 #include "ComponentMesh.h"
 #include "ModuleCamera3D.h"
 #include "ModuleFileSystem.h"
-#include <fstream>
-#include <direct.h>
+#include <filesystem>
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
@@ -299,9 +298,9 @@ void GeometryLoader::UnloadAllFiles()
 	}
 }
 
-vector<Mesh*> GeometryLoader::GetMeshesVector()
+vector<Mesh*>* GeometryLoader::GetMeshesVector()
 {
-	return meshes;
+	return &meshes;
 }
 
 Mesh::Mesh(float* _vertices, uint _num_vertices, uint* _indices, uint _num_indices, float* _uvs, uint _num_uvs, const char* filename)
@@ -468,53 +467,70 @@ bool MeshImporter::Load(const char * exported_file)
 	bool ret = false;
 
 	string path = exported_file;
-	path += "BakerHouse_0.sustomesh";
+	path += "*.sustomesh";
 
-	// Open the file and get the size
-	FILE* file = fopen(path.c_str(), "rb");
-	fseek(file, 0, SEEK_END);
-	uint size = ftell(file);
-	rewind(file);
-	
-	// Create a buffer to get the data of the file
-	char* buffer = new char[size];
-	char* cursor = buffer;
+	// Find files in Directory
+	WIN32_FIND_DATA search_data;
 
-	// Read the file and close it
-	fread(buffer, sizeof(char), size, file);
-	fclose(file);
+	HANDLE handle = FindFirstFile(path.c_str(), &search_data);
+	char* m = search_data.cFileName;
+	while (handle != INVALID_HANDLE_VALUE)
+	{
+		string mesh_path = exported_file;
+		mesh_path += search_data.cFileName;
 
-	// Copy the ranges
-	uint ranges[3];		// ranges[0] = Vertices, ranges[1] = Indices, ranges[2] = Uvs
-	uint bytes = sizeof(ranges);
-	memcpy(ranges, cursor, bytes);
+		// Open the file and get the size
+		FILE* file = fopen(mesh_path.c_str(), "rb");
+		fseek(file, 0, SEEK_END);
+		uint size = ftell(file);
+		rewind(file);
 
-	// Store indices
-	cursor += bytes; 
-	uint* indices;
-	bytes = sizeof(uint) * ranges[1];
-	memcpy(indices, cursor, bytes);
+		// Create a buffer to get the data of the file
+		char* buffer = new char[size];
+		char* cursor = buffer;
 
-	// Store vertices
-	cursor += bytes; 
-	float* vertices;
-	bytes = sizeof(float) * ranges[0] * 3;
-	memcpy(vertices, cursor, bytes);
+		// Read the file and close it
+		fread(buffer, sizeof(char), size, file);
+		fclose(file);
 
-	// Store UVs
-	cursor += bytes; 
-	float* Uvs;
-	bytes = sizeof(float) * ranges[2] * 3;
-	memcpy(Uvs, cursor, bytes);
+		// Copy the ranges
+		uint ranges[3];		// ranges[0] = Vertices, ranges[1] = Indices, ranges[2] = Uvs
+		uint bytes = sizeof(ranges);
+		memcpy(ranges, cursor, bytes);
 
-	Mesh* new_mesh = new Mesh(vertices, ranges[0], indices, ranges[1], Uvs, ranges[2], path.c_str());
+		// Store indices
+		cursor += bytes;
+		uint indices[9999];
+		bytes = sizeof(uint) * ranges[1];
+		memcpy(indices, cursor, bytes);
 
-	GameObject* go = App->gameobj->Create();
-	go->AddComponent(ComponentType::MESH);
-	ComponentMesh* comp_mesh = (ComponentMesh*)go->FindComponentByType(ComponentType::MESH);
-	comp_mesh->SetMesh(new_mesh);
-	App->geometry->GetMeshesVector().push_back(new_mesh);
-	 
+		// Store vertices
+		cursor += bytes;
+		float vertices[9999];
+		bytes = sizeof(float) * ranges[0] * 3;
+		memcpy(vertices, cursor, bytes);
+
+		// Store UVs
+		cursor += bytes;
+		float Uvs[9999];
+		bytes = sizeof(float) * ranges[2] * 3;
+		memcpy(Uvs, cursor, bytes);
+
+		Mesh* new_mesh = new Mesh(vertices, ranges[0], indices, ranges[1], Uvs, ranges[2], GetFileNameFromFilePath(search_data.cFileName).c_str());
+		new_mesh->LoadToMemory();
+		GameObject* go = App->gameobj->Create();
+		go->SetName(GetFileNameFromFilePath(search_data.cFileName));
+		go->AddComponent(ComponentType::MESH);
+		ComponentMesh* comp_mesh = (ComponentMesh*)go->FindComponentByType(ComponentType::MESH);
+		comp_mesh->SetMesh(new_mesh);
+		App->geometry->GetMeshesVector()->push_back(new_mesh);
+
+		if (FindNextFile(handle, &search_data) == FALSE)
+			break;
+	}
+
+	//Close the handle after use or memory/resource leak
+	FindClose(handle);
 
 	return ret;
 }

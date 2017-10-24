@@ -80,7 +80,7 @@ public:
 	void UnloadFile(Mesh* mesh);
 	void UnloadAllFiles();
 
-	vector<Mesh*> GetMeshesVector();
+	vector<Mesh*>* GetMeshesVector();
 
 private:
 	vector<Mesh*> meshes;
