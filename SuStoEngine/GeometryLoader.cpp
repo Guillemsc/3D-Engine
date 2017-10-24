@@ -7,6 +7,8 @@
 #include "ComponentMesh.h"
 #include "ModuleCamera3D.h"
 #include "ModuleFileSystem.h"
+#include <fstream>
+#include <direct.h>
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
@@ -48,7 +50,9 @@ bool GeometryLoader::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	LoadFile("Models/BakerHouse/BakerHouse.fbx", true);
+	//LoadFile("Models/BakerHouse/BakerHouse.fbx", true);
+	MeshImporter importer;
+	importer.Load(App->file_system->library_mesh_path.c_str());
 
 	return ret;
 }
@@ -295,6 +299,11 @@ void GeometryLoader::UnloadAllFiles()
 	}
 }
 
+vector<Mesh*> GeometryLoader::GetMeshesVector()
+{
+	return meshes;
+}
+
 Mesh::Mesh(float* _vertices, uint _num_vertices, uint* _indices, uint _num_indices, float* _uvs, uint _num_uvs, const char* filename)
 {
 	if (_num_vertices > 0)
@@ -459,7 +468,53 @@ bool MeshImporter::Load(const char * exported_file)
 	bool ret = false;
 
 	string path = exported_file;
-	path += "Test.susto";
+	path += "BakerHouse_0.sustomesh";
+
+	// Open the file and get the size
+	FILE* file = fopen(path.c_str(), "rb");
+	fseek(file, 0, SEEK_END);
+	uint size = ftell(file);
+	rewind(file);
+	
+	// Create a buffer to get the data of the file
+	char* buffer = new char[size];
+	char* cursor = buffer;
+
+	// Read the file and close it
+	fread(buffer, sizeof(char), size, file);
+	fclose(file);
+
+	// Copy the ranges
+	uint ranges[3];		// ranges[0] = Vertices, ranges[1] = Indices, ranges[2] = Uvs
+	uint bytes = sizeof(ranges);
+	memcpy(ranges, cursor, bytes);
+
+	// Store indices
+	cursor += bytes; 
+	uint* indices;
+	bytes = sizeof(uint) * ranges[1];
+	memcpy(indices, cursor, bytes);
+
+	// Store vertices
+	cursor += bytes; 
+	float* vertices;
+	bytes = sizeof(float) * ranges[0] * 3;
+	memcpy(vertices, cursor, bytes);
+
+	// Store UVs
+	cursor += bytes; 
+	float* Uvs;
+	bytes = sizeof(float) * ranges[2] * 3;
+	memcpy(Uvs, cursor, bytes);
+
+	Mesh* new_mesh = new Mesh(vertices, ranges[0], indices, ranges[1], Uvs, ranges[2], path.c_str());
+
+	GameObject* go = App->gameobj->Create();
+	go->AddComponent(ComponentType::MESH);
+	ComponentMesh* comp_mesh = (ComponentMesh*)go->FindComponentByType(ComponentType::MESH);
+	comp_mesh->SetMesh(new_mesh);
+	App->geometry->GetMeshesVector().push_back(new_mesh);
+	 
 
 	return ret;
 }
