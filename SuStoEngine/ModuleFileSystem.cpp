@@ -148,7 +148,7 @@ void FileSystem::FileDelete(const char * filepath)
 	}
 }
 
-bool FileSystem::SaveFile(const char * path, const char* file_content, const char* name, const char* extension)
+bool FileSystem::SaveFile(const char * path, const char* file_content, const char* name, const char* extension, int size)
 {
 	bool ret = false;
 
@@ -162,7 +162,7 @@ bool FileSystem::SaveFile(const char * path, const char* file_content, const cha
 
 	if (new_file)
 	{
-		fwrite(file_content, sizeof(char), strlen(file_content), new_file);
+		fwrite(file_content, sizeof(char), size, new_file);
 		ret = true;
 	}
 	else 

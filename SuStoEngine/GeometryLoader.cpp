@@ -402,6 +402,11 @@ uint * Mesh::GetIndices()
 	return indices;
 }
 
+float * Mesh::GetUVs()
+{
+	return uvs;
+}
+
 void Mesh::LoadToMemory()
 {
 	if(id_vertices == 0 && vertices != nullptr)
@@ -449,9 +454,12 @@ bool MeshImporter::Import(const void * buffer, uint size, std::string & output_f
 	return ret;
 }
 
-bool MeshImporter::Load(const char * exported_file, Mesh * resource)
+bool MeshImporter::Load(const char * exported_file)
 {
 	bool ret = false;
+
+	string path = exported_file;
+	path += "Test.susto";
 
 	return ret;
 }
@@ -460,10 +468,12 @@ bool MeshImporter::Save(const char * path, vector<Mesh*> meshes)
 {
 	bool ret = false;
 
+	int i = 0;
 	for (vector<Mesh*>::iterator mesh = meshes.begin(); mesh != meshes.end(); ++mesh)
 	{
-		uint ranges[2] = { (*mesh)->GetNumVertices(), (*mesh)->GetNumIndices() };
-		uint size = sizeof(ranges) + sizeof(uint) * (*mesh)->GetNumIndices() + sizeof(float) * (*mesh)->GetNumVertices() * 3;
+		uint ranges[3] = { (*mesh)->GetNumVertices(), (*mesh)->GetNumIndices(), (*mesh)->GetNumUVs() };
+		uint size = sizeof(ranges) + sizeof(uint) * (*mesh)->GetNumIndices() + sizeof(float) * (*mesh)->GetNumVertices() * 3 + sizeof(float) * (*mesh)->GetNumUVs() * 3;
+		
 		char* data = new char[size]; // Allocate
 		char* cursor = data;
 		uint bytes = sizeof(ranges); // First store ranges
@@ -474,13 +484,18 @@ bool MeshImporter::Save(const char * path, vector<Mesh*> meshes)
 		memcpy(cursor, (*mesh)->GetIndices(), bytes);
 
 		cursor += bytes; // Store vertices
-		bytes = sizeof(float) * (*mesh)->GetNumVertices();
+		bytes = sizeof(float) * (*mesh)->GetNumVertices() * 3;
 		memcpy(cursor, (*mesh)->GetVertices(), bytes);
 
-		//const char* name = (*mesh)->GetFilename();
+		cursor += bytes; // Store UVs
+		bytes = sizeof(float) * (*mesh)->GetNumUVs() * 3;
+		memcpy(cursor, (*mesh)->GetUVs(), bytes);
 
+		//const char* name = (*mesh)->GetFilename();
+		char file_name[255];
+		sprintf_s(file_name, "Mesh_%i", i++);
 		//fopen
-		if (App->file_system->SaveFile(path, data, "Test", "susto") == false)
+		if (App->file_system->SaveFile(path, data, file_name, "susto", size) == false)
 		{
 			return false;
 		}
