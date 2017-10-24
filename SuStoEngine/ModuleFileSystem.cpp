@@ -1,6 +1,7 @@
 #include "ModuleFileSystem.h"
 #include "App.h"
 #include <Windows.h>
+#include <fstream>
 #include "Functions.h"
 
 FileSystem::FileSystem(bool start_enabled)
@@ -156,26 +157,20 @@ bool FileSystem::SaveFile(const char * path, const char* file_content, const cha
 	file += ".";
 	file += extension;
 
+	std::ofstream;
+	FILE* new_file = fopen(file.c_str(), "wb");
 
-	HANDLE h = CreateFile(
-		file.c_str(),		   // name of the file
-		GENERIC_WRITE, // open for writing
-		0,             // sharing mode, none in this case
-		0,             // use default security descriptor
-		CREATE_ALWAYS, // overwrite if exists
-		FILE_ATTRIBUTE_NORMAL,
-		0);
-
-	if (h)
+	if (new_file)
 	{
-		WriteFile(h, file_content, strlen(file_content), 0, NULL);
-		CloseHandle(h);
+		fwrite(file_content, sizeof(char), strlen(file_content), new_file);
 		ret = true;
 	}
 	else 
 	{
 		LOG_OUTPUT("Error saving file %s: ", name);
 	}
+
+	fclose(new_file);
 
 	return ret;
 }

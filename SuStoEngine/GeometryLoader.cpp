@@ -477,13 +477,15 @@ bool MeshImporter::Save(const char * path, vector<Mesh*> meshes)
 		bytes = sizeof(float) * (*mesh)->GetNumVertices();
 		memcpy(cursor, (*mesh)->GetVertices(), bytes);
 
-		string filename = (*mesh)->GetFilename();
-	
-		char* content = "This is a test";
-		if (App->file_system->SaveFile(path, content, "new_test", "susto") == false)
+		//const char* name = (*mesh)->GetFilename();
+
+		//fopen
+		if (App->file_system->SaveFile(path, data, "Test", "susto") == false)
 		{
 			return false;
 		}
+		//fclose
+
 		ret = true;
 	}
 	
