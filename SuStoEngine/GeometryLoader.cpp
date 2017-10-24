@@ -464,7 +464,7 @@ bool MeshImporter::Import(const void * buffer, uint size, std::string & output_f
 
 bool MeshImporter::Load(const char * exported_file)
 {
-	bool ret = false;
+	bool ret = true;
 
 	string path = exported_file;
 	path += "*.sustomesh";
@@ -474,6 +474,10 @@ bool MeshImporter::Load(const char * exported_file)
 
 	HANDLE handle = FindFirstFile(path.c_str(), &search_data);
 	char* m = search_data.cFileName;
+
+	if (handle == INVALID_HANDLE_VALUE)
+		return false;
+
 	while (handle != INVALID_HANDLE_VALUE)
 	{
 		string mesh_path = exported_file;
@@ -516,14 +520,46 @@ bool MeshImporter::Load(const char * exported_file)
 		bytes = sizeof(float) * ranges[2] * 3;
 		memcpy(Uvs, cursor, bytes);
 
-		Mesh* new_mesh = new Mesh(vertices, ranges[0], indices, ranges[1], Uvs, ranges[2], GetFileNameFromFilePath(search_data.cFileName).c_str());
-		new_mesh->LoadToMemory();
-		GameObject* go = App->gameobj->Create();
-		go->SetName(GetFileNameFromFilePath(search_data.cFileName));
-		go->AddComponent(ComponentType::MESH);
-		ComponentMesh* comp_mesh = (ComponentMesh*)go->FindComponentByType(ComponentType::MESH);
-		comp_mesh->SetMesh(new_mesh);
-		App->geometry->GetMeshesVector()->push_back(new_mesh);
+		// Create mesh --------------
+			Mesh* new_mesh = new Mesh(vertices, ranges[0], indices, ranges[1], Uvs, ranges[2], GetFileNameFromFilePath(search_data.cFileName).c_str());
+			new_mesh->LoadToMemory();
+			App->geometry->GetMeshesVector()->push_back(new_mesh);
+
+			LOG_OUTPUT("New mesh with %d vertices", ranges[0] * 3);
+			LOG_OUTPUT("New mesh with %d indices", ranges[1]);
+
+		// Create GameObjects
+			string name = GetFileNameFromFilePath(search_data.cFileName);
+
+			GameObject* go = App->gameobj->Create();
+			go->SetName(name.c_str());
+			go->AddComponent(MESH);
+			ComponentMesh* component = (ComponentMesh*)go->FindComponentByType(MESH);
+			component->SetMesh(new_mesh);
+
+			// -------PARENT !!!-------
+			// parent->AddChild(go);
+			// ------------------------
+
+			// Set mesh pos, rot and scale
+			/*aiVector3D translation;
+			aiVector3D scaling;
+			aiQuaternion rotation;
+
+			aiNode* node = scene->mRootNode->mChildren[i];
+			if (node != nullptr)
+			{
+				node->mTransformation.Decompose(scaling, rotation, translation);
+				float3 pos(translation.x, translation.y, translation.z);
+				float3 scale(scaling.x, scaling.y, scaling.z);
+				Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
+			}
+
+			go->transform->SetPosition(float3(translation.x, translation.y, translation.z));
+			go->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));*/
+			//go->transform->SetScale(float3(scaling.x, scaling.y, scaling.z));
+
+		
 
 		if (FindNextFile(handle, &search_data) == FALSE)
 			break;
@@ -537,7 +573,7 @@ bool MeshImporter::Load(const char * exported_file)
 
 bool MeshImporter::Save(const char * path, vector<Mesh*> meshes)
 {
-	bool ret = false;
+	bool ret = true;
 
 	int i = 0;
 	for (vector<Mesh*>::iterator mesh = meshes.begin(); mesh != meshes.end(); ++mesh)
@@ -547,7 +583,7 @@ bool MeshImporter::Save(const char * path, vector<Mesh*> meshes)
 		name += std::to_string(i++);
 
 		uint ranges[3] = { (*mesh)->GetNumVertices(), (*mesh)->GetNumIndices(), (*mesh)->GetNumUVs() };
-		uint size = sizeof(ranges) + sizeof(uint) * (*mesh)->GetNumIndices() + sizeof(float) * (*mesh)->GetNumVertices() * 3 + sizeof(float) * (*mesh)->GetNumUVs() * 3;
+		uint size = sizeof(ranges) + sizeof(uint) * (*mesh)->GetNumIndices() + sizeof(float) * (*mesh)->GetNumVertices() * 3 + sizeof(float) * (*mesh)->GetNumUVs() * 3 + sizeof(AABB);
 		
 		char* data = new char[size]; // Allocate
 		char* cursor = data;
@@ -572,8 +608,6 @@ bool MeshImporter::Save(const char * path, vector<Mesh*> meshes)
 			return false;
 		}
 		//fclose
-
-		ret = true;
 	}
 	
 
