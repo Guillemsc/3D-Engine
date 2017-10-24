@@ -272,10 +272,7 @@ void Camera3D::SetFOV(const float & set)
 		frustum.verticalFov = DEGTORAD * set;
 
 	if (aspect_ratio > 0)
-		frustum.horizontalFov = frustum.verticalFov * aspect_ratio;
-	/*	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspect_ratio);*/ //  wtf is this?
-
-	float aspect_ration = frustum.AspectRatio();
+		frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspect_ratio); //  wtf is this?
 }
 
 void Camera3D::SetAspectRatio(const float & set)
