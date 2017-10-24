@@ -133,6 +133,23 @@ string GetFileExtension(const char * file_name)
 	return ret;
 }
 
+std::string GetFilenameWithoutExtension(const char * file_name)
+{
+	string ret;
+
+	for (int i = 0; file_name[i] != '\0'; i++)
+	{
+		if (file_name[i] == '.')
+		{
+			break;
+		}
+
+		ret += file_name[i];
+	}
+
+	return ret;
+}
+
 std::string GetFileNameFromFilePath(const char * file_path)
 {
 	string ret;

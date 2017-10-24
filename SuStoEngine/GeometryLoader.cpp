@@ -471,7 +471,9 @@ bool MeshImporter::Save(const char * path, vector<Mesh*> meshes)
 	int i = 0;
 	for (vector<Mesh*>::iterator mesh = meshes.begin(); mesh != meshes.end(); ++mesh)
 	{
-		string name = (*mesh)->GetFilename();
+		string name = GetFilenameWithoutExtension((*mesh)->GetFilename().c_str());
+		name += "_";
+		name += std::to_string(i++);
 
 		uint ranges[3] = { (*mesh)->GetNumVertices(), (*mesh)->GetNumIndices(), (*mesh)->GetNumUVs() };
 		uint size = sizeof(ranges) + sizeof(uint) * (*mesh)->GetNumIndices() + sizeof(float) * (*mesh)->GetNumVertices() * 3 + sizeof(float) * (*mesh)->GetNumUVs() * 3;
@@ -493,12 +495,8 @@ bool MeshImporter::Save(const char * path, vector<Mesh*> meshes)
 		bytes = sizeof(float) * (*mesh)->GetNumUVs() * 3;
 		memcpy(cursor, (*mesh)->GetUVs(), bytes);
 
-
-		//const char* name = (*mesh)->GetFilename();
-		char file_name[255];
-		sprintf_s(file_name, "Mesh_%i", i++);
 		//fopen
-		if (App->file_system->SaveFile(path, data, file_name, "susto", size) == false)
+		if (App->file_system->SaveFile(path, data, name.c_str(), "sustomesh", size) == false)
 		{
 			return false;
 		}
