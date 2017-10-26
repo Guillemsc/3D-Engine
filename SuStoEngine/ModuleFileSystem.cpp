@@ -11,6 +11,7 @@ FileSystem::FileSystem(bool start_enabled)
 	assets_path = CreateFolder(App->GetBasePath(), "Assets");
 	library_path = CreateFolder(App->GetBasePath(), "Library");
 	library_mesh_path = CreateFolder(library_path.c_str(), "Meshes");
+	settings_path = CreateFolder(App->GetBasePath(), "Settings");
 }
 
 FileSystem::~FileSystem()

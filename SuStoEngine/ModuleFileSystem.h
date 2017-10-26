@@ -29,6 +29,7 @@ public:
 	string assets_path;
 	string library_path;
 	string library_mesh_path;
+	string settings_path;
 
 };
 

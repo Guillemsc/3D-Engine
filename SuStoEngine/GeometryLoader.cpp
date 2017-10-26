@@ -49,7 +49,6 @@ bool GeometryLoader::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	//LoadFile("Models/BakerHouse/BakerHouse.fbx", true);
 	MeshImporter importer;
 	importer.Load(App->file_system->library_mesh_path.c_str());
 
@@ -82,7 +81,6 @@ void GeometryLoader::OnLoadFile(const char* file_path, const char* file_name, co
 {
 	if (TextCmp("fbx", file_extension))
 	{
-		App->gameobj->DestroyAllGameObjects();
 		LoadFile(file_path, true);
 	}
 }
@@ -537,6 +535,12 @@ bool MeshImporter::Load(const char * exported_file)
 			ComponentMesh* component = (ComponentMesh*)go->FindComponentByType(MESH);
 			component->SetMesh(new_mesh);
 
+			GameObject* parent = nullptr;
+
+			/*
+			parent = App->gameobj->Create();
+			parent->SetName(GetFilenameWithoutExtension(name.c_str()));
+*/
 			// -------PARENT !!!-------
 			// parent->AddChild(go);
 			// ------------------------
