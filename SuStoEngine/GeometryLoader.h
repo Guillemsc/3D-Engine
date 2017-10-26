@@ -26,8 +26,13 @@ class Mesh
 {
 public:
 	Mesh(float* vertices, uint num_vertices, uint* indices, uint num_indices, float* uvs, uint num_uvs, const char* filename);
+	Mesh();
 
 	void CleanUp();
+
+	void SetFaces(float* vertices, uint num_vertices, uint* indices, uint num_indices);
+	void SetUvs(float* uvs, uint num_uvs);
+	void SetTransform(float3 pos, Quat rotation, float3 scale);
 
 	uint GetIdVertices();
 	uint GetNumVertices();
@@ -41,6 +46,10 @@ public:
 	float* GetVertices();
 	uint* GetIndices();
 	float* GetUVs();
+
+	float3 GetPosition();
+	Quat   GetRotation();
+	float3 GetScale();
 
 	void LoadToMemory();
 	void UnloadFromMemory();
@@ -59,6 +68,10 @@ private:
 	uint   id_uv = 0;
 	uint   num_uvs = 0;
 	float* uvs = nullptr;
+
+	float3 position;
+	Quat   rotation;
+	float3 scale;
 
 	AABB   bbox;
 };
@@ -82,6 +95,7 @@ public:
 	vector<Mesh*>* GetMeshesVector();
 
 private:
+	//void RecursiveLoadMesh(aiMesh* mesh, aiNode* node);
 	vector<Mesh*> meshes;
 
 public:

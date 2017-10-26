@@ -130,7 +130,6 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 			parent->transform->SetPosition(float3(translation.x, translation.y, translation.z));
 			parent->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 			//parent->transform->SetScale(float3(scaling.x, scaling.y, scaling.z));
-		
 		}
 
 		// -------------------------------------------
@@ -300,6 +299,58 @@ vector<Mesh*>* GeometryLoader::GetMeshesVector()
 	return &meshes;
 }
 
+//void GeometryLoader::RecursiveLoadMesh(aiMesh * aimesh, aiNode * node)
+//{
+//	bool valid = true;
+//
+//	Mesh* mesh = new Mesh();
+//
+//	if (!aimesh->HasFaces())
+//	{
+//		LOG_OUTPUT("WARNING, geometry has no faces!");
+//		valid = false;
+//	}
+//
+//	if (valid)
+//	{
+//		// VERTICES
+//		float* vertices = new float(aimesh->mNumVertices * 3);
+//		memcpy(vertices, aimesh->mVertices, sizeof(float) * aimesh->mNumVertices * 3);
+//
+//		// INDICES
+//		uint* indices = new uint[aimesh->mNumFaces * 3];
+//
+//		for (uint i = 0; i < aimesh->mNumFaces && valid; ++i)
+//		{
+//			if (aimesh->mFaces[i].mNumIndices == 3)
+//			{
+//				memcpy(&indices[i * 3], aimesh->mFaces[i].mIndices, 3 * sizeof(uint));
+//			}
+//			else
+//			{
+//				LOG_OUTPUT("WARNING, geometry face with != 3 indices!");
+//				valid = false;
+//			}
+//		}
+//
+//		mesh->SetFaces(vertices, aimesh->mNumVertices, indices, aimesh->mNumFaces);
+//		
+//		delete[] vertices;
+//		delete[] indices;
+//	}
+//
+//	if (valid && aimesh->HasTextureCoords(0))
+//	{
+//		// UVS
+//		float* uvs = new float[aimesh->mNumVertices * 3];
+//		memcpy(uvs, (float*)aimesh->mTextureCoords[0], sizeof(float) * aimesh->mNumVertices * 3);
+//
+//		mesh->SetUvs(uvs, aimesh->mNumVertices);
+//
+//		delete[] uvs;
+//	}
+//}
+
 Mesh::Mesh(float* _vertices, uint _num_vertices, uint* _indices, uint _num_indices, float* _uvs, uint _num_uvs, const char* filename)
 {
 	if (_num_vertices > 0)
@@ -333,6 +384,10 @@ Mesh::Mesh(float* _vertices, uint _num_vertices, uint* _indices, uint _num_indic
 	}
 }
 
+Mesh::Mesh()
+{
+}
+
 void Mesh::CleanUp()
 {
 	// Unload from vram
@@ -355,6 +410,36 @@ void Mesh::CleanUp()
 	num_uvs = 0;
 	if (uvs != nullptr)
 		RELEASE_ARRAY(uvs);
+}
+
+void Mesh::SetFaces(float * _vertices, uint _num_vertices, uint * _indices, uint _num_indices)
+{
+	if (num_vertices > 0)
+	{
+		// Vertices
+		vertices = new float[_num_vertices * 3];
+		memcpy(vertices, _vertices, sizeof(float) * _num_vertices * 3);
+		num_vertices = _num_vertices;
+
+		if (num_indices > 0)
+		{
+			// Indices
+			indices = new uint[_num_indices];
+			memcpy(indices, _indices, sizeof(uint) * _num_indices);
+			num_indices = _num_indices;
+		}
+	}
+}
+
+void Mesh::SetUvs(float * _uvs, uint _num_uvs)
+{
+	if (_num_uvs > 0)
+	{
+		// UVs
+		uvs = new float[_num_uvs * 3];
+		memcpy(uvs, _uvs, sizeof(float) * _num_uvs * 3);
+		num_uvs = _num_uvs;
+	}
 }
 
 uint Mesh::GetIdVertices()
@@ -410,6 +495,28 @@ uint * Mesh::GetIndices()
 float * Mesh::GetUVs()
 {
 	return uvs;
+}
+
+void Mesh::SetTransform(float3 _pos, Quat _rotation, float3 _scale)
+{
+	position = _pos;
+	rotation = _rotation;
+	scale = _scale;
+}
+
+float3 Mesh::GetPosition()
+{
+	return position;
+}
+
+Quat Mesh::GetRotation()
+{
+	return rotation;
+}
+
+float3 Mesh::GetScale()
+{
+	return scale;
 }
 
 void Mesh::LoadToMemory()

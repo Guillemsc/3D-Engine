@@ -24,6 +24,7 @@ class Configuration;
 class GeometryLoader;
 class TextureLoader;
 class FileSystem;
+class SceneManager;
 
 class Application
 {
@@ -84,6 +85,7 @@ public:
 	GeometryLoader*	   geometry = nullptr;
 	TextureLoader*	   texture = nullptr;
 	FileSystem*		   file_system = nullptr;
+	SceneManager*	   scene_manager = nullptr;
 
 	std::list<string>  logs;
 

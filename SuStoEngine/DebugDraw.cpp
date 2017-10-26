@@ -118,19 +118,6 @@ void DebugDraw::DrawFrustum(float3 * corners, float3 color)
 	float3* lines = new float3[s];
 	float3* colors = new float3[s];
 
-	LOG_OUTPUT("%f %f %f", corners[0].x, corners[0].y, corners[0].z);
-	LOG_OUTPUT("%f %f %f", corners[1].x, corners[1].y, corners[1].z);
-
-	LOG_OUTPUT("%f %f %f", corners[2].x, corners[2].y, corners[2].z);
-	LOG_OUTPUT("%f %f %f", corners[3].x, corners[3].y, corners[3].z);
-
-	LOG_OUTPUT("%f %f %f", corners[4].x, corners[4].y, corners[4].z);
-	LOG_OUTPUT("%f %f %f", corners[5].x, corners[5].y, corners[5].z);
-
-	LOG_OUTPUT("%f %f %f", corners[6].x, corners[6].y, corners[6].z);
-	LOG_OUTPUT("%f %f %f", corners[7].x, corners[7].y, corners[7].z);
-
-
 	lines[0] = float3(corners[0].x, corners[0].y, corners[0].z);
 	lines[1] = float3(corners[2].x, corners[2].y, corners[2].z);
 
