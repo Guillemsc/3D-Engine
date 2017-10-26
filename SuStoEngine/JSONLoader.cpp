@@ -358,6 +358,6 @@ bool JSON_Doc::FindArrayValue(const char * arr, int index, json_value_type type)
 		if (val != nullptr && json_value_get_type(val) == type)
 			ret = true;
 	}
-
+	
 	return ret;
 }

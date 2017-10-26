@@ -51,6 +51,7 @@ void EngineTest::GenerateRandomNumbers(float2 range, int quantity)
 		char number[255];
 		snprintf(number, 255, "%.2f", number_rounded);
 		App->editorUI->GetConsole()->AddLog(number);
+		GetRandomValue(0, 9999999999999999);
 	}
 }
 

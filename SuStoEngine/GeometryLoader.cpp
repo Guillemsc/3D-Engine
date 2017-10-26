@@ -206,7 +206,6 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 						float3 scale(scaling.x, scaling.y, scaling.z);
 						Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 					}
-					
 					go->transform->SetPosition(float3(translation.x, translation.y, translation.z));
 					go->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 					//go->transform->SetScale(float3(scaling.x, scaling.y, scaling.z));
@@ -537,13 +536,7 @@ bool MeshImporter::Load(const char * exported_file)
 
 			GameObject* parent = nullptr;
 
-			/*
-			parent = App->gameobj->Create();
-			parent->SetName(GetFilenameWithoutExtension(name.c_str()));
-*/
-			// -------PARENT !!!-------
-			// parent->AddChild(go);
-			// ------------------------
+		
 
 			// Set mesh pos, rot and scale
 			/*aiVector3D translation;

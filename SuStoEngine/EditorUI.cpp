@@ -125,6 +125,9 @@ bool EditorUI::Update()
 			if (ImGui::MenuItem("Open in Explorer", ""))
 				App->GoToFolder(App->GetBasePath());
 
+			if (ImGui::MenuItem("Save Scene", ""))
+				App->SaveConfig();
+
 			if (ImGui::MenuItem("Quit", "Alt+F4")) 
 				App->EndApp(); 
 

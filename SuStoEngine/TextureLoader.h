@@ -7,13 +7,14 @@
 class Texture
 {
 public:
-	Texture(uint id, uint width, uint height);
+	Texture(uint id, uint width, uint height, const char* filename);
 	
 	bool operator == (Texture* text);
 
 	void CleanUp();
 
 	uint GetId();
+	string GetFileName();
 	float2 GetSize();
 
 	void AddUser();
@@ -22,6 +23,7 @@ public:
 	bool IsUsed();
 
 private:
+	string file_name;
 	uint   id = 0;
 	float2 size = float2(0, 0);
 
@@ -47,6 +49,18 @@ private:
 	vector<Texture*> textures;
 
 public:
+	
+};
+
+#include "Importer.h"
+
+class TextureImporter : public Importer
+{
+public:
+	bool Import(const char* file, const char* path, std::string& output_file);
+	bool Import(const void* buffer, uint size, std::string& output_file);
+	bool Load(const char * exported_file);
+	bool Save(const char* path, vector<Texture*> textures);
 
 };
 
