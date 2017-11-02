@@ -213,12 +213,11 @@ const bool ModuleCamera3D::IsMouseInsideWindow() const
 
 Camera3D::Camera3D()
 {
+	frustum.SetKind(FrustumProjectiveSpace::FrustumSpaceGL, FrustumHandedness::FrustumRightHanded);
+
 	frustum.SetPos(float3(0, 0, -1));
 	frustum.SetFront(float3::unitZ);
 	frustum.SetUp(float3::unitY);
-	frustum.SetVerticalFovAndAspectRatio(0, 0);
-	frustum.SetHorizontalFovAndAspectRatio(0, 0);
-	frustum.SetViewPlaneDistances(0, 1);
 	aspect_ratio = 0;
 
 	SetNearPlaneDistance(0.1f);
@@ -254,27 +253,30 @@ void Camera3D::GetCorners(float3* corners)
 
 void Camera3D::SetNearPlaneDistance(const float & set)
 {
-	if (set > 0 && set < frustum.FarPlaneDistance())
-		frustum.SetViewPlaneDistances(set, frustum.FarPlaneDistance());
+	frustum.SetViewPlaneDistances(set, frustum.FarPlaneDistance());
 }
 
 void Camera3D::SetFarPlaneDistance(const float & set)
 {
-	if (set > 0 && set > frustum.NearPlaneDistance())
-		frustum.SetViewPlaneDistances(frustum.NearPlaneDistance(), set);
+	frustum.SetViewPlaneDistances(frustum.NearPlaneDistance(), set);
 }
 
 void Camera3D::SetFOV(const float & set)
 {
 	if (set > 0)
+	{
+		vertical_fov = set * DEGTORAD;
 		frustum.SetVerticalFovAndAspectRatio(DEGTORAD * set, aspect_ratio);
+	}
 }
 
 void Camera3D::SetAspectRatio(const float & set)
 {
-	aspect_ratio = set;
-
-	frustum.SetVerticalFovAndAspectRatio(frustum.VerticalFov(), set);
+	if (set > 0)
+	{
+		aspect_ratio = set;
+		frustum.SetVerticalFovAndAspectRatio(vertical_fov, set);
+	}
 }
 
 const float Camera3D::GetNearPlaneFistance() const
