@@ -42,7 +42,7 @@ public:
 	bool CleanUp();
 	void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension);
 
-	bool LoadTexture(const char* full_path);
+	Texture* LoadTexture(const char* full_path);
 	void UnloadTexture(Texture* text);
 
 private:

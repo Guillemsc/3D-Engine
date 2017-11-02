@@ -86,9 +86,9 @@ void TextureLoader::OnLoadFile(const char * file_path, const char * file_name, c
 	}
 }
 
-bool TextureLoader::LoadTexture(const char * full_path)
+Texture* TextureLoader::LoadTexture(const char * full_path)
 {
-	bool ret = true;
+	Texture* ret = nullptr;
 	
 	ILuint id;				
 	GLuint textureID;								
@@ -112,22 +112,9 @@ bool TextureLoader::LoadTexture(const char * full_path)
 
 		Texture* texture = new Texture(textureID, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), file_name.c_str());
 		textures.push_back(texture);
+		ret = texture;
+
 		ilDeleteImages(1, &id);
-
-		textures.push_back(texture);
-
-		// CUSTOM GAME OBJECT TEXTURE LOADING FOR THIS ASSIGNMENT
-		vector<GameObject*> go = App->gameobj->GetListGameObjects();
-
-		for (vector<GameObject*>::iterator it = go.begin(); it != go.end(); it++)
-		{
-			(*it)->RemoveComponent(MATERIAL);
-			(*it)->AddComponent(MATERIAL);
-			ComponentMaterial* comp = (ComponentMaterial*)(*it)->FindComponentByType(MATERIAL);
-
-			comp->SetTexture(texture);
-		}
-		// ------------------------------------------------------
 	}
 	else
 	{

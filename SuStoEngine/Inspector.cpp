@@ -59,7 +59,7 @@ void Inspector::Draw()
 			{
 				for (vector<GameObject*>::iterator obj = ++selected.begin(); obj != selected.end(); obj++)
 				{
-					Component* comp = (*obj)->FindComponentByType((*it)->GetType());
+					Component* comp = (*obj)->GetComponent((*it)->GetType());
 
 					if (comp != nullptr)
 					{

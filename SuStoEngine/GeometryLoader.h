@@ -5,6 +5,9 @@
 #include "GeometryMath.h"
 
 #include "Assimp\include\DefaultLogger.hpp"
+#include "Assimp\include\scene.h"
+
+class GameObject;
 
 class AssimpLogger : public Assimp::LogStream
 {
@@ -19,7 +22,6 @@ public:
 	{
 		log(__FILE__, __LINE__, "%s\n", message);
 	}
-
 };
 
 class Mesh
@@ -41,6 +43,7 @@ public:
 	uint GetIdUV();
 	uint GetNumUVs();
 	AABB GetBBox();
+	float GetDiagonal();
 
 	string GetFilename();
 	float* GetVertices();
@@ -53,6 +56,9 @@ public:
 
 	void LoadToMemory();
 	void UnloadFromMemory();
+
+private:
+	void CalcMeshBBox();
 
 private:
 	string file_name;
@@ -95,7 +101,7 @@ public:
 	vector<Mesh*>* GetMeshesVector();
 
 private:
-	//void RecursiveLoadMesh(aiMesh* mesh, aiNode* node);
+	void RecursiveLoadMesh(const aiScene* scene, aiNode* node, const char* full_path, GameObject* parent = nullptr);
 	vector<Mesh*> meshes;
 
 public:

@@ -27,7 +27,7 @@ bool DebugScene::Awake()
 
 	GameObject* go = App->gameobj->Create();
 	go->AddComponent(CAMERA);
-	ComponentCamera* cam = (ComponentCamera*)go->FindComponentByType(CAMERA);
+	ComponentCamera* cam = (ComponentCamera*)go->GetComponent(CAMERA);
 	cam->GetCamera()->SetFarPlaneDistance(100.0f);
 
 	return ret;

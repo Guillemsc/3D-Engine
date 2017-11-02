@@ -28,7 +28,7 @@ public:
 	bool ContainsComponent(ComponentType type);
 	const std::vector<Component*> GetComponents() const;
 
-	Component* FindComponentByType(ComponentType type);
+	Component* GetComponent(ComponentType type);
 
 	const char* GetName() const;
 	void SetName(const std::string& set);

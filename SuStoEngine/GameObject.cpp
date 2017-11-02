@@ -31,7 +31,7 @@ void GameObject::Start()
 	SetName("GameObject");
 
 	AddComponent(TRANSFORM);
-	transform = (ComponentTransform*)FindComponentByType(TRANSFORM);
+	transform = (ComponentTransform*)GetComponent(TRANSFORM);
 }
 
 void GameObject::Update()
@@ -49,7 +49,7 @@ void GameObject::Draw()
 	glPushMatrix();
 	glMultMatrixf(transform->GetGlobalTransform().Transposed().ptr());
 
-	ComponentMaterial* component_material = (ComponentMaterial*)FindComponentByType(MATERIAL);
+	ComponentMaterial* component_material = (ComponentMaterial*)GetComponent(MATERIAL);
 
 	if (component_material != nullptr && component_material->GetEnabled())
 	{
@@ -59,7 +59,7 @@ void GameObject::Draw()
 		}
 	}
 
-	ComponentMesh* component_mesh = (ComponentMesh*)FindComponentByType(MESH);
+	ComponentMesh* component_mesh = (ComponentMesh*)GetComponent(MESH);
 	
 	if (component_mesh != nullptr && component_mesh->GetEnabled())
 	{
@@ -218,7 +218,7 @@ const std::vector<Component*> GameObject::GetComponents() const
 	return components;
 }
 
-Component * GameObject::FindComponentByType(ComponentType type)
+Component * GameObject::GetComponent(ComponentType type)
 {
 	Component* ret = nullptr;
 
