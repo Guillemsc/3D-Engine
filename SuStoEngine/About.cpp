@@ -1,7 +1,7 @@
 #include "About.h"
 #include "App.h"
 #include "imgui.h"
-#define NUM_LIBRARIES 9
+#define NUM_LIBRARIES 10
 
 About::About(bool start_enabled) : EditorElement(start_enabled)
 {
@@ -50,8 +50,8 @@ void About::Draw()
 			ImGui::Text("Name"); ImGui::NextColumn();
 			ImGui::Text("Version"); ImGui::NextColumn();
 			ImGui::Separator();
-			const char* name[NUM_LIBRARIES] = { "SDL", "MathGeoLib", "ImGui", "Parson", "OpenGL", "Glew", "Devil", "Assimp", "mmgr" };
-			const char* version[NUM_LIBRARIES] = { "v2.0.4", "v1.5", "v1.52", "2017 version", "v2.1", "v2.0", "v1.7.8", "", "" };
+			const char* name[NUM_LIBRARIES] = { "SDL", "MathGeoLib", "ImGui", "ImGuizmo", "Parson", "OpenGL", "Glew", "Devil", "Assimp", "mmgr" };
+			const char* version[NUM_LIBRARIES] = { "v2.0.4", "v1.5", "v1.52", "Last version", "2017 version", "v2.1", "v2.0", "v1.7.8", "", "" };
 			static int selected = -1;
 			for (int i = 0; i < NUM_LIBRARIES; i++)
 			{

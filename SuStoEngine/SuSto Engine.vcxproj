@@ -144,6 +144,7 @@
     <ClInclude Include="IDGenerator.h" />
     <ClInclude Include="imconfig.h" />
     <ClInclude Include="imgui.h" />
+    <ClInclude Include="ImGuizmo.h" />
     <ClInclude Include="imgui_docking.h" />
     <ClInclude Include="imgui_impl_sdl.h" />
     <ClInclude Include="imgui_internal.h" />
@@ -263,6 +264,7 @@
     <ClCompile Include="Hierarchy.cpp" />
     <ClCompile Include="IDGenerator.cpp" />
     <ClCompile Include="imgui.cpp" />
+    <ClCompile Include="ImGuizmo.cpp" />
     <ClCompile Include="imgui_demo.cpp" />
     <ClCompile Include="imgui_docking.cpp" />
     <ClCompile Include="imgui_draw.cpp" />
