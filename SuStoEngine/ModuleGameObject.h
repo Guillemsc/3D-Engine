@@ -18,6 +18,7 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	GameObject* Create(double id);
 	GameObject* Create();
 	void Destroy(GameObject* go);
 	void DestroyAllGameObjects();

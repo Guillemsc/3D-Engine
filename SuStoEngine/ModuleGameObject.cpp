@@ -3,6 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include "DebugDraw.h"
 #include "IDGenerator.h"
+#include "Functions.h"
 
 ModuleGameObject::ModuleGameObject(bool enabled)
 {
@@ -77,15 +78,20 @@ bool ModuleGameObject::CleanUp()
 	return ret;
 }
 
-GameObject * ModuleGameObject::Create()
+GameObject * ModuleGameObject::Create(double id)
 {
-	GameObject* game_object = new GameObject(App->id->NewId("gameobject"));
+	GameObject* game_object = new GameObject(id);
 
 	game_objects.push_back(game_object);
 	root->AddChild(game_object);
 	game_object->Start();
 
 	return game_object;
+}
+
+GameObject * ModuleGameObject::Create()
+{
+	return Create(GetUniqueIdentifierRandom());
 }
 
 void ModuleGameObject::Destroy(GameObject * go)

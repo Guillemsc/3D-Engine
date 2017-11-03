@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "Functions.h"
 #include "App.h"
 #include "imgui.h"
 #include "Component.h"

@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <cmath>
 #include <random>
+#include <limits>
 #include "imgui.h"
 
 // Returns the angle between two points in degrees
@@ -102,6 +103,20 @@ float GetRandomValue(float range_1, float range_2)
 	uniform_real_distribution<> dis(range_1, range_2);
 
 	return dis(gen);
+}
+
+double GetRandomValue(double range_1, double range_2)
+{
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_real_distribution<> dis(range_1, range_2);
+
+	return dis(gen);
+}
+
+double GetUniqueIdentifierRandom()
+{
+	return GetRandomValue(-DBL_MAX, DBL_MAX);
 }
 
 bool PointInRect(float2 point_xy, float4 rect_xywh)

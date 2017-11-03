@@ -10,7 +10,7 @@
 class GameObject
 {
 public:
-	GameObject(int id);
+	GameObject(double id);
 	virtual ~GameObject();
 
 	void Start();
@@ -55,9 +55,9 @@ public:
 	ComponentTransform* transform = nullptr;
 	
 private:
+	double		id = 0;
 	std::string name;
 	bool		enabled = false;
-	int			id = 0;
 	bool		selected = false;
 
 	std::vector<Component*> components;
