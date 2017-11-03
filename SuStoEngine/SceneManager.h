@@ -17,6 +17,8 @@ private:
 public:
 
 private:
+	JSON_Doc* config = nullptr;
+
 };
 
 #endif

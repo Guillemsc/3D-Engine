@@ -6,6 +6,7 @@
 #include "GeometryMath.h"
 #include "GameObject.h"
 #include "ModuleRenderer3D.h"
+#include "JSONLoader.h"
 #include "imgui.h"
 
 ComponentMesh::ComponentMesh(GameObject * owner) : Component(MESH, owner)
@@ -74,6 +75,23 @@ void ComponentMesh::InspectorDraw(std::vector<Component*> components)
 	ImGui::Text("Id indices: %d", mesh->GetIdIndices());
 	ImGui::Text("Num indices: %d", mesh->GetNumIndices());
 	ImGui::Text("Id uv: %d", mesh->GetIdUV());
+}
+
+void ComponentMesh::LoadScene(JSON_Doc * config)
+{
+}
+
+void ComponentMesh::SaveScene(JSON_Doc * config, string root)
+{
+	root += ".mesh";
+
+	string set = root;
+	set += ".title";
+	config->SetString(set, "Component Mesh");
+	set = root;
+	set += ".path";
+	string file = mesh->GetFilename();
+	config->SetString(set, file.c_str());
 }
 
 void ComponentMesh::OnEnable()

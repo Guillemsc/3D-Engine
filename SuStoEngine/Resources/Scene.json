@@ -1,0 +1,13 @@
+{
+    "scene": {
+        "title": "Scenes"
+    },
+    "hierarchy": {
+        "gameobject1": {
+            "mesh": {
+                "title": "Component Mesh",
+                "path": "BakerHouse_1.sustomesh"
+            }
+        }
+    }
+}

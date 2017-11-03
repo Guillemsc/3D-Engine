@@ -17,6 +17,7 @@
 #include "Inspector.h"
 #include "JSONLoader.h"
 #include "ModuleGameObject.h"
+#include "SceneManager.h"
 
 //https://github.com/ocornut/imgui/issues/351
 
@@ -126,7 +127,7 @@ bool EditorUI::Update()
 				App->GoToFolder(App->GetBasePath());
 
 			if (ImGui::MenuItem("Save Scene", ""))
-				App->SaveConfig();
+				App->scene_manager->SaveScene("Scene.json");
 
 			if (ImGui::MenuItem("Quit", "Alt+F4")) 
 				App->EndApp(); 
@@ -347,6 +348,15 @@ void EditorUI::OnLoadConfig(JSON_Doc * config)
 void EditorUI::OnSaveConfig(JSON_Doc * config)
 {
 
+}
+
+void EditorUI::LoadScene(JSON_Doc * config)
+{
+}
+
+void EditorUI::SaveScene(JSON_Doc * config)
+{
+	hierarchy->SaveScene(config);
 }
 
 void EditorUI::ImGuiInput(SDL_Event* const ev)

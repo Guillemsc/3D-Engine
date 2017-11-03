@@ -42,9 +42,6 @@ bool TextureLoader::Start()
 {
 	bool ret = true;
 
-	TextureImporter importer;
-	importer.Load(App->file_system->library_texture_path.c_str());
-
 	return ret;
 }
 
@@ -213,9 +210,27 @@ bool TextureImporter::Import(const void * buffer, uint size, std::string & outpu
 	return ret;
 }
 
-bool TextureImporter::Load(const char * exported_file)
+bool TextureImporter::Load(const char * exported_file, Texture* texture)
 {
 	bool ret = true;
+
+	string path = exported_file;
+	path += "*.DDS";
+
+	// Find files in Directory
+	WIN32_FIND_DATA search_data;
+
+	HANDLE handle = FindFirstFile(path.c_str(), &search_data);
+	char* m = search_data.cFileName;
+
+	if (handle == INVALID_HANDLE_VALUE)
+		return false;
+
+	while (handle != INVALID_HANDLE_VALUE)
+	{
+		
+	}
+	
 
 	return ret;
 }

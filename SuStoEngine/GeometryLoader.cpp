@@ -767,14 +767,23 @@ bool MeshImporter::Load(const char * exported_file)
 			LOG_OUTPUT("New mesh with %d vertices", ranges[0] * 3);
 			LOG_OUTPUT("New mesh with %d indices", ranges[1]);
 
+		// Create texture -----------
+			string path = App->file_system->library_texture_path;
+			path += GetFilenameWithoutExtension(search_data.cFileName);
+			path += ".DDS";
+
+			Texture* texture = App->texture->LoadTexture(path.c_str());
+
 		// Create GameObjects
 			string name = GetFileNameFromFilePath(search_data.cFileName);
 
 			GameObject* go = App->gameobj->Create();
 			go->SetName(name.c_str());
 			go->AddComponent(MESH);
-			ComponentMesh* component = (ComponentMesh*)go->GetComponent(MESH);
-			component->SetMesh(new_mesh);
+			ComponentMesh* mesh = (ComponentMesh*)go->GetComponent(MESH);
+			mesh->SetMesh(new_mesh);
+			ComponentMaterial* material = (ComponentMaterial*)go->GetComponent(MATERIAL);
+			//material->SetTexture(texture);
 
 			GameObject* parent = nullptr;
 

@@ -213,7 +213,7 @@ bool GameObject::ContainsComponent(ComponentType type)
 	return ret;
 }
 
-const std::vector<Component*> GameObject::GetComponents() const
+std::vector<Component*> GameObject::GetComponents()
 {
 	return components;
 }

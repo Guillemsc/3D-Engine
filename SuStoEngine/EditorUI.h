@@ -47,6 +47,9 @@ public:
 	void OnLoadConfig(JSON_Doc* config);
 	void OnSaveConfig(JSON_Doc* config);
 
+	void LoadScene(JSON_Doc* config);
+	void SaveScene(JSON_Doc* config);
+
 	void ImGuiInput(SDL_Event* const ev);
 
 	void LoadStyle(const char* name);

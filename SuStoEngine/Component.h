@@ -3,9 +3,11 @@
 
 #include "Globals.h"
 #include <vector>
+#include <string>
 #include "GeometryMath.h"
 
 class GameObject;
+class JSON_Doc;
 
 enum ComponentType
 {
@@ -38,6 +40,9 @@ public:
 
 	virtual void OnGetBoundingBox(AABB &bbox) {};
 	virtual void InspectorDraw(std::vector<Component*> components) {};
+
+	virtual void LoadScene(JSON_Doc* config) {};
+	virtual void SaveScene(JSON_Doc* config, std::string root) {};
 
 private:
 	virtual void OnEnable() {};
