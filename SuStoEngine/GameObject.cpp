@@ -357,7 +357,7 @@ void GameObject::RecursiveCalcBBox()
 	}
 }
 
-const bool GameObject::GetStatic() const
+bool GameObject::GetStatic()
 {
 	return static_;
 }

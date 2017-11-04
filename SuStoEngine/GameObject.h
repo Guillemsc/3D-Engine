@@ -48,20 +48,20 @@ public:
 	void RecursiveCalcGlobalTransform();
 	void RecursiveCalcBBox();
 
-	const bool GetStatic() const;
+	bool GetStatic();
 
 private:
 	void DrawBBox();
 
 public:
 	ComponentTransform* transform = nullptr;
-	
+	bool		static_ = false;
+
 private:
 	double		id = 0;
 	std::string name;
 	bool		enabled = false;
 	bool		selected = false;
-	bool		static_ = false;
 
 	std::vector<Component*> components;
 
