@@ -13,10 +13,12 @@ public:
 
 	void CleanUp();
 
-	uint GetId();
+	void SetId(double id);
+	double GetId();
+
 	string GetFileName();
 	float2 GetSize();
-
+ 
 	void AddUser();
 	void DeleteUser();
 	int	 UsedBy();
@@ -28,6 +30,7 @@ private:
 	float2 size = float2(0, 0);
 
 	int  used_by = 0;
+ 
 };
 
 class TextureLoader : public Module

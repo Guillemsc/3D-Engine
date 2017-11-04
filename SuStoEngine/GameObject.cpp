@@ -250,7 +250,7 @@ void GameObject::SetSelected(const bool& set)
 	selected = set;
 }
 
-const int GameObject::GetId() const
+const double GameObject::GetId() const
 {
 	return id;
 }
@@ -361,7 +361,12 @@ void GameObject::RecursiveCalcBBox()
 
 bool GameObject::GetStatic()
 {
-	return static_;
+	return is_static;
+}
+
+void GameObject::SetStatic(bool set)
+{
+	is_static = set;
 }
 
 AABB GameObject::GetBbox() const

@@ -119,14 +119,14 @@ void ComponentTransform::InspectorDraw(std::vector<Component*> components)
 	float3 position = GetPosition();
 	float3 rotation = GetRotationEuler();
 	float3 scale = GetScale();
-
-		if (ImGui::DragFloat3("Position", (float*)&position, 0.1f) && !GetOwner()->static_)
+	 
+		if (ImGui::DragFloat3("Position", (float*)&position, 0.1f))
 			SetPosition(position);
 
-		if (ImGui::DragFloat3("Rotation", (float*)&rotation, 0.1f) && !GetOwner()->static_)
+		if (ImGui::DragFloat3("Rotation", (float*)&rotation, 0.1f))
 			SetRotation(rotation);
 
-		if (ImGui::DragFloat3("Scale", (float*)&scale, 0.1f) && !GetOwner()->static_)
+		if (ImGui::DragFloat3("Scale", (float*)&scale, 0.1f))
 			SetScale(scale);
 }
 

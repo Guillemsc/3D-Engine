@@ -96,14 +96,14 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 
 	if (scene == nullptr)
 		ret = false;
-	
+
 	if (ret && !scene->HasMeshes())
 	{
 		LOG_OUTPUT("WARNING, scene has no meshes!");
 		ret = false;
 	}
 
-	if(ret)
+	if (ret)
 	{
 		aiNode* root = scene->mRootNode;
 
@@ -140,206 +140,10 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 		}
 	}
 
-	if(scene != nullptr)
+	if (scene != nullptr)
 		aiReleaseImport(scene);
 
-	//if (ret)
-	//{
-	//	LOG_OUTPUT("\nLOADING %d MESHES", scene->mNumMeshes);
-
-	//	string file_name = GetFileNameFromFilePath(full_path);
-
-	//	// Parent GameObject
-	//	GameObject* parent = nullptr;
-
-	//	if (as_new_gameobject)
-	//	{
-	//		parent = App->gameobj->Create();
-	//		parent->SetName(file_name);
-
-	//		aiVector3D translation;
-	//		aiVector3D scaling;
-	//		aiQuaternion rotation;
-	//		if (scene->mRootNode != nullptr)
-	//		{
-	//			scene->mRootNode->mTransformation.Decompose(scaling, rotation, translation);
-	//			float3 pos(translation.x, translation.y, translation.z);
-	//			float3 scale(scaling.x, scaling.y, scaling.z);
-	//			Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
-	//		}
-
-	//		parent->transform->SetPosition(float3(translation.x, translation.y, translation.z));
-	//		parent->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
-	//		//parent->transform->SetScale(float3(scaling.x, scaling.y, scaling.z));
-	//	}
-
-	//	// -------------------------------------------
-	//	// LOAD MESH ---------------------------------
-	//	// -------------------------------------------
-	//	for (int i = 0; i < scene->mNumMeshes && ret; ++i)
-	//	{
-	//		aiMesh* current_mesh = scene->mMeshes[i];
-
-	//		uint* indices = new uint[current_mesh->mNumFaces * 3];
-
-	//		// Load indices from faces ---------------
-	//		if (!current_mesh->HasFaces())
-	//		{
-	//			LOG_OUTPUT("WARNING, geometry has no faces!");
-	//			ret = false;
-	//		}
-
-	//		// Assume each face is a triangle
-	//		for (uint i = 0; i < current_mesh->mNumFaces && ret; ++i)
-	//		{
-	//			if (current_mesh->mFaces[i].mNumIndices == 3)
-	//			{
-	//				memcpy(&indices[i * 3], current_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
-	//			}
-	//			else
-	//			{
-	//				LOG_OUTPUT("WARNING, geometry face with != 3 indices!");
-	//				ret = false;
-	//			}
-	//		}
-	//		
-
-	//		// Create mesh --------------
-	//		if (ret)
-	//		{
-	//			Mesh* new_mesh = new Mesh(
-	//				(float*)current_mesh->mVertices, current_mesh->mNumVertices,
-	//				indices, current_mesh->mNumFaces * 3,
-	//				(float*)current_mesh->mTextureCoords[0], current_mesh->mNumVertices,
-	//				file_name.c_str());
-
-	//			new_mesh->LoadToMemory();
-
-	//			meshes.push_back(new_mesh);
-
-	//			LOG_OUTPUT("New mesh with %d vertices", current_mesh->mNumVertices);
-	//			LOG_OUTPUT("New mesh with %d indices", current_mesh->mNumFaces * 3);
-
-	//			// Create GameObjects
-	//			if (as_new_gameobject)
-	//			{
-	//				string name = file_name; name += "_"; name += std::to_string(i);
-
-	//				GameObject* go = App->gameobj->Create();
-	//				go->SetName(name.c_str());
-	//				go->AddComponent(MESH);
-	//				ComponentMesh* component = (ComponentMesh*)go->GetComponent(MESH);
-	//				component->SetMesh(new_mesh);
-
-	//				parent->AddChild(go);
-
-	//				// Set mesh pos, rot and scale
-	//				aiVector3D translation;
-	//				aiVector3D scaling;
-	//				aiQuaternion rotation;
-
-	//				aiNode* node = scene->mRootNode->mChildren[i];
-
-	//				if (node != nullptr)
-	//				{
-	//					node->mTransformation.Decompose(scaling, rotation, translation);
-	//					float3 pos(translation.x, translation.y, translation.z);
-	//					float3 scale(scaling.x, scaling.y, scaling.z);
-	//					Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
-	//				}
-	//				go->transform->SetPosition(float3(translation.x, translation.y, translation.z));
-	//				go->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
-	//				//go->transform->SetScale(float3(scaling.x, scaling.y, scaling.z));
-	//			}
-	//		}
-
-	//		delete[] indices;
-	//	}
-
-	//	// -------------------------------------------
-	//	// LOAD TEXTURES -----------------------------
-	//	// -------------------------------------------
-	//	if (ret)
-	//	{
-	//		aiMaterial* material = scene->mMaterials[0];
-
-	//		string path = GetPathFromFilePath(full_path);
-
-	//		// Difuse -------------------
-	//		aiString file;
-	//		material->GetTexture(aiTextureType_DIFFUSE, 0, &file);
-	//		path += file.C_Str();
-
-	//		App->LoadFile(path.c_str());
-	//	}
-
-	//	// -------------------------------------------
-	//	// RELEASE -----------------------------------
-	//	// -------------------------------------------
-	//	if(scene != nullptr)
-	//		aiReleaseImport(scene);
-
-	//	// CUSTOM GAME OBJECT BEHAVEOUR FOR THIS ASSIGNMENT
-	//	if (ret)
-	//	{
-	//		vector<GameObject*> gobjects = App->gameobj->GetListGameObjects();
-
-	//		float max_size = 0;
-	//		for (vector<GameObject*>::iterator it = gobjects.begin(); it != gobjects.end(); ++it)
-	//		{
-	//			ComponentMesh* cmesh = (ComponentMesh*)(*it)->GetComponent(MESH);
-
-	//			if (cmesh != nullptr)
-	//			{
-	//				float size = cmesh->GetMesh()->GetBBox().Size().Length();
-
-	//				if (size > max_size)
-	//					max_size = size;
-	//			}
-	//		}
-
-	//		App->camera->GetEditorCamera()->Focus(float3(0, 0, 0), max_size*1.2f);
-	//	}
-	//	// ------------------------------------------------
-	//}
-	//
-	//if(!ret)
-	//{
-	//	LOG_OUTPUT("Error loading scene %s", full_path);
-	//	ret = false;
-	//}
-
-	//return ret;
-	return true;
-}
-
-void GeometryLoader::UnloadFile(Mesh* mesh)
-{
-	for (vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end(); ++it)
-	{
-		if ((*it) == mesh)
-		{
-			(*it)->CleanUp();
-			delete *it;
-			meshes.erase(it);
-			break;
-		}
-	}
-}
-
-void GeometryLoader::UnloadAllFiles()
-{
-	for (vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end();)
-	{
-		(*it)->CleanUp();
-		delete *it;
-		it = meshes.erase(it);
-	}
-}
-
-vector<Mesh*>* GeometryLoader::GetMeshesVector()
-{
-	return &meshes;
+	return ret;
 }
 
 void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, const char* full_path, GameObject* parent)
@@ -350,7 +154,8 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 	aiMesh* aimesh = scene->mMeshes[mesh_index];
 
 	Mesh* mesh = new Mesh();
-
+	mesh->SetId(GetUniqueIdentifierRandom());
+ 
 	if (!aimesh->HasFaces())
 	{
 		LOG_OUTPUT("WARNING, geometry has no faces!");
@@ -461,6 +266,8 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 			ComponentMaterial* cmaterial = (ComponentMaterial*)go->GetComponent(MATERIAL);
 			cmaterial->SetTexture(texture);
 		}
+
+		go->SetName(aimesh->mName.C_Str());
 	}
 
 	// RECURSE
@@ -471,6 +278,35 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 
 	if (!valid)
 		RELEASE(mesh);
+}
+ 
+void GeometryLoader::UnloadFile(Mesh* mesh)
+{
+	for (vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end(); ++it)
+	{
+		if ((*it) == mesh)
+		{
+			(*it)->CleanUp();
+			delete *it;
+			meshes.erase(it);
+			break;
+		}
+	}
+}
+
+void GeometryLoader::UnloadAllFiles()
+{
+	for (vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end();)
+	{
+		(*it)->CleanUp();
+		delete *it;
+		it = meshes.erase(it);
+	}
+}
+
+vector<Mesh*>* GeometryLoader::GetMeshesVector()
+{
+	return &meshes;
 }
 
 Mesh::Mesh(float* _vertices, uint _num_vertices, uint* _indices, uint _num_indices, float* _uvs, uint _num_uvs, const char* filename)
@@ -534,6 +370,12 @@ void Mesh::CleanUp()
 		RELEASE_ARRAY(uvs);
 }
 
+void Mesh::SetId(double _id)
+{
+  
+    id = _id;
+}
+
 void Mesh::SetFaces(float * _vertices, uint _num_vertices, uint * _indices, uint _num_indices)
 {
 	if (_num_vertices > 0)
@@ -553,6 +395,7 @@ void Mesh::SetFaces(float * _vertices, uint _num_vertices, uint * _indices, uint
 
 		CalcMeshBBox();
 	}
+ 
 }
 
 void Mesh::SetUvs(float * _uvs, uint _num_uvs)
@@ -679,6 +522,11 @@ void Mesh::UnloadFromMemory()
 		App->renderer3D->UnloadBuffer(id_uv, num_uvs * 3);
 		id_uv = 0;
 	}
+}
+
+const double Mesh::GetId() const
+{
+	return id;
 }
 
 void Mesh::CalcMeshBBox()

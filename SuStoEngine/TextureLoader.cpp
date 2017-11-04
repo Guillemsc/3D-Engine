@@ -145,6 +145,9 @@ Texture::Texture(uint _id, uint _width, uint _height, const char * filename)
 	id = _id;
 	size.x = _width;
 	size.y = _height;
+
+	SetId(GetUniqueIdentifierRandom());
+ 
 }
 
 bool Texture::operator==(Texture* text)
@@ -161,7 +164,13 @@ void Texture::CleanUp()
 {
 }
 
-uint Texture::GetId()
+void Texture::SetId(double _id)
+{
+	if (id == 0)
+		id = _id;
+}
+
+double Texture::GetId()
 {
 	return id;
 }

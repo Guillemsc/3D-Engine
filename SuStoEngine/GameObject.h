@@ -34,7 +34,7 @@ public:
 	void SetName(const std::string& set);
 	void SetSelected(const bool& set);
 
-	const int GetId() const;
+	const double GetId() const;
 	const bool GetSelected() const;
 
 	const GameObject* GetParent() const;
@@ -49,6 +49,7 @@ public:
 	void RecursiveCalcBBox();
 
 	bool GetStatic();
+	void SetStatic(bool set);
 	AABB GetBbox() const;
 
 private:
@@ -56,7 +57,6 @@ private:
 
 public:
 	ComponentTransform* transform = nullptr;
-	bool		static_ = false;
 	OBB			global_bbox;
 
 private:
@@ -64,6 +64,7 @@ private:
 	std::string name;
 	bool		enabled = false;
 	bool		selected = false;
+	bool		is_static = false;
 
 	std::vector<Component*> components;
 

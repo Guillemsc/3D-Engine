@@ -47,13 +47,14 @@ void Inspector::Draw()
 		if (ImGui::InputText("", name, 25, ImGuiInputTextFlags_AutoSelectAll))
 			selected[0]->SetName(name);
 
-		if (ImGui::Checkbox("static", &selected[0]->static_))
-		{
-			if (selected[0]->static_) {
-				LOG_OUTPUT("Gameobject set to static");
-			}
-		}
+		ImGui::SameLine();
 
+		bool stat = selected[0]->GetStatic();
+		if (ImGui::Checkbox("Static", &stat)) 
+			selected[0]->SetStatic(stat);
+
+		ImGui::TextWrapped("Unique id: %f", selected[0]->GetId());
+ 
 		ImGui::Separator();
 
 		vector<Component*> components = selected[0]->GetComponents();

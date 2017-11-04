@@ -69,7 +69,7 @@ void ComponentMesh::InspectorDraw(std::vector<Component*> components)
 		ImGui::Text("No mesh loaded");
 		return;
 	}
-
+	ImGui::TextWrapped("Unique id:", mesh->GetId());
 	ImGui::Text("Id vertices: %d", mesh->GetIdVertices());
 	ImGui::Text("Num vertices: %d", mesh->GetNumVertices());
 	ImGui::Text("Id indices: %d", mesh->GetIdIndices());

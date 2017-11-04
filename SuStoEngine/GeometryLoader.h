@@ -32,6 +32,7 @@ public:
 
 	void CleanUp();
 
+	void SetId(double id);
 	void SetFaces(float* vertices, uint num_vertices, uint* indices, uint num_indices);
 	void SetUvs(float* uvs, uint num_uvs);
 	void SetTransform(float3 pos, Quat rotation, float3 scale);
@@ -57,6 +58,8 @@ public:
 	void LoadToMemory();
 	void UnloadFromMemory();
 
+	const double GetId() const;
+
 private:
 	void CalcMeshBBox();
 
@@ -80,6 +83,8 @@ private:
 	float3 scale;
 
 	AABB   bbox;
+
+	double id = 0;
 };
 
 class GeometryLoader : public Module

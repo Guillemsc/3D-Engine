@@ -1,0 +1,10 @@
+Info,  T19984: Load C:/Users/Guillem/Documents/GitHub/3D-Engine/SuStoEngine/Resources/Models/BakerHouse/BakerHouse.fbx
+Info,  T19984: Found a matching importer for this file format: Autodesk FBX Importer.
+Info,  T19984: Import root directory is 'C:/Users/Guillem/Documents/GitHub/3D-Engine/SuStoEngine/Resources/Models/BakerHouse\'
+Warn,  T19984: FBX-DOM (TOK_KEY, offset 0xd7b7) shading mode not recognized: Phong
+Info,  T19984: Entering post processing pipeline
+Info,  T19984: Points: 0, Lines: 0, Triangles: 2, Polygons: 0 (Meshes, X = removed)
+Info,  T19984: CalcTangentsProcess finished. Tangents have been calculated
+Info,  T19984: JoinVerticesProcess finished | Verts in: 3075 out: 1801 | ~41.4%
+Info,  T19984: Cache relevant are 2 meshes (1025 faces). Average output ACMR is 1.757073
+Info,  T19984: Leaving post processing pipeline
