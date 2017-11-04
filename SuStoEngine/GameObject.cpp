@@ -345,6 +345,8 @@ void GameObject::RecursiveCalcBBox()
 	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
 		(*it)->OnGetBoundingBox(local_bbox);
 
+	global_bbox = local_bbox;
+
 	if (local_bbox.IsFinite())
 		local_bbox.Transform(transform->GetGlobalTransform());
 	
@@ -360,6 +362,11 @@ void GameObject::RecursiveCalcBBox()
 bool GameObject::GetStatic()
 {
 	return static_;
+}
+
+AABB GameObject::GetBbox() const
+{
+	return local_bbox;
 }
 
 void GameObject::DrawBBox()

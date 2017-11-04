@@ -49,6 +49,7 @@ public:
 	void RecursiveCalcBBox();
 
 	bool GetStatic();
+	AABB GetBbox() const;
 
 private:
 	void DrawBBox();
@@ -56,6 +57,7 @@ private:
 public:
 	ComponentTransform* transform = nullptr;
 	bool		static_ = false;
+	OBB			global_bbox;
 
 private:
 	double		id = 0;
