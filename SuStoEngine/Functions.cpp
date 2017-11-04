@@ -116,7 +116,7 @@ double GetRandomValue(double range_1, double range_2)
 
 double GetUniqueIdentifierRandom()
 {
-	return GetRandomValue(-DBL_MAX, DBL_MAX);
+	return GetRandomValue(DBL_MIN, DBL_MAX);
 }
 
 bool PointInRect(float2 point_xy, float4 rect_xywh)

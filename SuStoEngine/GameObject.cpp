@@ -16,7 +16,7 @@
 
 #include "Glew/include/glew.h" 
 
-GameObject::GameObject(int _id)
+GameObject::GameObject(double _id)
 {
 	id = _id;
 }
@@ -355,6 +355,11 @@ void GameObject::RecursiveCalcBBox()
 			(*it)->RecursiveCalcBBox();
 		}
 	}
+}
+
+const bool GameObject::GetStatic() const
+{
+	return static_;
 }
 
 void GameObject::DrawBBox()

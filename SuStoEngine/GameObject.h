@@ -48,6 +48,8 @@ public:
 	void RecursiveCalcGlobalTransform();
 	void RecursiveCalcBBox();
 
+	const bool GetStatic() const;
+
 private:
 	void DrawBBox();
 
@@ -59,6 +61,7 @@ private:
 	std::string name;
 	bool		enabled = false;
 	bool		selected = false;
+	bool		static_ = false;
 
 	std::vector<Component*> components;
 
