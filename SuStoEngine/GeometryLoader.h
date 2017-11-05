@@ -32,7 +32,7 @@ public:
 
 	void CleanUp();
 
-	void SetId(double id);
+	void SetUniqueId(double id);
 	void SetFaces(float* vertices, uint num_vertices, uint* indices, uint num_indices);
 	void SetUvs(float* uvs, uint num_uvs);
 	void SetTransform(float3 pos, Quat rotation, float3 scale);
@@ -58,7 +58,7 @@ public:
 	void LoadToMemory();
 	void UnloadFromMemory();
 
-	const double GetId() const;
+	const double GetUniqueId() const;
 
 private:
 	void CalcMeshBBox();
@@ -78,13 +78,13 @@ private:
 	uint   num_uvs = 0;
 	float* uvs = nullptr;
 
-	float3 position;
-	Quat   rotation;
-	float3 scale;
+	float3 position = float3(0, 0, 0);
+	Quat   rotation = Quat(0, 0, 0, 0);
+	float3 scale = float3(0, 0, 0);
 
 	AABB   bbox;
 
-	double id = 0;
+	double unique_id = 0;
 };
 
 class GeometryLoader : public Module
@@ -106,7 +106,7 @@ public:
 	vector<Mesh*>* GetMeshesVector();
 
 private:
-	void RecursiveLoadMesh(const aiScene* scene, aiNode* node, const char* full_path, GameObject* parent = nullptr);
+	void RecursiveLoadMesh(const aiScene* scene, aiNode* node, const char* full_path, AABB& total_abb, GameObject* parent = nullptr);
 	vector<Mesh*> meshes;
 
 public:

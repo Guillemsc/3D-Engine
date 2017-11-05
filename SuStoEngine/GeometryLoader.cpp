@@ -116,6 +116,9 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 		aiVector3D aiscaling;
 		aiQuaternion airotation;
 
+		AABB total_bbox;
+		total_bbox.SetNegativeInfinity();
+
 		if (root != nullptr)
 		{
 			root->mTransformation.Decompose(aiscaling, airotation, aitranslation);
@@ -131,12 +134,21 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 			parent->transform->SetPosition(float3(position.x, position.y, position.z));
 			parent->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 			parent->transform->SetScale(float3(scale.x, scale.y, scale.z));
-			parent->SetName("hi");
+			parent->SetName(root->mName.C_Str());
 		}
+
+		AABB total_abb;
+		total_abb.SetNegativeInfinity();
 
 		for (int i = 0; i < root->mNumChildren; i++)
 		{
-			RecursiveLoadMesh(scene, root->mChildren[i], full_path, parent);
+			RecursiveLoadMesh(scene, root->mChildren[i], full_path, total_abb, parent);
+		}
+
+		// Set camera focus
+		if (ret)
+		{
+			App->camera->GetCurrentCamera()->Focus(total_abb.CenterPoint(), total_abb.Size().Length());
 		}
 	}
 
@@ -146,29 +158,36 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 	return ret;
 }
 
-void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, const char* full_path, GameObject* parent)
+void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, const char* full_path, AABB& total_abb, GameObject* parent)
 {
 	bool valid = true;
 
-	int mesh_index = node->mMeshes[0];
-	aiMesh* aimesh = scene->mMeshes[mesh_index];
-
-	Mesh* mesh = new Mesh();
-	mesh->SetId(GetUniqueIdentifierRandom());
- 
-	if (!aimesh->HasFaces())
-	{
-		LOG_OUTPUT("WARNING, geometry has no faces!");
+	if (node->mNumMeshes == 0)
 		valid = false;
-	}
 
+	aiMesh* aimesh = nullptr;
+	Mesh* mesh = nullptr;
 	if (valid)
 	{
-		// VERTICES
+		int mesh_index = node->mMeshes[0];
+		aimesh = scene->mMeshes[mesh_index];
+
+		mesh = new Mesh();
+		mesh->SetUniqueId(GetUniqueIdentifierRandom());
+
+		if (!aimesh->HasFaces())
+		{
+			LOG_OUTPUT("WARNING, geometry has no faces!");
+			valid = false;
+		}
+	}
+
+	// VERTICES && INDICES
+	if (valid)
+	{
 		float* vertices = new float[aimesh->mNumVertices * 3];
 		memcpy(vertices, aimesh->mVertices, sizeof(float) * aimesh->mNumVertices * 3);
 
-		// INDICES
 		uint* indices = new uint[aimesh->mNumFaces * 3];
 
 		for (uint i = 0; i < aimesh->mNumFaces && valid; ++i)
@@ -190,9 +209,9 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 		RELEASE_ARRAY(indices);
 	}
 
+	// UVS
 	if (valid && aimesh->HasTextureCoords(0))
 	{
-		// UVS
 		float* uvs = new float[aimesh->mNumVertices * 3];
 		memcpy(uvs, (float*)aimesh->mTextureCoords[0], sizeof(float) * aimesh->mNumVertices * 3);
 
@@ -202,12 +221,11 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 	}
 
 	// POSITION, ROTATION AND SCALE
+	float3 position(0, 0, 0);
+	Quat rotation(0, 0, 0, 0);
+	float3 scale(0, 0, 0);
 	if (valid)
 	{
-		float3 position(0, 0, 0);
-		Quat rotation(0, 0, 0, 0);
-		float3 scale(0, 0, 0);
-
 		aiVector3D aitranslation;
 		aiVector3D aiscaling;
 		aiQuaternion airotation;
@@ -226,6 +244,12 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 		}
 		else
 			valid = false;
+	}
+
+	// GENERAL BBOX
+	if (valid)
+	{
+		total_abb.Enclose(mesh->GetBBox());
 	}
 
 	// MATERIALS
@@ -273,7 +297,7 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 	// RECURSE
 	for (int i = 0; i < node->mNumChildren; i++)
 	{
-		RecursiveLoadMesh(scene, node->mChildren[i], full_path, go);
+		RecursiveLoadMesh(scene, node->mChildren[i], full_path, total_abb, parent);
 	}
 
 	if (!valid)
@@ -370,10 +394,9 @@ void Mesh::CleanUp()
 		RELEASE_ARRAY(uvs);
 }
 
-void Mesh::SetId(double _id)
+void Mesh::SetUniqueId(double _id)
 {
-  
-    id = _id;
+    unique_id = _id;
 }
 
 void Mesh::SetFaces(float * _vertices, uint _num_vertices, uint * _indices, uint _num_indices)
@@ -474,6 +497,8 @@ void Mesh::SetTransform(float3 _pos, Quat _rotation, float3 _scale)
 	position = _pos;
 	rotation = _rotation;
 	scale = _scale;
+
+	CalcMeshBBox();
 }
 
 float3 Mesh::GetPosition()
@@ -524,15 +549,20 @@ void Mesh::UnloadFromMemory()
 	}
 }
 
-const double Mesh::GetId() const
+const double Mesh::GetUniqueId() const
 {
-	return id;
+	return unique_id;
 }
 
 void Mesh::CalcMeshBBox()
 {
 	bbox.SetNegativeInfinity();
-	bbox.Enclose((vec*)vertices, num_vertices);
+
+	if (vertices != nullptr && num_vertices > 0)
+	{
+		bbox.Enclose((vec*)vertices, num_vertices);
+		bbox.Scale(position, scale);
+	}
 }
 
 bool MeshImporter::Import(const char * file, const char * path, std::string & output_file)

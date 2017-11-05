@@ -129,10 +129,12 @@ bool ModuleCamera3D::Update()
 	if (editor_camera == nullptr)
 		return true;
 
-	float speed = camera_speed * App->GetDT();
+	float cam_speed = camera_speed * App->GetDT();
+	float whe_speed = wheel_speed * App->GetDT();
+	float mou_speed = mouse_sensitivity * App->GetDT();
 
 	if (App->input->GetKeyRepeat(SDL_SCANCODE_LSHIFT))
-		speed = camera_speed/2 * App->GetDT();
+		cam_speed = camera_speed/2 * App->GetDT();
 
 	if (IsMouseInsideWindow())
 	{
@@ -144,11 +146,11 @@ bool ModuleCamera3D::Update()
 	{
 		if (App->input->GetMouseWheel() == 1)
 		{
-			editor_camera->MoveFront(wheel_speed);
+			editor_camera->MoveFront(whe_speed);
 		}
 		else if (App->input->GetMouseWheel() == -1)
 		{
-			editor_camera->MoveBack(wheel_speed);
+			editor_camera->MoveBack(whe_speed);
 		}
 
 		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
@@ -156,24 +158,24 @@ bool ModuleCamera3D::Update()
 			App->window->GetCursor()->Hand();
 
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_Z))
-				editor_camera->MoveUp(speed);
+				editor_camera->MoveUp(cam_speed);
 
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_X))
-				editor_camera->MoveDown(speed);
+				editor_camera->MoveDown(cam_speed);
 
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_W))
-				editor_camera->MoveFront(speed);
+				editor_camera->MoveFront(cam_speed);
 
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_S))
-				editor_camera->MoveBack(speed);
+				editor_camera->MoveBack(cam_speed);
 
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_A))
-				editor_camera->MoveLeft(speed);
+				editor_camera->MoveLeft(cam_speed);
 
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_D))
-				editor_camera->MoveRight(speed);
+				editor_camera->MoveRight(cam_speed);
 
-			editor_camera->Rotate(-App->input->GetMouseXMotion()*mouse_sensitivity*0.01f, -App->input->GetMouseYMotion()*mouse_sensitivity*0.01f);
+			editor_camera->Rotate(-App->input->GetMouseXMotion()*mou_speed, -App->input->GetMouseYMotion()*mou_speed);
 			
 		}
 		else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
@@ -181,12 +183,12 @@ bool ModuleCamera3D::Update()
 			if (App->input->GetKeyRepeat(SDL_SCANCODE_LALT) || App->input->GetKeyRepeat(SDL_SCANCODE_RALT))
 			{
 				if (App->input->GetKeyRepeat(SDL_SCANCODE_W))
-					editor_camera->MoveFront(speed);
+					editor_camera->MoveFront(cam_speed);
 
 				if (App->input->GetKeyRepeat(SDL_SCANCODE_S))
-					editor_camera->MoveBack(speed);
+					editor_camera->MoveBack(cam_speed);
 
-				editor_camera->Orbit(float3(0, 0, 0), -App->input->GetMouseXMotion()*mouse_sensitivity*0.01f, -App->input->GetMouseYMotion()*mouse_sensitivity*0.01f);
+				editor_camera->Orbit(float3(0, 0, 0), -App->input->GetMouseXMotion()*mou_speed, -App->input->GetMouseYMotion()*mou_speed);
 				editor_camera->Look(float3(0, 0, 0));
 
 				App->window->GetCursor()->SizeAll();
@@ -221,7 +223,7 @@ Camera3D::Camera3D()
 	aspect_ratio = 0;
 
 	SetNearPlaneDistance(0.1f);
-	SetFarPlaneDistance(500.0f);
+	SetFarPlaneDistance(1000.0f);
 	SetAspectRatio(1.3f);
 	SetFOV(60);
 }

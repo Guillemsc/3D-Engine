@@ -13,8 +13,7 @@ public:
 
 	void CleanUp();
 
-	void SetId(double id);
-	double GetId();
+	uint GetId();
 
 	string GetFileName();
 	float2 GetSize();
