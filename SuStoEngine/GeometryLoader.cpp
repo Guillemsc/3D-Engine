@@ -725,14 +725,14 @@ void MeshImporter::ImportAllMeshes()
 	{
 		Mesh* new_mesh = Load((*it).c_str());
 
-		if (new_mesh != nullptr)
+		/*if (new_mesh != nullptr)
 		{
 			GameObject* new_gameobject = App->gameobj->Create();
 			new_gameobject->AddComponent(ComponentType::MESH);
 			ComponentMesh* mesh_comp = (ComponentMesh*) new_gameobject->GetComponent(ComponentType::MESH);
 			mesh_comp->SetMesh(new_mesh);
 
-		}
+		}*/
 	}
 }
 
