@@ -59,7 +59,7 @@ bool TextureLoader::CleanUp()
 	bool ret = true;
 
 	TextureImporter importer;
-	importer.Save(App->file_system->library_texture_path.c_str(), textures);
+	importer.Save(App->file_system->GetLibraryTexturePath().c_str(), textures);
 
 	for (vector<Texture*>::iterator it = textures.begin(); it != textures.end();)
 	{

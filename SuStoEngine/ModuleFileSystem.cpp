@@ -13,8 +13,6 @@ FileSystem::FileSystem(bool start_enabled)
 	library_mesh_path = CreateFolder(library_path.c_str(), "Meshes");
 	library_texture_path = CreateFolder(library_path.c_str(), "Textures");
 	settings_path = CreateFolder(App->GetBasePath(), "Settings");
-
-	GetFilesInPath(library_mesh_path.c_str(), "sustomesh");
 }
 
 FileSystem::~FileSystem()
@@ -57,6 +55,21 @@ string FileSystem::GetAssetsPath()
 string FileSystem::GetLibraryPath()
 {
 	return library_path;
+}
+
+string FileSystem::GetLibraryMeshPath()
+{
+	return library_mesh_path;
+}
+
+string FileSystem::GetLibraryTexturePath()
+{
+	return library_texture_path;
+}
+
+string FileSystem::GetSettingsPath()
+{
+	return settings_path;
 }
 
 string FileSystem::CreateFolder(const char * path, const char * name)
@@ -193,7 +206,9 @@ vector<string> FileSystem::GetFilesInPath(const char * path, const char* extensi
 
 	while (handle != INVALID_HANDLE_VALUE)
 	{
-		files.push_back(search_data.cFileName);
+		string path_new = path;
+		path_new += search_data.cFileName;
+		files.push_back(path_new);
 
 		if (FindNextFile(handle, &search_data) == FALSE)
 			break;

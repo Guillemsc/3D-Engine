@@ -23,10 +23,13 @@ public:
 
 	string GetAssetsPath();
 	string GetLibraryPath();
+	string GetLibraryMeshPath();
+	string GetLibraryTexturePath();
+	string GetSettingsPath();
 
 private:
 
-public:
+private:
 	string assets_path;
 	string library_path;
 	string library_mesh_path;

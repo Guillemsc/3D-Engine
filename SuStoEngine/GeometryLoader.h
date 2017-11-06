@@ -109,6 +109,8 @@ public:
 
 private:
 	void RecursiveLoadMesh(const aiScene* scene, aiNode* node, const char* full_path, AABB& total_abb, GameObject* parent = nullptr);
+
+private:
 	vector<Mesh*> meshes;
 
 	MeshImporter* mesh_importer = nullptr;
@@ -122,10 +124,10 @@ public:
 class MeshImporter : public Importer
 {
 public:
-	bool Import(const char* file, const char* path, std::string& output_file);
-	bool Import(const void* buffer, uint size, std::string& output_file);
 	bool Load(const char * exported_file);
 	bool Save(const char* path, Mesh* meshes);
+
+	void ImportAllMeshes();
 };
 
 #endif // __GEOMETRYLOADER_H__

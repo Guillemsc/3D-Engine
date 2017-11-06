@@ -52,7 +52,7 @@ bool GeometryLoader::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	//mesh_importer->Load("C://Users//guillemsc1//Documents//GitHub//3D-Engine//Debug//Library//Meshes//_0.sustomesh");
+	mesh_importer->ImportAllMeshes();
 
 	return ret;
 }
@@ -326,7 +326,7 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 		RELEASE(mesh);
 	}
 	else
-		mesh_importer->Save(App->file_system->library_mesh_path.c_str(), mesh);
+		mesh_importer->Save(App->file_system->GetLibraryMeshPath().c_str(), mesh);
 }
  
 void GeometryLoader::UnloadFile(Mesh* mesh)
@@ -594,20 +594,6 @@ void Mesh::CalcMeshBBox()
 	}
 }
 
-bool MeshImporter::Import(const char * file, const char * path, std::string & output_file)
-{
-	bool ret = false;
-
-	return ret;
-}
-
-bool MeshImporter::Import(const void * buffer, uint size, std::string & output_file)
-{
-	bool ret = false;
-
-	return ret;
-}
-
 bool MeshImporter::Load(const char * filepath)
 {
 	bool ret = true;
@@ -733,5 +719,15 @@ bool MeshImporter::Save(const char * path, Mesh* mesh)
 	
 
 	return ret;
+}
+
+void MeshImporter::ImportAllMeshes()
+{
+	vector<string> paths = App->file_system->GetFilesInPath(App->file_system->GetLibraryMeshPath().c_str(), "sustomesh");
+
+	for (vector<string>::iterator it = paths.begin(); it != paths.end(); it++)
+	{
+		Load((*it).c_str());
+	}
 }
 
