@@ -243,9 +243,9 @@ void Texture::UnloadFromMemory()
 		App->renderer3D->UnloadTextureBuffer(id, 1);
 }
 
-bool TextureImporter::Load(const char * exported_file)
+Texture* TextureImporter::Load(const char * exported_file)
 {
-	bool ret = true;
+	Texture* ret = nullptr;
 
 	App->LoadFile(exported_file);
 

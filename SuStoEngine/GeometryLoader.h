@@ -121,10 +121,10 @@ public:
 
 #include "Importer.h"
 
-class MeshImporter : public Importer
+class MeshImporter : public Importer<class Mesh>
 {
 public:
-	bool Load(const char * exported_file);
+	Mesh* Load(const char * exported_file);
 	bool Save(const char* path, Mesh* meshes);
 
 	void ImportAllMeshes();

@@ -76,10 +76,10 @@ public:
 
 #include "Importer.h"
 
-class TextureImporter : public Importer
+class TextureImporter : public Importer<class Texture>
 {
 public:
-	bool Load(const char * exported_file);
+	Texture* Load(const char * exported_file);
 	bool Save(const char* path, Texture* textures);
 	void ImportAllTextures();
 };

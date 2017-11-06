@@ -5,10 +5,11 @@
 
 #include <string>
 
+template <class TYPE>
 class Importer
 {
 public:
-	virtual bool Load(const char* exported_file) { return false; };
+	virtual TYPE* Load(const char* exported_file) { return false; };
 	virtual bool Save(const char* exported_file) { return false; }
 };
 

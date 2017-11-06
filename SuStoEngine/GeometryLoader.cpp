@@ -595,10 +595,8 @@ void Mesh::CalcMeshBBox()
 	}
 }
 
-bool MeshImporter::Load(const char * filepath)
+Mesh* MeshImporter::Load(const char * filepath)
 {
-	bool ret = true;
-
 	//Open the file and get the size
 	FILE* file = fopen(filepath, "rb");
 	fseek(file, 0, SEEK_END);
@@ -655,8 +653,11 @@ bool MeshImporter::Load(const char * filepath)
 	LOG_OUTPUT("New mesh with %d indices", ranges[1]);
 
 	RELEASE(id);
+	if (new_mesh != nullptr) {
+		return new_mesh;
+	}
 
-	return ret;
+	return nullptr;
 }
 
 bool MeshImporter::Save(const char * path, Mesh* mesh)
@@ -722,7 +723,16 @@ void MeshImporter::ImportAllMeshes()
 
 	for (vector<string>::iterator it = paths.begin(); it != paths.end(); it++)
 	{
-		Load((*it).c_str());
+		Mesh* new_mesh = Load((*it).c_str());
+
+		if (new_mesh != nullptr)
+		{
+			GameObject* new_gameobject = App->gameobj->Create();
+			new_gameobject->AddComponent(ComponentType::MESH);
+			ComponentMesh* mesh_comp = (ComponentMesh*) new_gameobject->GetComponent(ComponentType::MESH);
+			mesh_comp->SetMesh(new_mesh);
+
+		}
 	}
 }
 

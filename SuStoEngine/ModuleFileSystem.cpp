@@ -199,7 +199,7 @@ vector<string> FileSystem::GetFilesInPath(const char * path, const char* extensi
 	WIN32_FIND_DATA search_data;
 
 	string path_ex = path;
-	path_ex += "*";
+	path_ex += "*.";
 	path_ex += extension;
 
 	HANDLE handle = FindFirstFile(path_ex.c_str(), &search_data);
