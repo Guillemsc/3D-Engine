@@ -13,6 +13,8 @@ FileSystem::FileSystem(bool start_enabled)
 	library_mesh_path = CreateFolder(library_path.c_str(), "Meshes");
 	library_texture_path = CreateFolder(library_path.c_str(), "Textures");
 	settings_path = CreateFolder(App->GetBasePath(), "Settings");
+
+	GetFilesInPath(library_mesh_path.c_str(), "sustomesh");
 }
 
 FileSystem::~FileSystem()
@@ -177,22 +179,27 @@ bool FileSystem::FileSave(const char * path, const char* file_content, const cha
 	return ret;
 }
 
-vector<string> FileSystem::GetFilesInPath(const char * path)
+vector<string> FileSystem::GetFilesInPath(const char * path, const char* extension)
 {
 	vector<string> files;
 
-	//WIN32_FIND_DATA search_data;
-	//HANDLE handle = FindFirstFile(path, &search_data);
+	WIN32_FIND_DATA search_data;
 
-	//while (handle != INVALID_HANDLE_VALUE)
-	//{
-	//	files.push_back(search_data.cFileName);
+	string path_ex = path;
+	path_ex += "*";
+	path_ex += extension;
 
-	//	if (FindNextFile(handle, &search_data) == FALSE)
-	//		break;
-	//}
+	HANDLE handle = FindFirstFile(path_ex.c_str(), &search_data);
 
-	//FindClose(handle);
+	while (handle != INVALID_HANDLE_VALUE)
+	{
+		files.push_back(search_data.cFileName);
+
+		if (FindNextFile(handle, &search_data) == FALSE)
+			break;
+	}
+
+	FindClose(handle);
 
 	return files;
 }

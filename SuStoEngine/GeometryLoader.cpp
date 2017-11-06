@@ -52,7 +52,7 @@ bool GeometryLoader::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	mesh_importer->Load("C://Users//guillemsc1//Documents//GitHub//3D-Engine//Debug//Library//Meshes//_0.sustomesh");
+	//mesh_importer->Load("C://Users//guillemsc1//Documents//GitHub//3D-Engine//Debug//Library//Meshes//_0.sustomesh");
 
 	return ret;
 }

@@ -19,7 +19,7 @@ public:
 	void FileCopyPaste(const char* filepath, const char* new_path);
 	void FileDelete(const char* filepath);
 	bool FileSave(const char * path, const char * file_content, const char * name, const char * extension, int size);
-	vector<string> GetFilesInPath(const char* path);
+	vector<string> GetFilesInPath(const char* path, const char* extension);
 
 	string GetAssetsPath();
 	string GetLibraryPath();
