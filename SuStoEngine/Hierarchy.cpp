@@ -99,6 +99,7 @@ void Hierarchy::PrintGoAndChildsRecursive(GameObject * go)
 	if (go == nullptr)
 		return;
 
+	ImGui::PushID(go->GetId());
 	// ------------------------
 	// Flags ------------------
 	// ------------------------
@@ -152,6 +153,8 @@ void Hierarchy::PrintGoAndChildsRecursive(GameObject * go)
 
 		ImGui::EndPopup();
 	}
+
+	ImGui::PopID();
 
 	// ------------------------
 	// Draw childs recursive --

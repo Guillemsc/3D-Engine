@@ -345,10 +345,10 @@ void GameObject::RecursiveCalcBBox()
 	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
 		(*it)->OnGetBoundingBox(local_bbox);
 
-	global_bbox = local_bbox;
-
 	if (local_bbox.IsFinite())
-		local_bbox.Transform(transform->GetGlobalTransform());
+	{
+		local_bbox.Scale(transform->GetGlobalPosition(), transform->GetScale());
+	}
 	
 	if (!childs.empty())
 	{

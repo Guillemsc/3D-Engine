@@ -27,6 +27,7 @@ public:
 	const void SetRotation(const Quat& quater);
 	const void SetScale(const float3& scale);
 	const float3 GetPosition() const;
+	const float3 GetGlobalPosition() const;
 	const float3 GetRotationEuler() const;
 	const Quat GetRotationQuat() const;
 	const float3 GetScale() const;

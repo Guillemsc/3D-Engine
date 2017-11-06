@@ -210,7 +210,7 @@ void Configuration::Draw()
 			App->SaveConfig(App->camera);
 		}
 
-		if (ImGui::SliderFloat("Wheel speed", &wheel_speed, 0.01f, 15))
+		if (ImGui::SliderFloat("Wheel speed", &wheel_speed, 0.01f, 200))
 		{
 			App->camera->SetWheelSpeed(wheel_speed);
 			App->SaveConfig(App->camera);

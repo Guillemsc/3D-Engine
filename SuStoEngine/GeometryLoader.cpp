@@ -134,7 +134,10 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 			parent->transform->SetPosition(float3(position.x, position.y, position.z));
 			parent->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 			parent->transform->SetScale(float3(scale.x, scale.y, scale.z));
-			parent->SetName(root->mName.C_Str());
+
+			string name = GetFileNameFromFilePath(full_path);
+			name = GetFilenameWithoutExtension(name.c_str());
+			parent->SetName(name);
 		}
 
 		AABB total_abb;
@@ -142,7 +145,7 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 
 		for (int i = 0; i < root->mNumChildren; i++)
 		{
-			RecursiveLoadMesh(scene, root->mChildren[i], full_path, total_abb, parent);
+			RecursiveLoadMesh( scene, root->mChildren[i], full_path, total_abb, parent);
 		}
 
 		// Set camera focus
@@ -249,7 +252,10 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 	// GENERAL BBOX
 	if (valid)
 	{
-		total_abb.Enclose(mesh->GetBBox());
+		AABB mesh_with_scale = mesh->GetBBox();
+		mesh_with_scale.Scale(position, scale);
+
+		total_abb.Enclose(mesh_with_scale);
 	}
 
 	// MATERIALS
@@ -273,6 +279,13 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 	if (valid && parent != nullptr)
 	{
 		go = App->gameobj->Create();
+		
+		string name = aimesh->mName.C_Str();
+		if (name == "")
+			name = "no_name";
+
+		go->SetName(name);
+
 		parent->AddChild(go);
 
 		go->transform->SetPosition(mesh->GetPosition());
@@ -290,14 +303,20 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 			ComponentMaterial* cmaterial = (ComponentMaterial*)go->GetComponent(MATERIAL);
 			cmaterial->SetTexture(texture);
 		}
-
-		go->SetName(aimesh->mName.C_Str());
 	}
+
+	// Select parent
+	GameObject* pare = nullptr;
+
+	if (valid)
+		pare = go;
+	else
+		pare = parent;
 
 	// RECURSE
 	for (int i = 0; i < node->mNumChildren; i++)
 	{
-		RecursiveLoadMesh(scene, node->mChildren[i], full_path, total_abb, parent);
+		RecursiveLoadMesh(scene, node->mChildren[i], full_path, total_abb, pare);
 	}
 
 	if (!valid)
@@ -561,7 +580,6 @@ void Mesh::CalcMeshBBox()
 	if (vertices != nullptr && num_vertices > 0)
 	{
 		bbox.Enclose((vec*)vertices, num_vertices);
-		bbox.Scale(position, scale);
 	}
 }
 

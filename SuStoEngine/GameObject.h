@@ -57,7 +57,7 @@ private:
 
 public:
 	ComponentTransform* transform = nullptr;
-	OBB			global_bbox;
+	AABB	    local_bbox;
 
 private:
 	double		id = 0;
@@ -70,8 +70,6 @@ private:
 
 	GameObject* parent = nullptr;
 	std::vector<GameObject*> childs;
-
-	AABB	     local_bbox;
 };
 
 #endif

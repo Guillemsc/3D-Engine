@@ -86,6 +86,17 @@ const float3 ComponentTransform::GetPosition() const
 	return local_position;
 }
 
+const float3 ComponentTransform::GetGlobalPosition() const
+{
+	float3 position;
+	float4x4 dummy;
+	float3 dummy2;
+
+	global_transform.Decompose(position, dummy, dummy2);
+
+	return position;
+}
+
 const float3 ComponentTransform::GetRotationEuler() const
 {
 	return local_rotation_euler;

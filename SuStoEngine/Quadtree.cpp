@@ -24,7 +24,7 @@ void EngineQuadTree::Insert(GameObject * go)
 {
 	if (root != nullptr)
 	{
-		if (go->global_bbox.MinimalEnclosingAABB().Intersects(root->limits))
+		if (go->local_bbox.Intersects(root->limits))
 			root->Insert(go);
 	}
 }
