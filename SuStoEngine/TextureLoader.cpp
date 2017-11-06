@@ -35,12 +35,16 @@ bool TextureLoader::Awake()
 	ilutInit();
 	ilutRenderer(ILUT_OPENGL);
 
+	texture_importer = new TextureImporter();
+
 	return ret;
 }
 
 bool TextureLoader::Start()
 {
 	bool ret = true;
+
+	//texture_importer->ImportAllTextures();
 
 	return ret;
 }
@@ -58,26 +62,15 @@ bool TextureLoader::CleanUp()
 {
 	bool ret = true;
 
-	TextureImporter importer;
-	importer.Save(App->file_system->GetLibraryTexturePath().c_str(), textures);
-
-	for (vector<Texture*>::iterator it = textures.begin(); it != textures.end();)
-	{
-		if ((*it)->GetId() != 0)
-			App->renderer3D->UnloadTextureBuffer((*it)->GetId(), 1);
-
-		(*it)->CleanUp();
-		delete (*it);
-
-		it = textures.erase(it);
-	}
+	// Unload all textures
+	UnloadAllFiles();
 
 	return ret;
 }
 
 void TextureLoader::OnLoadFile(const char * file_path, const char * file_name, const char * file_extension)
 {
-	if (TextCmp("png", file_extension))
+	if (TextCmp("png", file_extension) || TextCmp("dds", file_extension))
 	{
 		LoadTexture(file_path);
 	}
@@ -85,33 +78,41 @@ void TextureLoader::OnLoadFile(const char * file_path, const char * file_name, c
 
 Texture* TextureLoader::LoadTexture(const char * full_path)
 {
-	Texture* ret = nullptr;
-	
-	ILuint id;				
-	GLuint textureID;								
+	Texture* ret = nullptr;											
 
+	// Load texture
 	if (ilLoad(IL_TYPE_UNKNOWN, full_path))
 	{
+		// Get file name
 		string file_name = GetFileNameFromFilePath(full_path);
 
+		// Get texture info
 		ILinfo ImageInfo;
 		iluGetImageInfo(&ImageInfo);
 
+		// Rotate if origin is upper left
 		if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
 		{
 			iluFlipImage();
 		}
 
+		// Convert image to rgb and a byte chain
 		ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
 
-		textureID = App->renderer3D->LoadTextureBuffer(ilGetData(), 1, ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
+		// Create texture
+		Texture* texture = new Texture(ImageInfo.Data, ImageInfo.SizeOfData, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT), file_name.c_str(),
 			GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
 
-		Texture* texture = new Texture(textureID, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), file_name.c_str());
 		textures.push_back(texture);
 		ret = texture;
 
-		ilDeleteImages(1, &id);
+		// Load texture to memory (temp?)
+		texture->LoadToMemory();
+
+		ilDeleteImages(1, &ImageInfo.Id);
+
+		// Export it to Library
+		texture_importer->Save(App->file_system->GetLibraryTexturePath().c_str(), texture);
 	}
 	else
 	{
@@ -127,9 +128,6 @@ void TextureLoader::UnloadTexture(Texture * text)
 	{
 		if ((*it) == text)
 		{
-			if((*it)->GetId() != 0)
-				App->renderer3D->UnloadTextureBuffer((*it)->GetId(), 1);
-
 			(*it)->CleanUp();
 
 			delete(*it);
@@ -139,14 +137,34 @@ void TextureLoader::UnloadTexture(Texture * text)
 	}
 }
 
-Texture::Texture(uint _id, uint _width, uint _height, const char * filename)
+void TextureLoader::UnloadAllFiles()
 {
-	file_name = filename;
-	id = _id;
+	for (vector<Texture*>::iterator it = textures.begin(); it != textures.end(); it++)
+	{	
+		(*it)->CleanUp();
+
+		delete(*it);
+		it = textures.erase(it);	
+	}
+}
+
+Texture::Texture(byte* _texture_data, uint _texture_data_lenght, uint _width, uint _height, int _format, const char * filename, uint _wrap_s, uint _wrap_t, uint _mag, uint _min)
+{
+	if (_texture_data_lenght > 0)
+	{
+		texture_data = new byte[_texture_data_lenght];
+		memcpy(texture_data, _texture_data, _texture_data_lenght);
+	}
+	
+	format = _format;
 	size.x = _width;
 	size.y = _height;
+	wrap_s = _wrap_s;
+	wrap_t = _wrap_t;
+	mag = _mag;
+	min = _min;
 
-	id = _id;
+	file_name = filename;
 }
 
 bool Texture::operator==(Texture* text)
@@ -161,6 +179,11 @@ bool Texture::operator==(Texture* text)
 
 void Texture::CleanUp()
 {
+	// Unload from memory
+	UnloadFromMemory();
+
+	// Unload texture data
+	RELEASE_ARRAY(texture_data);
 }
 
 uint Texture::GetId()
@@ -198,62 +221,73 @@ bool Texture::IsUsed()
 	return used_by != 0 ? true : false;
 }
 
-bool TextureImporter::Import(const char * file, const char * path, std::string & output_file)
+double Texture::GetUniqueId()
+{
+	return unique_id;
+}
+
+void Texture::SetUniqueId(double set)
+{
+	unique_id = set;
+}
+
+void Texture::LoadToMemory()
+{
+	if(id == 0 && texture_data != nullptr && size.x > 0 && size.y > 0)
+		id = App->renderer3D->LoadTextureBuffer(texture_data, 1, format, size.x, size.y, wrap_s, wrap_t, mag, min);
+}
+
+void Texture::UnloadFromMemory()
+{
+	if(id != 0)
+		App->renderer3D->UnloadTextureBuffer(id, 1);
+}
+
+bool TextureImporter::Load(const char * exported_file)
 {
 	bool ret = true;
+
+	App->LoadFile(exported_file);
 
 	return ret;
 }
 
-bool TextureImporter::Import(const void * buffer, uint size, std::string & output_file)
+bool TextureImporter::Save(const char * path, Texture* texture)
 {
 	bool ret = true;
 
-	return ret;
-}
+	uint size = 0;
+	byte* data = nullptr;
 
-bool TextureImporter::Load(const char * exported_file, Texture* texture)
-{
-	bool ret = true;
+	string name = GetFilenameWithoutExtension(texture->GetFileName().c_str(), false);
 
-	string path = exported_file;
-	path += "*.DDS";
+	// To pick a specific DXT compression use
+	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
 
-	// Find files in Directory
-	WIN32_FIND_DATA search_data;
+	// Get the size of the data buffer
+	size = ilSaveL(IL_DDS, NULL, 0);
 
-	HANDLE handle = FindFirstFile(path.c_str(), &search_data);
-	char* m = search_data.cFileName;
-
-	if (handle == INVALID_HANDLE_VALUE)
-		return false;
-
-	while (handle != INVALID_HANDLE_VALUE)
+	if (size > 0) 
 	{
-		
+		// Allocate data buffer
+		data = new byte[size]; 
+
+		// Save to buffer with the ilSaveIL function
+		if (ilSaveL(IL_DDS, data, size) > 0)
+			ret = App->file_system->FileSave(path, (char*)data, name.c_str(), "dds", size);
+
+		RELEASE_ARRAY(data);
 	}
 	
-
 	return ret;
 }
 
-bool TextureImporter::Save(const char * path, vector<Texture*> textures)
+void TextureImporter::ImportAllTextures()
 {
-	bool ret = true;
+	vector<string> paths = App->file_system->GetFilesInPath(App->file_system->GetLibraryTexturePath().c_str(), "dds");
 
-	for (vector<Texture*>::iterator texture = textures.begin(); texture != textures.end(); ++texture)
+	for (vector<string>::iterator it = paths.begin(); it != paths.end(); it++)
 	{
-		string name = GetFilenameWithoutExtension((*texture)->GetFileName().c_str(), false);
-		ILuint size;
-		ILubyte *data;
-		ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
-		size = ilSaveL(IL_DDS, NULL, 0); // Get the size of the data buffer
-		if (size > 0) {
-			data = new ILubyte[size]; // allocate data buffer
-			if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
-				ret = App->file_system->FileSave(path, (char*)data, name.c_str(), "DDS", size);
-			RELEASE_ARRAY(data);
-		}
+		App->LoadFile((*it).c_str());
 	}
-	return ret;
 }

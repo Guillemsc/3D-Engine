@@ -4,10 +4,12 @@
 #include "Module.h"
 #include "GeometryMath.h"
 
+class TextureImporter;
+
 class Texture
 {
 public:
-	Texture(uint id, uint width, uint height, const char* filename);
+	Texture(byte* texture_data, uint texture_data_lenght, uint width, uint height, int format, const char* filename, uint wrap_s, uint wrap_t, uint mag, uint min);
 	
 	bool operator == (Texture* text);
 
@@ -23,13 +25,27 @@ public:
 	int	 UsedBy();
 	bool IsUsed();
 
+	double GetUniqueId();
+	void SetUniqueId(double set);
+
+	void LoadToMemory();
+	void UnloadFromMemory();
+
 private:
+	byte*  texture_data = nullptr;
+	int	   format = 0;
+	float2 size = float2(0, 0);
+	uint   wrap_s = 0;
+	uint   wrap_t = 0;
+	uint   mag = 0;
+	uint   min = 0;
+
 	string file_name;
 	uint   id = 0;
-	float2 size = float2(0, 0);
 
 	int  used_by = 0;
- 
+
+	double unique_id = 0;
 };
 
 class TextureLoader : public Module
@@ -47,8 +63,12 @@ public:
 	Texture* LoadTexture(const char* full_path);
 	void UnloadTexture(Texture* text);
 
+	void UnloadAllFiles();
+
 private:
 	vector<Texture*> textures;
+
+	TextureImporter* texture_importer = nullptr;
 
 public:
 	
@@ -59,11 +79,9 @@ public:
 class TextureImporter : public Importer
 {
 public:
-	bool Import(const char* file, const char* path, std::string& output_file);
-	bool Import(const void* buffer, uint size, std::string& output_file);
-	bool Load(const char * exported_file, Texture* texture);
-	bool Save(const char* path, vector<Texture*> textures);
-
+	bool Load(const char * exported_file);
+	bool Save(const char* path, Texture* textures);
+	void ImportAllTextures();
 };
 
 #endif // __TEXTURELOADER_H__

@@ -118,9 +118,6 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 		aiVector3D aiscaling;
 		aiQuaternion airotation;
 
-		AABB total_bbox;
-		total_bbox.SetNegativeInfinity();
-
 		if (root != nullptr)
 		{
 			root->mTransformation.Decompose(aiscaling, airotation, aitranslation);
@@ -129,6 +126,7 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 			rotation = Quat(airotation.x, airotation.y, airotation.z, airotation.w);
 		}
 
+		// Create root go
 		GameObject* parent = nullptr;
 		if (as_new_gameobject)
 		{
@@ -142,12 +140,14 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 			parent->SetName(name);
 		}
 
+		// Total mesh bbox
 		AABB total_abb;
 		total_abb.SetNegativeInfinity();
 
+		// Iterate
 		for (int i = 0; i < root->mNumChildren; i++)
 		{
-			RecursiveLoadMesh( scene, root->mChildren[i], full_path, total_abb, parent);
+			RecursiveLoadMesh(scene, root->mChildren[i], full_path, total_abb, parent);
 		}
 
 		// Set camera focus
@@ -157,6 +157,7 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 		}
 	}
 
+	// Release scene
 	if (scene != nullptr)
 		aiReleaseImport(scene);
 
@@ -653,11 +654,6 @@ bool MeshImporter::Load(const char * filepath)
 	LOG_OUTPUT("New mesh with %d vertices", ranges[0] * 3);
 	LOG_OUTPUT("New mesh with %d indices", ranges[1]);
 
-	// Create texture -----------
-	//string path = App->file_system->library_texture_path;
-	//path += GetFilenameWithoutExtension(filepath);
-	//path += ".DDS";
-
 	RELEASE(id);
 
 	return ret;
@@ -717,7 +713,6 @@ bool MeshImporter::Save(const char * path, Mesh* mesh)
 	RELEASE(id);
 	RELEASE_ARRAY(data);
 	
-
 	return ret;
 }
 

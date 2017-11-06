@@ -8,10 +8,8 @@
 class Importer
 {
 public:
-	virtual bool Import(const char* file, const char* path, std::string& output_file) { return false; };
-	virtual bool Import(const void* buffer, uint size, std::string& output_file) { return false; };
 	virtual bool Load(const char* exported_file) { return false; };
-
+	virtual bool Save(const char* exported_file) { return false; }
 };
 
 
