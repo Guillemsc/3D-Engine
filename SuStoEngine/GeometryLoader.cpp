@@ -34,6 +34,8 @@ bool GeometryLoader::Awake()
 
 	LOG_OUTPUT("Loading GeometryLoader Module");
 
+	mesh_importer = new MeshImporter();
+
 	return ret;
 }
 
@@ -50,8 +52,7 @@ bool GeometryLoader::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	MeshImporter importer;
-	importer.Load(App->file_system->library_mesh_path.c_str());
+	mesh_importer->Load("C://Users//guillemsc1//Documents//GitHub//3D-Engine//Debug//Library//Meshes//_0.sustomesh");
 
 	return ret;
 }
@@ -67,13 +68,14 @@ bool GeometryLoader::CleanUp()
 {
 	bool ret = true;
 
-	MeshImporter importer;
-	importer.Save(App->file_system->library_mesh_path.c_str(), meshes);
-
+	// Unload all meshes
 	UnloadAllFiles();
 
 	// Detach log stream
 	aiDetachAllLogStreams();
+
+	// Free mesh importer
+	RELEASE(mesh_importer);
 
 	return ret;
 }
@@ -320,7 +322,11 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 	}
 
 	if (!valid)
+	{
 		RELEASE(mesh);
+	}
+	else
+		mesh_importer->Save(App->file_system->library_mesh_path.c_str(), mesh);
 }
  
 void GeometryLoader::UnloadFile(Mesh* mesh)
@@ -350,6 +356,11 @@ void GeometryLoader::UnloadAllFiles()
 vector<Mesh*>* GeometryLoader::GetMeshesVector()
 {
 	return &meshes;
+}
+
+MeshImporter * GeometryLoader::GetMeshImporter()
+{
+	return mesh_importer;
 }
 
 Mesh::Mesh(float* _vertices, uint _num_vertices, uint* _indices, uint _num_indices, float* _uvs, uint _num_uvs, const char* filename)
@@ -597,164 +608,130 @@ bool MeshImporter::Import(const void * buffer, uint size, std::string & output_f
 	return ret;
 }
 
-bool MeshImporter::Load(const char * exported_file)
+bool MeshImporter::Load(const char * filepath)
 {
 	bool ret = true;
 
-	string path = exported_file;
-	path += "*.sustomesh";
+	//Open the file and get the size
+	FILE* file = fopen(filepath, "rb");
+	fseek(file, 0, SEEK_END);
+	uint size = ftell(file);
+	rewind(file);
 
-	// Find files in Directory
-	WIN32_FIND_DATA search_data;
+	// Create a buffer to get the data of the file
+	char* buffer = new char[size];
+	char* cursor = buffer;
 
-	HANDLE handle = FindFirstFile(path.c_str(), &search_data);
-	char* m = search_data.cFileName;
+	// Read the file and close it
+	fread(buffer, sizeof(char), size, file);
+	fclose(file);
 
-	if (handle == INVALID_HANDLE_VALUE)
-		return false;
+	// Copy unique id
+	double* id = new double;
+	uint bytes = sizeof(double);
+	memcpy(id, cursor, bytes);
+	cursor += bytes;
 
-	while (handle != INVALID_HANDLE_VALUE)
-	{
-		string mesh_path = exported_file;
-		mesh_path += search_data.cFileName;
+	// Copy the ranges
+	uint ranges[3];		// ranges[0] = Vertices, ranges[1] = Indices, ranges[2] = Uvs
+	bytes = sizeof(ranges);
+	memcpy(ranges, cursor, bytes);
+	cursor += bytes;
 
-		// Open the file and get the size
-		FILE* file = fopen(mesh_path.c_str(), "rb");
-		fseek(file, 0, SEEK_END);
-		uint size = ftell(file);
-		rewind(file);
+	// Store indices
+	uint indices[9999];
+	bytes = sizeof(uint) * ranges[1];
+	memcpy(indices, cursor, bytes);
+	cursor += bytes;
 
-		// Create a buffer to get the data of the file
-		char* buffer = new char[size];
-		char* cursor = buffer;
+	// Store vertices
+	float vertices[9999];
+	bytes = sizeof(float) * ranges[0] * 3;
+	memcpy(vertices, cursor, bytes);
+	cursor += bytes;
 
-		// Read the file and close it
-		fread(buffer, sizeof(char), size, file);
-		fclose(file);
+	// Store UVs
+	float uvs[9999];
+	bytes = sizeof(float) * ranges[2] * 3;
+	memcpy(uvs, cursor, bytes);
+	cursor += bytes;
 
-		// Copy the ranges
-		uint ranges[3];		// ranges[0] = Vertices, ranges[1] = Indices, ranges[2] = Uvs
-		uint bytes = sizeof(ranges);
-		memcpy(ranges, cursor, bytes);
+	// Create mesh --------------
+	Mesh* new_mesh = new Mesh();
+	new_mesh->SetFaces(vertices, ranges[0], indices, ranges[1]);
+	new_mesh->SetUvs(uvs, ranges[2]);
+	new_mesh->SetUniqueId(double(*id));
+	new_mesh->LoadToMemory();
+	App->geometry->GetMeshesVector()->push_back(new_mesh);
 
-		// Store indices
-		cursor += bytes;
-		uint indices[9999];
-		bytes = sizeof(uint) * ranges[1];
-		memcpy(indices, cursor, bytes);
+	LOG_OUTPUT("New mesh with %d vertices", ranges[0] * 3);
+	LOG_OUTPUT("New mesh with %d indices", ranges[1]);
 
-		// Store vertices
-		cursor += bytes;
-		float vertices[9999];
-		bytes = sizeof(float) * ranges[0] * 3;
-		memcpy(vertices, cursor, bytes);
+	// Create texture -----------
+	//string path = App->file_system->library_texture_path;
+	//path += GetFilenameWithoutExtension(filepath);
+	//path += ".DDS";
 
-		// Store UVs
-		cursor += bytes;
-		float Uvs[9999];
-		bytes = sizeof(float) * ranges[2] * 3;
-		memcpy(Uvs, cursor, bytes);
-
-		// Create mesh --------------
-			Mesh* new_mesh = new Mesh(vertices, ranges[0], indices, ranges[1], Uvs, ranges[2], GetFileNameFromFilePath(search_data.cFileName).c_str());
-			new_mesh->LoadToMemory();
-			App->geometry->GetMeshesVector()->push_back(new_mesh);
-
-			LOG_OUTPUT("New mesh with %d vertices", ranges[0] * 3);
-			LOG_OUTPUT("New mesh with %d indices", ranges[1]);
-
-		// Create texture -----------
-			string path = App->file_system->library_texture_path;
-			path += GetFilenameWithoutExtension(search_data.cFileName);
-			path += ".DDS";
-
-			Texture* texture = App->texture->LoadTexture(path.c_str());
-
-		// Create GameObjects
-			string name = GetFileNameFromFilePath(search_data.cFileName);
-
-			GameObject* go = App->gameobj->Create();
-			go->SetName(name.c_str());
-			go->AddComponent(MESH);
-			ComponentMesh* mesh = (ComponentMesh*)go->GetComponent(MESH);
-			mesh->SetMesh(new_mesh);
-			ComponentMaterial* material = (ComponentMaterial*)go->GetComponent(MATERIAL);
-			//material->SetTexture(texture);
-
-			GameObject* parent = nullptr;
-
-		
-
-			// Set mesh pos, rot and scale
-			/*aiVector3D translation;
-			aiVector3D scaling;
-			aiQuaternion rotation;
-
-			aiNode* node = scene->mRootNode->mChildren[i];
-			if (node != nullptr)
-			{
-				node->mTransformation.Decompose(scaling, rotation, translation);
-				float3 pos(translation.x, translation.y, translation.z);
-				float3 scale(scaling.x, scaling.y, scaling.z);
-				Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
-			}
-
-			go->transform->SetPosition(float3(translation.x, translation.y, translation.z));
-			go->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));*/
-			//go->transform->SetScale(float3(scaling.x, scaling.y, scaling.z));
-
-		
-
-		if (FindNextFile(handle, &search_data) == FALSE)
-			break;
-	}
-
-	//Close the handle after use or memory/resource leak
-	FindClose(handle);
+	RELEASE(id);
 
 	return ret;
 }
 
-bool MeshImporter::Save(const char * path, vector<Mesh*> meshes)
+bool MeshImporter::Save(const char * path, Mesh* mesh)
 {
 	bool ret = true;
+	
+	string name = GetFilenameWithoutExtension(mesh->GetFilename().c_str());
+	name += "_";
+	name += std::to_string(App->id->NewId("mesh"));
 
-	int i = 0;
-	for (vector<Mesh*>::iterator mesh = meshes.begin(); mesh != meshes.end(); ++mesh)
+	double* id = new double;
+	*id = mesh->GetUniqueId();
+
+	uint ranges[3] = { mesh->GetNumVertices(), mesh->GetNumIndices(), mesh->GetNumUVs() };
+	uint size = sizeof(double) + sizeof(ranges) + 
+		sizeof(uint) * mesh->GetNumIndices() + 
+		sizeof(float) * mesh->GetNumVertices() * 3 + 
+		sizeof(float) * mesh->GetNumUVs() * 3;
+	
+	// Allocate data
+	char* data = new char[size];
+	char* cursor = data;
+
+	// Store unique id
+	uint bytes = sizeof(double);
+	memcpy(cursor, id, bytes);
+	cursor += bytes;
+
+	// Store ranges
+	bytes = sizeof(ranges);
+	memcpy(cursor, ranges, bytes);
+	cursor += bytes;
+
+	// Store indices
+	bytes = sizeof(uint) * mesh->GetNumIndices();
+	memcpy(cursor, mesh->GetIndices(), bytes);
+	cursor += bytes; 
+
+	// Store vertices
+	bytes = sizeof(float) * mesh->GetNumVertices() * 3;
+	memcpy(cursor, mesh->GetVertices(), bytes);
+	cursor += bytes;
+
+	// Store UVs
+	bytes = sizeof(float) * mesh->GetNumUVs() * 3;
+	memcpy(cursor, mesh->GetUVs(), bytes);
+
+	//fopen
+	if (App->file_system->FileSave(path, data, name.c_str(), "sustomesh", size) == false)
 	{
-		string name = GetFilenameWithoutExtension((*mesh)->GetFilename().c_str());
-		name += "_";
-		name += std::to_string(i++);
-
-		uint ranges[3] = { (*mesh)->GetNumVertices(), (*mesh)->GetNumIndices(), (*mesh)->GetNumUVs() };
-		uint size = sizeof(ranges) + sizeof(uint) * (*mesh)->GetNumIndices() + sizeof(float) * (*mesh)->GetNumVertices() * 3 + sizeof(float) * (*mesh)->GetNumUVs() * 3 + sizeof(AABB);
-		
-		char* data = new char[size]; // Allocate
-		char* cursor = data;
-		uint bytes = sizeof(ranges); // First store ranges
-		memcpy(cursor, ranges, bytes);
-
-		cursor += bytes; // Store indices
-		bytes = sizeof(uint) * (*mesh)->GetNumIndices();
-		memcpy(cursor, (*mesh)->GetIndices(), bytes);
-
-		cursor += bytes; // Store vertices
-		bytes = sizeof(float) * (*mesh)->GetNumVertices() * 3;
-		memcpy(cursor, (*mesh)->GetVertices(), bytes);
-
-		cursor += bytes; // Store UVs
-		bytes = sizeof(float) * (*mesh)->GetNumUVs() * 3;
-		memcpy(cursor, (*mesh)->GetUVs(), bytes);
-
-		//fopen
-		if (App->file_system->SaveFile(path, data, name.c_str(), "sustomesh", size) == false)
-		{
-			return false;
-		}
-		//fclose
+		return false;
 	}
+
+	RELEASE(id);
+	RELEASE_ARRAY(data);
 	
 
-
 	return ret;
 }
+

@@ -8,6 +8,7 @@
 #include "Assimp\include\scene.h"
 
 class GameObject;
+class MeshImporter;
 
 class AssimpLogger : public Assimp::LogStream
 {
@@ -104,10 +105,13 @@ public:
 	void UnloadAllFiles();
 
 	vector<Mesh*>* GetMeshesVector();
+	MeshImporter* GetMeshImporter();
 
 private:
 	void RecursiveLoadMesh(const aiScene* scene, aiNode* node, const char* full_path, AABB& total_abb, GameObject* parent = nullptr);
 	vector<Mesh*> meshes;
+
+	MeshImporter* mesh_importer = nullptr;
 
 public:
 
@@ -121,8 +125,7 @@ public:
 	bool Import(const char* file, const char* path, std::string& output_file);
 	bool Import(const void* buffer, uint size, std::string& output_file);
 	bool Load(const char * exported_file);
-	bool Save(const char* path, vector<Mesh*> meshes);
-
+	bool Save(const char* path, Mesh* meshes);
 };
 
 #endif // __GEOMETRYLOADER_H__

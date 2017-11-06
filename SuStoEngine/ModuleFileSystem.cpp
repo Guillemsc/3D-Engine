@@ -150,7 +150,7 @@ void FileSystem::FileDelete(const char * filepath)
 	}
 }
 
-bool FileSystem::SaveFile(const char * path, const char* file_content, const char* name, const char* extension, int size)
+bool FileSystem::FileSave(const char * path, const char* file_content, const char* name, const char* extension, int size)
 {
 	bool ret = false;
 
@@ -175,4 +175,24 @@ bool FileSystem::SaveFile(const char * path, const char* file_content, const cha
 	fclose(new_file);
 
 	return ret;
+}
+
+vector<string> FileSystem::GetFilesInPath(const char * path)
+{
+	vector<string> files;
+
+	//WIN32_FIND_DATA search_data;
+	//HANDLE handle = FindFirstFile(path, &search_data);
+
+	//while (handle != INVALID_HANDLE_VALUE)
+	//{
+	//	files.push_back(search_data.cFileName);
+
+	//	if (FindNextFile(handle, &search_data) == FALSE)
+	//		break;
+	//}
+
+	//FindClose(handle);
+
+	return files;
 }

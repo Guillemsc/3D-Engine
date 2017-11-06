@@ -251,7 +251,7 @@ bool TextureImporter::Save(const char * path, vector<Texture*> textures)
 		if (size > 0) {
 			data = new ILubyte[size]; // allocate data buffer
 			if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
-				ret = App->file_system->SaveFile(path, (char*)data, name.c_str(), "DDS", size);
+				ret = App->file_system->FileSave(path, (char*)data, name.c_str(), "DDS", size);
 			RELEASE_ARRAY(data);
 		}
 	}
