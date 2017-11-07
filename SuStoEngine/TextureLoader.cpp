@@ -99,9 +99,13 @@ Texture* TextureLoader::LoadTexture(const char * full_path)
 		// Convert image to rgb and a byte chain
 		ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
 
+		ILuint size = 0;
+		size = ilSaveL(IL_RGB, NULL, 0);
+		uint s = ImageInfo.SizeOfData;
+
 		// Create texture
-		Texture* texture = new Texture(ImageInfo.Data, ImageInfo.SizeOfData, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT), file_name.c_str(),
-			GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
+		Texture* texture = new Texture(ImageInfo.Data, size, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT),
+			file_name.c_str(), GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
 
 		textures.push_back(texture);
 		ret = texture;
@@ -153,7 +157,7 @@ Texture::Texture(byte* _texture_data, uint _texture_data_lenght, uint _width, ui
 	if (_texture_data_lenght > 0)
 	{
 		texture_data = new byte[_texture_data_lenght];
-		memcpy(texture_data, _texture_data, _texture_data_lenght);
+		memcpy(texture_data, _texture_data, _texture_data_lenght * sizeof(byte));
 	}
 	
 	format = _format;

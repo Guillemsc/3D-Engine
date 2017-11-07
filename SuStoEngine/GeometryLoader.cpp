@@ -166,78 +166,82 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 
 void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, const char* full_path, AABB& total_abb, GameObject* parent)
 {
-	bool valid = true;
+	bool node_valid = true;
 
 	if (node->mNumMeshes == 0)
-		valid = false;
+		node_valid = false;
 
 	aiMesh* aimesh = nullptr;
 	Mesh* mesh = nullptr;
-	if (valid)
+	GameObject* go = nullptr;
+
+	for (int i = 0; i < node->mNumMeshes; i++)
 	{
-		int mesh_index = node->mMeshes[0];
-		aimesh = scene->mMeshes[mesh_index];
-
-		mesh = new Mesh();
-		mesh->SetUniqueId(GetUniqueIdentifierRandom());
-
-		if (!aimesh->HasFaces())
+		bool mesh_valid = true;
+		if (mesh_valid && node_valid)
 		{
-			LOG_OUTPUT("WARNING, geometry has no faces!");
-			valid = false;
-		}
-	}
+			int mesh_index = node->mMeshes[i];
+			aimesh = scene->mMeshes[mesh_index];
 
-	// VERTICES && INDICES
-	if (valid)
-	{
-		float* vertices = new float[aimesh->mNumVertices * 3];
-		memcpy(vertices, aimesh->mVertices, sizeof(float) * aimesh->mNumVertices * 3);
+			mesh = new Mesh();
+			mesh->SetUniqueId(GetUniqueIdentifierRandom());
 
-		uint* indices = new uint[aimesh->mNumFaces * 3];
-
-		for (uint i = 0; i < aimesh->mNumFaces && valid; ++i)
-		{
-			if (aimesh->mFaces[i].mNumIndices == 3)
+			if (!aimesh->HasFaces())
 			{
-				memcpy(&indices[i * 3], aimesh->mFaces[i].mIndices, 3 * sizeof(uint));
-			}
-			else
-			{
-				LOG_OUTPUT("WARNING, geometry face with != 3 indices!");
-				valid = false;
+				LOG_OUTPUT("WARNING, geometry has no faces!");
+				mesh_valid = false;
 			}
 		}
 
-		mesh->SetFaces(vertices, aimesh->mNumVertices, indices, aimesh->mNumFaces*3);
-		
-		RELEASE_ARRAY(vertices);
-		RELEASE_ARRAY(indices);
-	}
-
-	// UVS
-	if (valid && aimesh->HasTextureCoords(0))
-	{
-		float* uvs = new float[aimesh->mNumVertices * 3];
-		memcpy(uvs, (float*)aimesh->mTextureCoords[0], sizeof(float) * aimesh->mNumVertices * 3);
-
-		mesh->SetUvs(uvs, aimesh->mNumVertices);
-
-		RELEASE_ARRAY(uvs);
-	}
-
-	// POSITION, ROTATION AND SCALE
-	float3 position(0, 0, 0);
-	Quat rotation(0, 0, 0, 0);
-	float3 scale(0, 0, 0);
-	if (valid)
-	{
-		aiVector3D aitranslation;
-		aiVector3D aiscaling;
-		aiQuaternion airotation;
-
-		if (node != nullptr)
+		// VERTICES && INDICES
+		if (mesh_valid && node_valid)
 		{
+			float* vertices = new float[aimesh->mNumVertices * 3];
+			memcpy(vertices, aimesh->mVertices, sizeof(float) * aimesh->mNumVertices * 3);
+
+			uint* indices = new uint[aimesh->mNumFaces * 3];
+
+			for (uint i = 0; i < aimesh->mNumFaces && mesh_valid; ++i)
+			{
+				if (aimesh->mFaces[i].mNumIndices == 3)
+				{
+					memcpy(&indices[i * 3], aimesh->mFaces[i].mIndices, 3 * sizeof(uint));
+				}
+				else
+				{
+					LOG_OUTPUT("WARNING, geometry face with != 3 indices!");
+					mesh_valid = false;
+				}
+			}
+
+			mesh->SetFaces(vertices, aimesh->mNumVertices, indices, aimesh->mNumFaces * 3);
+
+			RELEASE_ARRAY(vertices);
+			RELEASE_ARRAY(indices);
+		}
+
+		// UVS
+		if (mesh_valid && node_valid && aimesh->HasTextureCoords(0))
+		{
+			float* uvs = new float[aimesh->mNumVertices * 3];
+			memcpy(uvs, (float*)aimesh->mTextureCoords[0], sizeof(float) * aimesh->mNumVertices * 3);
+
+			mesh->SetUvs(uvs, aimesh->mNumVertices);
+
+			RELEASE_ARRAY(uvs);
+		}
+
+		// POSITION, ROTATION AND SCALE
+		float3 position(0, 0, 0);
+		Quat rotation(0, 0, 0, 0);
+		float3 scale(0, 0, 0);
+
+		if (mesh_valid && node_valid)
+		{
+			aiVector3D aitranslation;
+			aiVector3D aiscaling;
+			aiQuaternion airotation;
+			
 			node->mTransformation.Decompose(aiscaling, airotation, aitranslation);
 			position = float3(aitranslation.x, aitranslation.y, aitranslation.z);
 			scale = float3(aiscaling.x, aiscaling.y, aiscaling.z);
@@ -245,73 +249,77 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 
 			mesh->SetTransform(
 				float3(position.x, position.y, position.z),
-				Quat(rotation.x, rotation.y, rotation.w, rotation.z), 
+				Quat(rotation.x, rotation.y, rotation.w, rotation.z),
 				float3(scale.x, scale.y, scale.z));
+			
+		}
+
+		// GENERAL BBOX
+		if (mesh_valid && node_valid)
+		{
+			AABB mesh_with_scale = mesh->GetBBox();
+			mesh_with_scale.Scale(position, scale);
+
+			total_abb.Enclose(mesh_with_scale);
+		}
+
+		// MATERIALS
+		Texture* texture = nullptr;
+		if (mesh_valid && node_valid)
+		{
+			aiMaterial* material = scene->mMaterials[aimesh->mMaterialIndex];
+
+			string path = GetPathFromFilePath(full_path);
+
+			// Difuse -------------------
+			aiString file;
+			material->GetTexture(aiTextureType_DIFFUSE, 0, &file);
+			path += GetFileNameFromFilePath(file.C_Str());
+
+			texture = App->texture->LoadTexture(path.c_str());
+		}
+
+		// CREATE GAME OBJECT
+		if (mesh_valid && node_valid && parent != nullptr)
+		{
+			go = App->gameobj->Create();
+
+			string name = node->mName.C_Str();
+			if (name == "")
+				name = "no_name";
+
+			go->SetName(name);
+
+			parent->AddChild(go);
+
+			go->transform->SetPosition(mesh->GetPosition());
+			go->transform->SetRotation(mesh->GetRotation());
+			go->transform->SetScale(mesh->GetScale());
+
+			go->AddComponent(MESH);
+			ComponentMesh* cmesh = (ComponentMesh*)go->GetComponent(MESH);
+			cmesh->SetMesh(mesh);
+			mesh->LoadToMemory();
+
+			if (texture != nullptr)
+			{
+				go->AddComponent(MATERIAL);
+				ComponentMaterial* cmaterial = (ComponentMaterial*)go->GetComponent(MATERIAL);
+				cmaterial->SetTexture(texture);
+			}
+		}
+
+		if (!mesh_valid || !node_valid)
+		{
+			RELEASE(mesh);
 		}
 		else
-			valid = false;
-	}
-
-	// GENERAL BBOX
-	if (valid)
-	{
-		AABB mesh_with_scale = mesh->GetBBox();
-		mesh_with_scale.Scale(position, scale);
-
-		total_abb.Enclose(mesh_with_scale);
-	}
-
-	// MATERIALS
-	Texture* texture = nullptr;
-	if (valid)
-	{
-		aiMaterial* material = scene->mMaterials[0];
-
-		string path = GetPathFromFilePath(full_path);
-
-		// Difuse -------------------
-		aiString file;
-		material->GetTexture(aiTextureType_DIFFUSE, 0, &file);
-		path += file.C_Str();
-
-		texture = App->texture->LoadTexture(path.c_str());
-	}
-
-	// CREATE GAME OBJECT
-	GameObject* go = nullptr;
-	if (valid && parent != nullptr)
-	{
-		go = App->gameobj->Create();
-		
-		string name = aimesh->mName.C_Str();
-		if (name == "")
-			name = "no_name";
-
-		go->SetName(name);
-
-		parent->AddChild(go);
-
-		go->transform->SetPosition(mesh->GetPosition());
-		go->transform->SetRotation(mesh->GetRotation());
-		go->transform->SetScale(mesh->GetScale());
-
-		go->AddComponent(MESH);
-		ComponentMesh* cmesh = (ComponentMesh*)go->GetComponent(MESH);
-		cmesh->SetMesh(mesh);
-		mesh->LoadToMemory();
-
-		if (texture != nullptr)
-		{
-			go->AddComponent(MATERIAL);
-			ComponentMaterial* cmaterial = (ComponentMaterial*)go->GetComponent(MATERIAL);
-			cmaterial->SetTexture(texture);
-		}
+			mesh_importer->Save(App->file_system->GetLibraryMeshPath().c_str(), mesh);
 	}
 
 	// Select parent
 	GameObject* pare = nullptr;
-
-	if (valid)
+	if (node_valid && go != nullptr)
 		pare = go;
 	else
 		pare = parent;
@@ -321,13 +329,6 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 	{
 		RecursiveLoadMesh(scene, node->mChildren[i], full_path, total_abb, pare);
 	}
-
-	if (!valid)
-	{
-		RELEASE(mesh);
-	}
-	else
-		mesh_importer->Save(App->file_system->GetLibraryMeshPath().c_str(), mesh);
 }
  
 void GeometryLoader::UnloadFile(Mesh* mesh)
@@ -624,19 +625,19 @@ Mesh* MeshImporter::Load(const char * filepath)
 	cursor += bytes;
 
 	// Store indices
-	uint indices[9999];
+	uint* indices = new uint[ranges[1]];
 	bytes = sizeof(uint) * ranges[1];
 	memcpy(indices, cursor, bytes);
 	cursor += bytes;
 
 	// Store vertices
-	float vertices[9999];
+	float* vertices = new float[ranges[0] * 3];
 	bytes = sizeof(float) * ranges[0] * 3;
 	memcpy(vertices, cursor, bytes);
 	cursor += bytes;
 
 	// Store UVs
-	float uvs[9999];
+	float* uvs = new float[ranges[2] * 3];
 	bytes = sizeof(float) * ranges[2] * 3;
 	memcpy(uvs, cursor, bytes);
 	cursor += bytes;
@@ -653,11 +654,11 @@ Mesh* MeshImporter::Load(const char * filepath)
 	LOG_OUTPUT("New mesh with %d indices", ranges[1]);
 
 	RELEASE(id);
-	if (new_mesh != nullptr) {
-		return new_mesh;
-	}
+	RELEASE_ARRAY(indices);
+	RELEASE_ARRAY(vertices);
+	RELEASE_ARRAY(uvs);
 
-	return nullptr;
+	return new_mesh;
 }
 
 bool MeshImporter::Save(const char * path, Mesh* mesh)
