@@ -88,9 +88,9 @@ const float3 ComponentTransform::GetPosition() const
 
 const float3 ComponentTransform::GetGlobalPosition() const
 {
-	float3 position;
-	float4x4 dummy;
-	float3 dummy2;
+	float3 position = float3::zero;
+	float4x4 dummy = float4x4::identity;
+	float3 dummy2 = float3::zero;
 
 	global_transform.Decompose(position, dummy, dummy2);
 

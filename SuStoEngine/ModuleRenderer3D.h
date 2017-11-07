@@ -29,7 +29,6 @@ public:
 
 	void OnResize(int width, int height);
 	uint GetScreenTexture();
-	DebugDraw* GetDebugDraw();
 
 	void SetPoligonModeWireframe() const;
 	void SetPoligonModePoints(float point_size = 4.0f) const;
@@ -72,6 +71,4 @@ private:
 	bool wireframe = false;
 	bool points = false;
 	bool fill = false;
-
-	DebugDraw* debug_draw = nullptr;
 };

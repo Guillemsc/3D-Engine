@@ -49,9 +49,6 @@ bool ModuleGameObject::Update()
 	}
 
 	App->renderer3D->DrawGrid(100);
-	App->renderer3D->GetDebugDraw()->DrawCross(float3(-3, 10, 0), 1);
-	App->renderer3D->GetDebugDraw()->DrawBox(float3(0, 10, 0), float3(1, 1, 1), float3(51, 51, 255));
-	App->renderer3D->GetDebugDraw()->DrawAxis(float3(3, 10, 0), 1);
 
 	return ret;
 }

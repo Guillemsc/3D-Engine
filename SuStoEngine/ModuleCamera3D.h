@@ -46,6 +46,8 @@ public:
 
 	bool IntersectWithFrustum(const AABB& box);
 
+	Frustum GetFrustum();
+
 private:
 	Frustum frustum;
 	float	aspect_ratio = 0.0f;

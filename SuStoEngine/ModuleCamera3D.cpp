@@ -451,6 +451,11 @@ bool Camera3D::IntersectWithFrustum(const AABB & box)
 	return true;
 }
 
+Frustum Camera3D::GetFrustum()
+{
+	return frustum;
+}
+
 void Camera3D::Focus(const float3 & focus_center, const float & distance)
 {
 	float3 dir = frustum.Pos() - focus_center;

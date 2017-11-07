@@ -29,8 +29,8 @@ void ComponentCamera::Update()
 	camera->SetYDir(GetOwner()->transform->GetGlobalTransform().WorldY());
 
 	float3 corners[8];
-	camera->GetCorners(corners);
-	App->renderer3D->GetDebugDraw()->DrawFrustum(corners);
+	camera->GetCorners(corners);	
+	DebugDraw(camera->GetFrustum(), Color(255, 255, 255), true, 5);
 }
 
 void ComponentCamera::CleanUp()
