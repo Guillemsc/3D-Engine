@@ -44,6 +44,8 @@ public:
 
 	void Look(const float3& look_pos);
 
+	bool IntersectWithFrustum(const AABB& box);
+
 private:
 	Frustum frustum;
 	float	aspect_ratio = 0.0f;
