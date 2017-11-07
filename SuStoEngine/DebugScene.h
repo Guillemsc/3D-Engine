@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "Primitive.h"
 
+class KDTree;
 
 class DebugScene : public Module
 {
@@ -17,7 +18,7 @@ public:
 	bool CleanUp();
 
 public:
-
+	KDTree* kdtree = nullptr;
 private:
 
 

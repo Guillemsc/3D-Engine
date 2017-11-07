@@ -1,0 +1,93 @@
+Info,  T9868: Load D:/3DEngine/3D-Engine/SuStoEngine/Resources/Models/street/Street environment_V01.FBX
+Info,  T9868: Found a matching importer for this file format: Autodesk FBX Importer.
+Info,  T9868: Import root directory is 'D:/3DEngine/3D-Engine/SuStoEngine/Resources/Models/street\'
+Warn,  T9868: FBX-DOM (TOK_KEY, offset 0x1c9c1b) failed to resolve target Model/NodeAttribute/Constraint for AnimationCurveNode
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Skipping one or more lines with the same contents
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T9868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T9868: FBX: ignoring node animation, did not find any transformation key frames
+Info,  T9868: FBX: generating full transformation chain for node: Sky001
+Info,  T9868: FBX: generating full transformation chain for node: Dummy001
+Info,  T9868: FBX: generating full transformation chain for node: Camera001
+Skipping one or more lines with the same contents
+Info,  T9868: FBX: generating full transformation chain for node: Spot001
+Skipping one or more lines with the same contents
+Info,  T9868: Entering post processing pipeline
+Info,  T9868: FindInstancesProcess finished. Found 13 instances
+Warn,  T9868: Found 2 degenerated primitives
+Info,  T9868: Points: 0, Lines: 1, Triangles: 17, Polygons: 0 (Meshes, X = removed)
+Info,  T9868: Tangents are undefined for line and point meshes
+Error, T9868: Failed to compute tangents; need UV data in channel0
+Skipping one or more lines with the same contents
+Info,  T9868: CalcTangentsProcess finished. Tangents have been calculated
+Info,  T9868: JoinVerticesProcess finished | Verts in: 81181 out: 48324 | ~40.5%
+Error, T9868: This algorithm works on triangle meshes only
+Info,  T9868: Cache relevant are 17 meshes (27059 faces). Average output ACMR is 1.794745
+Info,  T9868: Leaving post processing pipeline

@@ -1,11 +1,11 @@
 #include "Quadtree.h"
-#include "Globals.h"
 #include "GameObject.h"
 #include "Functions.h"
 #include "ComponentMesh.h"
 
-KDTree::Node::Node()
+KDTree::Node::Node(uint partition_num)
 {
+	this->partition_num = partition_num;
 }
 
 KDTree::Node::~Node()
@@ -19,25 +19,31 @@ void KDTree::Node::AddElement(GameObject * go)
 
 void KDTree::Node::CreatePartition()
 {
-	if (left != nullptr && right != nullptr) 
+	if (left == nullptr && right == nullptr) 
 	{
-		left = new Node();
-		right = new Node();
+		left = new Node(partition_num);
+		left->SetParent(this);
+		right = new Node(partition_num);
+		right->SetParent(this);
 
-		// Decide Axis
-		switch (parent->axis)
-		{
-		case Node::a_x:
-			axis = Axis::a_z;
-			break;
-		case Node::a_y:
+		if (parent == nullptr)
 			axis = Axis::a_x;
-			break;
-		case Node::a_z:
-			axis = Axis::a_y;
-			break;
+		else
+		{
+			// Decide Axis
+			switch (parent->axis)
+			{
+			case Node::a_x:
+				axis = Axis::a_z;
+				break;
+			case Node::a_y:
+				axis = Axis::a_x;
+				break;
+			case Node::a_z:
+				axis = Axis::a_y;
+				break;
+			}
 		}
-
 		// Get max and min point of the AABB depending on the axis
 		std::vector<float> points;
 		for (int i = 0; i < elements.size(); ++i)
@@ -89,10 +95,10 @@ void KDTree::Node::CreatePartition()
 		}
 
 		// Set the elements of the node to one or both of the created node
-		while (!elements.empty())
+		for (vector<GameObject*>::iterator it = elements.begin(); it != elements.end(); ++it)
 		{
 			uint node = 0; // new node determine
-			AABB box = elements[elements.size() - 1]->GetBbox();
+			AABB box = (*it)->GetBbox();
 			switch (axis)
 			{
 			case Node::a_x:
@@ -148,19 +154,20 @@ void KDTree::Node::CreatePartition()
 			switch (node)
 			{
 			case -1:
-				right->AddElement(*elements.end());
+				right->AddElement(*it);
 				break;
 			case 0:
-				left->AddElement(*elements.end());
-				right->AddElement(*elements.end());
+				left->AddElement(*it);
+				right->AddElement(*it);
 				break;
 			case 1:
-				left->AddElement(*elements.end());
+				left->AddElement(*it);
 				break;
 			}
-
-			elements.pop_back();
 		}
+
+		left->CheckPartition();
+		right->CheckPartition();
 	}
 	else
 	{
@@ -193,4 +200,88 @@ void KDTree::Node::GetElements(std::vector<GameObject*>& elements) const
 
 		nodes_to_visit.erase(node);
 	}
+}
+
+void KDTree::Node::CheckPartition()
+{
+	if (elements.size() > partition_num)
+	{
+		CreatePartition();
+	}
+}
+
+void KDTree::Node::SetParent(Node * parent)
+{
+	this->parent = parent;
+}
+
+const KDTree::Node * KDTree::Node::GetLeft() const
+{
+	return left;
+}
+
+const KDTree::Node * KDTree::Node::GetRight() const
+{
+	return right;
+}
+
+KDTree::KDTree()
+{
+}
+
+KDTree::~KDTree()
+{
+}
+
+void KDTree::CreateTree(const std::vector<GameObject*>& elements, uint num_partition)
+{
+	if (root == nullptr)
+	{
+		root = new Node(num_partition);
+
+		for (int i = 0; i < elements.size(); ++i)
+		{
+			root->AddElement(elements[i]);
+		}
+		root->CheckPartition();
+	}
+}
+
+void KDTree::EraseTree()
+{
+	std::vector<const Node*> nodes_to_visit;
+	nodes_to_visit.push_back(root);
+
+	while (!nodes_to_visit.empty())
+	{
+		std::vector<const Node*>::iterator node = nodes_to_visit.begin();
+
+		// Add childs to visit later
+		if ((*node)->GetLeft() != nullptr && (*node)->GetRight() != nullptr)
+		{
+			nodes_to_visit.push_back((*node)->GetLeft());
+			nodes_to_visit.push_back((*node)->GetRight());
+		}
+
+		RELEASE(*node);
+
+		nodes_to_visit.erase(node);
+	}
+}
+
+void KDTree::GetElementsToTest(const Frustum & frustum) const
+{
+}
+
+void KDTree::GetElementsToTest(const Ray & ray) const
+{
+}
+
+void KDTree::GetElementsToTest(const AABB & aabb) const
+{
+}
+
+bool KDTree::HasTree() const
+{
+	return root != nullptr;
 }

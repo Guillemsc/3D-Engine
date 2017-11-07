@@ -12,6 +12,7 @@
 #include "ComponentCamera.h"
 #include "ModuleCamera3D.h"
 #include "ModuleInput.h"
+#include "Quadtree.h"
 
 DebugScene::DebugScene(bool start_enabled) : Module(start_enabled)
 {
@@ -38,6 +39,7 @@ bool DebugScene::Start()
 {
 	bool ret = true;
 
+	kdtree = new KDTree();
 
 	return true;
 }
@@ -53,6 +55,14 @@ bool DebugScene::CleanUp()
 bool DebugScene::Update()
 {
 	bool ret = true;
+
+	if (App->input->GetKeyDown("K"))
+	{
+		if (kdtree->HasTree())
+			kdtree->EraseTree();
+
+		kdtree->CreateTree(App->gameobj->GetListGameObjects(), 2);
+	}
 
 	//App->renderer3D->GetDebugDraw()->DrawCone(float3(-6, 10, 0));
 
