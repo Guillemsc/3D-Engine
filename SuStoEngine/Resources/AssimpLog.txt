@@ -1,0 +1,93 @@
+Info,  T1144: Load C:/Users/Guillem/Documents/GitHub/3D-Engine/SuStoEngine/Resources/Models/street/Street environment_V01.FBX
+Info,  T1144: Found a matching importer for this file format: Autodesk FBX Importer.
+Info,  T1144: Import root directory is 'C:/Users/Guillem/Documents/GitHub/3D-Engine/SuStoEngine/Resources/Models/street\'
+Warn,  T1144: FBX-DOM (TOK_KEY, offset 0x1c9c1b) failed to resolve target Model/NodeAttribute/Constraint for AnimationCurveNode
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Skipping one or more lines with the same contents
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Warn,  T1144: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
+Warn,  T1144: FBX: ignoring node animation, did not find any transformation key frames
+Info,  T1144: FBX: generating full transformation chain for node: Sky001
+Info,  T1144: FBX: generating full transformation chain for node: Dummy001
+Info,  T1144: FBX: generating full transformation chain for node: Camera001
+Skipping one or more lines with the same contents
+Info,  T1144: FBX: generating full transformation chain for node: Spot001
+Skipping one or more lines with the same contents
+Info,  T1144: Entering post processing pipeline
+Info,  T1144: FindInstancesProcess finished. Found 13 instances
+Warn,  T1144: Found 2 degenerated primitives
+Info,  T1144: Points: 0, Lines: 1, Triangles: 17, Polygons: 0 (Meshes, X = removed)
+Info,  T1144: Tangents are undefined for line and point meshes
+Error, T1144: Failed to compute tangents; need UV data in channel0
+Skipping one or more lines with the same contents
+Info,  T1144: CalcTangentsProcess finished. Tangents have been calculated
+Info,  T1144: JoinVerticesProcess finished | Verts in: 81181 out: 48324 | ~40.5%
+Error, T1144: This algorithm works on triangle meshes only
+Info,  T1144: Cache relevant are 17 meshes (27059 faces). Average output ACMR is 1.794745
+Info,  T1144: Leaving post processing pipeline

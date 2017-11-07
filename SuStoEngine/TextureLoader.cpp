@@ -99,21 +99,17 @@ Texture* TextureLoader::LoadTexture(const char * full_path)
 		// Convert image to rgb and a byte chain
 		ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
 
-		ILuint size = 0;
-		size = ilSaveL(IL_RGB, NULL, 0);
-		uint s = ImageInfo.SizeOfData;
-
 		// Create texture
-		Texture* texture = new Texture(ImageInfo.Data, size, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT),
+		Texture* texture = new Texture(ilGetData(), ilGetInteger(IL_IMAGE_SIZE_OF_DATA), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT),
 			file_name.c_str(), GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
 
 		textures.push_back(texture);
 		ret = texture;
 
+		ilDeleteImages(1, &ImageInfo.Id);
+
 		// Load texture to memory (temp?)
 		texture->LoadToMemory();
-
-		ilDeleteImages(1, &ImageInfo.Id);
 
 		// Export it to Library
 		texture_importer->Save(App->file_system->GetLibraryTexturePath().c_str(), texture);
