@@ -131,8 +131,6 @@ bool ModuleRenderer3D::Awake()
 
 	SetTexture2D(true);
 
-	debug_draw = new DebugDraw();
-
 	return ret;
 }
 
@@ -190,8 +188,6 @@ bool ModuleRenderer3D::CleanUp()
 
 	LOG_OUTPUT("Destroying 3D Renderer");
 
-	delete debug_draw;
-
 	fbo_texture->Unbind();
 	RELEASE(fbo_texture);
 
@@ -214,11 +210,6 @@ void ModuleRenderer3D::OnResize(int width, int height)
 uint ModuleRenderer3D::GetScreenTexture()
 {
 	return fbo_texture->GetTexture();
-}
-
-DebugDraw * ModuleRenderer3D::GetDebugDraw()
-{
-	return debug_draw;
 }
 
 void ModuleRenderer3D::SetPoligonModeWireframe() const

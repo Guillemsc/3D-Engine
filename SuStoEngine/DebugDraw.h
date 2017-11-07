@@ -1,26 +1,27 @@
-#ifndef __DEBUG_DRAW_H__
-#define __DEBUG_DRAW_H__
+#ifndef __DEBUGDRAW_H__
+#define __DEBUGDRAW_H__
 
 #include "GeometryMath.h"
+#include "Color.h"
 
-class DebugDraw
-{
-public:
-	DebugDraw();
+void BeginDebugDraw();
+void EndDebugDraw();
 
-	void DrawCross(float3 center = { 0, 0, 0 }, float size = 1);
-	void DrawAxis(float3 start = { 0, 0, 0 }, float size = 1);
-	void DrawBox(float3 center = { 0, 0, 0 }, float3 size = { 1, 1, 1 }, float3 color = {255, 255, 255});
-	void DrawFrustum(float3* corners, float3 color = { 255, 255, 255 });
-	void DrawCone(float3 center = { 0, 0, 0 }, float radius = 1, float height = 1);
-	void DrawArrow(float3 start = { 0, 0, 0 }, float lenght = 1, float radius = 0.3f, float3 color = { 255, 255, 255 });
+void DebugDraw(const Sphere& sphere, Color color = White, const float4x4& transform = float4x4::identity);
+void DebugDraw(const AABB& aabb, Color color = White, const float4x4& transform = float4x4::identity);
+void DebugDraw(const OBB& obb, Color color = White, const float4x4& transform = float4x4::identity);
+void DebugDraw(const Capsule& capsule, Color color = White, const float4x4& transform = float4x4::identity);
+void DebugDraw(const float4x4& transform);
+void DebugDraw(const Frustum& frustum, Color color = White, bool lines = false, const float& line_size = 1.0f);
+void DebugDraw(const LineSegment& segment, Color color = White, bool is_arrow = false, const float4x4& transform = float4x4::identity);
+void DebugDraw(const Ray& ray, Color color = White, float max_dist = 5000.0f);
+void DebugDraw(const float3& point, Color color = White);
+//void DebugDraw(const Cylinder& cylinder, Color color = White, const float4x4& transform = float4x4::identity);
+//void DebugDraw(const Cone& cone, Color color = White, const float4x4& transform = float4x4::identity);
+void DebugDrawBox(const float3* box_8_vertices, Color color = White, bool lines = false, const float& line_size = 1.0f);
+void DebugDrawArrow(const float3 & dir, const float3 & offset, Color color, const float4x4 & transform = float4x4::identity);
+void DebugDraw(const Circle& circle, Color color = White);
+void DebugDraw(const Circle& pos, float inner_radius, Color color = White);
+void DebugDrawArc(const float3& pos, float radius, float angle_left, float angle_right, float inner_radius = 0.0f, Color color = White, const float4x4& transform = float4x4::identity);
 
-private:
-	void DrawLinesList(float3 * line_points, int size, int line_thickness = 3, float3* colors = nullptr);
-
-public:
-
-private:
-};
-
-#endif // !_DEBUG_DRAW__H
+#endif // __DEBUGDRAW_H__

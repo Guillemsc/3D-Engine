@@ -347,6 +347,7 @@ void GameObject::RecursiveCalcBBox()
 
 	if (local_bbox.IsFinite())
 	{
+		local_bbox.Transform(transform->GetGlobalTransform());
 		local_bbox.Scale(transform->GetGlobalPosition(), transform->GetScale());
 	}
 	
@@ -376,8 +377,8 @@ AABB GameObject::GetBbox() const
 
 void GameObject::DrawBBox()
 {
-	if(local_bbox.IsFinite())
-		App->renderer3D->GetDebugDraw()->DrawBox(local_bbox.CenterPoint(), local_bbox.Size(), float3(20, 255, 20));
+	//if(local_bbox.IsFinite())
+	//	App->renderer3D->GetDebugDraw()->DrawBox(local_bbox.CenterPoint(), local_bbox.Size(), float3(20, 255, 20));
 }
 
 
