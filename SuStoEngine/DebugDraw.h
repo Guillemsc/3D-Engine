@@ -8,8 +8,8 @@ void BeginDebugDraw();
 void EndDebugDraw();
 
 void DebugDraw(const Sphere& sphere, Color color = White, const float4x4& transform = float4x4::identity);
-void DebugDraw(const AABB& aabb, Color color = White, const float4x4& transform = float4x4::identity);
-void DebugDraw(const OBB& obb, Color color = White, const float4x4& transform = float4x4::identity);
+void DebugDraw(const AABB& aabb, Color color = White, bool lines = false, const float& line_size = 1.0f, const float4x4& transform = float4x4::identity);
+void DebugDraw(const OBB& obb, Color color = White, bool lines = false, const float& line_size = 1.0f, const float4x4& transform = float4x4::identity);
 void DebugDraw(const Capsule& capsule, Color color = White, const float4x4& transform = float4x4::identity);
 void DebugDraw(const float4x4& transform);
 void DebugDraw(const Frustum& frustum, Color color = White, bool lines = false, const float& line_size = 1.0f);

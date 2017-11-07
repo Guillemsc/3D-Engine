@@ -95,26 +95,26 @@ void DebugDraw(const Sphere & sphere, Color color, const float4x4 & transform)
 }
 
 // ------------------------------------------------------------
-void DebugDraw(const AABB & aabb, Color color, const float4x4& transform)
+void DebugDraw(const AABB & aabb, Color color, bool lines, const float& line_size, const float4x4& transform)
 {
 	static float3 corners[8];
 	aabb.GetCornerPoints(corners);
 
 	glPushMatrix();
 	glMultMatrixf((GLfloat*)transform.Transposed().ptr());
-	DebugDrawBox(corners, color);
+	DebugDrawBox(corners, color, lines, line_size);
 	glPopMatrix();
 }
 
 // ------------------------------------------------------------
-void DebugDraw(const OBB& obb, Color color, const float4x4& transform)
+void DebugDraw(const OBB& obb, Color color, bool lines, const float& line_size, const float4x4& transform)
 {
 	static float3 corners[8];
 	obb.GetCornerPoints(corners);
 
 	glPushMatrix();
 	glMultMatrixf((GLfloat*)transform.Transposed().ptr());
-	DebugDrawBox(corners, color);
+	DebugDrawBox(corners, color, lines, line_size);
 	glPopMatrix();
 }
 
