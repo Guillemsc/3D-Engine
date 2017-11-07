@@ -2,69 +2,45 @@
 #include "Globals.h"
 #include "GameObject.h"
 
-EngineQuadTree::EngineQuadTree()
+Node::Node()
 {
 }
 
-EngineQuadTree::~EngineQuadTree()
-{
-	Clear();
-}
-
-void EngineQuadTree::Create(const AABB & limits)
+Node::~Node()
 {
 }
 
-void EngineQuadTree::Clear()
+void Node::AddElement(GameObject * go)
 {
-	RELEASE(root);
+	elements.push_back(go);
 }
 
-void EngineQuadTree::Insert(GameObject * go)
+void Node::CreatePartition()
 {
-	if (root != nullptr)
+}
+
+void Node::GetElements(std::vector<GameObject*>& elements) const
+{
+	std::vector<const Node*> nodes_to_visit;
+	nodes_to_visit.push_back(this);
+
+	while (!nodes_to_visit.empty())
 	{
-		if (go->local_bbox.Intersects(root->limits))
-			root->Insert(go);
-	}
-}
+		std::vector<const Node*>::iterator node = nodes_to_visit.begin();
 
-void EngineQuadTree::Remove(GameObject * go)
-{
-}
+		// Add childs to visit later
+		if ((*node)->left != nullptr && (*node)->right != nullptr)
+		{
+			nodes_to_visit.push_back((*node)->left);
+			nodes_to_visit.push_back((*node)->right);
+		}
 
-EngineQuadTreeNode::EngineQuadTreeNode(const AABB & limits)
-{
-	this->limits = limits;
-	for (int i = 0; i < 4; ++i)
-	{
-		childs[i] = nullptr;
-	}
-}
+		// Iterate through the list
+		for (int i = 0; i < (*node)->elements.size(); ++i)
+		{
+			elements.push_back((*node)->elements[i]);
+		}
 
-EngineQuadTreeNode::~EngineQuadTreeNode()
-{
-	for (int i = 0; i < 4; ++i)
-	{
-		if (childs[i] != nullptr)
-			RELEASE(childs[i]);
-	}	
-}
-
-bool EngineQuadTreeNode::IsLeaf()
-{
-	return childs[0] == nullptr;
-}
-
-void EngineQuadTreeNode::Insert(GameObject * go)
-{
-	if (IsLeaf() == true && (objects.size() < 8 || (limits.HalfSize().LengthSq() <= 64)))
-		objects.push_back(go);
-	else
-	{
-		if (IsLeaf() == true)
-			// Create Separations / Childs
-
-		objects.push_back(go);
+		nodes_to_visit.erase(node);
 	}
 }

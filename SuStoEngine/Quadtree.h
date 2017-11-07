@@ -2,54 +2,37 @@
 #define _QUADTREE_H_
 
 #include <vector>
-#include <list>
-#include "GeometryMath.h"
 
 class GameObject;
-class EngineQuadTreeNode;
 
-class EngineQuadTree
+class Node
 {
 public:
-	EngineQuadTree();
-	virtual ~EngineQuadTree();
-
-	void Create(const AABB& limits);
-	void Clear();
-	void Insert(GameObject* go);
-	void Remove(GameObject* go);
-	template<typename T>
-	void Intersect(std::vector<GameObject*>&, const T& PRIMITIVE);
-
-private:
+	enum Axis 
+	{
+		a_null,
+		a_x,
+		a_y,
+		a_z
+	};
 
 public:
-	EngineQuadTreeNode* root = nullptr;
-	
+	Node();
+	~Node();
+
+	void AddElement(GameObject* go);
+
+	void CreatePartition();
+
+	void GetElements(std::vector<GameObject*>& elements) const;
+
+public:
+	Node* left = nullptr;
+	Node* right = nullptr;
+	Plane cut_plane;
+	Axis axis = Axis::a_null;
+
+	std::vector<GameObject*> elements;
 };
-
-class EngineQuadTreeNode {
-public:
-	EngineQuadTreeNode(const AABB& limits);
-	virtual ~EngineQuadTreeNode();
-
-	bool IsLeaf();
-	void Insert(GameObject* go);
-
-private:
-
-public:
-	AABB limits;
-	EngineQuadTreeNode* parent = nullptr;
-	EngineQuadTreeNode* childs[4];
-	std::list<GameObject*> objects;
-};
-
-
-template<typename T>
-inline void EngineQuadTree::Intersect(std::vector<GameObject*>&, const T & PRIMITIVE)
-{
-}
-
 
 #endif // !_QUADTREE_H_
