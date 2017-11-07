@@ -417,6 +417,40 @@ void Camera3D::Look(const float3 & look_pos)
 	frustum.SetUp(direction_matrix.MulDir(frustum.Up()).Normalized());
 }
 
+bool Camera3D::IntersectWithFrustum(const AABB & box)
+{
+	bool ret = false;
+	
+	Plane plane[6];
+	frustum.GetPlanes(plane);
+
+	// check box outside/inside of frustum
+	for (int i = 0; i<6; i++)
+	{
+		int out = 0;
+		out += math::Dot4(float4(plane[i].normal.x, plane[i].normal.y, plane[i].normal.z, 1.0f), float4(box.MinX, box.MinY, box.MinZ, 1.0f)) < 0.0 ? 1 : 0;
+		out += math::Dot4(float4(plane[i].normal.x, plane[i].normal.y, plane[i].normal.z, 1.0f), float4(box.MaxX, box.MinY, box.MinZ, 1.0f)) < 0.0 ? 1 : 0;
+		out += math::Dot4(float4(plane[i].normal.x, plane[i].normal.y, plane[i].normal.z, 1.0f), float4(box.MinX, box.MaxY, box.MinZ, 1.0f)) < 0.0 ? 1 : 0;
+		out += math::Dot4(float4(plane[i].normal.x, plane[i].normal.y, plane[i].normal.z, 1.0f), float4(box.MaxX, box.MaxY, box.MinZ, 1.0f)) < 0.0 ? 1 : 0;
+		out += math::Dot4(float4(plane[i].normal.x, plane[i].normal.y, plane[i].normal.z, 1.0f), float4(box.MinX, box.MinY, box.MaxZ, 1.0f)) < 0.0 ? 1 : 0;
+		out += math::Dot4(float4(plane[i].normal.x, plane[i].normal.y, plane[i].normal.z, 1.0f), float4(box.MaxX, box.MinY, box.MaxZ, 1.0f)) < 0.0 ? 1 : 0;
+		out += math::Dot4(float4(plane[i].normal.x, plane[i].normal.y, plane[i].normal.z, 1.0f), float4(box.MinX, box.MaxY, box.MaxZ, 1.0f)) < 0.0 ? 1 : 0;
+		out += math::Dot4(float4(plane[i].normal.x, plane[i].normal.y, plane[i].normal.z, 1.0f), float4(box.MaxX, box.MaxY, box.MaxZ, 1.0f)) < 0.0 ? 1 : 0;
+		if (out == 8) return false;
+	}
+
+	// check frustum outside/inside box
+	int out;
+	out = 0; for (int i = 0; i<8; i++) out += ((fru.mPoints[i].x > box.mMaxX) ? 1 : 0); if (out == 8) return false;
+	out = 0; for (int i = 0; i<8; i++) out += ((fru.mPoints[i].x < box.mMinX) ? 1 : 0); if (out == 8) return false;
+	out = 0; for (int i = 0; i<8; i++) out += ((fru.mPoints[i].y > box.mMaxY) ? 1 : 0); if (out == 8) return false;
+	out = 0; for (int i = 0; i<8; i++) out += ((fru.mPoints[i].y < box.mMinY) ? 1 : 0); if (out == 8) return false;
+	out = 0; for (int i = 0; i<8; i++) out += ((fru.mPoints[i].z > box.mMaxZ) ? 1 : 0); if (out == 8) return false;
+	out = 0; for (int i = 0; i<8; i++) out += ((fru.mPoints[i].z < box.mMinZ) ? 1 : 0); if (out == 8) return false;
+
+	return true;
+}
+
 void Camera3D::Focus(const float3 & focus_center, const float & distance)
 {
 	float3 dir = frustum.Pos() - focus_center;
