@@ -349,6 +349,7 @@ void GameObject::RecursiveCalcBBox()
 	{
 		global_bbox = local_bbox;
 		global_bbox.Transform(transform->GetGlobalTransform());
+		global_bbox = global_bbox.MinimalEnclosingAABB();
 	}
 	
 	if (!childs.empty())
