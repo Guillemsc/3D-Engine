@@ -2,37 +2,47 @@
 #define _QUADTREE_H_
 
 #include <vector>
+#include "GeometryMath.h"
 
 class GameObject;
 
-class Node
+class KDTree
 {
 public:
-	enum Axis 
+	class Node
 	{
-		a_null,
-		a_x,
-		a_y,
-		a_z
+	public:
+		enum Axis
+		{
+			a_null,
+			a_x,
+			a_y,
+			a_z
+		};
+
+	public:
+		Node();
+		~Node();
+
+		void AddElement(GameObject* go);
+
+		void CreatePartition();
+
+		void GetElements(std::vector<GameObject*>& elements) const;
+
+	public:
+		Plane cut_plane;
+		Axis axis = Axis::a_null;
+		std::vector<GameObject*> elements;
+
+	private:
+		Node* left = nullptr;
+		Node* right = nullptr;
+		Node* parent = nullptr;
 	};
-
 public:
-	Node();
-	~Node();
 
-	void AddElement(GameObject* go);
-
-	void CreatePartition();
-
-	void GetElements(std::vector<GameObject*>& elements) const;
-
-public:
-	Node* left = nullptr;
-	Node* right = nullptr;
-	Plane cut_plane;
-	Axis axis = Axis::a_null;
-
-	std::vector<GameObject*> elements;
 };
+
 
 #endif // !_QUADTREE_H_
