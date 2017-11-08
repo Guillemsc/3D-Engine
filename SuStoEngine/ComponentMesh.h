@@ -5,6 +5,7 @@
 #include "GeometryLoader.h"
 
 class GameObject;
+class ResourceMesh;
 
 class ComponentMesh : public Component
 {
@@ -16,8 +17,9 @@ public:
 	void Update();
 	void CleanUp();
 
-	void SetMesh(Mesh* mesh);
-	Mesh* GetMesh() const;
+	void SetMesh(ResourceMesh* mesh);
+	void RemoveMesh();
+	ResourceMesh* GetMesh() const;
 	const bool HasMesh() const;
 
 	void OnGetBoundingBox(AABB& box);
@@ -32,7 +34,7 @@ private:
 
 public:
 private:
-	Mesh* mesh = nullptr;
+	ResourceMesh* mesh = nullptr;
 	bool has_mesh = false;;
 
 };

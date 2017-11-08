@@ -19,12 +19,12 @@ class ModuleRenderer3D;
 class ModuleCamera3D;
 class ModuleGameObject;
 class EditorUI;
-class DebugScene;
 class Configuration;
 class GeometryLoader;
 class TextureLoader;
 class FileSystem;
 class SceneManager;
+class ResourceManager;
 
 class Application
 {
@@ -81,11 +81,11 @@ public:
 	ModuleCamera3D*    camera = nullptr;
 	ModuleGameObject*  gameobj = nullptr;
 	EditorUI*		   editorUI	= nullptr;
-	DebugScene*        debug_scene = nullptr;
 	GeometryLoader*	   geometry = nullptr;
 	TextureLoader*	   texture = nullptr;
 	FileSystem*		   file_system = nullptr;
 	SceneManager*	   scene_manager = nullptr;
+	ResourceManager*   resource_manager = nullptr;
 
 	std::list<string>  logs;
 

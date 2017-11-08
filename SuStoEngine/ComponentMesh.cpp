@@ -6,6 +6,7 @@
 #include "GeometryMath.h"
 #include "GameObject.h"
 #include "ModuleRenderer3D.h"
+#include "ResourceMesh.h"
 #include "JSONLoader.h"
 #include "imgui.h"
 
@@ -30,21 +31,35 @@ void ComponentMesh::Update()
 
 void ComponentMesh::CleanUp()
 {
-	if(has_mesh)
-		App->geometry->UnloadFile(mesh);
+	RemoveMesh();
 }
 
-void ComponentMesh::SetMesh(Mesh* _mesh)
+void ComponentMesh::SetMesh(ResourceMesh* _mesh)
 {
+	RemoveMesh();
+
 	mesh = _mesh;
 
 	if (mesh != nullptr)
 	{
+		mesh->LoadMem();
+
 		has_mesh = true;
 	}
 }
 
-Mesh * ComponentMesh::GetMesh() const
+void ComponentMesh::RemoveMesh()
+{
+	if (mesh != nullptr)
+	{
+		mesh->UnloadMem();
+
+		mesh = nullptr;
+		has_mesh = false;
+	}
+}
+
+ResourceMesh * ComponentMesh::GetMesh() const
 {
 	return mesh;
 }
@@ -69,7 +84,9 @@ void ComponentMesh::InspectorDraw(std::vector<Component*> components)
 		ImGui::Text("No mesh loaded");
 		return;
 	}
+
 	ImGui::TextWrapped("Unique id:", mesh->GetUniqueId());
+	ImGui::Text("Used by: %d GameObjects", mesh->UsedCount());
 	ImGui::Text("Id vertices: %d", mesh->GetIdVertices());
 	ImGui::Text("Num vertices: %d", mesh->GetNumVertices());
 	ImGui::Text("Id indices: %d", mesh->GetIdIndices());
@@ -83,15 +100,7 @@ void ComponentMesh::LoadScene(JSON_Doc * config)
 
 void ComponentMesh::SaveScene(JSON_Doc * config, string root)
 {
-	root += ".mesh";
 
-	string set = root;
-	set += ".title";
-	config->SetString(set, "Component Mesh");
-	set = root;
-	set += ".path";
-	string file = mesh->GetFilename();
-	config->SetString(set, file.c_str());
 }
 
 void ComponentMesh::OnEnable()

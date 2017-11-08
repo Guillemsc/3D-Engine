@@ -106,7 +106,6 @@
     <ClInclude Include="Console.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="DebugDraw.h" />
-    <ClInclude Include="DebugScene.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="EditorUI.h" />
     <ClInclude Include="EngineTest.h" />
@@ -148,7 +147,6 @@
     <ClInclude Include="imgui_docking.h" />
     <ClInclude Include="imgui_impl_sdl.h" />
     <ClInclude Include="imgui_internal.h" />
-    <ClInclude Include="Importer.h" />
     <ClInclude Include="Inspector.h" />
     <ClInclude Include="JSONLoader.h" />
     <ClInclude Include="Light.h" />
@@ -191,7 +189,6 @@
     <ClInclude Include="Math\SSEMath.h" />
     <ClInclude Include="Math\sse_mathfun.h" />
     <ClInclude Include="Math\TransformOps.h" />
-    <ClInclude Include="MeshImporter.h" />
     <ClInclude Include="mmgr\mmgr.h" />
     <ClInclude Include="mmgr\nommgr.h" />
     <ClInclude Include="ModuleCamera3D.h" />
@@ -210,11 +207,14 @@
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="Quadtree.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="ResourceMesh.h" />
+    <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="stb_rect_pack.h" />
     <ClInclude Include="stb_textedit.h" />
     <ClInclude Include="stb_truetype.h" />
-    <ClInclude Include="TextureImporter.h" />
     <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Component.h" />
@@ -236,7 +236,6 @@
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="DebugDraw.cpp" />
-    <ClCompile Include="DebugScene.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="EditorUI.cpp" />
     <ClCompile Include="EngineTest.cpp" />
@@ -308,6 +307,10 @@
     <ClCompile Include="ProfilerViewer.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="Quadtree.cpp" />
+    <ClCompile Include="Resource.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="ResourceMesh.cpp" />
+    <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="Timer.cpp" />

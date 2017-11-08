@@ -6,6 +6,8 @@
 #include "ModuleGameObject.h"
 #include "ComponentMaterial.h"
 #include "Functions.h"
+#include "ResourceTexture.h"
+#include "ResourceManager.h"
 
 #include "Devil\include\il.h"
 #include "Devil\include\ilu.h"
@@ -44,8 +46,6 @@ bool TextureLoader::Start()
 {
 	bool ret = true;
 
-	//texture_importer->ImportAllTextures();
-
 	return ret;
 }
 
@@ -53,17 +53,12 @@ bool TextureLoader::Update()
 {
 	bool ret = true;
 
-	textures;
-
 	return ret;
 }
 
 bool TextureLoader::CleanUp()
 {
 	bool ret = true;
-
-	// Unload all textures
-	UnloadAllFiles();
 
 	return ret;
 }
@@ -76,9 +71,9 @@ void TextureLoader::OnLoadFile(const char * file_path, const char * file_name, c
 	}
 }
 
-Texture* TextureLoader::LoadTexture(const char * full_path)
+ResourceTexture* TextureLoader::LoadTexture(const char * full_path)
 {
-	Texture* ret = nullptr;											
+	ResourceTexture* ret = nullptr;
 
 	// Load texture
 	if (ilLoad(IL_TYPE_UNKNOWN, full_path))
@@ -100,19 +95,14 @@ Texture* TextureLoader::LoadTexture(const char * full_path)
 		ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
 
 		// Create texture
-		Texture* texture = new Texture(ilGetData(), ilGetInteger(IL_IMAGE_SIZE_OF_DATA), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT),
-			file_name.c_str(), GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
-
-		textures.push_back(texture);
-		ret = texture;
+		ret = (ResourceTexture*)App->resource_manager->CreateNewResource(RT_TEXTURE);
+		ret->SetData(ilGetData(), ilGetInteger(IL_IMAGE_SIZE_OF_DATA), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT),
+			GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
 
 		ilDeleteImages(1, &ImageInfo.Id);
 
-		// Load texture to memory (temp?)
-		texture->LoadToMemory();
-
 		// Export it to Library
-		texture_importer->Save(App->file_system->GetLibraryTexturePath().c_str(), texture);
+		App->resource_manager->SaveResourceIntoFile(ret);
 	}
 	else
 	{
@@ -122,144 +112,122 @@ Texture* TextureLoader::LoadTexture(const char * full_path)
 	return ret;
 }
 
-void TextureLoader::UnloadTexture(Texture * text)
+TextureImporter * TextureLoader::GetTextureImporter()
 {
-	for (vector<Texture*>::iterator it = textures.begin(); it != textures.end(); it++)
-	{
-		if ((*it) == text)
-		{
-			(*it)->CleanUp();
-
-			delete(*it);
-			textures.erase(it);
-			break;
-		}
-	}
+	return texture_importer;
 }
 
-void TextureLoader::UnloadAllFiles()
+//
+//Texture::Texture(byte* _texture_data, uint _texture_data_lenght, uint _width, uint _height, int _format, const char * filename, uint _wrap_s, uint _wrap_t, uint _mag, uint _min)
+//{
+//	if (_texture_data_lenght > 0)
+//	{
+//		texture_data = new byte[_texture_data_lenght];
+//		memcpy(texture_data, _texture_data, _texture_data_lenght * sizeof(byte));
+//	}
+//	
+//	format = _format;
+//	size.x = _width;
+//	size.y = _height;
+//	wrap_s = _wrap_s;
+//	wrap_t = _wrap_t;
+//	mag = _mag;
+//	min = _min;
+//
+//	file_name = filename;
+//}
+//
+//bool Texture::operator==(Texture* text)
+//{
+//	bool ret = false;
+//
+//	if (id == text->id && size.x == text->size.x && size.y == text->size.y)
+//		ret = true;
+//
+//	return ret;
+//}
+//
+//void Texture::CleanUp()
+//{
+//	// Unload from memory
+//	UnloadFromMemory();
+//
+//	// Unload texture data
+//	RELEASE_ARRAY(texture_data);
+//}
+//
+//uint Texture::GetId()
+//{
+//	return id;
+//}
+//
+//string Texture::GetFileName()
+//{
+//	return file_name;
+//}
+//
+//float2 Texture::GetSize()
+//{
+//	return size;
+//}
+//
+//void Texture::AddUser()
+//{
+//	used_by++;
+//}
+//
+//void Texture::DeleteUser()
+//{
+//	used_by--;
+//}
+//
+//int Texture::UsedBy()
+//{
+//	return used_by;
+//}
+//
+//bool Texture::IsUsed()
+//{
+//	return used_by != 0 ? true : false;
+//}
+//
+//double Texture::GetUniqueId()
+//{
+//	return unique_id;
+//}
+//
+//void Texture::SetUniqueId(double set)
+//{
+//	unique_id = set;
+//}
+//
+//void Texture::LoadToMemory()
+//{
+//	if(id == 0 && texture_data != nullptr && size.x > 0 && size.y > 0)
+//		id = App->renderer3D->LoadTextureBuffer(texture_data, 1, format, size.x, size.y, wrap_s, wrap_t, mag, min);
+//}
+//
+//void Texture::UnloadFromMemory()
+//{
+//	if(id != 0)
+//		App->renderer3D->UnloadTextureBuffer(id, 1);
+//}
+
+ResourceTexture* TextureImporter::Load(const char * exported_file)
 {
-	for (vector<Texture*>::iterator it = textures.begin(); it != textures.end(); it++)
-	{	
-		(*it)->CleanUp();
-
-		delete(*it);
-		it = textures.erase(it);	
-	}
-}
-
-Texture::Texture(byte* _texture_data, uint _texture_data_lenght, uint _width, uint _height, int _format, const char * filename, uint _wrap_s, uint _wrap_t, uint _mag, uint _min)
-{
-	if (_texture_data_lenght > 0)
-	{
-		texture_data = new byte[_texture_data_lenght];
-		memcpy(texture_data, _texture_data, _texture_data_lenght * sizeof(byte));
-	}
-	
-	format = _format;
-	size.x = _width;
-	size.y = _height;
-	wrap_s = _wrap_s;
-	wrap_t = _wrap_t;
-	mag = _mag;
-	min = _min;
-
-	file_name = filename;
-}
-
-bool Texture::operator==(Texture* text)
-{
-	bool ret = false;
-
-	if (id == text->id && size.x == text->size.x && size.y == text->size.y)
-		ret = true;
-
-	return ret;
-}
-
-void Texture::CleanUp()
-{
-	// Unload from memory
-	UnloadFromMemory();
-
-	// Unload texture data
-	RELEASE_ARRAY(texture_data);
-}
-
-uint Texture::GetId()
-{
-	return id;
-}
-
-string Texture::GetFileName()
-{
-	return file_name;
-}
-
-float2 Texture::GetSize()
-{
-	return size;
-}
-
-void Texture::AddUser()
-{
-	used_by++;
-}
-
-void Texture::DeleteUser()
-{
-	used_by--;
-}
-
-int Texture::UsedBy()
-{
-	return used_by;
-}
-
-bool Texture::IsUsed()
-{
-	return used_by != 0 ? true : false;
-}
-
-double Texture::GetUniqueId()
-{
-	return unique_id;
-}
-
-void Texture::SetUniqueId(double set)
-{
-	unique_id = set;
-}
-
-void Texture::LoadToMemory()
-{
-	if(id == 0 && texture_data != nullptr && size.x > 0 && size.y > 0)
-		id = App->renderer3D->LoadTextureBuffer(texture_data, 1, format, size.x, size.y, wrap_s, wrap_t, mag, min);
-}
-
-void Texture::UnloadFromMemory()
-{
-	if(id != 0)
-		App->renderer3D->UnloadTextureBuffer(id, 1);
-}
-
-Texture* TextureImporter::Load(const char * exported_file)
-{
-	Texture* ret = nullptr;
-
 	App->LoadFile(exported_file);
 
-	return ret;
+	return nullptr;
 }
 
-bool TextureImporter::Save(const char * path, Texture* texture)
+bool TextureImporter::Save(const char * path, ResourceTexture* texture)
 {
 	bool ret = true;
 
 	uint size = 0;
 	byte* data = nullptr;
 
-	string name = GetFilenameWithoutExtension(texture->GetFileName().c_str(), false);
+	string name = GetFilenameWithoutExtension(texture->GetName().c_str(), false);
 
 	// To pick a specific DXT compression use
 	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
@@ -280,14 +248,4 @@ bool TextureImporter::Save(const char * path, Texture* texture)
 	}
 	
 	return ret;
-}
-
-void TextureImporter::ImportAllTextures()
-{
-	vector<string> paths = App->file_system->GetFilesInPath(App->file_system->GetLibraryTexturePath().c_str(), "dds");
-
-	for (vector<string>::iterator it = paths.begin(); it != paths.end(); it++)
-	{
-		App->LoadFile((*it).c_str());
-	}
 }

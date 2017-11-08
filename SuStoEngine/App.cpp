@@ -5,7 +5,6 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleGameObject.h"
-#include "DebugScene.h"
 #include "XMLLoader.h"
 #include "JSONLoader.h"
 #include "EditorUI.h"
@@ -14,6 +13,7 @@
 #include "TextureLoader.h"
 #include "ModuleFileSystem.h"
 #include "SceneManager.h"
+#include "ResourceManager.h"
 #include "imgui.h"
 
 #include "mmgr\nommgr.h"
@@ -30,11 +30,11 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	renderer3D = new ModuleRenderer3D();
 	camera = new ModuleCamera3D();
 	gameobj = new ModuleGameObject();
-	debug_scene = new DebugScene();
 	editorUI = new EditorUI();
 	geometry = new GeometryLoader();
 	texture = new TextureLoader();
 	scene_manager = new SceneManager();
+	resource_manager = new ResourceManager();
 
 	// The order of calls is very important!
 	// Modules will Awake() Start() and Update in this order
@@ -51,10 +51,10 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(geometry);
 	AddModule(texture);
 	AddModule(file_system);
+	AddModule(resource_manager);
 	AddModule(scene_manager);
 
 	AddModule(editorUI);
-	AddModule(debug_scene);
 
 	// Renderer last
 	AddModule(renderer3D);

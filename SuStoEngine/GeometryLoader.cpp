@@ -9,6 +9,8 @@
 #include "ModuleCamera3D.h"
 #include "ModuleFileSystem.h"
 #include "TextureLoader.h"
+#include "ResourceManager.h"
+#include "ResourceMesh.h"
 #include <filesystem>
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -67,9 +69,6 @@ bool GeometryLoader::Update()
 bool GeometryLoader::CleanUp()
 {
 	bool ret = true;
-
-	// Unload all meshes
-	UnloadAllFiles();
 
 	// Detach log stream
 	aiDetachAllLogStreams();
@@ -172,7 +171,7 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 		node_valid = false;
 
 	aiMesh* aimesh = nullptr;
-	Mesh* mesh = nullptr;
+	ResourceMesh* mesh = nullptr;
 	GameObject* go = nullptr;
 
 	for (int i = 0; i < node->mNumMeshes; i++)
@@ -183,8 +182,7 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 			int mesh_index = node->mMeshes[i];
 			aimesh = scene->mMeshes[mesh_index];
 
-			mesh = new Mesh();
-			mesh->SetUniqueId(GetUniqueIdentifierRandom());
+			mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(RT_MESH);
 
 			if (!aimesh->HasFaces())
 			{
@@ -264,7 +262,7 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 		}
 
 		// MATERIALS
-		Texture* texture = nullptr;
+		ResourceTexture* texture = nullptr;
 		if (mesh_valid && node_valid)
 		{
 			aiMaterial* material = scene->mMaterials[aimesh->mMaterialIndex];
@@ -299,7 +297,6 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 			go->AddComponent(MESH);
 			ComponentMesh* cmesh = (ComponentMesh*)go->GetComponent(MESH);
 			cmesh->SetMesh(mesh);
-			mesh->LoadToMemory();
 
 			if (texture != nullptr)
 			{
@@ -314,7 +311,7 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 			RELEASE(mesh);
 		}
 		else
-			mesh_importer->Save(App->file_system->GetLibraryMeshPath().c_str(), mesh);
+			App->resource_manager->SaveResourceIntoFile(mesh);
 	}
 
 	// Select parent
@@ -330,273 +327,244 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 		RecursiveLoadMesh(scene, node->mChildren[i], full_path, total_abb, pare);
 	}
 }
- 
-void GeometryLoader::UnloadFile(Mesh* mesh)
-{
-	for (vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end(); ++it)
-	{
-		if ((*it) == mesh)
-		{
-			(*it)->CleanUp();
-			delete *it;
-			meshes.erase(it);
-			break;
-		}
-	}
-}
-
-void GeometryLoader::UnloadAllFiles()
-{
-	for (vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end();)
-	{
-		(*it)->CleanUp();
-		delete *it;
-		it = meshes.erase(it);
-	}
-}
-
-vector<Mesh*>* GeometryLoader::GetMeshesVector()
-{
-	return &meshes;
-}
 
 MeshImporter * GeometryLoader::GetMeshImporter()
 {
 	return mesh_importer;
 }
 
-Mesh::Mesh(float* _vertices, uint _num_vertices, uint* _indices, uint _num_indices, float* _uvs, uint _num_uvs, const char* filename)
-{
-	if (_num_vertices > 0)
-	{
-		// Vertices
-		vertices = new float[_num_vertices * 3];
-		memcpy(vertices, _vertices, sizeof(float) * _num_vertices * 3);
-		num_vertices = _num_vertices;
+//Mesh::Mesh(float* _vertices, uint _num_vertices, uint* _indices, uint _num_indices, float* _uvs, uint _num_uvs, const char* filename)
+//{
+//	if (_num_vertices > 0)
+//	{
+//		// Vertices
+//		vertices = new float[_num_vertices * 3];
+//		memcpy(vertices, _vertices, sizeof(float) * _num_vertices * 3);
+//		num_vertices = _num_vertices;
+//
+//		if (_num_indices > 0)
+//		{
+//			// Indices
+//			indices = new uint[_num_indices];
+//			memcpy(indices, _indices, sizeof(uint) * _num_indices);
+//			num_indices = _num_indices;
+//		}
+//
+//		if (_num_uvs > 0)
+//		{
+//			// UVs
+//			uvs = new float[_num_uvs * 3];
+//			memcpy(uvs, _uvs, sizeof(float) * _num_uvs * 3);
+//			num_uvs = _num_uvs;
+//		}
+//
+//		file_name = filename;
+//
+//		// Bbox
+//		bbox.SetNegativeInfinity();
+//		bbox.Enclose((float3*)vertices, _num_vertices);
+//	}
+//}
+//
+//Mesh::Mesh()
+//{
+//}
+//
+//void Mesh::CleanUp()
+//{
+//	// Unload from vram
+//	UnloadFromMemory();
+//
+//	// Vertices
+//	id_vertices = 0;
+//	num_vertices = 0;
+//	if (vertices != nullptr)
+//		RELEASE_ARRAY(vertices);
+//
+//	// Indices
+//	id_indices = 0;
+//	num_indices = 0;
+//	if (indices != nullptr)
+//		RELEASE_ARRAY(indices);
+//
+//	// UVs
+//	id_uv = 0;
+//	num_uvs = 0;
+//	if (uvs != nullptr)
+//		RELEASE_ARRAY(uvs);
+//}
+//
+//void Mesh::SetUniqueId(double _id)
+//{
+//    unique_id = _id;
+//}
+//
+//void Mesh::SetFaces(float * _vertices, uint _num_vertices, uint * _indices, uint _num_indices)
+//{
+//	if (_num_vertices > 0)
+//	{
+//		// Vertices
+//		vertices = new float[_num_vertices * 3];
+//		memcpy(vertices, _vertices, sizeof(float) * _num_vertices * 3);
+//		num_vertices = _num_vertices;
+//
+//		if (_num_indices > 0)
+//		{
+//			// Indices
+//			indices = new uint[_num_indices];
+//			memcpy(indices, _indices, sizeof(uint) * _num_indices);
+//			num_indices = _num_indices;
+//		}
+//
+//		CalcMeshBBox();
+//	}
+// 
+//}
+//
+//void Mesh::SetUvs(float * _uvs, uint _num_uvs)
+//{
+//	if (_num_uvs > 0)
+//	{
+//		// UVs
+//		uvs = new float[_num_uvs * 3];
+//		memcpy(uvs, _uvs, sizeof(float) * _num_uvs * 3);
+//		num_uvs = _num_uvs;
+//	}
+//}
+//
+//uint Mesh::GetIdVertices()
+//{
+//	return id_vertices;
+//}
+//
+//uint Mesh::GetNumVertices()
+//{
+//	return num_vertices;
+//}
+//
+//uint Mesh::GetIdIndices()
+//{
+//	return id_indices;
+//}
+//
+//uint Mesh::GetNumIndices()
+//{
+//	return num_indices;
+//}
+//
+//uint Mesh::GetIdUV()
+//{
+//	return id_uv;
+//}
+//
+//uint Mesh::GetNumUVs()
+//{
+//	return num_uvs;
+//}
+//
+//AABB Mesh::GetBBox()
+//{
+//	return bbox;
+//}
+//
+//float Mesh::GetDiagonal()
+//{
+//	return bbox.Diagonal().Length();
+//}
+//
+//string Mesh::GetFilename()
+//{
+//	return file_name;
+//}
+//
+//float * Mesh::GetVertices()
+//{
+//	return vertices;
+//}
+//
+//uint * Mesh::GetIndices()
+//{
+//	return indices;
+//}
+//
+//float * Mesh::GetUVs()
+//{
+//	return uvs;
+//}
+//
+//void Mesh::SetTransform(float3 _pos, Quat _rotation, float3 _scale)
+//{
+//	position = _pos;
+//	rotation = _rotation;
+//	scale = _scale;
+//
+//	CalcMeshBBox();
+//}
+//
+//float3 Mesh::GetPosition()
+//{
+//	return position;
+//}
+//
+//Quat Mesh::GetRotation()
+//{
+//	return rotation;
+//}
+//
+//float3 Mesh::GetScale()
+//{
+//	return scale;
+//}
+//
+//void Mesh::LoadToMemory()
+//{
+//	if(id_vertices == 0 && vertices != nullptr)
+//		id_vertices = App->renderer3D->LoadBuffer(vertices, num_vertices * 3);
+//
+//	if(id_indices == 0 && indices != nullptr)
+//		id_indices = App->renderer3D->LoadBuffer(indices, num_indices);
+//
+//	if(id_uv == 0 && uvs != nullptr)
+//		id_uv = App->renderer3D->LoadBuffer(uvs, num_uvs * 3);
+//}
+//
+//void Mesh::UnloadFromMemory()
+//{
+//	if (id_vertices != 0)
+//	{
+//		App->renderer3D->UnloadBuffer(id_vertices, num_vertices * 3);
+//		id_vertices = 0;
+//	}
+//	
+//	if (id_indices != 0)
+//	{
+//		App->renderer3D->UnloadBuffer(id_indices, num_indices);
+//		id_indices = 0;
+//	}
+//
+//	if (id_uv != 0)
+//	{
+//		App->renderer3D->UnloadBuffer(id_uv, num_uvs * 3);
+//		id_uv = 0;
+//	}
+//}
+//
+//const double Mesh::GetUniqueId() const
+//{
+//	return unique_id;
+//}
+//
+//void Mesh::CalcMeshBBox()
+//{
+//	bbox.SetNegativeInfinity();
+//
+//	if (vertices != nullptr && num_vertices > 0)
+//	{
+//		bbox.Enclose((vec*)vertices, num_vertices);
+//	}
+//}
 
-		if (_num_indices > 0)
-		{
-			// Indices
-			indices = new uint[_num_indices];
-			memcpy(indices, _indices, sizeof(uint) * _num_indices);
-			num_indices = _num_indices;
-		}
-
-		if (_num_uvs > 0)
-		{
-			// UVs
-			uvs = new float[_num_uvs * 3];
-			memcpy(uvs, _uvs, sizeof(float) * _num_uvs * 3);
-			num_uvs = _num_uvs;
-		}
-
-		file_name = filename;
-
-		// Bbox
-		bbox.SetNegativeInfinity();
-		bbox.Enclose((float3*)vertices, _num_vertices);
-	}
-}
-
-Mesh::Mesh()
-{
-}
-
-void Mesh::CleanUp()
-{
-	// Unload from vram
-	UnloadFromMemory();
-
-	// Vertices
-	id_vertices = 0;
-	num_vertices = 0;
-	if (vertices != nullptr)
-		RELEASE_ARRAY(vertices);
-
-	// Indices
-	id_indices = 0;
-	num_indices = 0;
-	if (indices != nullptr)
-		RELEASE_ARRAY(indices);
-
-	// UVs
-	id_uv = 0;
-	num_uvs = 0;
-	if (uvs != nullptr)
-		RELEASE_ARRAY(uvs);
-}
-
-void Mesh::SetUniqueId(double _id)
-{
-    unique_id = _id;
-}
-
-void Mesh::SetFaces(float * _vertices, uint _num_vertices, uint * _indices, uint _num_indices)
-{
-	if (_num_vertices > 0)
-	{
-		// Vertices
-		vertices = new float[_num_vertices * 3];
-		memcpy(vertices, _vertices, sizeof(float) * _num_vertices * 3);
-		num_vertices = _num_vertices;
-
-		if (_num_indices > 0)
-		{
-			// Indices
-			indices = new uint[_num_indices];
-			memcpy(indices, _indices, sizeof(uint) * _num_indices);
-			num_indices = _num_indices;
-		}
-
-		CalcMeshBBox();
-	}
- 
-}
-
-void Mesh::SetUvs(float * _uvs, uint _num_uvs)
-{
-	if (_num_uvs > 0)
-	{
-		// UVs
-		uvs = new float[_num_uvs * 3];
-		memcpy(uvs, _uvs, sizeof(float) * _num_uvs * 3);
-		num_uvs = _num_uvs;
-	}
-}
-
-uint Mesh::GetIdVertices()
-{
-	return id_vertices;
-}
-
-uint Mesh::GetNumVertices()
-{
-	return num_vertices;
-}
-
-uint Mesh::GetIdIndices()
-{
-	return id_indices;
-}
-
-uint Mesh::GetNumIndices()
-{
-	return num_indices;
-}
-
-uint Mesh::GetIdUV()
-{
-	return id_uv;
-}
-
-uint Mesh::GetNumUVs()
-{
-	return num_uvs;
-}
-
-AABB Mesh::GetBBox()
-{
-	return bbox;
-}
-
-float Mesh::GetDiagonal()
-{
-	return bbox.Diagonal().Length();
-}
-
-string Mesh::GetFilename()
-{
-	return file_name;
-}
-
-float * Mesh::GetVertices()
-{
-	return vertices;
-}
-
-uint * Mesh::GetIndices()
-{
-	return indices;
-}
-
-float * Mesh::GetUVs()
-{
-	return uvs;
-}
-
-void Mesh::SetTransform(float3 _pos, Quat _rotation, float3 _scale)
-{
-	position = _pos;
-	rotation = _rotation;
-	scale = _scale;
-
-	CalcMeshBBox();
-}
-
-float3 Mesh::GetPosition()
-{
-	return position;
-}
-
-Quat Mesh::GetRotation()
-{
-	return rotation;
-}
-
-float3 Mesh::GetScale()
-{
-	return scale;
-}
-
-void Mesh::LoadToMemory()
-{
-	if(id_vertices == 0 && vertices != nullptr)
-		id_vertices = App->renderer3D->LoadBuffer(vertices, num_vertices * 3);
-
-	if(id_indices == 0 && indices != nullptr)
-		id_indices = App->renderer3D->LoadBuffer(indices, num_indices);
-
-	if(id_uv == 0 && uvs != nullptr)
-		id_uv = App->renderer3D->LoadBuffer(uvs, num_uvs * 3);
-}
-
-void Mesh::UnloadFromMemory()
-{
-	if (id_vertices != 0)
-	{
-		App->renderer3D->UnloadBuffer(id_vertices, num_vertices * 3);
-		id_vertices = 0;
-	}
-	
-	if (id_indices != 0)
-	{
-		App->renderer3D->UnloadBuffer(id_indices, num_indices);
-		id_indices = 0;
-	}
-
-	if (id_uv != 0)
-	{
-		App->renderer3D->UnloadBuffer(id_uv, num_uvs * 3);
-		id_uv = 0;
-	}
-}
-
-const double Mesh::GetUniqueId() const
-{
-	return unique_id;
-}
-
-void Mesh::CalcMeshBBox()
-{
-	bbox.SetNegativeInfinity();
-
-	if (vertices != nullptr && num_vertices > 0)
-	{
-		bbox.Enclose((vec*)vertices, num_vertices);
-	}
-}
-
-Mesh* MeshImporter::Load(const char * filepath)
+ResourceMesh* MeshImporter::Load(const char * filepath)
 {
 	//Open the file and get the size
 	FILE* file = fopen(filepath, "rb");
@@ -643,12 +611,9 @@ Mesh* MeshImporter::Load(const char * filepath)
 	cursor += bytes;
 
 	// Create mesh --------------
-	Mesh* new_mesh = new Mesh();
+	ResourceMesh* new_mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(RT_MESH);
 	new_mesh->SetFaces(vertices, ranges[0], indices, ranges[1]);
 	new_mesh->SetUvs(uvs, ranges[2]);
-	new_mesh->SetUniqueId(double(*id));
-	new_mesh->LoadToMemory();
-	App->geometry->GetMeshesVector()->push_back(new_mesh);
 
 	LOG_OUTPUT("New mesh with %d vertices", ranges[0] * 3);
 	LOG_OUTPUT("New mesh with %d indices", ranges[1]);
@@ -661,11 +626,11 @@ Mesh* MeshImporter::Load(const char * filepath)
 	return new_mesh;
 }
 
-bool MeshImporter::Save(const char * path, Mesh* mesh)
+bool MeshImporter::Save(const char * path, ResourceMesh* mesh)
 {
 	bool ret = true;
 	
-	string name = GetFilenameWithoutExtension(mesh->GetFilename().c_str());
+	string name = GetFilenameWithoutExtension(mesh->GetName().c_str());
 	name += "_";
 	name += std::to_string(App->id->NewId("mesh"));
 
@@ -720,20 +685,11 @@ bool MeshImporter::Save(const char * path, Mesh* mesh)
 
 void MeshImporter::ImportAllMeshes()
 {
-	vector<string> paths = App->file_system->GetFilesInPath(App->file_system->GetLibraryMeshPath().c_str(), "sustomesh");
+	//vector<string> paths = App->file_system->GetFilesInPath(App->file_system->GetLibraryMeshPath().c_str(), "sustomesh");
 
-	for (vector<string>::iterator it = paths.begin(); it != paths.end(); it++)
-	{
-		Mesh* new_mesh = Load((*it).c_str());
-
-		/*if (new_mesh != nullptr)
-		{
-			GameObject* new_gameobject = App->gameobj->Create();
-			new_gameobject->AddComponent(ComponentType::MESH);
-			ComponentMesh* mesh_comp = (ComponentMesh*) new_gameobject->GetComponent(ComponentType::MESH);
-			mesh_comp->SetMesh(new_mesh);
-
-		}*/
-	}
+	//for (vector<string>::iterator it = paths.begin(); it != paths.end(); it++)
+	//{
+	//	Mesh* new_mesh = Load((*it).c_str());
+	//}
 }
 

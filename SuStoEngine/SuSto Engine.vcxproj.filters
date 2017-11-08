@@ -7,9 +7,6 @@
     <Filter Include="Sources\Containers">
       <UniqueIdentifier>{afc36133-f401-499a-aa33-0da1e500fb52}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Scenes">
-      <UniqueIdentifier>{5c44ea0b-650a-4266-9bc1-4ea414b50e17}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Components">
       <UniqueIdentifier>{121f8e6b-df36-4ab0-be0d-601ddfc9e503}</UniqueIdentifier>
     </Filter>
@@ -34,12 +31,6 @@
     <Filter Include="Sources\Components\gpudetect">
       <UniqueIdentifier>{49c97a4b-1bdb-49c2-a920-81cd0a1b296d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\GameObject">
-      <UniqueIdentifier>{99ae2367-b349-443b-94d3-f8aebcab11e7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Importer">
-      <UniqueIdentifier>{75424721-2dd7-49d4-966b-8416936704ff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Components\MathGeoLib">
       <UniqueIdentifier>{a685dcba-0427-4e0c-b3fa-1911cc4200b9}</UniqueIdentifier>
     </Filter>
@@ -60,6 +51,15 @@
     </Filter>
     <Filter Include="Sources\Components\ImGuizmo">
       <UniqueIdentifier>{e11c78d5-4f22-4e2c-9963-5e6d4363aa16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Resources">
+      <UniqueIdentifier>{75424721-2dd7-49d4-966b-8416936704ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameObjects">
+      <UniqueIdentifier>{99ae2367-b349-443b-94d3-f8aebcab11e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameObjects\Components">
+      <UniqueIdentifier>{c5f10952-9d6c-4eec-b70e-347606580b18}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -95,9 +95,6 @@
     </ClInclude>
     <ClInclude Include="App.h">
       <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="DebugScene.h">
-      <Filter>Sources\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="imconfig.h">
       <Filter>Sources\Components\ImGui</Filter>
@@ -198,20 +195,11 @@
     <ClInclude Include="Cursor.h">
       <Filter>Sources\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>Sources\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentTransform.h">
-      <Filter>Sources\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>Sources\GameObject</Filter>
+      <Filter>Sources\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="ModuleGameObject.h">
       <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentPrimitive.h">
-      <Filter>Sources\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Hierarchy.h">
       <Filter>Sources\Editor</Filter>
@@ -228,26 +216,8 @@
     <ClInclude Include="TextureLoader.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentMesh.h">
-      <Filter>Sources\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleFileSystem.h">
       <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentMaterial.h">
-      <Filter>Sources\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Importer.h">
-      <Filter>Sources\Importer</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureImporter.h">
-      <Filter>Sources\Importer</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshImporter.h">
-      <Filter>Sources\Importer</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentCamera.h">
-      <Filter>Sources\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="DebugDraw.h">
       <Filter>Sources\Components</Filter>
@@ -450,6 +420,36 @@
     <ClInclude Include="Quadtree.h">
       <Filter>Sources\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Sources\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentCamera.h">
+      <Filter>Sources\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentMaterial.h">
+      <Filter>Sources\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentMesh.h">
+      <Filter>Sources\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentPrimitive.h">
+      <Filter>Sources\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentTransform.h">
+      <Filter>Sources\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceMesh.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceTexture.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -484,9 +484,6 @@
     </ClCompile>
     <ClCompile Include="App.cpp">
       <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="DebugScene.cpp">
-      <Filter>Sources\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="imgui.cpp">
       <Filter>Sources\Components\ImGui</Filter>
@@ -566,20 +563,11 @@
     <ClCompile Include="Cursor.cpp">
       <Filter>Sources\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>Sources\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentTransform.cpp">
-      <Filter>Sources\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Sources\GameObject</Filter>
+      <Filter>Sources\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="ModuleGameObject.cpp">
       <Filter>Sources\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentPrimitive.cpp">
-      <Filter>Sources\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Hierarchy.cpp">
       <Filter>Sources\Editor</Filter>
@@ -596,20 +584,11 @@
     <ClCompile Include="TextureLoader.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentMesh.cpp">
-      <Filter>Sources\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="ModuleFileSystem.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentMaterial.cpp">
-      <Filter>Sources\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="DebugDraw.cpp">
       <Filter>Sources\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentCamera.cpp">
-      <Filter>Sources\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>Sources\Modules</Filter>
@@ -727,6 +706,36 @@
     </ClCompile>
     <ClCompile Include="Quadtree.cpp">
       <Filter>Sources\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Sources\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentCamera.cpp">
+      <Filter>Sources\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMaterial.cpp">
+      <Filter>Sources\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMesh.cpp">
+      <Filter>Sources\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentPrimitive.cpp">
+      <Filter>Sources\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentTransform.cpp">
+      <Filter>Sources\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceMesh.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceTexture.cpp">
+      <Filter>Sources\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

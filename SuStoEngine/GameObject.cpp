@@ -13,6 +13,8 @@
 #include "Inspector.h"
 #include "ModuleRenderer3D.h"
 #include "DebugDraw.h"
+#include "ResourceMesh.h"
+#include "ResourceTexture.h"
 
 #include "Glew/include/glew.h" 
 
@@ -56,7 +58,7 @@ void GameObject::Draw()
 	{
 		if (component_material->HasTexture())
 		{
-			glBindTexture(GL_TEXTURE_2D, component_material->GetTexture()->GetId());
+			glBindTexture(GL_TEXTURE_2D, component_material->GetTexture()->GetTextureId());
 		}
 	}
 

@@ -5,7 +5,7 @@
 #include "GeometryMath.h"
 
 class GameObject;
-class Texture;
+class ResourceTexture;
 
 class ComponentMaterial : public Component
 {
@@ -17,8 +17,9 @@ public:
 	void Update();
 	void CleanUp();
 
-	void SetTexture(Texture* text);
-	Texture* GetTexture();
+	void SetTexture(ResourceTexture* text);
+	void RemoveTexture();
+	ResourceTexture* GetTexture();
 	const bool HasTexture() const;
 
 	void InspectorDraw(std::vector<Component*> components);
@@ -28,7 +29,7 @@ private:
 	void OnDisable();
 
 private:
-	Texture* texture = nullptr;
+	ResourceTexture* texture = nullptr;
 	bool	 has_texture = false;
 
 	float2   text_inspector_size = float2(0, 0);

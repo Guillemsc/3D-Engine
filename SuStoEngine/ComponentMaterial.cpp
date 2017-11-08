@@ -1,7 +1,8 @@
 #include "ComponentMaterial.h"
 #include "GameObject.h"
 #include "App.h"
-#include "TextureLoader.h"
+#include "ResourceTexture.h"
+#include "ResourceManager.h"
 #include "imgui.h"
 
 ComponentMaterial::ComponentMaterial(GameObject * owner) : Component(ComponentType::MATERIAL, owner)
@@ -24,26 +25,33 @@ void ComponentMaterial::Update()
 
 void ComponentMaterial::CleanUp()
 {
-	if (has_texture)
-	{
-		texture->DeleteUser();
-
-		if(!texture->IsUsed())
-			App->texture->UnloadTexture(texture);
-	}
+	RemoveTexture();
 }
 
-void ComponentMaterial::SetTexture(Texture* text)
+void ComponentMaterial::SetTexture(ResourceTexture* text)
 {
-	if (text != nullptr && texture != text)
+	RemoveTexture();
+
+	texture = text;
+
+	if (texture != nullptr)
 	{
-		texture = text;
-		text->AddUser();
+		texture->LoadMem();
 		has_texture = true;
 	}
 }
 
-Texture * ComponentMaterial::GetTexture()
+void ComponentMaterial::RemoveTexture()
+{
+	if (texture != nullptr)
+	{
+		texture->UnloadMem();
+		texture = nullptr;
+		has_texture = false;
+	}
+}
+
+ResourceTexture * ComponentMaterial::GetTexture()
 {
 	return texture;
 }
@@ -61,10 +69,10 @@ void ComponentMaterial::InspectorDraw(std::vector<Component*> components)
 		return;
 	}
 
-	ImGui::Text("Id texture: %d", texture->GetId());
-	ImGui::Text("Used by %d GameObjects", texture->UsedBy());
+	ImGui::Text("Used by %d GameObjects", texture->UsedCount());
+	ImGui::Text("Id texture: %d", texture->GetTextureId());
 	ImGui::Text("Preview:");
-	ImGui::Image((ImTextureID)texture->GetId(), ImVec2(200, 200));
+	ImGui::Image((ImTextureID)texture->GetTextureId(), ImVec2(200, 200));
 }
 
 void ComponentMaterial::OnEnable()
