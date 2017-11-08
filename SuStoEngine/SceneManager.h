@@ -3,6 +3,8 @@
 
 #include "Module.h"
 
+class GameObject;
+
 class SceneManager : public Module
 {
 public:
@@ -13,6 +15,7 @@ public:
 	void LoadScene(const char* scene_name);
 
 private:
+	void RecursiveSaveGameObject(GameObject* go);
 
 public:
 

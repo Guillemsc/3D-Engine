@@ -10,7 +10,7 @@ class ResourceMesh;
 class ComponentMesh : public Component
 {
 public:
-	ComponentMesh(GameObject* owner);
+	ComponentMesh(GameObject* owner, double id);
 	virtual ~ComponentMesh();
 
 	void Start();
@@ -25,8 +25,8 @@ public:
 	void OnGetBoundingBox(AABB& box);
 	void InspectorDraw(std::vector<Component*> components);
 
-	void LoadScene(JSON_Doc* config);
-	void SaveScene(JSON_Doc* config, string root);
+	void OnLoadScene(JSON_Doc* config);
+	void OnSaveScene(JSON_Doc* config);
 
 private:
 	void OnEnable();

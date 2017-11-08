@@ -22,6 +22,8 @@ public:
 	void AddStringToArray(string arr, const char* str);
 	void AddBoolToArray(string arr, bool bo);
 	void AddNumberToArray(string arr, double set);
+	void AddSectionToArray(string arr);
+	bool MoveToSectionFromArray(string arr, int index);
 	const int GetArrayCount(string set) const;
 	const char* GetStringFromArray(string arr, int index);
 	const bool GetBoolFromArray(string arr, int index);

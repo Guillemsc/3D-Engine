@@ -11,7 +11,7 @@ class ComponentTransform : public Component
 	friend class GameObject;
 
 public:
-	ComponentTransform(GameObject* owner);
+	ComponentTransform(GameObject* owner, double id);
 	virtual ~ComponentTransform();
 
 	void Start();
@@ -38,6 +38,9 @@ private:
 	void RecalculateLocalTransform();
 	void OnEnable();
 	void OnDisable();
+
+	void OnLoadScene(JSON_Doc* config);
+	void OnSaveScene(JSON_Doc* config);
 
 private:
 	float4x4 local_transform;

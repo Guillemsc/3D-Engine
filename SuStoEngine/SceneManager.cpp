@@ -1,5 +1,7 @@
 #include "SceneManager.h"
 #include "JSONLoader.h"
+#include "GameObject.h"
+#include "ModuleGameObject.h"
 #include "App.h"
 
 SceneManager::SceneManager(bool start_enabled) : Module(start_enabled)
@@ -16,10 +18,15 @@ void SceneManager::SaveScene(const char * scene_name)
 
 	if (config)
 	{
-		config->SetString("scene.title", "Scenes");
-		for (list<Module*>::iterator it = App->modules.begin(); it != App->modules.end(); ++it)
+		vector<GameObject*> game_objects = App->gameobj->GetListGameObjects();
+
+		// Store GameObjects
+		config->SetArray("GameObjects");
+		config->SetArray("Components");
+
+		for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); it++)
 		{
-			(*it)->SaveScene(config);
+			(*it)->OnSaveScene(config);
 		}
 
 		config->Save();
@@ -28,4 +35,9 @@ void SceneManager::SaveScene(const char * scene_name)
 
 void SceneManager::LoadScene(const char * scene_name)
 {
+}
+
+void SceneManager::RecursiveSaveGameObject(GameObject * go)
+{
+
 }

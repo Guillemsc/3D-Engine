@@ -6,6 +6,7 @@
 #include "Functions.h"
 #include "KDTree.h"
 #include "ModuleInput.h"
+#include "SceneManager.h"
 
 ModuleGameObject::ModuleGameObject(bool enabled)
 {
@@ -86,20 +87,24 @@ bool ModuleGameObject::CleanUp()
 	return ret;
 }
 
-GameObject * ModuleGameObject::Create(double id)
+GameObject * ModuleGameObject::Create(double force_id)
 {
-	GameObject* game_object = new GameObject(id);
+	double new_id = 0;
+
+	if (force_id == -1)
+		new_id = GetUniqueIdentifierRandom();
+	else
+		new_id = force_id;
+
+	GameObject* game_object = new GameObject(new_id);
 
 	game_objects.push_back(game_object);
 	root->AddChild(game_object);
 	game_object->Start();
 
-	return game_object;
-}
+	App->scene_manager->SaveScene("test.scene");
 
-GameObject * ModuleGameObject::Create()
-{
-	return Create(GetUniqueIdentifierRandom());
+	return game_object;
 }
 
 void ModuleGameObject::Destroy(GameObject * go)

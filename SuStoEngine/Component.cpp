@@ -1,9 +1,10 @@
 #include "Component.h"
 
-Component::Component(ComponentType _type, GameObject* _owner)
+Component::Component(ComponentType _type, GameObject* _owner, double _unique_id)
 {
 	type = _type;
 	owner = _owner;
+	unique_id = _unique_id;
 
 	enabled = true;
 }
@@ -59,4 +60,9 @@ const ComponentType Component::GetType() const
 const char* Component::GetName() const
 {
 	return name;
+}
+
+double Component::GetUniqueId()
+{
+	return unique_id;
 }

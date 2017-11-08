@@ -25,14 +25,14 @@ Resource * ResourceManager::Get(double id)
 	return nullptr;
 }
 
-Resource * ResourceManager::CreateNewResource(ResourceType type, double id)
+Resource * ResourceManager::CreateNewResource(ResourceType type, double force_id)
 {
 	double new_id = 0;
 
-	if (id == -1)
+	if (force_id == -1)
 		new_id = GetUniqueIdentifierRandom();
 	else
-		new_id = id;
+		new_id = force_id;
 
 	Resource* res = Get(new_id);
 

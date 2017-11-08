@@ -98,6 +98,7 @@ ResourceTexture* TextureLoader::LoadTexture(const char * full_path)
 		ret = (ResourceTexture*)App->resource_manager->CreateNewResource(RT_TEXTURE);
 		ret->SetData(ilGetData(), ilGetInteger(IL_IMAGE_SIZE_OF_DATA), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT),
 			GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
+		ret->SetName(file_name);
 
 		ilDeleteImages(1, &ImageInfo.Id);
 

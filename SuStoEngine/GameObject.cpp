@@ -15,6 +15,7 @@
 #include "DebugDraw.h"
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
+#include "JSONLoader.h"
 
 #include "Glew/include/glew.h" 
 
@@ -141,10 +142,17 @@ void GameObject::CleanUp()
 	}
 }
 
-void GameObject::AddComponent(ComponentType type)
+void GameObject::AddComponent(ComponentType type, double force_id)
 {
 	if (ContainsComponent(type))
 		return;
+
+	double new_id = 0;
+
+	if (force_id == -1)
+		new_id = GetUniqueIdentifierRandom();
+	else
+		new_id = force_id;
 
 	Component* ret = nullptr;
 
@@ -152,27 +160,22 @@ void GameObject::AddComponent(ComponentType type)
 	{
 		case TRANSFORM:
 		{
-			ret = new ComponentTransform(this);
+			ret = new ComponentTransform(this, new_id);
 		}
 		break;
 		case MESH:
 		{
-			ret = new ComponentMesh(this);
+			ret = new ComponentMesh(this, new_id);
 		}
 		break;
 		case MATERIAL:
 		{
-			ret = new ComponentMaterial(this);
+			ret = new ComponentMaterial(this, new_id);
 		}
 		break;
 		case CAMERA:
 		{
-			ret = new ComponentCamera(this);
-		}
-		break;
-		case PRIMITIVE:
-		{
-			ret = new ComponentPrimitive(this);
+			ret = new ComponentCamera(this, new_id);
 		}
 		break;
 
@@ -376,6 +379,33 @@ void GameObject::SetStatic(bool set)
 AABB GameObject::GetBbox() const
 {
 	return local_bbox;
+}
+
+void GameObject::OnLoadScene(JSON_Doc * config)
+{
+
+	config->MoveToRoot();
+
+	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
+	{
+		(*it)->OnLoadScene(config);
+	}
+}
+
+void GameObject::OnSaveScene(JSON_Doc * config)
+{
+	config->AddSectionToArray("GameObjects");
+	config->MoveToSectionFromArray("GameObjects", config->GetArrayCount("GameObjects") - 1);
+
+	config->SetString("works", "well");
+
+
+	config->MoveToRoot();
+
+	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
+	{
+		(*it)->OnSaveScene(config);
+	}
 }
 
 void GameObject::DrawBBox()

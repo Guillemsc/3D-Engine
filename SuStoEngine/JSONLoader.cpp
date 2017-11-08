@@ -258,6 +258,33 @@ void JSON_Doc::AddNumberToArray(string arr, double set)
 	}
 }
 
+void JSON_Doc::AddSectionToArray(string arr)
+{
+	JSON_Array* array = json_object_get_array(root, arr.c_str());
+
+	if (array != nullptr)
+	{
+		json_array_append_value(array, json_value_init_object());
+	}
+}
+
+bool JSON_Doc::MoveToSectionFromArray(string arr, int index)
+{
+	bool ret = false;
+
+	JSON_Array* array = json_object_get_array(root, arr.c_str());
+
+	if (array != nullptr)
+	{
+		JSON_Object* obj = json_array_get_object(array, index);
+
+		object = obj;
+		ret = true;
+	}
+
+	return ret;
+}
+
 const char * JSON_Doc::GetString(string str, const char* defaul)
 {
 	const char* ret = defaul;

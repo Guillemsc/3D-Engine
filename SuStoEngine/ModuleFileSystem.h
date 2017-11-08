@@ -25,6 +25,7 @@ public:
 	string GetLibraryPath();
 	string GetLibraryMeshPath();
 	string GetLibraryTexturePath();
+	string GetLibraryScenePath();
 	string GetSettingsPath();
 
 private:
@@ -34,6 +35,7 @@ private:
 	string library_path;
 	string library_mesh_path;
 	string library_texture_path;
+	string library_scene_path;
 	string settings_path;
 
 };

@@ -55,43 +55,6 @@ void Hierarchy::Draw()
 
 		create_empty_game_object = false;
 	}
-
-	if (create_cube_object)
-	{
-		GameObject* go = App->gameobj->Create();
-		go->AddComponent(PRIMITIVE);
-
-		App->gameobj->ClearSelection();
-		App->gameobj->AddGameObjectToSelected(go);
-
-		create_cube_object = false;
-	}
-
-}
-
-void Hierarchy::LoadScene(JSON_Doc * config)
-{
-}
-
-void Hierarchy::SaveScene(JSON_Doc * config)
-{
-	vector<GameObject*> game_objects = App->gameobj->GetRoot()->GetChilds();
-
-	int i = 0;
-	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); it++)
-	{
-		vector<Component*> components = (*it)->GetComponents();
-		string root = "hierarchy.gameobject_";
-		root += std::to_string(i);
-
-		config->SetNumber(root + ".parent", (*it)->GetParent()->GetId());
-
-		for (vector<Component*>::iterator it2 = components.begin(); it2 != components.end(); ++it2)
-		{
-			(*it2)->SaveScene(config, root);
-		}
-		i++;
-	}
 }
 
 void Hierarchy::PrintGoAndChildsRecursive(GameObject * go)

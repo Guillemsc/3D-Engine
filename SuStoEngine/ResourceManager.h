@@ -13,7 +13,7 @@ public:
 	virtual ~ResourceManager();
 
 	Resource * Get(double id);
-	Resource* CreateNewResource(ResourceType type, double id = -1);
+	Resource* CreateNewResource(ResourceType type, double force_id = -1);
 	void DeleteResource(double id);
 
 	void SaveResourceIntoFile(Resource* res);

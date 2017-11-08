@@ -10,7 +10,7 @@ class Camera3D;
 class ComponentCamera : public Component
 {
 public:
-	ComponentCamera(GameObject* owner);
+	ComponentCamera(GameObject* owner, double id);
 	virtual ~ComponentCamera();
 
 	void Start();
@@ -24,6 +24,9 @@ public:
 private:
 	void OnEnable();
 	void OnDisable();
+
+	virtual void OnLoadScene(JSON_Doc* config);
+	virtual void OnSaveScene(JSON_Doc* config);
 
 private:
 	Camera3D* camera = nullptr;

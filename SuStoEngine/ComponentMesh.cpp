@@ -10,7 +10,7 @@
 #include "JSONLoader.h"
 #include "imgui.h"
 
-ComponentMesh::ComponentMesh(GameObject * owner) : Component(MESH, owner)
+ComponentMesh::ComponentMesh(GameObject * owner, double id) : Component(MESH, owner, id)
 {
 	LOG_OUTPUT("Component Mesh Created");
 	SetName("Mesh");
@@ -94,13 +94,12 @@ void ComponentMesh::InspectorDraw(std::vector<Component*> components)
 	ImGui::Text("Id uv: %d", mesh->GetIdUV());
 }
 
-void ComponentMesh::LoadScene(JSON_Doc * config)
+void ComponentMesh::OnLoadScene(JSON_Doc * config)
 {
 }
 
-void ComponentMesh::SaveScene(JSON_Doc * config, string root)
+void ComponentMesh::OnSaveScene(JSON_Doc * config)
 {
-
 }
 
 void ComponentMesh::OnEnable()

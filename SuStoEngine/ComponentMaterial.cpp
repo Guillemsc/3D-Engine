@@ -5,7 +5,7 @@
 #include "ResourceManager.h"
 #include "imgui.h"
 
-ComponentMaterial::ComponentMaterial(GameObject * owner) : Component(ComponentType::MATERIAL, owner)
+ComponentMaterial::ComponentMaterial(GameObject * owner, double id) : Component(ComponentType::MATERIAL, owner, id)
 {
 	LOG_OUTPUT("Component Material Created");
 	SetName("Material");
@@ -80,5 +80,13 @@ void ComponentMaterial::OnEnable()
 }
 
 void ComponentMaterial::OnDisable()
+{
+}
+
+void ComponentMaterial::OnLoadScene(JSON_Doc * config)
+{
+}
+
+void ComponentMaterial::OnSaveScene(JSON_Doc * config)
 {
 }

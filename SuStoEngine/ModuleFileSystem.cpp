@@ -12,6 +12,7 @@ FileSystem::FileSystem(bool start_enabled)
 	library_path = CreateFolder(App->GetBasePath(), "Library");
 	library_mesh_path = CreateFolder(library_path.c_str(), "Meshes");
 	library_texture_path = CreateFolder(library_path.c_str(), "Textures");
+	library_scene_path = CreateFolder(library_path.c_str(), "Scenes");
 	settings_path = CreateFolder(App->GetBasePath(), "Settings");
 }
 
@@ -65,6 +66,11 @@ string FileSystem::GetLibraryMeshPath()
 string FileSystem::GetLibraryTexturePath()
 {
 	return library_texture_path;
+}
+
+string FileSystem::GetLibraryScenePath()
+{
+	return library_scene_path;
 }
 
 string FileSystem::GetSettingsPath()

@@ -23,7 +23,7 @@ public:
 	void SetEnabled(const bool& set);
 	void CleanUp();
 
-	void AddComponent(ComponentType type);
+	void AddComponent(ComponentType type, double force_id = -1);
 	void RemoveComponent(ComponentType type);
 	bool ContainsComponent(ComponentType type);
 	std::vector<Component*> GetComponents();
@@ -51,6 +51,9 @@ public:
 	bool GetStatic();
 	void SetStatic(bool set);
 	AABB GetBbox() const;
+
+	void OnLoadScene(JSON_Doc* config);
+	void OnSaveScene(JSON_Doc* config);
 
 private:
 	void DrawBBox();

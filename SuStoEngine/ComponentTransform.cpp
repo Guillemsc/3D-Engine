@@ -4,7 +4,7 @@
 #include "App.h"
 #include "ModuleInput.h"
 
-ComponentTransform::ComponentTransform(GameObject * owner) : Component(ComponentType::TRANSFORM, owner)
+ComponentTransform::ComponentTransform(GameObject * owner, double id) : Component(ComponentType::TRANSFORM, owner, id)
 {
 	LOG_OUTPUT("Component Transform Created");
 	SetName("Transform");
@@ -122,6 +122,14 @@ void ComponentTransform::OnEnable()
 }
 
 void ComponentTransform::OnDisable()
+{
+}
+
+void ComponentTransform::OnLoadScene(JSON_Doc * config)
+{
+}
+
+void ComponentTransform::OnSaveScene(JSON_Doc * config)
 {
 }
 

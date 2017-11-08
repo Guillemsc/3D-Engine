@@ -5,7 +5,7 @@
 #include "ModuleRenderer3D.h"
 #include "DebugDraw.h"
 
-ComponentCamera::ComponentCamera(GameObject * owner) : Component(CAMERA, owner)
+ComponentCamera::ComponentCamera(GameObject * owner, double id) : Component(CAMERA, owner, id)
 {
 	LOG_OUTPUT("Component Camera Created");
 	SetName("Camera");
@@ -52,5 +52,13 @@ void ComponentCamera::OnEnable()
 }
 
 void ComponentCamera::OnDisable()
+{
+}
+
+void ComponentCamera::OnLoadScene(JSON_Doc * config)
+{
+}
+
+void ComponentCamera::OnSaveScene(JSON_Doc * config)
 {
 }

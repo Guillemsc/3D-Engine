@@ -15,13 +15,12 @@ enum ComponentType
 	MESH,
 	MATERIAL,
 	CAMERA,
-	PRIMITIVE,
 };
 
 class Component
 {
 public:
-	Component(ComponentType type, GameObject* owner);
+	Component(ComponentType type, GameObject* owner, double unique_id);
 	virtual ~Component();
 
 	virtual void Start() {};
@@ -32,6 +31,8 @@ public:
 	const ComponentType GetType() const;
 	const char* GetName() const;
 
+	double GetUniqueId();
+
 	void Enable();
 	void Disable();
 	const bool GetEnabled() const;
@@ -41,8 +42,8 @@ public:
 	virtual void OnGetBoundingBox(AABB &bbox) {};
 	virtual void InspectorDraw(std::vector<Component*> components) {};
 
-	virtual void LoadScene(JSON_Doc* config) {};
-	virtual void SaveScene(JSON_Doc* config, std::string root) {};
+	virtual void OnLoadScene(JSON_Doc* config) {};
+	virtual void OnSaveScene(JSON_Doc* config) {};
 
 private:
 	virtual void OnEnable() {};
@@ -53,6 +54,7 @@ private:
 	GameObject*   owner = nullptr;
 	ComponentType type;
 	const char*   name = nullptr;
+	double	      unique_id = 0;
 };
 
 #endif

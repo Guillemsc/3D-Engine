@@ -126,6 +126,8 @@ bool EditorUI::Update()
 			if (ImGui::MenuItem("Open in Explorer", ""))
 				App->GoToFolder(App->GetBasePath());
 
+			ImGui::Separator();
+
 			if (ImGui::MenuItem("Save Scene", ""))
 				App->scene_manager->SaveScene("Scene.json");
 
@@ -356,7 +358,7 @@ void EditorUI::LoadScene(JSON_Doc * config)
 
 void EditorUI::SaveScene(JSON_Doc * config)
 {
-	hierarchy->SaveScene(config);
+
 }
 
 void EditorUI::ImGuiInput(SDL_Event* const ev)

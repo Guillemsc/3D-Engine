@@ -16,9 +16,6 @@ public:
 	void Start();
 	void Draw();
 
-	void LoadScene(JSON_Doc* config);
-	void SaveScene(JSON_Doc* config);
-
 private:
 	void PrintGoAndChildsRecursive(GameObject* go);
 

@@ -10,7 +10,7 @@ class ResourceTexture;
 class ComponentMaterial : public Component
 {
 public:
-	ComponentMaterial(GameObject* owner);
+	ComponentMaterial(GameObject* owner, double id);
 	virtual ~ComponentMaterial();
 
 	void Start();
@@ -27,6 +27,9 @@ public:
 private:
 	void OnEnable();
 	void OnDisable();
+
+	void OnLoadScene(JSON_Doc* config);
+	void OnSaveScene(JSON_Doc* config);
 
 private:
 	ResourceTexture* texture = nullptr;
