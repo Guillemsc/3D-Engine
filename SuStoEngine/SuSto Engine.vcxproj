@@ -206,7 +206,7 @@
     <ClInclude Include="ProfilerViewer.h" />
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
-    <ClInclude Include="Quadtree.h" />
+    <ClInclude Include="KDTree.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ResourceMesh.h" />
@@ -306,7 +306,7 @@
     <ClCompile Include="Profiler.cpp" />
     <ClCompile Include="ProfilerViewer.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
-    <ClCompile Include="Quadtree.cpp" />
+    <ClCompile Include="KDTree.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ResourceMesh.cpp" />

@@ -1,93 +1,20 @@
-Info,  T4868: Load C:/Users/Guillem/Documents/GitHub/3D-Engine/SuStoEngine/Resources/Models/street/Street environment_V01.FBX
-Info,  T4868: Found a matching importer for this file format: Autodesk FBX Importer.
-Info,  T4868: Import root directory is 'C:/Users/Guillem/Documents/GitHub/3D-Engine/SuStoEngine/Resources/Models/street\'
-Warn,  T4868: FBX-DOM (TOK_KEY, offset 0x1c9c1b) failed to resolve target Model/NodeAttribute/Constraint for AnimationCurveNode
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Skipping one or more lines with the same contents
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Warn,  T4868: FBX: no animation curves assigned to AnimationCurveNode: AnimCurveNode::T
-Warn,  T4868: FBX: ignoring node animation, did not find any transformation key frames
-Info,  T4868: FBX: generating full transformation chain for node: Sky001
-Info,  T4868: FBX: generating full transformation chain for node: Dummy001
-Info,  T4868: FBX: generating full transformation chain for node: Camera001
-Skipping one or more lines with the same contents
-Info,  T4868: FBX: generating full transformation chain for node: Spot001
-Skipping one or more lines with the same contents
-Info,  T4868: Entering post processing pipeline
-Info,  T4868: FindInstancesProcess finished. Found 13 instances
-Warn,  T4868: Found 2 degenerated primitives
-Info,  T4868: Points: 0, Lines: 1, Triangles: 17, Polygons: 0 (Meshes, X = removed)
-Info,  T4868: Tangents are undefined for line and point meshes
-Error, T4868: Failed to compute tangents; need UV data in channel0
-Skipping one or more lines with the same contents
-Info,  T4868: CalcTangentsProcess finished. Tangents have been calculated
-Info,  T4868: JoinVerticesProcess finished | Verts in: 81181 out: 48324 | ~40.5%
-Error, T4868: This algorithm works on triangle meshes only
-Info,  T4868: Cache relevant are 17 meshes (27059 faces). Average output ACMR is 1.794745
-Info,  T4868: Leaving post processing pipeline
+Info,  T11792: Load C:/Users/simonsb/Documents/GitHub/3D-Engine/SuStoEngine/Resources/Models/BakerHouse/BakerHouse.fbx
+Info,  T11792: Found a matching importer for this file format: Autodesk FBX Importer.
+Info,  T11792: Import root directory is 'C:/Users/simonsb/Documents/GitHub/3D-Engine/SuStoEngine/Resources/Models/BakerHouse\'
+Warn,  T11792: FBX-DOM (TOK_KEY, offset 0xd7b7) shading mode not recognized: Phong
+Info,  T11792: Entering post processing pipeline
+Info,  T11792: Points: 0, Lines: 0, Triangles: 2, Polygons: 0 (Meshes, X = removed)
+Info,  T11792: CalcTangentsProcess finished. Tangents have been calculated
+Info,  T11792: JoinVerticesProcess finished | Verts in: 3075 out: 1801 | ~41.4%
+Info,  T11792: Cache relevant are 2 meshes (1025 faces). Average output ACMR is 1.757073
+Info,  T11792: Leaving post processing pipeline
+Info,  T11792: Load C:/Users/simonsb/Documents/GitHub/3D-Engine/SuStoEngine/Resources/Models/BakerHouse/BakerHouse.fbx
+Info,  T11792: Found a matching importer for this file format: Autodesk FBX Importer.
+Info,  T11792: Import root directory is 'C:/Users/simonsb/Documents/GitHub/3D-Engine/SuStoEngine/Resources/Models/BakerHouse\'
+Warn,  T11792: FBX-DOM (TOK_KEY, offset 0xd7b7) shading mode not recognized: Phong
+Info,  T11792: Entering post processing pipeline
+Info,  T11792: Points: 0, Lines: 0, Triangles: 2, Polygons: 0 (Meshes, X = removed)
+Info,  T11792: CalcTangentsProcess finished. Tangents have been calculated
+Info,  T11792: JoinVerticesProcess finished | Verts in: 3075 out: 1801 | ~41.4%
+Info,  T11792: Cache relevant are 2 meshes (1025 faces). Average output ACMR is 1.757073
+Info,  T11792: Leaving post processing pipeline

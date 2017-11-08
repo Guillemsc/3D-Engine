@@ -4,6 +4,8 @@
 #include "Module.h"
 #include "GameObject.h"
 
+class KDTree;
+
 class ModuleGameObject : public Module
 {
 public:
@@ -43,6 +45,7 @@ private:
 	vector<GameObject*> selected;
 	vector<GameObject*> statics;
 	GameObject*			root = nullptr;
+	KDTree* kdtree = nullptr;
 };
 
 #endif // !_MODULE_GAME_OBJECT_H_

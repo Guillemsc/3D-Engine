@@ -1,6 +1,7 @@
-#include "Quadtree.h"
+#include "KDTree.h"
 #include "GameObject.h"
 #include "Functions.h"
+#include <algorithm>
 #include "ComponentMesh.h"
 
 KDTree::Node::Node(uint partition_num)
@@ -48,9 +49,6 @@ void KDTree::Node::CreatePartition()
 		std::vector<float> points;
 		for (int i = 0; i < elements.size(); ++i)
 		{
-			if (!elements[i]->ContainsComponent(ComponentType::MESH))
-				continue;
-
 			switch (axis)
 			{
 			case Node::a_x:
@@ -69,12 +67,8 @@ void KDTree::Node::CreatePartition()
 		}
 
 		// Calculate mid-point
-		float mid_point = 0.0f;
-		for (int i = 0; i < points.size(); ++i)
-		{
-			mid_point += points[i];
-		}
-		mid_point /= points.size();
+		std::sort(points.begin(), points.end());
+		float mid_point = points[points.size() / 2];
 
 		// Create a point in the space with the mid-point and create the plane
 		float3 plane_point = float3::zero;
@@ -102,9 +96,9 @@ void KDTree::Node::CreatePartition()
 			switch (axis)
 			{
 			case Node::a_x:
-				if (box.MaxX() > mid_point)
+				if (box.MaxX() >= mid_point)
 				{
-					if (box.MinX() > mid_point)
+					if (box.MinX() >= mid_point)
 						node = 1;
 					else
 						node = 0;
@@ -118,9 +112,9 @@ void KDTree::Node::CreatePartition()
 				}
 				break;
 			case Node::a_y:
-				if (box.MaxY() > mid_point)
+				if (box.MaxY() >= mid_point)
 				{
-					if (box.MinY() > mid_point)
+					if (box.MinY() >= mid_point)
 						node = 1;
 					else
 						node = 0;
@@ -134,9 +128,9 @@ void KDTree::Node::CreatePartition()
 				}
 				break;
 			case Node::a_z:
-				if (box.MaxZ() > mid_point)
+				if (box.MaxZ() >= mid_point)
 				{
-					if (box.MinZ() > mid_point)
+					if (box.MinZ() >= mid_point)
 						node = 1;
 					else
 						node = 0;
@@ -241,6 +235,8 @@ void KDTree::CreateTree(const std::vector<GameObject*>& elements, uint num_parti
 
 		for (int i = 0; i < elements.size(); ++i)
 		{
+			if (!elements[i]->ContainsComponent(ComponentType::MESH))
+				continue;
 			root->AddElement(elements[i]);
 		}
 		root->CheckPartition();

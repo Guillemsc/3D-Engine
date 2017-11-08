@@ -4,6 +4,8 @@
 #include "DebugDraw.h"
 #include "IDGenerator.h"
 #include "Functions.h"
+#include "KDTree.h"
+#include "ModuleInput.h"
 
 ModuleGameObject::ModuleGameObject(bool enabled)
 {
@@ -24,6 +26,8 @@ bool ModuleGameObject::Awake()
 	bool ret = true;
 
 	LOG_OUTPUT("Creating Module GameObject");	
+
+	kdtree = new KDTree();
 
 	return ret;
 }
@@ -48,6 +52,15 @@ bool ModuleGameObject::Update()
 		(*it)->Draw();
 	}
 
+	if (App->input->GetKeyDown("K"))
+	{
+		if (kdtree->HasTree())
+			kdtree->EraseTree();
+
+		kdtree->CreateTree(game_objects, 2);
+	}
+
+
 	App->renderer3D->DrawGrid(100);
 
 	return ret;
@@ -56,8 +69,6 @@ bool ModuleGameObject::Update()
 bool ModuleGameObject::PostUpdate()
 {
 	bool ret = true;
-
-
 
 	DestroyGameObjects();
 

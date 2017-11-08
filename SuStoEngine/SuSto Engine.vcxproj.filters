@@ -417,9 +417,6 @@
     <ClInclude Include="ImGuizmo.h">
       <Filter>Sources\Components\ImGuizmo</Filter>
     </ClInclude>
-    <ClInclude Include="Quadtree.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="Component.h">
       <Filter>Sources\GameObjects\Components</Filter>
     </ClInclude>
@@ -449,6 +446,9 @@
     </ClInclude>
     <ClInclude Include="ResourceTexture.h">
       <Filter>Sources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="KDTree.h">
+      <Filter>Sources\Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -704,9 +704,6 @@
     <ClCompile Include="ImGuizmo.cpp">
       <Filter>Sources\Components\ImGuizmo</Filter>
     </ClCompile>
-    <ClCompile Include="Quadtree.cpp">
-      <Filter>Sources\Containers</Filter>
-    </ClCompile>
     <ClCompile Include="Component.cpp">
       <Filter>Sources\GameObjects\Components</Filter>
     </ClCompile>
@@ -736,6 +733,9 @@
     </ClCompile>
     <ClCompile Include="ResourceTexture.cpp">
       <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="KDTree.cpp">
+      <Filter>Sources\Containers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
