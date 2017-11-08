@@ -345,6 +345,14 @@ void JSON_Doc::AddSection(string set)
 	json_object_set_value(object, set.c_str(), json_value_init_object());
 }
 
+void JSON_Doc::Clear()
+{
+	json_value_free(value);
+	value = json_value_init_object();
+	object = json_value_get_object(value);
+	root = object;
+}
+
 const char * JSON_Doc::GetPath() const
 {
 	return path;

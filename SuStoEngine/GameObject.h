@@ -64,7 +64,7 @@ public:
 	OBB		    global_bbox;
 
 private:
-	double		id = 0;
+	double		unique_id = 0;
 	std::string name;
 	bool		enabled = false;
 	bool		selected = false;

@@ -22,6 +22,15 @@ ModuleGameObject::~ModuleGameObject()
 {
 }
 
+bool ModuleGameObject::Start()
+{
+	bool ret = true;
+
+	App->scene_manager->LoadScene("test.scene");
+
+	return ret;
+}
+
 bool ModuleGameObject::Awake()
 {
 	bool ret = true;
@@ -80,6 +89,8 @@ bool ModuleGameObject::CleanUp()
 {
 	bool ret = true;
 
+	App->scene_manager->SaveScene("test.scene");
+
 	Destroy(root);
 
 	DestroyGameObjects();
@@ -101,8 +112,6 @@ GameObject * ModuleGameObject::Create(double force_id)
 	game_objects.push_back(game_object);
 	root->AddChild(game_object);
 	game_object->Start();
-
-	App->scene_manager->SaveScene("test.scene");
 
 	return game_object;
 }
