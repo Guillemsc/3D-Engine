@@ -34,6 +34,8 @@ public:
 	void MoveToRoot();
 	void AddSection(string set);
 
+	void Clear();
+
 	const char* GetPath() const;
 	void Save();
 	void CleanUp();

@@ -13,6 +13,7 @@ public:
 	~ModuleGameObject();
 
 	bool Awake();
+	bool Start();
 	bool PreUpdate();
 	bool Update();
 	bool PostUpdate();

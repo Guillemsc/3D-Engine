@@ -14,27 +14,45 @@ SceneManager::~SceneManager()
 
 void SceneManager::SaveScene(const char * scene_name)
 {
-	config = App->json->CreateJSON(scene_name);
+	JSON_Doc* scene = App->json->LoadJSON(scene_name);
 
-	if (config)
+	if (scene == nullptr)
+		scene = App->json->CreateJSON(scene_name);
+
+	if (scene != nullptr)
 	{
+		scene->Clear();
+
 		vector<GameObject*> game_objects = App->gameobj->GetListGameObjects();
 
 		// Store GameObjects
-		config->SetArray("GameObjects");
-		config->SetArray("Components");
+		scene->SetArray("GameObjects");
+		scene->SetArray("Components");
 
 		for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); it++)
 		{
-			(*it)->OnSaveScene(config);
+			(*it)->OnSaveScene(scene);
 		}
 
-		config->Save();
+		scene->Save();
 	}
 }
 
 void SceneManager::LoadScene(const char * scene_name)
 {
+	JSON_Doc* scene = App->json->LoadJSON(scene_name);
+
+	if (scene != nullptr)
+	{
+		for (int i = 0; i < scene->GetArrayCount("GameObjects"); i++)
+		{
+			scene->MoveToSectionFromArray("GameObjects", i);
+
+			double id = scene->GetNumber("uid");
+
+			GameObject* go = App->gameobj->Create(id);
+		}
+	}
 }
 
 void SceneManager::RecursiveSaveGameObject(GameObject * go)

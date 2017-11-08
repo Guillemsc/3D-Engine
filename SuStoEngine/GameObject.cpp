@@ -21,7 +21,7 @@
 
 GameObject::GameObject(double _id)
 {
-	id = _id;
+	unique_id = _id;
 }
 
 GameObject::~GameObject()
@@ -257,7 +257,7 @@ void GameObject::SetSelected(const bool& set)
 
 const double GameObject::GetId() const
 {
-	return id;
+	return unique_id;
 }
 
 const bool GameObject::GetSelected() const
@@ -383,7 +383,6 @@ AABB GameObject::GetBbox() const
 
 void GameObject::OnLoadScene(JSON_Doc * config)
 {
-
 	config->MoveToRoot();
 
 	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
@@ -394,10 +393,19 @@ void GameObject::OnLoadScene(JSON_Doc * config)
 
 void GameObject::OnSaveScene(JSON_Doc * config)
 {
+	config->MoveToRoot();
 	config->AddSectionToArray("GameObjects");
 	config->MoveToSectionFromArray("GameObjects", config->GetArrayCount("GameObjects") - 1);
 
-	config->SetString("works", "well");
+	config->SetNumber("uid", unique_id);
+	
+	if (parent != nullptr && parent != App->gameobj->GetRoot())
+		config->SetNumber("parent", parent->GetId());
+	else
+		config->SetNumber("parent", -1);
+
+	config->SetString("name", name.c_str());
+
 
 
 	config->MoveToRoot();
