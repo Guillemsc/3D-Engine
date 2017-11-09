@@ -7,6 +7,7 @@
 #include <limits>
 #include "imgui.h"
 #include <stdlib.h>
+#include "Globals.h"
 
 // Returns the angle between two points in degrees
 float AngleFromTwoPoints(float x1, float y1, float x2, float y2)
@@ -117,25 +118,33 @@ double GetRandomValue(double range_1, double range_2)
 
 double GetUIDRandomDouble()
 {
-	return GetRandomValue(DBL_MIN, DBL_MAX);
+	return GetRandomValue((double)0, DBL_MAX);
 }
 
 float GetUIDRandomFloat()
 {
-	return GetRandomValue(FLT_MIN, FLT_MAX);
+	return GetRandomValue((float)0, FLT_MAX);
 }
 
 int GetUIDRandomInt()
 {
-	return GetRandomValue(INT_MIN, INT_MAX);
+	return GetRandomValue(0, INT_MAX);
+}
+
+std::string IntToHexa(int value)
+{
+	std::stringstream stream;
+	stream << std::hex << value;
+	std::string result(stream.str());
+	return result;
 }
 
 std::string GetUIDRandomHexadecimal()
 {
-	char buf[17];
-	snprintf(buf, sizeof(buf), "%016llx", GetUIDRandomInt());
-	buf[16] = 0;
-	return buf;
+	double val = GetUIDRandomInt();
+	std::string ret = IntToHexa(val);
+
+	return ret;
 }
 
 bool PointInRect(float2 point_xy, float4 rect_xywh)

@@ -51,6 +51,8 @@ float GetUIDRandomFloat();
 
 int GetUIDRandomInt();
 
+std::string IntToHexa(int num);
+
 std::string GetUIDRandomHexadecimal();
 
 // Returns true if a point is inide a rect
