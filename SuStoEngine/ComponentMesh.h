@@ -2,7 +2,6 @@
 #define __COMPONENT_MESH_H__
 
 #include "Component.h"
-#include "GeometryLoader.h"
 
 class GameObject;
 class ResourceMesh;

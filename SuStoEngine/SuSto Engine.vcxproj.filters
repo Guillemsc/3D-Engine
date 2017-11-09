@@ -213,12 +213,6 @@
     <ClInclude Include="IDGenerator.h">
       <Filter>Sources\Components</Filter>
     </ClInclude>
-    <ClInclude Include="GeometryLoader.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureLoader.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleFileSystem.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
@@ -583,12 +577,6 @@
     </ClCompile>
     <ClCompile Include="IDGenerator.cpp">
       <Filter>Sources\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="GeometryLoader.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureLoader.cpp">
-      <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="ModuleFileSystem.cpp">
       <Filter>Sources\Modules</Filter>

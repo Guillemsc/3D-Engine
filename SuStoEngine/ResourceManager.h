@@ -15,6 +15,8 @@ public:
 	ResourceManager(bool start_enabled = true);
 	virtual ~ResourceManager();
 
+	bool CleanUp();
+
 	Resource * Get(std::string unique_id);
 	Resource* CreateNewResource(ResourceType type, std::string unique_id = "");
 	void DeleteResource(std::string unique_id);
@@ -23,6 +25,7 @@ public:
 	Resource* LoadResource(const char* file_path);
 
 private:
+	void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension);
 
 public:
 

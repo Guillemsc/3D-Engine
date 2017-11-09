@@ -32,8 +32,8 @@ public:
 	virtual ~ResourceMeshLoader();
 
 	bool Load(const char* filepath, bool as_new_gameobject = true);
-	bool Import(const char* filepath);
-	void Export(const char* filepath);
+	void Import(const char* filepath);
+	bool Export(const char* filepath, ResourceMesh* mesh);
 
 private:
 	void RecursiveLoadMesh(const aiScene* scene, aiNode* node, const char* full_path, AABB& total_abb, GameObject* parent = nullptr);

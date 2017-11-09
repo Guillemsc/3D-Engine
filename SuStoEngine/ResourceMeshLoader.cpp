@@ -10,6 +10,7 @@
 #include "Globals.h"
 #include "GameObject.h"
 #include "Functions.h"
+#include "ModuleFileSystem.h"
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\postprocess.h"
 #include "Assimp\include\cfileio.h"
@@ -267,11 +268,104 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 }
 
 
-bool ResourceMeshLoader::Import(const char * filepath)
+void ResourceMeshLoader::Import(const char * filepath)
 {
-	return nullptr;
+	//Open the file and get the size
+	FILE* file = fopen(filepath, "rb");
+	fseek(file, 0, SEEK_END);
+	uint size = ftell(file);
+	rewind(file);
+
+	// Create a buffer to get the data of the file
+	char* buffer = new char[size];
+	char* cursor = buffer;
+
+	// Read the file and close it
+	fread(buffer, sizeof(char), size, file);
+	fclose(file);
+
+	// Copy the ranges
+	// ranges[0] = Vertices, ranges[1] = Indices, ranges[2] = Uvs
+	uint ranges[3];
+	uint bytes = sizeof(ranges);
+	memcpy(ranges, cursor, bytes);
+	cursor += bytes;
+
+	// Store indices
+	uint* indices = new uint[ranges[1]];
+	bytes = sizeof(uint) * ranges[1];
+	memcpy(indices, cursor, bytes);
+	cursor += bytes;
+
+	// Store vertices
+	float* vertices = new float[ranges[0] * 3];
+	bytes = sizeof(float) * ranges[0] * 3;
+	memcpy(vertices, cursor, bytes);
+	cursor += bytes;
+
+	// Store UVs
+	float* uvs = new float[ranges[2] * 3];
+	bytes = sizeof(float) * ranges[2] * 3;
+	memcpy(uvs, cursor, bytes);
+	cursor += bytes;
+
+	// Create mesh --------------
+	ResourceMesh* new_mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(RT_MESH);
+	new_mesh->SetFaces(vertices, ranges[0], indices, ranges[1]);
+	new_mesh->SetUvs(uvs, ranges[2]);
+
+	LOG_OUTPUT("New mesh with %d vertices", ranges[0] * 3);
+	LOG_OUTPUT("New mesh with %d indices", ranges[1]);
+
+	RELEASE_ARRAY(indices);
+	RELEASE_ARRAY(vertices);
+	RELEASE_ARRAY(uvs);
 }
 
-void ResourceMeshLoader::Export(const char * filepath)
+bool ResourceMeshLoader::Export(const char * filepath, ResourceMesh* mesh)
 {
+	bool ret = true;
+
+	string name = GetFilenameWithoutExtension(mesh->GetName().c_str());
+	name += "_";
+	name += std::to_string(App->id->NewId("mesh"));
+
+	uint ranges[3] = { mesh->GetNumVertices(), mesh->GetNumIndices(), mesh->GetNumUVs() };
+	uint size = sizeof(ranges) +
+		sizeof(uint) * mesh->GetNumIndices() +
+		sizeof(float) * mesh->GetNumVertices() * 3 +
+		sizeof(float) * mesh->GetNumUVs() * 3;
+
+	// Allocate data
+	char* data = new char[size];
+	char* cursor = data;
+
+	// Store ranges
+	uint bytes = sizeof(ranges);
+	memcpy(cursor, ranges, bytes);
+	cursor += bytes;
+
+	// Store indices
+	bytes = sizeof(uint) * mesh->GetNumIndices();
+	memcpy(cursor, mesh->GetIndices(), bytes);
+	cursor += bytes;
+
+	// Store vertices
+	bytes = sizeof(float) * mesh->GetNumVertices() * 3;
+	memcpy(cursor, mesh->GetVertices(), bytes);
+	cursor += bytes;
+
+	// Store UVs
+	bytes = sizeof(float) * mesh->GetNumUVs() * 3;
+	memcpy(cursor, mesh->GetUVs(), bytes);
+
+	//fopen
+	if (App->file_system->FileSave(filepath, data, name.c_str(), "sustomesh", size) == false)
+	{
+		return false;
+	}
+
+	RELEASE_ARRAY(data);
+
+	return ret;
 }

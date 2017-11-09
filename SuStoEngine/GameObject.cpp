@@ -8,7 +8,6 @@
 #include "ComponentMaterial.h"
 #include "ComponentCamera.h"
 #include "ModuleGameObject.h"
-#include "TextureLoader.h"
 #include "Inspector.h"
 #include "ModuleRenderer3D.h"
 #include "DebugDraw.h"

@@ -3,16 +3,28 @@
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
 #include "App.h"
-#include "GeometryLoader.h"
 #include "ModuleFileSystem.h"
-#include "TextureLoader.h"
+#include "ResourceMeshLoader.h"
+#include "ResourceTextureLoader.h"
 
 ResourceManager::ResourceManager(bool start_enabled)
 {
+	mesh_loader = new ResourceMeshLoader();
+	texture_loader = new ResourceTextureLoader();
 }
 
 ResourceManager::~ResourceManager()
 {
+}
+
+bool ResourceManager::CleanUp()
+{
+	bool ret = true;
+
+	RELEASE(mesh_loader);
+	RELEASE(texture_loader);
+
+	return ret;
 }
 
 Resource * ResourceManager::Get(std::string _unique_id)
@@ -76,10 +88,10 @@ void ResourceManager::SaveResourceIntoFile(Resource * res)
 	switch (res->GetType())
 	{
 	case ResourceType::RT_MESH:
-		App->geometry->GetMeshImporter()->Save(App->file_system->GetLibraryMeshPath().c_str(), (ResourceMesh*)res);
+		mesh_loader->Export(App->file_system->GetLibraryMeshPath().c_str(), (ResourceMesh*)res);
 		break;
 	case ResourceType::RT_TEXTURE:
-		App->texture->GetTextureImporter()->Save(App->file_system->GetLibraryTexturePath().c_str(), (ResourceTexture*)res);
+		texture_loader->Export(App->file_system->GetLibraryTexturePath().c_str(), (ResourceTexture*)res);
 		break;
 	case ResourceType::RT_SCENE:
 		break;
@@ -88,5 +100,25 @@ void ResourceManager::SaveResourceIntoFile(Resource * res)
 
 Resource * ResourceManager::LoadResource(const char * file_path)
 {
-	return nullptr;
+	Resource* ret = nullptr;
+
+	string path = ProcessFilePath(file_path);
+	string name = GetFileNameFromFilePath(file_path);
+	string extension = ToLowerCase(GetFileExtension(name.c_str()));
+
+	if (TextCmp("fbx", extension.c_str()))
+	{
+		mesh_loader->Load(file_path, true);
+	}
+	else if (TextCmp("png", extension.c_str()) || TextCmp("dds", extension.c_str()) || TextCmp("tga", extension.c_str()))
+	{
+		ret = texture_loader->Load(file_path);
+	}
+
+	return ret;
+}
+
+void ResourceManager::OnLoadFile(const char * file_path, const char * file_name, const char * file_extension)
+{
+	LoadResource(file_path);
 }

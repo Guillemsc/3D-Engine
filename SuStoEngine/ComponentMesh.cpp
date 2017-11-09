@@ -1,6 +1,5 @@
 #include "ComponentMesh.h"
 #include "App.h"
-#include "GeometryLoader.h"
 #include "Component.h"
 #include "ComponentTransform.h"
 #include "GeometryMath.h"

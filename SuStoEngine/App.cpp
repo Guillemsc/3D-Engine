@@ -9,8 +9,6 @@
 #include "JSONLoader.h"
 #include "EditorUI.h"
 #include "Configuration.h"
-#include "GeometryLoader.h"
-#include "TextureLoader.h"
 #include "ModuleFileSystem.h"
 #include "SceneManager.h"
 #include "ResourceManager.h"
@@ -31,8 +29,6 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	camera = new ModuleCamera3D();
 	gameobj = new ModuleGameObject();
 	editorUI = new EditorUI();
-	geometry = new GeometryLoader();
-	texture = new TextureLoader();
 	scene_manager = new SceneManager();
 	resource_manager = new ResourceManager();
 
@@ -48,8 +44,6 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(input);
 	AddModule(audio);
 	AddModule(gameobj);
-	AddModule(geometry);
-	AddModule(texture);
 	AddModule(file_system);
 	AddModule(resource_manager);
 	AddModule(scene_manager);

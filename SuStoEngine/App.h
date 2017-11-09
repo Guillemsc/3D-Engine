@@ -20,8 +20,6 @@ class ModuleCamera3D;
 class ModuleGameObject;
 class EditorUI;
 class Configuration;
-class GeometryLoader;
-class TextureLoader;
 class FileSystem;
 class SceneManager;
 class ResourceManager;
@@ -82,8 +80,6 @@ public:
 	ModuleCamera3D*    camera = nullptr;
 	ModuleGameObject*  gameobj = nullptr;
 	EditorUI*		   editorUI	= nullptr;
-	GeometryLoader*	   geometry = nullptr;
-	TextureLoader*	   texture = nullptr;
 	FileSystem*		   file_system = nullptr;
 	SceneManager*	   scene_manager = nullptr;
 	ResourceManager*   resource_manager = nullptr;
