@@ -10,7 +10,7 @@
 class GameObject
 {
 public:
-	GameObject(double id);
+	GameObject(std::string unique_id);
 	virtual ~GameObject();
 
 	void Start();
@@ -23,7 +23,7 @@ public:
 	void SetEnabled(const bool& set);
 	void CleanUp();
 
-	void AddComponent(ComponentType type, double force_id = -1);
+	void AddComponent(ComponentType type, std::string unique_id = "");
 	void RemoveComponent(ComponentType type);
 	bool ContainsComponent(ComponentType type);
 	std::vector<Component*> GetComponents();
@@ -34,7 +34,7 @@ public:
 	void SetName(const std::string& set);
 	void SetSelected(const bool& set);
 
-	const double GetId() const;
+	std::string GetUniqueId();
 	const bool GetSelected() const;
 
 	const GameObject* GetParent() const;
@@ -63,7 +63,7 @@ public:
 	AABB	    local_bbox;
 
 private:
-	double		unique_id = 0;
+	std::string unique_id;
 	std::string name;
 	bool		enabled = false;
 	bool		selected = false;

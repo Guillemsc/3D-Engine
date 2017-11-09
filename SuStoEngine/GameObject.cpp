@@ -18,9 +18,9 @@
 
 #include "Glew/include/glew.h" 
 
-GameObject::GameObject(double _id)
+GameObject::GameObject(std::string _unique_id)
 {
-	unique_id = _id;
+	unique_id = _unique_id;
 }
 
 GameObject::~GameObject()
@@ -141,17 +141,17 @@ void GameObject::CleanUp()
 	}
 }
 
-void GameObject::AddComponent(ComponentType type, double force_id)
+void GameObject::AddComponent(ComponentType type, string unique_id)
 {
 	if (ContainsComponent(type))
 		return;
 
-	double new_id = 0;
+	string new_id;
 
-	if (force_id == -1)
-		new_id = GetUniqueIdentifierRandom();
+	if (new_id == "")
+		new_id = GetUIDRandomHexadecimal();
 	else
-		new_id = force_id;
+		new_id = unique_id;
 
 	Component* ret = nullptr;
 
@@ -254,7 +254,7 @@ void GameObject::SetSelected(const bool& set)
 	selected = set;
 }
 
-const double GameObject::GetId() const
+std::string GameObject::GetUniqueId()
 {
 	return unique_id;
 }
@@ -398,14 +398,14 @@ void GameObject::OnSaveScene(JSON_Doc * config)
 	config->MoveToSectionFromArray("GameObjects", config->GetArrayCount("GameObjects") - 1);
 
 	// Set the id
-	config->SetNumber("uid", unique_id);
+	config->SetString("uid", unique_id.c_str());
 	
 	// Set the name
 	config->SetString("name", name.c_str());
 
 	// Set the parent id
 	if (parent != nullptr && parent != App->gameobj->GetRoot())
-		config->SetNumber("parent", parent->GetId());
+		config->SetString("parent", parent->GetUniqueId().c_str());
 	else
 		config->SetNumber("parent", -1);
 
@@ -419,7 +419,7 @@ void GameObject::OnSaveScene(JSON_Doc * config)
 		config->MoveToSectionFromArray("Components", config->GetArrayCount("Components") - 1);
 
 		config->SetNumber("type", (*it)->GetType());
-		config->SetNumber("component_id", (*it)->GetUniqueId());
+		config->SetString("component_id", (*it)->GetUniqueId().c_str());
 
 		(*it)->OnSaveScene(config);
 	}

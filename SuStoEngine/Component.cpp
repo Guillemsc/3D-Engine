@@ -1,6 +1,6 @@
 #include "Component.h"
 
-Component::Component(ComponentType _type, GameObject* _owner, double _unique_id)
+Component::Component(ComponentType _type, GameObject* _owner, std::string _unique_id)
 {
 	type = _type;
 	owner = _owner;
@@ -62,7 +62,7 @@ const char* Component::GetName() const
 	return name;
 }
 
-double Component::GetUniqueId()
+std::string Component::GetUniqueId()
 {
 	return unique_id;
 }

@@ -50,7 +50,7 @@ void SceneManager::LoadScene(const char * scene_name)
 		{
 			scene->MoveToSectionFromArray("GameObjects", i);
 
-			double id = scene->GetNumber("uid");
+			string id = scene->GetString("uid");
 			string name = scene->GetString("name");
 
 			GameObject* go = App->gameobj->Create(id);

@@ -15,9 +15,9 @@ ResourceManager::~ResourceManager()
 {
 }
 
-Resource * ResourceManager::Get(double id)
+Resource * ResourceManager::Get(std::string _unique_id)
 {
-	std::map<double, Resource*>::iterator it = resources.find(id);
+	std::map<std::string, Resource*>::iterator it = resources.find(_unique_id);
 
 	if (it != resources.end())
 		return it->second;
@@ -25,16 +25,16 @@ Resource * ResourceManager::Get(double id)
 	return nullptr;
 }
 
-Resource * ResourceManager::CreateNewResource(ResourceType type, double force_id)
+Resource * ResourceManager::CreateNewResource(ResourceType type, std::string _unique_id)
 {
-	double new_id = 0;
+	std::string new_id;
 
-	if (force_id == -1)
-		new_id = GetUniqueIdentifierRandom();
+	if (_unique_id == "")
+		new_id = GetUIDRandomHexadecimal();
 	else
-		new_id = force_id;
+		new_id = _unique_id;
 
-	Resource* res = Get(new_id);
+	Resource* res = Get(_unique_id);
 
 	if (res == nullptr)
 	{
@@ -59,9 +59,9 @@ Resource * ResourceManager::CreateNewResource(ResourceType type, double force_id
 	return res;
 }
 
-void ResourceManager::DeleteResource(double id)
+void ResourceManager::DeleteResource(std::string unique_id)
 {
-	std::map<double, Resource*>::iterator it = resources.find(id);
+	std::map<std::string, Resource*>::iterator it = resources.find(unique_id);
 
 	if (it != resources.end())
 	{

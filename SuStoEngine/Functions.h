@@ -45,7 +45,13 @@ float GetRandomValue(float range_1, float range_2);
 // Returns a random float given a range;
 double GetRandomValue(double range_1, double range_2);
 
-double GetUniqueIdentifierRandom();
+double GetUIDRandomDouble();
+
+float GetUIDRandomFloat();
+
+int GetUIDRandomInt();
+
+std::string GetUIDRandomHexadecimal();
 
 // Returns true if a point is inide a rect
 bool PointInRect(float2 point_xy, float4 rect_xywh);

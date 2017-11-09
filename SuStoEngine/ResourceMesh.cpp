@@ -2,7 +2,7 @@
 #include "App.h"
 #include "ModuleRenderer3D.h"
 
-ResourceMesh::ResourceMesh(double unique_id) : Resource(unique_id)
+ResourceMesh::ResourceMesh(std::string unique_id) : Resource(unique_id)
 {
 }
 

@@ -53,7 +53,7 @@ void Inspector::Draw()
 		if (ImGui::Checkbox("Static", &stat)) 
 			selected[0]->SetStatic(stat);
 
-		ImGui::TextWrapped("Unique id: %f", selected[0]->GetId());
+		ImGui::TextWrapped("Unique id: %s", selected[0]->GetUniqueId().c_str());
  
 		ImGui::Separator();
 

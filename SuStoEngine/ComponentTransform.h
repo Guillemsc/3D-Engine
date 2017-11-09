@@ -11,7 +11,7 @@ class ComponentTransform : public Component
 	friend class GameObject;
 
 public:
-	ComponentTransform(GameObject* owner, double id);
+	ComponentTransform(GameObject* owner, std::string unique_id);
 	virtual ~ComponentTransform();
 
 	void Start();

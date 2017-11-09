@@ -6,7 +6,7 @@
 #include "imgui.h"
 #include "JSONLoader.h"
 
-ComponentMaterial::ComponentMaterial(GameObject * owner, double id) : Component(ComponentType::MATERIAL, owner, id)
+ComponentMaterial::ComponentMaterial(GameObject * owner, std::string unique_id) : Component(ComponentType::MATERIAL, owner, unique_id)
 {
 	LOG_OUTPUT("Component Material Created");
 	SetName("Material");
@@ -92,6 +92,6 @@ void ComponentMaterial::OnSaveScene(JSON_Doc * config)
 {
 	if (has_texture)
 	{
-		config->SetNumber("texture_id", texture->GetUniqueId());
+		config->SetString("texture_id", texture->GetUniqueId().c_str());
 	}
 }

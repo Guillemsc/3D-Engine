@@ -10,7 +10,7 @@
 #include "JSONLoader.h"
 #include "imgui.h"
 
-ComponentMesh::ComponentMesh(GameObject * owner, double id) : Component(MESH, owner, id)
+ComponentMesh::ComponentMesh(GameObject * owner, std::string unique_id) : Component(MESH, owner, unique_id)
 {
 	LOG_OUTPUT("Component Mesh Created");
 	SetName("Mesh");
@@ -102,7 +102,7 @@ void ComponentMesh::OnSaveScene(JSON_Doc * config)
 {
 	if (has_mesh)
 	{
-		config->SetNumber("mesh_id", mesh->GetUniqueId());
+		config->SetString("mesh_id", mesh->GetUniqueId().c_str());
 	}
 }
 

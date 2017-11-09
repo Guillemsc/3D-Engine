@@ -20,7 +20,7 @@ enum ComponentType
 class Component
 {
 public:
-	Component(ComponentType type, GameObject* owner, double unique_id);
+	Component(ComponentType type, GameObject* owner, std::string unique_id);
 	virtual ~Component();
 
 	virtual void Start() {};
@@ -31,7 +31,7 @@ public:
 	const ComponentType GetType() const;
 	const char* GetName() const;
 
-	double GetUniqueId();
+	std::string GetUniqueId();
 
 	void Enable();
 	void Disable();
@@ -54,7 +54,7 @@ private:
 	GameObject*   owner = nullptr;
 	ComponentType type;
 	const char*   name = nullptr;
-	double	      unique_id = 0;
+	std::string	  unique_id;
 };
 
 #endif

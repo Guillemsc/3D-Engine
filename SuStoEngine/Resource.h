@@ -14,7 +14,7 @@ enum ResourceType
 class Resource
 {
 public:
-	Resource(double unique_id);
+	Resource(std::string  unique_id);
 	virtual ~Resource();
 
 	virtual void CleanUp() {};
@@ -24,7 +24,7 @@ public:
 
 	ResourceType GetType();
 
-	double GetUniqueId();
+	std::string GetUniqueId();
 	bool IsUsed();
 	int  UsedCount();
 
@@ -37,7 +37,7 @@ private:
 
 private:
 	ResourceType type = RT_NULL;
-	double		 unique_id = 0;
+	std::string  unique_id;
 	int			 count_ref = 0;
 	std::string	 name;
 };

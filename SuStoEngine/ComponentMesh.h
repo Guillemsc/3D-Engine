@@ -10,7 +10,7 @@ class ResourceMesh;
 class ComponentMesh : public Component
 {
 public:
-	ComponentMesh(GameObject* owner, double id);
+	ComponentMesh(GameObject* owner, std::string unique_id);
 	virtual ~ComponentMesh();
 
 	void Start();

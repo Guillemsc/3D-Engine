@@ -9,7 +9,7 @@
 class ResourceTexture : public Resource
 {
 public:
-	ResourceTexture(double unique_id);
+	ResourceTexture(std::string unique_id);
 	virtual ~ResourceTexture();
 
 	virtual void CleanUp();

@@ -397,9 +397,6 @@ bool MeshImporter::Save(const char * path, ResourceMesh* mesh)
 	name += "_";
 	name += std::to_string(App->id->NewId("mesh"));
 
-	double* id = new double;
-	*id = mesh->GetUniqueId();
-
 	uint ranges[3] = { mesh->GetNumVertices(), mesh->GetNumIndices(), mesh->GetNumUVs() };
 	uint size = sizeof(ranges) + 
 		sizeof(uint) * mesh->GetNumIndices() + 
@@ -435,7 +432,6 @@ bool MeshImporter::Save(const char * path, ResourceMesh* mesh)
 		return false;
 	}
 
-	RELEASE(id);
 	RELEASE_ARRAY(data);
 	
 	return ret;

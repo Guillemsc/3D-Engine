@@ -6,7 +6,7 @@
 #include "DebugDraw.h"
 #include "JSONLoader.h"
 
-ComponentCamera::ComponentCamera(GameObject * owner, double id) : Component(CAMERA, owner, id)
+ComponentCamera::ComponentCamera(GameObject * owner, std::string unique_id) : Component(CAMERA, owner, unique_id)
 {
 	LOG_OUTPUT("Component Camera Created");
 	SetName("Camera");

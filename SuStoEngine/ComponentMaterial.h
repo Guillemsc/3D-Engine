@@ -10,7 +10,7 @@ class ResourceTexture;
 class ComponentMaterial : public Component
 {
 public:
-	ComponentMaterial(GameObject* owner, double id);
+	ComponentMaterial(GameObject* owner, std::string unique_id);
 	virtual ~ComponentMaterial();
 
 	void Start();

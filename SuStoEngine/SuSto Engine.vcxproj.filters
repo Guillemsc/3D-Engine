@@ -61,9 +61,6 @@
     <Filter Include="Sources\GameObjects\Components">
       <UniqueIdentifier>{c5f10952-9d6c-4eec-b70e-347606580b18}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Resources\NewFilter1">
-      <UniqueIdentifier>{897acfff-62ab-44ea-b41a-562d754ebd81}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleAudio.h">

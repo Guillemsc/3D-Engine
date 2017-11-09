@@ -12,9 +12,9 @@ public:
 	ResourceManager(bool start_enabled = true);
 	virtual ~ResourceManager();
 
-	Resource * Get(double id);
-	Resource* CreateNewResource(ResourceType type, double force_id = -1);
-	void DeleteResource(double id);
+	Resource * Get(std::string unique_id);
+	Resource* CreateNewResource(ResourceType type, std::string unique_id = "");
+	void DeleteResource(std::string unique_id);
 
 	void SaveResourceIntoFile(Resource* res);
 	Resource* LoadResource(const char* file_path);
@@ -24,7 +24,7 @@ private:
 public:
 
 private:
-	std::map<double, Resource*> resources;
+	std::map<std::string, Resource*> resources;
 
 };
 

@@ -13,7 +13,7 @@ ModuleGameObject::ModuleGameObject(bool enabled)
 	SetName("GameObject");
 
 	// Root GameObject
-	root = new GameObject(-1);
+	root = new GameObject("Root");
 	root->Start();
 	root->SetName("Root");
 }
@@ -98,12 +98,12 @@ bool ModuleGameObject::CleanUp()
 	return ret;
 }
 
-GameObject * ModuleGameObject::Create(double force_id)
+GameObject * ModuleGameObject::Create(std::string force_id)
 {
-	double new_id = 0;
+	string new_id;
 
-	if (force_id == -1)
-		new_id = GetUniqueIdentifierRandom();
+	if (force_id == "")
+		new_id = GetUIDRandomHexadecimal();
 	else
 		new_id = force_id;
 
@@ -127,13 +127,13 @@ void ModuleGameObject::Destroy(GameObject * go)
 	to_delete.push_back(go);
 }
 
-GameObject* ModuleGameObject::Find(double id)
+GameObject* ModuleGameObject::Find(std::string unique_id)
 {
 	GameObject* ret = nullptr;
 
 	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
 	{
-		if ((*it)->GetId() == id)
+		if ((*it)->GetUniqueId() == unique_id)
 		{
 			ret = (*it);
 			break;

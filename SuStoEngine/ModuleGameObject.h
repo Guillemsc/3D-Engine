@@ -21,9 +21,9 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	GameObject* Create(double force_id = -1);
+	GameObject* Create(std::string unique_id = "");
 	void Destroy(GameObject* go);
-	GameObject* Find(double id);
+	GameObject* Find(std::string unique_id);
 	void DestroyAllGameObjects();
 
 	const vector<GameObject*> GetListGameObjects() const;

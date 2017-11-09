@@ -10,7 +10,7 @@ class Camera3D;
 class ComponentCamera : public Component
 {
 public:
-	ComponentCamera(GameObject* owner, double id);
+	ComponentCamera(GameObject* owner, std::string unique_id);
 	virtual ~ComponentCamera();
 
 	void Start();

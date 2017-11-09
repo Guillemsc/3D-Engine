@@ -62,7 +62,6 @@ void Hierarchy::PrintGoAndChildsRecursive(GameObject * go)
 	if (go == nullptr)
 		return;
 
-	ImGui::PushID(go->GetId());
 	// ------------------------
 	// Flags ------------------
 	// ------------------------
@@ -107,6 +106,7 @@ void Hierarchy::PrintGoAndChildsRecursive(GameObject * go)
 		}
 	}
 
+	// Menu
 	if (ImGui::BeginPopupContextItem("HerarchyPopup"))
 	{
 		if (ImGui::Button("Delete"))
@@ -116,8 +116,6 @@ void Hierarchy::PrintGoAndChildsRecursive(GameObject * go)
 
 		ImGui::EndPopup();
 	}
-
-	ImGui::PopID();
 
 	// ------------------------
 	// Draw childs recursive --
