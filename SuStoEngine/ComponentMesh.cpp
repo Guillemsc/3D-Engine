@@ -100,6 +100,10 @@ void ComponentMesh::OnLoadScene(JSON_Doc * config)
 
 void ComponentMesh::OnSaveScene(JSON_Doc * config)
 {
+	if (has_mesh)
+	{
+		config->SetNumber("mesh_id", mesh->GetUniqueId());
+	}
 }
 
 void ComponentMesh::OnEnable()

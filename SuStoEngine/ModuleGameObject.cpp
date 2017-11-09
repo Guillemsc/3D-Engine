@@ -127,6 +127,22 @@ void ModuleGameObject::Destroy(GameObject * go)
 	to_delete.push_back(go);
 }
 
+GameObject* ModuleGameObject::Find(double id)
+{
+	GameObject* ret = nullptr;
+
+	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
+	{
+		if ((*it)->GetId() == id)
+		{
+			ret = (*it);
+			break;
+		}
+	}
+
+	return ret;
+}
+
 void ModuleGameObject::DestroyAllGameObjects()
 {
 	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)

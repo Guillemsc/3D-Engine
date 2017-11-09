@@ -281,7 +281,7 @@ void Camera3D::SetAspectRatio(const float & set)
 	}
 }
 
-const float Camera3D::GetNearPlaneFistance() const
+const float Camera3D::GetNearPlaneDistance() const
 {
 	return frustum.NearPlaneDistance();
 }

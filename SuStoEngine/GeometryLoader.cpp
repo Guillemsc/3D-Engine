@@ -333,237 +333,6 @@ MeshImporter * GeometryLoader::GetMeshImporter()
 	return mesh_importer;
 }
 
-//Mesh::Mesh(float* _vertices, uint _num_vertices, uint* _indices, uint _num_indices, float* _uvs, uint _num_uvs, const char* filename)
-//{
-//	if (_num_vertices > 0)
-//	{
-//		// Vertices
-//		vertices = new float[_num_vertices * 3];
-//		memcpy(vertices, _vertices, sizeof(float) * _num_vertices * 3);
-//		num_vertices = _num_vertices;
-//
-//		if (_num_indices > 0)
-//		{
-//			// Indices
-//			indices = new uint[_num_indices];
-//			memcpy(indices, _indices, sizeof(uint) * _num_indices);
-//			num_indices = _num_indices;
-//		}
-//
-//		if (_num_uvs > 0)
-//		{
-//			// UVs
-//			uvs = new float[_num_uvs * 3];
-//			memcpy(uvs, _uvs, sizeof(float) * _num_uvs * 3);
-//			num_uvs = _num_uvs;
-//		}
-//
-//		file_name = filename;
-//
-//		// Bbox
-//		bbox.SetNegativeInfinity();
-//		bbox.Enclose((float3*)vertices, _num_vertices);
-//	}
-//}
-//
-//Mesh::Mesh()
-//{
-//}
-//
-//void Mesh::CleanUp()
-//{
-//	// Unload from vram
-//	UnloadFromMemory();
-//
-//	// Vertices
-//	id_vertices = 0;
-//	num_vertices = 0;
-//	if (vertices != nullptr)
-//		RELEASE_ARRAY(vertices);
-//
-//	// Indices
-//	id_indices = 0;
-//	num_indices = 0;
-//	if (indices != nullptr)
-//		RELEASE_ARRAY(indices);
-//
-//	// UVs
-//	id_uv = 0;
-//	num_uvs = 0;
-//	if (uvs != nullptr)
-//		RELEASE_ARRAY(uvs);
-//}
-//
-//void Mesh::SetUniqueId(double _id)
-//{
-//    unique_id = _id;
-//}
-//
-//void Mesh::SetFaces(float * _vertices, uint _num_vertices, uint * _indices, uint _num_indices)
-//{
-//	if (_num_vertices > 0)
-//	{
-//		// Vertices
-//		vertices = new float[_num_vertices * 3];
-//		memcpy(vertices, _vertices, sizeof(float) * _num_vertices * 3);
-//		num_vertices = _num_vertices;
-//
-//		if (_num_indices > 0)
-//		{
-//			// Indices
-//			indices = new uint[_num_indices];
-//			memcpy(indices, _indices, sizeof(uint) * _num_indices);
-//			num_indices = _num_indices;
-//		}
-//
-//		CalcMeshBBox();
-//	}
-// 
-//}
-//
-//void Mesh::SetUvs(float * _uvs, uint _num_uvs)
-//{
-//	if (_num_uvs > 0)
-//	{
-//		// UVs
-//		uvs = new float[_num_uvs * 3];
-//		memcpy(uvs, _uvs, sizeof(float) * _num_uvs * 3);
-//		num_uvs = _num_uvs;
-//	}
-//}
-//
-//uint Mesh::GetIdVertices()
-//{
-//	return id_vertices;
-//}
-//
-//uint Mesh::GetNumVertices()
-//{
-//	return num_vertices;
-//}
-//
-//uint Mesh::GetIdIndices()
-//{
-//	return id_indices;
-//}
-//
-//uint Mesh::GetNumIndices()
-//{
-//	return num_indices;
-//}
-//
-//uint Mesh::GetIdUV()
-//{
-//	return id_uv;
-//}
-//
-//uint Mesh::GetNumUVs()
-//{
-//	return num_uvs;
-//}
-//
-//AABB Mesh::GetBBox()
-//{
-//	return bbox;
-//}
-//
-//float Mesh::GetDiagonal()
-//{
-//	return bbox.Diagonal().Length();
-//}
-//
-//string Mesh::GetFilename()
-//{
-//	return file_name;
-//}
-//
-//float * Mesh::GetVertices()
-//{
-//	return vertices;
-//}
-//
-//uint * Mesh::GetIndices()
-//{
-//	return indices;
-//}
-//
-//float * Mesh::GetUVs()
-//{
-//	return uvs;
-//}
-//
-//void Mesh::SetTransform(float3 _pos, Quat _rotation, float3 _scale)
-//{
-//	position = _pos;
-//	rotation = _rotation;
-//	scale = _scale;
-//
-//	CalcMeshBBox();
-//}
-//
-//float3 Mesh::GetPosition()
-//{
-//	return position;
-//}
-//
-//Quat Mesh::GetRotation()
-//{
-//	return rotation;
-//}
-//
-//float3 Mesh::GetScale()
-//{
-//	return scale;
-//}
-//
-//void Mesh::LoadToMemory()
-//{
-//	if(id_vertices == 0 && vertices != nullptr)
-//		id_vertices = App->renderer3D->LoadBuffer(vertices, num_vertices * 3);
-//
-//	if(id_indices == 0 && indices != nullptr)
-//		id_indices = App->renderer3D->LoadBuffer(indices, num_indices);
-//
-//	if(id_uv == 0 && uvs != nullptr)
-//		id_uv = App->renderer3D->LoadBuffer(uvs, num_uvs * 3);
-//}
-//
-//void Mesh::UnloadFromMemory()
-//{
-//	if (id_vertices != 0)
-//	{
-//		App->renderer3D->UnloadBuffer(id_vertices, num_vertices * 3);
-//		id_vertices = 0;
-//	}
-//	
-//	if (id_indices != 0)
-//	{
-//		App->renderer3D->UnloadBuffer(id_indices, num_indices);
-//		id_indices = 0;
-//	}
-//
-//	if (id_uv != 0)
-//	{
-//		App->renderer3D->UnloadBuffer(id_uv, num_uvs * 3);
-//		id_uv = 0;
-//	}
-//}
-//
-//const double Mesh::GetUniqueId() const
-//{
-//	return unique_id;
-//}
-//
-//void Mesh::CalcMeshBBox()
-//{
-//	bbox.SetNegativeInfinity();
-//
-//	if (vertices != nullptr && num_vertices > 0)
-//	{
-//		bbox.Enclose((vec*)vertices, num_vertices);
-//	}
-//}
-
 ResourceMesh* MeshImporter::Load(const char * filepath)
 {
 	//Open the file and get the size
@@ -580,15 +349,10 @@ ResourceMesh* MeshImporter::Load(const char * filepath)
 	fread(buffer, sizeof(char), size, file);
 	fclose(file);
 
-	// Copy unique id
-	double* id = new double;
-	uint bytes = sizeof(double);
-	memcpy(id, cursor, bytes);
-	cursor += bytes;
-
 	// Copy the ranges
-	uint ranges[3];		// ranges[0] = Vertices, ranges[1] = Indices, ranges[2] = Uvs
-	bytes = sizeof(ranges);
+	// ranges[0] = Vertices, ranges[1] = Indices, ranges[2] = Uvs
+	uint ranges[3];		
+	uint bytes = sizeof(ranges);
 	memcpy(ranges, cursor, bytes);
 	cursor += bytes;
 
@@ -618,7 +382,6 @@ ResourceMesh* MeshImporter::Load(const char * filepath)
 	LOG_OUTPUT("New mesh with %d vertices", ranges[0] * 3);
 	LOG_OUTPUT("New mesh with %d indices", ranges[1]);
 
-	RELEASE(id);
 	RELEASE_ARRAY(indices);
 	RELEASE_ARRAY(vertices);
 	RELEASE_ARRAY(uvs);
@@ -638,7 +401,7 @@ bool MeshImporter::Save(const char * path, ResourceMesh* mesh)
 	*id = mesh->GetUniqueId();
 
 	uint ranges[3] = { mesh->GetNumVertices(), mesh->GetNumIndices(), mesh->GetNumUVs() };
-	uint size = sizeof(double) + sizeof(ranges) + 
+	uint size = sizeof(ranges) + 
 		sizeof(uint) * mesh->GetNumIndices() + 
 		sizeof(float) * mesh->GetNumVertices() * 3 + 
 		sizeof(float) * mesh->GetNumUVs() * 3;
@@ -647,13 +410,8 @@ bool MeshImporter::Save(const char * path, ResourceMesh* mesh)
 	char* data = new char[size];
 	char* cursor = data;
 
-	// Store unique id
-	uint bytes = sizeof(double);
-	memcpy(cursor, id, bytes);
-	cursor += bytes;
-
 	// Store ranges
-	bytes = sizeof(ranges);
+	uint bytes = sizeof(ranges);
 	memcpy(cursor, ranges, bytes);
 	cursor += bytes;
 

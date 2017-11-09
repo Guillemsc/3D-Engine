@@ -23,6 +23,7 @@ public:
 
 	GameObject* Create(double force_id = -1);
 	void Destroy(GameObject* go);
+	GameObject* Find(double id);
 	void DestroyAllGameObjects();
 
 	const vector<GameObject*> GetListGameObjects() const;

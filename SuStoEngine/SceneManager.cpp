@@ -31,6 +31,7 @@ void SceneManager::SaveScene(const char * scene_name)
 
 		for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); it++)
 		{
+			scene->MoveToRoot();
 			(*it)->OnSaveScene(scene);
 		}
 
@@ -44,13 +45,16 @@ void SceneManager::LoadScene(const char * scene_name)
 
 	if (scene != nullptr)
 	{
+		// Load GameObjects
 		for (int i = 0; i < scene->GetArrayCount("GameObjects"); i++)
 		{
 			scene->MoveToSectionFromArray("GameObjects", i);
 
 			double id = scene->GetNumber("uid");
+			string name = scene->GetString("name");
 
 			GameObject* go = App->gameobj->Create(id);
+			go->SetName(name);
 		}
 	}
 }

@@ -4,6 +4,7 @@
 #include "ResourceTexture.h"
 #include "ResourceManager.h"
 #include "imgui.h"
+#include "JSONLoader.h"
 
 ComponentMaterial::ComponentMaterial(GameObject * owner, double id) : Component(ComponentType::MATERIAL, owner, id)
 {
@@ -89,4 +90,8 @@ void ComponentMaterial::OnLoadScene(JSON_Doc * config)
 
 void ComponentMaterial::OnSaveScene(JSON_Doc * config)
 {
+	if (has_texture)
+	{
+		config->SetNumber("texture_id", texture->GetUniqueId());
+	}
 }

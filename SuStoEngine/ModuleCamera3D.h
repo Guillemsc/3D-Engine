@@ -22,7 +22,7 @@ public:
 	void SetFarPlaneDistance(const float& set);
 	void SetFOV(const float& set);
 	void SetAspectRatio(const float& set);
-	const float GetNearPlaneFistance() const;
+	const float GetNearPlaneDistance() const;
 	const float GetFarPlaneDistance() const;
 	const float GetVerticalFOV() const;
 	const float GetHorizontalFOV() const;

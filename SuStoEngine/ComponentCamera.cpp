@@ -4,6 +4,7 @@
 #include "App.h"
 #include "ModuleRenderer3D.h"
 #include "DebugDraw.h"
+#include "JSONLoader.h"
 
 ComponentCamera::ComponentCamera(GameObject * owner, double id) : Component(CAMERA, owner, id)
 {
@@ -61,4 +62,7 @@ void ComponentCamera::OnLoadScene(JSON_Doc * config)
 
 void ComponentCamera::OnSaveScene(JSON_Doc * config)
 {
+	config->SetNumber("far_plane_distance", camera->GetFarPlaneDistance());
+	config->SetNumber("near_plane_distance", camera->GetNearPlaneDistance());
+	config->SetNumber("fov", camera->GetVerticalFOV());
 }

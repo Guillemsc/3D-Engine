@@ -3,6 +3,7 @@
 #include "imgui.h"
 #include "App.h"
 #include "ModuleInput.h"
+#include "JSONLoader.h"
 
 ComponentTransform::ComponentTransform(GameObject * owner, double id) : Component(ComponentType::TRANSFORM, owner, id)
 {
@@ -131,6 +132,9 @@ void ComponentTransform::OnLoadScene(JSON_Doc * config)
 
 void ComponentTransform::OnSaveScene(JSON_Doc * config)
 {
+	config->SetNumber3("position", local_position);
+	config->SetNumber4("rotation", float4(local_rotation_quat.x, local_rotation_quat.y, local_rotation_quat.w, local_rotation_quat.z));
+	config->SetNumber3("scale", local_scale);
 }
 
 void ComponentTransform::InspectorDraw(std::vector<Component*> components)

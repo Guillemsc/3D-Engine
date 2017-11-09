@@ -4,6 +4,8 @@
 #include "Module.h"
 #include "Parson\parson.h"
 
+#include "GeometryMath.h"
+
 class JSON_Doc
 {
 public:
@@ -13,9 +15,13 @@ public:
 	void SetString(string set, const char* str);
 	void SetBool(string set, bool bo);
 	void SetNumber(string set, double nu);
+	void SetNumber3(string set, float3 val);
+	void SetNumber4(string set, float4 val);
 	const char* GetString(string str, const char* defaul = "");
 	const bool GetBool(string bo, bool defaul = false);
 	const double GetNumber(string nu, double defaul = 0);
+	const float3 GetNumber3(string fl);
+	const float4 GetNumber4(string fl);
 
 	void SetArray(string set);
 	void ClearArray(string arr);

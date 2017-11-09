@@ -305,7 +305,7 @@ void GameObject::EraseChild(GameObject * child, bool send_child_to_root)
 			{
 				App->gameobj->GetRoot()->AddChild(child);
 
-				child->transform->global_transform = child->transform->local_transform;
+				child->transform->local_transform = child->transform->global_transform;
 			}
 
 			break;
@@ -393,25 +393,34 @@ void GameObject::OnLoadScene(JSON_Doc * config)
 
 void GameObject::OnSaveScene(JSON_Doc * config)
 {
-	config->MoveToRoot();
+	// Add and move to a new secion on the gameobjects array
 	config->AddSectionToArray("GameObjects");
 	config->MoveToSectionFromArray("GameObjects", config->GetArrayCount("GameObjects") - 1);
 
+	// Set the id
 	config->SetNumber("uid", unique_id);
 	
+	// Set the name
+	config->SetString("name", name.c_str());
+
+	// Set the parent id
 	if (parent != nullptr && parent != App->gameobj->GetRoot())
 		config->SetNumber("parent", parent->GetId());
 	else
 		config->SetNumber("parent", -1);
 
-	config->SetString("name", name.c_str());
-
-
-
 	config->MoveToRoot();
 
+	// Save components
 	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
 	{
+		// Add and move to a new section on the components array
+		config->AddSectionToArray("Components");
+		config->MoveToSectionFromArray("Components", config->GetArrayCount("Components") - 1);
+
+		config->SetNumber("type", (*it)->GetType());
+		config->SetNumber("component_id", (*it)->GetUniqueId());
+
 		(*it)->OnSaveScene(config);
 	}
 }
