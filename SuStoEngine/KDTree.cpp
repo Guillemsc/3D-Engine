@@ -293,33 +293,6 @@ bool KDTree::HasTree() const
 
 void KDTree::DebugDraw() const
 {
-	std::vector<Node*> planes_to_draw;
-	std::vector<Node*> nodes_to_visit;
-	planes_to_draw.push_back(root_node);
-	nodes_to_visit.push_back(root_node);
 
-	//get all children that have planes
-	while (!nodes_to_visit.empty())
-	{
-		//add childs to visit and draw them later 
-		if ((*nodes_to_visit.begin())->GetLeft() != nullptr && (*nodes_to_visit.begin())->GetRight() != nullptr)
-		{
-			nodes_to_visit.push_back((*nodes_to_visit.begin())->GetLeft());
-			nodes_to_visit.push_back((*nodes_to_visit.begin())->GetRight());
-			planes_to_draw.push_back((*nodes_to_visit.begin())->GetLeft());
-			planes_to_draw.push_back((*nodes_to_visit.begin())->GetRight());
-		}
-
-		//remove curr node from the nodes to visit
-		nodes_to_visit.erase(nodes_to_visit.begin());
-	}
-
-	float plane_size = 100.0f;
-
-	for (int p = 0; p < planes_to_draw.size(); ++p)
-	{
-		Plane plane_info = planes_to_draw[p]->cut_plane;
-
-	}
 }
 
