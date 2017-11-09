@@ -47,6 +47,7 @@ private:
 	vector<GameObject*> statics;
 	GameObject*			root = nullptr;
 	KDTree* kdtree = nullptr;
+	bool kdtree_debug = false;
 };
 
 #endif // !_MODULE_GAME_OBJECT_H_

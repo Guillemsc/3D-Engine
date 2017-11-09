@@ -36,6 +36,8 @@ public:
 		Node* GetLeft()const;
 		Node* GetRight()const;
 
+		void DrawPlane(int width, int height, float3 initial_translation);
+
 	private:
 		//Divides this node into 2 nodes that contais the elements (half on each node)
 		void CreatePartition();

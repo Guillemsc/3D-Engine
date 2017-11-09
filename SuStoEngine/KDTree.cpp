@@ -3,6 +3,8 @@
 #include "Functions.h"
 #include <algorithm>
 #include "ComponentMesh.h"
+#include "Color.h"
+#include <gl\GLU.h>
 
 KDTree::Node::Node(uint partition_num) : partition_num(partition_num)
 {
@@ -94,7 +96,7 @@ void KDTree::Node::CreatePartition()
 		{
 			int node = 0; // new node is decided between positive part or negative part of the plane.
 
-			if (*ele == nullptr)
+			if ((*ele)->GetComponent(ComponentType::MESH) == nullptr)
 			{
 				ele = elements.erase(ele);
 				continue;
@@ -103,9 +105,9 @@ void KDTree::Node::CreatePartition()
 			switch (axis)
 			{
 			case KDTree::Node::A_X:
-				if ((*ele)->GetBbox().MaxX() > mid_point)
+				if ((*ele)->GetBbox().MaxX() >= mid_point)
 				{
-					if ((*ele)->GetBbox().MinX() > mid_point)
+					if ((*ele)->GetBbox().MinX() >= mid_point)
 						node = 1;
 					else
 						node = 0;
@@ -221,6 +223,45 @@ KDTree::Node * KDTree::Node::GetRight() const
 	return right;
 }
 
+void KDTree::Node::DrawPlane(int width, int height, float3 initial_translation)
+{
+	/*Color color = { 0, 0, 0, 0 };
+	Quat rotation;
+
+	if (this == nullptr)
+		return;
+
+	switch (axis)
+	{
+	case KDTree::Node::A_X:
+		color = { 1.0f, 0.0f, 0.0f, 0.25f };
+		rotation = Quat::ToEulerXYZ()
+
+		break;
+	case KDTree::Node::A_Y:
+		color = { 0.0f, 1.0f, 0.0f, 0.25f };
+		rotation = { 0, 1, 0 };
+
+		break;
+	case KDTree::Node::A_Z:
+		color = { 0.0f, 0.0f, 1.0f, 0.25f };
+		rotation = { 0, 0, 1 };
+
+		break;
+	}
+
+	
+
+	glPushMatrix();
+		//glMultMatrixf();
+		glColor4f(color.r, color.g, color.b, color.a);
+		
+	glPopMatrix();
+
+	left->DrawPlane(100, 100, initial_translation);
+	right->DrawPlane(100, 100, initial_translation);*/
+}
+
 void KDTree::Node::CheckPartition()
 {
 	if (elements.size() > partition_num)
@@ -293,33 +334,9 @@ bool KDTree::HasTree() const
 
 void KDTree::DebugDraw() const
 {
-	std::vector<Node*> planes_to_draw;
-	std::vector<Node*> nodes_to_visit;
-	planes_to_draw.push_back(root_node);
-	nodes_to_visit.push_back(root_node);
-
-	//get all children that have planes
-	while (!nodes_to_visit.empty())
+	if (root_node != nullptr)
 	{
-		//add childs to visit and draw them later 
-		if ((*nodes_to_visit.begin())->GetLeft() != nullptr && (*nodes_to_visit.begin())->GetRight() != nullptr)
-		{
-			nodes_to_visit.push_back((*nodes_to_visit.begin())->GetLeft());
-			nodes_to_visit.push_back((*nodes_to_visit.begin())->GetRight());
-			planes_to_draw.push_back((*nodes_to_visit.begin())->GetLeft());
-			planes_to_draw.push_back((*nodes_to_visit.begin())->GetRight());
-		}
-
-		//remove curr node from the nodes to visit
-		nodes_to_visit.erase(nodes_to_visit.begin());
-	}
-
-	float plane_size = 100.0f;
-
-	for (int p = 0; p < planes_to_draw.size(); ++p)
-	{
-		Plane plane_info = planes_to_draw[p]->cut_plane;
-
+		root_node->DrawPlane(100, 100, float3::zero);
 	}
 }
 
