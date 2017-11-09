@@ -15,55 +15,64 @@ public:
 	public:
 		enum Axis
 		{
-			a_null,
-			a_x,
-			a_y,
-			a_z
+			A_NULL,
+			A_X,
+			A_Y,
+			A_Z
 		};
 
 	public:
 		Node(uint partition_num);
 		~Node();
 
-		void AddElement(GameObject* go);
-
-		void CreatePartition();
-
-		void GetElements(std::vector<GameObject*>& elements) const;
+		//Add an element to this node.
+		void AddElement(GameObject* element);
 
 		void CheckPartition();
 
+		//fills elements vector with all elements of this node and child nodes
+		void GetElements(std::vector<GameObject*>& elements) const;
+
+		Node* GetLeft()const;
+		Node* GetRight()const;
+
+	private:
+		//Divides this node into 2 nodes that contais the elements (half on each node)
+		void CreatePartition();
 		void SetParent(Node* parent);
-		const Node* GetLeft() const;
-		const Node* GetRight() const;
+
 	public:
 		Plane cut_plane;
-		Axis axis = Axis::a_null;
+		Axis axis = A_NULL;
+
+	private:
+		Node* right = nullptr;
+		Node* left = nullptr;
+		Node* parent = nullptr;
+
 		std::vector<GameObject*> elements;
 
-		uint partition_num = 0;
-	private:
-		Node* left = nullptr;
-		Node* right = nullptr;
-		Node* parent = nullptr;
+		uint partition_num = 1;
 	};
 
 public:
 	KDTree();
 	~KDTree();
 
-	void CreateTree(const std::vector<GameObject*>& elements, uint num_partition);
+	void CreateTree(std::vector<GameObject*>& elements, uint ele_on_partition = 5);
+
 	void EraseTree();
 
 	void GetElementsToTest(const Frustum& frustum) const;
 	void GetElementsToTest(const Ray& ray) const;
-	void GetElementsToTest(const AABB& aabb) const;
+	void GetElementsToTest(const AABB& box) const;
 
-	bool HasTree() const;
+	bool HasTree()const;
+	void DebugDraw()const;
 
 private:
-	Node* root = nullptr;
+	Node* root_node = nullptr;
+
 };
 
-
-#endif // !_QUADTREE_H_
+#endif

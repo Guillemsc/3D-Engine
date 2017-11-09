@@ -4,140 +4,147 @@
 #include <algorithm>
 #include "ComponentMesh.h"
 
-KDTree::Node::Node(uint partition_num)
+KDTree::Node::Node(uint partition_num) : partition_num(partition_num)
 {
-	this->partition_num = partition_num;
 }
 
 KDTree::Node::~Node()
 {
 }
 
-void KDTree::Node::AddElement(GameObject * go)
+void KDTree::Node::AddElement(GameObject * element)
 {
-	elements.push_back(go);
+	elements.push_back(element);
 }
 
 void KDTree::Node::CreatePartition()
 {
-	if (left == nullptr && right == nullptr) 
+	// Difficult one, and the key of the K-D tree.
+	if (left == nullptr && right == nullptr)
 	{
 		left = new Node(partition_num);
 		left->SetParent(this);
 		right = new Node(partition_num);
 		right->SetParent(this);
 
-		if (parent == nullptr)
-			axis = Axis::a_x;
-		else
-		{
-			// Decide Axis
+		//decide next plane axis
+		if (parent == nullptr) //for root node
+			axis = A_X;
+		else {
 			switch (parent->axis)
 			{
-			case Node::a_x:
-				axis = Axis::a_z;
+			case KDTree::Node::A_X:
+				axis = A_Z;
 				break;
-			case Node::a_y:
-				axis = Axis::a_x;
+			case KDTree::Node::A_Y:
+				axis = A_X;
 				break;
-			case Node::a_z:
-				axis = Axis::a_y;
+			case KDTree::Node::A_Z:
+				axis = A_Y;
 				break;
 			}
 		}
-		// Get max and min point of the AABB depending on the axis
+
+		//get max and min points of the AABB depending on axis
 		std::vector<float> points;
 		for (int i = 0; i < elements.size(); ++i)
 		{
 			switch (axis)
 			{
-			case Node::a_x:
+			case KDTree::Node::A_X:
 				points.push_back(elements[i]->GetBbox().MaxX());
 				points.push_back(elements[i]->GetBbox().MinX());
 				break;
-			case Node::a_y:
+			case KDTree::Node::A_Y:
 				points.push_back(elements[i]->GetBbox().MaxY());
 				points.push_back(elements[i]->GetBbox().MinY());
 				break;
-			case Node::a_z:
+			case KDTree::Node::A_Z:
 				points.push_back(elements[i]->GetBbox().MaxZ());
 				points.push_back(elements[i]->GetBbox().MinZ());
 				break;
 			}
 		}
 
-		// Calculate mid-point
+		//get mid_point
 		std::sort(points.begin(), points.end());
 		float mid_point = points[points.size() / 2];
 
-		// Create a point in the space with the mid-point and create the plane
+
+		//create a 3d point from that mid_point and create the plane from the point
 		float3 plane_point = float3::zero;
 		switch (axis)
 		{
-		case Node::a_x:
+		case KDTree::Node::A_X:
 			plane_point.x = mid_point;
-			cut_plane.Set(plane_point, math::vec::unitX);
+			cut_plane.Set(plane_point, float3::unitX);
 			break;
-		case Node::a_y:
+		case KDTree::Node::A_Y:
 			plane_point.y = mid_point;
-			cut_plane.Set(plane_point, math::vec::unitY);
+			cut_plane.Set(plane_point, float3::unitY);
 			break;
-		case Node::a_z:
+		case KDTree::Node::A_Z:
 			plane_point.z = mid_point;
-			cut_plane.Set(plane_point, math::vec::unitZ);
+			cut_plane.Set(plane_point, float3::unitZ);
 			break;
 		}
 
-		// Set the elements of the node to one or both of the created node
-		for (vector<GameObject*>::iterator it = elements.begin(); it != elements.end(); ++it)
+		//set each element of the node to one/both of the created nodes
+		for (std::vector<GameObject*>::iterator ele = elements.begin(); ele != elements.end();)
 		{
-			uint node = 0; // new node determine
-			AABB box = (*it)->GetBbox();
+			int node = 0; // new node is decided between positive part or negative part of the plane.
+
+			if (*ele == nullptr)
+			{
+				ele = elements.erase(ele);
+				continue;
+			}
+
 			switch (axis)
 			{
-			case Node::a_x:
-				if (box.MaxX() >= mid_point)
+			case KDTree::Node::A_X:
+				if ((*ele)->GetBbox().MaxX() > mid_point)
 				{
-					if (box.MinX() >= mid_point)
+					if ((*ele)->GetBbox().MinX() > mid_point)
 						node = 1;
 					else
 						node = 0;
 				}
 				else
 				{
-					if (box.MinX() < mid_point)
+					if ((*ele)->GetBbox().MinX() < mid_point)
 						node = -1;
 					else
 						node = 0;
 				}
 				break;
-			case Node::a_y:
-				if (box.MaxY() >= mid_point)
+			case KDTree::Node::A_Y:
+				if ((*ele)->GetBbox().MaxY() >= mid_point)
 				{
-					if (box.MinY() >= mid_point)
+					if ((*ele)->GetBbox().MinY() >= mid_point)
 						node = 1;
 					else
 						node = 0;
 				}
 				else
 				{
-					if (box.MinY() < mid_point)
+					if ((*ele)->GetBbox().MinY() < mid_point)
 						node = -1;
 					else
 						node = 0;
 				}
 				break;
-			case Node::a_z:
-				if (box.MaxZ() >= mid_point)
+			case KDTree::Node::A_Z:
+				if ((*ele)->GetBbox().MaxZ() >= mid_point)
 				{
-					if (box.MinZ() >= mid_point)
+					if ((*ele)->GetBbox().MinZ() >= mid_point)
 						node = 1;
 					else
 						node = 0;
 				}
 				else
 				{
-					if (box.MinZ() < mid_point)
+					if ((*ele)->GetBbox().MinZ() < mid_point)
 						node = -1;
 					else
 						node = 0;
@@ -147,27 +154,34 @@ void KDTree::Node::CreatePartition()
 
 			switch (node)
 			{
-			case -1:
-				right->AddElement(*it);
+			case 1:
+				right->AddElement(*ele);
 				break;
 			case 0:
-				left->AddElement(*it);
-				right->AddElement(*it);
+				right->AddElement(*ele);
+				left->AddElement(*ele);
 				break;
-			case 1:
-				left->AddElement(*it);
+			case -1:
+				left->AddElement(*ele);
 				break;
 			}
+
+			ele = elements.erase(ele);
 		}
 
+		//Check if nodes need partition
 		left->CheckPartition();
 		right->CheckPartition();
 	}
 	else
 	{
-		LOG_OUTPUT("K-D Tree: This node has partitions already");
+		LOG_OUTPUT("K-D Tree: This node already has partitions");
 	}
+}
 
+void KDTree::Node::SetParent(Node * parent)
+{
+	this->parent = parent;
 }
 
 void KDTree::Node::GetElements(std::vector<GameObject*>& elements) const
@@ -179,44 +193,38 @@ void KDTree::Node::GetElements(std::vector<GameObject*>& elements) const
 	{
 		std::vector<const Node*>::iterator node = nodes_to_visit.begin();
 
-		// Add childs to visit later
+		//add childs to visit them later
 		if ((*node)->left != nullptr && (*node)->right != nullptr)
 		{
 			nodes_to_visit.push_back((*node)->left);
 			nodes_to_visit.push_back((*node)->right);
 		}
 
-		// Iterate through the list
+		//add curr node elements to elements list
 		for (int i = 0; i < (*node)->elements.size(); ++i)
 		{
 			elements.push_back((*node)->elements[i]);
 		}
 
+		//remove curr node from the nodes to visit
 		nodes_to_visit.erase(node);
 	}
+}
+
+KDTree::Node * KDTree::Node::GetLeft() const
+{
+	return left;
+}
+
+KDTree::Node * KDTree::Node::GetRight() const
+{
+	return right;
 }
 
 void KDTree::Node::CheckPartition()
 {
 	if (elements.size() > partition_num)
-	{
 		CreatePartition();
-	}
-}
-
-void KDTree::Node::SetParent(Node * parent)
-{
-	this->parent = parent;
-}
-
-const KDTree::Node * KDTree::Node::GetLeft() const
-{
-	return left;
-}
-
-const KDTree::Node * KDTree::Node::GetRight() const
-{
-	return right;
 }
 
 KDTree::KDTree()
@@ -227,41 +235,42 @@ KDTree::~KDTree()
 {
 }
 
-void KDTree::CreateTree(const std::vector<GameObject*>& elements, uint num_partition)
+void KDTree::CreateTree(std::vector<GameObject*>& elements, uint ele_on_partition)
 {
-	if (root == nullptr)
+	if (root_node == nullptr)
 	{
-		root = new Node(num_partition);
-
+		root_node = new Node(ele_on_partition);
 		for (int i = 0; i < elements.size(); ++i)
 		{
 			if (!elements[i]->ContainsComponent(ComponentType::MESH))
 				continue;
-			root->AddElement(elements[i]);
+
+			root_node->AddElement(elements[i]);
 		}
-		root->CheckPartition();
+		root_node->CheckPartition();
 	}
 }
 
 void KDTree::EraseTree()
 {
-	std::vector<const Node*> nodes_to_visit;
-	nodes_to_visit.push_back(root);
+	std::vector<Node*> nodes_to_visit;
+	nodes_to_visit.push_back(root_node);
+	root_node = nullptr;
 
 	while (!nodes_to_visit.empty())
 	{
-		std::vector<const Node*>::iterator node = nodes_to_visit.begin();
-
-		// Add childs to visit later
-		if ((*node)->GetLeft() != nullptr && (*node)->GetRight() != nullptr)
+		//add childs to visit them later
+		if ((*nodes_to_visit.begin())->GetLeft() != nullptr && (*nodes_to_visit.begin())->GetRight() != nullptr)
 		{
-			nodes_to_visit.push_back((*node)->GetLeft());
-			nodes_to_visit.push_back((*node)->GetRight());
+			nodes_to_visit.push_back((*nodes_to_visit.begin())->GetLeft());
+			nodes_to_visit.push_back((*nodes_to_visit.begin())->GetRight());
 		}
 
-		RELEASE(*node);
+		//Remove node data
+		RELEASE(*nodes_to_visit.begin());
 
-		nodes_to_visit.erase(node);
+		//remove curr node from the nodes to visit
+		nodes_to_visit.erase(nodes_to_visit.begin());
 	}
 }
 
@@ -273,11 +282,44 @@ void KDTree::GetElementsToTest(const Ray & ray) const
 {
 }
 
-void KDTree::GetElementsToTest(const AABB & aabb) const
+void KDTree::GetElementsToTest(const AABB & box) const
 {
 }
 
 bool KDTree::HasTree() const
 {
-	return root != nullptr;
+	return root_node != nullptr;
 }
+
+void KDTree::DebugDraw() const
+{
+	std::vector<Node*> planes_to_draw;
+	std::vector<Node*> nodes_to_visit;
+	planes_to_draw.push_back(root_node);
+	nodes_to_visit.push_back(root_node);
+
+	//get all children that have planes
+	while (!nodes_to_visit.empty())
+	{
+		//add childs to visit and draw them later 
+		if ((*nodes_to_visit.begin())->GetLeft() != nullptr && (*nodes_to_visit.begin())->GetRight() != nullptr)
+		{
+			nodes_to_visit.push_back((*nodes_to_visit.begin())->GetLeft());
+			nodes_to_visit.push_back((*nodes_to_visit.begin())->GetRight());
+			planes_to_draw.push_back((*nodes_to_visit.begin())->GetLeft());
+			planes_to_draw.push_back((*nodes_to_visit.begin())->GetRight());
+		}
+
+		//remove curr node from the nodes to visit
+		nodes_to_visit.erase(nodes_to_visit.begin());
+	}
+
+	float plane_size = 100.0f;
+
+	for (int p = 0; p < planes_to_draw.size(); ++p)
+	{
+		Plane plane_info = planes_to_draw[p]->cut_plane;
+
+	}
+}
+

@@ -67,7 +67,7 @@ bool ModuleGameObject::Update()
 		if (kdtree->HasTree())
 			kdtree->EraseTree();
 
-		kdtree->CreateTree(game_objects, 2);
+		kdtree->CreateTree(game_objects, 2);;
 	}
 
 
