@@ -47,7 +47,7 @@ void Component::SetName(const char * new_name)
 	name = new_name;
 }
 
-const GameObject * Component::GetOwner() const
+GameObject * Component::GetOwner() const
 {
 	return owner;
 }

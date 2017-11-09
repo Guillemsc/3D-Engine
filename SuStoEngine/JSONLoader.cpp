@@ -126,6 +126,14 @@ JSON_Doc::JSON_Doc(JSON_Value * _value, JSON_Object * _object, const char* _path
 	path = _path;
 }
 
+JSON_Doc::JSON_Doc(JSON_Doc & doc)
+{
+	value = doc.value;
+	object = doc.object;
+	path = doc.path;
+	root = object;
+}
+
 JSON_Doc::~JSON_Doc()
 {
 }
@@ -420,7 +428,7 @@ bool JSON_Doc::FindArrayValue(const char * arr, int index, json_value_type type)
 {
 	bool ret = false;
 
-	JSON_Array* array = json_object_get_array(root, arr);
+	JSON_Array* array = json_object_get_array(object, arr);
 
 	if (array != nullptr)
 	{

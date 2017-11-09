@@ -27,7 +27,7 @@ public:
 	virtual void Update() {};
 	virtual void CleanUp() {};
 
-	const GameObject* GetOwner() const;
+	GameObject* GetOwner() const;
 	const ComponentType GetType() const;
 	const char* GetName() const;
 

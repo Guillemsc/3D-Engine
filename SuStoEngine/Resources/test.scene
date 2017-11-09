@@ -1,4 +1,32 @@
 {
-    "GameObjects": [],
-    "Components": []
+    "GameObjects": [
+        {
+            "uid": "6750d87e",
+            "name": "GameObject",
+            "parent": -1
+        }
+    ],
+    "Components": [
+        {
+            "type": 0,
+            "component_id": "433c8648",
+            "owner_id": "6750d87e",
+            "position": [
+                300,
+                0,
+                0
+            ],
+            "rotation": [
+                0,
+                0,
+                0,
+                0
+            ],
+            "scale": [
+                0,
+                0,
+                0
+            ]
+        }
+    ]
 }

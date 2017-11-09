@@ -420,8 +420,11 @@ void GameObject::OnSaveScene(JSON_Doc * config)
 
 		config->SetNumber("type", (*it)->GetType());
 		config->SetString("component_id", (*it)->GetUniqueId().c_str());
+		config->SetString("owner_id", (*it)->GetOwner()->GetUniqueId().c_str());
 
 		(*it)->OnSaveScene(config);
+
+		config->MoveToRoot();
 	}
 }
 
