@@ -3,6 +3,8 @@
 #include "Functions.h"
 #include <algorithm>
 #include "ComponentMesh.h"
+#include "Color.h"
+#include <gl\GLU.h>
 
 KDTree::Node::Node(uint partition_num) : partition_num(partition_num)
 {
@@ -221,6 +223,45 @@ KDTree::Node * KDTree::Node::GetRight() const
 	return right;
 }
 
+void KDTree::Node::DrawPlane(int width, int height, float3 initial_translation)
+{
+	/*Color color = { 0, 0, 0, 0 };
+	Quat rotation;
+
+	if (this == nullptr)
+		return;
+
+	switch (axis)
+	{
+	case KDTree::Node::A_X:
+		color = { 1.0f, 0.0f, 0.0f, 0.25f };
+		rotation = Quat::ToEulerXYZ()
+
+		break;
+	case KDTree::Node::A_Y:
+		color = { 0.0f, 1.0f, 0.0f, 0.25f };
+		rotation = { 0, 1, 0 };
+
+		break;
+	case KDTree::Node::A_Z:
+		color = { 0.0f, 0.0f, 1.0f, 0.25f };
+		rotation = { 0, 0, 1 };
+
+		break;
+	}
+
+	
+
+	glPushMatrix();
+		//glMultMatrixf();
+		glColor4f(color.r, color.g, color.b, color.a);
+		
+	glPopMatrix();
+
+	left->DrawPlane(100, 100, initial_translation);
+	right->DrawPlane(100, 100, initial_translation);*/
+}
+
 void KDTree::Node::CheckPartition()
 {
 	if (elements.size() > partition_num)
@@ -293,6 +334,9 @@ bool KDTree::HasTree() const
 
 void KDTree::DebugDraw() const
 {
-
+	if (root_node != nullptr)
+	{
+		root_node->DrawPlane(100, 100, float3::zero);
+	}
 }
 

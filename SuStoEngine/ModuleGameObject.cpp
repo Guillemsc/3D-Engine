@@ -67,8 +67,16 @@ bool ModuleGameObject::Update()
 		if (kdtree->HasTree())
 			kdtree->EraseTree();
 
-		kdtree->CreateTree(game_objects, 2);;
+		kdtree->CreateTree(game_objects, 5);;
 	}
+	
+	if (App->input->GetKeyDown("F1"))
+	{
+		kdtree_debug = !kdtree_debug;
+	}
+
+	if (kdtree_debug && kdtree != nullptr)
+		kdtree->DebugDraw();
 
 
 	App->renderer3D->DrawGrid(100);
