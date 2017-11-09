@@ -94,7 +94,7 @@ void KDTree::Node::CreatePartition()
 		{
 			int node = 0; // new node is decided between positive part or negative part of the plane.
 
-			if (*ele == nullptr)
+			if ((*ele)->GetComponent(ComponentType::MESH) == nullptr)
 			{
 				ele = elements.erase(ele);
 				continue;
@@ -103,9 +103,9 @@ void KDTree::Node::CreatePartition()
 			switch (axis)
 			{
 			case KDTree::Node::A_X:
-				if ((*ele)->GetBbox().MaxX() > mid_point)
+				if ((*ele)->GetBbox().MaxX() >= mid_point)
 				{
-					if ((*ele)->GetBbox().MinX() > mid_point)
+					if ((*ele)->GetBbox().MinX() >= mid_point)
 						node = 1;
 					else
 						node = 0;

@@ -3,7 +3,6 @@
 #include "App.h"
 #include "imgui.h"
 #include "Component.h"
-#include "ComponentPrimitive.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
