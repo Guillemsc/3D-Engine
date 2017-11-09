@@ -61,6 +61,9 @@
     <Filter Include="Sources\GameObjects\Components">
       <UniqueIdentifier>{c5f10952-9d6c-4eec-b70e-347606580b18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Resources\Loaders">
+      <UniqueIdentifier>{15b91578-5e35-4dc2-bd7f-b18595074ce9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleAudio.h">
@@ -447,6 +450,12 @@
     <ClInclude Include="KDTree.h">
       <Filter>Sources\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceMeshLoader.h">
+      <Filter>Sources\Resources\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceTextureLoader.h">
+      <Filter>Sources\Resources\Loaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -730,6 +739,12 @@
     </ClCompile>
     <ClCompile Include="KDTree.cpp">
       <Filter>Sources\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceMeshLoader.cpp">
+      <Filter>Sources\Resources\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceTextureLoader.cpp">
+      <Filter>Sources\Resources\Loaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

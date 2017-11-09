@@ -85,3 +85,8 @@ void ResourceManager::SaveResourceIntoFile(Resource * res)
 		break;
 	}
 }
+
+Resource * ResourceManager::LoadResource(const char * file_path)
+{
+	return nullptr;
+}

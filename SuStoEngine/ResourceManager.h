@@ -6,6 +6,9 @@
 #include <map>
 #include <vector>
 
+class ResourceMeshLoader;
+class ResourceTextureLoader;
+
 class ResourceManager : public Module
 {
 public:
@@ -25,6 +28,10 @@ public:
 
 private:
 	std::map<std::string, Resource*> resources;
+
+	ResourceMeshLoader*    mesh_loader = nullptr;
+	ResourceTextureLoader* texture_loader = nullptr;
+	
 
 };
 

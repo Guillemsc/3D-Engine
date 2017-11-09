@@ -1,98 +1,36 @@
-#include "GeometryLoader.h"
+#include "ResourceMeshLoader.h"
 #include "App.h"
-#include "ModuleRenderer3D.h"
-#include "Functions.h"
-#include "GameObject.h"
 #include "ModuleGameObject.h"
-#include "ComponentMesh.h"
-#include "ComponentMaterial.h"
 #include "ModuleCamera3D.h"
-#include "ModuleFileSystem.h"
-#include "TextureLoader.h"
 #include "ResourceManager.h"
 #include "ResourceMesh.h"
-#include <filesystem>
-#include <gl/GL.h>
-#include <gl/GLU.h>
-
+#include "ResourceTexture.h"
+#include "ComponentMesh.h"
+#include "ComponentMaterial.h"
+#include "Globals.h"
+#include "GameObject.h"
+#include "Functions.h"
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\postprocess.h"
 #include "Assimp\include\cfileio.h"
 
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
-GeometryLoader::GeometryLoader(bool start_enabled) : Module(start_enabled)
-{
-	SetName("Geometry Loader");
-}
 
-GeometryLoader::~GeometryLoader()
+ResourceMeshLoader::ResourceMeshLoader()
 {
 }
 
-bool GeometryLoader::Awake()
+ResourceMeshLoader::~ResourceMeshLoader()
 {
-	bool ret = true;
-
-	LOG_OUTPUT("Loading GeometryLoader Module");
-
-	mesh_importer = new MeshImporter();
-
-	return ret;
 }
 
-bool GeometryLoader::Start()
-{
-	bool ret = true;
-
-	// Stream log messages to Debug window
-	//Assimp::DefaultLogger::create();
-	//const uint severity = Assimp::Logger::Debugging | Assimp::Logger::Info | Assimp::Logger::Err | Assimp::Logger::Warn;
-	//Assimp::DefaultLogger::get()->attachStream(new AssimpLogger(), severity);
-
-	//struct aiLogStream stream;
-	//stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
-	//aiAttachLogStream(&stream);
-
-	mesh_importer->ImportAllMeshes();
-
-	return ret;
-}
-
-bool GeometryLoader::Update()
-{
-	bool ret = true;
-
-	return ret;
-}
-
-bool GeometryLoader::CleanUp()
-{
-	bool ret = true;
-
-	// Detach log stream
-	aiDetachAllLogStreams();
-
-	// Free mesh importer
-	RELEASE(mesh_importer);
-
-	return ret;
-}
-
-void GeometryLoader::OnLoadFile(const char* file_path, const char* file_name, const char* file_extension)
-{
-	if (TextCmp("fbx", file_extension))
-	{
-		LoadFile(file_path, true);
-	}
-}
-
-bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
+bool ResourceMeshLoader::Load(const char * filepath, bool as_new_gameobject)
 {
 	bool ret = true;
 
 	LOG_OUTPUT("\nStarting mesh scene Loading -------------------- \n\n");
-	const aiScene* scene = aiImportFile(full_path, aiProcessPreset_TargetRealtime_MaxQuality);
+	const aiScene* scene = aiImportFile(filepath, aiProcessPreset_TargetRealtime_MaxQuality);
 	LOG_OUTPUT("Finishing mesh scene Loading ---------------------");
 
 	if (scene == nullptr)
@@ -134,7 +72,7 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 			parent->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 			parent->transform->SetScale(float3(scale.x, scale.y, scale.z));
 
-			string name = GetFileNameFromFilePath(full_path);
+			string name = GetFileNameFromFilePath(filepath);
 			name = GetFilenameWithoutExtension(name.c_str());
 			parent->SetName(name);
 		}
@@ -146,7 +84,7 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 		// Iterate
 		for (int i = 0; i < root->mNumChildren; i++)
 		{
-			RecursiveLoadMesh(scene, root->mChildren[i], full_path, total_abb, parent);
+			RecursiveLoadMesh(scene, root->mChildren[i], filepath, total_abb, parent);
 		}
 
 		// Set camera focus
@@ -163,7 +101,7 @@ bool GeometryLoader::LoadFile(const char * full_path, bool as_new_gameobject)
 	return ret;
 }
 
-void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, const char* full_path, AABB& total_abb, GameObject* parent)
+void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node, const char * full_path, AABB & total_abb, GameObject * parent)
 {
 	bool node_valid = true;
 
@@ -239,7 +177,7 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 			aiVector3D aitranslation;
 			aiVector3D aiscaling;
 			aiQuaternion airotation;
-			
+
 			node->mTransformation.Decompose(aiscaling, airotation, aitranslation);
 			position = float3(aitranslation.x, aitranslation.y, aitranslation.z);
 			scale = float3(aiscaling.x, aiscaling.y, aiscaling.z);
@@ -249,7 +187,7 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 				float3(position.x, position.y, position.z),
 				Quat(rotation.x, rotation.y, rotation.w, rotation.z),
 				float3(scale.x, scale.y, scale.z));
-			
+
 		}
 
 		// GENERAL BBOX
@@ -274,7 +212,7 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &file);
 			path += GetFileNameFromFilePath(file.C_Str());
 
-			texture = App->texture->LoadTexture(path.c_str());
+			texture = (ResourceTexture*)App->resource_manager->LoadResource(path.c_str());
 		}
 
 		// CREATE GAME OBJECT
@@ -328,122 +266,12 @@ void GeometryLoader::RecursiveLoadMesh(const aiScene* scene, aiNode * node, cons
 	}
 }
 
-MeshImporter * GeometryLoader::GetMeshImporter()
+
+bool ResourceMeshLoader::Import(const char * filepath)
 {
-	return mesh_importer;
+	return nullptr;
 }
 
-ResourceMesh* MeshImporter::Load(const char * filepath)
+void ResourceMeshLoader::Export(const char * filepath)
 {
-	//Open the file and get the size
-	FILE* file = fopen(filepath, "rb");
-	fseek(file, 0, SEEK_END);
-	uint size = ftell(file);
-	rewind(file);
-
-	// Create a buffer to get the data of the file
-	char* buffer = new char[size];
-	char* cursor = buffer;
-
-	// Read the file and close it
-	fread(buffer, sizeof(char), size, file);
-	fclose(file);
-
-	// Copy the ranges
-	// ranges[0] = Vertices, ranges[1] = Indices, ranges[2] = Uvs
-	uint ranges[3];		
-	uint bytes = sizeof(ranges);
-	memcpy(ranges, cursor, bytes);
-	cursor += bytes;
-
-	// Store indices
-	uint* indices = new uint[ranges[1]];
-	bytes = sizeof(uint) * ranges[1];
-	memcpy(indices, cursor, bytes);
-	cursor += bytes;
-
-	// Store vertices
-	float* vertices = new float[ranges[0] * 3];
-	bytes = sizeof(float) * ranges[0] * 3;
-	memcpy(vertices, cursor, bytes);
-	cursor += bytes;
-
-	// Store UVs
-	float* uvs = new float[ranges[2] * 3];
-	bytes = sizeof(float) * ranges[2] * 3;
-	memcpy(uvs, cursor, bytes);
-	cursor += bytes;
-
-	// Create mesh --------------
-	ResourceMesh* new_mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(RT_MESH);
-	new_mesh->SetFaces(vertices, ranges[0], indices, ranges[1]);
-	new_mesh->SetUvs(uvs, ranges[2]);
-
-	LOG_OUTPUT("New mesh with %d vertices", ranges[0] * 3);
-	LOG_OUTPUT("New mesh with %d indices", ranges[1]);
-
-	RELEASE_ARRAY(indices);
-	RELEASE_ARRAY(vertices);
-	RELEASE_ARRAY(uvs);
-
-	return new_mesh;
 }
-
-bool MeshImporter::Save(const char * path, ResourceMesh* mesh)
-{
-	bool ret = true;
-	
-	string name = GetFilenameWithoutExtension(mesh->GetName().c_str());
-	name += "_";
-	name += std::to_string(App->id->NewId("mesh"));
-
-	uint ranges[3] = { mesh->GetNumVertices(), mesh->GetNumIndices(), mesh->GetNumUVs() };
-	uint size = sizeof(ranges) + 
-		sizeof(uint) * mesh->GetNumIndices() + 
-		sizeof(float) * mesh->GetNumVertices() * 3 + 
-		sizeof(float) * mesh->GetNumUVs() * 3;
-	
-	// Allocate data
-	char* data = new char[size];
-	char* cursor = data;
-
-	// Store ranges
-	uint bytes = sizeof(ranges);
-	memcpy(cursor, ranges, bytes);
-	cursor += bytes;
-
-	// Store indices
-	bytes = sizeof(uint) * mesh->GetNumIndices();
-	memcpy(cursor, mesh->GetIndices(), bytes);
-	cursor += bytes; 
-
-	// Store vertices
-	bytes = sizeof(float) * mesh->GetNumVertices() * 3;
-	memcpy(cursor, mesh->GetVertices(), bytes);
-	cursor += bytes;
-
-	// Store UVs
-	bytes = sizeof(float) * mesh->GetNumUVs() * 3;
-	memcpy(cursor, mesh->GetUVs(), bytes);
-
-	//fopen
-	if (App->file_system->FileSave(path, data, name.c_str(), "sustomesh", size) == false)
-	{
-		return false;
-	}
-
-	RELEASE_ARRAY(data);
-	
-	return ret;
-}
-
-void MeshImporter::ImportAllMeshes()
-{
-	//vector<string> paths = App->file_system->GetFilesInPath(App->file_system->GetLibraryMeshPath().c_str(), "sustomesh");
-
-	//for (vector<string>::iterator it = paths.begin(); it != paths.end(); it++)
-	//{
-	//	Mesh* new_mesh = Load((*it).c_str());
-	//}
-}
-

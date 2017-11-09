@@ -209,7 +209,9 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ResourceMesh.h" />
+    <ClInclude Include="ResourceMeshLoader.h" />
     <ClInclude Include="ResourceTexture.h" />
+    <ClInclude Include="ResourceTextureLoader.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="stb_rect_pack.h" />
     <ClInclude Include="stb_textedit.h" />
@@ -308,7 +310,9 @@
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ResourceMesh.cpp" />
+    <ClCompile Include="ResourceMeshLoader.cpp" />
     <ClCompile Include="ResourceTexture.cpp" />
+    <ClCompile Include="ResourceTextureLoader.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="Timer.cpp" />

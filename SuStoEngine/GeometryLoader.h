@@ -11,20 +11,20 @@ class GameObject;
 class MeshImporter;
 class ResourceMesh;
 
-class AssimpLogger : public Assimp::LogStream
-{
-public:
-	AssimpLogger()
-	{
-
-	}
-	~AssimpLogger()
-	{}
-	void write(const char* message)
-	{
-		log(__FILE__, __LINE__, "%s\n", message);
-	}
-};
+//class AssimpLogger : public Assimp::LogStream
+//{
+//public:
+//	AssimpLogger()
+//	{
+//
+//	}
+//	~AssimpLogger()
+//	{}
+//	void write(const char* message)
+//	{
+//		log(__FILE__, __LINE__, "%s\n", message);
+//	}
+//};
 
 //class Mesh
 //{
