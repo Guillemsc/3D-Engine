@@ -61,7 +61,6 @@ private:
 public:
 	ComponentTransform* transform = nullptr;
 	AABB	    local_bbox;
-	OBB		    global_bbox;
 
 private:
 	double		unique_id = 0;

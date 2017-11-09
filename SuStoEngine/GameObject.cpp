@@ -3,7 +3,6 @@
 #include "App.h"
 #include "imgui.h"
 #include "Component.h"
-#include "ComponentPrimitive.h"
 #include "ComponentTransform.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
@@ -352,9 +351,10 @@ void GameObject::RecursiveCalcBBox()
 
 	if (local_bbox.IsFinite())
 	{
-		global_bbox = local_bbox;
-		global_bbox.Transform(transform->GetGlobalTransform());
-		global_bbox = global_bbox.MinimalEnclosingAABB();
+		local_bbox.TransformAsAABB(transform->GetGlobalTransform());
+		//global_bbox = local_bbox;
+		//global_bbox.Transform(transform->GetGlobalTransform());
+		//global_bbox = global_bbox.MinimalEnclosingAABB();
 	}
 	
 	if (!childs.empty())
@@ -428,7 +428,7 @@ void GameObject::OnSaveScene(JSON_Doc * config)
 void GameObject::DrawBBox()
 {
 	if (local_bbox.IsFinite())
-		DebugDraw(global_bbox, White, true, 4.0f);
+		DebugDraw(local_bbox, White, true, 4.0f);
 }
 
 
