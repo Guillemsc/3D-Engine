@@ -11,6 +11,7 @@
 #include "GameObject.h"
 #include "Functions.h"
 #include "ModuleFileSystem.h"
+#include "JSONLoader.h"
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\postprocess.h"
 #include "Assimp\include\cfileio.h"
@@ -270,6 +271,21 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 
 void ResourceMeshLoader::Import(const char * filepath)
 {
+	string path = GetPathFromFilePath(filepath);
+	string filename = GetFileNameFromFilePath(filepath);
+	string name = GetFilenameWithoutExtension(filename.c_str());
+
+	// -------------------------------------
+	// META --------------------------------
+	// -------------------------------------
+	string meta_name = path + name + ".meta";
+	JSON_Doc* doc = App->json->LoadJSON(meta_name.c_str());
+
+	string uid = doc->GetString("uid", "no_uid");
+
+	// -------------------------------------
+	// FILE --------------------------------
+	// -------------------------------------
 	//Open the file and get the size
 	FILE* file = fopen(filepath, "rb");
 	fseek(file, 0, SEEK_END);
@@ -310,7 +326,7 @@ void ResourceMeshLoader::Import(const char * filepath)
 	cursor += bytes;
 
 	// Create mesh --------------
-	ResourceMesh* new_mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(RT_MESH);
+	ResourceMesh* new_mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(RT_MESH, uid);
 	new_mesh->SetFaces(vertices, ranges[0], indices, ranges[1]);
 	new_mesh->SetUvs(uvs, ranges[2]);
 
@@ -322,7 +338,7 @@ void ResourceMeshLoader::Import(const char * filepath)
 	RELEASE_ARRAY(uvs);
 }
 
-bool ResourceMeshLoader::Export(const char * filepath, ResourceMesh* mesh)
+bool ResourceMeshLoader::Export(const char * path, ResourceMesh* mesh)
 {
 	bool ret = true;
 
@@ -330,6 +346,9 @@ bool ResourceMeshLoader::Export(const char * filepath, ResourceMesh* mesh)
 	name += "_";
 	name += std::to_string(App->id->NewId("mesh"));
 
+	// -------------------------------------
+	// FILE --------------------------------
+	// -------------------------------------
 	uint ranges[3] = { mesh->GetNumVertices(), mesh->GetNumIndices(), mesh->GetNumUVs() };
 	uint size = sizeof(ranges) +
 		sizeof(uint) * mesh->GetNumIndices() +
@@ -360,12 +379,26 @@ bool ResourceMeshLoader::Export(const char * filepath, ResourceMesh* mesh)
 	memcpy(cursor, mesh->GetUVs(), bytes);
 
 	//fopen
-	if (App->file_system->FileSave(filepath, data, name.c_str(), "sustomesh", size) == false)
+	if (App->file_system->FileSave(path, data, name.c_str(), "sustomesh", size) == false)
 	{
 		return false;
 	}
 
 	RELEASE_ARRAY(data);
+
+	// -------------------------------------
+	// META --------------------------------
+	// -------------------------------------
+	string meta_name = path + name + ".meta";
+
+	JSON_Doc* doc = App->json->LoadJSON(meta_name.c_str());
+	if (doc == nullptr)
+		doc = App->json->CreateJSON(meta_name.c_str());
+	doc->Clear();
+
+	doc->SetString("uid", mesh->GetUniqueId().c_str());
+
+	doc->Save();
 
 	return ret;
 }
