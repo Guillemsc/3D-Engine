@@ -345,6 +345,7 @@ void ResourceMeshLoader::Import(const char * filepath)
 	RELEASE_ARRAY(indices);
 	RELEASE_ARRAY(vertices);
 	RELEASE_ARRAY(uvs);
+	App->json->UnloadJSON(doc);
 }
 
 bool ResourceMeshLoader::Export(const char * path, ResourceMesh* mesh)
@@ -410,6 +411,8 @@ bool ResourceMeshLoader::Export(const char * path, ResourceMesh* mesh)
 
 		doc->Save();
 	}
+
+	App->json->UnloadJSON(doc);
 
 	return ret;
 }

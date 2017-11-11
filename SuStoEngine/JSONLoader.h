@@ -69,6 +69,7 @@ public:
 
 	JSON_Doc* LoadJSON(const char* path);
 	JSON_Doc* CreateJSON(const char* path);
+	void UnloadJSON(JSON_Doc* path);
 
 private:
 	std::list<JSON_Doc*> jsons;

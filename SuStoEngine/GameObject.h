@@ -54,14 +54,13 @@ public:
 
 	void OnLoadScene(JSON_Doc* config);
 	void OnSaveScene(JSON_Doc* config);
-
+ 
 private:
 	void DrawBBox();
 
 public:
 	ComponentTransform* transform = nullptr;
-	AABB	    local_bbox;
-
+ 
 private:
 	std::string unique_id;
 	std::string name;
@@ -70,6 +69,8 @@ private:
 	bool		is_static = false;
 
 	std::vector<Component*> components;
+
+	AABB	    local_bbox;
 
 	GameObject* parent = nullptr;
 	std::vector<GameObject*> childs;

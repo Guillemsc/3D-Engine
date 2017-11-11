@@ -127,6 +127,8 @@ void ResourceTextureLoader::Import(const char * filepath)
 	{
 		LOG_OUTPUT("Cannot load image %s. Error: %s", filepath, iluErrorString(ilGetError()));
 	}
+
+	App->json->UnloadJSON(doc);
 }
 
 bool ResourceTextureLoader::Export(const char * path, ResourceTexture* resource)
@@ -176,6 +178,8 @@ bool ResourceTextureLoader::Export(const char * path, ResourceTexture* resource)
 
 		doc->Save();
 	}
+
+	App->json->UnloadJSON(doc);
 
 	return ret;
 }

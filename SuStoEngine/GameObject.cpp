@@ -351,9 +351,7 @@ void GameObject::RecursiveCalcBBox()
 	if (local_bbox.IsFinite())
 	{
 		local_bbox.TransformAsAABB(transform->GetGlobalTransform());
-		//global_bbox = local_bbox;
-		//global_bbox.Transform(transform->GetGlobalTransform());
-		//global_bbox = global_bbox.MinimalEnclosingAABB();
+ 
 	}
 	
 	if (!childs.empty())
@@ -406,7 +404,7 @@ void GameObject::OnSaveScene(JSON_Doc * config)
 	if (parent != nullptr && parent != App->gameobj->GetRoot())
 		config->SetString("parent", parent->GetUniqueId().c_str());
 	else
-		config->SetNumber("parent", -1);
+		config->SetString("parent", "");
 
 	config->MoveToRoot();
 
@@ -426,7 +424,7 @@ void GameObject::OnSaveScene(JSON_Doc * config)
 		config->MoveToRoot();
 	}
 }
-
+ 
 void GameObject::DrawBBox()
 {
 	if (local_bbox.IsFinite())

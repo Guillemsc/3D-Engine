@@ -47,6 +47,11 @@ void Component::SetName(const char * new_name)
 	name = new_name;
 }
 
+void Component::ForceUid(std::string uid)
+{
+	unique_id = uid;
+}
+
 GameObject * Component::GetOwner() const
 {
 	return owner;

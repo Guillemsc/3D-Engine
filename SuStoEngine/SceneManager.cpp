@@ -4,6 +4,10 @@
 #include "ModuleGameObject.h"
 #include "ResourceManager.h"
 #include "ModuleFileSystem.h"
+#include "ResourceMesh.h"
+#include "ComponentMesh.h"
+#include "ComponentMaterial.h"
+#include "ResourceTexture.h"
 #include "App.h"
 
 SceneManager::SceneManager(bool start_enabled) : Module(start_enabled)
@@ -85,6 +89,24 @@ void SceneManager::LoadScene(const char * scene_name)
 			scene->MoveToRoot();
 		}
 
+		for (int i = 0; i < game_objects_count; i++)
+		{
+			scene->MoveToSectionFromArray("GameObjects", i);
+
+			string parent = scene->GetString("parent");
+			string id = scene->GetString("uid");
+			
+			if (parent != "")
+			{
+				GameObject* go_parent = App->gameobj->Find(parent);
+				GameObject* go = App->gameobj->Find(id);
+
+				go_parent->AddChild(go);
+			}
+
+			scene->MoveToRoot();
+		}
+
 		// Load Components
 		int components_count = scene->GetArrayCount("Components");
 		for (int i = 0; i < components_count; i++)
@@ -103,9 +125,32 @@ void SceneManager::LoadScene(const char * scene_name)
 				float3 position = scene->GetNumber3("position");
 				float4 rotation = scene->GetNumber4("rotation");
 				float3 scale = scene->GetNumber3("scale");
+
+				owner->transform->ForceUid(component_id);
+
 				owner->transform->SetPosition(position);
 				owner->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 				owner->transform->SetScale(scale);
+			}
+			break;
+			case MESH:
+			{
+				string mesh_id = scene->GetString("mesh_id", "no_id");
+
+				owner->AddComponent(MESH, component_id);
+				ComponentMesh* cmesh = (ComponentMesh*)owner->GetComponent(MESH);
+				ResourceMesh* rmesh = (ResourceMesh*)App->resource_manager->Get(mesh_id);
+				cmesh->SetMesh(rmesh);
+			}
+			break;
+			case MATERIAL:
+			{
+				string texture_id = scene->GetString("texture_id", "no_id");
+
+				owner->AddComponent(MATERIAL, component_id);
+				ComponentMaterial* cmaterial = (ComponentMaterial*)owner->GetComponent(MATERIAL);
+				ResourceTexture* rtexture = (ResourceTexture*)App->resource_manager->Get(texture_id);
+				cmaterial->SetTexture(rtexture);
 			}
 			break;
 			}

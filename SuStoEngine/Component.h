@@ -45,6 +45,8 @@ public:
 	virtual void OnLoadScene(JSON_Doc* config) {};
 	virtual void OnSaveScene(JSON_Doc* config) {};
 
+	void ForceUid(std::string uid);
+
 private:
 	virtual void OnEnable() {};
 	virtual void OnDisable() {};
