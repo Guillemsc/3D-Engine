@@ -268,6 +268,16 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 	}
 }
 
+void ResourceMeshLoader::ImportAllMeshes()
+{
+	vector<string> files = App->file_system->GetFilesInPath(App->file_system->GetLibraryMeshPath().c_str(), "sustomesh");
+
+	for (vector<string>::iterator it = files.begin(); it != files.end(); it++)
+	{
+		Import((*it).c_str());
+	}
+}
+
 
 void ResourceMeshLoader::Import(const char * filepath)
 {
@@ -280,7 +290,6 @@ void ResourceMeshLoader::Import(const char * filepath)
 	// -------------------------------------
 	string meta_name = path + name + ".meta";
 	JSON_Doc* doc = App->json->LoadJSON(meta_name.c_str());
-
 	string uid = doc->GetString("uid", "no_uid");
 
 	// -------------------------------------
@@ -342,10 +351,8 @@ bool ResourceMeshLoader::Export(const char * path, ResourceMesh* mesh)
 {
 	bool ret = true;
 
-	string name = GetFilenameWithoutExtension(mesh->GetName().c_str());
-	name += "_";
-	name += std::to_string(App->id->NewId("mesh"));
-
+	string name = mesh->GetUniqueId();
+ 
 	// -------------------------------------
 	// FILE --------------------------------
 	// -------------------------------------
@@ -394,11 +401,15 @@ bool ResourceMeshLoader::Export(const char * path, ResourceMesh* mesh)
 	JSON_Doc* doc = App->json->LoadJSON(meta_name.c_str());
 	if (doc == nullptr)
 		doc = App->json->CreateJSON(meta_name.c_str());
-	doc->Clear();
 
-	doc->SetString("uid", mesh->GetUniqueId().c_str());
+	if (doc != nullptr)
+	{
+		doc->Clear();
 
-	doc->Save();
+		doc->SetString("uid", mesh->GetUniqueId().c_str());
+
+		doc->Save();
+	}
 
 	return ret;
 }

@@ -2,6 +2,8 @@
 #include "JSONLoader.h"
 #include "GameObject.h"
 #include "ModuleGameObject.h"
+#include "ResourceManager.h"
+#include "ModuleFileSystem.h"
 #include "App.h"
 
 SceneManager::SceneManager(bool start_enabled) : Module(start_enabled)
@@ -12,12 +14,33 @@ SceneManager::~SceneManager()
 {
 }
 
+bool SceneManager::Start()
+{
+	bool ret = true;
+
+	App->resource_manager->ImportAllResources();
+	App->scene_manager->LoadScene("test.scene");
+
+	return ret;
+}
+
+bool SceneManager::CleanUp()
+{
+	bool ret = true;
+
+	App->scene_manager->SaveScene("test.scene");
+
+	return ret;
+}
+
 void SceneManager::SaveScene(const char * scene_name)
 {
-	JSON_Doc* scene = App->json->LoadJSON(scene_name);
+	string path = App->file_system->GetLibraryScenePath() + scene_name;
+
+	JSON_Doc* scene = App->json->LoadJSON(path.c_str());
 
 	if (scene == nullptr)
-		scene = App->json->CreateJSON(scene_name);
+		scene = App->json->CreateJSON(path.c_str());
 
 	if (scene != nullptr)
 	{
@@ -41,7 +64,9 @@ void SceneManager::SaveScene(const char * scene_name)
 
 void SceneManager::LoadScene(const char * scene_name)
 {
-	JSON_Doc* scene = App->json->LoadJSON(scene_name);
+	string path = App->file_system->GetLibraryScenePath() + scene_name;
+
+	JSON_Doc* scene = App->json->LoadJSON(path.c_str());
 
 	if (scene != nullptr)
 	{

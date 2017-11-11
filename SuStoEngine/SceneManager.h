@@ -11,6 +11,9 @@ public:
 	SceneManager(bool start_enabled = true);
 	virtual ~SceneManager();
 
+	bool Start();
+	bool CleanUp();
+
 	void SaveScene(const char* scene_name);
 	void LoadScene(const char* scene_name);
 

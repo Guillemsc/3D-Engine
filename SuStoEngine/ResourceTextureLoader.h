@@ -12,8 +12,10 @@ public:
 	ResourceTexture* Load(const char* filepath);
 	void Import(const char* filepath);
 	bool Export(const char* filepath, ResourceTexture* resource);
+	void ImportAllTextures();
 
 private:
+	
 
 };
 

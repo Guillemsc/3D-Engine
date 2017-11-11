@@ -25,9 +25,7 @@ ModuleGameObject::~ModuleGameObject()
 bool ModuleGameObject::Start()
 {
 	bool ret = true;
-
-	App->scene_manager->LoadScene("test.scene");
-
+ 
 	return ret;
 }
 
@@ -96,9 +94,7 @@ bool ModuleGameObject::PostUpdate()
 bool ModuleGameObject::CleanUp()
 {
 	bool ret = true;
-
-	App->scene_manager->SaveScene("test.scene");
-
+ 
 	Destroy(root);
 
 	DestroyGameObjects();

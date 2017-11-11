@@ -17,6 +17,13 @@ ResourceManager::~ResourceManager()
 {
 }
 
+bool ResourceManager::Start()
+{
+	bool ret = true;
+
+	return ret;
+}
+
 bool ResourceManager::CleanUp()
 {
 	bool ret = true;
@@ -116,6 +123,12 @@ Resource * ResourceManager::LoadResource(const char * file_path)
 	}
 
 	return ret;
+}
+
+void ResourceManager::ImportAllResources()
+{
+	mesh_loader->ImportAllMeshes();
+	texture_loader->ImportAllTextures();
 }
 
 void ResourceManager::OnLoadFile(const char * file_path, const char * file_name, const char * file_extension)
