@@ -37,8 +37,9 @@ public:
 
 private:
 	void RecursiveLoadMesh(const aiScene* scene, aiNode* node, const char* full_path, AABB& total_abb, GameObject* parent = nullptr);
+	void CreatePlane();
 
-private:
+public:
 
 };
 

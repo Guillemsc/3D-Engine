@@ -1,8 +1,10 @@
 #include "KDTree.h"
+#include "App.h"
+#include "ResourceManager.h"
+#include "ResourceMesh.h"
 #include "GameObject.h"
 #include "Functions.h"
 #include <algorithm>
-#include "ComponentMesh.h"
 #include "Color.h"
 #include <gl\GLU.h>
 
@@ -225,41 +227,91 @@ KDTree::Node * KDTree::Node::GetRight() const
 
 void KDTree::Node::DrawPlane(int width, int height, float3 initial_translation)
 {
-	/*Color color = { 0, 0, 0, 0 };
-	Quat rotation;
-
-	if (this == nullptr)
-		return;
-
-	switch (axis)
+	if (right != nullptr && left != nullptr)
 	{
-	case KDTree::Node::A_X:
-		color = { 1.0f, 0.0f, 0.0f, 0.25f };
-		rotation = Quat::ToEulerXYZ()
+		//calculate the transform to apply to a unit plane defined on axis x,z
+		//Scale
+		float3 size(width, 1.f, height);
 
-		break;
-	case KDTree::Node::A_Y:
-		color = { 0.0f, 1.0f, 0.0f, 0.25f };
-		rotation = { 0, 1, 0 };
+		//Rotation and translation and set color 
+		Quat rotation;
+		Color c;
+		float3 translation = initial_translation;
 
-		break;
-	case KDTree::Node::A_Z:
-		color = { 0.0f, 0.0f, 1.0f, 0.25f };
-		rotation = { 0, 0, 1 };
+		float next_x = width;
+		float next_z = height;
+		float center_distance = (width > height) ? height : width;
 
-		break;
+		switch (axis)
+		{
+		case KDTree::Node::A_X:
+			//rotation
+			rotation = Quat::FromEulerXYZ(0 * DEGTORAD, 0 * DEGTORAD, 90 * DEGTORAD);
+
+			//translation
+			translation.x = cut_plane.d;
+			if (parent != nullptr)
+			{
+				float diff = (center_distance / 2)*((parent->right == this) ? 1 : -1);
+				translation.y += diff;
+			}
+			next_x /= 2;
+
+			//set color green
+			c.Set(0, 1.f, 0, .5f);
+			break;
+		case KDTree::Node::A_Y:
+			//rotation
+			rotation = Quat::identity;
+
+			//translation
+			translation.y = cut_plane.d;
+			if (parent != nullptr)
+			{
+				float diff = (center_distance / 2)*((parent->right == this) ? 1 : -1);
+				translation.z += diff;
+			}
+			//next_x /= 2;
+
+			//set color red
+			c.Set(1.f, 0, 0, .5f);
+			break;
+		case KDTree::Node::A_Z:
+			//rotation
+			rotation = Quat::FromEulerXYZ(90 * DEGTORAD, 0 * DEGTORAD, 0 * DEGTORAD);
+
+			//translation
+			translation.z = cut_plane.d;
+			if (parent != nullptr)
+			{
+				float diff = (center_distance / 2)*((parent->right == this) ? 1 : -1);
+				translation.x += diff;
+			}
+			next_z /= 2;
+
+			//set color red
+			c.Set(0, 0, 1.f, .5f);
+			break;
+		}
+		//calculate transform from data below
+		float4x4 transfrom = float4x4::FromTRS(translation, rotation, size);
+
+		//Draw the plane
+		glPushMatrix();
+		glMultMatrixf(transfrom.Transposed().ptr());
+		glColor4f(c.r, c.g, c.b, c.a);
+
+		if (App->resource_manager->plane != nullptr)
+			App->resource_manager->plane->Render();
+
+		glColor4f(1.f, 1.f, 1.f, 1.f);
+
+		glPopMatrix();
+
+		//Draw children if needed
+		left->DrawPlane(next_x, next_z, translation);
+		right->DrawPlane(next_x, next_z, translation);
 	}
-
-	
-
-	glPushMatrix();
-		//glMultMatrixf();
-		glColor4f(color.r, color.g, color.b, color.a);
-		
-	glPopMatrix();
-
-	left->DrawPlane(100, 100, initial_translation);
-	right->DrawPlane(100, 100, initial_translation);*/
 }
 
 void KDTree::Node::CheckPartition()
