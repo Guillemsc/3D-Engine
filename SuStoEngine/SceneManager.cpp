@@ -54,6 +54,10 @@ void SceneManager::SaveScene(const char * scene_name)
 
 		vector<GameObject*> game_objects = App->gameobj->GetListGameObjects();
 
+		scene->SetNumber3("editor_camera_position", App->camera->GetCurrentCamera()->GetPosition());
+		scene->SetNumber3("editor_camera_front", App->camera->GetCurrentCamera()->GetZDir());
+		scene->SetNumber3("editor_camera_up", App->camera->GetCurrentCamera()->GetYDir());
+
 		// Store GameObjects
 		scene->SetArray("GameObjects");
 		scene->SetArray("Components");
@@ -76,6 +80,13 @@ void SceneManager::LoadScene(const char * scene_name)
 
 	if (scene != nullptr)
 	{
+		float3 cam_pos = scene->GetNumber3("editor_camera_position");
+		float3 z_dir = scene->GetNumber3("editor_camera_front");
+		float3 y_dir = scene->GetNumber3("editor_camera_up");
+		App->camera->GetCurrentCamera()->SetPosition(cam_pos);
+		App->camera->GetCurrentCamera()->SetZDir(z_dir);
+		App->camera->GetCurrentCamera()->SetYDir(y_dir);
+
 		// Load GameObjects
 		int game_objects_count = scene->GetArrayCount("GameObjects");
 		for (int i = 0; i < game_objects_count; i++)

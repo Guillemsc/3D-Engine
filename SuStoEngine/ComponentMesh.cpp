@@ -84,7 +84,7 @@ void ComponentMesh::InspectorDraw(std::vector<Component*> components)
 		return;
 	}
 
-	ImGui::TextWrapped("Unique id:", mesh->GetUniqueId());
+	ImGui::TextWrapped("Unique id: %s", mesh->GetUniqueId().c_str());
 	ImGui::Text("Used by: %d GameObjects", mesh->UsedCount());
 	ImGui::Text("Id vertices: %d", mesh->GetIdVertices());
 	ImGui::Text("Num vertices: %d", mesh->GetNumVertices());

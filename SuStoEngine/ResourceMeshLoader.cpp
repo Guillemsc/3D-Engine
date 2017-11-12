@@ -276,16 +276,14 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 			}
 		}
 
-		if (!mesh_valid || !node_valid)
+		if(mesh_valid && node_valid && !mesh_already_loaded)
 		{
-			RELEASE(mesh);
-		}
-		else if (!mesh_already_loaded)
-		{
+			App->resource_manager->SaveResourceIntoFile(mesh);
+
 			AddResource(mesh_index, RT_MESH, mesh);
 		}
 		else
-			App->resource_manager->SaveResourceIntoFile(mesh);
+			RELEASE(mesh);
 	}
 
 	// Select parent
@@ -395,9 +393,6 @@ void ResourceMeshLoader::Import(const char * filepath)
 	ResourceMesh* new_mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(RT_MESH, uid);
 	new_mesh->SetFaces(vertices, ranges[0], indices, ranges[1]);
 	new_mesh->SetUvs(uvs, ranges[2]);
-
-	LOG_OUTPUT("New mesh with %d vertices", ranges[0] * 3);
-	LOG_OUTPUT("New mesh with %d indices", ranges[1]);
 
 	RELEASE_ARRAY(indices);
 	RELEASE_ARRAY(vertices);

@@ -15,6 +15,8 @@ public:
 
 	void SetZDir(const float3& front);
 	void SetYDir(const float3& front);
+	float3 GetZDir();
+	float3 GetYDir();
 
 	void GetCorners(float3* corners);
 

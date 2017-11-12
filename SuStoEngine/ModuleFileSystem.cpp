@@ -193,7 +193,8 @@ bool FileSystem::FileSave(const char * path, const char* file_content, const cha
 		LOG_OUTPUT("Error saving file %s: ", name);
 	}
 
-	fclose(new_file);
+	if(new_file)
+		fclose(new_file);
 
 	return ret;
 }
@@ -220,7 +221,8 @@ vector<string> FileSystem::GetFilesInPath(const char * path, const char* extensi
 			break;
 	}
 
-	FindClose(handle);
+	if(handle)
+		FindClose(handle);
 
 	return files;
 }

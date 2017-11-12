@@ -248,6 +248,16 @@ void Camera3D::SetYDir(const float3 & front)
 	frustum.SetUp(front.Normalized());
 }
 
+float3 Camera3D::GetZDir()
+{
+	return frustum.Front();
+}
+
+float3 Camera3D::GetYDir()
+{
+	return frustum.Up();
+}
+
 void Camera3D::GetCorners(float3* corners)
 {
 	frustum.GetCornerPoints(corners);
