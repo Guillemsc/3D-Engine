@@ -6,6 +6,7 @@
 #include "Globals.h"
 
 class GameObject;
+class ResourceMesh;
 
 class KDTree
 {
@@ -74,6 +75,8 @@ public:
 
 private:
 	Node* root_node = nullptr;
+
+public:
 
 };
 

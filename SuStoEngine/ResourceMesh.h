@@ -33,6 +33,8 @@ public:
 	Quat   GetRotation();
 	float3 GetScale();
 
+	void Render();
+
 private:
 	void CalcMeshBBox();
 

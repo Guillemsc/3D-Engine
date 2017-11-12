@@ -68,7 +68,7 @@ bool ModuleGameObject::Update()
 		kdtree->CreateTree(game_objects, 5);;
 	}
 	
-	if (App->input->GetKeyDown("F1"))
+	if (App->input->GetKeyDown("0"))
 	{
 		kdtree_debug = !kdtree_debug;
 	}

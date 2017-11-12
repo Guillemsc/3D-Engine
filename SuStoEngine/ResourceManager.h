@@ -7,6 +7,7 @@
 #include <vector>
 
 class ResourceMeshLoader;
+class ResourceMesh;
 class ResourceTextureLoader;
 
 class ResourceManager : public Module
@@ -31,6 +32,7 @@ private:
 	void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension);
 
 public:
+	ResourceMesh* plane = nullptr;
 
 private:
 	std::map<std::string, Resource*> resources;

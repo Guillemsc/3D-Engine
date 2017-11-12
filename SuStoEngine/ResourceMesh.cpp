@@ -145,6 +145,32 @@ float3 ResourceMesh::GetScale()
 	return scale;
 }
 
+void ResourceMesh::Render()
+{
+	glEnable(GL_VERTEX_ARRAY);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, id_vertices);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
+
+
+	//Apply UV if exist
+	if (num_uvs != 0)
+	{
+		glEnable(GL_TEXTURE_COORD_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, id_uv);
+		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+	}
+
+	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	glDisable(GL_VERTEX_ARRAY);
+	glDisable(GL_TEXTURE_COORD_ARRAY);
+}
+
 void ResourceMesh::LoadToMemory()
 {
 	if (id_vertices == 0 && vertices != nullptr)
