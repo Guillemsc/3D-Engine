@@ -7,6 +7,8 @@
 #include "ResourceMesh.h"
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
+#include "ComponentCamera.h"
+#include "ModuleCamera3D.h"
 #include "ResourceTexture.h"
 #include "App.h"
 
@@ -151,6 +153,19 @@ void SceneManager::LoadScene(const char * scene_name)
 				ComponentMaterial* cmaterial = (ComponentMaterial*)owner->GetComponent(MATERIAL);
 				ResourceTexture* rtexture = (ResourceTexture*)App->resource_manager->Get(texture_id);
 				cmaterial->SetTexture(rtexture);
+			}
+			break;
+			case CAMERA:
+			{
+				float far_plane_distance = scene->GetNumber("far_plane_distance", 1000);
+				float near_plane_distance = scene->GetNumber("near_plane_distance", 0.1f);
+				float fov = scene->GetNumber("fov", 60.0f);
+
+				owner->AddComponent(CAMERA, component_id);
+				ComponentCamera* ccamera = (ComponentCamera*)owner->GetComponent(CAMERA);
+				ccamera->GetCamera()->SetFarPlaneDistance(far_plane_distance);
+				ccamera->GetCamera()->SetNearPlaneDistance(near_plane_distance);
+				ccamera->GetCamera()->SetFOV(fov);
 			}
 			break;
 			}

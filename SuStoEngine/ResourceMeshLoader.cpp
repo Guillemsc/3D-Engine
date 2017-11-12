@@ -83,11 +83,15 @@ bool ResourceMeshLoader::Load(const char * filepath, bool as_new_gameobject)
 		AABB total_abb;
 		total_abb.SetNegativeInfinity();
 
+		// Keep track of resources loaded (avoid repeating)
+
 		// Iterate
 		for (int i = 0; i < root->mNumChildren; i++)
 		{
 			RecursiveLoadMesh(scene, root->mChildren[i], filepath, total_abb, parent);
 		}
+
+		used_resources.clear();
 
 		// Set camera focus
 		if (ret)
@@ -117,11 +121,21 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 	for (int i = 0; i < node->mNumMeshes; i++)
 	{
 		bool mesh_valid = true;
-		if (mesh_valid && node_valid)
-		{
-			int mesh_index = node->mMeshes[i];
-			aimesh = scene->mMeshes[mesh_index];
 
+		int mesh_index = node->mMeshes[i];
+		aimesh = scene->mMeshes[mesh_index];
+
+		// Check if its already loaded
+		Resource* res_mesh = nullptr;
+		bool mesh_already_loaded = false;
+		if (ResourceIsUsed(mesh_index, RT_MESH, res_mesh))
+		{
+			mesh = (ResourceMesh*)res_mesh;
+			mesh_already_loaded = true;
+		}
+
+		if (mesh_valid && node_valid && !mesh_already_loaded)
+		{
 			mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(RT_MESH);
 
 			if (!aimesh->HasFaces())
@@ -132,7 +146,7 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 		}
 
 		// VERTICES && INDICES
-		if (mesh_valid && node_valid)
+		if (mesh_valid && node_valid && !mesh_already_loaded)
 		{
 			float* vertices = new float[aimesh->mNumVertices * 3];
 			memcpy(vertices, aimesh->mVertices, sizeof(float) * aimesh->mNumVertices * 3);
@@ -159,7 +173,7 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 		}
 
 		// UVS
-		if (mesh_valid && node_valid && aimesh->HasTextureCoords(0))
+		if (mesh_valid && node_valid && !mesh_already_loaded && aimesh->HasTextureCoords(0))
 		{
 			float* uvs = new float[aimesh->mNumVertices * 3];
 			memcpy(uvs, (float*)aimesh->mTextureCoords[0], sizeof(float) * aimesh->mNumVertices * 3);
@@ -205,16 +219,30 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 		ResourceTexture* texture = nullptr;
 		if (mesh_valid && node_valid)
 		{
-			aiMaterial* material = scene->mMaterials[aimesh->mMaterialIndex];
+			// Check if its already loaded
+			Resource* res_tex = nullptr;
+			bool texture_already_loaded = false;
+			if (ResourceIsUsed(aimesh->mMaterialIndex, RT_TEXTURE, res_tex))
+			{
+				texture = (ResourceTexture*)res_tex;
+				texture_already_loaded = true;
+			}
 
-			string path = GetPathFromFilePath(full_path);
+			if (!texture_already_loaded)
+			{
+				aiMaterial* material = scene->mMaterials[aimesh->mMaterialIndex];
 
-			// Difuse -------------------
-			aiString file;
-			material->GetTexture(aiTextureType_DIFFUSE, 0, &file);
-			path += GetFileNameFromFilePath(file.C_Str());
+				string path = GetPathFromFilePath(full_path);
 
-			texture = (ResourceTexture*)App->resource_manager->LoadResource(path.c_str());
+				// Difuse -------------------
+				aiString file;
+				material->GetTexture(aiTextureType_DIFFUSE, 0, &file);
+				path += GetFileNameFromFilePath(file.C_Str());
+
+				texture = (ResourceTexture*)App->resource_manager->LoadResource(path.c_str());
+
+				AddResource(aimesh->mMaterialIndex, RT_TEXTURE, texture);
+			}
 		}
 
 		// CREATE GAME OBJECT
@@ -250,6 +278,10 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 		{
 			RELEASE(mesh);
 		}
+		else if (!mesh_already_loaded)
+		{
+			AddResource(mesh_index, RT_MESH, mesh);
+		}
 		else
 			App->resource_manager->SaveResourceIntoFile(mesh);
 	}
@@ -266,6 +298,29 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 	{
 		RecursiveLoadMesh(scene, node->mChildren[i], full_path, total_abb, pare);
 	}
+}
+
+bool ResourceMeshLoader::ResourceIsUsed(int index, ResourceType type, Resource*& res)
+{
+	bool ret = false;
+
+	for (vector<UsedResource>::iterator it = used_resources.begin(); it != used_resources.end(); it++)
+	{
+		if ((*it).GetIndex() == index && (*it).GetType() == type)
+		{
+			res = (*it).GetResource();
+			ret = true;
+			break;
+		}
+	}
+
+	return ret;
+}
+
+void ResourceMeshLoader::AddResource(int index, ResourceType type, Resource * res)
+{
+	UsedResource used(res, index, type);
+	used_resources.push_back(used);
 }
 
 void ResourceMeshLoader::ImportAllMeshes()
