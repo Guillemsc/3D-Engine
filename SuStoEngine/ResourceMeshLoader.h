@@ -33,13 +33,14 @@ public:
 
 	bool Load(const char* filepath, bool as_new_gameobject = true);
 	void Import(const char* filepath);
-	bool Export(const char* filepath, ResourceMesh* mesh);
+	bool Export(const char* path, ResourceMesh* mesh);
+	void ImportAllMeshes();
 
 private:
 	void RecursiveLoadMesh(const aiScene* scene, aiNode* node, const char* full_path, AABB& total_abb, GameObject* parent = nullptr);
 	void CreatePlane();
 
-public:
+private:
 
 };
 

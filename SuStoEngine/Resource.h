@@ -14,7 +14,7 @@ enum ResourceType
 class Resource
 {
 public:
-	Resource(std::string  unique_id);
+	Resource(std::string unique_id, ResourceType type);
 	virtual ~Resource();
 
 	virtual void CleanUp() {};

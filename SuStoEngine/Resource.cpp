@@ -1,8 +1,9 @@
 #include "Resource.h"
 
-Resource::Resource(std::string _unique_id)
+Resource::Resource(std::string _unique_id, ResourceType _type)
 {
 	unique_id = _unique_id;
+	type = _type;
 }
 
 Resource::~Resource()

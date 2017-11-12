@@ -16,6 +16,7 @@ public:
 	ResourceManager(bool start_enabled = true);
 	virtual ~ResourceManager();
 
+	bool Start();
 	bool CleanUp();
 
 	Resource * Get(std::string unique_id);
@@ -24,6 +25,8 @@ public:
 
 	void SaveResourceIntoFile(Resource* res);
 	Resource* LoadResource(const char* file_path);
+
+	void ImportAllResources();
 
 private:
 	void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension);

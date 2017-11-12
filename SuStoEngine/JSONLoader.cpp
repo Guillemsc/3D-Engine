@@ -101,6 +101,25 @@ JSON_Doc* JSONLoader::CreateJSON(const char * path)
 	return ret;
 }
 
+void JSONLoader::UnloadJSON(JSON_Doc * son)
+{
+
+	for (list<JSON_Doc*>::iterator it = jsons.begin(); it != jsons.end();)
+	{
+		if ((*it) == son)
+		{
+			(*it)->CleanUp();
+			delete (*it);
+
+			it = jsons.erase(it);
+			break;
+		}
+		else
+			++it;
+		
+	}
+}
+
 bool JSONLoader::CleanUp()
 {
 	bool ret = true;
