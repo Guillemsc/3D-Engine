@@ -7,6 +7,8 @@
 #include "KDTree.h"
 #include "ModuleInput.h"
 #include "SceneManager.h"
+#include "ModuleCamera3D.h"
+#include "EditorUI.h"
 
 ModuleGameObject::ModuleGameObject(bool enabled)
 {
@@ -53,6 +55,11 @@ bool ModuleGameObject::PreUpdate()
 bool ModuleGameObject::Update()
 {
 	bool ret = true;
+
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+		MousePick();
+	}
 
 	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
 	{
@@ -255,3 +262,34 @@ void ModuleGameObject::DestroyGameObjects()
 		to_del = to_delete.erase(to_del);
 	}
 }
+
+void ModuleGameObject::MousePick()
+{
+	float4 rect = App->editorUI->GameRect();
+	float2 mouse_pos = App->input->GetMouse();
+
+	if (PointInRect(mouse_pos, rect))
+	{
+		// The point (1, 1) corresponds to the top-right corner of the near plane
+		// (-1, -1) is bottom-left
+
+		float first_normalized_x = (mouse_pos.x - rect.x) / rect.w;
+		float first_normalized_y = (mouse_pos.y - rect.y) / rect.z;
+
+		float normalized_x = (first_normalized_x * 2) - 1;
+		float normalized_y = 1 - (first_normalized_y * 2);
+
+		LineSegment picking = App->camera->GetCurrentCamera()->GetFrustum().UnProjectLineSegment(normalized_x, normalized_y);
+
+		float distance = 99999999999;
+		GameObject* closest = nullptr;
+		root->RecursiveTestRay(picking, closest, distance);
+
+		if (closest != nullptr)
+		{
+			ClearSelection();
+			AddGameObjectToSelected(closest);
+		}
+	}
+}
+

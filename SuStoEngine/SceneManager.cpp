@@ -41,6 +41,8 @@ bool SceneManager::CleanUp()
 
 void SceneManager::SaveScene(const char * scene_name)
 {
+	LOG_OUTPUT("Saving scene %s", scene_name);
+
 	string path = App->file_system->GetLibraryScenePath() + scene_name;
 
 	JSON_Doc* scene = App->json->LoadJSON(path.c_str());
@@ -65,7 +67,9 @@ void SceneManager::SaveScene(const char * scene_name)
 		for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); it++)
 		{
 			scene->MoveToRoot();
-			(*it)->OnSaveScene(scene);
+
+			if((*it) != App->gameobj->GetRoot())
+				(*it)->OnSaveScene(scene);
 		}
 
 		scene->Save();
@@ -74,6 +78,8 @@ void SceneManager::SaveScene(const char * scene_name)
 
 void SceneManager::LoadScene(const char * scene_name)
 {
+	LOG_OUTPUT("Loading scene %s", scene_name);
+
 	string path = App->file_system->GetLibraryScenePath() + scene_name;
 
 	JSON_Doc* scene = App->json->LoadJSON(path.c_str());

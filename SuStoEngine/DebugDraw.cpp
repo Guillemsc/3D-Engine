@@ -378,6 +378,8 @@ void DebugDrawBox(const float3* corners, Color color, bool lines, const float& l
 		glPolygonMode(GL_FRONT_AND_BACK, previous[0]);
 
 	glLineWidth(1.0f);
+
+	glColor3f(255, 255, 255);
 }
 
 

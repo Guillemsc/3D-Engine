@@ -47,6 +47,7 @@ public:
 
 	void RecursiveCalcGlobalTransform();
 	void RecursiveCalcBBox();
+	void RecursiveTestRay(const LineSegment& segment, GameObject*& closest, float& dist);
 
 	bool GetStatic();
 	void SetStatic(bool set);

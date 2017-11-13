@@ -69,6 +69,7 @@ public:
 
 	int GetMouseX() const;
 	int GetMouseY() const;
+	float2 GetMouse();
 	int GetMouseWheel() const;
 	int GetMouseXMotion() const;
 	int GetMouseYMotion() const;

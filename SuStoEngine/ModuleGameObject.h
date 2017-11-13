@@ -39,6 +39,7 @@ public:
 
 private:
 	void DestroyGameObjects();
+	void MousePick();
 
 private:
 	vector<GameObject*> game_objects;
@@ -46,8 +47,9 @@ private:
 	vector<GameObject*> selected;
 	vector<GameObject*> statics;
 	GameObject*			root = nullptr;
-	KDTree* kdtree = nullptr;
-	bool kdtree_debug = false;
+
+	KDTree*				kdtree = nullptr;
+	bool				kdtree_debug = false;
 };
 
 #endif // !_MODULE_GAME_OBJECT_H_

@@ -404,6 +404,11 @@ int ModuleInput::GetMouseY() const
 	return mouse_y;
 }
 
+float2 ModuleInput::GetMouse()
+{
+	return float2(mouse_x, mouse_y);
+}
+
 int ModuleInput::GetMouseWheel() const
 {
 	return mouse_wheel;

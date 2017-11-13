@@ -285,7 +285,6 @@ bool EditorUI::CleanUp()
 	SaveLayoutsInfo();
 
 	LOG_OUTPUT("Destroying ImGui");
-	ImGui_ImplSdlGL2_Shutdown();
 
 	for (vector<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
 	{
@@ -294,6 +293,8 @@ bool EditorUI::CleanUp()
 	}
 
 	editor_elements.clear();
+
+	ImGui_ImplSdlGL2_Shutdown();
 
 	return ret;
 }
