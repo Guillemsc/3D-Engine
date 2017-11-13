@@ -93,8 +93,8 @@ void SceneManager::LoadScene(const char * scene_name)
 		{
 			scene->MoveToSectionFromArray("GameObjects", i);
 
-			string id = scene->GetString("uid");
-			string name = scene->GetString("name");
+			string id = scene->GetString("uid", "no_id");
+			string name = scene->GetString("name", "missing_name");
 
 			GameObject* go = App->gameobj->Create(id);
 			go->SetName(name);
@@ -106,8 +106,8 @@ void SceneManager::LoadScene(const char * scene_name)
 		{
 			scene->MoveToSectionFromArray("GameObjects", i);
 
-			string parent = scene->GetString("parent");
-			string id = scene->GetString("uid");
+			string parent = scene->GetString("parent", "no_id");
+			string id = scene->GetString("uid", "no_id");
 			
 			if (parent != "")
 			{
@@ -131,54 +131,57 @@ void SceneManager::LoadScene(const char * scene_name)
 			string owner_id = scene->GetString("owner_id", "no_id");
 			GameObject* owner = App->gameobj->Find(owner_id);
 
-			switch (type)
+			if (owner != nullptr)
 			{
-			case TRANSFORM:
-			{
-				float3 position = scene->GetNumber3("position");
-				float4 rotation = scene->GetNumber4("rotation");
-				float3 scale = scene->GetNumber3("scale");
+				switch (type)
+				{
+				case TRANSFORM:
+				{
+					float3 position = scene->GetNumber3("position");
+					float4 rotation = scene->GetNumber4("rotation");
+					float3 scale = scene->GetNumber3("scale");
 
-				owner->transform->ForceUid(component_id);
+					owner->transform->ForceUid(component_id);
 
-				owner->transform->SetPosition(position);
-				owner->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
-				owner->transform->SetScale(scale);
-			}
-			break;
-			case MESH:
-			{
-				string mesh_id = scene->GetString("mesh_id", "no_id");
+					owner->transform->SetPosition(position);
+					owner->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
+					owner->transform->SetScale(scale);
+				}
+				break;
+				case MESH:
+				{
+					string mesh_id = scene->GetString("mesh_id", "no_id");
 
-				owner->AddComponent(MESH, component_id);
-				ComponentMesh* cmesh = (ComponentMesh*)owner->GetComponent(MESH);
-				ResourceMesh* rmesh = (ResourceMesh*)App->resource_manager->Get(mesh_id);
-				cmesh->SetMesh(rmesh);
-			}
-			break;
-			case MATERIAL:
-			{
-				string texture_id = scene->GetString("texture_id", "no_id");
+					owner->AddComponent(MESH, component_id);
+					ComponentMesh* cmesh = (ComponentMesh*)owner->GetComponent(MESH);
+					ResourceMesh* rmesh = (ResourceMesh*)App->resource_manager->Get(mesh_id);
+					cmesh->SetMesh(rmesh);
+				}
+				break;
+				case MATERIAL:
+				{
+					string texture_id = scene->GetString("texture_id", "no_id");
 
-				owner->AddComponent(MATERIAL, component_id);
-				ComponentMaterial* cmaterial = (ComponentMaterial*)owner->GetComponent(MATERIAL);
-				ResourceTexture* rtexture = (ResourceTexture*)App->resource_manager->Get(texture_id);
-				cmaterial->SetTexture(rtexture);
-			}
-			break;
-			case CAMERA:
-			{
-				float far_plane_distance = scene->GetNumber("far_plane_distance", 1000);
-				float near_plane_distance = scene->GetNumber("near_plane_distance", 0.1f);
-				float fov = scene->GetNumber("fov", 60.0f);
+					owner->AddComponent(MATERIAL, component_id);
+					ComponentMaterial* cmaterial = (ComponentMaterial*)owner->GetComponent(MATERIAL);
+					ResourceTexture* rtexture = (ResourceTexture*)App->resource_manager->Get(texture_id);
+					cmaterial->SetTexture(rtexture);
+				}
+				break;
+				case CAMERA:
+				{
+					float far_plane_distance = scene->GetNumber("far_plane_distance", 1000);
+					float near_plane_distance = scene->GetNumber("near_plane_distance", 0.1f);
+					float fov = scene->GetNumber("fov", 60.0f);
 
-				owner->AddComponent(CAMERA, component_id);
-				ComponentCamera* ccamera = (ComponentCamera*)owner->GetComponent(CAMERA);
-				ccamera->GetCamera()->SetFarPlaneDistance(far_plane_distance);
-				ccamera->GetCamera()->SetNearPlaneDistance(near_plane_distance);
-				ccamera->GetCamera()->SetFOV(fov);
-			}
-			break;
+					owner->AddComponent(CAMERA, component_id);
+					ComponentCamera* ccamera = (ComponentCamera*)owner->GetComponent(CAMERA);
+					ccamera->GetCamera()->SetFarPlaneDistance(far_plane_distance);
+					ccamera->GetCamera()->SetNearPlaneDistance(near_plane_distance);
+					ccamera->GetCamera()->SetFOV(fov);
+				}
+				break;
+				}
 			}
 
 			scene->MoveToRoot();

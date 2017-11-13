@@ -217,7 +217,7 @@ Camera3D::Camera3D()
 {
 	frustum.SetKind(FrustumProjectiveSpace::FrustumSpaceGL, FrustumHandedness::FrustumRightHanded);
 
-	frustum.SetPos(float3(0, 0, -1));
+	frustum.SetPos(float3(0, 1, -1));
 	frustum.SetFront(float3::unitZ);
 	frustum.SetUp(float3::unitY);
 	aspect_ratio = 0;
