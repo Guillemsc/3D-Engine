@@ -388,11 +388,11 @@ void GameObject::RecursiveTestRay(const LineSegment & segment, GameObject*& clos
 					Triangle tri;
 					uint* indices = mesh->GetIndices();
 					float* vertices = mesh->GetVertices();
-					for (int i = 0; i < mesh->GetNumIndices(); i++)
+					for (int i = 0; i < mesh->GetNumIndices();)
 					{
-						tri.a.Set(vertices[indices[i]], vertices[indices[i] + 1], vertices[indices[i] + 2]);
-						tri.b.Set(vertices[indices[i] + 3], vertices[indices[i] + 4], vertices[indices[i] + 5]);
-						tri.c.Set(vertices[indices[i] + 6], vertices[indices[i] + 7], vertices[indices[i] + 8]);
+						tri.a.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
+						tri.b.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
+						tri.c.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
 
 						float distance;
 						float3 hit_point;
