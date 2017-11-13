@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "GameObject.h"
+#include "ImGuizmo.h"
 
 class KDTree;
 
@@ -50,6 +51,9 @@ private:
 
 	KDTree*				kdtree = nullptr;
 	bool				kdtree_debug = false;
+
+	ImGuizmo::OPERATION current_gizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
+	ImGuizmo::MODE		current_gizmo_mode = ImGuizmo::MODE::WORLD;
 };
 
 #endif // !_MODULE_GAME_OBJECT_H_

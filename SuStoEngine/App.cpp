@@ -17,6 +17,12 @@
 #include "mmgr\nommgr.h"
 #include "mmgr\mmgr.h"
 
+// TOD0
+// I don't like texture saving to dds method
+// Textures loading wrong orientation in some meshes
+// Mouse picking not working 100%
+// Memory Leaks!
+
 Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
 	file_system = new FileSystem();

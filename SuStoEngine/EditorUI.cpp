@@ -18,6 +18,7 @@
 #include "JSONLoader.h"
 #include "ModuleGameObject.h"
 #include "SceneManager.h"
+#include "ImGuizmo.h"
 
 //https://github.com/ocornut/imgui/issues/351
 
@@ -80,6 +81,8 @@ bool EditorUI::Start()
 {
 	bool ret = true;
 
+	ImGuizmo::Enable(true);
+
 	for (vector<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
 	{
 		(*it)->Start();
@@ -95,6 +98,10 @@ bool EditorUI::PreUpdate()
 	// ImGui new frame
 	ImGui_ImplSdlGL2_NewFrame(App->window->window);
 
+	// ImGuizmo begin frame
+	ImGuizmo::BeginFrame();
+
+	// Begin docking workspace
 	igBeginWorkspace(&workspace_visible, ImVec2(-3, 21), ImVec2(App->window->GetWindowSize().x, App->window->GetWindowSize().y - 21),
 		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBringToFrontOnFocus);
 

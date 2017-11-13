@@ -9,6 +9,7 @@
 #include "SceneManager.h"
 #include "ModuleCamera3D.h"
 #include "EditorUI.h"
+#include "ImGuizmo.h"
 
 ModuleGameObject::ModuleGameObject(bool enabled)
 {
@@ -65,6 +66,38 @@ bool ModuleGameObject::Update()
 	{
 		(*it)->Update();
 		(*it)->Draw();
+	}
+
+	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
+	{
+		//ImGuizmo::DrawCube(App->camera->GetCurrentCamera()->GetViewMatrix().ptr(), 
+		//	App->camera->GetCurrentCamera()->GetProjectionMatrix().ptr(), 
+		//	(float*)(*it)->transform->GetGlobalTransform().ptr());
+
+		float4x4 transform = (float4x4)(*it)->transform->GetGlobalTransform();
+
+		float3 snap;
+		snap.x = 2;
+		snap.y = 2;
+		snap.z = 2;
+		ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetViewMatrix().ptr(),
+			App->camera->GetCurrentCamera()->GetProjectionMatrix().ptr(),
+			current_gizmo_operation,
+			current_gizmo_mode,
+			transform.ptr(),
+			0);
+
+		if (ImGuizmo::IsUsing())
+		{
+			switch (current_gizmo_operation)
+			{
+				case ImGuizmo::OPERATION::TRANSLATE:
+				{
+
+				}
+				break;
+			}
+		}
 	}
 
 	if (App->input->GetKeyDown("K"))

@@ -5,6 +5,7 @@
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
 #include "FBO.h"
+#include "ImGuizmo.h"
 
 Game::Game(bool start_enabled)
 {
@@ -34,6 +35,11 @@ void Game::Draw()
 
 		saved_size.x = size.x;
 		saved_size.y = size.y;
+
+		/*ImGuizmo::SetRect(position.x, position.y, size.x, size.y);*/
+
+		ImGuiIO& io = ImGui::GetIO();
+		ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
 	}
 
 	ImGui::Image((void*)App->renderer3D->GetScreenTexture(), ImVec2(size.y, size.x), ImVec2(0, 1), ImVec2(1, 0));

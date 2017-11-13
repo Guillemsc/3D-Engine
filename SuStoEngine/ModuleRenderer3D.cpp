@@ -130,6 +130,8 @@ bool ModuleRenderer3D::Awake()
 	}
 
 	SetTexture2D(true);
+	float light[4] = { 255, 255, 255, 255 };
+	SetAmbientLight(true, light);
 
 	return ret;
 }
