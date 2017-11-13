@@ -363,6 +363,62 @@ void GameObject::RecursiveCalcBBox()
 	}
 }
 
+void GameObject::RecursiveTestRay(const LineSegment & segment, GameObject*& closest, float& dist)
+{
+	// Check if intersects with bbox
+	if (local_bbox.IsFinite())
+	{
+		if (segment.Intersects(local_bbox))
+		{
+			// Get mesh
+			ComponentMesh* cmesh = nullptr;
+			cmesh = (ComponentMesh*)GetComponent(MESH);
+
+			if (cmesh != nullptr)
+			{
+				if (cmesh->HasMesh())
+				{
+					// Transform segment to match mesh transform
+					LineSegment segment_local_space(segment);
+					segment_local_space.Transform(transform->GetGlobalTransform().Inverted());
+
+					ResourceMesh* mesh = cmesh->GetMesh();
+
+					// Check every triangle
+					Triangle tri;
+					uint* indices = mesh->GetIndices();
+					float* vertices = mesh->GetVertices();
+					for (int i = 0; i < mesh->GetNumIndices(); i++)
+					{
+						tri.a.Set(vertices[indices[i]], vertices[indices[i] + 1], vertices[indices[i] + 2]);
+						tri.b.Set(vertices[indices[i] + 3], vertices[indices[i] + 4], vertices[indices[i] + 5]);
+						tri.c.Set(vertices[indices[i] + 6], vertices[indices[i] + 7], vertices[indices[i] + 8]);
+
+						float distance;
+						float3 hit_point;
+						if (segment_local_space.Intersects(tri, &distance, &hit_point))
+						{
+							if (distance < dist)
+							{
+								dist = distance;
+								closest = this;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if (!childs.empty())
+	{
+		for (vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); it++)
+		{
+			(*it)->RecursiveTestRay(segment, closest, dist);
+		}
+	}
+}
+
 bool GameObject::GetStatic()
 {
 	return is_static;
@@ -428,7 +484,12 @@ void GameObject::OnSaveScene(JSON_Doc * config)
 void GameObject::DrawBBox()
 {
 	if (local_bbox.IsFinite())
-		DebugDraw(local_bbox, White, true, 4.0f);
+	{	
+		if(selected)
+			DebugDraw(local_bbox, Red, true, 4.0f);
+		else
+			DebugDraw(local_bbox, Green, true, 4.0f);
+	}
 }
 
 
