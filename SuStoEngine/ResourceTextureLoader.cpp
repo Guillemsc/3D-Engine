@@ -21,7 +21,6 @@ ResourceTextureLoader::ResourceTextureLoader()
 	iluInit();
 	ilutInit();
 	ilutRenderer(ILUT_OPENGL);
- 
 }
 
 ResourceTextureLoader::~ResourceTextureLoader()
@@ -57,10 +56,10 @@ ResourceTexture* ResourceTextureLoader::Load(const char * filepath)
 			GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
 		ret->SetName(file_name);
 
-		ilDeleteImages(1, &ImageInfo.Id);
-
 		// Export it to Library
 		App->resource_manager->SaveResourceIntoFile(ret);
+
+		ilDeleteImages(1, &ImageInfo.Id);
 	}
 	else
 	{
@@ -106,12 +105,6 @@ void ResourceTextureLoader::Import(const char * filepath)
 		ILinfo ImageInfo;
 		iluGetImageInfo(&ImageInfo);
 
-		// Rotate if origin is upper left
-		if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
-		{
-			iluFlipImage();
-		}
-
 		// Convert image to rgb and a byte chain
 		ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
 
@@ -151,6 +144,8 @@ bool ResourceTextureLoader::Export(const char * path, ResourceTexture* resource)
 
 	if (size > 0)
 	{
+		ilEnable(IL_FILE_OVERWRITE);
+
 		// Allocate data buffer
 		data = new byte[size];
 

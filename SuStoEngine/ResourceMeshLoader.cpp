@@ -282,7 +282,7 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 
 			AddResource(mesh_index, RT_MESH, mesh);
 		}
-		else
+		else if (!mesh_valid || !node_valid)
 			RELEASE(mesh);
 	}
 

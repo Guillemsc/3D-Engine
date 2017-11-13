@@ -18,6 +18,8 @@ public:
 
 	uint GetTextureId();
 	float2 GetSize();
+	byte* GetTextureData();
+	uint GetTextureDataSize();
 
 private:
 	void LoadToMemory();
@@ -25,6 +27,7 @@ private:
 
 private:
 	byte*  texture_data = nullptr;
+	uint   texture_data_size = 0;
 	uint   texture_id = 0;
 	int	   format = 0;
 	float2 size = float2(0, 0);

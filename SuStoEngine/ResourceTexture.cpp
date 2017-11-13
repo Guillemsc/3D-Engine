@@ -22,6 +22,7 @@ void ResourceTexture::SetData(byte * _texture_data, uint _texture_data_lenght, u
 		memcpy(texture_data, _texture_data, _texture_data_lenght * sizeof(byte));
 	}
 
+	texture_data_size = _texture_data_lenght;
 	format = _format;
 	size.x = _width;
 	size.y = _height;
@@ -39,6 +40,16 @@ uint ResourceTexture::GetTextureId()
 float2 ResourceTexture::GetSize()
 {
 	return size;
+}
+
+byte * ResourceTexture::GetTextureData()
+{
+	return texture_data;
+}
+
+uint ResourceTexture::GetTextureDataSize()
+{
+	return texture_data_size;
 }
 
 void ResourceTexture::LoadToMemory()
