@@ -258,7 +258,7 @@ void KDTree::Node::DrawPlane(int width, int height, float3 initial_translation)
 			next_x /= 2;
 
 			//set color green
-			c.Set(0, 1.f, 0, .75f);
+			c.Set(0, 1.f, 0, .5f);
 			break;
 		case KDTree::Node::A_Y:
 			//rotation
@@ -271,9 +271,10 @@ void KDTree::Node::DrawPlane(int width, int height, float3 initial_translation)
 				float diff = (center_distance / 2)*((parent->right == this) ? 1 : -1);
 				translation.z += diff;
 			}
+			//next_x /= 2;
 
 			//set color red
-			c.Set(1.f, 0, 0, .75f);
+			c.Set(1.f, 0, 0, .5f);
 			break;
 		case KDTree::Node::A_Z:
 			//rotation
@@ -289,9 +290,10 @@ void KDTree::Node::DrawPlane(int width, int height, float3 initial_translation)
 			next_z /= 2;
 
 			//set color red
-			c.Set(0, 0, 1.f, .75f);
+			c.Set(0, 0, 1.f, .5f);
 			break;
 		}
+
 		//calculate transform from data below
 		float4x4 transfrom = float4x4::FromTRS(translation, rotation, size);
 

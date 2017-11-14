@@ -13,33 +13,33 @@ public:
 	JSON_Doc(JSON_Doc& doc);
 	~JSON_Doc();
 
-	void SetString(string set, const char* str);
-	void SetBool(string set, bool bo);
-	void SetNumber(string set, double nu);
-	void SetNumber3(string set, float3 val);
-	void SetNumber4(string set, float4 val);
-	const char* GetString(string str, const char* defaul = "");
-	const bool GetBool(string bo, bool defaul = false);
-	const double GetNumber(string nu, double defaul = 0);
-	const float3 GetNumber3(string fl);
-	const float4 GetNumber4(string fl);
+	void SetString(const string& set, const char* str);
+	void SetBool(const string& set, bool bo);
+	void SetNumber(const string& set, double nu);
+	void SetNumber3(const string& set, float3 val);
+	void SetNumber4(const string& set, float4 val);
+	const char* GetString(const string& str, const char* defaul = "");
+	const bool GetBool(const string& bo, bool defaul = false);
+	const double GetNumber(const string& nu, double defaul = 0);
+	const float3 GetNumber3(const string& fl);
+	const float4 GetNumber4(const string& fl);
 
-	void SetArray(string set);
-	void ClearArray(string arr);
-	void AddStringToArray(string arr, const char* str);
-	void AddBoolToArray(string arr, bool bo);
-	void AddNumberToArray(string arr, double set);
-	void AddSectionToArray(string arr);
-	bool MoveToSectionFromArray(string arr, int index);
-	const int GetArrayCount(string set) const;
-	const char* GetStringFromArray(string arr, int index);
-	const bool GetBoolFromArray(string arr, int index);
-	const double GetNumberFromArray(string arr, int index);
+	void SetArray(const string& set);
+	void ClearArray(const string& arr);
+	void AddStringToArray(const string& arr, const char* str);
+	void AddBoolToArray(const string& arr, bool bo);
+	void AddNumberToArray(const string& arr, double set);
+	void AddSectionToArray(const string& arr);
+	bool MoveToSectionFromArray(const string& arr, int index);
+	const int GetArrayCount(const string& set) const;
+	const char* GetStringFromArray(const string& arr, int index);
+	const bool GetBoolFromArray(const string& arr, int index);
+	const double GetNumberFromArray(const string& arr, int index);
 
-	bool MoveToSection(string set);
-	void RemoveSection(string set);
+	bool MoveToSection(const string& set);
+	void RemoveSection(const string& set);
 	void MoveToRoot();
-	void AddSection(string set);
+	void AddSection(const string& set);
 
 	void Clear();
 
