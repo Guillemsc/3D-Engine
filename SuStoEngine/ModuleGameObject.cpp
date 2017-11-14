@@ -10,6 +10,7 @@
 #include "ModuleCamera3D.h"
 #include "EditorUI.h"
 #include "ImGuizmo.h"
+#include "imgui.h"
 
 ModuleGameObject::ModuleGameObject(bool enabled)
 {
@@ -70,18 +71,11 @@ bool ModuleGameObject::Update()
 
 	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
 	{
-		//ImGuizmo::DrawCube(App->camera->GetCurrentCamera()->GetViewMatrix().ptr(), 
-		//	App->camera->GetCurrentCamera()->GetProjectionMatrix().ptr(), 
-		//	(float*)(*it)->transform->GetGlobalTransform().ptr());
+		float4x4 transform = (*it)->transform->GetGlobalTransform().Transposed();
 
-		float4x4 transform = (float4x4)(*it)->transform->GetGlobalTransform();
-
-		float3 snap;
-		snap.x = 2;
-		snap.y = 2;
-		snap.z = 2;
-		ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetViewMatrix().ptr(),
-			App->camera->GetCurrentCamera()->GetProjectionMatrix().ptr(),
+		float3 snap(2, 2, 2);
+		ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetOpenGLViewMatrix().ptr(),
+			App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr(),
 			current_gizmo_operation,
 			current_gizmo_mode,
 			transform.ptr(),

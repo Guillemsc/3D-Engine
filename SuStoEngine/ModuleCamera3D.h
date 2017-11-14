@@ -30,8 +30,8 @@ public:
 	const float GetHorizontalFOV() const;
 	const float4x4 GetViewMatrix() const;
 	const float4x4 GetProjectionMatrix() const;
-	const float* GetOpenGLViewMatrix() const;
-	const float* GetOpenGLProjectionMatrix() const;
+	const float4x4 GetOpenGLViewMatrix() const;
+	const float4x4 GetOpenGLProjectionMatrix() const;
 
 	void MoveFront(const float& speed);
 	void MoveBack(const float& speed);

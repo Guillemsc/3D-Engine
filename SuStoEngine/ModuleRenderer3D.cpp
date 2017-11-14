@@ -204,7 +204,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	App->camera->GetCurrentCamera()->SetAspectRatio((float)width / (float)height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glLoadMatrixf(App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix());
+	glLoadMatrixf(App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr());
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }

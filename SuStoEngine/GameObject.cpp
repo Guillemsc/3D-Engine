@@ -396,6 +396,7 @@ void GameObject::RecursiveTestRay(const LineSegment & segment, GameObject*& clos
 
 						float distance;
 						float3 hit_point;
+
 						if (segment_local_space.Intersects(tri, &distance, &hit_point))
 						{
 							if (distance < dist)

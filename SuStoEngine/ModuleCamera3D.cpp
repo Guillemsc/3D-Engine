@@ -118,7 +118,7 @@ void ModuleCamera3D::SetCurrentCameraToEditorCamera()
 
 const float * ModuleCamera3D::GetViewMatrix() const
 {
-	return current_camera->GetViewMatrix().Transposed().ptr();
+	return current_camera->GetOpenGLViewMatrix().ptr();
 }
 
 // -----------------------------------------------------------------
@@ -321,16 +321,15 @@ const float4x4 Camera3D::GetProjectionMatrix() const
 	return frustum.ProjectionMatrix();
 }
 
-const float * Camera3D::GetOpenGLViewMatrix() const
+const float4x4 Camera3D::GetOpenGLViewMatrix() const
 {
-	static float4x4 view = frustum.ViewMatrix();
-	view.Transpose();
-	return view.ptr();
+	float4x4 view = frustum.ViewMatrix();
+	return view.Transposed();
 }
 
-const float * Camera3D::GetOpenGLProjectionMatrix() const
+const float4x4 Camera3D::GetOpenGLProjectionMatrix() const
 {
-	return frustum.ProjectionMatrix().Transposed().ptr();
+	return frustum.ProjectionMatrix().Transposed();
 }
 
 void Camera3D::MoveFront(const float & speed)

@@ -25,21 +25,20 @@ void Game::Draw()
 {
 	igBeginDock("Game", &visible, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 	
+	ImGuizmo::SetDrawlist();
+
 	size = float2(ImGui::GetContentRegionAvail().y, ImGui::GetContentRegionAvail().x);
 	position = float2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
 
 	// Keep in mind that ImGui has w and z inverted (x, y, z, w)
-	if (saved_size.x != size.x || saved_size.x != size.y)
+	if (saved_size.x != size.x || saved_size.y != size.y)
 	{
 		App->renderer3D->OnResize(size.y, size.x);
 
 		saved_size.x = size.x;
 		saved_size.y = size.y;
 
-		/*ImGuizmo::SetRect(position.x, position.y, size.x, size.y);*/
-
-		ImGuiIO& io = ImGui::GetIO();
-		ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+		ImGuizmo::SetRect(position.x, position.y, size.x, size.y);
 	}
 
 	ImGui::Image((void*)App->renderer3D->GetScreenTexture(), ImVec2(size.y, size.x), ImVec2(0, 1), ImVec2(1, 0));
