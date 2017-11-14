@@ -271,7 +271,6 @@ void KDTree::Node::DrawPlane(int width, int height, float3 initial_translation)
 				float diff = (center_distance / 2)*((parent->right == this) ? 1 : -1);
 				translation.z += diff;
 			}
-			//next_x /= 2;
 
 			//set color red
 			c.Set(1.f, 0, 0, .5f);

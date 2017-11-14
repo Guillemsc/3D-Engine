@@ -56,12 +56,13 @@ public:
 	void Import(const char* filepath);
 	bool Export(const char* path, ResourceMesh* mesh);
 	void ImportAllMeshes();
+	void CreatePlane();
 
 private:
 	void RecursiveLoadMesh(const aiScene* scene, aiNode* node, const char* full_path, AABB& total_abb, GameObject* parent = nullptr);
 	bool ResourceIsUsed(int index, ResourceType type, Resource*& res);
 	void AddResource(int index, ResourceType type, Resource* res);
-	void CreatePlane();
+	
 
 private:
 	std::vector<UsedResource> used_resources;

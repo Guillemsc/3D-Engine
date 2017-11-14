@@ -153,7 +153,6 @@ void ResourceMesh::Render()
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
 
-
 	//Apply UV if exist
 	if (num_uvs != 0)
 	{
