@@ -52,8 +52,8 @@ private:
 	KDTree*				kdtree = nullptr;
 	bool				kdtree_debug = false;
 
-	ImGuizmo::OPERATION current_gizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
-	ImGuizmo::MODE		current_gizmo_mode = ImGuizmo::MODE::WORLD;
+	ImGuizmo::OPERATION current_gizmo_operation = ImGuizmo::OPERATION::SCALE;
+	float3 last_scale = float3::zero;
 };
 
 #endif // !_MODULE_GAME_OBJECT_H_

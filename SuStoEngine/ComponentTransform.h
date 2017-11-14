@@ -23,9 +23,12 @@ public:
 	const float4x4 GetGlobalTransform() const;
 
 	const void SetPosition(const float3& pos);
+	const void Translate(const float3& pos);
 	const void SetRotation(const float3& rotation);
 	const void SetRotation(const Quat& quater);
+	const void Rotate(const float3& rotate);
 	const void SetScale(const float3& scale);
+	const void Scale(const float3& scale);
 	const float3 GetPosition() const;
 	const float3 GetGlobalPosition() const;
 	const float3 GetRotationEuler() const;

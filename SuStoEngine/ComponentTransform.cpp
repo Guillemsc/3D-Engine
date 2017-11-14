@@ -47,6 +47,14 @@ const void ComponentTransform::SetPosition(const float3 & pos)
 	RecalculateLocalTransform();
 }
 
+const void ComponentTransform::Translate(const float3 & pos)
+{
+	if(pos.x != 0 || pos.y != 0 || pos.z != 0)
+		local_position += pos;
+
+	RecalculateLocalTransform();
+}
+
 const void ComponentTransform::SetRotation(const float3 & rotation)
 {
 	float3 diff = rotation - local_rotation_euler;
@@ -65,9 +73,23 @@ const void ComponentTransform::SetRotation(const Quat & quat)
 	RecalculateLocalTransform();
 }
 
+const void ComponentTransform::Rotate(const float3 & rotate)
+{
+	SetRotation(GetRotationEuler() + rotate);
+
+	RecalculateLocalTransform();
+}
+
 const void ComponentTransform::SetScale(const float3 & scale)
 {
 	local_scale = scale;
+
+	RecalculateLocalTransform();
+}
+
+const void ComponentTransform::Scale(const float3 & scale)
+{
+	local_scale += scale;
 
 	RecalculateLocalTransform();
 }

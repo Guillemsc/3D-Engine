@@ -78,21 +78,42 @@ bool ModuleGameObject::Update()
 	{
 		float4x4 transform = (*it)->transform->GetGlobalTransform().Transposed();
 
-		float3 snap(2, 2, 2);
+		float transformation[16];
 		ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetOpenGLViewMatrix().ptr(),
 			App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr(),
 			current_gizmo_operation,
-			current_gizmo_mode,
+			ImGuizmo::MODE::WORLD,
 			transform.ptr(),
-			0);
+			transformation);
 
 		if (ImGuizmo::IsUsing())
 		{
+			float addition[3];
+			float rotation[3];
+			float scale[3];
+			ImGuizmo::DecomposeMatrixToComponents(transformation, addition, rotation, scale);
+			float3 add(-addition[0], addition[2], addition[1]);
+			float3 rot(-rotation[2], -rotation[0], rotation[1]);
+			float3 sc(-scale[2], -scale[0], scale[1]);
+
+			LOG_OUTPUT("%f, %f, %f", sc.x, sc.y, sc.z);
+
 			switch (current_gizmo_operation)
 			{
 				case ImGuizmo::OPERATION::TRANSLATE:
 				{
-
+					if(add.IsFinite())
+						(*it)->transform->Translate(add);
+				}
+				case ImGuizmo::OPERATION::ROTATE:
+				{
+					if (rot.IsFinite())
+						(*it)->transform->Rotate(rot);
+				}
+				case ImGuizmo::OPERATION::SCALE:
+				{
+					if (sc.IsFinite())
+						(*it)->transform->SetScale(sc);
 				}
 				break;
 			}
