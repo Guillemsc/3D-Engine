@@ -149,6 +149,7 @@
     <ClInclude Include="JSONLoader.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="GeometryMath.h" />
+    <ClInclude Include="MainBar.h" />
     <ClInclude Include="MathBuildConfig.h" />
     <ClInclude Include="MathGeoLib.h" />
     <ClInclude Include="MathGeoLibFwd.h" />
@@ -218,6 +219,7 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Time\Clock.h" />
+    <ClInclude Include="ToolsBar.h" />
     <ClInclude Include="XMLLoader.h" />
   </ItemGroup>
   <ItemGroup>
@@ -271,6 +273,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainBar.cpp" />
     <ClCompile Include="Math\BitOps.cpp" />
     <ClCompile Include="Math\Callstack.cpp" />
     <ClCompile Include="Math\float2.cpp" />
@@ -314,6 +317,7 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Time\Clock.cpp" />
+    <ClCompile Include="ToolsBar.cpp" />
     <ClCompile Include="XMLLoader.cpp" />
   </ItemGroup>
   <ItemGroup>

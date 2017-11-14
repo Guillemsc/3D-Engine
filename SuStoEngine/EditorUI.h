@@ -4,6 +4,8 @@
 #include "Module.h"
 #include "GeometryMath.h"
 
+class MainBar;
+class ToolsBar;
 class Console;
 class Configuration;
 class About;
@@ -54,27 +56,38 @@ public:
 
 	void LoadStyle(const char* name);
 
-	Console* GetConsole() const;
-	Inspector* GetInspector() const;
-
 	void LoadLayoutsInfo();
 	void SaveLayoutsInfo();
 	
-	void AddExistingLayout(const char* layout);
 	void SetCurrentLayout(const char* current = "");
+	string GetCurrentLayout();
+	std::list<string> GetLayouts();
 
 	void LoadCurrentLayout();
 	void SaveCurrentLayout();
 	void SaveNewLayout(const char* layout);
-
 	void RemoveLayout(const char* layout);
 
 	const Rect GameRect() const;
 
-private:
-	void AddEditor(EditorElement* el);
+	MainBar* GetMainBar();
+	ToolsBar* GetToolsBar();
+	Console* GetConsole();
+	Configuration* GetConfiguration();
+	About* GetAbout();
+	ProfilerViewer* GetProfilerViewer();
+	Hardware* GetHardware();
+	Game* GetGame();
+	Hierarchy* GetHerarchy();
+	Inspector* GetInspector();
 
 private:
+	void AddEditor(EditorElement* el);
+	void AddExistingLayout(const char* layout);
+
+private:
+	MainBar*		     main_bar = nullptr;
+	ToolsBar*			 tools_bar = nullptr;
 	Console*             console = nullptr;
 	Configuration*       configuration = nullptr;
 	About*               about = nullptr;

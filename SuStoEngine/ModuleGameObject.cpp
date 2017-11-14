@@ -94,7 +94,7 @@ bool ModuleGameObject::Update()
 			ImGuizmo::DecomposeMatrixToComponents(transformation, addition, rotation, scale);
 			float3 add(-addition[0], addition[2], addition[1]);
 			float3 rot(-rotation[2], -rotation[0], rotation[1]);
-			float3 sc(-scale[2], -scale[0], scale[1]);
+			float3 sc(scale[2], scale[0], scale[1]);
 
 			LOG_OUTPUT("%f, %f, %f", sc.x, sc.y, sc.z);
 

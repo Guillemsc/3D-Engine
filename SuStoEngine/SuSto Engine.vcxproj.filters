@@ -450,6 +450,12 @@
     <ClInclude Include="ResourceTextureLoader.h">
       <Filter>Sources\Resources\Loaders</Filter>
     </ClInclude>
+    <ClInclude Include="MainBar.h">
+      <Filter>Sources\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolsBar.h">
+      <Filter>Sources\Editor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -733,6 +739,12 @@
     </ClCompile>
     <ClCompile Include="ResourceTextureLoader.cpp">
       <Filter>Sources\Resources\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="MainBar.cpp">
+      <Filter>Sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolsBar.cpp">
+      <Filter>Sources\Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

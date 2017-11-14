@@ -6,6 +6,8 @@
 #include "imgui_impl_sdl.h"
 #include "Functions.h"
 #include "Console.h"
+#include "MainBar.h"
+#include "ToolsBar.h"
 #include "Configuration.h"
 #include "About.h"
 #include "EngineTest.h"
@@ -49,6 +51,8 @@ bool EditorUI::Awake()
 	LoadStyle("blue_yellow");
 
 	// Editor elements
+	main_bar = new MainBar();
+	tools_bar = new ToolsBar();
 	console = new Console(true);
 	configuration = new Configuration(false);
 	about = new About(false);
@@ -59,6 +63,8 @@ bool EditorUI::Awake()
 	hierarchy = new Hierarchy(true);
 	inspector = new Inspector(true);
 
+	AddEditor(main_bar);
+	AddEditor(tools_bar);
 	AddEditor(game);
 	AddEditor(console);
 	AddEditor(configuration);
@@ -120,158 +126,6 @@ bool EditorUI::Update()
 
 	igEndWorkspace();
 
-	int win_width, win_height;
-	App->window->GetWindowSize(win_width, win_height);
-
-	ImGuiStyle * style = &ImGui::GetStyle();
-
-	// Main Menu -------------------------
-	if (ImGui::BeginMainMenuBar())
-	{
-		if (ImGui::BeginMenu("File"))
-		{
-			if (ImGui::MenuItem("Open in Explorer", ""))
-				App->GoToFolder(App->GetBasePath());
-
-			ImGui::Separator();
-
-			if (ImGui::MenuItem("Save Scene", ""))
-				App->scene_manager->SaveScene("Scene.json");
-
-			if (ImGui::MenuItem("Quit", "Alt+F4")) 
-				App->EndApp(); 
-
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("Edit"))
-		{
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("GameObject"))
-		{
-			if (ImGui::MenuItem("Create Empty"))
-			{
-				App->gameobj->Create();
-			}
-
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("Component"))
-		{
-			if (App->gameobj->GetSelectedGameObjects().size() > 0)
-			{
-				vector<GameObject*> selected = App->gameobj->GetSelectedGameObjects();
-
-				if (ImGui::MenuItem("Add Material"))
-					selected[0]->AddComponent(MATERIAL);
-				if (ImGui::MenuItem("Add Mesh"))
-					selected[0]->AddComponent(MESH);
-			}
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("Window"))
-		{
-			ImGui::MenuItem("Game", NULL, &game->visible);
-
-			ImGui::MenuItem("Hierarchy", NULL, &hierarchy->visible);
-
-			ImGui::MenuItem("Inspector", NULL, &inspector->visible);
-
-			ImGui::MenuItem("Console", "º", &console->visible);
-
-			ImGui::MenuItem("Configuration", "c", &configuration->visible);
-
-			ImGui::MenuItem("Profiler", "p", &profiler_viewer->visible);
-	
-			ImGui::MenuItem("Hardware", NULL, &hardware->visible);
-
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Help"))
-		{
-			ImGui::MenuItem("About SuSto Engine", NULL, &about->visible);
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("Layouts"))
-		{
-			ImGui::Text("Current: %s", current_layout.c_str());
-
-			ImGui::Separator();
-			for (list<string>::iterator it = layouts.begin(); it != layouts.end();)
-			{
-				ImGui::Text((*it).c_str());
-
-				ImGui::SameLine();
-
-				string id = (*it) + "set";
-				ImGui::PushID(id.c_str());
-				if (ImGui::SmallButton("Set"))
-				{
-					SaveCurrentLayout();
-					SetCurrentLayout((*it).c_str());
-					LoadCurrentLayout();
-				}
-				ImGui::PopID();
-
-				ImGui::SameLine();
-
-				id = (*it) + "x";
-				ImGui::PushID(id.c_str());
-				if (ImGui::SmallButton("x"))
-				{
-					SetCurrentLayout();
-					RemoveLayout((*it).c_str());
-					it = layouts.erase(it);
-					SaveLayoutsInfo();
-				}
-				else
-				{
-					++it;
-				}
-
-				ImGui::PopID();
-			}
-			ImGui::Separator();
-
-			ImGui::InputText("", layout_name, 254);
-			if (ImGui::Button("Save layout"))
-			{
-				if (!TextCmp(layout_name, ""))
-				{
-					SaveNewLayout(layout_name);
-					SaveLayoutsInfo();
-				}
-			}
-
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
-		{
-			ImGui::MenuItem("Engine Tests", NULL, &engine_test->visible);
-
-			ImGui::MenuItem("Test window", NULL, &show_imgui_test_window);
-
-			ImGui::EndMenu();
-		}
-
-		ImGui::Text("Fps: %d", App->profiler->GetFPS());
-	
-		ImGui::EndMainMenuBar();
-	}
-	// -------------------------------------
-
-	// Test window imgui
-	if (show_imgui_test_window)
-	{
-		ImGui::ShowTestWindow();
-	}
-
 	return ret;
 }
 
@@ -308,9 +162,11 @@ bool EditorUI::CleanUp()
 
 void EditorUI::LoadLayoutsInfo()
 {
+	// Load layouts json
 	if (layout == nullptr)
 		layout = App->json->LoadJSON("layout.json");
 
+	// Get all layouts stored
 	if (layout != nullptr)
 	{
 		int size = layout->GetArrayCount("layouts");
@@ -408,6 +264,16 @@ void EditorUI::SetCurrentLayout(const char * current)
 	current_layout = "default";
 }
 
+string EditorUI::GetCurrentLayout()
+{
+	return current_layout;
+}
+
+std::list<string> EditorUI::GetLayouts()
+{
+	return layouts;
+}
+
 void EditorUI::LoadCurrentLayout()
 {
 	if (layout != nullptr)
@@ -456,6 +322,56 @@ void EditorUI::RemoveLayout(const char * lay)
 const Rect EditorUI::GameRect() const
 {
 	return game->GetRect();
+}
+
+MainBar * EditorUI::GetMainBar()
+{
+	return main_bar;
+}
+
+ToolsBar * EditorUI::GetToolsBar()
+{
+	return tools_bar;
+}
+
+Console * EditorUI::GetConsole()
+{
+	return console;
+}
+
+Configuration * EditorUI::GetConfiguration()
+{
+	return configuration;
+}
+
+About * EditorUI::GetAbout()
+{
+	return about;
+}
+
+ProfilerViewer * EditorUI::GetProfilerViewer()
+{
+	return profiler_viewer;
+}
+
+Hardware * EditorUI::GetHardware()
+{
+	return hardware;
+}
+
+Game * EditorUI::GetGame()
+{
+	return game;
+}
+
+Hierarchy * EditorUI::GetHerarchy()
+{
+	return hierarchy;
+}
+
+Inspector * EditorUI::GetInspector()
+{
+	return inspector;
 }
 
 
@@ -695,13 +611,4 @@ void EditorUI::LoadStyle(const char * name)
 	}
 }
 
-Console * EditorUI::GetConsole() const
-{
-	return console;
-}
-
-Inspector * EditorUI::GetInspector() const
-{
-	return inspector;
-}
 
