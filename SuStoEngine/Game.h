@@ -18,7 +18,8 @@ public:
 	void CleanUp();
 
 public:
-	const float4 GetRect() const;
+	const Rect GetRect() const;
+
 private:
 	DockContext* dock;
 	bool first_time = true;

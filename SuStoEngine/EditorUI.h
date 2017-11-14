@@ -69,7 +69,7 @@ public:
 
 	void RemoveLayout(const char* layout);
 
-	const float4 GameRect() const;
+	const Rect GameRect() const;
 
 private:
 	void AddEditor(EditorElement* el);

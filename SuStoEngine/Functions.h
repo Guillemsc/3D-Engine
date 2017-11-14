@@ -58,6 +58,9 @@ std::string GetUIDRandomHexadecimal();
 // Returns true if a point is inide a rect
 bool PointInRect(float2 point_xy, float4 rect_xywh);
 
+// Returns true if a point is inide a rect
+bool PointInRect(float2 point_xy, Rect rect_xywh);
+
 // Returns the file extension without the "."
 std::string GetFileExtension(const char* file_name);
 

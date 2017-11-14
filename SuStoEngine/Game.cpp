@@ -27,21 +27,21 @@ void Game::Draw()
 	
 	ImGuizmo::SetDrawlist();
 
-	size = float2(ImGui::GetContentRegionAvail().y, ImGui::GetContentRegionAvail().x);
 	position = float2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
+	size = float2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
 
 	// Keep in mind that ImGui has w and z inverted (x, y, z, w)
 	if (saved_size.x != size.x || saved_size.y != size.y)
 	{
-		App->renderer3D->OnResize(size.y, size.x);
-
 		saved_size.x = size.x;
 		saved_size.y = size.y;
+
+		App->renderer3D->OnResize(size.x, size.y);
 
 		ImGuizmo::SetRect(position.x, position.y, size.x, size.y);
 	}
 
-	ImGui::Image((void*)App->renderer3D->GetScreenTexture(), ImVec2(size.y, size.x), ImVec2(0, 1), ImVec2(1, 0));
+	ImGui::Image((void*)App->renderer3D->GetScreenTexture(), ImVec2(size.x, size.y), ImVec2(0, 1), ImVec2(1, 0));
 
 	igEndDock();
 }
@@ -50,7 +50,7 @@ void Game::CleanUp()
 {
 }
 
-const float4 Game::GetRect() const
+const Rect Game::GetRect() const
 {
-	return float4(position.x, position.y, size.x, size.y);
+	return math::Rect(position.x, position.y, size.x, size.y);
 }

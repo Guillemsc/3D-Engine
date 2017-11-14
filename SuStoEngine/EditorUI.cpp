@@ -453,7 +453,7 @@ void EditorUI::RemoveLayout(const char * lay)
 	}
 }
 
-const float4 EditorUI::GameRect() const
+const Rect EditorUI::GameRect() const
 {
 	return game->GetRect();
 }

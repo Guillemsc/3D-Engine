@@ -149,9 +149,15 @@ std::string GetUIDRandomHexadecimal()
 
 bool PointInRect(float2 point_xy, float4 rect_xywh)
 {
-	if (point_xy.x > rect_xywh.x && point_xy.x < rect_xywh.x + rect_xywh.w && point_xy.y > rect_xywh.y && point_xy.y < rect_xywh.y + rect_xywh.z)
+	if (point_xy.x >= rect_xywh.x && point_xy.x <= rect_xywh.x + rect_xywh.w && point_xy.y > rect_xywh.y && point_xy.y < rect_xywh.y + rect_xywh.z)
 		return true;
+	return false;
+}
 
+bool PointInRect(float2 point_xy, Rect rect_xywh)
+{
+	if (point_xy.x >= rect_xywh.left && point_xy.x <= rect_xywh.right && point_xy.y > rect_xywh.top && point_xy.y < rect_xywh.bottom)
+		return true;
 	return false;
 }
 

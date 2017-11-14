@@ -10,6 +10,7 @@
 #include "SceneManager.h"
 #include "ModuleCamera3D.h"
 #include "EditorUI.h"
+#include "ModuleWindow.h"
 #include "ImGuizmo.h"
 #include "imgui.h"
 
@@ -296,16 +297,16 @@ void ModuleGameObject::DestroyGameObjects()
 
 void ModuleGameObject::MousePick()
 {
-	float4 rect = App->editorUI->GameRect();
+	Rect window = App->editorUI->GameRect();
 	float2 mouse_pos = App->input->GetMouse();
 
-	if (PointInRect(mouse_pos, rect))
+	if (PointInRect(mouse_pos, window))
 	{
-		// The point (1, 1) corresponds to the top-right corner of the near plane
-		// (-1, -1) is bottom-left
+		 //The point (1, 1) corresponds to the top-right corner of the near plane
+		 //(-1, -1) is bottom-left
 
-		float first_normalized_x = (mouse_pos.x - rect.x) / rect.w;
-		float first_normalized_y = (mouse_pos.y - rect.y) / rect.z;
+		float first_normalized_x = (mouse_pos.x - window.left) / (window.right - window.left);
+		float first_normalized_y = (mouse_pos.y - window.top) / (window.bottom - window.top);
 
 		float normalized_x = (first_normalized_x * 2) - 1;
 		float normalized_y = 1 - (first_normalized_y * 2);

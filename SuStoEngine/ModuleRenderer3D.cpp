@@ -7,6 +7,7 @@
 #include "EditorUI.h"
 #include "FBO.h"
 #include "SDL/include/SDL_opengl.h"
+#include "ImGuizmo.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
