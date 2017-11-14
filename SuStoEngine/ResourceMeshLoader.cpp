@@ -46,8 +46,6 @@ bool ResourceMeshLoader::Load(const char * filepath, bool as_new_gameobject)
 
 	if (ret)
 	{
-		CreatePlane();
-
 		aiNode* root = scene->mRootNode;
 
 		// Root transform
@@ -536,5 +534,6 @@ void ResourceMeshLoader::CreatePlane()
 	App->resource_manager->plane = (ResourceMesh*)App->resource_manager->CreateNewResource(ResourceType::RT_MESH, "Plane");
 
 	App->resource_manager->plane->SetFaces(vertices, num_vert, indices, num_indices);
-	App->resource_manager->plane->SetUvs(uv, sizeof(uv));
+	App->resource_manager->plane->SetUvs(uv, 4);
+	App->resource_manager->plane->LoadMem();
 }

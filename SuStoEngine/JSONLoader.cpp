@@ -157,22 +157,22 @@ JSON_Doc::~JSON_Doc()
 {
 }
 
-void JSON_Doc::SetString(string set, const char * str)
+void JSON_Doc::SetString(const string& set, const char * str)
 {
 	json_object_dotset_string(object, set.c_str(), str);
 }
 
-void JSON_Doc::SetBool(string set, bool bo)
+void JSON_Doc::SetBool(const string& set, bool bo)
 {
 	json_object_dotset_boolean(object, set.c_str(), bo);
 }
 
-void JSON_Doc::SetNumber(string set, double nu)
+void JSON_Doc::SetNumber(const string& set, double nu)
 {
 	json_object_dotset_number(object, set.c_str(), nu);
 }
 
-void JSON_Doc::SetNumber3(string set, float3 val)
+void JSON_Doc::SetNumber3(const string& set, float3 val)
 {
 	SetArray(set);
 	AddNumberToArray(set, val.x);
@@ -180,7 +180,7 @@ void JSON_Doc::SetNumber3(string set, float3 val)
 	AddNumberToArray(set, val.z);
 }
 
-void JSON_Doc::SetNumber4(string set, float4 val)
+void JSON_Doc::SetNumber4(const string& set, float4 val)
 {
 	SetArray(set);
 	AddNumberToArray(set, val.x);
@@ -189,7 +189,7 @@ void JSON_Doc::SetNumber4(string set, float4 val)
 	AddNumberToArray(set, val.z);
 }
 
-void JSON_Doc::SetArray(string set)
+void JSON_Doc::SetArray(const string& set)
 {
 	JSON_Value* va = json_value_init_array();
 	JSON_Array* arr = json_value_get_array(va);
@@ -197,7 +197,7 @@ void JSON_Doc::SetArray(string set)
 	json_object_dotset_value(object, set.c_str(), va);
 }
 
-void JSON_Doc::ClearArray(string arr)
+void JSON_Doc::ClearArray(const string& arr)
 {
 	JSON_Array* array = json_object_get_array(object, arr.c_str());
 
@@ -207,7 +207,7 @@ void JSON_Doc::ClearArray(string arr)
 	}
 }
 
-const int JSON_Doc::GetArrayCount(string set) const
+const int JSON_Doc::GetArrayCount(const string& set) const
 {
 	int ret = 0;
 
@@ -221,7 +221,7 @@ const int JSON_Doc::GetArrayCount(string set) const
 	return ret;
 }
 
-const char * JSON_Doc::GetStringFromArray(string arr, int index)
+const char * JSON_Doc::GetStringFromArray(const string& arr, int index)
 {
 	const char* ret = nullptr;
 
@@ -238,7 +238,7 @@ const char * JSON_Doc::GetStringFromArray(string arr, int index)
 	return ret;
 }
 
-const bool JSON_Doc::GetBoolFromArray(string arr, int index)
+const bool JSON_Doc::GetBoolFromArray(const string& arr, int index)
 {
 	bool ret = false;
 
@@ -255,7 +255,7 @@ const bool JSON_Doc::GetBoolFromArray(string arr, int index)
 	return ret;
 }
 
-const double JSON_Doc::GetNumberFromArray(string arr, int index)
+const double JSON_Doc::GetNumberFromArray(const string& arr, int index)
 {
 	double ret = 0;
 
@@ -272,7 +272,7 @@ const double JSON_Doc::GetNumberFromArray(string arr, int index)
 	return ret;
 }
 
-void JSON_Doc::AddStringToArray(string arr, const char * str)
+void JSON_Doc::AddStringToArray(const string& arr, const char * str)
 {
 	JSON_Array* array = json_object_get_array(object, arr.c_str());
 
@@ -282,7 +282,7 @@ void JSON_Doc::AddStringToArray(string arr, const char * str)
 	}
 }
 
-void JSON_Doc::AddBoolToArray(string arr, bool bo)
+void JSON_Doc::AddBoolToArray(const string& arr, bool bo)
 {
 	JSON_Array* array = json_object_get_array(object, arr.c_str());
 
@@ -292,7 +292,7 @@ void JSON_Doc::AddBoolToArray(string arr, bool bo)
 	}
 }
 
-void JSON_Doc::AddNumberToArray(string arr, double set)
+void JSON_Doc::AddNumberToArray(const string& arr, double set)
 {
 	JSON_Array* array = json_object_get_array(object, arr.c_str());
 
@@ -302,7 +302,7 @@ void JSON_Doc::AddNumberToArray(string arr, double set)
 	}
 }
 
-void JSON_Doc::AddSectionToArray(string arr)
+void JSON_Doc::AddSectionToArray(const string& arr)
 {
 	JSON_Array* array = json_object_get_array(object, arr.c_str());
 
@@ -312,7 +312,7 @@ void JSON_Doc::AddSectionToArray(string arr)
 	}
 }
 
-bool JSON_Doc::MoveToSectionFromArray(string arr, int index)
+bool JSON_Doc::MoveToSectionFromArray(const string& arr, int index)
 {
 	bool ret = false;
 
@@ -329,7 +329,7 @@ bool JSON_Doc::MoveToSectionFromArray(string arr, int index)
 	return ret;
 }
 
-const char * JSON_Doc::GetString(string str, const char* defaul)
+const char * JSON_Doc::GetString(const string& str, const char* defaul)
 {
 	const char* ret = defaul;
 
@@ -339,7 +339,7 @@ const char * JSON_Doc::GetString(string str, const char* defaul)
 	return ret;
 }
 
-const bool JSON_Doc::GetBool(string str, bool defaul)
+const bool JSON_Doc::GetBool(const string& str, bool defaul)
 {
 	bool ret = defaul;
 
@@ -349,7 +349,7 @@ const bool JSON_Doc::GetBool(string str, bool defaul)
 	return ret;
 }
 
-const double JSON_Doc::GetNumber(string str, double defaul)
+const double JSON_Doc::GetNumber(const string& str, double defaul)
 {
 	double ret = defaul;
 
@@ -359,7 +359,7 @@ const double JSON_Doc::GetNumber(string str, double defaul)
 	return ret;
 }
 
-const float3 JSON_Doc::GetNumber3(string fl)
+const float3 JSON_Doc::GetNumber3(const string& fl)
 {
 	float3 ret = float3::zero;
 	ret.x = GetNumberFromArray(fl, 0);
@@ -368,7 +368,7 @@ const float3 JSON_Doc::GetNumber3(string fl)
 	return ret;
 }
 
-const float4 JSON_Doc::GetNumber4(string fl)
+const float4 JSON_Doc::GetNumber4(const string& fl)
 {
 	float4 ret = float4::zero;
 	ret.x = GetNumberFromArray(fl, 0);
@@ -378,7 +378,7 @@ const float4 JSON_Doc::GetNumber4(string fl)
 	return ret;
 }
 
-bool JSON_Doc::MoveToSection(string set)
+bool JSON_Doc::MoveToSection(const string& set)
 {
 	bool ret = false;
 
@@ -393,7 +393,7 @@ bool JSON_Doc::MoveToSection(string set)
 	return ret;
 }
 
-void JSON_Doc::RemoveSection(string set)
+void JSON_Doc::RemoveSection(const string& set)
 {
 	json_object_remove(object, set.c_str());
 }
@@ -403,7 +403,7 @@ void JSON_Doc::MoveToRoot()
 	object = root;
 }
 
-void JSON_Doc::AddSection(string set)
+void JSON_Doc::AddSection(const string& set)
 {
 	json_object_set_value(object, set.c_str(), json_value_init_object());
 }

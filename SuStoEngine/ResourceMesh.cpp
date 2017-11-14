@@ -153,7 +153,6 @@ void ResourceMesh::Render()
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
 
-
 	//Apply UV if exist
 	if (num_uvs != 0)
 	{
@@ -161,6 +160,9 @@ void ResourceMesh::Render()
 		glBindBuffer(GL_ARRAY_BUFFER, id_uv);
 		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 	}
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
 

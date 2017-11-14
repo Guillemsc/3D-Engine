@@ -1,6 +1,7 @@
 #include "ModuleGameObject.h"
 #include "App.h"
 #include "ModuleRenderer3D.h"
+#include "ResourceMeshLoader.h"
 #include "DebugDraw.h"
 #include "IDGenerator.h"
 #include "Functions.h"
@@ -30,6 +31,9 @@ bool ModuleGameObject::Start()
 {
 	bool ret = true;
  
+	ResourceMeshLoader loader;
+	loader.CreatePlane();
+
 	return ret;
 }
 
@@ -99,7 +103,7 @@ bool ModuleGameObject::Update()
 		if (kdtree->HasTree())
 			kdtree->EraseTree();
 
-		kdtree->CreateTree(game_objects, 5);;
+		kdtree->CreateTree(game_objects, 5);
 	}
 	
 	if (App->input->GetKeyDown("0"))

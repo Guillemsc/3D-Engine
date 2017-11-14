@@ -293,6 +293,7 @@ void KDTree::Node::DrawPlane(int width, int height, float3 initial_translation)
 			c.Set(0, 0, 1.f, .5f);
 			break;
 		}
+
 		//calculate transform from data below
 		float4x4 transfrom = float4x4::FromTRS(translation, rotation, size);
 
