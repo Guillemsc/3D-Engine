@@ -6,6 +6,7 @@
 #include "ModuleFileSystem.h"
 #include "ResourceMeshLoader.h"
 #include "ResourceTextureLoader.h"
+#include "Globals.h"
 
 ResourceManager::ResourceManager(bool start_enabled)
 {
@@ -27,6 +28,8 @@ bool ResourceManager::Start()
 bool ResourceManager::CleanUp()
 {
 	bool ret = true;
+
+	DeleteAllResources();
 
 	RELEASE(mesh_loader);
 	RELEASE(texture_loader);
@@ -134,4 +137,14 @@ void ResourceManager::ImportAllResources()
 void ResourceManager::OnLoadFile(const char * file_path, const char * file_name, const char * file_extension)
 {
 	LoadResource(file_path);
+}
+
+void ResourceManager::DeleteAllResources()
+{
+	for (map<std::string, Resource*>::iterator it = resources.begin(); it != resources.end();)
+	{
+		(*it).second->CleanUp();
+		RELEASE(it->second);
+		it = resources.erase(it);
+	}
 }

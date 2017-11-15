@@ -12,6 +12,10 @@ ResourceTexture::~ResourceTexture()
 
 void ResourceTexture::CleanUp()
 {
+	UnloadFromMemory();
+
+	if (texture_data != nullptr)
+		RELEASE_ARRAY(texture_data);
 }
 
 void ResourceTexture::SetData(byte * _texture_data, uint _texture_data_lenght, uint _width, uint _height, int _format, uint _wrap_s, uint _wrap_t, uint _mag, uint _min)
@@ -32,6 +36,11 @@ void ResourceTexture::SetData(byte * _texture_data, uint _texture_data_lenght, u
 	min = _min;
 }
 
+void ResourceTexture::SetFlipped(bool set)
+{
+	flipped = set;
+}
+
 uint ResourceTexture::GetTextureId()
 {
 	return texture_id;
@@ -50,6 +59,11 @@ byte * ResourceTexture::GetTextureData()
 uint ResourceTexture::GetTextureDataSize()
 {
 	return texture_data_size;
+}
+
+bool ResourceTexture::GetFlipped()
+{
+	return flipped;
 }
 
 void ResourceTexture::LoadToMemory()

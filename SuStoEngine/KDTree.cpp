@@ -329,6 +329,11 @@ KDTree::~KDTree()
 {
 }
 
+void KDTree::CleanUp()
+{
+	EraseTree();
+}
+
 void KDTree::CreateTree(std::vector<GameObject*>& elements, uint ele_on_partition)
 {
 	if (root_node == nullptr)
@@ -347,6 +352,9 @@ void KDTree::CreateTree(std::vector<GameObject*>& elements, uint ele_on_partitio
 
 void KDTree::EraseTree()
 {
+	if (!HasTree())
+		return;
+
 	std::vector<Node*> nodes_to_visit;
 	nodes_to_visit.push_back(root_node);
 	root_node = nullptr;
@@ -392,4 +400,5 @@ void KDTree::DebugDraw() const
 		root_node->DrawPlane(100, 100, float3::zero);
 	}
 }
+
 

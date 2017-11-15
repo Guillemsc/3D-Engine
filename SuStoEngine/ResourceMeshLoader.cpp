@@ -392,6 +392,7 @@ void ResourceMeshLoader::Import(const char * filepath)
 	new_mesh->SetFaces(vertices, ranges[0], indices, ranges[1]);
 	new_mesh->SetUvs(uvs, ranges[2]);
 
+	RELEASE_ARRAY(buffer);
 	RELEASE_ARRAY(indices);
 	RELEASE_ARRAY(vertices);
 	RELEASE_ARRAY(uvs);
@@ -536,4 +537,8 @@ void ResourceMeshLoader::CreatePlane()
 	App->resource_manager->plane->SetFaces(vertices, num_vert, indices, num_indices);
 	App->resource_manager->plane->SetUvs(uv, 4);
 	App->resource_manager->plane->LoadMem();
+
+	RELEASE_ARRAY(vertices);
+	RELEASE_ARRAY(indices);
+	RELEASE_ARRAY(uv);
 }

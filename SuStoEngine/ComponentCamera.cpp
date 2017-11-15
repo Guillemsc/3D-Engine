@@ -36,7 +36,7 @@ void ComponentCamera::Update()
 
 void ComponentCamera::CleanUp()
 {
-	delete camera;
+	RELEASE(camera);
 }
 
 Camera3D * ComponentCamera::GetCamera() const

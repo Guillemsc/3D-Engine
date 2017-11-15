@@ -25,11 +25,11 @@ public:
 
 	void SaveResourceIntoFile(Resource* res);
 	Resource* LoadResource(const char* file_path);
-
 	void ImportAllResources();
 
 private:
 	void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension);
+	void DeleteAllResources();
 
 public:
 	ResourceMesh* plane = nullptr;

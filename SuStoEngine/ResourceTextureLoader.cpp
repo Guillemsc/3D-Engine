@@ -37,6 +37,9 @@ ResourceTexture* ResourceTextureLoader::Load(const char * filepath)
 		// Get file name
 		string file_name = GetFileNameFromFilePath(filepath);
 
+		// Create texture
+		ret = (ResourceTexture*)App->resource_manager->CreateNewResource(RT_TEXTURE);
+
 		// Get texture info
 		ILinfo ImageInfo;
 		iluGetImageInfo(&ImageInfo);
@@ -45,15 +48,17 @@ ResourceTexture* ResourceTextureLoader::Load(const char * filepath)
 		if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
 		{
 			iluFlipImage();
+			ret->SetFlipped(true);
 		}
 
 		// Convert image to rgb and a byte chain
 		ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
-
-		// Create texture
-		ret = (ResourceTexture*)App->resource_manager->CreateNewResource(RT_TEXTURE);
+		
+		// Save data
 		ret->SetData(ilGetData(), ilGetInteger(IL_IMAGE_SIZE_OF_DATA), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT),
 			GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
+
+		// Set name
 		ret->SetName(file_name);
 
 		// Export it to Library
@@ -90,38 +95,49 @@ void ResourceTextureLoader::Import(const char * filepath)
 	// -------------------------------------
 	string meta_name = path + name + ".meta";
 	JSON_Doc* doc = App->json->LoadJSON(meta_name.c_str());
-	string uid = doc->GetString("uid", "no_uid");
 
-	// -------------------------------------
-	// FILE --------------------------------
-	// -------------------------------------
-	// Load texture
-	if (ilLoad(IL_TYPE_UNKNOWN, filepath))
+	if (doc != nullptr)
 	{
-		// Get file name
-		string file_name = GetFileNameFromFilePath(filepath);
+		string uid = doc->GetString("uid", "no_uid");
+		bool flipped = doc->GetBool("flipped");
 
-		// Get texture info
-		ILinfo ImageInfo;
-		iluGetImageInfo(&ImageInfo);
+		// -------------------------------------
+		// FILE --------------------------------
+		// -------------------------------------
+		// Load texture
+		if (ilLoad(IL_TYPE_UNKNOWN, filepath))
+		{
+			// Get file name
+			string file_name = GetFileNameFromFilePath(filepath);
 
-		// Convert image to rgb and a byte chain
-		ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+			// Get texture info
+			ILinfo ImageInfo;
+			iluGetImageInfo(&ImageInfo);
 
-		// Create texture
-		ResourceTexture* ret = (ResourceTexture*)App->resource_manager->CreateNewResource(RT_TEXTURE, uid.c_str());
-		ret->SetData(ilGetData(), ilGetInteger(IL_IMAGE_SIZE_OF_DATA), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT),
-			GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
-		ret->SetName(file_name);
+			if (!flipped)
+			{
+				iluFlipImage();
+			}
 
-		ilDeleteImages(1, &ImageInfo.Id);
+			// Convert image to rgb and a byte chain
+			ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+
+			// Create texture
+			ResourceTexture* ret = (ResourceTexture*)App->resource_manager->CreateNewResource(RT_TEXTURE, uid.c_str());
+			ret->SetData(ilGetData(), ilGetInteger(IL_IMAGE_SIZE_OF_DATA), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT),
+				GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
+			ret->SetName(file_name);
+			ret->SetFlipped(flipped);
+
+			ilDeleteImages(1, &ImageInfo.Id);
+		}
+		else
+		{
+			LOG_OUTPUT("Cannot load image %s. Error: %s", filepath, iluErrorString(ilGetError()));
+		}
+
+		App->json->UnloadJSON(doc);
 	}
-	else
-	{
-		LOG_OUTPUT("Cannot load image %s. Error: %s", filepath, iluErrorString(ilGetError()));
-	}
-
-	App->json->UnloadJSON(doc);
 }
 
 bool ResourceTextureLoader::Export(const char * path, ResourceTexture* resource)
@@ -170,6 +186,7 @@ bool ResourceTextureLoader::Export(const char * path, ResourceTexture* resource)
 		doc->Clear();
 
 		doc->SetString("uid", resource->GetUniqueId().c_str());
+		doc->SetBool("flipped", resource->GetFlipped());
 
 		doc->Save();
 	}

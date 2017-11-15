@@ -46,7 +46,7 @@ bool ModuleCamera3D::CleanUp()
 
 	LOG_OUTPUT("Cleaning camera");
 
-	delete editor_camera;
+	RELEASE(editor_camera);
 
 	return ret;
 }

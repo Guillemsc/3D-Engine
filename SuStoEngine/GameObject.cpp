@@ -132,10 +132,10 @@ void GameObject::SetEnabled(const bool& set)
 
 void GameObject::CleanUp()
 {
-	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it)
+	for (vector<Component*>::iterator it = components.begin(); it != components.end();)
 	{
 		(*it)->CleanUp();
-		delete(*it);
+		RELEASE(*it);
 		it = components.erase(it);
 	}
 }

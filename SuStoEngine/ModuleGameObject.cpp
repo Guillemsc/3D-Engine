@@ -158,6 +158,9 @@ bool ModuleGameObject::CleanUp()
 
 	DestroyGameObjects();
 
+	kdtree->CleanUp();
+	RELEASE(kdtree);
+
 	return ret;
 }
 

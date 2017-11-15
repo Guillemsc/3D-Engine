@@ -62,6 +62,8 @@ public:
 	KDTree();
 	~KDTree();
 
+	void CleanUp();
+
 	void CreateTree(std::vector<GameObject*>& elements, uint ele_on_partition = 5);
 
 	void EraseTree();
@@ -72,6 +74,9 @@ public:
 
 	bool HasTree()const;
 	void DebugDraw()const;
+
+private:
+
 
 private:
 	Node* root_node = nullptr;

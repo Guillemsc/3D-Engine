@@ -45,13 +45,13 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	// Main Modules
 	AddModule(xml);
 	AddModule(json);
+	AddModule(resource_manager);
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
 	AddModule(audio);
 	AddModule(gameobj);
 	AddModule(file_system);
-	AddModule(resource_manager);
 	AddModule(scene_manager);
 
 	AddModule(editorUI);

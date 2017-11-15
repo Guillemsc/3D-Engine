@@ -108,7 +108,7 @@ void JSONLoader::UnloadJSON(JSON_Doc * son)
 		if ((*it) == son)
 		{
 			(*it)->CleanUp();
-			delete (*it);
+			RELEASE(*it);
 
 			it = jsons.erase(it);
 			break;
