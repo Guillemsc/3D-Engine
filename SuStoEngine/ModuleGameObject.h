@@ -26,6 +26,7 @@ public:
 	void Destroy(GameObject* go);
 	GameObject* Find(std::string unique_id);
 	void DestroyAllGameObjects();
+	void DestroyAllGameObjectsNow();
 
 	const vector<GameObject*> GetListGameObjects() const;
 

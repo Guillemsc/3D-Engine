@@ -70,6 +70,7 @@ void ComponentMaterial::InspectorDraw(std::vector<Component*> components)
 		return;
 	}
 
+	ImGui::Text("Unique id: %s", texture->GetUniqueId().c_str());
 	ImGui::Text("Used by %d GameObjects", texture->UsedCount());
 	ImGui::Text("Id texture: %d", texture->GetTextureId());
 	ImGui::Text("Preview:");

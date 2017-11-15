@@ -3,6 +3,7 @@
 #include "App.h"
 #include "ModuleWindow.h"
 #include "ModuleGameObject.h"
+#include "SceneManager.h"
 
 ToolsBar::ToolsBar(bool start_enabled)
 {
@@ -40,6 +41,43 @@ void ToolsBar::Draw()
 	if (ImGui::Button("Scale"))
 	{
 		App->gameobj->SetGuizmoOperation(ImGuizmo::OPERATION::SCALE);
+	}
+
+	if (App->scene_manager->GetState() == SceneState::EDIT)
+	{
+		ImGui::Text("Current: EDIT");
+
+		ImGui::SetCursorPos(ImVec2(800, 3));
+		if (ImGui::Button("Play"))
+		{
+			App->scene_manager->Play();
+		}
+
+		ImGui::SetCursorPos(ImVec2(950, 6));
+		ImGui::Text("Current: EDIT");
+	}
+	else if(App->scene_manager->GetState() == SceneState::PLAY)
+	{
+		ImGui::SetCursorPos(ImVec2(800, 3));
+		if (ImGui::Button("STOP"))
+		{
+			App->scene_manager->Edit();
+		}
+
+		ImGui::SetCursorPos(ImVec2(847, 3));
+		if (ImGui::Button("Pause"))
+		{
+			App->scene_manager->Pause();
+		}
+
+		ImGui::SetCursorPos(ImVec2(900, 3));
+		if (ImGui::Button("Step"))
+		{
+			App->scene_manager->Step();
+		}
+
+		ImGui::SetCursorPos(ImVec2(950, 6));
+		ImGui::Text("Current: PLAY");
 	}
 
 	ImGui::End();

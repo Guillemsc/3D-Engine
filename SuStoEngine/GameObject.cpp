@@ -36,7 +36,7 @@ void GameObject::Start()
 	transform = (ComponentTransform*)GetComponent(TRANSFORM);
 }
 
-void GameObject::Update()
+void GameObject::UpdateComponents()
 {
 	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
 	{

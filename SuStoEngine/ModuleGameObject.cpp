@@ -70,7 +70,7 @@ bool ModuleGameObject::Update()
 
 	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
 	{
-		(*it)->Update();
+		(*it)->UpdateComponents();
 		(*it)->Draw();
 	}
 
@@ -215,8 +215,12 @@ void ModuleGameObject::DestroyAllGameObjects()
 	{
 		Destroy((*it));
 	}
+}
 
-	// Temp
+void ModuleGameObject::DestroyAllGameObjectsNow()
+{
+	DestroyAllGameObjects();
+
 	DestroyGameObjects();
 }
 

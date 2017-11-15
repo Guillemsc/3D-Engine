@@ -14,7 +14,7 @@ public:
 	virtual ~GameObject();
 
 	void Start();
-	void Update();
+	void UpdateComponents();
 	void Draw();
 
 	void Enable();

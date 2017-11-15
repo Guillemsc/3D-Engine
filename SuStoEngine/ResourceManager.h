@@ -38,9 +38,7 @@ private:
 	std::map<std::string, Resource*> resources;
 
 	ResourceMeshLoader*    mesh_loader = nullptr;
-	ResourceTextureLoader* texture_loader = nullptr;
-	
-
+	ResourceTextureLoader* texture_loader = nullptr;	
 };
 
 #endif

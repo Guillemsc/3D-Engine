@@ -5,6 +5,12 @@
 
 class GameObject;
 
+enum SceneState
+{
+	EDIT,
+	PLAY,
+};
+
 class SceneManager : public Module
 {
 public:
@@ -16,14 +22,30 @@ public:
 
 	void SaveScene(const char* scene_name);
 	void LoadScene(const char* scene_name);
+	void DestroyScene();
+
+	SceneState GetState();
+	bool GetPause();
+	bool GetStep();
+
+	void Edit();
+	void Play();
+	void Pause();
+	void Step();
+
+	float GetGameDT();
+	float GetGameExecutionTime();
 
 private:
-	void RecursiveSaveGameObject(GameObject* go);
+
 
 public:
 
 private:
-
+	SceneState state = EDIT;
+	bool	   pause = false;
+	bool	   step = false;
+	string	   current_scene;
 };
 
 #endif

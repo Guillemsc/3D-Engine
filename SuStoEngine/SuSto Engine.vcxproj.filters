@@ -459,6 +459,9 @@
     <ClInclude Include="Module.h">
       <Filter>Sources\1. App =================</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceScene.h">
+      <Filter>Sources\6. Resources =============</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -748,6 +751,9 @@
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Sources\1. App =================</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceScene.cpp">
+      <Filter>Sources\6. Resources =============</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

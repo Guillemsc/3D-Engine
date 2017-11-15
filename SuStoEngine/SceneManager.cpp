@@ -25,8 +25,10 @@ bool SceneManager::Start()
 {
 	bool ret = true;
 
+	current_scene = "test.scene";
+
 	App->resource_manager->ImportAllResources();
-	App->scene_manager->LoadScene("test.scene");
+	App->scene_manager->LoadScene(current_scene.c_str());
 
 	return ret;
 }
@@ -81,6 +83,7 @@ void SceneManager::LoadScene(const char * scene_name)
 {
 	LOG_OUTPUT("Loading scene %s", scene_name);
 
+	// Load new scene
 	string path = App->file_system->GetLibraryScenePath() + scene_name;
 
 	JSON_Doc* scene = App->json->LoadJSON(path.c_str());
@@ -205,7 +208,78 @@ void SceneManager::LoadScene(const char * scene_name)
 	}
 }
 
-void SceneManager::RecursiveSaveGameObject(GameObject * go)
+void SceneManager::DestroyScene()
 {
-
+	App->gameobj->ClearSelection();
+	App->gameobj->DestroyAllGameObjectsNow();
 }
+
+SceneState SceneManager::GetState()
+{
+	return state;
+}
+
+bool SceneManager::GetPause()
+{
+	return pause;
+}
+
+bool SceneManager::GetStep()
+{
+	return step;
+}
+
+void SceneManager::Edit()
+{
+	if (state != EDIT)
+	{
+		state = EDIT;
+		pause = false;
+		step = false;
+
+		DestroyScene();
+
+		LoadScene(current_scene.c_str());
+	}
+}
+
+void SceneManager::Play()
+{
+	if (state != PLAY)
+	{
+		state = PLAY;
+
+		SaveScene(current_scene.c_str());
+	}
+}
+
+void SceneManager::Pause()
+{
+	pause = false;
+
+	if (state == PLAY)
+	{
+		pause = true;
+	}
+}
+
+void SceneManager::Step()
+{
+	step = false;
+
+	if (state == PLAY)
+	{
+		step = true;
+	}
+}
+
+float SceneManager::GetGameDT()
+{
+	return 0.0f;
+}
+
+float SceneManager::GetGameExecutionTime()
+{
+	return 0.0f;
+}
+
