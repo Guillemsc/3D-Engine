@@ -55,7 +55,7 @@ public:
 	void SetDebugMode(bool set);
 	bool GetDebugMode() const;
 	void SetVersion(const char* version);
-	const char* GetVersion();
+	const char* GetVersion() const;
 	SDL_version GetSDLVersion();
 	const char* GetBasePath();
 

@@ -43,7 +43,7 @@ public:
 
 	void Clear();
 
-	const char* GetPath() const;
+	string GetPath();
 	void Save();
 	void CleanUp();
 
@@ -55,7 +55,7 @@ private:
 	JSON_Value*  value = nullptr;
 	JSON_Object* object = nullptr;
 	JSON_Object* root = nullptr;
-	const char*  path;
+	string		 path;
 };
 
 class JSONLoader : public Module

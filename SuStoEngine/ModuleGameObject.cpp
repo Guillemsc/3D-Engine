@@ -83,8 +83,7 @@ bool ModuleGameObject::Update()
 			App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr(),
 			current_gizmo_operation,
 			ImGuizmo::MODE::WORLD,
-			transform.ptr(),
-			transformation);
+			transform.ptr(), transformation);
 
 		if (ImGuizmo::IsUsing())
 		{
@@ -92,11 +91,9 @@ bool ModuleGameObject::Update()
 			float rotation[3];
 			float scale[3];
 			ImGuizmo::DecomposeMatrixToComponents(transformation, addition, rotation, scale);
-			float3 add(-addition[0], addition[2], addition[1]);
-			float3 rot(-rotation[2], -rotation[0], rotation[1]);
-			float3 sc(scale[2], scale[0], scale[1]);
-
-			LOG_OUTPUT("%f, %f, %f", sc.x, sc.y, sc.z);
+			float3 add(-addition[0], -addition[1], addition[2]);
+			float3 rot(rotation[0], rotation[1], rotation[2]);
+			float3 sc(scale[0], scale[1], scale[2]);
 
 			switch (current_gizmo_operation)
 			{
@@ -105,11 +102,13 @@ bool ModuleGameObject::Update()
 					if(add.IsFinite())
 						(*it)->transform->Translate(add);
 				}
+				break;
 				case ImGuizmo::OPERATION::ROTATE:
 				{
 					if (rot.IsFinite())
 						(*it)->transform->Rotate(rot);
 				}
+				break;
 				case ImGuizmo::OPERATION::SCALE:
 				{
 					if (sc.IsFinite())
@@ -273,6 +272,11 @@ GameObject * ModuleGameObject::GetRoot()
 const vector<GameObject*> ModuleGameObject::GetSelectedGameObjects() const
 {
 	return selected;
+}
+
+void ModuleGameObject::SetGuizmoOperation(ImGuizmo::OPERATION op)
+{
+	current_gizmo_operation = op;
 }
 
 void ModuleGameObject::DestroyGameObjects()

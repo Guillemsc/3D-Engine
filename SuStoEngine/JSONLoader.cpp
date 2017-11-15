@@ -27,7 +27,7 @@ JSON_Doc* JSONLoader::LoadJSON(const char * path)
 	bool exists = false;
 	for (list<JSON_Doc*>::iterator it = jsons.begin(); it != jsons.end(); it++)
 	{
-		if (TextCmp(path, (*it)->GetPath()))
+		if (TextCmp(path, (*it)->GetPath().c_str()))
 		{
 			ret = (*it);
 			exists = true;
@@ -66,7 +66,7 @@ JSON_Doc* JSONLoader::CreateJSON(const char * path)
 	bool exists = false;
 	for (list<JSON_Doc*>::iterator it = jsons.begin(); it != jsons.end(); it++)
 	{
-		if (TextCmp(path, (*it)->GetPath()))
+		if (TextCmp(path, (*it)->GetPath().c_str()))
 		{
 			exists = true;
 			break;
@@ -103,7 +103,6 @@ JSON_Doc* JSONLoader::CreateJSON(const char * path)
 
 void JSONLoader::UnloadJSON(JSON_Doc * son)
 {
-
 	for (list<JSON_Doc*>::iterator it = jsons.begin(); it != jsons.end();)
 	{
 		if ((*it) == son)
@@ -416,14 +415,14 @@ void JSON_Doc::Clear()
 	root = object;
 }
 
-const char * JSON_Doc::GetPath() const
+string JSON_Doc::GetPath()
 {
 	return path;
 }
 
 void JSON_Doc::Save()
 {
-	json_serialize_to_file_pretty(value, path);
+	json_serialize_to_file_pretty(value, path.c_str());
 }
 
 void JSON_Doc::CleanUp()

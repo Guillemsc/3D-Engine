@@ -108,8 +108,8 @@ bool EditorUI::PreUpdate()
 	ImGuizmo::BeginFrame();
 
 	// Begin docking workspace
-	igBeginWorkspace(&workspace_visible, ImVec2(-3, 21), ImVec2(App->window->GetWindowSize().x, App->window->GetWindowSize().y - 21),
-		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBringToFrontOnFocus);
+	igBeginWorkspace(&workspace_visible, ImVec2(-3, 25), ImVec2(App->window->GetWindowSize().x, App->window->GetWindowSize().y - 22),
+		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
 
 	return ret;
 }
@@ -551,11 +551,11 @@ void EditorUI::LoadStyle(const char * name)
 
 	else if (TextCmp(name, "blue_yellow"))
 	{
-		style->WindowPadding = ImVec2(6, 15);
-		style->WindowRounding = 10.0f;
+		style->WindowPadding = ImVec2(6, 13);
+		style->WindowRounding = 3.0f;
 		style->FramePadding = ImVec2(3, 4);
 		style->FrameRounding = 4.0f;
-		style->ItemSpacing = ImVec2(12, 8);
+		style->ItemSpacing = ImVec2(12, 6);
 		style->ItemInnerSpacing = ImVec2(8, 6);
 		style->IndentSpacing = 9.0f;
 		style->ScrollbarSize = 15.0f;

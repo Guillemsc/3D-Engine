@@ -345,7 +345,7 @@ void Application::SetVersion(const char * set)
 	version = set;
 }
 
-const char * Application::GetVersion()
+const char * Application::GetVersion() const
 {
 	return version.c_str();;
 }

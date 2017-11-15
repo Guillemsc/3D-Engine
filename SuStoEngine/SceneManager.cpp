@@ -10,6 +10,7 @@
 #include "ComponentCamera.h"
 #include "ModuleCamera3D.h"
 #include "ResourceTexture.h"
+#include "ModuleWindow.h"
 #include "App.h"
 
 SceneManager::SceneManager(bool start_enabled) : Module(start_enabled)
@@ -86,6 +87,15 @@ void SceneManager::LoadScene(const char * scene_name)
 
 	if (scene != nullptr)
 	{
+		// Engine title --------------
+		string title_name = App->GetAppName();
+		title_name += " ";
+		title_name += App->GetVersion();
+		title_name += " - ";
+		title_name += scene_name;
+		App->window->SetTitle(title_name.c_str());
+		// ---------------------------
+
 		float3 cam_pos = scene->GetNumber3("editor_camera_position");
 		float3 z_dir = scene->GetNumber3("editor_camera_front");
 		float3 y_dir = scene->GetNumber3("editor_camera_up");

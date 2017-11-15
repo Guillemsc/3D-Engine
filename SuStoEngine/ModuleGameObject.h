@@ -38,6 +38,8 @@ public:
 
 	const vector<GameObject*> GetSelectedGameObjects() const;
 
+	void SetGuizmoOperation(ImGuizmo::OPERATION op);
+
 private:
 	void DestroyGameObjects();
 	void MousePick();
@@ -52,7 +54,7 @@ private:
 	KDTree*				kdtree = nullptr;
 	bool				kdtree_debug = false;
 
-	ImGuizmo::OPERATION current_gizmo_operation = ImGuizmo::OPERATION::SCALE;
+	ImGuizmo::OPERATION current_gizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
 	float3 last_scale = float3::zero;
 };
 
