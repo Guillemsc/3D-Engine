@@ -75,5 +75,8 @@ void ResourceTexture::LoadToMemory()
 void ResourceTexture::UnloadFromMemory()
 {
 	if (texture_id != 0)
+	{
 		App->renderer3D->UnloadTextureBuffer(texture_id, 1);
+		texture_id = 0;
+	}
 }

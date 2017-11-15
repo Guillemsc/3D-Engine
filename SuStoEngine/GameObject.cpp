@@ -104,6 +104,10 @@ void GameObject::Draw()
 	DrawBBox();
 }
 
+void GameObject::UpdateLogic()
+{
+}
+
 void GameObject::Enable()
 {
 	if (!enabled)

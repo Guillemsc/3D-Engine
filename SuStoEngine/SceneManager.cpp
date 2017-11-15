@@ -275,7 +275,12 @@ void SceneManager::Step()
 
 float SceneManager::GetGameDT()
 {
-	return 0.0f;
+	float ret = 0.0f;
+
+	if (pause)
+		ret = 0.0f;
+	else
+		ret = App->GetDT();
 }
 
 float SceneManager::GetGameExecutionTime()

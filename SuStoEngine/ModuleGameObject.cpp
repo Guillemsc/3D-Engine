@@ -72,6 +72,9 @@ bool ModuleGameObject::Update()
 	{
 		(*it)->UpdateComponents();
 		(*it)->Draw();
+
+		if (App->scene_manager->GetState() == SceneState::PLAY)
+			(*it)->UpdateLogic();
 	}
 
 	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)

@@ -16,6 +16,7 @@ public:
 	void Start();
 	void UpdateComponents();
 	void Draw();
+	void UpdateLogic();
 
 	void Enable();
 	void Disable();
