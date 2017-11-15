@@ -7,10 +7,15 @@
 
 #include "ComponentTransform.h"
 
+
+class ModuleGameObject;
+
 class GameObject
 {
+	friend ModuleGameObject;
+
 public:
-	GameObject(std::string unique_id);
+	GameObject(std::string unique_id, ModuleGameObject* go_module);
 	virtual ~GameObject();
 
 	void Start();
@@ -33,10 +38,10 @@ public:
 
 	const char* GetName() const;
 	void SetName(const std::string& set);
-	void SetSelected(const bool& set);
 
 	std::string GetUniqueId();
 	const bool GetSelected() const;
+	const bool GetStatic() const;
 
 	const GameObject* GetParent() const;
 	GameObject* GetParent();
@@ -49,9 +54,8 @@ public:
 	void RecursiveCalcGlobalTransform();
 	void RecursiveCalcBBox();
 	void RecursiveTestRay(const LineSegment& segment, GameObject*& closest, float& dist);
+	void TestRay(const LineSegment& segment, bool& hit, float& dist);
 
-	bool GetStatic();
-	void SetStatic(bool set);
 	AABB GetBbox() const;
 
 	void OnLoadScene(JSON_Doc* config);
@@ -76,6 +80,8 @@ private:
 
 	GameObject* parent = nullptr;
 	std::vector<GameObject*> childs;
+
+	ModuleGameObject* go_module = nullptr;
 };
 
 #endif

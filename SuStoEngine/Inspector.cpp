@@ -50,8 +50,13 @@ void Inspector::Draw()
 		ImGui::SameLine();
 
 		bool stat = selected[0]->GetStatic();
-		if (ImGui::Checkbox("Static", &stat)) 
-			selected[0]->SetStatic(stat);
+		if (ImGui::Checkbox("Static", &stat))
+		{
+			if (stat)
+				App->gameobj->AddGameObjectToStatic(selected[0]);
+			else
+				App->gameobj->RemoveGameObjectFromStatic(selected[0]);
+		}
 
 		ImGui::TextWrapped("Unique id: %s", selected[0]->GetUniqueId().c_str());
  

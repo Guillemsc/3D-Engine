@@ -315,6 +315,113 @@ void KDTree::Node::DrawPlane(int width, int height, float3 initial_translation)
 	}
 }
 
+void KDTree::Node::GetElementsToTest(const LineSegment & ray, float p1_distance, float p2_distance, std::vector<GameObject*>& vec_to_fill) const
+{
+	if (right != nullptr && left != nullptr)
+	{
+		//check on which side of the plane the ray is defined
+		//get a segment of the ray
+		float3 p1 = ray.GetPoint(p1_distance);
+		float3 p2 = ray.GetPoint(p2_distance);
+
+		//check if this segment is on one of the plane sides or it crosses the plane
+		if (cut_plane.AreOnSameSide(p1, p2))
+		{
+			//check on which side the segment is
+			if (cut_plane.IsOnPositiveSide(p1))
+			{
+				right->GetElementsToTest(ray, p1_distance, p2_distance, vec_to_fill);
+			}
+			else
+			{
+				left->GetElementsToTest(ray, p1_distance, p2_distance, vec_to_fill);
+			}
+		}
+		else //the segment 
+		{
+			right->GetElementsToTest(ray, p1_distance, p2_distance, vec_to_fill);
+			left->GetElementsToTest(ray, p1_distance, p2_distance, vec_to_fill);
+		}
+	}
+	else
+	{
+		GetElements(vec_to_fill);
+	}
+}
+
+void KDTree::Node::GetElementsToTest(const AABB & box, std::vector<GameObject*>& vec_to_fill) const
+{
+	if (right != nullptr && left != nullptr)
+	{
+		//check on which side of the plane the AABB is defined
+		//first, check if the box is on one side or the plane crosses the box
+		if (cut_plane.AreOnSameSide(box.maxPoint, box.minPoint))
+		{
+			//check on which side the box is
+			if (cut_plane.IsOnPositiveSide(box.maxPoint))
+			{
+				right->GetElementsToTest(box, vec_to_fill);
+			}
+			else
+			{
+				left->GetElementsToTest(box, vec_to_fill);
+			}
+		}
+		else //the segment 
+		{
+			right->GetElementsToTest(box, vec_to_fill);
+			left->GetElementsToTest(box, vec_to_fill);
+		}
+	}
+	else
+	{
+		GetElements(vec_to_fill);
+	}
+}
+
+void KDTree::Node::GetElementsToTest(const Frustum & frustum, std::vector<GameObject*>& vec_to_fill) const
+{
+	if (right != nullptr && left != nullptr)
+	{
+		//check on which side of the plane the frustum is defined
+		//first, check if the frustum is on one side or the plane crosses the frustum
+		uint on_pos_side = 0;
+		uint on_neg_side = 0;
+
+		for (int corner = 0; corner < 8; ++corner)
+		{
+			if (cut_plane.IsOnPositiveSide(frustum.CornerPoint(corner)))
+			{
+				on_pos_side++;
+			}
+			else
+				on_neg_side++;
+		}
+
+		if (on_pos_side == 8 || on_neg_side == 8)
+		{
+			//check on which side the frustum is
+			if (on_pos_side > 0)
+			{
+				right->GetElementsToTest(frustum, vec_to_fill);
+			}
+			else
+			{
+				left->GetElementsToTest(frustum, vec_to_fill);
+			}
+		}
+		else //the segment 
+		{
+			right->GetElementsToTest(frustum, vec_to_fill);
+			left->GetElementsToTest(frustum, vec_to_fill);
+		}
+	}
+	else
+	{
+		GetElements(vec_to_fill);
+	}
+}
+
 void KDTree::Node::CheckPartition()
 {
 	if (elements.size() > partition_num)
@@ -336,6 +443,8 @@ void KDTree::CleanUp()
 
 void KDTree::CreateTree(std::vector<GameObject*>& elements, uint ele_on_partition)
 {
+	EraseTree();
+
 	if (root_node == nullptr)
 	{
 		root_node = new Node(ele_on_partition);
@@ -376,16 +485,28 @@ void KDTree::EraseTree()
 	}
 }
 
-void KDTree::GetElementsToTest(const Frustum & frustum) const
+void KDTree::GetElementsToTest(const LineSegment & ray, float p1_distance, float p2_distance, std::vector<GameObject*>& vec_to_fill) const
 {
+	if (root_node != nullptr)
+	{
+		root_node->GetElementsToTest(ray, p1_distance, p2_distance, vec_to_fill);
+	}
 }
 
-void KDTree::GetElementsToTest(const Ray & ray) const
+void KDTree::GetElementsToTest(const AABB & box, std::vector<GameObject*>& vec_to_fill) const
 {
+	if (root_node != nullptr)
+	{
+		root_node->GetElementsToTest(box, vec_to_fill);
+	}
 }
 
-void KDTree::GetElementsToTest(const AABB & box) const
+void KDTree::GetElementsToTest(const Frustum & frustum, std::vector<GameObject*>& vec_to_fill) const
 {
+	if (root_node != nullptr)
+	{
+		root_node->GetElementsToTest(frustum, vec_to_fill);
+	}
 }
 
 bool KDTree::HasTree() const
@@ -395,7 +516,7 @@ bool KDTree::HasTree() const
 
 void KDTree::DebugDraw() const
 {
-	if (root_node != nullptr)
+	if (HasTree())
 	{
 		root_node->DrawPlane(100, 100, float3::zero);
 	}

@@ -34,10 +34,15 @@ public:
 	void RemoveGameObjectFromSelected(GameObject* go);
 	void ClearSelection();
 	void DestroySelectedGameObjects();
+	const vector<GameObject*> GetSelectedGameObjects() const;
  
 	GameObject* GetRoot();
 
-	const vector<GameObject*> GetSelectedGameObjects() const;
+	void AddGameObjectToStatic(GameObject* go);
+	void RemoveGameObjectFromStatic(GameObject* go);
+	const vector<GameObject*> GetStaticGameObjects() const;
+
+	const vector<GameObject*> GetDynamicGameObjects() const;
 
 	void SetGuizmoOperation(ImGuizmo::OPERATION op);
 

@@ -114,9 +114,14 @@ void SceneManager::LoadScene(const char * scene_name)
 
 			string id = scene->GetString("uid", "no_id");
 			string name = scene->GetString("name", "missing_name");
+			bool is_static = scene->GetBool("static");
 
 			GameObject* go = App->gameobj->Create(id);
+
 			go->SetName(name);
+
+			if(is_static)
+				App->gameobj->AddGameObjectToStatic(go);
 
 			scene->MoveToRoot();
 		}

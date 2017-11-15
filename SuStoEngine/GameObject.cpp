@@ -17,9 +17,10 @@
 
 #include "Glew/include/glew.h" 
 
-GameObject::GameObject(std::string _unique_id)
+GameObject::GameObject(std::string _unique_id, ModuleGameObject* _go_module)
 {
 	unique_id = _unique_id;
+	go_module = _go_module;
 }
 
 GameObject::~GameObject()
@@ -252,11 +253,6 @@ void GameObject::SetName(const string& set)
 	name = set;
 }
 
-void GameObject::SetSelected(const bool& set)
-{
-	selected = set;
-}
-
 std::string GameObject::GetUniqueId()
 {
 	return unique_id;
@@ -265,6 +261,11 @@ std::string GameObject::GetUniqueId()
 const bool GameObject::GetSelected() const
 {
 	return selected;
+}
+
+const bool GameObject::GetStatic() const
+{
+	return is_static;
 }
 
 const GameObject* GameObject::GetParent() const
@@ -424,14 +425,56 @@ void GameObject::RecursiveTestRay(const LineSegment & segment, GameObject*& clos
 	}
 }
 
-bool GameObject::GetStatic()
+void GameObject::TestRay(const LineSegment& segment, bool& hit, float& dist)
 {
-	return is_static;
-}
+	dist = 9999999999999;
+	hit = false;
 
-void GameObject::SetStatic(bool set)
-{
-	is_static = set;
+	// Check if intersects with bbox
+	if (local_bbox.IsFinite())
+	{
+		if (segment.Intersects(local_bbox))
+		{
+			// Get mesh
+			ComponentMesh* cmesh = nullptr;
+			cmesh = (ComponentMesh*)GetComponent(MESH);
+
+			if (cmesh != nullptr)
+			{
+				if (cmesh->HasMesh())
+				{
+					// Transform segment to match mesh transform
+					LineSegment segment_local_space(segment);
+					segment_local_space.Transform(transform->GetGlobalTransform().Inverted());
+
+					ResourceMesh* mesh = cmesh->GetMesh();
+
+					// Check every triangle
+					Triangle tri;
+					uint* indices = mesh->GetIndices();
+					float* vertices = mesh->GetVertices();
+					for (int i = 0; i < mesh->GetNumIndices();)
+					{
+						tri.a.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
+						tri.b.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
+						tri.c.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
+
+						float distance;
+						float3 hit_point;
+
+						if (segment_local_space.Intersects(tri, &distance, &hit_point))
+						{
+							if (distance < dist)
+							{
+								dist = distance;
+								hit = true;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 AABB GameObject::GetBbox() const
@@ -460,6 +503,8 @@ void GameObject::OnSaveScene(JSON_Doc * config)
 	
 	// Set the name
 	config->SetString("name", name.c_str());
+
+	config->SetBool("static", is_static);
 
 	// Set the parent id
 	if (parent != nullptr && parent != App->gameobj->GetRoot())

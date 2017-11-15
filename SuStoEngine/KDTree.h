@@ -39,6 +39,10 @@ public:
 
 		void DrawPlane(int width, int height, float3 initial_translation);
 
+		void GetElementsToTest(const LineSegment& ray, float p1_distance, float p2_distance, std::vector<GameObject*>& vec_to_fill)const;
+		void GetElementsToTest(const AABB& box, std::vector<GameObject*>& vec_to_fill) const;
+		void GetElementsToTest(const Frustum& frustum, std::vector<GameObject*>& vec_to_fill) const;
+
 	private:
 		//Divides this node into 2 nodes that contais the elements (half on each node)
 		void CreatePartition();
@@ -68,9 +72,9 @@ public:
 
 	void EraseTree();
 
-	void GetElementsToTest(const Frustum& frustum) const;
-	void GetElementsToTest(const Ray& ray) const;
-	void GetElementsToTest(const AABB& box) const;
+	void GetElementsToTest(const LineSegment& ray, float p1_distance, float p2_distance, std::vector<GameObject*>& vec_to_fill)const;
+	void GetElementsToTest(const AABB& box, std::vector<GameObject*>& vec_to_fill) const;
+	void GetElementsToTest(const Frustum& frustum, std::vector<GameObject*>& vec_to_fill) const;
 
 	bool HasTree()const;
 	void DebugDraw()const;

@@ -19,7 +19,7 @@ ModuleGameObject::ModuleGameObject(bool enabled)
 	SetName("GameObject");
 
 	// Root GameObject
-	root = new GameObject("Root");
+	root = new GameObject("Root", this);
 	root->Start();
 	root->SetName("Root");
 }
@@ -122,20 +122,7 @@ bool ModuleGameObject::Update()
 		}
 	}
 
-	if (App->input->GetKeyDown("K"))
-	{
-		if (kdtree->HasTree())
-			kdtree->EraseTree();
-
-		kdtree->CreateTree(game_objects, 5);
-	}
-	
-	if (App->input->GetKeyDown("0"))
-	{
-		kdtree_debug = !kdtree_debug;
-	}
-
-	if (kdtree_debug && kdtree != nullptr)
+	if (1)
 		kdtree->DebugDraw();
 
 
@@ -176,7 +163,7 @@ GameObject * ModuleGameObject::Create(std::string force_id)
 	else
 		new_id = force_id;
 
-	GameObject* game_object = new GameObject(new_id);
+	GameObject* game_object = new GameObject(new_id, this);
 
 	game_objects.push_back(game_object);
 	root->AddChild(game_object);
@@ -234,23 +221,29 @@ const vector<GameObject*> ModuleGameObject::GetListGameObjects() const
 
 void ModuleGameObject::AddGameObjectToSelected(GameObject * go)
 {
+	if (go->GetSelected())
+		return;
+
 	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
 	{
 		if ((*it) == go)
 			return;
 	}
 
-	go->SetSelected(true);
 	selected.push_back(go);
+	go->selected = true;
 }
 
 void ModuleGameObject::RemoveGameObjectFromSelected(GameObject * go)
 {
+	if (!go->GetSelected())
+		return;
+
 	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
 	{
 		if ((*it) == go)
 		{
-			go->SetSelected(false);
+			go->selected = false,
 			selected.erase(it);
 			return;
 		}
@@ -261,7 +254,7 @@ void ModuleGameObject::ClearSelection()
 {
 	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end();)
 	{
-		(*it)->SetSelected(false);
+		(*it)->selected = false;
 		it = selected.erase(it);
 	}
 }
@@ -282,6 +275,60 @@ GameObject * ModuleGameObject::GetRoot()
 const vector<GameObject*> ModuleGameObject::GetSelectedGameObjects() const
 {
 	return selected;
+}
+
+void ModuleGameObject::AddGameObjectToStatic(GameObject * go)
+{
+	if (go->GetStatic())
+		return;
+
+	for (vector<GameObject*>::iterator it = statics.begin(); it != statics.end(); it++)
+	{
+		if ((*it) == go)
+		{
+			break;
+		}
+	}
+
+	statics.push_back(go);
+	go->is_static = true;
+
+	kdtree->CreateTree(statics);
+}
+
+void ModuleGameObject::RemoveGameObjectFromStatic(GameObject * go)
+{
+	if (!go->GetStatic())
+		return;
+
+	for (vector<GameObject*>::iterator it = statics.begin(); it != statics.end(); it++)
+	{
+		if ((*it) == go)
+		{
+			statics.erase(it);
+			go->is_static = false;
+			kdtree->CreateTree(statics);
+			break;
+		}
+	}
+}
+
+const vector<GameObject*> ModuleGameObject::GetStaticGameObjects() const
+{
+	return statics;
+}
+
+const vector<GameObject*> ModuleGameObject::GetDynamicGameObjects() const
+{
+	vector<GameObject*> dynamics;
+
+	for (vector<GameObject*>::const_iterator it = game_objects.begin(); it != game_objects.end(); it++)
+	{
+		if (!(*it)->is_static)
+			dynamics.push_back((*it));
+	}
+
+	return dynamics;
 }
 
 void ModuleGameObject::SetGuizmoOperation(ImGuizmo::OPERATION op)
@@ -321,6 +368,7 @@ void ModuleGameObject::DestroyGameObjects()
 
 		// Delete from selected
 		RemoveGameObjectFromSelected(*to_del);
+		RemoveGameObjectFromStatic(*to_del);
 
 		// Free
 		(*to_del)->CleanUp();
@@ -350,7 +398,25 @@ void ModuleGameObject::MousePick()
 
 		float distance = 99999999999;
 		GameObject* closest = nullptr;
-		root->RecursiveTestRay(picking, closest, distance);
+
+		vector<GameObject*> gos = App->gameobj->GetDynamicGameObjects();
+		kdtree->GetElementsToTest(picking, App->camera->GetCurrentCamera()->GetNearPlaneDistance(), App->camera->GetCurrentCamera()->GetFarPlaneDistance(), gos);
+
+		for (vector<GameObject*>::iterator it = gos.begin(); it != gos.end(); it++)
+		{
+			bool hit;
+			float dist;
+			(*it)->TestRay(picking, hit, dist);
+
+			if (hit)
+			{
+				if (dist < distance)
+				{
+					distance = dist;
+					closest = (*it);
+				}
+			}
+		}
 
 		if (closest != nullptr)
 		{
