@@ -281,6 +281,8 @@ float SceneManager::GetGameDT()
 		ret = 0.0f;
 	else
 		ret = App->GetDT();
+
+	return ret;
 }
 
 float SceneManager::GetGameExecutionTime()
