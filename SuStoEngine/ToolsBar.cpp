@@ -45,16 +45,14 @@ void ToolsBar::Draw()
 
 	if (App->scene_manager->GetState() == SceneState::EDIT)
 	{
-		ImGui::Text("Current: EDIT");
-
 		ImGui::SetCursorPos(ImVec2(800, 3));
 		if (ImGui::Button("Play"))
 		{
 			App->scene_manager->Play();
 		}
 
-		ImGui::SetCursorPos(ImVec2(950, 6));
-		ImGui::Text("Current: EDIT");
+		ImGui::SetCursorPos(ImVec2(850, 6));
+		ImGui::Text("Current: EDITING");
 	}
 	else if(App->scene_manager->GetState() == SceneState::PLAY)
 	{
@@ -77,7 +75,7 @@ void ToolsBar::Draw()
 		}
 
 		ImGui::SetCursorPos(ImVec2(950, 6));
-		ImGui::Text("Current: PLAY");
+		ImGui::Text("Current: PLAYING");
 	}
 
 	ImGui::End();

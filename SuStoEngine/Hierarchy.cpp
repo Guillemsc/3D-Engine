@@ -76,7 +76,9 @@ void Hierarchy::PrintGoAndChildsRecursive(GameObject * go)
 	// ------------------------
 	// Draw line --------------
 	// ------------------------
+	ImGui::PushID(go->GetUniqueId().c_str());
 	bool opened = ImGui::TreeNodeEx(go->GetName(), flags);
+	ImGui::PopID();
 
 	// ------------------------
 	// Input ------------------

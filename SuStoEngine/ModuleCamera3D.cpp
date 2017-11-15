@@ -223,7 +223,7 @@ Camera3D::Camera3D()
 	aspect_ratio = 0;
 
 	SetNearPlaneDistance(0.1f);
-	SetFarPlaneDistance(1000.0f);
+	SetFarPlaneDistance(10000.0f);
 	SetAspectRatio(1.3f);
 	SetFOV(60);
 }

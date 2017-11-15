@@ -5,6 +5,7 @@
 #include "ModuleRenderer3D.h"
 #include "DebugDraw.h"
 #include "JSONLoader.h"
+#include "imgui.h"
 
 ComponentCamera::ComponentCamera(GameObject * owner, std::string unique_id) : Component(CAMERA, owner, unique_id)
 {
@@ -46,6 +47,23 @@ Camera3D * ComponentCamera::GetCamera() const
 
 void ComponentCamera::InspectorDraw(std::vector<Component*> components)
 {
+	float near_plane = camera->GetNearPlaneDistance();
+	if (ImGui::DragFloat("Near plane", &near_plane, 0.2f, 0.01f, 1000))
+	{
+		camera->SetNearPlaneDistance(near_plane);
+	}
+
+	float far_plane = camera->GetFarPlaneDistance();
+	if (ImGui::DragFloat("Far plane", &far_plane, 10, near_plane, 10000))
+	{
+		camera->SetFarPlaneDistance(far_plane);
+	}
+
+	float fov = camera->GetVerticalFOV();
+	if (ImGui::DragFloat("Field of view", &fov, 1, 1, 179.9f))
+	{
+		camera->SetFOV(fov);
+	}
 }
 
 void ComponentCamera::OnEnable()
