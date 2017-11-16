@@ -105,22 +105,36 @@ bool ModuleGameObject::Update()
 			{
 				case ImGuizmo::OPERATION::TRANSLATE:
 				{
-					if (add.IsFinite())
+					if (add.IsFinite()) 
 					{
+						if ((*it)->parent != nullptr) 
+						{
+							add = (*it)->parent->transform->GetGlobalTransform().Inverted().TransformPos(add);
+						}
+
 						(*it)->transform->Translate(add);
-					}
+					}		
 				}
 				break;
 				case ImGuizmo::OPERATION::ROTATE:
 				{
-					if (rot.IsFinite())
+					if (rot.IsFinite()) 
+					{
+						if ((*it)->parent != nullptr) 
+						{
+							rot = (*it)->parent->transform->GetGlobalTransform().Inverted().TransformPos(rot);
+						}
 						(*it)->transform->Rotate(rot);
+					}				
 				}
 				break;
 				case ImGuizmo::OPERATION::SCALE:
 				{
-					if (sc.IsFinite())
+					if (sc.IsFinite()) 
+					{
 						(*it)->transform->SetScale(sc);
+					}
+					
 				}
 				break;
 			}
