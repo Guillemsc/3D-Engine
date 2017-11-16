@@ -41,6 +41,8 @@ public:
 	void AddGameObjectToStatic(GameObject* go);
 	void RemoveGameObjectFromStatic(GameObject* go);
 	const vector<GameObject*> GetStaticGameObjects() const;
+	void AddGameObjectToStaticRecursive(GameObject* go);
+	void RemoveGameObjectFromStaticRecursive(GameObject* go);
 
 	const vector<GameObject*> GetDynamicGameObjects() const;
 

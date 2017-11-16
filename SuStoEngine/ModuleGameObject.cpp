@@ -97,7 +97,7 @@ bool ModuleGameObject::Update()
 			float rotation[3];
 			float scale[3];
 			ImGuizmo::DecomposeMatrixToComponents(transformation, addition, rotation, scale);
-			float3 add(-addition[0], -addition[1], addition[2]);
+			float3 add(addition[0], addition[1], addition[2]);
 			float3 rot(rotation[0], rotation[1], rotation[2]);
 			float3 sc(scale[0], scale[1], scale[2]);
 
@@ -105,8 +105,10 @@ bool ModuleGameObject::Update()
 			{
 				case ImGuizmo::OPERATION::TRANSLATE:
 				{
-					if(add.IsFinite())
+					if (add.IsFinite())
+					{
 						(*it)->transform->Translate(add);
+					}
 				}
 				break;
 				case ImGuizmo::OPERATION::ROTATE:
@@ -320,6 +322,28 @@ void ModuleGameObject::RemoveGameObjectFromStatic(GameObject * go)
 const vector<GameObject*> ModuleGameObject::GetStaticGameObjects() const
 {
 	return statics;
+}
+
+void ModuleGameObject::AddGameObjectToStaticRecursive(GameObject * go)
+{
+	AddGameObjectToStatic(go);
+
+	vector<GameObject*> childs = go->GetChilds();
+	for (vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); ++it)
+	{
+		AddGameObjectToStaticRecursive(*it);
+	}
+}
+
+void ModuleGameObject::RemoveGameObjectFromStaticRecursive(GameObject * go)
+{
+	RemoveGameObjectFromStatic(go);
+
+	vector<GameObject*> childs = go->GetChilds();
+	for (vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); ++it)
+	{
+		RemoveGameObjectFromStaticRecursive(*it);
+	}
 }
 
 const vector<GameObject*> ModuleGameObject::GetDynamicGameObjects() const
