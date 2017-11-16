@@ -50,6 +50,9 @@ public:
 
 	void RecalculateKDTree();
 
+	void SetDebugKDTree(bool set);
+	void SetDebugBBoxes(bool set);
+
 private:
 	void DestroyGameObjects();
 	void MousePick();
@@ -64,7 +67,9 @@ private:
 
 	KDTree*				kdtree = nullptr;
 	bool				update_kdtree = false;
-	bool				kdtree_debug = false;
+
+	bool				show_kdtree = false;
+	bool				show_bboxes = false;
 
 	ImGuizmo::OPERATION current_gizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
 	float3 last_scale = float3::zero;

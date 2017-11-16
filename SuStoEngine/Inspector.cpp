@@ -47,18 +47,67 @@ void Inspector::Draw()
 		if (ImGui::InputText("", name, 25, ImGuiInputTextFlags_AutoSelectAll))
 			selected[0]->SetName(name);
 
+		// Static selector --------------------------------------
 		bool stat = selected[0]->GetStatic();
-		if (ImGui::Checkbox("Static", &stat))
+		if (ImGui::Checkbox("static", &stat))
 		{
 			if (stat)
 			{
-				App->gameobj->AddGameObjectToStatic(selected[0]);
+				ImGui::OpenPopup("Static Enable");
 			}
 			else
 			{
+				ImGui::OpenPopup("Static Disable");
 				App->gameobj->RemoveGameObjectFromStatic(selected[0]);
 			}
 		}
+
+		if (ImGui::BeginPopupModal("Static Enable", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+		{
+			ImGui::Text("Do you want to enable static for all the child objects as well?");
+			ImGui::Separator();
+
+			if (ImGui::Button("Yes, change children", ImVec2(160, 0))) 
+			{
+				App->gameobj->AddGameObjectToStaticRecursive(selected[0]);
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("No, this object only", ImVec2(160, 0)))
+			{
+				App->gameobj->AddGameObjectToStatic(selected[0]);
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel", ImVec2(130, 0)))
+			{ ImGui::CloseCurrentPopup(); }
+			ImGui::EndPopup();
+		}
+
+		if (ImGui::BeginPopupModal("Static Disable", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+		{
+			ImGui::Text("Do you want to disable static for all the child objects as well?");
+			ImGui::Separator();
+
+			if (ImGui::Button("Yes, change children", ImVec2(160, 0)))
+			{
+				App->gameobj->RemoveGameObjectFromStaticRecursive(selected[0]);
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("No, this object only", ImVec2(160, 0)))
+			{
+				App->gameobj->RemoveGameObjectFromStatic(selected[0]);
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel", ImVec2(130, 0)))
+			{
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
+		// ----------------------------------------
 
 		ImGui::TextWrapped("Unique id: %s", selected[0]->GetUniqueId().c_str());
  

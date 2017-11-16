@@ -60,6 +60,8 @@ public:
 
 	void OnLoadScene(JSON_Doc* config);
 	void OnSaveScene(JSON_Doc* config);
+
+	void SetDebugDraw(bool set);
  
 private:
 	void DrawBBox();
@@ -82,6 +84,8 @@ private:
 	std::vector<GameObject*> childs;
 
 	ModuleGameObject* go_module = nullptr;
+
+	bool debug_draw = false;
 };
 
 #endif

@@ -78,5 +78,17 @@ void ToolsBar::Draw()
 		ImGui::Text("Current: PLAYING");
 	}
 
+	ImGui::SetCursorPos(ImVec2(1250, 3));
+	if (ImGui::Checkbox("Draw KDTree", &draw_kdtree))
+	{
+		App->gameobj->SetDebugKDTree(draw_kdtree);
+	}
+
+	ImGui::SetCursorPos(ImVec2(1400, 3));
+	if (ImGui::Checkbox("Draw BBoxes", &draw_bboxes))
+	{
+		App->gameobj->SetDebugBBoxes(draw_bboxes);
+	}
+
 	ImGui::End();
 }

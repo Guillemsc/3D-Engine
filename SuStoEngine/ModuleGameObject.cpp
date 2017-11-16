@@ -78,6 +78,8 @@ bool ModuleGameObject::Update()
 
 		if (App->scene_manager->GetState() == SceneState::PLAY)
 			(*it)->UpdateLogic();
+
+		(*it)->SetDebugDraw(show_bboxes);
 	}
 
 	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
@@ -141,7 +143,7 @@ bool ModuleGameObject::Update()
 		}
 	}
 
-	if (1)
+	if (show_kdtree)
 		kdtree->DebugDraw();
 
 
@@ -381,6 +383,16 @@ void ModuleGameObject::SetGuizmoOperation(ImGuizmo::OPERATION op)
 void ModuleGameObject::RecalculateKDTree()
 {
 	update_kdtree = true;
+}
+
+void ModuleGameObject::SetDebugKDTree(bool set)
+{
+	show_kdtree = set;
+}
+
+void ModuleGameObject::SetDebugBBoxes(bool set)
+{
+	show_bboxes = set;
 }
 
 void ModuleGameObject::DestroyGameObjects()

@@ -16,7 +16,8 @@ public:
 public:
 
 private:
-
+	bool draw_kdtree = false;
+	bool draw_bboxes = false;
 };
 
 #endif

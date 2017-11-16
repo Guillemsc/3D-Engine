@@ -539,9 +539,17 @@ void GameObject::OnSaveScene(JSON_Doc * config)
 		config->MoveToRoot();
 	}
 }
+
+void GameObject::SetDebugDraw(bool set)
+{
+	debug_draw = set;
+}
  
 void GameObject::DrawBBox()
 {
+	if (!debug_draw)
+		return;
+
 	if (local_bbox.IsFinite())
 	{	
 		if(selected)
