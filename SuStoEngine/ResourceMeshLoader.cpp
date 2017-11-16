@@ -274,13 +274,13 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 			}
 		}
 
-		if (mesh_valid && node_valid && !mesh_already_loaded)
+		if (mesh_valid && node_valid && !mesh_already_loaded && mesh != nullptr)
 		{
 			App->resource_manager->SaveResourceIntoFile(mesh);
 
 			AddResource(mesh_index, RT_MESH, mesh);
 		}
-		else if (!mesh_valid && !mesh_already_loaded)
+		else if (!mesh_valid && !mesh_already_loaded && mesh != nullptr)
 			App->resource_manager->DeleteResource(mesh->GetUniqueId());
 	}
 

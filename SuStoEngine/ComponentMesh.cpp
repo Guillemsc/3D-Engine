@@ -37,10 +37,10 @@ void ComponentMesh::SetMesh(ResourceMesh* _mesh)
 {
 	RemoveMesh();
 
-	mesh = _mesh;
-
-	if (mesh != nullptr)
+	if (_mesh != nullptr)
 	{
+		mesh = _mesh;
+
 		mesh->LoadMem();
 
 		has_mesh = true;

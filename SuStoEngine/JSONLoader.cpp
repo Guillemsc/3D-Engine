@@ -40,7 +40,7 @@ JSON_Doc* JSONLoader::LoadJSON(const char * path)
 		JSON_Value *user_data = json_parse_file(path);
 		JSON_Object *root_object = json_value_get_object(user_data);
 
-		if (user_data == nullptr && root_object == nullptr)
+		if (user_data == nullptr || root_object == nullptr)
 		{
 			LOG_OUTPUT("Error loading %s", path);
 		}

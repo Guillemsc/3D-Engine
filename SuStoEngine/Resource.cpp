@@ -4,6 +4,7 @@ Resource::Resource(std::string _unique_id, ResourceType _type)
 {
 	unique_id = _unique_id;
 	type = _type;
+	count_ref = 0;
 }
 
 Resource::~Resource()
