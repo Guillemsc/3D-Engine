@@ -97,7 +97,7 @@ bool ModuleGameObject::Update()
 			float rotation[3];
 			float scale[3];
 			ImGuizmo::DecomposeMatrixToComponents(transformation, addition, rotation, scale);
-			float3 add(-addition[0], -addition[1], addition[2]);
+			float3 add(addition[0], addition[1], addition[2]);
 			float3 rot(rotation[0], rotation[1], rotation[2]);
 			float3 sc(scale[0], scale[1], scale[2]);
 
@@ -105,20 +105,30 @@ bool ModuleGameObject::Update()
 			{
 				case ImGuizmo::OPERATION::TRANSLATE:
 				{
-					if(add.IsFinite())
+					if (add.IsFinite()) {
+						if ((*it)->parent != nullptr) {
+							add = (*it)->parent->transform->GetGlobalTransform().Inverted().TransformPos(add);
+						}
 						(*it)->transform->Translate(add);
+					}		
 				}
 				break;
 				case ImGuizmo::OPERATION::ROTATE:
 				{
-					if (rot.IsFinite())
+					if (rot.IsFinite()) {
+						if ((*it)->parent != nullptr) {
+							rot = (*it)->parent->transform->GetGlobalTransform().Inverted().TransformPos(rot);
+						}
 						(*it)->transform->Rotate(rot);
+					}				
 				}
 				break;
 				case ImGuizmo::OPERATION::SCALE:
 				{
-					if (sc.IsFinite())
+					if (sc.IsFinite()) {
 						(*it)->transform->SetScale(sc);
+					}
+					
 				}
 				break;
 			}
