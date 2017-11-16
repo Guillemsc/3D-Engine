@@ -47,6 +47,7 @@ void ComponentMaterial::RemoveTexture()
 	if (texture != nullptr)
 	{
 		texture->UnloadMem();
+
 		texture = nullptr;
 		has_texture = false;
 	}

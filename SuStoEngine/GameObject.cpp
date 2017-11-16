@@ -464,9 +464,9 @@ void GameObject::TestRay(const LineSegment& segment, bool& hit, float& dist)
 					float* vertices = mesh->GetVertices();
 					for (int i = 0; i < mesh->GetNumIndices();)
 					{
-						tri.a.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
-						tri.b.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
-						tri.c.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
+						tri.a.Set(vertices[(3 * indices[i])], vertices[(3 * indices[i]) + 1], vertices[(3 * indices[i]) + 2]); ++i;
+						tri.b.Set(vertices[(3 * indices[i])], vertices[(3 * indices[i]) + 1], vertices[(3 * indices[i]) + 2]); ++i;
+						tri.c.Set(vertices[(3 * indices[i])], vertices[(3 * indices[i]) + 1], vertices[(3 * indices[i]) + 2]); ++i;
 
 						float distance;
 						float3 hit_point;

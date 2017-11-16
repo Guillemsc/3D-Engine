@@ -95,16 +95,19 @@ void ResourceManager::DeleteResource(std::string unique_id)
 
 void ResourceManager::SaveResourceIntoFile(Resource * res)
 {
-	switch (res->GetType())
+	if (res != nullptr)
 	{
-	case ResourceType::RT_MESH:
-		mesh_loader->Export(App->file_system->GetLibraryMeshPath().c_str(), (ResourceMesh*)res);
-		break;
-	case ResourceType::RT_TEXTURE:
-		texture_loader->Export(App->file_system->GetLibraryTexturePath().c_str(), (ResourceTexture*)res);
-		break;
-	case ResourceType::RT_SCENE:
-		break;
+		switch (res->GetType())
+		{
+		case ResourceType::RT_MESH:
+			mesh_loader->Export(App->file_system->GetLibraryMeshPath().c_str(), (ResourceMesh*)res);
+			break;
+		case ResourceType::RT_TEXTURE:
+			texture_loader->Export(App->file_system->GetLibraryTexturePath().c_str(), (ResourceTexture*)res);
+			break;
+		case ResourceType::RT_SCENE:
+			break;
+		}
 	}
 }
 
