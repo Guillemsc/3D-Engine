@@ -46,9 +46,12 @@ public:
 
 	void SetGuizmoOperation(ImGuizmo::OPERATION op);
 
+	void RecalculateKDTree();
+
 private:
 	void DestroyGameObjects();
 	void MousePick();
+	void UpdateKDTree();
 
 private:
 	vector<GameObject*> game_objects;
@@ -58,6 +61,7 @@ private:
 	GameObject*			root = nullptr;
 
 	KDTree*				kdtree = nullptr;
+	bool				update_kdtree = false;
 	bool				kdtree_debug = false;
 
 	ImGuizmo::OPERATION current_gizmo_operation = ImGuizmo::OPERATION::TRANSLATE;

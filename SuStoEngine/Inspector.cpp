@@ -47,8 +47,6 @@ void Inspector::Draw()
 		if (ImGui::InputText("", name, 25, ImGuiInputTextFlags_AutoSelectAll))
 			selected[0]->SetName(name);
 
-		ImGui::SameLine();
-
 		bool stat = selected[0]->GetStatic();
 		if (ImGui::Checkbox("Static", &stat))
 		{

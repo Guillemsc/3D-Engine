@@ -216,7 +216,7 @@ void Configuration::Draw()
 			App->SaveConfig(App->camera);
 		}
 
-		if (ImGui::SliderFloat("Camera speed", &camera_speed, 0.01f, 100))
+		if (ImGui::SliderFloat("Camera speed", &camera_speed, 0.01f, 500))
 		{
 			App->camera->SetCameraSpeed(camera_speed);
 			App->SaveConfig(App->camera);

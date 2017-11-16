@@ -169,6 +169,9 @@ void GameObject::AddComponent(ComponentType type, string unique_id)
 		case MESH:
 		{
 			ret = new ComponentMesh(this, new_id);
+
+			if (is_static)
+				go_module->RecalculateKDTree();
 		}
 		break;
 		case MATERIAL:
@@ -199,6 +202,12 @@ void GameObject::RemoveComponent(ComponentType type)
 	{
 		if ((*it)->GetType() == type)
 		{
+			if (type == MESH)
+			{
+				if (is_static)
+					go_module->RecalculateKDTree();
+			}
+
 			(*it)->CleanUp();
 			components.erase(it);
 			break;

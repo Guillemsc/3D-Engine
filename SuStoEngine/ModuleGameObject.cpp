@@ -18,6 +18,9 @@ ModuleGameObject::ModuleGameObject(bool enabled)
 {
 	SetName("GameObject");
 
+	// KDTree
+	kdtree = new KDTree();
+
 	// Root GameObject
 	root = new GameObject("Root", this);
 	root->Start();
@@ -28,23 +31,21 @@ ModuleGameObject::~ModuleGameObject()
 {
 }
 
-bool ModuleGameObject::Start()
-{
-	bool ret = true;
- 
-	ResourceMeshLoader loader;
-	loader.CreatePlane();
-
-	return ret;
-}
-
 bool ModuleGameObject::Awake()
 {
 	bool ret = true;
 
 	LOG_OUTPUT("Creating Module GameObject");	
 
-	kdtree = new KDTree();
+	return ret;
+}
+
+bool ModuleGameObject::Start()
+{
+	bool ret = true;
+
+	ResourceMeshLoader loader;
+	loader.CreatePlane();
 
 	return ret;
 }
@@ -55,6 +56,8 @@ bool ModuleGameObject::PreUpdate()
 
 	root->RecursiveCalcGlobalTransform();
 	root->RecursiveCalcBBox();
+
+	UpdateKDTree();
 
 	return ret;
 }
@@ -281,7 +284,7 @@ void ModuleGameObject::AddGameObjectToStatic(GameObject * go)
 {
 	if (go->GetStatic())
 		return;
-
+	
 	for (vector<GameObject*>::iterator it = statics.begin(); it != statics.end(); it++)
 	{
 		if ((*it) == go)
@@ -293,7 +296,7 @@ void ModuleGameObject::AddGameObjectToStatic(GameObject * go)
 	statics.push_back(go);
 	go->is_static = true;
 
-	kdtree->CreateTree(statics);
+	RecalculateKDTree();
 }
 
 void ModuleGameObject::RemoveGameObjectFromStatic(GameObject * go)
@@ -307,10 +310,11 @@ void ModuleGameObject::RemoveGameObjectFromStatic(GameObject * go)
 		{
 			statics.erase(it);
 			go->is_static = false;
-			kdtree->CreateTree(statics);
 			break;
 		}
 	}
+
+	RecalculateKDTree();
 }
 
 const vector<GameObject*> ModuleGameObject::GetStaticGameObjects() const
@@ -334,6 +338,11 @@ const vector<GameObject*> ModuleGameObject::GetDynamicGameObjects() const
 void ModuleGameObject::SetGuizmoOperation(ImGuizmo::OPERATION op)
 {
 	current_gizmo_operation = op;
+}
+
+void ModuleGameObject::RecalculateKDTree()
+{
+	update_kdtree = true;
 }
 
 void ModuleGameObject::DestroyGameObjects()
@@ -423,6 +432,15 @@ void ModuleGameObject::MousePick()
 			ClearSelection();
 			AddGameObjectToSelected(closest);
 		}
+	}
+}
+
+void ModuleGameObject::UpdateKDTree()
+{
+	if (update_kdtree)
+	{
+		update_kdtree = false;
+		kdtree->CreateTree(statics);
 	}
 }
 
