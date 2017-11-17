@@ -17,6 +17,7 @@
 #include "Game.h"
 #include "Hierarchy.h"
 #include "Inspector.h"
+#include "Explorer.h"
 #include "JSONLoader.h"
 #include "ModuleGameObject.h"
 #include "SceneManager.h"
@@ -62,6 +63,7 @@ bool EditorUI::Awake()
 	game = new Game(true);
 	hierarchy = new Hierarchy(true);
 	inspector = new Inspector(true);
+	explorer = new Explorer(true);
 
 	AddEditor(main_bar);
 	AddEditor(tools_bar);
@@ -74,6 +76,7 @@ bool EditorUI::Awake()
 	AddEditor(hardware);
 	AddEditor(hierarchy);
 	AddEditor(inspector);
+	AddEditor(explorer);
 
 	// ---------------
 
@@ -372,6 +375,11 @@ Hierarchy * EditorUI::GetHerarchy()
 Inspector * EditorUI::GetInspector()
 {
 	return inspector;
+}
+
+Explorer * EditorUI::GetExplorer()
+{
+	return nullptr;
 }
 
 

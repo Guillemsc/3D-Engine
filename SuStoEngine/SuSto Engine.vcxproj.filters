@@ -462,6 +462,9 @@
     <ClInclude Include="ResourceScene.h">
       <Filter>Sources\6. Resources =============</Filter>
     </ClInclude>
+    <ClInclude Include="Explorer.h">
+      <Filter>Sources\4. Editor ================</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -754,6 +757,9 @@
     </ClCompile>
     <ClCompile Include="ResourceScene.cpp">
       <Filter>Sources\6. Resources =============</Filter>
+    </ClCompile>
+    <ClCompile Include="Explorer.cpp">
+      <Filter>Sources\4. Editor ================</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

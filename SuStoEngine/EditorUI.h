@@ -15,6 +15,7 @@ class Hardware;
 class Game;
 class Hierarchy;
 class Inspector;
+class Explorer;
 
 class ImVec4;
 
@@ -80,6 +81,7 @@ public:
 	Game* GetGame();
 	Hierarchy* GetHerarchy();
 	Inspector* GetInspector();
+	Explorer* GetExplorer();
 
 private:
 	void AddEditor(EditorElement* el);
@@ -97,6 +99,7 @@ private:
 	Game*				 game = nullptr;
 	Hierarchy*			 hierarchy = nullptr;
 	Inspector*			 inspector = nullptr;
+	Explorer*			 explorer = nullptr;
 
 	vector<EditorElement*> editor_elements;
 

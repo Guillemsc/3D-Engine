@@ -2,6 +2,7 @@
 #include "App.h"
 #include <Windows.h>
 #include <fstream>
+#include <iostream>
 #include "Functions.h"
 
 FileSystem::FileSystem(bool start_enabled)
@@ -206,8 +207,16 @@ vector<string> FileSystem::GetFilesInPath(const char * path, const char* extensi
 	WIN32_FIND_DATA search_data;
 
 	string path_ex = path;
-	path_ex += "*.";
-	path_ex += extension;
+
+	if (!TextCmp(extension, ""))
+	{
+		path_ex += "*.";
+		path_ex += extension;
+	}
+	else
+	{
+		path_ex += "*.*";
+	}
 
 	HANDLE handle = FindFirstFile(path_ex.c_str(), &search_data);
 
