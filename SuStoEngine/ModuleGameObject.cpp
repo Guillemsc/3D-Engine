@@ -76,11 +76,13 @@ bool ModuleGameObject::Update()
 	vector<GameObject*> to_draw;
 
 	// Get elements to draw from all cameras
-	for (vector<Camera3D*>::iterator it = cameras.begin(); it != cameras.end(); ++it)
-	{
-		if((*it)->GetFrustumCulling())
-			(*it)->GetElementsToDraw(to_draw);
-	}
+	App->camera->GetEditorCamera()->GetElementsToDraw(to_draw);
+
+	//for (vector<Camera3D*>::iterator it = cameras.begin(); it != cameras.end(); ++it)
+	//{
+	//	if((*it)->GetFrustumCulling())
+	//		(*it)->GetElementsToDraw(to_draw);
+	//}
 	
 	// Draw
 	for(vector<GameObject*>::iterator it = to_draw.begin(); it != to_draw.end(); ++it)
@@ -133,6 +135,7 @@ bool ModuleGameObject::Update()
 					}		
 				}
 				break;
+
 				case ImGuizmo::OPERATION::ROTATE:
 				{
 					if (rot.IsFinite()) 
@@ -322,7 +325,7 @@ void ModuleGameObject::AddGameObjectToStatic(GameObject * go)
 	{
 		if ((*it) == go)
 		{
-			break;
+			return;
 		}
 	}
 
@@ -479,7 +482,7 @@ void ModuleGameObject::MousePick()
 		GameObject* closest = nullptr;
 
 		vector<GameObject*> gos = App->gameobj->GetDynamicGameObjects();
-		kdtree->GetElementsToTest(picking, App->camera->GetCurrentCamera()->GetNearPlaneDistance(), App->camera->GetCurrentCamera()->GetFarPlaneDistance(), gos);
+		kdtree->GetElementsToTest(picking, 0, App->camera->GetCurrentCamera()->GetFarPlaneDistance(), gos);
 
 		for (vector<GameObject*>::iterator it = gos.begin(); it != gos.end(); it++)
 		{

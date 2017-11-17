@@ -353,6 +353,15 @@ const bool ModuleRenderer3D::GetColorMaterial() const
 	return glIsEnabled(GL_COLOR_MATERIAL);
 }
 
+//const float4 ModuleRenderer3D::GetAmbientLight() const
+//{
+//	//float* color = new float[4];
+//	//glLightfv(GL_LIGHT0, GL_AMBIENT, color);
+//	//float4 ret = float4(color[0], color[1], color[3], color[1]);
+//	//RELEASE_ARRAY(color);
+//	return ret;
+//}
+
 uint ModuleRenderer3D::LoadBuffer(float* elements, uint size)
 {
 	uint id = 0;

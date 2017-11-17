@@ -21,8 +21,11 @@ public:
 	bool CleanUp();
 
 	void SaveScene(const char* scene_name);
-	void LoadScene(const char* scene_name);
+	void LoadScene(const char* scene_name, bool set_scene_title = true);
 	void DestroyScene();
+
+	void SaveTmpScene();
+	void LoadTmpScene();
 
 	SceneState GetState();
 	bool GetPause();

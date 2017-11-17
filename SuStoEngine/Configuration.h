@@ -66,7 +66,7 @@ private:
 	bool ambient = true;
 	bool diffuse = false;
 	bool specular = false;
-	float ambient_color[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	float ambient_color[4] = { 255.0f, 255.0f, 255.0f, 255.0f };
 	float diffuse_color[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	float specular_color[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 };

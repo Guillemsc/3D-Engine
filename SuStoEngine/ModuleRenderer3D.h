@@ -50,6 +50,7 @@ public:
 	const bool GetLightingState() const;
 	const bool GetTexture2D() const;
 	const bool GetColorMaterial() const;
+	//const float4 GetAmbientLight() const;
 
 	uint LoadBuffer(float* elements, uint size);
 	uint LoadBuffer(uint* elements, uint size);

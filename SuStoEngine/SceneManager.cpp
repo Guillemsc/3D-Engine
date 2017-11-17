@@ -79,9 +79,11 @@ void SceneManager::SaveScene(const char * scene_name)
 	}
 }
 
-void SceneManager::LoadScene(const char * scene_name)
+void SceneManager::LoadScene(const char * scene_name, bool set_scene_title)
 {
 	LOG_OUTPUT("Loading scene %s", scene_name);
+
+	DestroyScene();
 
 	// Load new scene
 	string path = App->file_system->GetLibraryScenePath() + scene_name;
@@ -90,14 +92,17 @@ void SceneManager::LoadScene(const char * scene_name)
 
 	if (scene != nullptr)
 	{
-		// Engine title --------------
-		string title_name = App->GetAppName();
-		title_name += " ";
-		title_name += App->GetVersion();
-		title_name += " - ";
-		title_name += scene_name;
-		App->window->SetTitle(title_name.c_str());
-		// ---------------------------
+		if (set_scene_title)
+		{
+			// Engine title --------------
+			string title_name = App->GetAppName();
+			title_name += " ";
+			title_name += App->GetVersion();
+			title_name += " - ";
+			title_name += scene_name;
+			App->window->SetTitle(title_name.c_str());
+			// ---------------------------
+		}
 
 		float3 cam_pos = scene->GetNumber3("editor_camera_position");
 		float3 z_dir = scene->GetNumber3("editor_camera_front");
@@ -219,6 +224,16 @@ void SceneManager::DestroyScene()
 	App->gameobj->DestroyAllGameObjectsNow();
 }
 
+void SceneManager::SaveTmpScene()
+{
+	SaveScene("tmp_scene.scene");
+}
+
+void SceneManager::LoadTmpScene()
+{
+	LoadScene("tmp_scene.scene", false);
+}
+
 SceneState SceneManager::GetState()
 {
 	return state;
@@ -242,9 +257,7 @@ void SceneManager::Edit()
 		pause = false;
 		step = false;
 
-		DestroyScene();
-
-		LoadScene(current_scene.c_str());
+		LoadTmpScene();
 	}
 }
 
@@ -254,7 +267,7 @@ void SceneManager::Play()
 	{
 		state = PLAY;
 
-		SaveScene(current_scene.c_str());
+		SaveTmpScene();
 	}
 }
 
