@@ -79,6 +79,84 @@ string FileSystem::GetSettingsPath()
 	return settings_path;
 }
 
+std::string FileSystem::GetFileExtension(const char * file_name)
+{
+	string ret;
+
+	bool adding = false;
+	for (int i = 0; file_name[i] != '\0'; i++)
+	{
+		if (file_name[i] == '.')
+		{
+			ret.clear();
+			adding = true;
+			continue;
+		}
+
+		if (adding)
+			ret += file_name[i];
+	}
+
+	return ret;
+}
+
+std::string FileSystem::GetFilenameWithoutExtension(const char * file_name, bool without_)
+{
+	string ret;
+
+	for (int i = 0; file_name[i] != '\0'; i++)
+	{
+		if (file_name[i] == '.' || (without_ && file_name[i] == '_'))
+		{
+			break;
+		}
+
+		ret += file_name[i];
+	}
+
+	return ret;
+}
+
+std::string FileSystem::GetFileNameFromFilePath(const char * file_path)
+{
+	string ret;
+
+	for (int i = 0; file_path[i] != '\0'; i++)
+	{
+		if (file_path[i] == '\\' || file_path[i] == '/')
+		{
+			ret.clear();
+			continue;
+		}
+
+		ret += file_path[i];
+	}
+
+	return ret;
+}
+
+std::string FileSystem::GetPathFromFilePath(const char * file_path)
+{
+	string ret;
+
+	int last = 0;
+	for (int i = 0; file_path[i] != '\0'; i++)
+	{
+		if (file_path[i] == '\\' || file_path[i] == '/')
+		{
+			last = i;
+			last++;
+		}
+	}
+
+	for (int i = 0; i < last && file_path[i] != '\0'; i++)
+	{
+		ret += file_path[i];
+	}
+
+	return ret;
+}
+
 string FileSystem::CreateFolder(const char * path, const char * name)
 {
 	string ret;

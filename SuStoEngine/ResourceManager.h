@@ -24,8 +24,14 @@ public:
 	void DeleteResource(std::string unique_id);
 
 	void SaveResourceIntoFile(Resource* res);
-	Resource* LoadResource(const char* file_path);
+	bool LoadResource(const char* file_path);
+	bool LoadResource(const char* file_path, vector<Resource*>& resources);
 	void ImportAllResources();
+
+	ResourceMeshLoader* GetMeshLoader();
+	ResourceTextureLoader* GetTextureLoader();
+
+	std::string GetNewUID();
 
 private:
 	void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension);

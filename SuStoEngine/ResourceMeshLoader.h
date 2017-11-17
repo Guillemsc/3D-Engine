@@ -52,14 +52,14 @@ public:
 	ResourceMeshLoader();
 	virtual ~ResourceMeshLoader();
 
-	bool Load(const char* filepath, bool as_new_gameobject = true);
+	bool Load(const char* filepath, std::vector<Resource*>& resources, bool as_new_gameobject = true);
 	void Import(const char* filepath);
 	bool Export(const char* path, ResourceMesh* mesh);
 	void ImportAllMeshes();
 	void CreatePlane();
 
 private:
-	void RecursiveLoadMesh(const aiScene* scene, aiNode* node, const char* full_path, AABB& total_abb, GameObject* parent = nullptr);
+	void RecursiveLoadMesh(const aiScene* scene, aiNode* node, const char* full_path, AABB& total_abb, std::vector<Resource*>& resources, GameObject* parent = nullptr);
 	bool ResourceIsUsed(int index, ResourceType type, Resource*& res);
 	void AddResource(int index, ResourceType type, Resource* res);
 	

@@ -11,6 +11,7 @@
 #include "GameObject.h"
 #include "Functions.h"
 #include "ModuleFileSystem.h"
+#include "ResourceTextureLoader.h"
 #include "JSONLoader.h"
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\postprocess.h"
@@ -27,7 +28,7 @@ ResourceMeshLoader::~ResourceMeshLoader()
 {
 }
 
-bool ResourceMeshLoader::Load(const char * filepath, bool as_new_gameobject)
+bool ResourceMeshLoader::Load(const char * filepath, vector<Resource*>& resources, bool as_new_gameobject)
 {
 	bool ret = true;
 
@@ -74,8 +75,8 @@ bool ResourceMeshLoader::Load(const char * filepath, bool as_new_gameobject)
 			parent->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 			parent->transform->SetScale(float3(scale.x, scale.y, scale.z));
 
-			string name = GetFileNameFromFilePath(filepath);
-			name = GetFilenameWithoutExtension(name.c_str());
+			string name = App->file_system->GetFileNameFromFilePath(filepath);
+			name = App->file_system->GetFilenameWithoutExtension(name.c_str());
 			parent->SetName(name);
 		}
 
@@ -88,7 +89,7 @@ bool ResourceMeshLoader::Load(const char * filepath, bool as_new_gameobject)
 		// Iterate
 		for (int i = 0; i < root->mNumChildren; i++)
 		{
-			RecursiveLoadMesh(scene, root->mChildren[i], filepath, total_abb, parent);
+			RecursiveLoadMesh(scene, root->mChildren[i], filepath, total_abb, resources, parent);
 		}
 
 		used_resources.clear();
@@ -107,7 +108,8 @@ bool ResourceMeshLoader::Load(const char * filepath, bool as_new_gameobject)
 	return ret;
 }
 
-void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node, const char * full_path, AABB & total_abb, GameObject * parent)
+void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node, const char * full_path, AABB & total_abb, 
+	vector<Resource*>& resources, GameObject * parent)
 {
 	bool node_valid = true;
 
@@ -232,16 +234,20 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 			{
 				aiMaterial* material = scene->mMaterials[aimesh->mMaterialIndex];
 
-				string path = GetPathFromFilePath(full_path);
+				string path = App->file_system->GetPathFromFilePath(full_path);
 
 				// Difuse -------------------
 				aiString file;
 				material->GetTexture(aiTextureType_DIFFUSE, 0, &file);
-				path += GetFileNameFromFilePath(file.C_Str());
+				path += App->file_system->GetFileNameFromFilePath(file.C_Str());
 
-				texture = (ResourceTexture*)App->resource_manager->LoadResource(path.c_str());
-
-				AddResource(aimesh->mMaterialIndex, RT_TEXTURE, texture);
+				vector<Resource*> tex;
+				App->resource_manager->LoadResource(path.c_str(), tex);
+				if (!tex.empty())
+				{
+					texture = (ResourceTexture*)*tex.begin();
+					AddResource(aimesh->mMaterialIndex, RT_TEXTURE, texture);
+				}
 			}
 		}
 
@@ -279,6 +285,8 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 			App->resource_manager->SaveResourceIntoFile(mesh);
 
 			AddResource(mesh_index, RT_MESH, mesh);
+
+			resources.push_back(mesh);
 		}
 		else if (!mesh_valid && !mesh_already_loaded && mesh != nullptr)
 			App->resource_manager->DeleteResource(mesh->GetUniqueId());
@@ -294,7 +302,7 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 	// RECURSE
 	for (int i = 0; i < node->mNumChildren; i++)
 	{
-		RecursiveLoadMesh(scene, node->mChildren[i], full_path, total_abb, pare);
+		RecursiveLoadMesh(scene, node->mChildren[i], full_path, total_abb, resources, pare);
 	}
 }
 
@@ -334,9 +342,9 @@ void ResourceMeshLoader::ImportAllMeshes()
 
 void ResourceMeshLoader::Import(const char * filepath)
 {
-	string path = GetPathFromFilePath(filepath);
-	string filename = GetFileNameFromFilePath(filepath);
-	string name = GetFilenameWithoutExtension(filename.c_str());
+	string path = App->file_system->GetPathFromFilePath(filepath);
+	string filename = App->file_system->GetFileNameFromFilePath(filepath);
+	string name = App->file_system->GetFilenameWithoutExtension(filename.c_str());
 
 	// -------------------------------------
 	// META --------------------------------
@@ -391,6 +399,7 @@ void ResourceMeshLoader::Import(const char * filepath)
 	ResourceMesh* new_mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(RT_MESH, uid);
 	new_mesh->SetFaces(vertices, ranges[0], indices, ranges[1]);
 	new_mesh->SetUvs(uvs, ranges[2]);
+	new_mesh->SetFilePath(filepath);
 
 	RELEASE_ARRAY(buffer);
 	RELEASE_ARRAY(indices);
@@ -464,6 +473,10 @@ bool ResourceMeshLoader::Export(const char * path, ResourceMesh* mesh)
 	}
 
 	App->json->UnloadJSON(doc);
+
+	// Setting resource path
+	string filepath = path + name + ".sustomesh";
+	mesh->SetFilePath(filepath);
 
 	return ret;
 }

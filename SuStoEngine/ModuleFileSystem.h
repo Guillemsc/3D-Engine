@@ -28,6 +28,20 @@ public:
 	string GetLibraryScenePath();
 	string GetSettingsPath();
 
+	// Example file.ex -> .ex
+	std::string GetFileExtension(const char* file_name);
+
+	// Example file.ex -> file
+	std::string GetFilenameWithoutExtension(const char* file_name, bool without_ = true);
+
+	// Example C:/user/folder/file.ex -> file.ex
+	std::string GetFileNameFromFilePath(const char* file_path);
+
+	// Example C:/user/folder/file.ex -> C:/user/folder/
+	std::string GetPathFromFilePath(const char* file_path);
+
+	std::string ProcessFilePath(const char* file_path);
+
 private:
 
 private:

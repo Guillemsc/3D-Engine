@@ -14,6 +14,7 @@
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
 #include "JSONLoader.h"
+#include "ResourceManager.h"
 
 #include "Glew/include/glew.h" 
 
@@ -153,7 +154,7 @@ void GameObject::AddComponent(ComponentType type, string unique_id)
 	string new_id;
 
 	if (new_id == "")
-		new_id = GetUIDRandomHexadecimal();
+		new_id = App->resource_manager->GetNewUID();
 	else
 		new_id = unique_id;
 

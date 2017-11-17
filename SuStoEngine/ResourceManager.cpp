@@ -7,6 +7,7 @@
 #include "ResourceMeshLoader.h"
 #include "ResourceTextureLoader.h"
 #include "Globals.h"
+#include "JSONLoader.h"
 
 ResourceManager::ResourceManager(bool start_enabled)
 {
@@ -52,7 +53,7 @@ Resource * ResourceManager::CreateNewResource(ResourceType type, std::string _un
 	std::string new_id;
 
 	if (_unique_id == "")
-		new_id = GetUIDRandomHexadecimal();
+		new_id = GetNewUID();
 	else
 		new_id = _unique_id;
 
@@ -111,21 +112,49 @@ void ResourceManager::SaveResourceIntoFile(Resource * res)
 	}
 }
 
-Resource * ResourceManager::LoadResource(const char * file_path)
+bool ResourceManager::LoadResource(const char * file_path)
 {
-	Resource* ret = nullptr;
+	vector<Resource*> resources;
+	return LoadResource(file_path, resources);
+}
 
-	string path = ProcessFilePath(file_path);
-	string name = GetFileNameFromFilePath(file_path);
-	string extension = ToLowerCase(GetFileExtension(name.c_str()));
+bool ResourceManager::LoadResource(const char * file_path, vector<Resource*>& resources)
+{
+	bool ret = false;
+
+	resources.clear();
+
+	string name = App->file_system->GetFileNameFromFilePath(file_path);
+	string extension = ToLowerCase(App->file_system->GetFileExtension(name.c_str()));
+
+	bool valid_extension = false;
 
 	if (TextCmp("fbx", extension.c_str()))
 	{
-		mesh_loader->Load(file_path, true);
+		ret = mesh_loader->Load(file_path, resources, true);
+		valid_extension = true;
 	}
 	else if (TextCmp("png", extension.c_str()) || TextCmp("dds", extension.c_str()) || TextCmp("tga", extension.c_str()))
 	{
-		ret = texture_loader->Load(file_path);
+		ret = texture_loader->Load(file_path, resources);
+	}
+
+	if (ret)
+	{
+		App->file_system->FileCopyPaste(file_path, App->file_system->GetAssetsPath().c_str());
+		string uid = GetNewUID();
+		string json_name = App->file_system->GetAssetsPath() + name + ".meta";
+		JSON_Doc* meta = App->json->CreateJSON(json_name.c_str());
+		meta->SetString("uid", uid.c_str());
+
+		meta->SetArray("resources");
+		for (vector<Resource*>::iterator res = resources.begin(); res != resources.end(); ++res)
+		{
+			meta->AddStringToArray("resources", (*res)->GetUniqueId().c_str());
+			(*res)->SetOriginalFileUID(uid.c_str());
+		}
+
+		meta->Save();
 	}
 
 	return ret;
@@ -135,6 +164,21 @@ void ResourceManager::ImportAllResources()
 {
 	mesh_loader->ImportAllMeshes();
 	texture_loader->ImportAllTextures();
+}
+
+ResourceMeshLoader * ResourceManager::GetMeshLoader()
+{
+	return mesh_loader;
+}
+
+ResourceTextureLoader * ResourceManager::GetTextureLoader()
+{
+	return texture_loader;
+}
+
+std::string ResourceManager::GetNewUID()
+{
+	return GetUIDRandomHexadecimal();
 }
 
 void ResourceManager::OnLoadFile(const char * file_path, const char * file_name, const char * file_extension)

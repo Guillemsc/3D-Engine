@@ -11,9 +11,15 @@ Resource::~Resource()
 {
 }
 
-void Resource::SetName(std::string _name)
+void Resource::SetFilePath(std::string _filepath)
 {
-	name = _name;
+	filepath = _filepath;
+
+}
+
+std::string Resource::GetFilePath()
+{
+	return filepath;
 }
 
 std::string Resource::GetName()
@@ -58,4 +64,14 @@ void Resource::UnloadMem()
 
 	if (!IsUsed())
 		UnloadFromMemory();
+}
+
+void Resource::SetOriginalFileUID(std::string set)
+{
+	original_file_unique_id = set;
+}
+
+std::string Resource::GetOriginalFileUID()
+{
+	return original_file_unique_id;
 }

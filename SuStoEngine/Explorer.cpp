@@ -20,7 +20,7 @@ void Explorer::Draw()
 {
 	igBeginDock("Explorer", &visible, ImGuiWindowFlags_MenuBar);
 
-	vector<string> files = App->file_system->GetFilesInPath(App->GetBasePath());
+	vector<string> files = App->file_system->GetFilesInPath(App->file_system->GetAssetsPath().c_str());
 
 	for (vector<string>::iterator it = files.begin(); it != files.end(); ++it)
 	{

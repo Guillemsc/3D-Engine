@@ -27,18 +27,19 @@ ResourceTextureLoader::~ResourceTextureLoader()
 {
 }
 
-ResourceTexture* ResourceTextureLoader::Load(const char * filepath)
+bool ResourceTextureLoader::Load(const char * filepath, std::vector<Resource*>& resources)
 {
-	ResourceTexture* ret = nullptr;
+	bool ret = false;
 
 	// Load texture
 	if (ilLoad(IL_TYPE_UNKNOWN, filepath))
 	{
 		// Get file name
-		string file_name = GetFileNameFromFilePath(filepath);
+		string file_name = App->file_system->GetFileNameFromFilePath(filepath);
 
 		// Create texture
-		ret = (ResourceTexture*)App->resource_manager->CreateNewResource(RT_TEXTURE);
+		ResourceTexture* rtex = (ResourceTexture*)App->resource_manager->CreateNewResource(RT_TEXTURE);
+		rtex->SetFilePath(filepath);
 
 		// Get texture info
 		ILinfo ImageInfo;
@@ -48,23 +49,24 @@ ResourceTexture* ResourceTextureLoader::Load(const char * filepath)
 		if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
 		{
 			iluFlipImage();
-			ret->SetFlipped(true);
+			rtex->SetFlipped(true);
 		}
 
 		// Convert image to rgb and a byte chain
 		ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
 		
 		// Save data
-		ret->SetData(ilGetData(), ilGetInteger(IL_IMAGE_SIZE_OF_DATA), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT),
+		rtex->SetData(ilGetData(), ilGetInteger(IL_IMAGE_SIZE_OF_DATA), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT),
 			GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
 
-		// Set name
-		ret->SetName(file_name);
-
 		// Export it to Library
-		App->resource_manager->SaveResourceIntoFile(ret);
+		App->resource_manager->SaveResourceIntoFile(rtex);
 
 		ilDeleteImages(1, &ImageInfo.Id);
+
+		resources.push_back(rtex);
+
+		ret = true;
 	}
 	else
 	{
@@ -86,9 +88,9 @@ void ResourceTextureLoader::ImportAllTextures()
 
 void ResourceTextureLoader::Import(const char * filepath)
 {
-	string path = GetPathFromFilePath(filepath);
-	string filename = GetFileNameFromFilePath(filepath);
-	string name = GetFilenameWithoutExtension(filename.c_str());
+	string path = App->file_system->GetPathFromFilePath(filepath);
+	string filename = App->file_system->GetFileNameFromFilePath(filepath);
+	string name = App->file_system->GetFilenameWithoutExtension(filename.c_str());
 
 	// -------------------------------------
 	// META --------------------------------
@@ -108,7 +110,7 @@ void ResourceTextureLoader::Import(const char * filepath)
 		if (ilLoad(IL_TYPE_UNKNOWN, filepath))
 		{
 			// Get file name
-			string file_name = GetFileNameFromFilePath(filepath);
+			string file_name = App->file_system->GetFileNameFromFilePath(filepath);
 
 			// Get texture info
 			ILinfo ImageInfo;
@@ -126,8 +128,8 @@ void ResourceTextureLoader::Import(const char * filepath)
 			ResourceTexture* ret = (ResourceTexture*)App->resource_manager->CreateNewResource(RT_TEXTURE, uid.c_str());
 			ret->SetData(ilGetData(), ilGetInteger(IL_IMAGE_SIZE_OF_DATA), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT),
 				GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
-			ret->SetName(file_name);
 			ret->SetFlipped(flipped);
+			ret->SetFilePath(filepath);
 
 			ilDeleteImages(1, &ImageInfo.Id);
 		}

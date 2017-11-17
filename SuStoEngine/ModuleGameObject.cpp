@@ -2,6 +2,7 @@
 #include "App.h"
 #include "ModuleRenderer3D.h"
 #include "ResourceMeshLoader.h"
+#include "ResourceManager.h"
 #include "DebugDraw.h"
 #include "IDGenerator.h"
 #include "Functions.h"
@@ -18,14 +19,6 @@
 ModuleGameObject::ModuleGameObject(bool enabled)
 {
 	SetName("GameObject");
-
-	// KDTree
-	kdtree = new KDTree();
-
-	// Root GameObject
-	root = new GameObject("Root", this);
-	root->Start();
-	root->SetName("Root");
 }
 
 ModuleGameObject::~ModuleGameObject()
@@ -37,6 +30,14 @@ bool ModuleGameObject::Awake()
 	bool ret = true;
 
 	LOG_OUTPUT("Creating Module GameObject");	
+
+	// KDTree
+	kdtree = new KDTree();
+
+	// Root GameObject
+	root = new GameObject("Root", this);
+	root->Start();
+	root->SetName("Root");
 
 	return ret;
 }
@@ -198,7 +199,7 @@ GameObject * ModuleGameObject::Create(std::string force_id)
 	string new_id;
 
 	if (force_id == "")
-		new_id = GetUIDRandomHexadecimal();
+		new_id = App->resource_manager->GetNewUID();
 	else
 		new_id = force_id;
 

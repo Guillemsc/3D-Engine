@@ -273,13 +273,12 @@ JSON_Doc* Application::GetConfig() const
 
 void Application::LoadFile(const char * filepath)
 {
-	string path = ProcessFilePath(filepath);
-	string name = GetFileNameFromFilePath(filepath);
-	string extension = ToLowerCase(GetFileExtension(name.c_str()));
+	string name = App->file_system->GetFileNameFromFilePath(filepath);
+	string extension = ToLowerCase(App->file_system->GetFileExtension(name.c_str()));
 
 	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
-		(*it)->OnLoadFile(path.c_str(), name.c_str(), extension.c_str());
+		(*it)->OnLoadFile(filepath, name.c_str(), extension.c_str());
 	}
 }
 
