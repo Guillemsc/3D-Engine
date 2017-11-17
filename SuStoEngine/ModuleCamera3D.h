@@ -5,6 +5,8 @@
 #include "GeometryMath.h"
 #include "glmath.h"
 
+class GameObject;
+
 class Camera3D
 {
 public:
@@ -46,7 +48,11 @@ public:
 
 	void Look(const float3& look_pos);
 
-	bool IntersectWithFrustum(const AABB& box);
+	void GetElementsToDraw(vector<GameObject*>& inside);
+	void DiscardElementsToDraw(vector<GameObject*>& dynamics, vector<GameObject*>& statics);
+	bool CheckInsideFrustum(const AABB& box);
+	void SetFrustumCulling(bool set);
+	bool GetFrustumCulling();
 
 	Frustum GetFrustum();
 
@@ -54,6 +60,8 @@ private:
 	Frustum frustum;
 	float	aspect_ratio = 0.0f;
 	float   vertical_fov = 0.0f;
+
+	bool	frustum_culling = true;
 };
 
 class ModuleCamera3D : public Module
@@ -69,6 +77,11 @@ public:
 
 	void OnLoadConfig(JSON_Doc* config);
 	void OnSaveConfig(JSON_Doc* config);
+
+	Camera3D* CreateCamera();
+	void DestroyCamera(Camera3D* cam);
+	void DestroyAllCameras();
+	vector<Camera3D*> GetCameras();
 
 	Camera3D* GetEditorCamera() const;
 
@@ -92,6 +105,8 @@ private:
 private:
 	Camera3D* editor_camera = nullptr;
 	Camera3D* current_camera = nullptr;
+
+	vector<Camera3D*> cameras;
 
 	// Camera Movement
 	bool  mouse_movement = false;

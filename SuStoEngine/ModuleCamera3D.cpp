@@ -8,13 +8,19 @@
 #include "Cursor.h"
 #include "imgui.h"
 #include "JSONLoader.h"
+#include "GameObject.h"
+#include "SceneManager.h"
+#include "ModuleGameObject.h"
+#include "ComponentMesh.h"
+#include "KDTree.h"
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
 	SetName("Camera3D");
 
-	editor_camera = new Camera3D();
+	editor_camera = CreateCamera();
 	current_camera = editor_camera;
+	current_camera->SetFrustumCulling(false);
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -44,9 +50,9 @@ bool ModuleCamera3D::CleanUp()
 {
 	bool ret = true;
 
-	LOG_OUTPUT("Cleaning camera");
+	LOG_OUTPUT("Cleaning cameras");
 
-	RELEASE(editor_camera);
+	DestroyAllCameras();
 
 	return ret;
 }
@@ -63,6 +69,45 @@ void ModuleCamera3D::OnSaveConfig(JSON_Doc * config)
 	config->SetNumber("camera.mouse_sensitivity", mouse_sensitivity);
 	config->SetNumber("camera.wheel_speed", wheel_speed);
 	config->SetNumber("camera.camera_speed", camera_speed);
+}
+
+Camera3D * ModuleCamera3D::CreateCamera()
+{
+	Camera3D* ret = nullptr;
+
+	ret = new Camera3D;
+	cameras.push_back(ret);
+
+	return ret;
+}
+
+void ModuleCamera3D::DestroyCamera(Camera3D * cam)
+{
+	for (vector<Camera3D*>::iterator it = cameras.begin(); it != cameras.end();)
+	{
+		if (cam == (*it))
+		{
+			RELEASE(*it);
+			cameras.erase(it);
+			break;
+		}
+		else
+			++it;
+	}
+}
+
+void ModuleCamera3D::DestroyAllCameras()
+{
+	for (vector<Camera3D*>::iterator it = cameras.begin(); it != cameras.end();)
+	{
+		RELEASE(*it);
+		it = cameras.erase(it);
+	}
+}
+
+vector<Camera3D*> ModuleCamera3D::GetCameras()
+{
+	return cameras;
 }
 
 Camera3D * ModuleCamera3D::GetEditorCamera() const
@@ -426,39 +471,80 @@ void Camera3D::Look(const float3 & look_pos)
 	frustum.SetUp(direction_matrix.MulDir(frustum.Up()).Normalized());
 }
 
-bool Camera3D::IntersectWithFrustum(const AABB & box)
+void Camera3D::GetElementsToDraw(vector<GameObject*>& inside)
 {
-	//bool ret = false;
-	//
-	//Plane plane[6];
-	//frustum.GetPlanes(plane);
+	vector<GameObject*> to_check = App->gameobj->GetDynamicGameObjects();
 
-	//// check box outside/inside of frustum
-	//for (int i = 0; i<6; i++)
-	//{
-	//	int out = 0;
-	//	out += math::Dot4(float4(plane[i].normal.x, plane[i].normal.y, plane[i].normal.z, 1.0f), float4(box.MinX, box.MinY, box.MinZ, 1.0f)) < 0.0 ? 1 : 0;
-	//	out += math::Dot4(float4(plane[i].normal.x, plane[i].normal.y, plane[i].normal.z, 1.0f), float4(box.MaxX, box.MinY, box.MinZ, 1.0f)) < 0.0 ? 1 : 0;
-	//	out += math::Dot4(float4(plane[i].normal.x, plane[i].normal.y, plane[i].normal.z, 1.0f), float4(box.MinX, box.MaxY, box.MinZ, 1.0f)) < 0.0 ? 1 : 0;
-	//	out += math::Dot4(float4(plane[i].normal.x, plane[i].normal.y, plane[i].normal.z, 1.0f), float4(box.MaxX, box.MaxY, box.MinZ, 1.0f)) < 0.0 ? 1 : 0;
-	//	out += math::Dot4(float4(plane[i].normal.x, plane[i].normal.y, plane[i].normal.z, 1.0f), float4(box.MinX, box.MinY, box.MaxZ, 1.0f)) < 0.0 ? 1 : 0;
-	//	out += math::Dot4(float4(plane[i].normal.x, plane[i].normal.y, plane[i].normal.z, 1.0f), float4(box.MaxX, box.MinY, box.MaxZ, 1.0f)) < 0.0 ? 1 : 0;
-	//	out += math::Dot4(float4(plane[i].normal.x, plane[i].normal.y, plane[i].normal.z, 1.0f), float4(box.MinX, box.MaxY, box.MaxZ, 1.0f)) < 0.0 ? 1 : 0;
-	//	out += math::Dot4(float4(plane[i].normal.x, plane[i].normal.y, plane[i].normal.z, 1.0f), float4(box.MaxX, box.MaxY, box.MaxZ, 1.0f)) < 0.0 ? 1 : 0;
-	//	if (out == 8) return false;
-	//}
+	// Clean all objects that doesn't have aabb
+	for (std::vector<GameObject*>::iterator it = to_check.begin(); it != to_check.end();)
+	{
+		if ((*it)->GetComponent(MESH) == nullptr)
+			it = to_check.erase(it);
+		else 
+			it++;
+	}
+	App->gameobj->GetKDTree()->GetElementsToTest(frustum, to_check);
 
-	// check frustum outside/inside box
-	//int out;
-	//out = 0; for (int i = 0; i<8; i++) out += ((fru.mPoints[i].x > box.mMaxX) ? 1 : 0); if (out == 8) return false;
-	//out = 0; for (int i = 0; i<8; i++) out += ((fru.mPoints[i].x < box.mMinX) ? 1 : 0); if (out == 8) return false;
-	//out = 0; for (int i = 0; i<8; i++) out += ((fru.mPoints[i].y > box.mMaxY) ? 1 : 0); if (out == 8) return false;
-	//out = 0; for (int i = 0; i<8; i++) out += ((fru.mPoints[i].y < box.mMinY) ? 1 : 0); if (out == 8) return false;
-	//out = 0; for (int i = 0; i<8; i++) out += ((fru.mPoints[i].z > box.mMaxZ) ? 1 : 0); if (out == 8) return false;
-	//out = 0; for (int i = 0; i<8; i++) out += ((fru.mPoints[i].z < box.mMinZ) ? 1 : 0); if (out == 8) return false;
+	//test elements with frustum
+	for (std::vector<GameObject*>::iterator it = to_check.begin(); it != to_check.end(); ++it)
+	{
+		if (CheckInsideFrustum((*it)->GetBbox()))
+		{
+			bool found = false;
+			if (std::find(inside.begin(), inside.end(), (*it)) != inside.end())
+				found = true;
 
-	return true;
+			if(!found)
+				inside.push_back((*it));
+		}
+	}
 }
+
+void Camera3D::DiscardElementsToDraw(vector<GameObject*>& dynamics, vector<GameObject*>& statics)
+{
+}
+
+bool Camera3D::CheckInsideFrustum(const AABB & box)
+{
+	bool ret = true;
+
+	// Get aabb corners
+	float3 corners[8];
+	box.GetCornerPoints(corners);
+
+	// Test all corners for each plane
+	for (int p = 0; p < 6; ++p)
+	{
+		uint corners_in = 8;
+
+		for (int c = 0; c < 8; ++c)
+		{
+			if (frustum.GetPlane(p).IsOnPositiveSide(corners[c]))
+			{
+				corners_in--;
+			}
+		}
+
+		if (corners_in == 0)
+		{
+			ret = false;
+			break;
+		}
+	}
+
+	return ret;
+}
+
+void Camera3D::SetFrustumCulling(bool set)
+{
+	frustum_culling = set;
+}
+
+bool Camera3D::GetFrustumCulling()
+{
+	return frustum_culling;
+}
+
 
 Frustum Camera3D::GetFrustum()
 {

@@ -6,8 +6,8 @@
         "max_fps": 999
     },
     "window": {
-        "width": 1680,
-        "height": 987,
+        "width": 1920,
+        "height": 1017,
         "fullscreen": false,
         "resizable": true,
         "borderless": false,
@@ -22,8 +22,8 @@
         "configuration": "C"
     },
     "camera": {
-        "mouse_sensitivity": 0.88500005006790161,
-        "wheel_speed": 135.59001159667969,
-        "camera_speed": 500.00003051757813
+        "mouse_sensitivity": 0.55900001525878906,
+        "wheel_speed": 188.09600830078125,
+        "camera_speed": 39.295001983642578
     }
 }

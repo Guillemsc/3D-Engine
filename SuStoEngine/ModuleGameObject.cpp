@@ -11,6 +11,7 @@
 #include "ModuleCamera3D.h"
 #include "EditorUI.h"
 #include "ModuleWindow.h"
+#include "ComponentCamera.h"
 #include "ImGuizmo.h"
 #include "imgui.h"
 
@@ -71,10 +72,24 @@ bool ModuleGameObject::Update()
 		MousePick();
 	}
 
+	vector<Camera3D*> cameras = App->camera->GetCameras();
+	vector<GameObject*> to_draw;
+
+	// Get elements to draw from all cameras
+	for (vector<Camera3D*>::iterator it = cameras.begin(); it != cameras.end(); ++it)
+	{
+		if((*it)->GetFrustumCulling())
+			(*it)->GetElementsToDraw(to_draw);
+	}
+	
+	// Draw
+	for(vector<GameObject*>::iterator it = to_draw.begin(); it != to_draw.end(); ++it)
+		(*it)->Draw();
+	
+	// Update
 	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
 	{
 		(*it)->UpdateComponents();
-		(*it)->Draw();
 
 		if (App->scene_manager->GetState() == SceneState::PLAY)
 			(*it)->UpdateLogic();
@@ -378,6 +393,11 @@ const vector<GameObject*> ModuleGameObject::GetDynamicGameObjects() const
 void ModuleGameObject::SetGuizmoOperation(ImGuizmo::OPERATION op)
 {
 	current_gizmo_operation = op;
+}
+
+KDTree * ModuleGameObject::GetKDTree()
+{
+	return kdtree;
 }
 
 void ModuleGameObject::RecalculateKDTree()

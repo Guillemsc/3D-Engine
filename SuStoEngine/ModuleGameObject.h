@@ -48,8 +48,8 @@ public:
 
 	void SetGuizmoOperation(ImGuizmo::OPERATION op);
 
+	KDTree* GetKDTree();
 	void RecalculateKDTree();
-
 	void SetDebugKDTree(bool set);
 	void SetDebugBBoxes(bool set);
 

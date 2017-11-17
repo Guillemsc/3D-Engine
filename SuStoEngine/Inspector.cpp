@@ -53,12 +53,17 @@ void Inspector::Draw()
 		{
 			if (stat)
 			{
-				ImGui::OpenPopup("Static Enable");
+				if(selected[0]->GetChildsCount() > 0)
+					ImGui::OpenPopup("Static Enable");
+				else
+					App->gameobj->AddGameObjectToStatic(selected[0]);
 			}
 			else
 			{
-				ImGui::OpenPopup("Static Disable");
-				App->gameobj->RemoveGameObjectFromStatic(selected[0]);
+				if (selected[0]->GetChildsCount() > 0)
+					ImGui::OpenPopup("Static Disable");
+				else
+					App->gameobj->RemoveGameObjectFromStatic(selected[0]);
 			}
 		}
 

@@ -12,7 +12,7 @@ ComponentCamera::ComponentCamera(GameObject * owner, std::string unique_id) : Co
 	LOG_OUTPUT("Component Camera Created");
 	SetName("Camera");
 
-	camera = new Camera3D();
+	camera = App->camera->CreateCamera();
 }
 
 ComponentCamera::~ComponentCamera()
@@ -37,7 +37,7 @@ void ComponentCamera::Update()
 
 void ComponentCamera::CleanUp()
 {
-	RELEASE(camera);
+	App->camera->DestroyCamera(camera);
 }
 
 Camera3D * ComponentCamera::GetCamera() const
@@ -63,6 +63,11 @@ void ComponentCamera::InspectorDraw(std::vector<Component*> components)
 	if (ImGui::DragFloat("Field of view", &fov, 1, 1, 179.9f))
 	{
 		camera->SetFOV(fov);
+	}
+	bool frustum_culling = camera->GetFrustumCulling();
+	if (ImGui::Checkbox("Frustum culling", &frustum_culling))
+	{
+		camera->SetFrustumCulling(frustum_culling);
 	}
 }
 
