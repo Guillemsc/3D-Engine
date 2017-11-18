@@ -11,22 +11,6 @@ Resource::~Resource()
 {
 }
 
-void Resource::SetFilePath(std::string _filepath)
-{
-	filepath = _filepath;
-
-}
-
-std::string Resource::GetFilePath()
-{
-	return filepath;
-}
-
-std::string Resource::GetName()
-{
-	return name;
-}
-
 ResourceType Resource::GetType()
 {
 	return type;
@@ -66,12 +50,3 @@ void Resource::UnloadMem()
 		UnloadFromMemory();
 }
 
-void Resource::SetOriginalFileUID(std::string set)
-{
-	original_file_unique_id = set;
-}
-
-std::string Resource::GetOriginalFileUID()
-{
-	return original_file_unique_id;
-}

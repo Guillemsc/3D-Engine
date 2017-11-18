@@ -313,3 +313,42 @@ vector<string> FileSystem::GetFilesInPath(const char * path, const char* extensi
 
 	return files;
 }
+
+bool FileSystem::FileExists(const char * path, const char * name, const char * extension)
+{
+	WIN32_FIND_DATA search_data;
+
+	bool has_extension = true;
+	if (!TextCmp(extension, ""))
+		has_extension = false;
+
+	string filepath = path;
+	filepath += name;
+	filepath += ".";
+	filepath += extension;
+
+	string filename = name;
+	if (has_extension)
+	{
+		filename += ".";
+		filename += extension;
+	}
+
+	HANDLE handle = FindFirstFile(path, &search_data);
+
+	while (handle != INVALID_HANDLE_VALUE)
+	{
+		string found_file = search_data.cFileName;
+
+		if(!has_extension)
+			found_file = GetFilenameWithoutExtension(search_data.cFileName);
+		
+		if (TextCmp(search_data.cFileName, filename.c_str()))
+			return true;
+		
+		if (FindNextFile(handle, &search_data) == FALSE)
+			break;
+	}
+
+	return false;
+}

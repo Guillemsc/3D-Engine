@@ -39,7 +39,6 @@ bool ResourceTextureLoader::Load(const char * filepath, std::vector<Resource*>& 
 
 		// Create texture
 		ResourceTexture* rtex = (ResourceTexture*)App->resource_manager->CreateNewResource(RT_TEXTURE);
-		rtex->SetFilePath(filepath);
 
 		// Get texture info
 		ILinfo ImageInfo;
@@ -129,7 +128,6 @@ void ResourceTextureLoader::Import(const char * filepath)
 			ret->SetData(ilGetData(), ilGetInteger(IL_IMAGE_SIZE_OF_DATA), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT),
 				GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
 			ret->SetFlipped(flipped);
-			ret->SetFilePath(filepath);
 
 			ilDeleteImages(1, &ImageInfo.Id);
 		}

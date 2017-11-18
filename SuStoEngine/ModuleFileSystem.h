@@ -20,6 +20,7 @@ public:
 	void FileDelete(const char* filepath);
 	bool FileSave(const char * path, const char * file_content, const char * name, const char * extension, int size);
 	vector<string> GetFilesInPath(const char* path, const char* extension = "");
+	bool FileExists(const char* path, const char* name, const char* extension = "");
 
 	string GetAssetsPath();
 	string GetLibraryPath();

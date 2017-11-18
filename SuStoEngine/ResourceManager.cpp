@@ -141,6 +141,7 @@ bool ResourceManager::LoadResource(const char * file_path, vector<Resource*>& re
 
 	if (ret)
 	{
+		// Save meta file ---------------------------
 		App->file_system->FileCopyPaste(file_path, App->file_system->GetAssetsPath().c_str());
 		string uid = GetNewUID();
 		string json_name = App->file_system->GetAssetsPath() + name + ".meta";
@@ -153,11 +154,11 @@ bool ResourceManager::LoadResource(const char * file_path, vector<Resource*>& re
 			for (vector<Resource*>::iterator res = resources.begin(); res != resources.end(); ++res)
 			{
 				meta->AddStringToArray("resources", (*res)->GetUniqueId().c_str());
-				(*res)->SetOriginalFileUID(uid.c_str());
 			}
 
 			meta->Save();
 		}
+
 	}
 
 	return ret;

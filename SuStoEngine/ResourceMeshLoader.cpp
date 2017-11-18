@@ -399,7 +399,6 @@ void ResourceMeshLoader::Import(const char * filepath)
 	ResourceMesh* new_mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(RT_MESH, uid);
 	new_mesh->SetFaces(vertices, ranges[0], indices, ranges[1]);
 	new_mesh->SetUvs(uvs, ranges[2]);
-	new_mesh->SetFilePath(filepath);
 
 	RELEASE_ARRAY(buffer);
 	RELEASE_ARRAY(indices);
@@ -473,10 +472,6 @@ bool ResourceMeshLoader::Export(const char * path, ResourceMesh* mesh)
 	}
 
 	App->json->UnloadJSON(doc);
-
-	// Setting resource path
-	string filepath = path + name + ".sustomesh";
-	mesh->SetFilePath(filepath);
 
 	return ret;
 }
