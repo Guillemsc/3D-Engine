@@ -352,3 +352,19 @@ bool FileSystem::FileExists(const char * path, const char * name, const char * e
 
 	return false;
 }
+
+void FileSystem::FileRename(const char * filepath, const char * new_name)
+{
+	string path = GetPathFromFilePath(filepath);
+	string name = GetFileNameFromFilePath(filepath);
+	string extension = GetFileExtension(name.c_str());
+
+	string new_filepath = path + new_name + "." + extension;
+
+	int result;
+	result = rename(filepath, new_filepath.c_str());
+	if (result == 0)
+		puts("File successfully renamed");
+	else
+		perror("Error renaming file");
+}
