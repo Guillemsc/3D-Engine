@@ -23,7 +23,7 @@ bool ResourceManager::Start()
 {
 	bool ret = true;
 
-	App->file_system->FileRename("C://Users//Guillem//Documents//GitHub//3D-Engine//Debug//Assets//building 01_c.tga", "jejaname");
+	bool f = App->file_system->FileExists("C:\\Users\\Guillem\\Documents\\GitHub\\3D-Engine\\SuStoEngine\\Resources\\", "config");
 
 	return ret;
 }

@@ -319,13 +319,19 @@ bool FileSystem::FileExists(const char * path, const char * name, const char * e
 	WIN32_FIND_DATA search_data;
 
 	bool has_extension = true;
-	if (!TextCmp(extension, ""))
+	if (TextCmp(extension, ""))
 		has_extension = false;
 
 	string filepath = path;
-	filepath += name;
-	filepath += ".";
-	filepath += extension;
+	if (has_extension)
+	{
+		filepath += "*.";
+		filepath += extension;
+	}
+	else
+	{
+		filepath += "*.*";
+	}
 
 	string filename = name;
 	if (has_extension)
@@ -334,7 +340,7 @@ bool FileSystem::FileExists(const char * path, const char * name, const char * e
 		filename += extension;
 	}
 
-	HANDLE handle = FindFirstFile(path, &search_data);
+	HANDLE handle = FindFirstFile(filepath.c_str(), &search_data);
 
 	while (handle != INVALID_HANDLE_VALUE)
 	{
@@ -343,7 +349,7 @@ bool FileSystem::FileExists(const char * path, const char * name, const char * e
 		if(!has_extension)
 			found_file = GetFilenameWithoutExtension(search_data.cFileName);
 		
-		if (TextCmp(search_data.cFileName, filename.c_str()))
+		if (TextCmp(found_file.c_str(), filename.c_str()))
 			return true;
 		
 		if (FindNextFile(handle, &search_data) == FALSE)
@@ -353,8 +359,10 @@ bool FileSystem::FileExists(const char * path, const char * name, const char * e
 	return false;
 }
 
-void FileSystem::FileRename(const char * filepath, const char * new_name)
+bool FileSystem::FileRename(const char * filepath, const char * new_name)
 {
+	bool ret = false;
+
 	string path = GetPathFromFilePath(filepath);
 	string name = GetFileNameFromFilePath(filepath);
 	string extension = GetFileExtension(name.c_str());
@@ -364,7 +372,7 @@ void FileSystem::FileRename(const char * filepath, const char * new_name)
 	int result;
 	result = rename(filepath, new_filepath.c_str());
 	if (result == 0)
-		puts("File successfully renamed");
-	else
-		perror("Error renaming file");
+		ret = true;
+
+	return ret;
 }

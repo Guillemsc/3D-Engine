@@ -21,7 +21,7 @@ public:
 	bool FileSave(const char * path, const char * file_content, const char * name, const char * extension, int size);
 	vector<string> GetFilesInPath(const char* path, const char* extension = "");
 	bool FileExists(const char* path, const char* name, const char* extension = "");
-	void FileRename(const char* filepath, const char* new_name);
+	bool FileRename(const char* filepath, const char* new_name);
 
 	string GetAssetsPath();
 	string GetLibraryPath();
