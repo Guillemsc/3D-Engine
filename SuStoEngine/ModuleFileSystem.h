@@ -23,6 +23,8 @@ public:
 	bool FileExists(const char* path, const char* name, const char* extension = "");
 	bool FileRename(const char* filepath, const char* new_name);
 
+	bool CheckNameCollision(const char* filepath, std::string& new_name);
+
 	string GetAssetsPath();
 	string GetLibraryPath();
 	string GetLibraryMeshPath();
