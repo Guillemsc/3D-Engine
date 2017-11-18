@@ -3,6 +3,7 @@
 #include "imgui_docking.h"
 #include "App.h"
 #include "ModuleFileSystem.h"
+#include "JSONLoader.h"
 
 Explorer::Explorer(bool start_enabled)
 {
@@ -14,6 +15,7 @@ Explorer::~Explorer()
 
 void Explorer::Start()
 {
+
 }
 
 void Explorer::Draw()
@@ -24,19 +26,8 @@ void Explorer::Draw()
 
 	for (vector<string>::iterator it = files.begin(); it != files.end(); ++it)
 	{
-		ImGui::Text((*it).c_str());
-
-		ImGui::PushID((*it).c_str());
-		if (ImGui::BeginPopupContextItem(""))
-		{
-			if (ImGui::Button("Load"))
-			{
-				App->LoadFile((*it).c_str());
-			}
-
-			ImGui::EndPopup();
-		}
-		ImGui::PopID();
+		string name = App->file_system->GetFileNameFromFilePath((*it).c_str());
+		ImGui::Text(name.c_str());
 	}
 
 	igEndDock();

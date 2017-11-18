@@ -5,9 +5,9 @@
 #include <vector>
 #include <string>
 #include "GeometryMath.h"
+#include "JSONLoader.h"
 
 class GameObject;
-class JSON_Doc;
 
 enum ComponentType
 {
@@ -42,8 +42,8 @@ public:
 	virtual void OnGetBoundingBox(AABB &bbox) {};
 	virtual void InspectorDraw(std::vector<Component*> components) {};
 
-	virtual void OnLoadScene(JSON_Doc* config) {};
-	virtual void OnSaveScene(JSON_Doc* config) {};
+	virtual void OnLoadSerialize(JSON_Doc config) {};
+	virtual void OnSaveSerialize(JSON_Doc config) {};
 
 	void ForceUid(std::string uid);
 

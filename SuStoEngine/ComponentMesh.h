@@ -24,8 +24,8 @@ public:
 	void OnGetBoundingBox(AABB& box);
 	void InspectorDraw(std::vector<Component*> components);
 
-	void OnLoadScene(JSON_Doc* config);
-	void OnSaveScene(JSON_Doc* config);
+	void OnLoadSerialize(JSON_Doc config);
+	void OnSaveSerialize(JSON_Doc config);
 
 private:
 	void OnEnable();

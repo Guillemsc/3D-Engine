@@ -407,6 +407,11 @@ void JSON_Doc::AddSection(const string& set)
 	json_object_set_value(object, set.c_str(), json_value_init_object());
 }
 
+JSON_Doc JSON_Doc::GetJsonNode()
+{
+	return JSON_Doc(*this);
+}
+
 void JSON_Doc::Clear()
 {
 	json_value_free(value);

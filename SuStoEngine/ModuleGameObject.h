@@ -53,6 +53,8 @@ public:
 	void SetDebugKDTree(bool set);
 	void SetDebugBBoxes(bool set);
 
+	void RecursiveGetGameObjectTree(GameObject* go, vector<GameObject*>& fill);
+
 private:
 	void DestroyGameObjects();
 	void MousePick();

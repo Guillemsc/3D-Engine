@@ -28,8 +28,8 @@ private:
 	void OnEnable();
 	void OnDisable();
 
-	void OnLoadScene(JSON_Doc* config);
-	void OnSaveScene(JSON_Doc* config);
+	void OnLoadSerialize(JSON_Doc config);
+	void OnSaveSerialize(JSON_Doc config);
 
 private:
 	ResourceTexture* texture = nullptr;

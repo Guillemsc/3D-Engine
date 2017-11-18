@@ -86,14 +86,18 @@ void ComponentMaterial::OnDisable()
 {
 }
 
-void ComponentMaterial::OnLoadScene(JSON_Doc * config)
+void ComponentMaterial::OnLoadSerialize(JSON_Doc config)
 {
+	string texture_id = config.GetString("texture_id", "no_id");
+
+	ResourceTexture* rtexture = (ResourceTexture*)App->resource_manager->Get(texture_id);
+	SetTexture(rtexture);
 }
 
-void ComponentMaterial::OnSaveScene(JSON_Doc * config)
+void ComponentMaterial::OnSaveSerialize(JSON_Doc config)
 {
 	if (has_texture)
 	{
-		config->SetString("texture_id", texture->GetUniqueId().c_str());
+		config.SetString("texture_id", texture->GetUniqueId().c_str());
 	}
 }

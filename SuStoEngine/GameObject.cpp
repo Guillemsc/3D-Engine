@@ -146,10 +146,12 @@ void GameObject::CleanUp()
 	}
 }
 
-void GameObject::AddComponent(ComponentType type, string unique_id)
+Component* GameObject::AddComponent(ComponentType type, string unique_id)
 {
+	Component* ret = nullptr;
+
 	if (ContainsComponent(type))
-		return;
+		return ret;
 
 	string new_id;
 
@@ -157,8 +159,6 @@ void GameObject::AddComponent(ComponentType type, string unique_id)
 		new_id = App->resource_manager->GetNewUID();
 	else
 		new_id = unique_id;
-
-	Component* ret = nullptr;
 
 	switch (type)
 	{
@@ -195,6 +195,8 @@ void GameObject::AddComponent(ComponentType type, string unique_id)
 		ret->Start();
 		components.push_back(ret);
 	}
+
+	return ret;
 }
 
 void GameObject::RemoveComponent(ComponentType type)
@@ -492,52 +494,64 @@ AABB GameObject::GetBbox() const
 	return local_bbox;
 }
 
-void GameObject::OnLoadScene(JSON_Doc * config)
+void GameObject::OnLoadSerialize(JSON_Doc config)
 {
-	config->MoveToRoot();
+	name = config.GetString("name");
+	
+	bool stat = config.GetBool("static");
+	if (stat)
+		App->gameobj->AddGameObjectToStatic(this);
 
-	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
+	int components_count = config.GetArrayCount("Components");
+
+	for (int i = 0; i < components_count; i++)
 	{
-		(*it)->OnLoadScene(config);
+		JSON_Doc comp_node = config.GetJsonNode();
+		comp_node.MoveToSectionFromArray("Components", i);
+
+		ComponentType type = static_cast<ComponentType>((int)comp_node.GetNumber("type", 0));
+		string component_id = comp_node.GetString("component_id", "no_id");
+
+		if (type != TRANSFORM)
+		{
+			Component* c = AddComponent(type, component_id.c_str());
+			c->OnLoadSerialize(comp_node);
+		}
+		else
+			transform->OnLoadSerialize(comp_node);
 	}
 }
 
-void GameObject::OnSaveScene(JSON_Doc * config)
+void GameObject::OnSaveSerialize(JSON_Doc doc)
 {
-	// Add and move to a new secion on the gameobjects array
-	config->AddSectionToArray("GameObjects");
-	config->MoveToSectionFromArray("GameObjects", config->GetArrayCount("GameObjects") - 1);
-
 	// Set the id
-	config->SetString("uid", unique_id.c_str());
+	doc.SetString("uid", unique_id.c_str());
 	
 	// Set the name
-	config->SetString("name", name.c_str());
+	doc.SetString("name", name.c_str());
 
-	config->SetBool("static", is_static);
+	doc.SetBool("static", is_static);
 
 	// Set the parent id
 	if (parent != nullptr && parent != App->gameobj->GetRoot())
-		config->SetString("parent", parent->GetUniqueId().c_str());
+		doc.SetString("parent", parent->GetUniqueId().c_str());
 	else
-		config->SetString("parent", "");
+		doc.SetString("parent", "");
 
-	config->MoveToRoot();
+	doc.SetArray("Components");
 
 	// Save components
 	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
 	{
 		// Add and move to a new section on the components array
-		config->AddSectionToArray("Components");
-		config->MoveToSectionFromArray("Components", config->GetArrayCount("Components") - 1);
+		JSON_Doc comp_doc = doc.GetJsonNode();
+		comp_doc.AddSectionToArray("Components");
+		comp_doc.MoveToSectionFromArray("Components", doc.GetArrayCount("Components") - 1);
 
-		config->SetNumber("type", (*it)->GetType());
-		config->SetString("component_id", (*it)->GetUniqueId().c_str());
-		config->SetString("owner_id", (*it)->GetOwner()->GetUniqueId().c_str());
+		comp_doc.SetNumber("type", (*it)->GetType());
+		comp_doc.SetString("component_id", (*it)->GetUniqueId().c_str());
 
-		(*it)->OnSaveScene(config);
-
-		config->MoveToRoot();
+		(*it)->OnSaveSerialize(comp_doc);
 	}
 }
 

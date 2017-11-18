@@ -29,7 +29,7 @@ public:
 	void SetEnabled(const bool& set);
 	void CleanUp();
 
-	void AddComponent(ComponentType type, std::string unique_id = "");
+	Component* AddComponent(ComponentType type, std::string unique_id = "");
 	void RemoveComponent(ComponentType type);
 	bool ContainsComponent(ComponentType type);
 	std::vector<Component*> GetComponents();
@@ -58,8 +58,8 @@ public:
 
 	AABB GetBbox() const;
 
-	void OnLoadScene(JSON_Doc* config);
-	void OnSaveScene(JSON_Doc* config);
+	void OnSaveSerialize(JSON_Doc config);
+	void OnLoadSerialize(JSON_Doc config);
 
 	void SetDebugDraw(bool set);
  

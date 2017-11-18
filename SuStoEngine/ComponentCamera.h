@@ -25,8 +25,8 @@ private:
 	void OnEnable();
 	void OnDisable();
 
-	virtual void OnLoadScene(JSON_Doc* config);
-	virtual void OnSaveScene(JSON_Doc* config);
+	virtual void OnLoadSerialize(JSON_Doc config);
+	virtual void OnSaveSerialize(JSON_Doc config);
 
 private:
 	Camera3D* camera = nullptr;

@@ -41,6 +41,8 @@ public:
 	void MoveToRoot();
 	void AddSection(const string& set);
 
+	JSON_Doc GetJsonNode();
+
 	void Clear();
 
 	string GetPath();

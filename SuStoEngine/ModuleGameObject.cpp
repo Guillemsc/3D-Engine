@@ -419,6 +419,17 @@ void ModuleGameObject::SetDebugBBoxes(bool set)
 	show_bboxes = set;
 }
 
+void ModuleGameObject::RecursiveGetGameObjectTree(GameObject * go, vector<GameObject*>& fill)
+{
+	fill.push_back(go);
+
+	vector<GameObject*> childs = go->GetChilds();
+	for (vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); ++it)
+	{
+		RecursiveGetGameObjectTree(*it, fill);
+	}
+}
+
 void ModuleGameObject::DestroyGameObjects()
 {
 	for (list<GameObject*>::iterator to_del = to_delete.begin(); to_del != to_delete.end();)

@@ -25,7 +25,7 @@ bool SceneManager::Start()
 {
 	bool ret = true;
 
-	current_scene = "test.scene";
+	current_scene = "test";
 
 	App->resource_manager->ImportAllResources();
 	App->scene_manager->LoadScene(current_scene.c_str());
@@ -37,185 +37,26 @@ bool SceneManager::CleanUp()
 {
 	bool ret = true;
 
-	App->scene_manager->SaveScene("test.scene");
+	App->scene_manager->SaveScene(current_scene.c_str());
 
 	return ret;
 }
 
 void SceneManager::SaveScene(const char * scene_name)
 {
-	LOG_OUTPUT("Saving scene %s", scene_name);
-
-	string path = App->file_system->GetLibraryScenePath() + scene_name;
-
-	JSON_Doc* scene = App->json->LoadJSON(path.c_str());
-
-	if (scene == nullptr)
-		scene = App->json->CreateJSON(path.c_str());
-
-	if (scene != nullptr)
-	{
-		scene->Clear();
-
-		vector<GameObject*> game_objects = App->gameobj->GetListGameObjects();
-
-		scene->SetNumber3("editor_camera_position", App->camera->GetCurrentCamera()->GetPosition());
-		scene->SetNumber3("editor_camera_front", App->camera->GetCurrentCamera()->GetZDir());
-		scene->SetNumber3("editor_camera_up", App->camera->GetCurrentCamera()->GetYDir());
-
-		// Store GameObjects
-		scene->SetArray("GameObjects");
-		scene->SetArray("Components");
-
-		for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); it++)
-		{
-			scene->MoveToRoot();
-
-			if((*it) != App->gameobj->GetRoot())
-				(*it)->OnSaveScene(scene);
-		}
-
-		scene->Save();
-	}
+	SavePrefab(scene_name, "scene", App->file_system->GetLibraryScenePath().c_str(), App->gameobj->GetRoot());
 }
 
 void SceneManager::LoadScene(const char * scene_name, bool set_scene_title)
 {
-	LOG_OUTPUT("Loading scene %s", scene_name);
-
 	DestroyScene();
 
-	// Load new scene
-	string path = App->file_system->GetLibraryScenePath() + scene_name;
+	string filepath = App->file_system->GetLibraryScenePath();
+	filepath += scene_name;
+	filepath += ".scene";
 
-	JSON_Doc* scene = App->json->LoadJSON(path.c_str());
-
-	if (scene != nullptr)
-	{
-		if (set_scene_title)
-		{
-			// Engine title --------------
-			string title_name = App->GetAppName();
-			title_name += " ";
-			title_name += App->GetVersion();
-			title_name += " - ";
-			title_name += scene_name;
-			App->window->SetTitle(title_name.c_str());
-			// ---------------------------
-		}
-
-		float3 cam_pos = scene->GetNumber3("editor_camera_position");
-		float3 z_dir = scene->GetNumber3("editor_camera_front");
-		float3 y_dir = scene->GetNumber3("editor_camera_up");
-		App->camera->GetCurrentCamera()->SetPosition(cam_pos);
-		App->camera->GetCurrentCamera()->SetZDir(z_dir);
-		App->camera->GetCurrentCamera()->SetYDir(y_dir);
-
-		// Load GameObjects
-		int game_objects_count = scene->GetArrayCount("GameObjects");
-		for (int i = 0; i < game_objects_count; i++)
-		{
-			scene->MoveToSectionFromArray("GameObjects", i);
-
-			string id = scene->GetString("uid", "no_id");
-			string name = scene->GetString("name", "missing_name");
-			bool is_static = scene->GetBool("static");
-
-			GameObject* go = App->gameobj->Create(id);
-
-			go->SetName(name);
-
-			if(is_static)
-				App->gameobj->AddGameObjectToStatic(go);
-
-			scene->MoveToRoot();
-		}
-
-		for (int i = 0; i < game_objects_count; i++)
-		{
-			scene->MoveToSectionFromArray("GameObjects", i);
-
-			string parent = scene->GetString("parent", "no_id");
-			string id = scene->GetString("uid", "no_id");
-			
-			if (parent != "")
-			{
-				GameObject* go_parent = App->gameobj->Find(parent);
-				GameObject* go = App->gameobj->Find(id);
-
-				go_parent->AddChild(go);
-			}
-
-			scene->MoveToRoot();
-		}
-
-		// Load Components
-		int components_count = scene->GetArrayCount("Components");
-		for (int i = 0; i < components_count; i++)
-		{
-			scene->MoveToSectionFromArray("Components", i);
-
-			ComponentType type = static_cast<ComponentType>((int)scene->GetNumber("type", 0));
-			string component_id = scene->GetString("component_id", "no_id");
-			string owner_id = scene->GetString("owner_id", "no_id");
-			GameObject* owner = App->gameobj->Find(owner_id);
-
-			if (owner != nullptr)
-			{
-				switch (type)
-				{
-				case TRANSFORM:
-				{
-					float3 position = scene->GetNumber3("position");
-					float4 rotation = scene->GetNumber4("rotation");
-					float3 scale = scene->GetNumber3("scale");
-
-					owner->transform->ForceUid(component_id);
-
-					owner->transform->SetPosition(position);
-					owner->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
-					owner->transform->SetScale(scale);
-				}
-				break;
-				case MESH:
-				{
-					string mesh_id = scene->GetString("mesh_id", "no_id");
-
-					owner->AddComponent(MESH, component_id);
-					ComponentMesh* cmesh = (ComponentMesh*)owner->GetComponent(MESH);
-					ResourceMesh* rmesh = (ResourceMesh*)App->resource_manager->Get(mesh_id);
-					cmesh->SetMesh(rmesh);
-				}
-				break;
-				case MATERIAL:
-				{
-					string texture_id = scene->GetString("texture_id", "no_id");
-
-					owner->AddComponent(MATERIAL, component_id);
-					ComponentMaterial* cmaterial = (ComponentMaterial*)owner->GetComponent(MATERIAL);
-					ResourceTexture* rtexture = (ResourceTexture*)App->resource_manager->Get(texture_id);
-					cmaterial->SetTexture(rtexture);
-				}
-				break;
-				case CAMERA:
-				{
-					float far_plane_distance = scene->GetNumber("far_plane_distance", 1000);
-					float near_plane_distance = scene->GetNumber("near_plane_distance", 0.1f);
-					float fov = scene->GetNumber("fov", 60.0f);
-
-					owner->AddComponent(CAMERA, component_id);
-					ComponentCamera* ccamera = (ComponentCamera*)owner->GetComponent(CAMERA);
-					ccamera->GetCamera()->SetFarPlaneDistance(far_plane_distance);
-					ccamera->GetCamera()->SetNearPlaneDistance(near_plane_distance);
-					ccamera->GetCamera()->SetFOV(fov);
-				}
-				break;
-				}
-			}
-
-			scene->MoveToRoot();
-		}
-	}
+	GameObject* go = nullptr;
+	LoadPrefab(filepath.c_str(), go);
 }
 
 void SceneManager::DestroyScene()
@@ -226,12 +67,133 @@ void SceneManager::DestroyScene()
 
 void SceneManager::SaveTmpScene()
 {
-	SaveScene("tmp_scene.scene");
+	SaveScene("tmp_scene");
 }
 
 void SceneManager::LoadTmpScene()
 {
-	LoadScene("tmp_scene.scene", false);
+	LoadScene("tmp_scene", false);
+}
+
+bool SceneManager::SavePrefab(const char* name, const char* extension, const char* path, GameObject* go)
+{
+	bool ret = false;
+
+	LOG_OUTPUT("Saving prefab with name: %s", name);
+
+	string filepath = path;
+	filepath += name;
+	filepath += ".";
+	filepath += extension;
+
+	JSON_Doc* prefab = App->json->LoadJSON(filepath.c_str());
+
+	if (prefab == nullptr)
+		prefab = App->json->CreateJSON(filepath.c_str());
+
+	if (prefab != nullptr)
+	{
+		prefab->Clear();
+
+		vector<GameObject*> game_objects;
+		App->gameobj->RecursiveGetGameObjectTree(go, game_objects);
+
+		// Store GameObjects
+		prefab->SetArray("GameObjects");
+
+		for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); it++)
+		{
+			prefab->MoveToRoot();
+
+			if ((*it) != App->gameobj->GetRoot())
+			{
+				JSON_Doc go_node = prefab->GetJsonNode();
+
+				// Add and move to a new secion on the gameobjects array
+				go_node.AddSectionToArray("GameObjects");
+				go_node.MoveToSectionFromArray("GameObjects", go_node.GetArrayCount("GameObjects") - 1);
+
+				(*it)->OnSaveSerialize(go_node);
+			}
+		}
+
+		prefab->Save();
+
+		ret = true;
+	}
+
+	return ret;
+}
+
+bool SceneManager::LoadPrefab(const char * file_path, GameObject *& loaded_go)
+{
+	bool ret = false;
+
+	string file_name = App->file_system->GetFileNameFromFilePath(file_path);
+
+	LOG_OUTPUT("Loading prefab with name: %s", file_name.c_str());
+
+	JSON_Doc* prefab = App->json->LoadJSON(file_path);
+
+	if (prefab != nullptr)
+	{
+		//if (set_scene_title)
+		//{
+		//	// Engine title --------------
+		//	string title_name = App->GetAppName();
+		//	title_name += " ";
+		//	title_name += App->GetVersion();
+		//	title_name += " - ";
+		//	title_name += scene_name;
+		//	App->window->SetTitle(title_name.c_str());
+		//	// ---------------------------
+		//}
+
+		//// Saving camera pos
+		//float3 cam_pos = scene->GetNumber3("editor_camera_position");
+		//float3 z_dir = scene->GetNumber3("editor_camera_front");
+		//float3 y_dir = scene->GetNumber3("editor_camera_up");
+		//App->camera->GetCurrentCamera()->SetPosition(cam_pos);
+		//App->camera->GetCurrentCamera()->SetZDir(z_dir);
+		//App->camera->GetCurrentCamera()->SetYDir(y_dir);
+
+		// Load GameObjects
+		int game_objects_count = prefab->GetArrayCount("GameObjects");
+		for (int i = 0; i < game_objects_count; i++)
+		{
+			JSON_Doc go_node = prefab->GetJsonNode();
+			go_node.MoveToSectionFromArray("GameObjects", i);
+
+			string id = go_node.GetString("uid", "no_id");
+			GameObject* go = App->gameobj->Create(id);
+
+			go->OnLoadSerialize(go_node);
+		}
+
+		// Setting parents and childs
+		for (int i = 0; i < game_objects_count; i++)
+		{
+			JSON_Doc go_node = prefab->GetJsonNode();
+
+			go_node.MoveToSectionFromArray("GameObjects", i);
+
+			string parent = go_node.GetString("parent", "no_id");
+			string id = go_node.GetString("uid", "no_id");
+
+			if (parent != "")
+			{
+				GameObject* go_parent = App->gameobj->Find(parent);
+				GameObject* go = App->gameobj->Find(id);
+
+				if(go_parent != nullptr)
+					go_parent->AddChild(go);
+			}
+		}
+
+		prefab->MoveToRoot();
+	}
+
+	return ret;
 }
 
 SceneState SceneManager::GetState()
