@@ -21,8 +21,8 @@ public:
 	const char* GetString(const string& str, const char* defaul = "");
 	const bool GetBool(const string& bo, bool defaul = false);
 	const double GetNumber(const string& nu, double defaul = 0);
-	const float3 GetNumber3(const string& fl);
-	const float4 GetNumber4(const string& fl);
+	const float3 GetNumber3(const string& fl, float3 defaul = float3(0, 0, 0));
+	const float4 GetNumber4(const string& fl, float4 defaul = float4(0, 0, 0, 0));
 
 	void SetArray(const string& set);
 	void ClearArray(const string& arr);

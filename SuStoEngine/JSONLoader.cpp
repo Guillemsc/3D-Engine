@@ -358,22 +358,40 @@ const double JSON_Doc::GetNumber(const string& str, double defaul)
 	return ret;
 }
 
-const float3 JSON_Doc::GetNumber3(const string& fl)
+const float3 JSON_Doc::GetNumber3(const string& fl, float3 defaul)
 {
 	float3 ret = float3::zero;
-	ret.x = GetNumberFromArray(fl, 0);
-	ret.y = GetNumberFromArray(fl, 1);
-	ret.z = GetNumberFromArray(fl, 2);
+
+	ret = defaul;
+
+	JSON_Array* array = json_object_get_array(object, fl.c_str());
+
+	if (array != nullptr)
+	{
+		ret.x = GetNumberFromArray(fl, 0);
+		ret.y = GetNumberFromArray(fl, 1);
+		ret.z = GetNumberFromArray(fl, 2);
+	}
+
 	return ret;
 }
 
-const float4 JSON_Doc::GetNumber4(const string& fl)
+const float4 JSON_Doc::GetNumber4(const string& fl, float4 defaul)
 {
 	float4 ret = float4::zero;
-	ret.x = GetNumberFromArray(fl, 0);
-	ret.y = GetNumberFromArray(fl, 1);
-	ret.w = GetNumberFromArray(fl, 2);
-	ret.z = GetNumberFromArray(fl, 3);
+
+	ret = defaul;
+
+	JSON_Array* array = json_object_get_array(object, fl.c_str());
+
+	if(array != nullptr)
+	{
+		ret.x = GetNumberFromArray(fl, 0);
+		ret.y = GetNumberFromArray(fl, 1);
+		ret.w = GetNumberFromArray(fl, 2);
+		ret.z = GetNumberFromArray(fl, 3);
+	}
+
 	return ret;
 }
 

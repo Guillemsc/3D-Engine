@@ -149,14 +149,6 @@ bool SceneManager::LoadPrefab(const char * file_path, GameObject *& loaded_go)
 		//	// ---------------------------
 		//}
 
-		//// Saving camera pos
-		//float3 cam_pos = scene->GetNumber3("editor_camera_position");
-		//float3 z_dir = scene->GetNumber3("editor_camera_front");
-		//float3 y_dir = scene->GetNumber3("editor_camera_up");
-		//App->camera->GetCurrentCamera()->SetPosition(cam_pos);
-		//App->camera->GetCurrentCamera()->SetZDir(z_dir);
-		//App->camera->GetCurrentCamera()->SetYDir(y_dir);
-
 		// Load GameObjects
 		int game_objects_count = prefab->GetArrayCount("GameObjects");
 		for (int i = 0; i < game_objects_count; i++)
@@ -167,7 +159,11 @@ bool SceneManager::LoadPrefab(const char * file_path, GameObject *& loaded_go)
 			string id = go_node.GetString("uid", "no_id");
 			GameObject* go = App->gameobj->Create(id);
 
-			go->OnLoadSerialize(go_node);
+			if(go != nullptr)
+				go->OnLoadSerialize(go_node);
+
+			if (i == 0)
+				loaded_go = go;
 		}
 
 		// Setting parents and childs

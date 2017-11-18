@@ -28,7 +28,7 @@ public:
 	void LoadTmpScene();
 
 	bool SavePrefab(const char* name, const char* extension, const char* path, GameObject* go);
-	bool LoadPrefab(const char* file_path, GameObject*& loaded_go);
+	bool LoadPrefab(const char* file_path, GameObject *& loaded_go);
 
 	SceneState GetState();
 	bool GetPause();
