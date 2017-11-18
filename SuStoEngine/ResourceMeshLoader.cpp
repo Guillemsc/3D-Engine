@@ -13,6 +13,7 @@
 #include "ModuleFileSystem.h"
 #include "ResourceTextureLoader.h"
 #include "JSONLoader.h"
+#include "SceneManager.h"
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\postprocess.h"
 #include "Assimp\include\cfileio.h"
@@ -31,6 +32,10 @@ ResourceMeshLoader::~ResourceMeshLoader()
 bool ResourceMeshLoader::Load(const char * filepath, vector<Resource*>& resources, bool as_new_gameobject)
 {
 	bool ret = true;
+
+	string path = App->file_system->GetPathFromFilePath(filepath);
+	string filename = App->file_system->GetFileNameFromFilePath(filepath);
+	string name = App->file_system->GetFilenameWithoutExtension(filename.c_str());
 
 	LOG_OUTPUT("\nStarting mesh scene Loading -------------------- \n\n");
 	const aiScene* scene = aiImportFile(filepath, aiProcessPreset_TargetRealtime_MaxQuality);
@@ -68,17 +73,16 @@ bool ResourceMeshLoader::Load(const char * filepath, vector<Resource*>& resource
 
 		// Create root go
 		GameObject* parent = nullptr;
-		if (as_new_gameobject)
-		{
-			parent = App->gameobj->Create();
-			parent->transform->SetPosition(float3(position.x, position.y, position.z));
-			parent->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
-			parent->transform->SetScale(float3(scale.x, scale.y, scale.z));
+		
+		parent = App->gameobj->Create();
+		parent->transform->SetPosition(float3(position.x, position.y, position.z));
+		parent->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
+		parent->transform->SetScale(float3(scale.x, scale.y, scale.z));
 
-			string name = App->file_system->GetFileNameFromFilePath(filepath);
-			name = App->file_system->GetFilenameWithoutExtension(name.c_str());
-			parent->SetName(name);
-		}
+		string name = App->file_system->GetFileNameFromFilePath(filepath);
+		name = App->file_system->GetFilenameWithoutExtension(name.c_str());
+		parent->SetName(name);
+		
 
 		// Total mesh bbox
 		AABB total_abb;
@@ -95,10 +99,12 @@ bool ResourceMeshLoader::Load(const char * filepath, vector<Resource*>& resource
 		used_resources.clear();
 
 		// Set camera focus
-		if (ret)
-		{
-			App->camera->GetCurrentCamera()->Focus(total_abb.CenterPoint(), total_abb.Size().Length());
-		}
+		App->camera->GetCurrentCamera()->Focus(total_abb.CenterPoint(), total_abb.Size().Length());
+		
+		App->scene_manager->SavePrefab(filename.c_str(), "prefab", App->file_system->GetAssetsPath().c_str(), parent);
+
+		if (!as_new_gameobject)
+			App->gameobj->Destroy(parent);
 	}
 
 	// Release scene
@@ -119,6 +125,7 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 	aiMesh* aimesh = nullptr;
 	ResourceMesh* mesh = nullptr;
 	GameObject* go = nullptr;
+	string name = node->mName.C_Str();
 
 	for (int i = 0; i < node->mNumMeshes; i++)
 	{
@@ -139,6 +146,7 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 		if (mesh_valid && node_valid && !mesh_already_loaded)
 		{
 			mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(RT_MESH);
+			mesh->SetFileName(name.c_str());
 
 			if (!aimesh->HasFaces())
 			{
@@ -256,7 +264,6 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 		{
 			go = App->gameobj->Create();
 
-			string name = node->mName.C_Str();
 			if (name == "")
 				name = "no_name";
 
@@ -352,6 +359,7 @@ void ResourceMeshLoader::Import(const char * filepath)
 	string meta_name = path + name + ".meta";
 	JSON_Doc* doc = App->json->LoadJSON(meta_name.c_str());
 	string uid = doc->GetString("uid", "no_uid");
+	string resource_name = doc->GetString("name");
 
 	// -------------------------------------
 	// FILE --------------------------------
@@ -399,6 +407,8 @@ void ResourceMeshLoader::Import(const char * filepath)
 	ResourceMesh* new_mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(RT_MESH, uid);
 	new_mesh->SetFaces(vertices, ranges[0], indices, ranges[1]);
 	new_mesh->SetUvs(uvs, ranges[2]);
+
+	new_mesh->SetFileName(resource_name.c_str());
 
 	RELEASE_ARRAY(buffer);
 	RELEASE_ARRAY(indices);
@@ -467,6 +477,7 @@ bool ResourceMeshLoader::Export(const char * path, ResourceMesh* mesh)
 		doc->Clear();
 
 		doc->SetString("uid", mesh->GetUniqueId().c_str());
+		doc->SetString("name", mesh->GetFileName().c_str());
 
 		doc->Save();
 	}

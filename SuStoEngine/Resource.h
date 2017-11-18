@@ -19,6 +19,9 @@ public:
 
 	virtual void CleanUp() {};
 
+	void SetFileName(const char* file_name);
+	std::string GetFileName();
+
 	ResourceType GetType();
 
 	std::string GetUniqueId();
@@ -36,6 +39,8 @@ private:
 	ResourceType type = RT_NULL;
 	std::string  unique_id;
 	int			 count_ref = 0;
+
+	std::string file_name;
 };
 
 #endif

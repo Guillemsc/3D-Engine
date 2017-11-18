@@ -4,6 +4,7 @@
 #include "App.h"
 #include "ModuleFileSystem.h"
 #include "JSONLoader.h"
+#include "Functions.h"
 
 Explorer::Explorer(bool start_enabled)
 {
@@ -26,8 +27,16 @@ void Explorer::Draw()
 
 	for (vector<string>::iterator it = files.begin(); it != files.end(); ++it)
 	{
-		string name = App->file_system->GetFileNameFromFilePath((*it).c_str());
-		ImGui::Text(name.c_str());
+		string path = App->file_system->GetPathFromFilePath((*it).c_str());
+		string filename = App->file_system->GetFileNameFromFilePath((*it).c_str());
+		string extension = App->file_system->GetFileExtension(filename.c_str());
+		string name = App->file_system->GetFilenameWithoutExtension(filename.c_str());
+
+		
+		if (TextCmp(extension.c_str(), "meta") || TextCmp(extension.c_str(), "prefab"))
+			continue;
+
+		ImGui::Text(filename.c_str());
 	}
 
 	igEndDock();

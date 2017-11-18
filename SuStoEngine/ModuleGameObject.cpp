@@ -68,7 +68,7 @@ bool ModuleGameObject::Update()
 {
 	bool ret = true;
 
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && can_pick)
 	{
 		MousePick();
 	}
@@ -162,11 +162,17 @@ bool ModuleGameObject::Update()
 		}
 	}
 
+	if (ImGuizmo::IsOver())
+		can_pick = false;
+	else
+		can_pick = true;
+	
+
 	if (show_kdtree)
 		kdtree->DebugDraw();
 
 
-	App->renderer3D->DrawGrid(100);
+	App->renderer3D->DrawGrid(200);
 
 	return ret;
 }

@@ -58,6 +58,9 @@ bool ResourceTextureLoader::Load(const char * filepath, std::vector<Resource*>& 
 		rtex->SetData(ilGetData(), ilGetInteger(IL_IMAGE_SIZE_OF_DATA), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT),
 			GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
 
+		// Set name
+		rtex->SetFileName(file_name.c_str());
+
 		// Export it to Library
 		App->resource_manager->SaveResourceIntoFile(rtex);
 
@@ -100,6 +103,7 @@ void ResourceTextureLoader::Import(const char * filepath)
 	if (doc != nullptr)
 	{
 		string uid = doc->GetString("uid", "no_uid");
+		string resource_name = doc->GetString("name");
 		bool flipped = doc->GetBool("flipped");
 
 		// -------------------------------------
@@ -128,6 +132,7 @@ void ResourceTextureLoader::Import(const char * filepath)
 			ret->SetData(ilGetData(), ilGetInteger(IL_IMAGE_SIZE_OF_DATA), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), ilGetInteger(IL_IMAGE_FORMAT),
 				GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
 			ret->SetFlipped(flipped);
+			ret->SetFileName(resource_name.c_str());
 
 			ilDeleteImages(1, &ImageInfo.Id);
 		}
@@ -186,6 +191,7 @@ bool ResourceTextureLoader::Export(const char * path, ResourceTexture* resource)
 		doc->Clear();
 
 		doc->SetString("uid", resource->GetUniqueId().c_str());
+		doc->SetString("name", resource->GetFileName().c_str());
 		doc->SetBool("flipped", resource->GetFlipped());
 
 		doc->Save();

@@ -75,6 +75,8 @@ private:
 
 	ImGuizmo::OPERATION current_gizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
 	float3 last_scale = float3::zero;
+
+	bool can_pick = true;
 };
 
 #endif // !_MODULE_GAME_OBJECT_H_

@@ -11,6 +11,16 @@ Resource::~Resource()
 {
 }
 
+void Resource::SetFileName(const char * _file_name)
+{
+	file_name = _file_name;
+}
+
+std::string Resource::GetFileName()
+{
+	return file_name;
+}
+
 ResourceType Resource::GetType()
 {
 	return type;
