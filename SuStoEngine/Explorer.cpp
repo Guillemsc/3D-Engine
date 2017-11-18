@@ -25,6 +25,18 @@ void Explorer::Draw()
 	for (vector<string>::iterator it = files.begin(); it != files.end(); ++it)
 	{
 		ImGui::Text((*it).c_str());
+
+		ImGui::PushID((*it).c_str());
+		if (ImGui::BeginPopupContextItem(""))
+		{
+			if (ImGui::Button("Load"))
+			{
+				App->LoadFile((*it).c_str());
+			}
+
+			ImGui::EndPopup();
+		}
+		ImGui::PopID();
 	}
 
 	igEndDock();
