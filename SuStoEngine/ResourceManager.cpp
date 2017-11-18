@@ -145,16 +145,19 @@ bool ResourceManager::LoadResource(const char * file_path, vector<Resource*>& re
 		string uid = GetNewUID();
 		string json_name = App->file_system->GetAssetsPath() + name + ".meta";
 		JSON_Doc* meta = App->json->CreateJSON(json_name.c_str());
-		meta->SetString("uid", uid.c_str());
-
-		meta->SetArray("resources");
-		for (vector<Resource*>::iterator res = resources.begin(); res != resources.end(); ++res)
+		if (meta)
 		{
-			meta->AddStringToArray("resources", (*res)->GetUniqueId().c_str());
-			(*res)->SetOriginalFileUID(uid.c_str());
-		}
+			meta->SetString("uid", uid.c_str());
 
-		meta->Save();
+			meta->SetArray("resources");
+			for (vector<Resource*>::iterator res = resources.begin(); res != resources.end(); ++res)
+			{
+				meta->AddStringToArray("resources", (*res)->GetUniqueId().c_str());
+				(*res)->SetOriginalFileUID(uid.c_str());
+			}
+
+			meta->Save();
+		}
 	}
 
 	return ret;
