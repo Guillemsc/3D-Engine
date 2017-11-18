@@ -32,11 +32,23 @@ void Explorer::Draw()
 		string extension = App->file_system->GetFileExtension(filename.c_str());
 		string name = App->file_system->GetFilenameWithoutExtension(filename.c_str());
 
-		
 		if (TextCmp(extension.c_str(), "meta") || TextCmp(extension.c_str(), "prefab"))
 			continue;
 
 		ImGui::Text(filename.c_str());
+
+		// Menu
+		ImGui::PushID((*it).c_str());
+		if (ImGui::BeginPopupContextItem("HerarchyPopup"))
+		{
+			if (ImGui::Button("Load"))
+			{
+				
+			}
+
+			ImGui::EndPopup();
+		}
+		ImGui::PopID();
 	}
 
 	igEndDock();
