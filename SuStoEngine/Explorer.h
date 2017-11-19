@@ -19,11 +19,14 @@ public:
 	void Start();
 	void Draw();
 
+	vector<string> OrderFiles(vector<string> files);
+
 public:
 
 private:
 	uint fbx_icon = 0;
 	uint png_icon = 0;
+	uint folder_icon = 0;
 
 	std::vector<Resource*> resources;
 };
