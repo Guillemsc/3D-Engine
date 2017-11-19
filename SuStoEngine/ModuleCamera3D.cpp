@@ -481,7 +481,7 @@ void Camera3D::Look(const float3 & look_pos)
 	frustum.SetUp(direction_matrix.MulDir(frustum.Up()).Normalized());
 }
 
-void Camera3D::GetElementsToDraw(vector<GameObject*>& inside)
+void Camera3D::GetElementsToDraw()
 {
 	vector<GameObject*> to_check = App->gameobj->GetDynamicGameObjects();
 
@@ -489,7 +489,10 @@ void Camera3D::GetElementsToDraw(vector<GameObject*>& inside)
 	for (std::vector<GameObject*>::iterator it = to_check.begin(); it != to_check.end();)
 	{
 		if ((*it)->GetComponent(MESH) == nullptr)
+		{
+			(*it)->SetDraw(false);
 			it = to_check.erase(it);
+		}
 		else 
 			it++;
 	}
@@ -500,13 +503,10 @@ void Camera3D::GetElementsToDraw(vector<GameObject*>& inside)
 	{
 		if (CheckInsideFrustum((*it)->GetBbox()))
 		{
-			bool found = false;
-			if (std::find(inside.begin(), inside.end(), (*it)) != inside.end())
-				found = true;
-
-			if(!found)
-				inside.push_back((*it));
+			(*it)->SetDraw(true);
 		}
+		else
+			(*it)->SetDraw(false);
 	}
 }
 

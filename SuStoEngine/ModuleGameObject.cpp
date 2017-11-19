@@ -74,20 +74,9 @@ bool ModuleGameObject::Update()
 	}
 
 	vector<Camera3D*> cameras = App->camera->GetCameras();
-	vector<GameObject*> to_draw;
 
 	// Get elements to draw from all cameras
-	App->camera->GetEditorCamera()->GetElementsToDraw(to_draw);
-
-	//for (vector<Camera3D*>::iterator it = cameras.begin(); it != cameras.end(); ++it)
-	//{
-	//	if((*it)->GetFrustumCulling())
-	//		(*it)->GetElementsToDraw(to_draw);
-	//}
-	
-	// Draw
-	for(vector<GameObject*>::iterator it = to_draw.begin(); it != to_draw.end(); ++it)
-		(*it)->Draw();
+	App->camera->GetEditorCamera()->GetElementsToDraw();
 	
 	// Update
 	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
@@ -96,6 +85,8 @@ bool ModuleGameObject::Update()
 
 		if (App->scene_manager->GetState() == SceneState::PLAY)
 			(*it)->UpdateLogic();
+
+		(*it)->Draw();
 
 		(*it)->SetDebugDraw(show_bboxes);
 	}

@@ -561,3 +561,17 @@ void ResourceMeshLoader::CreatePlane()
 	RELEASE_ARRAY(indices);
 	RELEASE_ARRAY(uv);
 }
+
+void ResourceMeshLoader::LoadIntoScene(const char * filepath)
+{
+	string path = App->file_system->GetPathFromFilePath(filepath);
+	string filename = App->file_system->GetFileNameFromFilePath(filepath);
+	string extension = ToLowerCase(App->file_system->GetFileExtension(filename.c_str()));
+	string name = App->file_system->GetFilenameWithoutExtension(filename.c_str());
+
+	string prefab_path = filepath;
+	prefab_path += ".prefab";
+
+	GameObject* loaded_go = nullptr;
+	App->scene_manager->LoadPrefab(prefab_path.c_str(), loaded_go);
+}
