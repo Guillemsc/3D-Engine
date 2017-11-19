@@ -32,6 +32,9 @@ public:
 	string GetLibraryScenePath();
 	string GetSettingsPath();
 
+	string GetLookingPath();
+	void SetLookingPath(const string & new_path);
+
 	// Example file.ex -> .ex
 	std::string GetFileExtension(const char* file_name);
 
@@ -56,6 +59,7 @@ private:
 	string library_scene_path;
 	string settings_path;
 
+	string looking_path;
 };
 
 #endif // __FILESYSTEM_H__

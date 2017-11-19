@@ -22,6 +22,8 @@ public:
 
 	vector<string> OrderFiles(vector<string> files);
 
+	string GetParentDirectory(string child);
+
 public:
 
 private:
