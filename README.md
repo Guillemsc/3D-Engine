@@ -15,6 +15,7 @@ Link to the **Simón Stoyanov**'s Github page ![https://github.com/SimonStoyanov
 ### Main Menu Bar
 * **File**
   * _**Open in Explorer**_: Opens the container of the Engine.
+  * _**Save Scene**_: Saves the current scene into a JSon.
   * _**Quit (Alt + F4)**_: Exits the application.
 * **Game Object**
   * _**Create Empty**_: Creates an empty GameObject and puts it into the hierarchy.
@@ -30,6 +31,7 @@ It will only show the options if a GameObject of the hierarchy is selected.
   * _**Configuration (C)**_
   * _**Profiler (P)**_
   * _**Hardware**_
+  * _**Explorer**_
 * **Help**
   * _**About SuSto Engine**_
 * **Layouts**
@@ -37,23 +39,31 @@ It will only show the options if a GameObject of the hierarchy is selected.
   * _**List of Layouts**_: A list of layouts that can be assigned when clicking the _Set_ Button or be deleted with the _X_ Button.
   * _**Input Layout**_: By clicking the button _Save Layout_ and assigning a name at the text input, a layout will be added to the list of layouts above.
 * **Debug**
-  * _**Engine Test**_: Opens the engine test window.
   * _**Test Window**_: Opens the imgui test window.
 * **FPS**: Show the current framerate.
+
+### Toolbar
+* **Move**: Selects the current guizmo mode to Movement.
+* **Rotate**: Selects the current guizmo mode to Rotation.
+* **Scale**: Selects the current guizmo mode to Scale.
+* **Play**: Starts the game, every object that is moved during play-time will return to its original position, also for the rotation and scale.
+* **Pause**: Only shown during play-time. It will change to editor mode, stoping the game.
+* **Draw KDTree**: Debug functionality that shows the planes that are dividing the gameobjects to create the KDTree.
+* **Draw BBoxes**: Draws the bounding boxes of all gameobjects that have one.
 
 ### Game
 * **Camera Movement**
   * _**Right Click + W, A, S, D**_: Move **forward**, **Left**, **backward** or **right**, respectively.
   * _**Right Click + Z, X**_: Move **up** or **down**, respectively
   * _**Mouse Scroll**_: Move the camera forward or backwards.
-  * _**Alt + Left Click + Mouse Movement**_: Camera orbits the object.
   * _**Right Click + Mouse Movement**_: Camera moves.
-  * _**F**_: Centers the view to the mesh.
+  * _**F**_: Centers the view to the (0, 0, 0).
 * **Other functionalities**
-  * _**Drag and Drop**_: if an fbx is dropped into the engine, it will be rendered. A PNG texture can be dropped to.
+  * _**Drag and Drop**_: if an fbx is dropped into the engine, it will be rendered.
  
 ### Hierarchy
 GameObjects are shown at the hierarchy. There, they can be selected (by right clicking) and created (with a button above the list of GameObject.
+Also, by right clicking and then pressing the button delete it will erase the GameObject.
 
 ### Inspector
 At the inspecotr it is posible to look at the components of a selected GameObject, which would be its transform, the mesh and the texture component (the last two being optional for the GameObject).
