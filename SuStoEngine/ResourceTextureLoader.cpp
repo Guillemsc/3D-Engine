@@ -78,6 +78,61 @@ bool ResourceTextureLoader::Load(const char * filepath, std::vector<Resource*>& 
 	return ret;
 }
 
+unsigned int ResourceTextureLoader::LoadTexture(const char* filename)
+{
+	ILuint textureID;
+	ILenum error;
+	ILboolean success;
+
+	// Texture Generation
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	success = ilLoadImage(filename);
+
+	if (success)
+	{
+		ILinfo ImageInfo;
+		iluGetImageInfo(&ImageInfo);
+
+		//Flip the image into the right way
+		if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
+		{
+			iluFlipImage();
+		}
+
+		// Convert the image into a suitable format to work with
+		if (!ilConvertImage(ilGetInteger(IL_IMAGE_FORMAT), IL_UNSIGNED_BYTE))
+		{
+			error = ilGetError();
+			LOG_OUTPUT("Image conversion failed - IL reportes error: %i, %s", error, iluErrorString(error));
+			exit(-1);
+		}
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_FORMAT),
+			ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 
+			0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData());
+
+		LOG_OUTPUT("Texture Application Successful.");
+	}
+
+	else
+	{
+		error = ilGetError();
+		LOG_OUTPUT("Image Load failed - IL reportes error: %i, %s", error, iluErrorString(error));
+	}
+
+	//RELEASE MEMORY used by the image
+	ilDeleteImages(1, &textureID);
+
+	return textureID;
+}
+
 void ResourceTextureLoader::ImportAllTextures()
 {
 	vector<string> files = App->file_system->GetFilesInPath(App->file_system->GetLibraryTexturePath().c_str(), "dds");

@@ -3,6 +3,12 @@
 
 #include "EditorUI.h"
 #include "Module.h"
+#include <vector>
+
+#define SPACING 10
+#define MAX_FILES_HORIZONTAL 5
+
+class Resource;
 
 class Explorer : public EditorElement
 {
@@ -16,7 +22,10 @@ public:
 public:
 
 private:
+	uint fbx_icon = 0;
+	uint png_icon = 0;
 
+	std::vector<Resource*> resources;
 };
 
 #endif
