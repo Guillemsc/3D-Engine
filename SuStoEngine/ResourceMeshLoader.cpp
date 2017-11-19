@@ -575,3 +575,8 @@ void ResourceMeshLoader::LoadIntoScene(const char * filepath)
 	GameObject* loaded_go = nullptr;
 	App->scene_manager->LoadPrefab(prefab_path.c_str(), loaded_go);
 }
+
+void ResourceMeshLoader::DeImport(const char * filepath)
+{
+
+}

@@ -189,6 +189,21 @@ void ResourceManager::LoadFileIntoScene(const char * file_path)
 	}
 }
 
+void ResourceManager::DeImportFile(const char * file_path)
+{
+	string name = App->file_system->GetFileNameFromFilePath(file_path);
+	string extension = ToLowerCase(App->file_system->GetFileExtension(name.c_str()));
+
+	if (TextCmp("fbx", extension.c_str()))
+	{
+		mesh_loader->LoadIntoScene(file_path);
+	}
+	else if (TextCmp("png", extension.c_str()) || TextCmp("dds", extension.c_str()) || TextCmp("tga", extension.c_str()))
+	{
+
+	}
+}
+
 ResourceMeshLoader * ResourceManager::GetMeshLoader()
 {
 	return mesh_loader;

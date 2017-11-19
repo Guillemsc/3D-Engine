@@ -86,6 +86,8 @@ void MainBar::Draw()
 
 			ImGui::MenuItem("Inspector", NULL, &App->editorUI->GetInspector()->visible);
 
+			ImGui::MenuItem("Explorer", NULL, &App->editorUI->GetExplorer()->visible);
+
 			ImGui::MenuItem("Console", "º", &App->editorUI->GetConsole()->visible);
 
 			ImGui::MenuItem("Configuration", "c", &App->editorUI->GetConfiguration()->visible);
