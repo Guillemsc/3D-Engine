@@ -2,6 +2,7 @@
 #define __SCENE_MANAGER_H__
 
 #include "Module.h"
+#include <vector>
 
 class GameObject;
 
@@ -9,6 +10,25 @@ enum SceneState
 {
 	EDIT,
 	PLAY,
+};
+
+struct Relation
+{
+	Relation(int _id, GameObject* _go)
+	{
+		id = _id;
+		go = _go;
+	}
+	Relation(int _id, GameObject* _go, int _id_parent)
+	{
+		id = _id;
+		go = _go;
+		id_parent = _id_parent;
+	}
+
+	int id = 0;
+	GameObject* go = nullptr;
+	int id_parent = 0;
 };
 
 class SceneManager : public Module
@@ -43,7 +63,11 @@ public:
 	float GetGameExecutionTime();
 
 private:
-
+	void ClearRelations();
+	void AddRelationGo(GameObject* go);
+	void AddRleationIdGo(int id, GameObject* go, int parent_id = -1);
+	int GetRelationGo(GameObject* go);
+	GameObject* GetRelationId(int id);
 
 public:
 
@@ -52,6 +76,8 @@ private:
 	bool	   pause = false;
 	bool	   step = false;
 	string	   current_scene;
+
+	std::vector<Relation> relations;
 };
 
 #endif

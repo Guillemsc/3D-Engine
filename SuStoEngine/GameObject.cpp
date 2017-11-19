@@ -513,11 +513,10 @@ void GameObject::OnLoadSerialize(JSON_Doc config)
 		comp_node.MoveToSectionFromArray("Components", i);
 
 		ComponentType type = static_cast<ComponentType>((int)comp_node.GetNumber("type", 0));
-		string component_id = comp_node.GetString("component_id", "no_id");
 
 		if (type != TRANSFORM)
 		{
-			Component* c = AddComponent(type, component_id.c_str());
+			Component* c = AddComponent(type);
 			c->OnLoadSerialize(comp_node);
 		}
 		else
@@ -532,19 +531,10 @@ void GameObject::SetDraw(bool set)
 
 void GameObject::OnSaveSerialize(JSON_Doc doc)
 {
-	// Set the id
-	doc.SetString("uid", unique_id.c_str());
-	
 	// Set the name
 	doc.SetString("name", name.c_str());
 
 	doc.SetBool("static", is_static);
-
-	// Set the parent id
-	if (parent != nullptr && parent != App->gameobj->GetRoot())
-		doc.SetString("parent", parent->GetUniqueId().c_str());
-	else
-		doc.SetString("parent", "");
 
 	doc.SetArray("Components");
 
@@ -557,8 +547,6 @@ void GameObject::OnSaveSerialize(JSON_Doc doc)
 		comp_doc.MoveToSectionFromArray("Components", doc.GetArrayCount("Components") - 1);
 
 		comp_doc.SetNumber("type", (*it)->GetType());
-		comp_doc.SetString("component_id", (*it)->GetUniqueId().c_str());
-
 		(*it)->OnSaveSerialize(comp_doc);
 	}
 }

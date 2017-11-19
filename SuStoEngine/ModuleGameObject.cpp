@@ -163,7 +163,7 @@ bool ModuleGameObject::Update()
 		kdtree->DebugDraw();
 
 
-	App->renderer3D->DrawGrid(200);
+	App->renderer3D->DrawGrid(100);
 
 	return ret;
 }
