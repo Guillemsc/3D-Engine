@@ -55,6 +55,8 @@ public:
 
 	void RecursiveGetGameObjectTree(GameObject* go, vector<GameObject*>& fill);
 
+	void SetCanPick(bool set);
+	void SetCanMove(bool set);
 private:
 	void DestroyGameObjects();
 	void MousePick();
@@ -77,6 +79,7 @@ private:
 	float3 last_scale = float3::zero;
 
 	bool can_pick = true;
+	bool can_move = true;
 };
 
 #endif // !_MODULE_GAME_OBJECT_H_

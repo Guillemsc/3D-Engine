@@ -231,6 +231,8 @@ bool ModuleCamera3D::Update()
 				editor_camera->MoveRight(cam_speed);
 
 			editor_camera->Rotate(-App->input->GetMouseXMotion()*mou_speed, -App->input->GetMouseYMotion()*mou_speed);
+
+			App->gameobj->SetCanMove(false);
 			
 		}
 		else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
@@ -247,11 +249,14 @@ bool ModuleCamera3D::Update()
 				editor_camera->Look(float3(0, 0, 0));
 
 				App->window->GetCursor()->SizeAll();
+
+				App->gameobj->SetCanMove(false);
 			}
 		}
 		else
 		{
 			mouse_movement = false;
+			App->gameobj->SetCanMove(true);
 		}
 	}
 
