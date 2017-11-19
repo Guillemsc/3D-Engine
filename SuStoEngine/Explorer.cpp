@@ -7,6 +7,7 @@
 #include "JSONLoader.h"
 #include "Functions.h"
 #include "ResourceTextureLoader.h"
+#include "ResourceManager.h"
 
 Explorer::Explorer(bool start_enabled)
 {
@@ -65,7 +66,7 @@ void Explorer::Draw()
 			ImGui::ImageButtonWithTextDOWN((ImTextureID*)fbx_icon, name.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
 			
 			if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
-				App->LoadFile((*it).c_str());
+				App->resource_manager->LoadFileIntoScene((*it).c_str());
 		}
 		else if (TextCmp(extension.c_str(), "png")) {
 			ImGui::ImageButtonWithTextDOWN((ImTextureID*)png_icon, name.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
