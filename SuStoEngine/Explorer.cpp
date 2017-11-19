@@ -44,6 +44,11 @@ void Explorer::Draw()
 				App->file_system->SetLookingPath(GetParentDirectory(looking_path));
 		}
 
+		if (ImGui::MenuItem("New Folder"))
+		{
+			App->file_system->CreateFolder(looking_path.c_str(), "new_folder");
+		}
+
 		ImGui::EndMenuBar();
 
 		vector<string> files = App->file_system->GetFilesInPath(looking_path.c_str());
@@ -64,19 +69,23 @@ void Explorer::Draw()
 			if (TextCmp(extension.c_str(), "meta") || TextCmp(extension.c_str(), "prefab"))
 				continue;
 
-			if (TextCmp(extension.c_str(), "fbx")) {
-				ImGui::ImageButtonWithTextDOWN((ImTextureID*)fbx_icon, name.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
 
+			if (TextCmp(extension.c_str(), "fbx")) {
+				ImGui::ImageButtonWithTextDOWN((ImTextureID*)fbx_icon, filename.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
+				
 				if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
-					App->LoadFile((*it).c_str());
+					App->resource_manager->LoadFileIntoScene((*it).c_str());
 			}
-			else if (TextCmp(extension.c_str(), "png")) {
-				ImGui::ImageButtonWithTextDOWN((ImTextureID*)png_icon, name.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
+			else if (TextCmp(extension.c_str(), "png")) 
+			{
+				ImGui::ImageButtonWithTextDOWN((ImTextureID*)png_icon, filename.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
 			}
-			else if (TextCmp(extension.c_str(), "tga")) {
-				ImGui::ImageButtonWithTextDOWN((ImTextureID*)tga_icon, name.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
+			else if (TextCmp(extension.c_str(), "tga")) 
+			{
+				ImGui::ImageButtonWithTextDOWN((ImTextureID*)tga_icon, filename.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
 			}
-			else if (TextCmp(extension.c_str(), "")) {
+			else if (TextCmp(extension.c_str(), ""))
+			{
 				ImGui::ImageButtonWithTextDOWN((ImTextureID*)folder_icon, name.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
 
 				if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
@@ -85,18 +94,26 @@ void Explorer::Draw()
 				}
 			}
 
-			//ImGui::SameLine();
-			//ImGui::Text(filename.c_str());
+		//ImGui::SameLine();
+		//ImGui::Text(filename.c_str());
 
-			if (i < MAX_FILES_HORIZONTAL)
-				ImGui::SameLine();
-			else
-				i = -1;
-			i++;
+		if (i < MAX_FILES_HORIZONTAL)
+			ImGui::SameLine();
+		else
+			i = -1;
 		}
 	}
 
 	igEndDock();
+}
+
+void Explorer::CleanUp()
+{
+	ResourceTextureLoader loader;
+	loader.UnloadTexture(fbx_icon);
+	loader.UnloadTexture(png_icon);
+	loader.UnloadTexture(tga_icon);
+	loader.UnloadTexture(folder_icon);
 }
 
 vector<string> Explorer::OrderFiles(vector<string> files)

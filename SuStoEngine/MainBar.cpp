@@ -88,11 +88,11 @@ void MainBar::Draw()
 
 			ImGui::MenuItem("Explorer", NULL, &App->editorUI->GetExplorer()->visible);
 
-			ImGui::MenuItem("Console", "º", &App->editorUI->GetConsole()->visible);
+			ImGui::MenuItem("Console", NULL, &App->editorUI->GetConsole()->visible);
 
-			ImGui::MenuItem("Configuration", "c", &App->editorUI->GetConfiguration()->visible);
+			ImGui::MenuItem("Configuration", NULL, &App->editorUI->GetConfiguration()->visible);
 
-			ImGui::MenuItem("Profiler", "p", &App->editorUI->GetProfilerViewer()->visible);
+			ImGui::MenuItem("Profiler", NULL, &App->editorUI->GetProfilerViewer()->visible);
 
 			ImGui::MenuItem("Hardware", NULL, &App->editorUI->GetHardware()->visible);
 

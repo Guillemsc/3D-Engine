@@ -14,6 +14,7 @@ public:
 
 	bool Load(const char* filepath, std::vector<Resource*>& resources);
 	unsigned int LoadTexture(const char * filename);
+	void UnloadTexture(unsigned int id);
 	void Import(const char* filepath);
 	bool Export(const char* filepath, ResourceTexture* resource);
 	void ImportAllTextures();

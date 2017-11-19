@@ -6,6 +6,7 @@
 #include "Globals.h"
 #include "ModuleFileSystem.h"
 #include "JSONLoader.h"
+#include "ModuleRenderer3D.h"
 
 #include "Devil\include\il.h"
 #include "Devil\include\ilu.h"
@@ -131,6 +132,12 @@ unsigned int ResourceTextureLoader::LoadTexture(const char* filename)
 	ilDeleteImages(1, &textureID);
 
 	return textureID;
+}
+
+void ResourceTextureLoader::UnloadTexture(unsigned int id)
+{
+	if(id != 0)
+		App->renderer3D->UnloadTextureBuffer(id, 1);
 }
 
 void ResourceTextureLoader::ImportAllTextures()

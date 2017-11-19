@@ -19,6 +19,7 @@ public:
 
 	void Start();
 	void Draw();
+	void CleanUp();
 
 	vector<string> OrderFiles(vector<string> files);
 
