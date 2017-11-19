@@ -32,74 +32,71 @@ void Explorer::Draw()
 {
 	igBeginDock("Explorer", &visible, ImGuiWindowFlags_MenuBar);	
 
-	string looking_path = App->file_system->GetLookingPath();
-	
-	if (ImGui::BeginMenuBar())
+	if (visible)
 	{
+		string looking_path = App->file_system->GetLookingPath();
+
+		ImGui::BeginMenuBar();
+
 		if (ImGui::MenuItem("Back"))
 		{
 			if (looking_path != App->file_system->GetAssetsPath())
 				App->file_system->SetLookingPath(GetParentDirectory(looking_path));
 		}
 
-		if (ImGui::MenuItem("Create Folder"))
-		{
-			App->file_system->CreateFolder(looking_path.c_str(), "new_folder");
-		}
-
 		ImGui::EndMenuBar();
-	}
 
-	vector<string> files = App->file_system->GetFilesInPath(looking_path.c_str());
-	files = OrderFiles(files);
+		vector<string> files = App->file_system->GetFilesInPath(looking_path.c_str());
+		files = OrderFiles(files);
 
-	int i = 0;
-	for (vector<string>::iterator it = files.begin(); it != files.end(); ++it)
-	{
-		string path = App->file_system->GetPathFromFilePath((*it).c_str());
-		string filename = App->file_system->GetFileNameFromFilePath((*it).c_str());
-		string extension = App->file_system->GetFileExtension(filename.c_str());
-		extension = ToLowerCase(extension);
-		string name = App->file_system->GetFilenameWithoutExtension(filename.c_str(), false);
-
-		if (TextCmp(filename.c_str(), ".") || TextCmp(filename.c_str(), ".."))
-			continue;
-
-		if (TextCmp(extension.c_str(), "meta") || TextCmp(extension.c_str(), "prefab"))
-			continue;
-
-		if (TextCmp(extension.c_str(), "fbx")) {
-			ImGui::ImageButtonWithTextDOWN((ImTextureID*)fbx_icon, filename.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
-			
-			if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
-				App->resource_manager->LoadFileIntoScene((*it).c_str());
-		}
-		else if (TextCmp(extension.c_str(), "png")) 
+		int i = 0;
+		for (vector<string>::iterator it = files.begin(); it != files.end(); ++it)
 		{
-			ImGui::ImageButtonWithTextDOWN((ImTextureID*)png_icon, filename.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
-		}
-		else if (TextCmp(extension.c_str(), "tga")) 
-		{
-			ImGui::ImageButtonWithTextDOWN((ImTextureID*)tga_icon, filename.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
-		}
-		else if (TextCmp(extension.c_str(), "")) 
-		{
-			ImGui::ImageButtonWithTextDOWN((ImTextureID*)folder_icon, filename.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
+			string path = App->file_system->GetPathFromFilePath((*it).c_str());
+			string filename = App->file_system->GetFileNameFromFilePath((*it).c_str());
+			string extension = App->file_system->GetFileExtension(filename.c_str());
+			extension = ToLowerCase(extension);
+			string name = App->file_system->GetFilenameWithoutExtension(filename.c_str(), false);
 
-			if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
-			{
-				App->file_system->SetLookingPath(path + filename + "\\");
+			if (TextCmp(filename.c_str(), ".") || TextCmp(filename.c_str(), ".."))
+				continue;
+
+			if (TextCmp(extension.c_str(), "meta") || TextCmp(extension.c_str(), "prefab"))
+				continue;
+
+
+			if (TextCmp(extension.c_str(), "fbx")) {
+				ImGui::ImageButtonWithTextDOWN((ImTextureID*)fbx_icon, filename.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
+				
+				if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
+					App->resource_manager->LoadFileIntoScene((*it).c_str());
 			}
-		}
+			else if (TextCmp(extension.c_str(), "png")) 
+			{
+				ImGui::ImageButtonWithTextDOWN((ImTextureID*)png_icon, filename.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
+			}
+			else if (TextCmp(extension.c_str(), "tga")) 
+			{
+				ImGui::ImageButtonWithTextDOWN((ImTextureID*)tga_icon, filename.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
+			}
+			else if (TextCmp(extension.c_str(), ""))
+			{
+				ImGui::ImageButtonWithTextDOWN((ImTextureID*)folder_icon, name.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
+
+				if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
+				{
+					App->file_system->SetLookingPath(path + filename + "\\");
+				}
+			}
 
 		//ImGui::SameLine();
 		//ImGui::Text(filename.c_str());
-		
+
 		if (i < MAX_FILES_HORIZONTAL)
 			ImGui::SameLine();
 		else
 			i = -1;
-		i++;
+		}
 	}
 
 	igEndDock();

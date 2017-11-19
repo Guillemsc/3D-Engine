@@ -96,6 +96,8 @@ void MainBar::Draw()
 
 			ImGui::MenuItem("Hardware", NULL, &App->editorUI->GetHardware()->visible);
 
+			ImGui::MenuItem("Explorer", NULL, &App->editorUI->GetExplorer()->visible);
+
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Help"))
