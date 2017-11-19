@@ -36,20 +36,22 @@ void Explorer::Draw()
 	{
 		string looking_path = App->file_system->GetLookingPath();
 
-		ImGui::BeginMenuBar();
-
-		if (ImGui::MenuItem("Back"))
+		if (ImGui::BeginMenuBar())
 		{
-			if (looking_path != App->file_system->GetAssetsPath())
-				App->file_system->SetLookingPath(GetParentDirectory(looking_path));
-		}
 
-		if (ImGui::MenuItem("New Folder"))
-		{
-			App->file_system->CreateFolder(looking_path.c_str(), "new_folder");
-		}
+			if (ImGui::MenuItem("Back"))
+			{
+				if (looking_path != App->file_system->GetAssetsPath())
+					App->file_system->SetLookingPath(GetParentDirectory(looking_path));
+			}
 
-		ImGui::EndMenuBar();
+			if (ImGui::MenuItem("New Folder"))
+			{
+				App->file_system->CreateFolder(looking_path.c_str(), "new_folder");
+			}
+
+			ImGui::EndMenuBar();
+		}
 
 		vector<string> files = App->file_system->GetFilesInPath(looking_path.c_str());
 		files = OrderFiles(files);
