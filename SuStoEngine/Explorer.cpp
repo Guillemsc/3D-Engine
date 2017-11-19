@@ -7,6 +7,7 @@
 #include "JSONLoader.h"
 #include "Functions.h"
 #include "ResourceTextureLoader.h"
+#include "ResourceManager.h"
 
 Explorer::Explorer(bool start_enabled)
 {

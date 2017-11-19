@@ -102,7 +102,7 @@ bool ModuleGameObject::Update()
 			ImGuizmo::MODE::WORLD,
 			transform.ptr(), transformation);
 
-		if (ImGuizmo::IsUsing())
+		if (ImGuizmo::IsUsing() && can_move)
 		{
 			float addition[3];
 			float rotation[3];
@@ -425,6 +425,16 @@ void ModuleGameObject::RecursiveGetGameObjectTree(GameObject * go, vector<GameOb
 	{
 		RecursiveGetGameObjectTree(*it, fill);
 	}
+}
+
+void ModuleGameObject::SetCanPick(bool set)
+{
+	can_pick = set;
+}
+
+void ModuleGameObject::SetCanMove(bool set)
+{
+	can_move = set;
 }
 
 void ModuleGameObject::DestroyGameObjects()

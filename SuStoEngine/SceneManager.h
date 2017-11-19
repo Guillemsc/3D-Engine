@@ -18,6 +18,7 @@ struct Relation
 	{
 		id = _id;
 		go = _go;
+		id_parent = -1;
 	}
 	Relation(int _id, GameObject* _go, int _id_parent)
 	{
