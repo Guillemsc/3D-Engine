@@ -61,6 +61,8 @@ public:
 	void OnSaveSerialize(JSON_Doc config);
 	void OnLoadSerialize(JSON_Doc config);
 
+	void SetDraw(bool set);
+
 	void SetDebugDraw(bool set);
  
 private:
@@ -75,6 +77,7 @@ private:
 	bool		enabled = false;
 	bool		selected = false;
 	bool		is_static = false;
+	bool		draw = false;
 
 	std::vector<Component*> components;
 

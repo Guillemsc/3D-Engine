@@ -48,7 +48,7 @@ public:
 
 	void Look(const float3& look_pos);
 
-	void GetElementsToDraw(vector<GameObject*>& inside);
+	void GetElementsToDraw();
 	void DiscardElementsToDraw(vector<GameObject*>& dynamics, vector<GameObject*>& statics);
 	bool CheckInsideFrustum(const AABB& box);
 	void SetFrustumCulling(bool set);

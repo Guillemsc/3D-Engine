@@ -49,6 +49,9 @@ void GameObject::UpdateComponents()
 
 void GameObject::Draw()
 {
+	if (!draw)
+		return;
+
 	// Push matrix
 	glPushMatrix();
 	glMultMatrixf(transform->GetGlobalTransform().Transposed().ptr());
@@ -520,6 +523,11 @@ void GameObject::OnLoadSerialize(JSON_Doc config)
 		else
 			transform->OnLoadSerialize(comp_node);
 	}
+}
+
+void GameObject::SetDraw(bool set)
+{
+	draw = set;
 }
 
 void GameObject::OnSaveSerialize(JSON_Doc doc)
