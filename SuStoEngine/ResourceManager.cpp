@@ -144,9 +144,8 @@ bool ResourceManager::LoadResource(const char * file_path, vector<Resource*>& re
 
 	if (ret)
 	{
-		App->file_system->FileCopyPaste(file_path, App->file_system->GetAssetsPath().c_str());
-
 		// Save meta file ---------------------------
+		App->file_system->FileCopyPaste(file_path, App->file_system->GetAssetsPath().c_str());
 		string uid = GetNewUID();
 		string json_name = App->file_system->GetAssetsPath() + name + ".meta";
 		JSON_Doc* meta = App->json->CreateJSON(json_name.c_str());
@@ -172,10 +171,6 @@ void ResourceManager::ImportAllResources()
 {
 	mesh_loader->ImportAllMeshes();
 	texture_loader->ImportAllTextures();
-}
-
-void ResourceManager::LoadFileIntoScene(const char * file_path)
-{
 }
 
 ResourceMeshLoader * ResourceManager::GetMeshLoader()
