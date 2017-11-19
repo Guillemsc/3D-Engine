@@ -150,6 +150,10 @@ void ResourceTextureLoader::ImportAllTextures()
 	}
 }
 
+void ResourceTextureLoader::DeImport(const char * filepath)
+{
+}
+
 void ResourceTextureLoader::Import(const char * filepath)
 {
 	string path = App->file_system->GetPathFromFilePath(filepath);

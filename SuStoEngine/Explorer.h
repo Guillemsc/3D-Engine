@@ -23,7 +23,7 @@ public:
 
 	vector<string> OrderFiles(vector<string> files);
 	string GetParentDirectory(string child);
-	void DeleteFileInAssets(string path, string filename);
+	//void DeleteFileInAssets(string path, string filename);
 
 public:
 
@@ -32,10 +32,8 @@ private:
 	uint png_icon = 0;
 	uint folder_icon = 0;
 	uint tga_icon = 0;
-	bool to_delete = false;
 
 	string path_delete;
-	string filename_delete;
 
 	std::vector<Resource*> resources;
 };

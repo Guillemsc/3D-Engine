@@ -56,11 +56,12 @@ public:
 	void Import(const char* filepath);
 	bool Export(const char* path, ResourceMesh* mesh);
 	void ImportAllMeshes();
-	void CreatePlane();
 
 	void LoadIntoScene(const char* filepath);
 
 	void DeImport(const char* filepath);
+
+	void CreatePlane();
 
 private:
 	void RecursiveLoadMesh(const aiScene* scene, aiNode* node, const char* full_path, AABB& total_abb, std::vector<Resource*>& resources, GameObject* parent = nullptr);
