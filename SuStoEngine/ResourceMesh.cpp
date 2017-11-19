@@ -169,6 +169,7 @@ void ResourceMesh::Render()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+	glDisable(GL_BLEND);
 	glDisable(GL_VERTEX_ARRAY);
 	glDisable(GL_TEXTURE_COORD_ARRAY);
 }
