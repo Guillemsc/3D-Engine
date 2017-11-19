@@ -13,8 +13,11 @@
 #include "EditorUI.h"
 #include "ModuleWindow.h"
 #include "ComponentCamera.h"
+#include "ComponentMesh.h"
+#include "ComponentMaterial.h"
 #include "ImGuizmo.h"
 #include "imgui.h"
+#include "Resource.h"
 
 ModuleGameObject::ModuleGameObject(bool enabled)
 {
@@ -319,7 +322,7 @@ void ModuleGameObject::AddGameObjectToStatic(GameObject * go)
 	if (go->GetStatic())
 		return;
 	
-	for (vector<GameObject*>::iterator it = statics.begin(); it != statics.end(); it++)
+	for (vector<GameObject*>::iterator it = statics.begin(); it != statics.end(); ++it)
 	{
 		if ((*it) == go)
 		{
@@ -338,7 +341,7 @@ void ModuleGameObject::RemoveGameObjectFromStatic(GameObject * go)
 	if (!go->GetStatic())
 		return;
 
-	for (vector<GameObject*>::iterator it = statics.begin(); it != statics.end(); it++)
+	for (vector<GameObject*>::iterator it = statics.begin(); it != statics.end(); ++it)
 	{
 		if ((*it) == go)
 		{
@@ -389,6 +392,42 @@ const vector<GameObject*> ModuleGameObject::GetDynamicGameObjects() const
 	}
 
 	return dynamics;
+}
+
+void ModuleGameObject::DeleteGameObjectsUsingResource(Resource * res)
+{
+	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
+	{
+		switch (res->GetType())
+		{
+		case RT_MESH:
+		{
+			ComponentMesh* cmesh = (ComponentMesh*)(*it)->GetComponent(MESH);
+			if (cmesh != nullptr)
+			{
+				if (cmesh->GetMesh() == (ResourceMesh*)res)
+				{
+					(*it)->RemoveComponent(MESH);
+					Destroy((*it));
+				}
+			}
+		}
+			break;
+		case RT_TEXTURE:
+		{
+			ComponentMaterial* cmat = (ComponentMaterial*)(*it)->GetComponent(MATERIAL);
+			if (cmat != nullptr)
+			{
+				if (cmat->GetTexture() == (ResourceTexture*)res)
+				{
+					(*it)->RemoveComponent(MATERIAL);
+					Destroy((*it));
+				}
+			}
+		}
+			break;
+		}
+	}
 }
 
 void ModuleGameObject::SetGuizmoOperation(ImGuizmo::OPERATION op)

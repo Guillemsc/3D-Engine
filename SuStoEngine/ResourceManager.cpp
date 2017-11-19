@@ -196,11 +196,11 @@ void ResourceManager::DeImportFile(const char * file_path)
 
 	if (TextCmp("fbx", extension.c_str()))
 	{
-		mesh_loader->DeImport(file_path);
+		mesh_loader->Unload(file_path);
 	}
 	else if (TextCmp("png", extension.c_str()) || TextCmp("dds", extension.c_str()) || TextCmp("tga", extension.c_str()))
 	{
-		texture_loader->DeImport(file_path);
+		texture_loader->Unload(file_path);
 	}
 }
 

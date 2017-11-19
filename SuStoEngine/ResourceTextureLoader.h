@@ -17,7 +17,7 @@ public:
 	bool Export(const char* filepath, ResourceTexture* resource);
 	void ImportAllTextures();
 
-	void DeImport(const char* filepath);
+	void Unload(const char* filepath);
 
 	unsigned int LoadTexture(const char * filename);
 	void UnloadTexture(unsigned int id);

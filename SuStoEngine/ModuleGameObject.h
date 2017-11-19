@@ -6,6 +6,7 @@
 #include "ImGuizmo.h"
 
 class KDTree;
+class Resource;
 
 class ModuleGameObject : public Module
 {
@@ -45,6 +46,8 @@ public:
 	void RemoveGameObjectFromStaticRecursive(GameObject* go);
 
 	const vector<GameObject*> GetDynamicGameObjects() const;
+
+	void DeleteGameObjectsUsingResource(Resource* res);
 
 	void SetGuizmoOperation(ImGuizmo::OPERATION op);
 

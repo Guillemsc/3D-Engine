@@ -59,7 +59,7 @@ public:
 
 	void LoadIntoScene(const char* filepath);
 
-	void DeImport(const char* filepath);
+	void Unload(const char* filepath);
 
 	void CreatePlane();
 

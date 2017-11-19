@@ -104,6 +104,7 @@ void Explorer::Draw()
 			if (ImGui::Button("Delete"))
 			{
 				path_delete = path;
+				App->resource_manager->DeImportFile((*it).c_str());
 				ImGui::OpenPopup("Delete PopUp");
 			}
 			if (ImGui::Button("Show in Explorer"))

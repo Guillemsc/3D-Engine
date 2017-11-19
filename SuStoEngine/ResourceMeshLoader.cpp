@@ -576,7 +576,37 @@ void ResourceMeshLoader::LoadIntoScene(const char * filepath)
 	App->scene_manager->LoadPrefab(prefab_path.c_str(), loaded_go);
 }
 
-void ResourceMeshLoader::DeImport(const char * filepath)
+void ResourceMeshLoader::Unload(const char * filepath)
 {
+	string path = App->file_system->GetPathFromFilePath(filepath);
+	string filename = App->file_system->GetFileNameFromFilePath(filepath);
+	string extension = App->file_system->GetFileExtension(filename.c_str());
+	string name = App->file_system->GetFilenameWithoutExtension(filename.c_str(), false);
 
+	string meta_path = path + filename + ".meta";
+	string prefab_path = path + filename + ".prefab";
+
+	JSON_Doc* meta = App->json->LoadJSON(meta_path.c_str());
+
+	if (meta != nullptr)
+	{
+		int resources_count = meta->GetArrayCount("resources");
+
+		for (int i = 0; i < resources_count; i++)
+		{
+			string res_uid = meta->GetStringFromArray("resources", i);
+
+			string resource_path = App->file_system->GetLibraryTexturePath() + res_uid + ".sustomesh";
+			string resource_meta_path = App->file_system->GetLibraryTexturePath() + res_uid + ".meta";
+
+			App->gameobj->DeleteGameObjectsUsingResource(App->resource_manager->Get(res_uid));
+
+			App->file_system->FileDelete(resource_path.c_str());
+			App->file_system->FileDelete(resource_meta_path.c_str());
+		}
+	}
+
+	App->file_system->FileDelete(meta_path.c_str());
+	App->file_system->FileDelete(prefab_path.c_str());
+	App->file_system->FileDelete(filepath);
 }
