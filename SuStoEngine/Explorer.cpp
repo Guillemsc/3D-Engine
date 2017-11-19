@@ -44,6 +44,11 @@ void Explorer::Draw()
 				App->file_system->SetLookingPath(GetParentDirectory(looking_path));
 		}
 
+		if (ImGui::MenuItem("New Folder"))
+		{
+			App->file_system->CreateFolder(looking_path.c_str(), "new_folder");
+		}
+
 		ImGui::EndMenuBar();
 
 		vector<string> files = App->file_system->GetFilesInPath(looking_path.c_str());
