@@ -38,7 +38,7 @@ void Explorer::Draw()
 		string filename = App->file_system->GetFileNameFromFilePath((*it).c_str());
 		string extension = App->file_system->GetFileExtension(filename.c_str());
 		extension = ToLowerCase(extension);
-		string name = App->file_system->GetFilenameWithoutExtension(filename.c_str());
+		string name = App->file_system->GetFilenameWithoutExtension(filename.c_str(), false);
 
 		if (TextCmp(filename.c_str(), ".") || TextCmp(filename.c_str(), ".."))
 			continue;
@@ -47,21 +47,21 @@ void Explorer::Draw()
 			continue;
 
 		if (TextCmp(extension.c_str(), "fbx")) {
-			ImGui::ImageButton((ImTextureID*)fbx_icon, ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0));
+			ImGui::ImageButtonWithTextDOWN((ImTextureID*)fbx_icon, name.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
 			
 			if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
 				App->LoadFile((*it).c_str());
 
 		}
 		else if (TextCmp(extension.c_str(), "png")) {
-			ImGui::ImageButton((ImTextureID*)png_icon, ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0));
+			ImGui::ImageButtonWithTextDOWN((ImTextureID*)png_icon, name.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
 		}
 		else if (TextCmp(extension.c_str(), "")) {
-			ImGui::ImageButton((ImTextureID*)folder_icon, ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0));
+			ImGui::ImageButtonWithTextDOWN((ImTextureID*)folder_icon, name.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
 		}
 
-		ImGui::SameLine();
-		ImGui::Text(filename.c_str());
+		//ImGui::SameLine();
+		//ImGui::Text(filename.c_str());
 		
 		if (i < MAX_FILES_HORIZONTAL)
 			ImGui::SameLine();
