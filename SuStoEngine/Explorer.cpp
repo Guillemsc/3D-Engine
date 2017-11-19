@@ -95,15 +95,31 @@ void Explorer::Draw()
 					App->file_system->SetLookingPath(path + filename + "\\");
 				}
 			}
+			
+			ImGui::PushID(name.c_str());
+			if (ImGui::BeginPopupContextItem("HerarchyPopup"))
+			{
+				if (ImGui::Button("Delete"))
+				{
+					to_delete = true;
+					path_delete = path;
+					filename_delete = filename;
+				}
 
-		//ImGui::SameLine();
-		//ImGui::Text(filename.c_str());
+				ImGui::EndPopup();
+			}
+			ImGui::PopID();
 
 		if (i < MAX_FILES_HORIZONTAL)
 			ImGui::SameLine();
 		else
 			i = -1;
 		}
+	}
+
+	if (to_delete)
+	{
+		DeleteFileInAssets(path_delete, filename_delete);
 	}
 
 	igEndDock();
@@ -192,4 +208,37 @@ string Explorer::GetParentDirectory(string child)
 	parent += "\\";
 
 	return parent;
+}
+
+void Explorer::DeleteFileInAssets(string path, string filename)
+{
+	if (ImGui::BeginPopupModal("Delete File", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+	{
+		ImGui::Text("Do you want to enable static for all the child objects as well?");
+		ImGui::Separator();
+
+		if (ImGui::Button("Yes, change children", ImVec2(160, 0)))
+		{
+			string file_to_delete = path + filename;
+			string meta_to_delete = file_to_delete + ".meta";
+			remove(file_to_delete.c_str());
+			remove(meta_to_delete.c_str());
+
+			to_delete = false;
+			path_delete.clear();
+			filename_delete.clear();
+
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(130, 0)))
+		{
+			to_delete = false;
+			path_delete.clear();
+			filename_delete.clear();
+
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
 }
