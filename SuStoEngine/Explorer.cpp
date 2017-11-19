@@ -37,6 +37,19 @@ void Explorer::Draw()
 			continue;
 
 		ImGui::Text(filename.c_str());
+
+		// Menu
+		ImGui::PushID((*it).c_str());
+		if (ImGui::BeginPopupContextItem("HerarchyPopup"))
+		{
+			if (ImGui::Button("Load"))
+			{
+				App->LoadFile((*it).c_str());
+			}
+
+			ImGui::EndPopup();
+		}
+		ImGui::PopID();
 	}
 
 	igEndDock();
