@@ -6,7 +6,8 @@
 #include <vector>
 
 #define SPACING 10
-#define MAX_FILES_HORIZONTAL 5
+#define MAX_FILES_HORIZONTAL 8
+#define NUM_EXTENSIONS 4
 
 class Resource;
 
@@ -27,6 +28,7 @@ private:
 	uint fbx_icon = 0;
 	uint png_icon = 0;
 	uint folder_icon = 0;
+	uint tga_icon = 0;
 
 	std::vector<Resource*> resources;
 };

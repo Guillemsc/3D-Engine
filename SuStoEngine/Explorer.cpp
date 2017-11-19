@@ -21,6 +21,7 @@ void Explorer::Start()
 	ResourceTextureLoader loader;
 	fbx_icon = loader.LoadTexture("UI/FBX_icon.png");
 	png_icon = loader.LoadTexture("UI/PNG_icon.png");
+	tga_icon = loader.LoadTexture("UI/TGA_icon.png");
 	folder_icon = loader.LoadTexture("UI/FOLDER_icon.png");
 }
 
@@ -43,7 +44,7 @@ void Explorer::Draw()
 		if (TextCmp(filename.c_str(), ".") || TextCmp(filename.c_str(), ".."))
 			continue;
 
-		if (TextCmp(extension.c_str(), "meta") || TextCmp(extension.c_str(), "tga") || TextCmp(extension.c_str(), "prefab"))
+		if (TextCmp(extension.c_str(), "meta") || TextCmp(extension.c_str(), "prefab"))
 			continue;
 
 		if (TextCmp(extension.c_str(), "fbx")) {
@@ -56,6 +57,9 @@ void Explorer::Draw()
 		else if (TextCmp(extension.c_str(), "png")) {
 			ImGui::ImageButtonWithTextDOWN((ImTextureID*)png_icon, name.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
 		}
+		else if (TextCmp(extension.c_str(), "tga")) {
+			ImGui::ImageButtonWithTextDOWN((ImTextureID*)tga_icon, name.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
+		}
 		else if (TextCmp(extension.c_str(), "")) {
 			ImGui::ImageButtonWithTextDOWN((ImTextureID*)folder_icon, name.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
 		}
@@ -65,7 +69,8 @@ void Explorer::Draw()
 		
 		if (i < MAX_FILES_HORIZONTAL)
 			ImGui::SameLine();
-
+		else
+			i = -1;
 		i++;
 	}
 
@@ -78,7 +83,7 @@ vector<string> Explorer::OrderFiles(vector<string> files)
 	vector<string> tmp;
 	
 	int i = 0;
-	while (i < 4)
+	while (i <= NUM_EXTENSIONS)
 	{
 		for (vector<string>::iterator it = files.begin(); it != files.end();)
 		{
@@ -86,7 +91,7 @@ vector<string> Explorer::OrderFiles(vector<string> files)
 			string extension = App->file_system->GetFileExtension(filename.c_str());
 			extension = ToLowerCase(extension);
 
-			if (i != 3 && (TextCmp(filename.c_str(), ".") || TextCmp(filename.c_str(), "..")))
+			if (i != NUM_EXTENSIONS && (TextCmp(filename.c_str(), ".") || TextCmp(filename.c_str(), "..")))
 			{
 				it++;
 				continue;
@@ -115,7 +120,14 @@ vector<string> Explorer::OrderFiles(vector<string> files)
 					continue;
 				}
 				break;
-			case 3: // Others
+			case 3: // Png
+				if (!TextCmp(extension.c_str(), "tga"))
+				{
+					it++;
+					continue;
+				}
+				break;
+			case 4: // Others
 				break;
 			}
 			
