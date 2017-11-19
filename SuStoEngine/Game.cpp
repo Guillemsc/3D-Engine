@@ -6,6 +6,7 @@
 #include "ModuleRenderer3D.h"
 #include "FBO.h"
 #include "ImGuizmo.h"
+#include "Functions.h"
 
 Game::Game(bool start_enabled)
 {

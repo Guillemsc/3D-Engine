@@ -29,15 +29,16 @@ void Explorer::Start()
 
 void Explorer::Draw()
 {
-	igBeginDock("Explorer", &visible, ImGuiWindowFlags_MenuBar);
-
-	ImGui::BeginMenuBar();
+	igBeginDock("Explorer", &visible, ImGuiWindowFlags_MenuBar);	
 
 	string looking_path = App->file_system->GetLookingPath();
+	
+	ImGui::BeginMenuBar();
 
-	if (ImGui::Button("Back"))
+	if (ImGui::MenuItem("Back"))
 	{
-		App->file_system->SetLookingPath(GetParentDirectory(looking_path));
+		if (looking_path != App->file_system->GetAssetsPath())
+			App->file_system->SetLookingPath(GetParentDirectory(looking_path));
 	}
 
 	ImGui::EndMenuBar();
