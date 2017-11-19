@@ -28,6 +28,7 @@ public:
 	bool LoadResource(const char* file_path, vector<Resource*>& resources);
 	void ImportAllResources();
 	void LoadFileIntoScene(const char* file_path);
+	void DeImportFile(const char* file_path);
 
 	ResourceMeshLoader* GetMeshLoader();
 	ResourceTextureLoader* GetTextureLoader();

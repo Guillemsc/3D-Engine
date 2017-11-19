@@ -379,7 +379,7 @@ Inspector * EditorUI::GetInspector()
 
 Explorer * EditorUI::GetExplorer()
 {
-	return nullptr;
+	return explorer;
 }
 
 

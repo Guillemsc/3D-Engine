@@ -15,6 +15,7 @@
 #include "Inspector.h"
 #include "ProfilerViewer.h"
 #include "Functions.h"
+#include "Explorer.h"
 
 MainBar::MainBar(bool start_enabled) : EditorElement(start_enabled)
 {
@@ -84,6 +85,8 @@ void MainBar::Draw()
 			ImGui::MenuItem("Hierarchy", NULL, &App->editorUI->GetHerarchy()->visible);
 
 			ImGui::MenuItem("Inspector", NULL, &App->editorUI->GetInspector()->visible);
+
+			ImGui::MenuItem("Explorer", NULL, &App->editorUI->GetExplorer()->visible);
 
 			ImGui::MenuItem("Console", "º", &App->editorUI->GetConsole()->visible);
 

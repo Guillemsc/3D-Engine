@@ -60,6 +60,8 @@ public:
 
 	void LoadIntoScene(const char* filepath);
 
+	void DeImport(const char* filepath);
+
 private:
 	void RecursiveLoadMesh(const aiScene* scene, aiNode* node, const char* full_path, AABB& total_abb, std::vector<Resource*>& resources, GameObject* parent = nullptr);
 	bool ResourceIsUsed(int index, ResourceType type, Resource*& res);
