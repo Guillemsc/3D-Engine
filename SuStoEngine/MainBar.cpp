@@ -15,6 +15,7 @@
 #include "Inspector.h"
 #include "ProfilerViewer.h"
 #include "Functions.h"
+#include "Explorer.h"
 
 MainBar::MainBar(bool start_enabled) : EditorElement(start_enabled)
 {
@@ -92,6 +93,8 @@ void MainBar::Draw()
 			ImGui::MenuItem("Profiler", "p", &App->editorUI->GetProfilerViewer()->visible);
 
 			ImGui::MenuItem("Hardware", NULL, &App->editorUI->GetHardware()->visible);
+
+			ImGui::MenuItem("Explorer", NULL, &App->editorUI->GetExplorer()->visible);
 
 			ImGui::EndMenu();
 		}
