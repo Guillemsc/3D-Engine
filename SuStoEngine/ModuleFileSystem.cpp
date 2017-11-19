@@ -79,6 +79,16 @@ string FileSystem::GetSettingsPath()
 	return settings_path;
 }
 
+string FileSystem::GetLookingPath()
+{
+	return looking_path;
+}
+
+void FileSystem::SetLookingPath(const string& new_path)
+{
+	looking_path = new_path;
+}
+
 std::string FileSystem::GetFileExtension(const char * file_name)
 {
 	string ret;

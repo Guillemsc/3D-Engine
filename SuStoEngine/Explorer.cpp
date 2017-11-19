@@ -23,13 +23,26 @@ void Explorer::Start()
 	png_icon = loader.LoadTexture("UI/PNG_icon.png");
 	tga_icon = loader.LoadTexture("UI/TGA_icon.png");
 	folder_icon = loader.LoadTexture("UI/FOLDER_icon.png");
+
+	App->file_system->SetLookingPath(App->file_system->GetAssetsPath().c_str());
 }
 
 void Explorer::Draw()
 {
 	igBeginDock("Explorer", &visible, ImGuiWindowFlags_MenuBar);
 
-	vector<string> files = App->file_system->GetFilesInPath(App->file_system->GetAssetsPath().c_str());
+	ImGui::BeginMenuBar();
+
+	string looking_path = App->file_system->GetLookingPath();
+
+	if (ImGui::Button("Back"))
+	{
+		App->file_system->SetLookingPath(GetParentDirectory(looking_path));
+	}
+
+	ImGui::EndMenuBar();
+
+	vector<string> files = App->file_system->GetFilesInPath(looking_path.c_str());
 	files = OrderFiles(files);
 
 	int i = 0;
@@ -52,7 +65,6 @@ void Explorer::Draw()
 			
 			if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
 				App->LoadFile((*it).c_str());
-
 		}
 		else if (TextCmp(extension.c_str(), "png")) {
 			ImGui::ImageButtonWithTextDOWN((ImTextureID*)png_icon, name.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
@@ -62,6 +74,11 @@ void Explorer::Draw()
 		}
 		else if (TextCmp(extension.c_str(), "")) {
 			ImGui::ImageButtonWithTextDOWN((ImTextureID*)folder_icon, name.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
+
+			if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
+			{
+				App->file_system->SetLookingPath(path + filename + "\\");
+			}
 		}
 
 		//ImGui::SameLine();
@@ -140,4 +157,15 @@ vector<string> Explorer::OrderFiles(vector<string> files)
 	}
 
 	return tmp;
+}
+
+string Explorer::GetParentDirectory(string child)
+{
+	string parent;
+	
+	parent = child.substr(0, child.find_last_of("\\"));
+	parent = parent.substr(0, parent.find_last_of("\\"));
+	parent += "\\";
+
+	return parent;
 }
