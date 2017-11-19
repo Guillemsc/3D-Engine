@@ -66,7 +66,11 @@ GameObjects are shown at the hierarchy. There, they can be selected (by right cl
 Also, by right clicking and then pressing the button delete it will erase the GameObject.
 
 ### Inspector
-At the inspecotr it is posible to look at the components of a selected GameObject, which would be its transform, the mesh and the texture component (the last two being optional for the GameObject).
+At the inspector it is posible to look at the components of a selected GameObject, which would be the next ones:
+* Transform. 
+* Mesh.
+* Texture.
+* Camera.
 
 ### Console
 The console prints the log of the engine, and also admits commands. At the momement, there are two commands:
@@ -80,7 +84,11 @@ At the configuration the user can change some variables for the sake of the use 
 Mainly, the user can look at the memory usage and the framerate within the profiler window.
 
 ### Hardware
-The hardware windows shows the capabilities of the hardware used by the user.
+The hardware window shows the capabilities of the hardware used by the user.
+
+### Explorer
+At the explorer window the user can access its Assets directory. 
+The explorer will only show folders, .fbx, .png and .tga.
 
 ## License
 MIT License
