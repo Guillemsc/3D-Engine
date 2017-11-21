@@ -1,3 +1,8 @@
+
+
+
+
+
 #include "Explorer.h"
 #include "imgui.h"
 #include "imgui_docking.h"
@@ -62,37 +67,58 @@ void Explorer::Draw()
 		extension = ToLowerCase(extension);
 		string name = App->file_system->GetFilenameWithoutExtension(filename.c_str(), false);
 
-		if (TextCmp(filename.c_str(), ".") || TextCmp(filename.c_str(), ".."))
+		if (TextCmp(filename.c_str(), ".") || TextCmp(filename.c_str(), "..") || TextCmp(extension.c_str(), "meta") || TextCmp(extension.c_str(), "prefab"))
 			continue;
 
-		if (TextCmp(extension.c_str(), "meta") || TextCmp(extension.c_str(), "prefab"))
-			continue;
+		if (TextCmp(extension.c_str(), "fbx"))
+			type = ExtensionType::FBX;
+		else if (TextCmp(extension.c_str(), "png"))
+			type = ExtensionType::PNG;
+		else if (TextCmp(extension.c_str(), "tga"))
+			type = ExtensionType::TGA;
+		else
+			type = ExtensionType::FOLDER;
+		
+		// set current icon
+		switch (type)
+		{
+		case FOLDER:
+			current_icon = folder_icon;
+			break;
+		case FBX:
+			current_icon = fbx_icon;
+			break;
+		case PNG:
+			current_icon = png_icon;
+			break;
+		case TGA:
+			current_icon = tga_icon;
+			break;
+		}
 
+		ImGui::ImageButtonWithTextDOWN((ImTextureID*)current_icon, filename.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
 
-		if (TextCmp(extension.c_str(), "fbx")) {
-			ImGui::ImageButtonWithTextDOWN((ImTextureID*)fbx_icon, filename.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
-			
+		// Actions with the icons
+		switch (type)
+		{
+		case FOLDER:
+			if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
+				App->file_system->SetLookingPath(path + filename + "\\");
+
+			break;
+		case FBX:
 			if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
 				App->resource_manager->LoadFileIntoScene((*it).c_str());
-		}
-		else if (TextCmp(extension.c_str(), "png")) 
-		{
-			ImGui::ImageButtonWithTextDOWN((ImTextureID*)png_icon, filename.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
-		}
-		else if (TextCmp(extension.c_str(), "tga")) 
-		{
-			ImGui::ImageButtonWithTextDOWN((ImTextureID*)tga_icon, filename.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
-		}
-		else if (TextCmp(extension.c_str(), ""))
-		{
-			ImGui::ImageButtonWithTextDOWN((ImTextureID*)folder_icon, name.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
 
-			if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
-			{
-				App->file_system->SetLookingPath(path + filename + "\\");
-			}
+			break;
+		case PNG:
+
+			break;
+		case TGA:
+
+			break;
 		}
-		
+
 		// Options ----------
 		ImGui::PushID(name.c_str());
 		if (ImGui::BeginPopupContextItem("HerarchyPopup"))
@@ -102,6 +128,12 @@ void Explorer::Draw()
 				App->resource_manager->LoadFileIntoScene((*it).c_str());
 			}
 			if (ImGui::Button("Delete"))
+			{
+				path_delete = path;
+				App->resource_manager->DeImportFile((*it).c_str());
+				ImGui::OpenPopup("Delete PopUp");
+			}
+			if (ImGui::Button("Rename"))
 			{
 				path_delete = path;
 				App->resource_manager->DeImportFile((*it).c_str());

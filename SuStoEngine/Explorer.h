@@ -11,6 +11,16 @@
 
 class Resource;
 
+enum ExtensionType
+{
+	FOLDER,
+	FBX,
+	PNG,
+	TGA,
+
+	NO_TYPE
+};
+
 class Explorer : public EditorElement
 {
 public:
@@ -33,9 +43,13 @@ private:
 	uint folder_icon = 0;
 	uint tga_icon = 0;
 
+	uint current_icon = 0;
+
 	string path_delete;
 
 	std::vector<Resource*> resources;
+
+	ExtensionType type = ExtensionType::NO_TYPE;
 };
 
 #endif
