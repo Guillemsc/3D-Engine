@@ -74,23 +74,34 @@ void GameObject::Draw()
 		{
 			// Vertex
 			glEnableClientState(GL_VERTEX_ARRAY);
-			glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdVertices());
-			glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-			// UV
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdUV());
-			glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+			if (component_mesh->GetMesh()->GetIdVertices() != 0)
+			{
+				glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdVertices());
+				glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-			// Index
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdIndices());
+				if (component_mesh->GetMesh()->GetIdUV() != 0)
+				{
+					// UV
+					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+					glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdUV());
+					glTexCoordPointer(3, GL_FLOAT, 0, NULL);
 
-			// Draw
-			glDrawElements((GLenum)GL_TRIANGLES, component_mesh->GetMesh()->GetNumIndices(), GL_UNSIGNED_INT, NULL);
+					if (component_mesh->GetMesh()->GetIdIndices() != 0)
+					{
 
+						// Index
+						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdIndices());
+
+						// Draw
+						glDrawElements((GLenum)GL_TRIANGLES, component_mesh->GetMesh()->GetNumIndices(), GL_UNSIGNED_INT, NULL);
+					}
+				}
+			}
 			// Disable
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 			glDisableClientState(GL_VERTEX_ARRAY);
+
 
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

@@ -458,6 +458,7 @@ bool ResourceMeshLoader::Export(const char * path, ResourceMesh* mesh)
 	//fopen
 	if (App->file_system->FileSave(path, data, name.c_str(), "sustomesh", size) == false)
 	{
+		RELEASE_ARRAY(data);
 		return false;
 	}
 

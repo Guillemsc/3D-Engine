@@ -23,9 +23,6 @@ bool ResourceManager::Start()
 {
 	bool ret = true;
 
-	std::string new_n;
-	bool f = App->file_system->CheckNameCollision("C:\\Users\\Guillem\\Documents\\GitHub\\3D-Engine\\SuStoEngine\\Resources\\config.json", new_n);
-
 	return ret;
 }
 
