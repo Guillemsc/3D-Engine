@@ -70,9 +70,6 @@
     <Filter Include="Sources\5. GameObjects ===========\Components\UI">
       <UniqueIdentifier>{f4502cdd-7657-4667-aa3a-60b747977d3b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\5. GameObjects ===========\Components\UI\Components">
-      <UniqueIdentifier>{a4849277-63d7-4c5f-8b0a-34218e3fdf0d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\5. GameObjects ===========\Components\UI\Elements">
       <UniqueIdentifier>{e893e753-aa26-4cdd-bf71-404e0c529095}</UniqueIdentifier>
     </Filter>
@@ -480,9 +477,6 @@
     <ClInclude Include="Explorer.h">
       <Filter>Sources\4. Editor ================</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentUserInterface.h">
-      <Filter>Sources\5. GameObjects ===========\Components\UI\Components</Filter>
-    </ClInclude>
     <ClInclude Include="UICanvas.h">
       <Filter>Sources\5. GameObjects ===========\Components\UI\Elements</Filter>
     </ClInclude>
@@ -790,9 +784,6 @@
     </ClCompile>
     <ClCompile Include="Explorer.cpp">
       <Filter>Sources\4. Editor ================</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentUserInterface.cpp">
-      <Filter>Sources\5. GameObjects ===========\Components\UI\Components</Filter>
     </ClCompile>
     <ClCompile Include="SuStoUI.cpp">
       <Filter>Sources\5. GameObjects ===========\Components\UI</Filter>

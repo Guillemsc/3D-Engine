@@ -15,7 +15,14 @@ enum ComponentType
 	MESH,
 	MATERIAL,
 	CAMERA,
-	UI
+	
+	UI_CANVAS,
+	UI_PANEL,
+	UI_IMAGE,
+	UI_TEXT,
+	UI_BUTTON,
+	UI_TEXT_INPUT,
+	UI_CHECKBOX
 };
 
 class Component

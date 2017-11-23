@@ -101,7 +101,6 @@
     <ClInclude Include="ComponentMesh.h" />
     <ClInclude Include="ComponentMaterial.h" />
     <ClInclude Include="ComponentTransform.h" />
-    <ClInclude Include="ComponentUserInterface.h" />
     <ClInclude Include="Configuration.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="Cursor.h" />
@@ -239,7 +238,6 @@
     <ClCompile Include="ComponentMesh.cpp" />
     <ClCompile Include="ComponentMaterial.cpp" />
     <ClCompile Include="ComponentTransform.cpp" />
-    <ClCompile Include="ComponentUserInterface.cpp" />
     <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="Cursor.cpp" />
