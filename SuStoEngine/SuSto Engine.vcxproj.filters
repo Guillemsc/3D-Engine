@@ -67,6 +67,21 @@
     <Filter Include="Sources\6. Resources =============\Loaders">
       <UniqueIdentifier>{15b91578-5e35-4dc2-bd7f-b18595074ce9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\5. GameObjects ===========\Components\UI">
+      <UniqueIdentifier>{f4502cdd-7657-4667-aa3a-60b747977d3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\5. GameObjects ===========\Components\UI\Components">
+      <UniqueIdentifier>{a4849277-63d7-4c5f-8b0a-34218e3fdf0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\5. GameObjects ===========\Components\UI\Elements">
+      <UniqueIdentifier>{e893e753-aa26-4cdd-bf71-404e0c529095}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\5. GameObjects ===========\Components\UI\Implementations">
+      <UniqueIdentifier>{f7ab3e0f-7f8b-49e4-9cd1-476281407e76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\5. GameObjects ===========\Components\UI\Event System">
+      <UniqueIdentifier>{4d8e2408-8dd8-4ba1-8e10-bbc640591513}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleAudio.h">
@@ -465,6 +480,21 @@
     <ClInclude Include="Explorer.h">
       <Filter>Sources\4. Editor ================</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentUserInterface.h">
+      <Filter>Sources\5. GameObjects ===========\Components\UI\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UICanvas.h">
+      <Filter>Sources\5. GameObjects ===========\Components\UI\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="SuStoUI.h">
+      <Filter>Sources\5. GameObjects ===========\Components\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SuSto_impl_sdl_opengl.h">
+      <Filter>Sources\5. GameObjects ===========\Components\UI\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="SuSto_event_system.h">
+      <Filter>Sources\5. GameObjects ===========\Components\UI\Event System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -760,6 +790,18 @@
     </ClCompile>
     <ClCompile Include="Explorer.cpp">
       <Filter>Sources\4. Editor ================</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentUserInterface.cpp">
+      <Filter>Sources\5. GameObjects ===========\Components\UI\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="SuStoUI.cpp">
+      <Filter>Sources\5. GameObjects ===========\Components\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SuSto_impl_sdl_opengl.cpp">
+      <Filter>Sources\5. GameObjects ===========\Components\UI\Implementations</Filter>
+    </ClCompile>
+    <ClCompile Include="SuSto_event_system.cpp">
+      <Filter>Sources\5. GameObjects ===========\Components\UI\Event System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

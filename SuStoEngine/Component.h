@@ -15,6 +15,7 @@ enum ComponentType
 	MESH,
 	MATERIAL,
 	CAMERA,
+	UI
 };
 
 class Component
