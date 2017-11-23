@@ -1,9 +1,6 @@
 #ifndef SUSTO_UI
 #define SUSTO_UI
 
-
-
-
 namespace SuStoUI
 {
 	struct Vec2 
@@ -35,7 +32,11 @@ namespace SuStoUI
 
 	struct Color 
 	{
+		Color();
+		Color(float r, float g, float b, float a);
+		Color(const Color& copy);
 
+		float r, g, b, a = 0;
 	};
 
 

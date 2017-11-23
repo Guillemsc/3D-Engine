@@ -38,4 +38,17 @@ SuStoUI::Rect::Rect(const Rect & copy)
 {
 }
 
+SuStoUI::Color::Color()
+{
+}
+
+SuStoUI::Color::Color(float r, float g, float b, float a)
+{
+}
+
+SuStoUI::Color::Color(const Color & copy)
+{
+}
+
+
 // --------------------------------------------------------------------
