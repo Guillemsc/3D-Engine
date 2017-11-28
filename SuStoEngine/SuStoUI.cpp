@@ -97,6 +97,18 @@ bool SuStoUI::Rect::PointInRect(const Vec2 & point)
 	return false;
 }
 
+void SuStoUI::Rect::SetPos(const Vec2 & pos)
+{
+	x = pos.x;
+	y = pos.y;
+}
+
+void SuStoUI::Rect::SetSize(const Vec2 & size)
+{
+	w = size.x;
+	h = size.y;
+}
+
 SuStoUI::Color::Color()
 {
 	r = 0;
@@ -160,4 +172,94 @@ bool SuStoUI::TextCmp(const char * text1, const char * text2)
 		ret = true;
 
 	return ret;
+}
+
+SuStoUI::Plane::Plane(Vec2 size)
+{
+	int resX = 2; // 2 minimum
+	int resZ = 2;
+
+	//vertices
+	uint num_vert = resX * resZ;
+	Vec3 ver[4];
+	for (int z = 0; z < resZ; z++)
+	{
+		// [ -length / 2, length / 2 ]
+		float zPos = ((float)z / (resZ - 1) - .5f) * size.y;
+		for (int x = 0; x < resX; x++)
+		{
+			// [ -width / 2, width / 2 ]
+			float xPos = ((float)x / (resX - 1) - .5f) * size.x;
+			ver[x + z * resX] = Vec3(xPos, 0.f, zPos);
+		}
+	}
+
+	vertices = new float[num_vert * 3];
+	for (int i = 0; i < num_vert; ++i)
+	{
+		memcpy(vertices + i * 3, &ver[i].x, sizeof(float) * 3);
+	}
+
+	//indices
+	uint num_indices = (resX - 1) * (resZ - 1) * 6;
+	uint ind[6];
+	int t = 0;
+	for (int face = 0; face < num_indices / 6; ++face)
+	{
+		int i = face % (resX - 1) + (face / (resZ - 1) * resX);
+
+		ind[t++] = i + resX;
+		ind[t++] = i + 1;
+		ind[t++] = i;
+
+		ind[t++] = i + resX;
+		ind[t++] = i + resX + 1;
+		ind[t++] = i + 1;
+	}
+	indices = new uint[num_indices];
+	memcpy(indices, ind, sizeof(uint)*num_indices);
+
+	//uv
+	Vec3 uv[4];
+	for (int v = 0; v < resZ; v++)
+	{
+		for (int u = 0; u < resX; u++)
+		{
+			uv[u + v * resX] = Vec3((float)u / (resX - 1), (float)v / (resZ - 1), 0.f);
+		}
+	}
+
+	float* uvs = new float[num_vert * 3];
+	for (int i = 0; i < num_vert; ++i)
+	{
+		memcpy(uvs + i * 3, &uv[i].x, sizeof(float) * 3);
+	}
+}
+
+void SuStoUI::Plane::LoadToMem()
+{
+}
+
+void SuStoUI::Plane::UnloadFromMem()
+{
+}
+
+void SuStoUI::Plane::CleanUp()
+{
+	UnloadFromMem();
+
+	// Vertices
+	id_vertices = 0;
+	num_vertices = 0;
+	RELEASE_ARRAY(vertices);
+
+	// Indices
+	id_indices = 0;
+	num_indices = 0;
+	RELEASE_ARRAY(indices);
+
+	// UVs
+	id_uv = 0;
+	num_uvs = 0;
+	RELEASE_ARRAY(uvs);
 }

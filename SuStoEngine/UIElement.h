@@ -18,10 +18,14 @@ public:
 
 	virtual void OnEvent();
 
+	void SetPos(Vec2 pos);
+	Vec2 GetPos();
+
 private:
 	SuStoUIMain* ui_main = nullptr;
 	ElementType  type = ElementType::UNDEFINED;
-	Vec2		 pos;
+	Rect		 rect;
+	Plane		 plane;
 };
 
 #endif

@@ -7,7 +7,34 @@
 
 class UIElement;
 
+// -------------------------------
+// GLOBALS -----------------------
+// -------------------------------
 typedef unsigned int uint;
+
+// Deletes a buffer
+#define RELEASE( x )		\
+    {                       \
+    if( x != nullptr )      \
+	    {                   \
+      delete x;             \
+	  x = nullptr;          \
+	    }                   \
+    }
+
+// Deletes an array of buffers
+#define RELEASE_ARRAY( x )  \
+    {                       \
+    if( x != nullptr )      \
+	    {                   \
+      delete[] x;           \
+	  x = nullptr;          \
+	    }                   \
+                            \
+    }
+
+// -------------------------------
+// -------------------------------
 
 namespace SuStoUI
 {
@@ -39,6 +66,8 @@ namespace SuStoUI
 		Rect(const Rect& copy);
 		bool operator == (const Rect& comp);
 		bool PointInRect(const Vec2& point);
+		void SetPos(const Vec2& pos);
+		void SetSize(const Vec2& size);
 
 		float x, y, w, h = 0;
 	};
@@ -50,6 +79,28 @@ namespace SuStoUI
 		bool operator == (const Color& comp);
 
 		float r, g, b, a = 0;
+	};
+	struct Plane
+	{
+		Plane(Vec2 size);
+
+		void LoadToMem();
+		void UnloadFromMem();
+
+		void CleanUp();
+
+	private:
+		uint   id_vertices = 0;
+		uint   num_vertices = 0;
+		float* vertices = nullptr;
+
+		uint   id_indices = 0;
+		uint   num_indices = 0;
+		uint*  indices = nullptr;
+
+		uint   id_uv = 0;
+		uint   num_uvs = 0;
+		float* uvs = nullptr;
 	};
 
 	enum ElementType
@@ -93,7 +144,7 @@ namespace SuStoUI
 
 	std::string ToUpperCase(std::string str);
 	std::string ToLowerCase(std::string str);
-	bool TextCmp(const char * text1, const char * text2); // Compare Texts
+	bool TextCmp(const char * text1, const char * text2); 
 }
 
 

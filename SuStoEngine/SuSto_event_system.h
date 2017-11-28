@@ -9,12 +9,13 @@ public:
 	UIEvent();
 	~UIEvent();
 
-	union MouseClick
+	struct MouseClick
 	{
 		bool left_button = false;
 		bool right_button = false;
 		bool wheel_button = false;
 	};
+
 };
 
 class EventSystem
@@ -22,6 +23,8 @@ class EventSystem
 public:
 	EventSystem();
 	~EventSystem();
+
+	void SendEvend(UIEvent ev);
 };
 
 #endif

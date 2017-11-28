@@ -18,20 +18,17 @@ void ResourceMesh::CleanUp()
 	// Vertices
 	id_vertices = 0;
 	num_vertices = 0;
-	if (vertices != nullptr)
-		RELEASE_ARRAY(vertices);
+	RELEASE_ARRAY(vertices);
 
 	// Indices
 	id_indices = 0;
 	num_indices = 0;
-	if (indices != nullptr)
-		RELEASE_ARRAY(indices);
+	RELEASE_ARRAY(indices);
 
 	// UVs
 	id_uv = 0;
 	num_uvs = 0;
-	if (uvs != nullptr)
-		RELEASE_ARRAY(uvs);
+	RELEASE_ARRAY(uvs);
 }
 
 void ResourceMesh::SetFaces(float * _vertices, uint _num_vertices, uint * _indices, uint _num_indices)
