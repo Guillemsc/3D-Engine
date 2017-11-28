@@ -3,18 +3,29 @@
 
 class UIElement;
 
+enum UIEventType
+{
+	MOUSE_CLICK,
+
+	UIEVENT_NULL
+};
+
 class UIEvent
 {
 public:
-	UIEvent();
+	UIEvent(UIEventType type);
 	~UIEvent();
 
-	union MouseClick
+	struct MouseClick
 	{
 		bool left_button = false;
 		bool right_button = false;
 		bool wheel_button = false;
 	};
+
+	MouseClick mouse_click;
+
+	UIEventType event_type = UIEventType::UIEVENT_NULL;
 };
 
 class EventSystem
@@ -22,6 +33,8 @@ class EventSystem
 public:
 	EventSystem();
 	~EventSystem();
+
+	void SendEvent(UIEvent ev);
 };
 
 #endif
