@@ -119,6 +119,10 @@ bool SuStoUI::Color::operator==(const Color & comp)
 	if (r == comp.r && g == comp.g && b == comp.b && a == comp.a)
 		return true;
 	return false;
+
 }
 
 // --------------------------------------------------------------------
+
+
+
