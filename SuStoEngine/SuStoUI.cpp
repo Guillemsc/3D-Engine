@@ -64,15 +64,15 @@ SuStoUI::Rect::Rect()
 	x = 0;
 	y = 0;
 	w = 0;
-	z = 0;
+	h = 0;
 }
 
-SuStoUI::Rect::Rect(float _x, float _y, float _w, float _z)
+SuStoUI::Rect::Rect(float _x, float _y, float _w, float _h)
 {
 	x = _x;
 	y = _y;
 	w = _w;
-	z = _z;
+	h = _h;
 }
 
 SuStoUI::Rect::Rect(const Rect & copy)
@@ -80,12 +80,19 @@ SuStoUI::Rect::Rect(const Rect & copy)
 	x = copy.x;
 	y = copy.y;
 	w = copy.w;
-	z = copy.z;
+	h = copy.h;
 }
 
 bool SuStoUI::Rect::operator==(const Rect & comp)
 {
-	if (x == comp.x && y == comp.y && w == comp.w && z == comp.z)
+	if (x == comp.x && y == comp.y && w == comp.w && h == comp.h)
+		return true;
+	return false;
+}
+
+bool SuStoUI::Rect::PointInRect(const Vec2 & point)
+{
+	if (point.x >= x && point.x <= x + w && point.y >= y && point.y <= y + h)
 		return true;
 	return false;
 }
@@ -122,7 +129,35 @@ bool SuStoUI::Color::operator==(const Color & comp)
 
 }
 
-// --------------------------------------------------------------------
+std::string SuStoUI::ToUpperCase(std::string str)
+{
+	for (uint i = 0; i < str.size(); i++)
+	{
+		str[i] = toupper(str[i]);
+	}
 
+	return str;
+}
 
+std::string SuStoUI::ToLowerCase(std::string str)
+{
+	for (uint i = 0; i < str.size(); i++)
+	{
+		str[i] = tolower(str[i]);
+	}
 
+	return str;
+}
+
+bool SuStoUI::TextCmp(const char * text1, const char * text2)
+{
+	bool ret = false;
+
+	if (text1 == nullptr || text2 == nullptr)
+		return false;
+
+	if (strcmp(text1, text2) == 0)
+		ret = true;
+
+	return ret;
+}

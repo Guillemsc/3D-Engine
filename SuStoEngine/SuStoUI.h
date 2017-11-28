@@ -3,8 +3,11 @@
 
 #include <vector>
 #include <list>
+#include <string>
 
 class UIElement;
+
+typedef unsigned int uint;
 
 namespace SuStoUI
 {
@@ -20,7 +23,6 @@ namespace SuStoUI
 
 		float x, y = 0;
 	};
-
 	struct Vec3 
 	{
 		Vec3();
@@ -30,18 +32,17 @@ namespace SuStoUI
 
 		float x, y, z = 0;
 	};
-
 	struct Rect 
 	{
 		Rect();
 		Rect(float x, float y, float w, float z);
 		Rect(const Rect& copy);
 		bool operator == (const Rect& comp);
+		bool PointInRect(const Vec2& point);
 
-		float x, y, w, z = 0;
+		float x, y, w, h = 0;
 	};
-
-	struct Color 
+	struct Color  
 	{
 		Color();
 		Color(float r, float g, float b, float a);
@@ -53,14 +54,15 @@ namespace SuStoUI
 
 	enum ElementType
 	{
-		UNDEFINED,
 		CANVAS,
 		PANEL,
 		IMAGE,
 		TEXT,
 		BUTTON,
 		TEXT_INPUT,
-		CHECKBOX
+		CHECKBOX,
+
+		UNDEFINED
 	};
 
 	class SuStoUIMain
@@ -88,6 +90,10 @@ namespace SuStoUI
 		std::vector<UIElement*> elements;
 		std::list<UIElement*>  to_delete;
 	};
+
+	std::string ToUpperCase(std::string str);
+	std::string ToLowerCase(std::string str);
+	bool TextCmp(const char * text1, const char * text2); // Compare Texts
 }
 
 
