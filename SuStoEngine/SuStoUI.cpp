@@ -26,6 +26,11 @@ bool SuStoUI::Vec2::operator==(const Vec2 & comp)
 	return false;
 }
 
+SuStoUI::Vec2 SuStoUI::Vec2::Zero()
+{
+	return Vec2(0, 0);
+}
+
 SuStoUI::Vec3::Vec3()
 {
 	x = 0;
@@ -115,47 +120,5 @@ bool SuStoUI::Color::operator==(const Color & comp)
 		return true;
 	return false;
 }
-
-template<typename T>
-SuStoUI::Vector<T>::Vector()
-{
-
-}
-
-template<typename T>
-SuStoUI::Vector<T>::~Vector()
-{
-
-}
-
-template<typename T>
-bool SuStoUI::Vector<T>::empty()
-{
-
-}
-
-template<typename T>
-int SuStoUI::Vector<T>::size()
-{
-
-}
-
-template<typename T>
-T& SuStoUI::Vector<T>::operator[](int i)
-{
-
-}
-
-template<typename T>
-const T& SuStoUI::Vector<T>::operator[](int i) const
-{
-
-}
-//
-//template<typename T>
-//const T& SuStoUI::Vector<T>::vl
-//{
-//
-//}
 
 // --------------------------------------------------------------------

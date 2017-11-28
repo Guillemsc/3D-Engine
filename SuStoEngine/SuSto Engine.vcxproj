@@ -226,6 +226,7 @@
     <ClInclude Include="Time\Clock.h" />
     <ClInclude Include="ToolsBar.h" />
     <ClInclude Include="UICanvas.h" />
+    <ClInclude Include="UIElement.h" />
     <ClInclude Include="XMLLoader.h" />
   </ItemGroup>
   <ItemGroup>
@@ -329,6 +330,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Time\Clock.cpp" />
     <ClCompile Include="ToolsBar.cpp" />
+    <ClCompile Include="UIElement.cpp" />
     <ClCompile Include="XMLLoader.cpp" />
   </ItemGroup>
   <ItemGroup>

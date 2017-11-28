@@ -489,6 +489,9 @@
     <ClInclude Include="SuSto_event_system.h">
       <Filter>Sources\2. Modules ==============\UI\Event System</Filter>
     </ClInclude>
+    <ClInclude Include="UIElement.h">
+      <Filter>Sources\2. Modules ==============\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -793,6 +796,9 @@
     </ClCompile>
     <ClCompile Include="SuSto_event_system.cpp">
       <Filter>Sources\2. Modules ==============\UI\Event System</Filter>
+    </ClCompile>
+    <ClCompile Include="UIElement.cpp">
+      <Filter>Sources\2. Modules ==============\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
