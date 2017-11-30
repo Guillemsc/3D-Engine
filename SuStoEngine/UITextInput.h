@@ -1,15 +1,15 @@
-#ifndef _UI_CANVAS_
-#define _UI_CANVAS_
+#ifndef _UI_TEXT_INPUT_
+#define _UI_TEXT_INPUT_
 
 #include "UIElement.h"
 
 using namespace SuStoUI;
 
-class UICanvas : public UIElement
+class UITextInput : public UIElement
 {
 public:
-	UICanvas(SuStoUIMain* main);
-	~UICanvas();
+	UITextInput(SuStoUIMain* main);
+	~UITextInput();
 
 	void Awake();
 	void Start();
@@ -21,8 +21,8 @@ public:
 private:
 
 public:
-	
+
 };
 
 
-#endif // !_UI_CANVAS_
+#endif // !_UI_TEXT_INPUT_

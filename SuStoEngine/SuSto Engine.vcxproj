@@ -225,8 +225,14 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="Time\Clock.h" />
     <ClInclude Include="ToolsBar.h" />
+    <ClInclude Include="UIButton.h" />
     <ClInclude Include="UICanvas.h" />
+    <ClInclude Include="UICheckBox.h" />
     <ClInclude Include="UIElement.h" />
+    <ClInclude Include="UIImage.h" />
+    <ClInclude Include="UIPanel.h" />
+    <ClInclude Include="UIText.h" />
+    <ClInclude Include="UITextInput.h" />
     <ClInclude Include="XMLLoader.h" />
   </ItemGroup>
   <ItemGroup>
@@ -330,8 +336,14 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Time\Clock.cpp" />
     <ClCompile Include="ToolsBar.cpp" />
+    <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UICanvas.cpp" />
+    <ClCompile Include="UICheckBox.cpp" />
     <ClCompile Include="UIElement.cpp" />
+    <ClCompile Include="UIImage.cpp" />
+    <ClCompile Include="UIPanel.cpp" />
+    <ClCompile Include="UIText.cpp" />
+    <ClCompile Include="UITextInput.cpp" />
     <ClCompile Include="XMLLoader.cpp" />
   </ItemGroup>
   <ItemGroup>

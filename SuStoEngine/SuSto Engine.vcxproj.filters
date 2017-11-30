@@ -492,6 +492,24 @@
     <ClInclude Include="UIElement.h">
       <Filter>Sources\2. Modules ==============\UI</Filter>
     </ClInclude>
+    <ClInclude Include="UIButton.h">
+      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="UIText.h">
+      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="UICheckBox.h">
+      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="UIPanel.h">
+      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="UIImage.h">
+      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="UITextInput.h">
+      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -801,6 +819,24 @@
       <Filter>Sources\2. Modules ==============\UI</Filter>
     </ClCompile>
     <ClCompile Include="UICanvas.cpp">
+      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="UIButton.cpp">
+      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="UIText.cpp">
+      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="UICheckBox.cpp">
+      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="UIPanel.cpp">
+      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="UIImage.cpp">
+      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="UITextInput.cpp">
       <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
     </ClCompile>
   </ItemGroup>

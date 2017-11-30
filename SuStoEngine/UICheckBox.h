@@ -1,15 +1,15 @@
-#ifndef _UI_CANVAS_
-#define _UI_CANVAS_
+#ifndef _UI_CHECKBOX_
+#define _UI_CHECKBOX_
 
 #include "UIElement.h"
 
 using namespace SuStoUI;
 
-class UICanvas : public UIElement
+class UICheckBox : public UIElement
 {
 public:
-	UICanvas(SuStoUIMain* main);
-	~UICanvas();
+	UICheckBox(SuStoUIMain* main);
+	~UICheckBox();
 
 	void Awake();
 	void Start();
@@ -21,8 +21,8 @@ public:
 private:
 
 public:
-	
+
 };
 
 
-#endif // !_UI_CANVAS_
+#endif // !_UI_CHECKBOX_

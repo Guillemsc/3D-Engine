@@ -1,6 +1,12 @@
 #include "SuStoUI.h"
 #include "UIElement.h"
 #include "UICanvas.h"
+#include "UIPanel.h"
+#include "UIImage.h"
+#include "UIText.h"
+#include "UIButton.h"
+#include "UITextInput.h"
+#include "UICheckBox.h"
 
 // Data types
 SuStoUI::Vec2::Vec2()
@@ -316,16 +322,22 @@ UIElement * SuStoUI::SuStoUIMain::CreateElement(ElementType type)
 		ret = new UICanvas(this);
 		break;
 	case SuStoUI::PANEL:
+		ret = new UIPanel(this);
 		break;
 	case SuStoUI::IMAGE:
+		ret = new UIImage(this);
 		break;
 	case SuStoUI::TEXT:
+		ret = new UIText(this);
 		break;
 	case SuStoUI::BUTTON:
+		ret = new UIButton(this);
 		break;
 	case SuStoUI::TEXT_INPUT:
+		ret = new UITextInput(this);
 		break;
 	case SuStoUI::CHECKBOX:
+		ret = new UICheckBox(this);
 		break;
 	default:
 		LOG_OUTPUT("Error while creating the element, type not found");

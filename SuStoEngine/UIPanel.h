@@ -1,15 +1,15 @@
-#ifndef _UI_CANVAS_
-#define _UI_CANVAS_
+#ifndef _UI_PANEL_
+#define _UI_PANEL_
 
 #include "UIElement.h"
 
 using namespace SuStoUI;
 
-class UICanvas : public UIElement
+class UIPanel : public UIElement
 {
 public:
-	UICanvas(SuStoUIMain* main);
-	~UICanvas();
+	UIPanel(SuStoUIMain* main);
+	~UIPanel();
 
 	void Awake();
 	void Start();
@@ -21,8 +21,8 @@ public:
 private:
 
 public:
-	
+
 };
 
 
-#endif // !_UI_CANVAS_
+#endif // !_UI_PANEL_

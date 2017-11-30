@@ -8,3 +8,23 @@ UICanvas::UICanvas(SuStoUIMain * main) : UIElement(main, ElementType::CANVAS)
 UICanvas::~UICanvas()
 {
 }
+
+void UICanvas::Awake()
+{
+}
+
+void UICanvas::Start()
+{
+}
+
+void UICanvas::Update()
+{
+}
+
+void UICanvas::CleanUp()
+{
+}
+
+void UICanvas::OnEvent()
+{
+}
