@@ -25,6 +25,6 @@ void UIPanel::CleanUp()
 {
 }
 
-void UIPanel::OnEvent()
+void UIPanel::OnEvent(UIEvent ev)
 {
 }

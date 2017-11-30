@@ -25,6 +25,6 @@ void UITextInput::CleanUp()
 {
 }
 
-void UITextInput::OnEvent()
+void UITextInput::OnEvent(UIEvent ev)
 {
 }

@@ -25,6 +25,6 @@ void UIText::CleanUp()
 {
 }
 
-void UIText::OnEvent()
+void UIText::OnEvent(UIEvent ev)
 {
 }

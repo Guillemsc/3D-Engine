@@ -16,7 +16,7 @@ public:
 	void Update();
 	void CleanUp();
 
-	void OnEvent();
+	void OnEvent(UIEvent ev);
 
 private:
 

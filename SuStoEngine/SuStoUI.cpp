@@ -182,10 +182,6 @@ bool SuStoUI::TextCmp(const char * text1, const char * text2)
 	return ret;
 }
 
-SuStoUI::Plane::Plane()
-{
-}
-
 SuStoUI::Plane::Plane(Vec2 size)
 {
 	int resX = 2; // 2 minimum
@@ -353,4 +349,12 @@ void SuStoUI::SuStoUIMain::DeleteElement(UIElement * del)
 
 void SuStoUI::SuStoUIMain::DestroyElements()
 {
+}
+
+SuStoUI::Texture::Texture(byte * _texture_data, uint _texture_data_size, int _format, Vec2 _size)
+{
+	texture_data = _texture_data;
+	texture_data_size = _texture_data_size;
+	format = _format;
+	size = _size;
 }

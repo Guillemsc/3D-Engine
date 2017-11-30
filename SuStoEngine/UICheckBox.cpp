@@ -25,6 +25,6 @@ void UICheckBox::CleanUp()
 {
 }
 
-void UICheckBox::OnEvent()
+void UICheckBox::OnEvent(UIEvent ev)
 {
 }

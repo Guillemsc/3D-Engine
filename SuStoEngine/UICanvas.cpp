@@ -25,6 +25,6 @@ void UICanvas::CleanUp()
 {
 }
 
-void UICanvas::OnEvent()
+void UICanvas::OnEvent(UIEvent ev)
 {
 }

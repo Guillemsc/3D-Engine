@@ -11,6 +11,8 @@ class UIElement;
 // GLOBALS -----------------------
 // -------------------------------
 typedef unsigned int uint;
+typedef unsigned char byte;
+typedef wchar_t wchar;
 
 // Deletes a buffer
 #define RELEASE( x )		\
@@ -54,6 +56,7 @@ namespace SuStoUI
 
 		float x, y = 0;
 	};
+
 	struct Vec3 
 	{
 		Vec3();
@@ -63,6 +66,7 @@ namespace SuStoUI
 
 		float x, y, z = 0;
 	};
+
 	struct Rect 
 	{
 		Rect();
@@ -75,6 +79,7 @@ namespace SuStoUI
 
 		float x, y, w, h = 0;
 	};
+
 	struct Color  
 	{
 		Color();
@@ -84,9 +89,9 @@ namespace SuStoUI
 
 		float r, g, b, a = 0;
 	};
-	struct Plane
+
+	class Plane
 	{
-		Plane();
 		Plane(Vec2 size);
 
 		void LoadToMem();
@@ -106,6 +111,39 @@ namespace SuStoUI
 		uint   id_uv = 0;
 		uint   num_uvs = 0;
 		float* uvs = nullptr;
+	};
+
+	class Texture
+	{
+	public:
+		Texture(byte* texture_data, uint texture_data_size, int format, Vec2 size);
+
+	private:
+		byte*  texture_data = nullptr;
+		uint   texture_data_size = 0;
+		uint   texture_id = 0;
+		int	   format = 0;
+		Vec2   size = Vec2(0, 0);
+	};
+
+	/*class Font
+	{
+	public:
+		Font();
+
+	private:
+		FontGlyph GetGlyph(wchar c);
+
+	private:
+		std::vector<FontGlyph> glyphs;
+	};*/
+
+	struct FontGlyph
+	{
+		wchar codepoint;          // 0x0000..0xFFFF
+		float dis_next_char;      // Distance to next character (= data from font + ImFontConfig::GlyphExtraSpacing.x baked in)
+		float X0, Y0, X1, Y1;     // Glyph corners
+		float U0, V0, U1, V1;     // Texture coordinates
 	};
 
 	enum ElementType

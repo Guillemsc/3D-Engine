@@ -25,6 +25,6 @@ void UIButton::CleanUp()
 {
 }
 
-void UIButton::OnEvent()
+void UIButton::OnEvent(UIEvent ev)
 {
 }

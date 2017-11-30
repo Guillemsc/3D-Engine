@@ -25,6 +25,6 @@ void UIImage::CleanUp()
 {
 }
 
-void UIImage::OnEvent()
+void UIImage::OnEvent(UIEvent ev)
 {
 }
