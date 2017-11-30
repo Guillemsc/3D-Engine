@@ -270,6 +270,26 @@ void SuStoUI::Plane::CleanUp()
 	RELEASE_ARRAY(uvs);
 }
 
+SuStoUI::SuStoUIMain::SuStoUIMain()
+{
+}
+
+SuStoUI::SuStoUIMain::~SuStoUIMain()
+{
+}
+
+void SuStoUI::SuStoUIMain::Awake()
+{
+}
+
+void SuStoUI::SuStoUIMain::Start()
+{
+}
+
+void SuStoUI::SuStoUIMain::PreUpdate()
+{
+}
+
 void SuStoUI::SuStoUIMain::Update()
 {
 }
@@ -320,25 +340,5 @@ void SuStoUI::SuStoUIMain::DeleteElement(UIElement * del)
 }
 
 void SuStoUI::SuStoUIMain::DestroyElements()
-{
-}
-
-SuStoUI::SuStoUIMain::SuStoUIMain()
-{
-}
-
-SuStoUI::SuStoUIMain::~SuStoUIMain()
-{
-}
-
-void SuStoUI::SuStoUIMain::Awake()
-{
-}
-
-void SuStoUI::SuStoUIMain::Start()
-{
-}
-
-void SuStoUI::SuStoUIMain::PreUpdate()
 {
 }
