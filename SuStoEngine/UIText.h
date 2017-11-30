@@ -1,6 +1,8 @@
 #ifndef _UI_TEXT_
 #define _UI_TEXT_
 
+#include <string>
+
 #include "UIElement.h"
 
 using namespace SuStoUI;
@@ -18,7 +20,11 @@ public:
 
 	void OnEvent();
 
+	void SetText(const char* new_text);
+	std::string GetText() const;
+
 private:
+	std::string text_data;
 
 public:
 

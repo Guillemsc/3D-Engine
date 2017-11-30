@@ -23,8 +23,20 @@ void UIText::Update()
 
 void UIText::CleanUp()
 {
+	text_data.clear();
 }
 
 void UIText::OnEvent()
 {
+}
+
+void UIText::SetText(const char * new_text)
+{
+	text_data.clear();
+	text_data = new_text;
+}
+
+std::string UIText::GetText() const
+{
+	return text_data;
 }

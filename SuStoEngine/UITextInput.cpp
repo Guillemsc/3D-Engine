@@ -28,3 +28,14 @@ void UITextInput::CleanUp()
 void UITextInput::OnEvent()
 {
 }
+
+void UITextInput::SetBaseText(const char * base_text)
+{
+	text_data.clear();
+	text_data = base_text;
+}
+
+std::string UITextInput::GetText() const
+{
+	return text_data;
+}
