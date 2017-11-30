@@ -6,6 +6,11 @@ using namespace SuStoUI;
 UIEvent::UIEvent(UIEventType type)
 {
 	event_type = type;
+
+	keyboard.keyboard = new Key[MAX_KEYS];
+
+	for (int i = 0; i < MAX_KEYS; ++i)
+		keyboard.keyboard[i].key = i;
 }
 
 UIEvent::~UIEvent()

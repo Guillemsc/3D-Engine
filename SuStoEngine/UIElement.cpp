@@ -24,23 +24,3 @@ UIElement::UIElement(SuStoUIMain * main, ElementType type)
 UIElement::~UIElement()
 {
 }
-
-void UIElement::Awake()
-{
-}
-
-void UIElement::Start()
-{
-}
-
-void UIElement::Update()
-{
-}
-
-void UIElement::CleanUp()
-{
-}
-
-void UIElement::OnEvent()
-{
-}

@@ -27,7 +27,7 @@ private:
 	SuStoUIMain* ui_main = nullptr;
 	ElementType  type = ElementType::UNDEFINED;
 	Rect		 rect;
-	Plane		 plane;
+	//Plane		 plane;
 };
 
 #endif
