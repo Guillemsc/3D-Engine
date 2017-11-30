@@ -330,6 +330,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Time\Clock.cpp" />
     <ClCompile Include="ToolsBar.cpp" />
+    <ClCompile Include="UICanvas.cpp" />
     <ClCompile Include="UIElement.cpp" />
     <ClCompile Include="XMLLoader.cpp" />
   </ItemGroup>

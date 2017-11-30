@@ -8,6 +8,7 @@ using namespace SuStoUI;
 class UIElement
 {
 public:
+	UIElement();
 	UIElement(SuStoUIMain* main, ElementType type);
 	~UIElement();
 

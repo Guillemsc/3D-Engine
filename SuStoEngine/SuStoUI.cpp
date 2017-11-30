@@ -1,4 +1,6 @@
 #include "SuStoUI.h"
+#include "UIElement.h"
+#include "UICanvas.h"
 
 // Data types
 SuStoUI::Vec2::Vec2()
@@ -174,6 +176,10 @@ bool SuStoUI::TextCmp(const char * text1, const char * text2)
 	return ret;
 }
 
+SuStoUI::Plane::Plane()
+{
+}
+
 SuStoUI::Plane::Plane(Vec2 size)
 {
 	int resX = 2; // 2 minimum
@@ -262,4 +268,77 @@ void SuStoUI::Plane::CleanUp()
 	id_uv = 0;
 	num_uvs = 0;
 	RELEASE_ARRAY(uvs);
+}
+
+void SuStoUI::SuStoUIMain::Update()
+{
+}
+
+void SuStoUI::SuStoUIMain::PostUpdate()
+{
+}
+
+void SuStoUI::SuStoUIMain::CleanUp()
+{
+}
+
+void SuStoUI::SuStoUIMain::PushEvent()
+{
+}
+
+UIElement * SuStoUI::SuStoUIMain::CreateElement(ElementType type)
+{
+	UIElement* ret = nullptr;
+
+	switch (type)
+	{
+	case SuStoUI::CANVAS:
+		ret = new UICanvas(this);
+		break;
+	case SuStoUI::PANEL:
+		break;
+	case SuStoUI::IMAGE:
+		break;
+	case SuStoUI::TEXT:
+		break;
+	case SuStoUI::BUTTON:
+		break;
+	case SuStoUI::TEXT_INPUT:
+		break;
+	case SuStoUI::CHECKBOX:
+		break;
+	default:
+		LOG_OUTPUT("Error while creating the element, type not found");
+		break;
+	}
+
+	return ret;
+}
+
+void SuStoUI::SuStoUIMain::DeleteElement(UIElement * del)
+{
+}
+
+void SuStoUI::SuStoUIMain::DestroyElements()
+{
+}
+
+SuStoUI::SuStoUIMain::SuStoUIMain()
+{
+}
+
+SuStoUI::SuStoUIMain::~SuStoUIMain()
+{
+}
+
+void SuStoUI::SuStoUIMain::Awake()
+{
+}
+
+void SuStoUI::SuStoUIMain::Start()
+{
+}
+
+void SuStoUI::SuStoUIMain::PreUpdate()
+{
 }

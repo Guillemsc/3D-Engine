@@ -800,6 +800,9 @@
     <ClCompile Include="UIElement.cpp">
       <Filter>Sources\2. Modules ==============\UI</Filter>
     </ClCompile>
+    <ClCompile Include="UICanvas.cpp">
+      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico">
