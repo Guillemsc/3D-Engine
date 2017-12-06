@@ -176,7 +176,8 @@ namespace SuStoUI
 
 		void PushEvent();
 
-		UIElement* CreateElement(ElementType type);
+		UIElement * CreateElement(ElementType type, Vec2 pos = Vec2(0, 0), Vec2 size = Vec2(0, 0));
+
 		void DeleteElement(UIElement* del);
 
 	private:

@@ -28,8 +28,3 @@ void UICanvas::CleanUp()
 void UICanvas::OnEvent(UIEvent ev)
 {
 }
-
-void UICanvas::SetWidthAndHeight(float width, float height)
-{
-
-}

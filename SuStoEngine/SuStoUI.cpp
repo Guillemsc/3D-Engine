@@ -320,7 +320,7 @@ void SuStoUI::SuStoUIMain::PushEvent()
 {
 }
 
-UIElement * SuStoUI::SuStoUIMain::CreateElement(ElementType type)
+UIElement * SuStoUI::SuStoUIMain::CreateElement(ElementType type, Vec2 pos, Vec2 size)
 {
 	UIElement* ret = nullptr;
 
@@ -352,15 +352,39 @@ UIElement * SuStoUI::SuStoUIMain::CreateElement(ElementType type)
 		break;
 	}
 
+	if (ret) 
+	{
+		ret->SetPos(pos);
+		ret->SetSize(size);
+	}
+
 	return ret;
 }
 
 void SuStoUI::SuStoUIMain::DeleteElement(UIElement * del)
 {
+	for (std::vector<UIElement*>::iterator it = elements.begin(); it != elements.end(); ++it)
+	{
+		if (*it == del) 
+		{
+			to_delete.push_back(*it);
+			elements.erase(it);
+			break;
+		}
+	}
 }
 
 void SuStoUI::SuStoUIMain::DestroyElements()
 {
+	std::list<UIElement*>::iterator it = to_delete.begin();
+
+	while (to_delete.size() > 0)
+	{
+		UIElement* tmp = *it;
+		it = to_delete.erase(it);
+		RELEASE(tmp);
+	}
+
 }
 
 SuStoUI::Texture::Texture(byte * _texture_data, uint _texture_data_size, int _format, Vec2 _size)
