@@ -9,65 +9,65 @@
 #include "UICheckBox.h"
 
 // Data types
-SuStoUI::Vec2::Vec2()
+SuStoVec2::SuStoVec2()
 {
 	x = 0;
 	y = 0;
 }
 
-SuStoUI::Vec2::Vec2(float _x, float _y)
+SuStoVec2::SuStoVec2(float _x, float _y)
 {
 	x = _x;
 	y = _y;
 }
 
-SuStoUI::Vec2::Vec2(const Vec2 & copy)
+SuStoVec2::SuStoVec2(const SuStoVec2 & copy)
 {
 	x = copy.x;
 	y = copy.y;
 }
 
-bool SuStoUI::Vec2::operator==(const Vec2 & comp)
+bool SuStoVec2::operator==(const SuStoVec2 & comp)
 {
 	if (x == comp.x && y == comp.y)
 		return true;
 	return false;
 }
 
-SuStoUI::Vec2 SuStoUI::Vec2::Zero()
+SuStoVec2 SuStoVec2::Zero()
 {
-	return Vec2(0, 0);
+	return SuStoVec2(0, 0);
 }
 
-SuStoUI::Vec3::Vec3()
+SuStoVec3::SuStoVec3()
 {
 	x = 0;
 	y = 0;
 	z = 0;
 }
 
-SuStoUI::Vec3::Vec3(float _x, float _y, float _z)
+SuStoVec3::SuStoVec3(float _x, float _y, float _z)
 {
 	x = _x;
 	y = _y;
 	z = _z;
 }
 
-SuStoUI::Vec3::Vec3(const Vec3 & copy)
+SuStoVec3::SuStoVec3(const SuStoVec3 & copy)
 {
 	x = copy.x;
 	y = copy.y;
 	z = copy.z;
 }
 
-bool SuStoUI::Vec3::operator==(const Vec3 & comp)
+bool SuStoVec3::operator==(const SuStoVec3 & comp)
 {
 	if (x == comp.x && y == comp.y && z == comp.z)
 		return true;
 	return false;
 }
 
-SuStoUI::Rect::Rect()
+SuStoRect::SuStoRect()
 {
 	x = 0;
 	y = 0;
@@ -77,17 +77,17 @@ SuStoUI::Rect::Rect()
 	wh = wh.Zero();
 }
 
-SuStoUI::Rect::Rect(float _x, float _y, float _w, float _h)
+SuStoRect::SuStoRect(float _x, float _y, float _w, float _h)
 {
 	x = _x;
 	y = _y;
 	w = _w;
 	h = _h;
-	xy = Vec2(x, y);
-	wh = Vec2(w, h);
+	xy = SuStoVec2(x, y);
+	wh = SuStoVec2(w, h);
 }
 
-SuStoUI::Rect::Rect(const Rect & copy)
+SuStoRect::SuStoRect(const SuStoRect & copy)
 {
 	x = copy.x;
 	y = copy.y;
@@ -97,35 +97,35 @@ SuStoUI::Rect::Rect(const Rect & copy)
 	wh = copy.wh;
 }
 
-bool SuStoUI::Rect::operator==(const Rect & comp)
+bool SuStoRect::operator==(const SuStoRect & comp)
 {
 	if (x == comp.x && y == comp.y && w == comp.w && h == comp.h)
 		return true;
 	return false;
 }
 
-bool SuStoUI::Rect::PointInRect(const Vec2 & point)
+bool SuStoRect::PointInRect(const SuStoVec2 & point)
 {
 	if (point.x >= x && point.x <= x + w && point.y >= y && point.y <= y + h)
 		return true;
 	return false;
 }
 
-void SuStoUI::Rect::SetPos(const Vec2 & pos)
+void SuStoRect::SetPos(const SuStoVec2 & pos)
 {
 	x = pos.x;
 	y = pos.y;
-	xy = Vec2(x, y);
+	xy = SuStoVec2(x, y);
 }
 
-void SuStoUI::Rect::SetSize(const Vec2 & size)
+void SuStoRect::SetSize(const SuStoVec2 & size)
 {
 	w = size.x;
 	h = size.y;
-	wh = Vec2(w, h);
+	wh = SuStoVec2(w, h);
 }
 
-SuStoUI::Color::Color()
+SuStoColor::SuStoColor()
 {
 	r = 0;
 	g = 0;
@@ -133,7 +133,7 @@ SuStoUI::Color::Color()
 	a = 0;
 }
 
-SuStoUI::Color::Color(float _r, float _g, float _b, float _a)
+SuStoColor::SuStoColor(float _r, float _g, float _b, float _a)
 {
 	r = _r;
 	g = _g;
@@ -141,7 +141,7 @@ SuStoUI::Color::Color(float _r, float _g, float _b, float _a)
 	a = _a;
 }
 
-SuStoUI::Color::Color(const Color & copy)
+SuStoColor::SuStoColor(const SuStoColor & copy)
 {
 	r = copy.r;
 	g = copy.g;
@@ -149,7 +149,7 @@ SuStoUI::Color::Color(const Color & copy)
 	a = copy.a;
 }
 
-bool SuStoUI::Color::operator==(const Color & comp)
+bool SuStoColor::operator==(const SuStoColor & comp)
 {
 	if (r == comp.r && g == comp.g && b == comp.b && a == comp.a)
 		return true;
@@ -157,117 +157,184 @@ bool SuStoUI::Color::operator==(const Color & comp)
 
 }
 
-std::string SuStoUI::ToUpperCase(std::string str)
-{
-	for (uint i = 0; i < str.size(); i++)
-	{
-		str[i] = toupper(str[i]);
-	}
 
-	return str;
-}
-
-std::string SuStoUI::ToLowerCase(std::string str)
-{
-	for (uint i = 0; i < str.size(); i++)
-	{
-		str[i] = tolower(str[i]);
-	}
-
-	return str;
-}
-
-bool SuStoUI::TextCmp(const char * text1, const char * text2)
-{
-	bool ret = false;
-
-	if (text1 == nullptr || text2 == nullptr)
-		return false;
-
-	if (strcmp(text1, text2) == 0)
-		ret = true;
-
-	return ret;
-}
-
-SuStoUI::Plane::Plane()
+SuStoPlane::SuStoPlane()
 {
 }
 
-SuStoUI::Plane::Plane(Vec2 size)
+SuStoPlane::SuStoPlane(SuStoVec2 size)
 {
-	int resX = 2; // 2 minimum
-	int resZ = 2;
+	// Vertices
+	uint num_ver = 4;
+	SuStoVec3 ver[4];
 
-	//vertices
-	uint num_vert = resX * resZ;
-	Vec3 ver[4];
-	for (int z = 0; z < resZ; z++)
-	{
-		// [ -length / 2, length / 2 ]
-		float zPos = ((float)z / (resZ - 1) - .5f) * size.y;
-		for (int x = 0; x < resX; x++)
-		{
-			// [ -width / 2, width / 2 ]
-			float xPos = ((float)x / (resX - 1) - .5f) * size.x;
-			ver[x + z * resX] = Vec3(xPos, 0.f, zPos);
-		}
-	}
-
-	vertices = new float[num_vert * 3];
-	for (int i = 0; i < num_vert; ++i)
+	ver[0] = SuStoVec3(0, 0, 0);
+	ver[1] = SuStoVec3(size.x, 0, 0);
+	ver[2] = SuStoVec3(0, size.y, 0);
+	ver[3] = SuStoVec3(size.x, size.y, 0);
+	
+	num_vertices = num_ver;
+	vertices = new float[num_vertices * 3];
+	for (int i = 0; i < num_vertices; ++i)
 	{
 		memcpy(vertices + i * 3, &ver[i].x, sizeof(float) * 3);
 	}
 
-	//indices
-	uint num_indices = (resX - 1) * (resZ - 1) * 6;
+	// Indices
+	uint num_ind = 6;
 	uint ind[6];
-	int t = 0;
-	for (int face = 0; face < num_indices / 6; ++face)
-	{
-		int i = face % (resX - 1) + (face / (resZ - 1) * resX);
 
-		ind[t++] = i + resX;
-		ind[t++] = i + 1;
-		ind[t++] = i;
+	ind[0] = 0;
+	ind[1] = 2;
+	ind[2] = 3;
 
-		ind[t++] = i + resX;
-		ind[t++] = i + resX + 1;
-		ind[t++] = i + 1;
-	}
+	ind[3] = 3;
+	ind[4] = 1;
+	ind[5] = 0;
+
+	num_indices = num_ind;
 	indices = new uint[num_indices];
 	memcpy(indices, ind, sizeof(uint)*num_indices);
 
-	//uv
-	Vec3 uv[4];
-	for (int v = 0; v < resZ; v++)
-	{
-		for (int u = 0; u < resX; u++)
-		{
-			uv[u + v * resX] = Vec3((float)u / (resX - 1), (float)v / (resZ - 1), 0.f);
-		}
-	}
+	// UVs
+	uint num_uv = 4;
+	SuStoVec2 uv[4];
 
-	float* uvs = new float[num_vert * 3];
-	for (int i = 0; i < num_vert; ++i)
+	uv[0] = SuStoVec2(0, 1);
+	uv[1] = SuStoVec2(1, 1);
+	uv[2] = SuStoVec2(0, 0);
+	uv[3] = SuStoVec2(1, 0);
+
+	num_uvs = num_uv;
+	for (int i = 0; i < num_uvs; ++i)
 	{
 		memcpy(uvs + i * 3, &uv[i].x, sizeof(float) * 3);
 	}
+	
+
+
+	//int resX = 2; // 2 minimum
+	//int resZ = 2;
+
+	////vertices
+	//uint num_vert = resX * resZ;
+	//Vec3 ver[4];
+	//for (int z = 0; z < resZ; z++)
+	//{
+	//	// [ -length / 2, length / 2 ]
+	//	float zPos = ((float)z / (resZ - 1) - .5f) * size.y;
+	//	for (int x = 0; x < resX; x++)
+	//	{
+	//		// [ -width / 2, width / 2 ]
+	//		float xPos = ((float)x / (resX - 1) - .5f) * size.x;
+	//		ver[x + z * resX] = Vec3(xPos, 0.f, zPos);
+	//	}
+	//}
+
+	//vertices = new float[num_vert * 3];
+	//for (int i = 0; i < num_vert; ++i)
+	//{
+	//	memcpy(vertices + i * 3, &ver[i].x, sizeof(float) * 3);
+	//}
+
+	////indices
+	//uint num_indices = (resX - 1) * (resZ - 1) * 6;
+	//uint ind[6];
+	//int t = 0;
+	//for (int face = 0; face < num_indices / 6; ++face)
+	//{
+	//	int i = face % (resX - 1) + (face / (resZ - 1) * resX);
+
+	//	ind[t++] = i + resX;
+	//	ind[t++] = i + 1;
+	//	ind[t++] = i;
+
+	//	ind[t++] = i + resX;
+	//	ind[t++] = i + resX + 1;
+	//	ind[t++] = i + 1;
+	//}
+	//indices = new uint[num_indices];
+	//memcpy(indices, ind, sizeof(uint)*num_indices);
+
+	////uv
+	//Vec3 uv[4];
+	//for (int v = 0; v < resZ; v++)
+	//{
+	//	for (int u = 0; u < resX; u++)
+	//	{
+	//		uv[u + v * resX] = Vec3((float)u / (resX - 1), (float)v / (resZ - 1), 0.f);
+	//	}
+	//}
+
+	//float* uvs = new float[num_vert * 3];
+	//for (int i = 0; i < num_vert; ++i)
+	//{
+	//	memcpy(uvs + i * 3, &uv[i].x, sizeof(float) * 3);
+	//}
 }
 
-void SuStoUI::Plane::LoadToMem()
+uint SuStoPlane::GetVerticesId()
 {
+	return id_vertices;
 }
 
-void SuStoUI::Plane::UnloadFromMem()
+uint SuStoPlane::GetIndicesId()
 {
+	return id_indices;
 }
 
-void SuStoUI::Plane::CleanUp()
+uint SuStoPlane::GetUvsId()
 {
-	UnloadFromMem();
+	return id_uvs;
+}
 
+void SuStoPlane::SetVerticesId(uint set)
+{
+	id_vertices = set;
+}
+
+void SuStoPlane::SetIndicesId(uint set)
+{
+	id_indices = set;
+}
+
+void SuStoPlane::SetUvsId(uint set)
+{
+	id_uvs = set;
+}
+
+uint SuStoPlane::GetNumVertices()
+{
+	return num_vertices;
+}
+
+uint SuStoPlane::GetNumIndices()
+{
+	return num_indices;
+}
+
+uint SuStoPlane::GetNumUvs()
+{
+	return num_uvs;
+}
+
+float * SuStoPlane::GetVertices()
+{
+	return vertices;
+}
+
+uint * SuStoPlane::GetIndices()
+{
+	return indices;
+}
+
+float * SuStoPlane::GetUvs()
+{
+	return uvs;
+}
+
+void SuStoPlane::CleanUp()
+{
 	// Vertices
 	id_vertices = 0;
 	num_vertices = 0;
@@ -279,72 +346,80 @@ void SuStoUI::Plane::CleanUp()
 	RELEASE_ARRAY(indices);
 
 	// UVs
-	id_uv = 0;
+	id_uvs = 0;
 	num_uvs = 0;
 	RELEASE_ARRAY(uvs);
 }
 
-SuStoUI::SuStoUIMain::SuStoUIMain()
+SuStoTexture::SuStoTexture(byte * _texture_data, uint _texture_data_size, int _format, SuStoVec2 _size)
+{
+	texture_data = _texture_data;
+	texture_data_size = _texture_data_size;
+	format = _format;
+	size = _size;
+}
+
+SuStoUIMain::SuStoUIMain()
 {
 }
 
-SuStoUI::SuStoUIMain::~SuStoUIMain()
+SuStoUIMain::~SuStoUIMain()
 {
 }
 
-void SuStoUI::SuStoUIMain::Awake()
+void SuStoUIMain::Awake()
 {
 }
 
-void SuStoUI::SuStoUIMain::Start()
+void SuStoUIMain::Start()
 {
 }
 
-void SuStoUI::SuStoUIMain::PreUpdate()
+void SuStoUIMain::PreUpdate()
 {
 }
 
-void SuStoUI::SuStoUIMain::Update()
+void SuStoUIMain::Update()
 {
 }
 
-void SuStoUI::SuStoUIMain::PostUpdate()
+void SuStoUIMain::PostUpdate()
 {
 }
 
-void SuStoUI::SuStoUIMain::CleanUp()
+void SuStoUIMain::CleanUp()
 {
 }
 
-void SuStoUI::SuStoUIMain::PushEvent()
+void SuStoUIMain::PushEvent(UIEvent ev)
 {
 }
 
-UIElement * SuStoUI::SuStoUIMain::CreateElement(ElementType type, Vec2 pos, Vec2 size)
+UIElement * SuStoUIMain::CreateElement(ElementType type)
 {
 	UIElement* ret = nullptr;
 
 	switch (type)
 	{
-	case SuStoUI::CANVAS:
+	case CANVAS:
 		ret = new UICanvas(this);
 		break;
-	case SuStoUI::PANEL:
+	case PANEL:
 		ret = new UIPanel(this);
 		break;
-	case SuStoUI::IMAGE:
+	case IMAGE:
 		ret = new UIImage(this);
 		break;
-	case SuStoUI::TEXT:
+	case TEXT:
 		ret = new UIText(this);
 		break;
-	case SuStoUI::BUTTON:
+	case BUTTON:
 		ret = new UIButton(this);
 		break;
-	case SuStoUI::TEXT_INPUT:
+	case TEXT_INPUT:
 		ret = new UITextInput(this);
 		break;
-	case SuStoUI::CHECKBOX:
+	case CHECKBOX:
 		ret = new UICheckBox(this);
 		break;
 	default:
@@ -352,45 +427,69 @@ UIElement * SuStoUI::SuStoUIMain::CreateElement(ElementType type, Vec2 pos, Vec2
 		break;
 	}
 
-	if (ret) 
-	{
-		ret->SetPos(pos);
-		ret->SetSize(size);
-	}
-
 	return ret;
 }
 
-void SuStoUI::SuStoUIMain::DeleteElement(UIElement * del)
+void SuStoUIMain::DeleteElement(UIElement * del)
 {
 	for (std::vector<UIElement*>::iterator it = elements.begin(); it != elements.end(); ++it)
 	{
 		if (*it == del) 
 		{
 			to_delete.push_back(*it);
-			elements.erase(it);
 			break;
 		}
 	}
 }
 
-void SuStoUI::SuStoUIMain::DestroyElements()
+void SuStoUIMain::SetViewport(SuStoVec2 view)
 {
-	std::list<UIElement*>::iterator it = to_delete.begin();
-
-	while (to_delete.size() > 0)
-	{
-		UIElement* tmp = *it;
-		it = to_delete.erase(it);
-		RELEASE(tmp);
-	}
-
+	viewport = view;
 }
 
-SuStoUI::Texture::Texture(byte * _texture_data, uint _texture_data_size, int _format, Vec2 _size)
+SuStoVec2 SuStoUIMain::GetViewport()
 {
-	texture_data = _texture_data;
-	texture_data_size = _texture_data_size;
-	format = _format;
-	size = _size;
+	return viewport;
+}
+
+void SuStoUIMain::DestroyElements()
+{
+	for (std::list<UIElement*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it)
+	{
+		RELEASE(*it);
+		it = to_delete.erase(it);
+	}
+}
+
+std::string ImGui::ToUpperCase(std::string str)
+{
+	for (uint i = 0; i < str.size(); i++)
+	{
+		str[i] = toupper(str[i]);
+	}
+
+	return str;
+}
+
+std::string ImGui::ToLowerCase(std::string str)
+{
+	for (uint i = 0; i < str.size(); i++)
+	{
+		str[i] = tolower(str[i]);
+	}
+
+	return str;
+}
+
+bool ImGui::TextCmp(const char * text1, const char * text2)
+{
+	bool ret = false;
+
+	if (text1 == nullptr || text2 == nullptr)
+		return false;
+
+	if (strcmp(text1, text2) == 0)
+		ret = true;
+
+	return ret;
 }

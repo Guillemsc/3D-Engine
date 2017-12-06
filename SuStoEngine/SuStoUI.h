@@ -5,6 +5,8 @@
 #include <list>
 #include <string>
 
+#include "SuSto_event_system.h"
+
 class UIElement;
 
 // -------------------------------
@@ -42,176 +44,154 @@ void log(const char file[], int line, const char* format, ...);
 // -------------------------------
 // -------------------------------
 
-namespace SuStoUI
+// Data types
+struct SuStoVec2 
 {
-	// Data types
-	struct Vec2 
-	{
-		Vec2();
-		Vec2(float x, float y);
-		Vec2(const Vec2& copy);
-		bool operator == (const Vec2& comp);
+	SuStoVec2();
+	SuStoVec2(float x, float y);
+	SuStoVec2(const SuStoVec2& copy);
+	bool operator == (const SuStoVec2& comp);
 
-		Vec2 Zero();
+	SuStoVec2 Zero();
 
-		float x, y = 0;
-	};
+	float x, y = 0;
+};
 
-	struct Vec3 
-	{
-		Vec3();
-		Vec3(float x, float y, float z);
-		Vec3(const Vec3& copy);
-		bool operator == (const Vec3& comp);
+struct SuStoVec3
+{
+	SuStoVec3();
+	SuStoVec3(float x, float y, float z);
+	SuStoVec3(const SuStoVec3& copy);
+	bool operator == (const SuStoVec3& comp);
 
-		float x, y, z = 0;
-	};
+	float x, y, z = 0;
+};
 
-	struct Rect 
-	{
-		Rect();
-		Rect(float x, float y, float w, float z);
-		Rect(const Rect& copy);
-		bool operator == (const Rect& comp);
-		bool PointInRect(const Vec2& point);
-		void SetPos(const Vec2& pos);
-		void SetSize(const Vec2& size);
+struct SuStoRect
+{
+	SuStoRect();
+	SuStoRect(float x, float y, float w, float z);
+	SuStoRect(const SuStoRect& copy);
+	bool operator == (const SuStoRect& comp);
+	bool PointInRect(const SuStoVec2& point);
+	void SetPos(const SuStoVec2& pos);
+	void SetSize(const SuStoVec2& size);
 
-		float x, y, w, h = 0;
-		Vec2 xy, wh;
-	};
+	float x, y, w, h = 0;
+	SuStoVec2 xy, wh;
+};
 
-	struct Color  
-	{
-		Color();
-		Color(float r, float g, float b, float a);
-		Color(const Color& copy);
-		bool operator == (const Color& comp);
+struct SuStoColor
+{
+	SuStoColor();
+	SuStoColor(float r, float g, float b, float a);
+	SuStoColor(const SuStoColor& copy);
+	bool operator == (const SuStoColor& comp);
 
-		float r, g, b, a = 0;
-	};
+	float r, g, b, a = 0;
+};
 
-	struct Plane
-	{
-		Plane();
-		Plane(Vec2 size);
+struct SuStoPlane
+{
+	SuStoPlane();
+	SuStoPlane(SuStoVec2 size);
 
-		void LoadToMem();
-		void UnloadFromMem();
+	uint GetVerticesId();
+	uint GetIndicesId();
+	uint GetUvsId();
 
-		void CleanUp();
+	void SetVerticesId(uint set);
+	void SetIndicesId(uint set);
+	void SetUvsId(uint set);
 
-	private:
-		uint   id_vertices = 0;
-		uint   num_vertices = 0;
-		float* vertices = nullptr;
+	uint GetNumVertices();
+	uint GetNumIndices();
+	uint GetNumUvs();
 
-		uint   id_indices = 0;
-		uint   num_indices = 0;
-		uint*  indices = nullptr;
+	float* GetVertices();
+	uint* GetIndices();
+	float* GetUvs();
 
-		uint   id_uv = 0;
-		uint   num_uvs = 0;
-		float* uvs = nullptr;
-	};
+	void CleanUp();
 
-	class Texture
-	{
-	public:
-		Texture(byte* texture_data, uint texture_data_size, int format, Vec2 size);
+private:
+	uint   id_vertices = 0;
+	uint   num_vertices = 0;
+	float* vertices = nullptr;
 
-	private:
-		byte*  texture_data = nullptr;
-		uint   texture_data_size = 0;
-		uint   texture_id = 0;
-		int	   format = 0;
-		Vec2   size = Vec2(0, 0);
-	};
+	uint   id_indices = 0;
+	uint   num_indices = 0;
+	uint*  indices = nullptr;
 
-	/*class Font
-	{
-	public:
-		Font();
+	uint   id_uvs = 0;
+	uint   num_uvs = 0;
+	float* uvs = nullptr;
+};
 
-	private:
-		FontGlyph GetGlyph(wchar c);
+class SuStoTexture
+{
+public:
+	SuStoTexture(byte* texture_data, uint texture_data_size, int format, SuStoVec2 size);
 
-	private:
-		std::vector<FontGlyph> glyphs;
-	};*/
+private:
+	byte*  texture_data = nullptr;
+	uint   texture_data_size = 0;
+	uint   texture_id = 0;
+	int	   format = 0;
+	SuStoVec2 size;
+};
 
-	struct FontGlyph
-	{
-		wchar codepoint;          // 0x0000..0xFFFF
-		float dis_next_char;      // Distance to next character (= data from font + ImFontConfig::GlyphExtraSpacing.x baked in)
-		float X0, Y0, X1, Y1;     // Glyph corners
-		float U0, V0, U1, V1;     // Texture coordinates
-	};
+enum ElementType
+{
+	CANVAS,
+	PANEL,
+	IMAGE,
+	TEXT,
+	BUTTON,
+	TEXT_INPUT,
+	CHECKBOX,
 
-	enum ElementType
-	{
-		CANVAS,
-		PANEL,
-		IMAGE,
-		TEXT,
-		BUTTON,
-		TEXT_INPUT,
-		CHECKBOX,
+	UNDEFINED
+};
 
-		UNDEFINED
-	};
+class SuStoUIMain
+{
+public:
+	SuStoUIMain();
+	~SuStoUIMain();
 
-	class SuStoUIMain
-	{
-	public:
-		SuStoUIMain();
-		~SuStoUIMain();
+	void Awake();
+	void Start();
+	void PreUpdate();
+	void Update();
+	void PostUpdate();
+	void CleanUp();
 
-		void Awake();
-		void Start();
-		void PreUpdate();
-		void Update();
-		void PostUpdate();
-		void CleanUp();
+	void PushEvent(UIEvent ev);
 
-		void PushEvent();
+	UIElement * CreateElement(ElementType type);
+	void DeleteElement(UIElement* del);
 
-		UIElement * CreateElement(ElementType type, Vec2 pos = Vec2(0, 0), Vec2 size = Vec2(0, 0));
+	void SetViewport(SuStoVec2 view);
+	SuStoVec2 GetViewport();
 
-		void DeleteElement(UIElement* del);
+private:
+	void DestroyElements();
 
-	private:
-		void DestroyElements();
+private:
+	std::vector<UIElement*> elements;
+	std::list<UIElement*>  to_delete;
 
-	private:
-		std::vector<UIElement*> elements;
-		std::list<UIElement*>  to_delete;
-	};
+private:
+	SuStoVec2 viewport;
+};
 
+namespace ImGui
+{
 	std::string ToUpperCase(std::string str);
 	std::string ToLowerCase(std::string str);
-	bool TextCmp(const char * text1, const char * text2); 
+	bool TextCmp(const char * text1, const char * text2);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 #endif // !SUSTO_UI

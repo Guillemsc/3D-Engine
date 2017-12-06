@@ -3,8 +3,6 @@
 
 #include "UIElement.h"
 
-using namespace SuStoUI;
-
 class UIPanel : public UIElement
 {
 public:

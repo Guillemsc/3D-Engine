@@ -3,8 +3,6 @@
 
 #include "UIElement.h"
 
-using namespace SuStoUI;
-
 class UITextInput : public UIElement
 {
 public:

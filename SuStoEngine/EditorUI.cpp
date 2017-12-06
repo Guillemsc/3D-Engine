@@ -23,6 +23,9 @@
 #include "SceneManager.h"
 #include "ImGuizmo.h"
 
+#include "SuSto_impl_sdl_opengl.h"
+#include "SuStoUI.h"
+
 //https://github.com/ocornut/imgui/issues/351
 
 EditorUI::EditorUI(bool enabled) : Module(enabled)
@@ -42,6 +45,8 @@ bool EditorUI::Awake()
 	LOG_OUTPUT("Loading ImGui");
 
 	ret = ImGui_ImplSdlGL2_Init(App->window->window);
+
+	SuStoUI::Init(App->window->window);
 
 	// Styles
 	//	-default
@@ -107,6 +112,8 @@ bool EditorUI::PreUpdate()
 	// ImGui new frame
 	ImGui_ImplSdlGL2_NewFrame(App->window->window);
 
+	SuStoUI::NewFrame(App->window->window);
+
 	// ImGuizmo begin frame
 	ImGuizmo::BeginFrame();
 
@@ -138,6 +145,8 @@ bool EditorUI::DrawEditor()
 
 	// ImGui Draw
 	ImGui::Render();
+
+	SuStoUI::EndFrame();
 
 	return ret;
 }

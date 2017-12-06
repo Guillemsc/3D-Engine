@@ -4,8 +4,6 @@
 #include "SuStoUI.h"
 #include "SuSto_event_system.h"
 
-using namespace SuStoUI;
-
 class UIElement
 {
 public:
@@ -20,20 +18,19 @@ public:
 
 	virtual void OnEvent(UIEvent ev) {};
 
-	void SetPos(const Vec2& pos);
-	Vec2 GetPos() const;
+	void SetPos(const SuStoVec2& pos);
+	SuStoVec2 GetPos() const;
 
-	void SetSize(const Vec2 & size);
-	Vec2 GetSize() const;
+	void SetSize(const SuStoVec2 & size);
+	SuStoVec2 GetSize() const;
 
-	void SetRect(const Rect& _rect);
-	Rect GetRect() const;
+	void SetRect(const SuStoRect& _rect);
+	SuStoRect GetRect() const;
 
 private:
 	SuStoUIMain* ui_main = nullptr;
 	ElementType  type = ElementType::UNDEFINED;
-	Rect		 rect;
-	Plane		 plane;
+	SuStoRect		 rect;
 };
 
 #endif

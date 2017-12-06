@@ -1,32 +1,32 @@
 #include "UIElement.h"
 
-void UIElement::SetPos(const Vec2& pos)
+void UIElement::SetPos(const SuStoVec2& pos)
 {
 	rect.SetPos(pos);
 }
 
-Vec2 UIElement::GetPos() const
+SuStoVec2 UIElement::GetPos() const
 {
 	return rect.xy;
 }
 
-void UIElement::SetSize(const Vec2 & size)
+void UIElement::SetSize(const SuStoVec2 & size)
 {
 	rect.SetSize(size);
 }
 
-Vec2 UIElement::GetSize() const
+SuStoVec2 UIElement::GetSize() const
 {
 	return rect.wh;
 }
 
-void UIElement::SetRect(const Rect & _rect)
+void UIElement::SetRect(const SuStoRect & _rect)
 {
 	rect.SetPos(_rect.xy);
 	rect.SetSize(_rect.wh);
 }
 
-Rect UIElement::GetRect() const
+SuStoRect UIElement::GetRect() const
 {
 	return rect;
 }

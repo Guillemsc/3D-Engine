@@ -5,8 +5,6 @@
 
 #include "UIElement.h"
 
-using namespace SuStoUI;
-
 class UIText : public UIElement
 {
 public:

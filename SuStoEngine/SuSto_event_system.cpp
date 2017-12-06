@@ -1,8 +1,6 @@
 #include "SuSto_event_system.h"
 #include "SuStoUI.h"
 
-using namespace SuStoUI;
-
 UIEvent::UIEvent(UIEventType type)
 {
 	event_type = type;

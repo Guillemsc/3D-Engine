@@ -3,8 +3,6 @@
 
 #include "UIElement.h"
 
-using namespace SuStoUI;
-
 class UICanvas : public UIElement
 {
 public:

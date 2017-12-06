@@ -3,8 +3,6 @@
 
 #include "UIElement.h"
 
-using namespace SuStoUI;
-
 class UIImage : public UIElement
 {
 public:
