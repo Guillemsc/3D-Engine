@@ -78,6 +78,7 @@ namespace SuStoUI
 		void SetSize(const Vec2& size);
 
 		float x, y, w, h = 0;
+		Vec2 xy, wh;
 	};
 
 	struct Color  
@@ -90,8 +91,9 @@ namespace SuStoUI
 		float r, g, b, a = 0;
 	};
 
-	class Plane
+	struct Plane
 	{
+		Plane();
 		Plane(Vec2 size);
 
 		void LoadToMem();

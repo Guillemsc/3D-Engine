@@ -73,6 +73,8 @@ SuStoUI::Rect::Rect()
 	y = 0;
 	w = 0;
 	h = 0;
+	xy = xy.Zero();
+	wh = wh.Zero();
 }
 
 SuStoUI::Rect::Rect(float _x, float _y, float _w, float _h)
@@ -81,6 +83,8 @@ SuStoUI::Rect::Rect(float _x, float _y, float _w, float _h)
 	y = _y;
 	w = _w;
 	h = _h;
+	xy = Vec2(x, y);
+	wh = Vec2(w, h);
 }
 
 SuStoUI::Rect::Rect(const Rect & copy)
@@ -89,6 +93,8 @@ SuStoUI::Rect::Rect(const Rect & copy)
 	y = copy.y;
 	w = copy.w;
 	h = copy.h;
+	xy = copy.xy;
+	wh = copy.wh;
 }
 
 bool SuStoUI::Rect::operator==(const Rect & comp)
@@ -109,12 +115,14 @@ void SuStoUI::Rect::SetPos(const Vec2 & pos)
 {
 	x = pos.x;
 	y = pos.y;
+	xy = Vec2(x, y);
 }
 
 void SuStoUI::Rect::SetSize(const Vec2 & size)
 {
 	w = size.x;
 	h = size.y;
+	wh = Vec2(w, h);
 }
 
 SuStoUI::Color::Color()
@@ -180,6 +188,10 @@ bool SuStoUI::TextCmp(const char * text1, const char * text2)
 		ret = true;
 
 	return ret;
+}
+
+SuStoUI::Plane::Plane()
+{
 }
 
 SuStoUI::Plane::Plane(Vec2 size)

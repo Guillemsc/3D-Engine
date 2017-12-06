@@ -20,14 +20,20 @@ public:
 
 	virtual void OnEvent(UIEvent ev) {};
 
-	void SetPos(Vec2 pos);
-	Vec2 GetPos();
+	void SetPos(const Vec2& pos);
+	Vec2 GetPos() const;
+
+	void SetSize(const Vec2 & size);
+	Vec2 GetSize() const;
+
+	void SetRect(const Rect& _rect);
+	Rect GetRect() const;
 
 private:
 	SuStoUIMain* ui_main = nullptr;
 	ElementType  type = ElementType::UNDEFINED;
 	Rect		 rect;
-	//Plane		 plane;
+	Plane		 plane;
 };
 
 #endif

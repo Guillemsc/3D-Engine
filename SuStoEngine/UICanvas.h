@@ -18,6 +18,8 @@ public:
 
 	void OnEvent(UIEvent ev);
 
+	void SetWidthAndHeight(float width, float height);
+
 private:
 
 public:
