@@ -8,12 +8,10 @@ class SuStoUIMain;
 
 namespace SuStoUI
 {
-	SuStoUIMain* Init(SDL_Window* window);
-	void NewFrame(SDL_Window* window);
-	void EndFrame();
-
-	//SuStoUIMain* ui_main = nullptr;
-	//SuStoPlane* test_pl;
+	void Init(SDL_Window* window, SuStoUIMain* ui_main);
+	void NewFrame(SDL_Window* window, SuStoUIMain* ui_main);
+	void Render(SuStoUIMain* ui_main);
+	void EndFrame(SuStoUIMain* ui_main);
 }
 
 #endif // !SUSTO_IMPL_STD_OPENGL

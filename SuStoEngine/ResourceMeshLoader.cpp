@@ -23,6 +23,7 @@
 
 ResourceMeshLoader::ResourceMeshLoader()
 {
+	
 }
 
 ResourceMeshLoader::~ResourceMeshLoader()
@@ -488,81 +489,6 @@ bool ResourceMeshLoader::Export(const char * path, ResourceMesh* mesh)
 	return ret;
 }
 
-void ResourceMeshLoader::CreatePlane()
-{
-	float length = 1.f;
-	float width = 1.f;
-	int resX = 2; // 2 minimum
-	int resZ = 2;
-
-	//vertices
-	uint num_vert = resX*resZ;
-	float3 ver[4];
-	for (int z = 0; z < resZ; z++)
-	{
-		// [ -length / 2, length / 2 ]
-		float zPos = ((float)z / (resZ - 1) - .5f) * length;
-		for (int x = 0; x < resX; x++)
-		{
-			// [ -width / 2, width / 2 ]
-			float xPos = ((float)x / (resX - 1) - .5f) * width;
-			ver[x + z * resX] = float3(xPos, 0.f, zPos);
-		}
-	}
-
-	float* vertices = new float[num_vert * 3];
-	for (int i = 0; i < num_vert; ++i)
-	{
-		memcpy(vertices + i * 3, ver[i].ptr(), sizeof(float) * 3);
-	}
-
-	//indices
-	uint num_indices = (resX - 1) * (resZ - 1) * 6;
-	uint ind[6];
-	int t = 0;
-	for (int face = 0; face < num_indices / 6; ++face)
-	{
-		int i = face % (resX - 1) + (face / (resZ - 1) * resX);
-
-		ind[t++] = i + resX;
-		ind[t++] = i + 1;
-		ind[t++] = i;
-
-		ind[t++] = i + resX;
-		ind[t++] = i + resX + 1;
-		ind[t++] = i + 1;
-	}
-	uint* indices = new uint[num_indices];
-	memcpy(indices, ind, sizeof(uint)*num_indices);
-
-	//uv
-	float3 uvs[4];
-	for (int v = 0; v < resZ; v++)
-	{
-		for (int u = 0; u < resX; u++)
-		{
-			uvs[u + v * resX] = float3((float)u / (resX - 1), (float)v / (resZ - 1), 0.f);
-		}
-	}
-
-	float* uv = new float[num_vert * 3];
-	for (int i = 0; i < num_vert; ++i)
-	{
-		memcpy(uv + i * 3, uvs[i].ptr(), sizeof(float) * 3);
-	}
-
-	//create mesh
-	App->resource_manager->plane = (ResourceMesh*)App->resource_manager->CreateNewResource(ResourceType::RT_MESH, "Plane");
-
-	App->resource_manager->plane->SetFaces(vertices, num_vert, indices, num_indices);
-	App->resource_manager->plane->SetUvs(uv, 4);
-	App->resource_manager->plane->LoadMem();
-
-	RELEASE_ARRAY(vertices);
-	RELEASE_ARRAY(indices);
-	RELEASE_ARRAY(uv);
-}
-
 void ResourceMeshLoader::LoadIntoScene(const char * filepath)
 {
 	string path = App->file_system->GetPathFromFilePath(filepath);
@@ -610,4 +536,78 @@ void ResourceMeshLoader::Unload(const char * filepath)
 	App->file_system->FileDelete(meta_path.c_str());
 	App->file_system->FileDelete(prefab_path.c_str());
 	App->file_system->FileDelete(filepath);
+}
+
+ResourceMesh * ResourceMeshLoader::CreatePlaneMesh(float2 size)
+{
+	float length = size.y;
+	float width = size.x;
+	int resX = 2; // 2 minimum
+	int resZ = 2;
+
+	//vertices
+	uint num_vert = resX*resZ;
+	float3 ver[4];
+	for (int z = 0; z < resZ; z++)
+	{
+		// [ -length / 2, length / 2 ]
+		float zPos = ((float)z / (resZ - 1) - .5f) * length;
+		for (int x = 0; x < resX; x++)
+		{
+			// [ -width / 2, width / 2 ]
+			float xPos = ((float)x / (resX - 1) - .5f) * width;
+			ver[x + z * resX] = float3(xPos, 0.f, zPos);
+		}
+	}
+
+	float* vertices = new float[num_vert * 3];
+	for (int i = 0; i < num_vert; ++i)
+	{
+		memcpy(vertices + i * 3, ver[i].ptr(), sizeof(float) * 3);
+	}
+
+	//indices
+	uint num_indices = (resX - 1) * (resZ - 1) * 6;
+	uint ind[6];
+	int t = 0;
+	for (int face = 0; face < num_indices / 6; ++face)
+	{
+		int i = face % (resX - 1) + (face / (resZ - 1) * resX);
+
+		ind[t++] = i + resX;
+		ind[t++] = i + 1;
+		ind[t++] = i;
+
+		ind[t++] = i + resX;
+		ind[t++] = i + resX + 1;
+		ind[t++] = i + 1;
+	}
+	uint* indices = new uint[num_indices];
+	memcpy(indices, ind, sizeof(uint)*num_indices);
+
+	//uv
+	float3 uv[4];
+	for (int v = 0; v < resZ; v++)
+	{
+		for (int u = 0; u < resX; u++)
+		{
+			uv[u + v * resX] = float3((float)u / (resX - 1), (float)v / (resZ - 1), 0.f);
+		}
+	}
+
+	float* uvs = new float[num_vert * 3];
+	for (int i = 0; i < num_vert; ++i)
+	{
+		memcpy(uvs + i * 3, uv[i].ptr(), sizeof(float) * 3);
+	}
+
+	ResourceMesh* rmesh = (ResourceMesh*)App->resource_manager->CreateNewResource(ResourceType::RT_MESH);
+	rmesh->SetFaces(vertices, num_vert, indices, num_indices);
+	rmesh->SetUvs(uvs, num_vert);
+
+	RELEASE_ARRAY(vertices);
+	RELEASE_ARRAY(indices);
+	RELEASE_ARRAY(uvs);
+
+	return rmesh;
 }

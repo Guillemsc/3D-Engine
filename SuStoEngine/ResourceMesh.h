@@ -54,9 +54,9 @@ private:
 	uint   num_uvs = 0;
 	float* uvs = nullptr;
 
-	float3 position = float3(0, 0, 0);
-	Quat   rotation = Quat(0, 0, 0, 0);
-	float3 scale = float3(0, 0, 0);
+	float3 position = float3::zero;
+	Quat   rotation = Quat::identity;
+	float3 scale = float3(1, 1, 1);
 
 	AABB   bbox;
 };

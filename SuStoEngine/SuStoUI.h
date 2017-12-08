@@ -53,6 +53,7 @@ struct SuStoVec2
 	bool operator == (const SuStoVec2& comp);
 
 	SuStoVec2 Zero();
+	float* ptr();
 
 	float x, y = 0;
 };
@@ -63,6 +64,9 @@ struct SuStoVec3
 	SuStoVec3(float x, float y, float z);
 	SuStoVec3(const SuStoVec3& copy);
 	bool operator == (const SuStoVec3& comp);
+
+	SuStoVec3 Zero();
+	float* ptr();
 
 	float x, y, z = 0;
 };
@@ -77,6 +81,8 @@ struct SuStoRect
 	void SetPos(const SuStoVec2& pos);
 	void SetSize(const SuStoVec2& size);
 
+	float* ptr();
+
 	float x, y, w, h = 0;
 	SuStoVec2 xy, wh;
 };
@@ -88,12 +94,13 @@ struct SuStoColor
 	SuStoColor(const SuStoColor& copy);
 	bool operator == (const SuStoColor& comp);
 
+	float* ptr();
+
 	float r, g, b, a = 0;
 };
 
 struct SuStoPlane
 {
-	SuStoPlane();
 	SuStoPlane(SuStoVec2 size);
 
 	uint GetVerticesId();
@@ -175,12 +182,17 @@ public:
 	void SetViewport(SuStoVec2 view);
 	SuStoVec2 GetViewport();
 
+	void Draw(SuStoPlane* plane);
+	std::vector<SuStoPlane*> GetDrawList();
+
 private:
 	void DestroyElements();
 
 private:
 	std::vector<UIElement*> elements;
 	std::list<UIElement*>  to_delete;
+
+	std::vector<SuStoPlane*> draw;
 
 private:
 	SuStoVec2 viewport;

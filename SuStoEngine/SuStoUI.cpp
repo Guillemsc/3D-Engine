@@ -39,6 +39,11 @@ SuStoVec2 SuStoVec2::Zero()
 	return SuStoVec2(0, 0);
 }
 
+float * SuStoVec2::ptr()
+{
+	return &x;
+}
+
 SuStoVec3::SuStoVec3()
 {
 	x = 0;
@@ -65,6 +70,16 @@ bool SuStoVec3::operator==(const SuStoVec3 & comp)
 	if (x == comp.x && y == comp.y && z == comp.z)
 		return true;
 	return false;
+}
+
+SuStoVec3 SuStoVec3::Zero()
+{
+	return SuStoVec3(0, 0, 0);
+}
+
+float * SuStoVec3::ptr()
+{
+	return &x;
 }
 
 SuStoRect::SuStoRect()
@@ -125,6 +140,11 @@ void SuStoRect::SetSize(const SuStoVec2 & size)
 	wh = SuStoVec2(w, h);
 }
 
+float * SuStoRect::ptr()
+{
+	return &x;
+}
+
 SuStoColor::SuStoColor()
 {
 	r = 0;
@@ -157,120 +177,78 @@ bool SuStoColor::operator==(const SuStoColor & comp)
 
 }
 
-
-SuStoPlane::SuStoPlane()
+float * SuStoColor::ptr()
 {
+	return &r;
 }
 
 SuStoPlane::SuStoPlane(SuStoVec2 size)
 {
-	// Vertices
-	uint num_ver = 4;
-	SuStoVec3 ver[4];
+	float length = size.y;
+	float width = size.x;
+	int resX = 2; // 2 minimum
+	int resZ = 2;
 
-	ver[0] = SuStoVec3(0, 0, 0);
-	ver[1] = SuStoVec3(size.x, 0, 0);
-	ver[2] = SuStoVec3(0, size.y, 0);
-	ver[3] = SuStoVec3(size.x, size.y, 0);
-	
-	num_vertices = num_ver;
+	//vertices
+	num_vertices = resX*resZ;
+	SuStoVec3 ver[4];
+	for (int z = 0; z < resZ; z++)
+	{
+		// [ -length / 2, length / 2 ]
+		float zPos = ((float)z / (resZ - 1) - .5f) * length;
+		for (int x = 0; x < resX; x++)
+		{
+			// [ -width / 2, width / 2 ]
+			float xPos = ((float)x / (resX - 1) - .5f) * width;
+			ver[x + z * resX] = SuStoVec3(xPos, 0.f, zPos);
+		}
+	}
+
 	vertices = new float[num_vertices * 3];
 	for (int i = 0; i < num_vertices; ++i)
 	{
-		memcpy(vertices + i * 3, &ver[i].x, sizeof(float) * 3);
+		memcpy(vertices + i * 3, ver[i].ptr(), sizeof(float) * 3);
 	}
 
-	// Indices
-	uint num_ind = 6;
+	//indices
+	uint num_indices = (resX - 1) * (resZ - 1) * 6;
 	uint ind[6];
-
-	ind[0] = 0;
-	ind[1] = 2;
-	ind[2] = 3;
-
-	ind[3] = 3;
-	ind[4] = 1;
-	ind[5] = 0;
-
-	num_indices = num_ind;
-	indices = new uint[num_indices];
-	memcpy(indices, ind, sizeof(uint)*num_indices);
-
-	// UVs
-	uint num_uv = 4;
-	SuStoVec2 uv[4];
-
-	uv[0] = SuStoVec2(0, 1);
-	uv[1] = SuStoVec2(1, 1);
-	uv[2] = SuStoVec2(0, 0);
-	uv[3] = SuStoVec2(1, 0);
-
-	num_uvs = num_uv;
-	for (int i = 0; i < num_uvs; ++i)
+	int t = 0;
+	for (int face = 0; face < num_indices / 6; ++face)
 	{
-		memcpy(uvs + i * 3, &uv[i].x, sizeof(float) * 3);
+		int i = face % (resX - 1) + (face / (resZ - 1) * resX);
+
+		ind[t++] = i + resX;
+		ind[t++] = i + 1;
+		ind[t++] = i;
+
+		ind[t++] = i + resX;
+		ind[t++] = i + resX + 1;
+		ind[t++] = i + 1;
 	}
-	
+	indices = new uint[num_indices];
+	memcpy(indices, ind, sizeof(uint) * num_indices);
 
+	//uv
+	SuStoVec3 uv[4];
+	for (int v = 0; v < resZ; v++)
+	{
+		for (int u = 0; u < resX; u++)
+		{
+			uv[u + v * resX] = SuStoVec3((float)u / (resX - 1), (float)v / (resZ - 1), 0.f);
+		}
+	}
 
-	//int resX = 2; // 2 minimum
-	//int resZ = 2;
+	uvs = new float[num_vertices * 3];
+	num_uvs = num_vertices;
+	for (int i = 0; i < num_vertices; ++i)
+	{
+		memcpy(uvs + i * 3, uv[i].ptr(), sizeof(float) * 3);
+	}
 
-	////vertices
-	//uint num_vert = resX * resZ;
-	//Vec3 ver[4];
-	//for (int z = 0; z < resZ; z++)
-	//{
-	//	// [ -length / 2, length / 2 ]
-	//	float zPos = ((float)z / (resZ - 1) - .5f) * size.y;
-	//	for (int x = 0; x < resX; x++)
-	//	{
-	//		// [ -width / 2, width / 2 ]
-	//		float xPos = ((float)x / (resX - 1) - .5f) * size.x;
-	//		ver[x + z * resX] = Vec3(xPos, 0.f, zPos);
-	//	}
-	//}
-
-	//vertices = new float[num_vert * 3];
-	//for (int i = 0; i < num_vert; ++i)
-	//{
-	//	memcpy(vertices + i * 3, &ver[i].x, sizeof(float) * 3);
-	//}
-
-	////indices
-	//uint num_indices = (resX - 1) * (resZ - 1) * 6;
-	//uint ind[6];
-	//int t = 0;
-	//for (int face = 0; face < num_indices / 6; ++face)
-	//{
-	//	int i = face % (resX - 1) + (face / (resZ - 1) * resX);
-
-	//	ind[t++] = i + resX;
-	//	ind[t++] = i + 1;
-	//	ind[t++] = i;
-
-	//	ind[t++] = i + resX;
-	//	ind[t++] = i + resX + 1;
-	//	ind[t++] = i + 1;
-	//}
-	//indices = new uint[num_indices];
-	//memcpy(indices, ind, sizeof(uint)*num_indices);
-
-	////uv
-	//Vec3 uv[4];
-	//for (int v = 0; v < resZ; v++)
-	//{
-	//	for (int u = 0; u < resX; u++)
-	//	{
-	//		uv[u + v * resX] = Vec3((float)u / (resX - 1), (float)v / (resZ - 1), 0.f);
-	//	}
-	//}
-
-	//float* uvs = new float[num_vert * 3];
-	//for (int i = 0; i < num_vert; ++i)
-	//{
-	//	memcpy(uvs + i * 3, &uv[i].x, sizeof(float) * 3);
-	//}
+	RELEASE_ARRAY(vertices);
+	RELEASE_ARRAY(indices);
+	RELEASE_ARRAY(uvs);
 }
 
 uint SuStoPlane::GetVerticesId()
@@ -450,6 +428,16 @@ void SuStoUIMain::SetViewport(SuStoVec2 view)
 SuStoVec2 SuStoUIMain::GetViewport()
 {
 	return viewport;
+}
+
+void SuStoUIMain::Draw(SuStoPlane * plane)
+{
+	draw.push_back(plane);
+}
+
+std::vector<SuStoPlane*> SuStoUIMain::GetDrawList()
+{
+	return draw;
 }
 
 void SuStoUIMain::DestroyElements()

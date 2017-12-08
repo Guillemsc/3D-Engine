@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "Color.h"
 #include <gl\GLU.h>
+#include "ResourceMeshLoader.h"
 
 KDTree::Node::Node(uint partition_num) : partition_num(partition_num)
 {
@@ -302,8 +303,8 @@ void KDTree::Node::DrawPlane(int width, int height, float3 initial_translation)
 		glMultMatrixf(transfrom.Transposed().ptr());
 		glColor4f(c.r, c.g, c.b, c.a);
 
-		if (App->resource_manager->plane != nullptr)
-			App->resource_manager->plane->Render();
+		//if (App->resource_manager->GetMeshLoader()->plane != nullptr)
+		//	App->resource_manager->GetMeshLoader()->plane->Render();
 
 		glColor4f(1.f, 1.f, 1.f, 1.f);
 

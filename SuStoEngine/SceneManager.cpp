@@ -28,7 +28,7 @@ bool SceneManager::Start()
 	current_scene = "test";
 
 	App->resource_manager->ImportAllResources();
-	App->scene_manager->LoadScene(current_scene.c_str());
+	//App->scene_manager->LoadScene(current_scene.c_str());
 
 	return ret;
 }
@@ -157,6 +157,8 @@ bool SceneManager::LoadPrefab(const char * file_path, GameObject *& loaded_go)
 
 	if (prefab != nullptr)
 	{
+		ret = true;
+
 		//if (set_scene_title)
 		//{
 		//	// Engine title --------------

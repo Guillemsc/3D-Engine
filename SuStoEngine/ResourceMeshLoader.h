@@ -61,14 +61,13 @@ public:
 
 	void Unload(const char* filepath);
 
-	void CreatePlane();
+	ResourceMesh* CreatePlaneMesh(float2 size);
 
 private:
 	void RecursiveLoadMesh(const aiScene* scene, aiNode* node, const char* full_path, AABB& total_abb, std::vector<Resource*>& resources, GameObject* parent = nullptr);
 	bool ResourceIsUsed(int index, ResourceType type, Resource*& res);
 	void AddResource(int index, ResourceType type, Resource* res);
 	
-
 private:
 	std::vector<UsedResource> used_resources;
 };

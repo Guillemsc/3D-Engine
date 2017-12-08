@@ -86,22 +86,21 @@ void GameObject::Draw()
 					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 					glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdUV());
 					glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+				}
 
-					if (component_mesh->GetMesh()->GetIdIndices() != 0)
-					{
+				if (component_mesh->GetMesh()->GetIdIndices() != 0)
+				{
+					// Index
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdIndices());
 
-						// Index
-						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdIndices());
-
-						// Draw
-						glDrawElements((GLenum)GL_TRIANGLES, component_mesh->GetMesh()->GetNumIndices(), GL_UNSIGNED_INT, NULL);
-					}
+					// Draw
+					glDrawElements((GLenum)GL_TRIANGLES, component_mesh->GetMesh()->GetNumIndices(), GL_UNSIGNED_INT, NULL);
 				}
 			}
+
 			// Disable
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 			glDisableClientState(GL_VERTEX_ARRAY);
-
 
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -110,9 +109,6 @@ void GameObject::Draw()
 	
 	// Reset
 	glBindTexture(GL_TEXTURE_2D, 0);
-
-	// Pop matrix
-	glPopMatrix();
 
 	// Pop matrix
 	glPopMatrix();

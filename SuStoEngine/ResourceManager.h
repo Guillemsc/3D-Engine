@@ -39,9 +39,6 @@ private:
 	void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension);
 	void DeleteAllResources();
 
-public:
-	ResourceMesh* plane = nullptr;
-
 private:
 	std::map<std::string, Resource*> resources;
 

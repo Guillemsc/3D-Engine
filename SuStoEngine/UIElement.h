@@ -30,7 +30,7 @@ public:
 private:
 	SuStoUIMain* ui_main = nullptr;
 	ElementType  type = ElementType::UNDEFINED;
-	SuStoRect		 rect;
+	SuStoRect    rect;
 };
 
 #endif

@@ -60,6 +60,7 @@ public:
 
 	void SetCanPick(bool set);
 	void SetCanMove(bool set);
+
 private:
 	void DestroyGameObjects();
 	void MousePick();

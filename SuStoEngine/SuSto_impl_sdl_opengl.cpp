@@ -5,30 +5,28 @@
 #include "SDL\include\SDL_syswm.h"
 #include "SDL\include\SDL_opengl.h"
 
-SuStoUIMain* SuStoUI::Init(SDL_Window* window)
+void SuStoUI::Init(SDL_Window* window, SuStoUIMain* ui_main)
 {
-	//ui_main = new SuStoUIMain();
 
-	//test_pl = new SuStoPlane(SuStoVec2(10, 10));
-
-	return nullptr;
 }
 
-void SuStoUI::NewFrame(SDL_Window* window)
+void SuStoUI::NewFrame(SDL_Window* window, SuStoUIMain* ui_main)
 {
 	// Viewport 
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
-	//ui_main->SetViewport(SuStoVec2(w, h));
+	ui_main->SetViewport(SuStoVec2(w, h));
 }
 
-void SuStoUI::EndFrame()
+void SuStoUI::Render(SuStoUIMain * ui_main)
 {
+
 	// Get last
 	GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
 	GLint last_polygon_mode[2]; glGetIntegerv(GL_POLYGON_MODE, last_polygon_mode);
 	GLint last_viewport[4]; glGetIntegerv(GL_VIEWPORT, last_viewport);
 	GLint last_scissor_box[4]; glGetIntegerv(GL_SCISSOR_BOX, last_scissor_box);
+	GLint last_matrix_mode; glGetIntegerv(GL_MATRIX_MODE, &last_matrix_mode);
 
 	// Setup 
 	glEnable(GL_BLEND);
@@ -44,35 +42,40 @@ void SuStoUI::EndFrame()
 
 	//glViewport(0, 0, (GLsizei)ui_main->GetViewport().x, (GLsizei)ui_main->GetViewport().y);
 
-	//glMatrixMode(GL_PROJECTION);
-	//glPushMatrix();
-	//glLoadIdentity();
-	//glOrtho(0.0f, ui_main->GetViewport().x, ui_main->GetViewport().y, 0.0f, -1.0f, +1.0f);
-	//glMatrixMode(GL_MODELVIEW);
-	//glPushMatrix();
-	//glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
 
-	// Draw -------------
+	//Draw -------------
 
-	//glVertexPointer(3, GL_FLOAT, sizeof(float), (const GLvoid*)((const char*)test_pl->GetVertices()));
-	//glTexCoordPointer(2, GL_FLOAT, sizeof(uint), (const GLvoid*)((const char*)test_pl->GetUvs()));
+	std::vector<SuStoPlane*> draw = ui_main->GetDrawList();
 
-	//glDrawElements(GL_TRIANGLES, test_pl->GetNumIndices(), GL_UNSIGNED_INT, test_pl->GetIndices());
+	for (std::vector<SuStoPlane*>::iterator it = draw.begin(); it != draw.end(); ++it)
+	{
+		glVertexPointer(3, GL_FLOAT, sizeof(float), (*it)->GetVertices());
+		glTexCoordPointer(3, GL_FLOAT, sizeof(uint), (*it)->GetUvs());
 
-	// ------------------
+		glDrawElements(GL_TRIANGLES, (*it)->GetNumIndices(), GL_UNSIGNED_INT, (*it)->GetIndices());
+	}
 
-	// Restore modified state
+	//------------------
+
+	//Restore modified state
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
-	glBindTexture(GL_TEXTURE_2D, (GLuint)last_texture);
+	glBindTexture(GL_TEXTURE_2D, (GLuint)0);
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
-	glMatrixMode(GL_PROJECTION);
+	glMatrixMode(last_matrix_mode);
 	glPopMatrix();
 	glPopAttrib();
 	glPolygonMode(GL_FRONT, last_polygon_mode[0]); glPolygonMode(GL_BACK, last_polygon_mode[1]);
 	glViewport(last_viewport[0], last_viewport[1], (GLsizei)last_viewport[2], (GLsizei)last_viewport[3]);
 	glScissor(last_scissor_box[0], last_scissor_box[1], (GLsizei)last_scissor_box[2], (GLsizei)last_scissor_box[3]);
+}
+
+void SuStoUI::EndFrame(SuStoUIMain* ui_main)
+{
 }
 

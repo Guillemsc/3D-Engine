@@ -511,7 +511,9 @@ void Camera3D::GetElementsToDraw()
 			(*it)->SetDraw(true);
 		}
 		else
+		{
 			(*it)->SetDraw(false);
+		}
 	}
 }
 

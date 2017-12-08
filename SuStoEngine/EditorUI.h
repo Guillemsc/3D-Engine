@@ -19,6 +19,8 @@ class Explorer;
 
 class ImVec4;
 
+class SuStoUIMain;
+
 class EditorElement
 {
 public:
@@ -112,6 +114,8 @@ private:
 	bool                 show_imgui_test_window	= false;
 
 	char				 layout_name[255];
+
+	SuStoUIMain*			susto_ui = nullptr;
 };
 
 #endif // __j1FILESYSTEM_H__

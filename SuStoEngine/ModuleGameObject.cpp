@@ -14,6 +14,7 @@
 #include "ModuleWindow.h"
 #include "ComponentCamera.h"
 #include "ComponentMesh.h"
+#include "ResourceMesh.h"
 #include "ComponentMaterial.h"
 #include "ImGuizmo.h"
 #include "imgui.h"
@@ -49,8 +50,12 @@ bool ModuleGameObject::Start()
 {
 	bool ret = true;
 
-	ResourceMeshLoader loader;
-	loader.CreatePlane();
+	GameObject* t = App->gameobj->Create();
+
+	ComponentMesh* cm = (ComponentMesh*)t->AddComponent(MESH);
+	ResourceMesh* rm = App->resource_manager->GetMeshLoader()->CreatePlaneMesh(float2(10, 10));
+
+	cm->SetMesh(rm);
 
 	return ret;
 }
@@ -149,7 +154,6 @@ bool ModuleGameObject::Update()
 					{
 						(*it)->transform->SetScale(sc);
 					}
-					
 				}
 				break;
 			}
@@ -161,12 +165,10 @@ bool ModuleGameObject::Update()
 	else
 		can_pick = true;
 	
-
 	if (show_kdtree)
 		kdtree->DebugDraw();
 
-
-	App->renderer3D->DrawGrid(100);
+	/*App->renderer3D->DrawGrid(100);*/
 
 	return ret;
 }
