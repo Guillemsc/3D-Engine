@@ -563,7 +563,7 @@ ResourceMesh * ResourceMeshLoader::CreatePlaneMesh(float2 size)
 	float* vertices = new float[num_vert * 3];
 	for (int i = 0; i < num_vert; ++i)
 	{
-		memcpy(vertices + i * 3, ver[i].ptr(), sizeof(float) * 3);
+		memcpy(vertices + i * 3, &ver[i].x, sizeof(float) * 3);
 	}
 
 	//indices
@@ -598,7 +598,7 @@ ResourceMesh * ResourceMeshLoader::CreatePlaneMesh(float2 size)
 	float* uvs = new float[num_vert * 3];
 	for (int i = 0; i < num_vert; ++i)
 	{
-		memcpy(uvs + i * 3, uv[i].ptr(), sizeof(float) * 3);
+		memcpy(uvs + i * 3, &uv[i].x, sizeof(float) * 3);
 	}
 
 	ResourceMesh* rmesh = (ResourceMesh*)App->resource_manager->CreateNewResource(ResourceType::RT_MESH);

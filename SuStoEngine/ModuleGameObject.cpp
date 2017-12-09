@@ -20,6 +20,9 @@
 #include "imgui.h"
 #include "Resource.h"
 
+#include "SuSto_impl_sdl_opengl.h"
+#include "SuStoUI.h"
+
 ModuleGameObject::ModuleGameObject(bool enabled)
 {
 	SetName("GameObject");
@@ -57,6 +60,15 @@ bool ModuleGameObject::Start()
 
 	cm->SetMesh(rm);
 
+	// --
+
+	susto_ui = new SuStoUIMain();
+	SuStoUI::Init(App->window->window, susto_ui);
+
+	SuStoPlane* pl = new SuStoPlane(SuStoVec2(10, 10));
+	susto_ui->Draw(pl);
+
+
 	return ret;
 }
 
@@ -69,12 +81,17 @@ bool ModuleGameObject::PreUpdate()
 
 	UpdateKDTree();
 
+	SuStoUI::NewFrame(App->window->window, susto_ui);
+
 	return ret;
 }
 
 bool ModuleGameObject::Update()
 {
 	bool ret = true;
+
+
+	SuStoUI::Render(susto_ui);
 
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && can_pick)
 	{

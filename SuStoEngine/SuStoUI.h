@@ -7,6 +7,8 @@
 
 #include "SuSto_event_system.h"
 
+#include "GeometryMath.h"
+
 class UIElement;
 
 // -------------------------------
@@ -147,6 +149,7 @@ private:
 	int	   format = 0;
 	SuStoVec2 size;
 };
+
 
 enum ElementType
 {

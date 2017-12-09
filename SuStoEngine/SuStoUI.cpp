@@ -207,11 +207,11 @@ SuStoPlane::SuStoPlane(SuStoVec2 size)
 	vertices = new float[num_vertices * 3];
 	for (int i = 0; i < num_vertices; ++i)
 	{
-		memcpy(vertices + i * 3, ver[i].ptr(), sizeof(float) * 3);
+		memcpy(vertices + i * 3, &ver[i].x, sizeof(float) * 3);
 	}
 
 	//indices
-	uint num_indices = (resX - 1) * (resZ - 1) * 6;
+	num_indices = (resX - 1) * (resZ - 1) * 6;
 	uint ind[6];
 	int t = 0;
 	for (int face = 0; face < num_indices / 6; ++face)
@@ -243,12 +243,8 @@ SuStoPlane::SuStoPlane(SuStoVec2 size)
 	num_uvs = num_vertices;
 	for (int i = 0; i < num_vertices; ++i)
 	{
-		memcpy(uvs + i * 3, uv[i].ptr(), sizeof(float) * 3);
+		memcpy(uvs + i * 3, &uv[i].x, sizeof(float) * 3);
 	}
-
-	RELEASE_ARRAY(vertices);
-	RELEASE_ARRAY(indices);
-	RELEASE_ARRAY(uvs);
 }
 
 uint SuStoPlane::GetVerticesId()

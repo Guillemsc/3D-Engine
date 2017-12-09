@@ -14,19 +14,19 @@ enum UIEventType
 	UIEVENT_NULL
 };
 
-enum KeyEvent
-{
-	KEY_DOWN,
-	KEY_UP,
-	KEY_REPEAT,
-
-	KEY_NULL
-};
+//enum KeyEvent
+//{
+//	KEY_DOWN,
+//	KEY_UP,
+//	KEY_REPEAT,
+//
+//	KEY_NULL
+//};
 
 struct Key
 {
 	int key = 0;
-	KeyEvent key_event = KeyEvent::KEY_NULL;
+	//KeyEvent key_event = KeyEvent::KEY_NULL;
 
 	bool operator == (const Key& comp_key)
 	{

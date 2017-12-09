@@ -23,9 +23,6 @@
 #include "SceneManager.h"
 #include "ImGuizmo.h"
 
-#include "SuSto_impl_sdl_opengl.h"
-#include "SuStoUI.h"
-
 //https://github.com/ocornut/imgui/issues/351
 
 EditorUI::EditorUI(bool enabled) : Module(enabled)
@@ -45,12 +42,6 @@ bool EditorUI::Awake()
 	LOG_OUTPUT("Loading ImGui");
 
 	ret = ImGui_ImplSdlGL2_Init(App->window->window);
-
-	susto_ui = new SuStoUIMain();
-	SuStoUI::Init(App->window->window, susto_ui);
-
-	SuStoPlane* pl = new SuStoPlane(SuStoVec2(100, 100));
-	susto_ui->Draw(pl);
 
 	// Styles
 	//	-default
@@ -116,8 +107,6 @@ bool EditorUI::PreUpdate()
 	// ImGui new frame
 	ImGui_ImplSdlGL2_NewFrame(App->window->window);
 
-	SuStoUI::NewFrame(App->window->window, susto_ui);
-
 	// ImGuizmo begin frame
 	ImGuizmo::BeginFrame();
 
@@ -149,8 +138,6 @@ bool EditorUI::DrawEditor()
 
 	// ImGui Draw
 	ImGui::Render();
-
-	SuStoUI::EndFrame(susto_ui);
 
 	return ret;
 }

@@ -7,6 +7,7 @@
 
 class KDTree;
 class Resource;
+class SuStoUIMain;
 
 class ModuleGameObject : public Module
 {
@@ -84,6 +85,8 @@ private:
 
 	bool can_pick = true;
 	bool can_move = true;
+
+	SuStoUIMain*	     susto_ui = nullptr;
 };
 
 #endif // !_MODULE_GAME_OBJECT_H_
