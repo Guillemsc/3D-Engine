@@ -36,7 +36,7 @@ void SuStoUI::Render(SuStoUIMain * ui_main, bool ortographic)
 	GLfloat last_projection[16]; glGetFloatv(GL_PROJECTION_MATRIX, &last_projection[0]);
 	//
 
-	float4x4 trans = float4x4::FromTRS(float3(1000, 100, 0), Quat::identity, float3(100, 1, 100));
+	float4x4 trans = float4x4::FromTRS(float3(1000, 100, 0), Quat::identity, float3(1, 1, 1));
 
 	glDisable(GL_DEPTH_TEST);
 
@@ -47,17 +47,10 @@ void SuStoUI::Render(SuStoUIMain * ui_main, bool ortographic)
 	
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
-	//glLoadIdentity();
+	glLoadIdentity();
 	//glMultMatrixf(trans.Transposed().ptr());
 
 	//Draw -------------
-
-	//glBegin(GL_LINE_LOOP);
-	//glVertex2i(0, viewport.x - 100);
-	//glVertex2i(0, viewport.x - 100);
-	//glVertex2i(0, viewport.x - 100);
-	//glVertex2i(0, viewport.x - 100);
-	//glEnd();
 
 	std::vector<SuStoPlane*> draw = ui_main->GetDrawList();
 

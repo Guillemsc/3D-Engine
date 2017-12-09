@@ -611,3 +611,4 @@ ResourceMesh * ResourceMeshLoader::CreatePlaneMesh(float2 size)
 
 	return rmesh;
 }
+

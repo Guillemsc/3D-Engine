@@ -200,7 +200,7 @@ SuStoPlane::SuStoPlane(SuStoVec2 size)
 		{
 			// [ -width / 2, width / 2 ]
 			float xPos = ((float)x / (resX - 1) - .5f) * width;
-			ver[x + z * resX] = SuStoVec3(xPos, 0.f, zPos);
+			ver[x + z * resX] = SuStoVec3(xPos, zPos, 0.f);
 		}
 	}
 
