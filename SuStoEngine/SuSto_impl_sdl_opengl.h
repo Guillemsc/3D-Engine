@@ -10,7 +10,7 @@ namespace SuStoUI
 {
 	void Init(SDL_Window* window, SuStoUIMain* ui_main);
 	void NewFrame(SDL_Window* window, SuStoUIMain* ui_main);
-	void Render(SuStoUIMain* ui_main, float3 camera_pos, bool ortographic = false);
+	void Render(SuStoUIMain* ui_main, bool ortographic = false);
 	void EndFrame(SuStoUIMain* ui_main);
 }
 

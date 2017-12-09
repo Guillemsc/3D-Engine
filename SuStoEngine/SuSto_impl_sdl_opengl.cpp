@@ -24,8 +24,10 @@ void SuStoUI::NewFrame(SDL_Window* window, SuStoUIMain* ui_main)
 	ui_main->SetViewport(SuStoVec2(w, h));
 }
 
-void SuStoUI::Render(SuStoUIMain * ui_main, float3 camera_pos, bool ortographic)
+void SuStoUI::Render(SuStoUIMain * ui_main, bool ortographic)
 {
+	SuStoVec2 viewport = ui_main->GetViewport();
+
 	// 
 	GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
 	GLint last_polygon_mode[2]; glGetIntegerv(GL_POLYGON_MODE, last_polygon_mode);
@@ -34,21 +36,28 @@ void SuStoUI::Render(SuStoUIMain * ui_main, float3 camera_pos, bool ortographic)
 	GLfloat last_projection[16]; glGetFloatv(GL_PROJECTION_MATRIX, &last_projection[0]);
 	//
 
-	float4x4 trans = float4x4::FromTRS(float3(0, 0, 0), Quat::identity, float3(100, 1, 100));
+	float4x4 trans = float4x4::FromTRS(float3(1000, 100, 0), Quat::identity, float3(100, 1, 100));
 
-	// Setup 
-	if (1)
-	{
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(0.0f, ui_main->GetViewport().x, ui_main->GetViewport().y, 0.0f, -10000.0f, +10000.0f);
-	}
+	glDisable(GL_DEPTH_TEST);
 
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(-1300.0f, ui_main->GetViewport().x, ui_main->GetViewport().y, -1000.0f, -10000.0f, +10000.0f);
+	
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
-	glMultMatrixf(trans.Transposed().ptr());
+	//glLoadIdentity();
+	//glMultMatrixf(trans.Transposed().ptr());
 
 	//Draw -------------
+
+	//glBegin(GL_LINE_LOOP);
+	//glVertex2i(0, viewport.x - 100);
+	//glVertex2i(0, viewport.x - 100);
+	//glVertex2i(0, viewport.x - 100);
+	//glVertex2i(0, viewport.x - 100);
+	//glEnd();
 
 	std::vector<SuStoPlane*> draw = ui_main->GetDrawList();
 
@@ -67,62 +76,13 @@ void SuStoUI::Render(SuStoUIMain * ui_main, float3 camera_pos, bool ortographic)
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisableClientState(GL_VERTEX_ARRAY);
 
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glLoadMatrixf(last_projection);
-
-		glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();
-
-		// ---------------------------
-		
-		//if ((*it)->GetVerticesId() == 0 && (*it)->GetVertices() != nullptr)
-		//	(*it)->SetVerticesId(App->renderer3D->LoadBuffer((*it)->GetVertices(), (*it)->GetNumVertices() * 3));
-
-		//if ((*it)->GetIndicesId() == 0 && (*it)->GetIndices() != nullptr)
-		//	(*it)->SetIndicesId(App->renderer3D->LoadBuffer((*it)->GetIndices(), (*it)->GetNumIndices()));
-
-		//if ((*it)->GetUvsId() == 0 && (*it)->GetUvs() != nullptr)
-		//	(*it)->SetUvsId(App->renderer3D->LoadBuffer((*it)->GetUvs(), (*it)->GetNumUvs() * 3));
-
-		//glEnableClientState(GL_VERTEX_ARRAY);
-
-		//if ((*it)->GetVerticesId() != 0)
-		//{
-		//	glBindBuffer(GL_ARRAY_BUFFER, (*it)->GetVerticesId());
-		//	glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-		//	if ((*it)->GetUvsId() != 0)
-		//	{
-		//		// UV
-		//		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		//		glBindBuffer(GL_ARRAY_BUFFER, (*it)->GetUvsId());
-		//		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
-		//	}
-
-		//	if ((*it)->GetIndicesId() != 0)
-		//	{
-		//		// Index
-		//		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*it)->GetIndicesId());
-
-		//		// Draw
-		//		glDrawElements((GLenum)GL_TRIANGLES, (*it)->GetNumIndices(), GL_UNSIGNED_INT, NULL);
-		//	}
-
-		//	// Disable
-		//	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		//	glDisableClientState(GL_VERTEX_ARRAY);
-
-		//	glBindBuffer(GL_ARRAY_BUFFER, 0);
-		//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		//}
-
-		//// Reset
-		//glBindTexture(GL_TEXTURE_2D, 0);
-
-		//// Pop matrix
-		//glPopMatrix();
 	}
+
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
 
 	//------------------
 

@@ -60,14 +60,11 @@ bool ModuleGameObject::Start()
 
 	cm->SetMesh(rm);
 
-	// --
-
 	susto_ui = new SuStoUIMain();
 	SuStoUI::Init(App->window->window, susto_ui);
 
-	SuStoPlane* pl = new SuStoPlane(SuStoVec2(10, 10));
+	SuStoPlane* pl = new SuStoPlane(SuStoVec2(1000, 1000));
 	susto_ui->Draw(pl);
-
 
 	return ret;
 }
@@ -90,7 +87,7 @@ bool ModuleGameObject::Update()
 {
 	bool ret = true;
 
-	SuStoUI::Render(susto_ui,App->camera->GetCurrentCamera()->GetPosition());
+	SuStoUI::Render(susto_ui);
 
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && can_pick)
 	{

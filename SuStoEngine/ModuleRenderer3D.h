@@ -14,6 +14,7 @@
 #define MAX_LIGHTS 8
 
 class FBO;
+class SuStoUIMain;
 class DebugDraw;
 
 class ModuleRenderer3D : public Module
@@ -23,6 +24,7 @@ public:
 	~ModuleRenderer3D();
 
 	bool Awake();
+	bool Start();
 	bool PreUpdate();
 	bool PostUpdate();
 	bool CleanUp();
@@ -72,4 +74,6 @@ private:
 	bool wireframe = false;
 	bool points = false;
 	bool fill = false;
+
+	SuStoUIMain* susto_ui = nullptr;
 };

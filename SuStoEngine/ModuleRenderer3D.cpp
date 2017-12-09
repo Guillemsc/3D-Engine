@@ -11,6 +11,9 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+#include "SuSto_impl_sdl_opengl.h"
+#include "SuStoUI.h"
+
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "Glew/Lib/glew32.lib") 
@@ -137,6 +140,19 @@ bool ModuleRenderer3D::Awake()
 	return ret;
 }
 
+bool ModuleRenderer3D::Start()
+{
+	bool ret = true;
+
+	susto_ui = new SuStoUIMain();
+	SuStoUI::Init(App->window->window, susto_ui);
+
+	SuStoPlane* pl = new SuStoPlane(SuStoVec2(10, 10));
+	susto_ui->Draw(pl);
+
+	return ret;
+}
+
 // PreUpdate: clear buffer
 bool ModuleRenderer3D::PreUpdate()
 {
@@ -150,11 +166,17 @@ bool ModuleRenderer3D::PreUpdate()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->GetViewMatrix());
 
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glLoadMatrixf(App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr());
+
 	// light 0 on cam pos
 	lights[0].SetPos(0, 0, 0);
 
 	for (uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
+
+	SuStoUI::NewFrame(App->window->window, susto_ui);
 
 	return ret;
 }
@@ -164,10 +186,12 @@ bool ModuleRenderer3D::PostUpdate()
 {
 	bool ret = true;
 
+	// Render ui
+	SuStoUI::Render(susto_ui);
+
+	// Finish 3d Draw scene
 	fbo_texture->Unbind();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	// Draw Scene
 
 	// Disable light
 	SetLightingState(false);
@@ -203,11 +227,6 @@ bool ModuleRenderer3D::CleanUp()
 void ModuleRenderer3D::OnResize(int width, int height)
 {
 	App->camera->GetCurrentCamera()->SetAspectRatio((float)width / (float)height);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glLoadMatrixf(App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr());
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
 }
 
 uint ModuleRenderer3D::GetScreenTexture()
