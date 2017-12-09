@@ -90,8 +90,7 @@ bool ModuleGameObject::Update()
 {
 	bool ret = true;
 
-
-	SuStoUI::Render(susto_ui);
+	SuStoUI::Render(susto_ui,App->camera->GetCurrentCamera()->GetPosition());
 
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && can_pick)
 	{
