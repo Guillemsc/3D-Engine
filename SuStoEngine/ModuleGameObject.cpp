@@ -80,7 +80,8 @@ bool ModuleGameObject::PreUpdate()
 
 	float width = App->editorUI->GameRect().right - App->editorUI->GameRect().left;
 	float heigth = App->editorUI->GameRect().bottom - App->editorUI->GameRect().top;
-	SuStoUI::NewFrame(SuStoVec2(width, heigth), susto_ui);
+
+	SuStoUI::NewFrame(susto_ui, App->window->window, SuStoVec2(width, heigth));
 
 	return ret;
 }
@@ -89,8 +90,9 @@ bool ModuleGameObject::Update()
 {
 	bool ret = true;
 
-	SuStoRect r = SuStoRect(App->editorUI->GameRect().left, App->editorUI->GameRect().top, App->editorUI->GameRect().right, App->editorUI->GameRect().bottom);
-	SuStoUI::Render(susto_ui, r);
+	float width = App->editorUI->GameRect().right - App->editorUI->GameRect().left;
+	float heigth = App->editorUI->GameRect().bottom - App->editorUI->GameRect().top;
+	SuStoUI::Render(susto_ui, App->window->window, SuStoVec2(width, heigth));
 
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && can_pick)
 	{

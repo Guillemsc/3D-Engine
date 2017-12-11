@@ -10,8 +10,8 @@ struct SuStoRect;
 namespace SuStoUI
 {
 	void Init(SDL_Window* window, SuStoUIMain* ui_main);
-	void NewFrame(SuStoVec2 viewport_size, SuStoUIMain* ui_main);
-	void Render(SuStoUIMain* ui_main, SuStoRect viewport, bool ortographic = false);
+	void NewFrame(SuStoUIMain* ui_main, SDL_Window* window, SuStoVec2 viewport);
+	void Render(SuStoUIMain* ui_main, SDL_Window* window, SuStoVec2 viewport, bool ortographic = false);
 	void EndFrame(SuStoUIMain* ui_main);
 }
 
