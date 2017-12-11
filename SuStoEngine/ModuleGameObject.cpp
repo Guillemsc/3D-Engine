@@ -27,6 +27,10 @@
 #include "UICanvas.h"
 #include "UIButton.h"
 
+#define BUTTON_SIZE SuStoVec2(96, 25)
+#define BUTTON_PADDING SuStoVec2(9, 5)
+
+
 ModuleGameObject::ModuleGameObject(bool enabled)
 {
 	SetName("GameObject");
@@ -71,11 +75,14 @@ bool ModuleGameObject::Start()
 	TextureInfo test = loader.LoadTexture("UI\\preview_164.png");
 
 	UICanvas* cv = susto_ui->CreateCanvas(SuStoVec2(0, 0), SuStoVec2(300, 300));
-	UIImage* b = (UIImage*)susto_ui->CreateElement(ElementType::IMAGE, cv);
-	b->SetImage(test.id, SuStoVec2(test.size_x, test.size_y));
+	/*UIImage* b = (UIImage*)susto_ui->CreateElement(ElementType::IMAGE, cv);
+	b->SetImage(test.id, SuStoVec2(test.size_x, test.size_y));*/
 
 	UIButton* button = (UIButton*)susto_ui->CreateElement(ElementType::BUTTON, cv);
-	button->SetToStandard();
+	button->SetStandardImage(test.id, SuStoVec2(8, 8), BUTTON_SIZE);
+	button->SetHighlightImage(test.id, SuStoVec2(8 + BUTTON_PADDING.x + BUTTON_SIZE.x, 8), BUTTON_SIZE);
+	button->SetClickImage(test.id, SuStoVec2(8 + 2* (BUTTON_PADDING.x + BUTTON_SIZE.x), 8), BUTTON_SIZE);
+	button->SetToClick();
 
 	return ret;
 }
