@@ -432,12 +432,26 @@ SuStoVec2 SuStoUIMain::GetWindowViewport()
 	return window_viewport;
 }
 
-void SuStoUIMain::Draw(SuStoPlane * plane)
+void SuStoUIMain::Draw(PrintableElement * plane)
 {
 	draw.push_back(plane);
 }
 
-std::vector<SuStoPlane*> SuStoUIMain::GetDrawList()
+void SuStoUIMain::Destroy(PrintableElement * element)
+{
+	for (std::vector<PrintableElement*>::iterator it = draw.begin(); it != draw.end(); ++it)
+	{
+		if ((*it) == element)
+		{
+			(*it)->CleanUp();
+			RELEASE(*it);
+			draw.erase(it);
+			break;
+		}
+	}
+}
+
+std::vector<PrintableElement*> SuStoUIMain::GetDrawList()
 {
 	return draw;
 }
@@ -484,26 +498,56 @@ bool ImGui::TextCmp(const char * text1, const char * text2)
 	return ret;
 }
 
-PrintableElement::PrintableElement(uint texture_id, SuStoVec2 texture_size, SuStoVec2 pos)
+PrintableElement::PrintableElement(uint _texture_id, SuStoVec2 _texture_size, SuStoVec2 _pos)
 {
+	texture_id = _texture_id;
+	texture_size = _texture_size;
+	local_pos = _pos;
+
+	plane = SuStoPlane(_texture_size);
 }
 
 uint PrintableElement::GetNumVertices()
 {
-	return uint();
+	return plane.GetNumVertices();
 }
 
 uint PrintableElement::GetNumIndices()
 {
-	return uint();
+	return plane.GetNumIndices();
 }
 
 uint PrintableElement::GetNumUvs()
 {
-	return uint();
+	return plane.GetNumUvs();
 }
 
 float * PrintableElement::GetVertices()
 {
-	return nullptr;
+	return plane.GetVertices();
+}
+
+uint * PrintableElement::GetIndices()
+{
+	return plane.GetIndices();
+}
+
+float * PrintableElement::GetUvs()
+{
+	return plane.GetUvs();
+}
+
+uint PrintableElement::GetTextureId()
+{
+	return texture_id;
+}
+
+SuStoVec2 PrintableElement::GetPos()
+{
+	return local_pos;
+}
+
+void PrintableElement::CleanUp()
+{
+	plane.CleanUp();
 }

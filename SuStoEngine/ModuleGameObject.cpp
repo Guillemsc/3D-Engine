@@ -19,6 +19,7 @@
 #include "ImGuizmo.h"
 #include "imgui.h"
 #include "Resource.h"
+#include "ResourceTextureLoader.h"
 
 #include "SuSto_impl_sdl_opengl.h"
 #include "SuStoUI.h"
@@ -63,8 +64,10 @@ bool ModuleGameObject::Start()
 	susto_ui = new SuStoUIMain();
 	SuStoUI::Init(App->window->window, susto_ui);
 
-	SuStoPlane* pl = new SuStoPlane(SuStoVec2(100, 100));
-	susto_ui->Draw(pl);
+	ResourceTextureLoader loader;
+	TextureInfo test = loader.LoadTexture("UI\\preview_164.png");
+	PrintableElement* el = new PrintableElement(test.id, SuStoVec2(test.size_x, test.size_y), SuStoVec2(100, 100));
+	susto_ui->Draw(el);
 
 	return ret;
 }

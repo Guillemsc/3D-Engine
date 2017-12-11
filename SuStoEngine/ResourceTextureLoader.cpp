@@ -81,7 +81,7 @@ bool ResourceTextureLoader::Load(const char * filepath, std::vector<Resource*>& 
 	return ret;
 }
 
-unsigned int ResourceTextureLoader::LoadTexture(const char* filename)
+TextureInfo ResourceTextureLoader::LoadTexture(const char* filename)
 {
 	ILuint textureID;
 	ILenum error;
@@ -93,9 +93,9 @@ unsigned int ResourceTextureLoader::LoadTexture(const char* filename)
 
 	success = ilLoadImage(filename);
 
+	ILinfo ImageInfo;
 	if (success)
 	{
-		ILinfo ImageInfo;
 		iluGetImageInfo(&ImageInfo);
 
 		//Flip the image into the right way
@@ -133,7 +133,7 @@ unsigned int ResourceTextureLoader::LoadTexture(const char* filename)
 	//RELEASE MEMORY used by the image
 	ilDeleteImages(1, &textureID);
 
-	return textureID;
+	return TextureInfo(textureID, ImageInfo.Width, ImageInfo.Height);
 }
 
 void ResourceTextureLoader::UnloadTexture(unsigned int id)
@@ -298,3 +298,4 @@ bool ResourceTextureLoader::Export(const char * path, ResourceTexture* resource)
 
 	return ret;
 }
+

@@ -25,10 +25,10 @@ Explorer::~Explorer()
 void Explorer::Start()
 {
 	ResourceTextureLoader loader;
-	fbx_icon = loader.LoadTexture("UI\\FBX_icon.png");
-	png_icon = loader.LoadTexture("UI\\PNG_icon.png");
-	tga_icon = loader.LoadTexture("UI\\TGA_icon.png");
-	folder_icon = loader.LoadTexture("UI\\FOLDER_icon.png");
+	fbx_icon = loader.LoadTexture("UI\\FBX_icon.png").id;
+	png_icon = loader.LoadTexture("UI\\PNG_icon.png").id;
+	tga_icon = loader.LoadTexture("UI\\TGA_icon.png").id;
+	folder_icon = loader.LoadTexture("UI\\FOLDER_icon.png").id;
 
 	App->file_system->SetLookingPath(App->file_system->GetAssetsPath().c_str());
 }

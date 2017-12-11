@@ -59,24 +59,27 @@ void SuStoUI::Render(SuStoUIMain * ui_main, bool ortographic)
 
 	//Draw -------------
 
-	std::vector<SuStoPlane*> draw = ui_main->GetDrawList();
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	for (std::vector<SuStoPlane*>::iterator it = draw.begin(); it != draw.end(); ++it)
+	std::vector<PrintableElement*> draw = ui_main->GetDrawList();
+
+	for (std::vector<PrintableElement*>::iterator it = draw.begin(); it != draw.end(); ++it)
 	{
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
+		// Vertices, indices, uvs and texture
 		glVertexPointer(3, GL_FLOAT, sizeof(float) * 3, (*it)->GetVertices());
 		glTexCoordPointer(3, GL_FLOAT, sizeof(float) * 3, (*it)->GetUvs());
 
-		//glBindTexture(GL_TEXTURE_2D, (GLuint)(intptr_t)pcmd->TextureId);
+		glBindTexture(GL_TEXTURE_2D, (*it)->GetTextureId());
 
 		glDrawElements(GL_TRIANGLES, (*it)->GetNumIndices(), GL_UNSIGNED_INT, (*it)->GetIndices());
 
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
-
+		glBindTexture(GL_TEXTURE_2D, 0);
+		// -----------------------------------
 	}
+
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
 
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();

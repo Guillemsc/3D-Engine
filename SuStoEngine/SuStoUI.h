@@ -153,10 +153,14 @@ public:
 
 	uint GetTextureId();
 
+	SuStoVec2 GetPos();
+
+	void CleanUp();
+
 private:
 	uint       texture_id;
 	SuStoVec2  texture_size;
-	SuStoVec2  pos;
+	SuStoVec2  local_pos;
 	SuStoPlane plane;
 };
 
@@ -197,8 +201,9 @@ public:
 	SuStoVec2 GetViewport();
 	SuStoVec2 GetWindowViewport();
 
-	void Draw(SuStoPlane* plane);
-	std::vector<SuStoPlane*> GetDrawList();
+	void Draw(PrintableElement* element);
+	void Destroy(PrintableElement* element);
+	std::vector<PrintableElement*> GetDrawList();
 
 private:
 	void DestroyElements();
@@ -207,7 +212,7 @@ private:
 	std::vector<UIElement*> elements;
 	std::list<UIElement*>  to_delete;
 
-	std::vector<SuStoPlane*> draw;
+	std::vector<PrintableElement*> draw;
 
 private:
 	SuStoVec2 window_viewport;
