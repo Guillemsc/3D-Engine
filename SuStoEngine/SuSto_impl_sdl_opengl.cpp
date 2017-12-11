@@ -24,9 +24,9 @@ void SuStoUI::NewFrame(SuStoVec2 viewport_size, SuStoUIMain* ui_main)
 	ui_main->SetViewport(viewport_size);
 }
 
-void SuStoUI::Render(SuStoUIMain * ui_main, bool ortographic)
+void SuStoUI::Render(SuStoUIMain * ui_main, SuStoRect viewport, bool ortographic)
 {
-	SuStoVec2 viewport = ui_main->GetViewport();
+	SuStoVec2 view = ui_main->GetViewport();
 
 	// 
 	GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
@@ -43,13 +43,13 @@ void SuStoUI::Render(SuStoUIMain * ui_main, bool ortographic)
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
-	glOrtho(-100, ui_main->GetViewport().x, ui_main->GetViewport().y, -500, -1.0f, +1.0f);
+	glOrtho(0, viewport.w, viewport.h, 0, -1.0f, +1.0f);
 	
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
-	//glTranslatef(600, 600, 0);
-	//glScalef(1, 1, 1);
+	glTranslatef(600, 600, 0);
+	glScalef(1, 1, 1);
 	//glMultMatrixf(trans.Transposed().ptr());
 
 	//Draw -------------

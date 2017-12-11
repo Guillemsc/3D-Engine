@@ -89,7 +89,8 @@ bool ModuleGameObject::Update()
 {
 	bool ret = true;
 
-	SuStoUI::Render(susto_ui);
+	SuStoRect r = SuStoRect(App->editorUI->GameRect().left, App->editorUI->GameRect().top, App->editorUI->GameRect().right, App->editorUI->GameRect().bottom);
+	SuStoUI::Render(susto_ui, r);
 
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && can_pick)
 	{
