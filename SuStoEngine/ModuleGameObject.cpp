@@ -63,7 +63,7 @@ bool ModuleGameObject::Start()
 	susto_ui = new SuStoUIMain();
 	SuStoUI::Init(App->window->window, susto_ui);
 
-	SuStoPlane* pl = new SuStoPlane(SuStoVec2(1000, 1000));
+	SuStoPlane* pl = new SuStoPlane(SuStoVec2(100, 100));
 	susto_ui->Draw(pl);
 
 	return ret;
@@ -78,7 +78,9 @@ bool ModuleGameObject::PreUpdate()
 
 	UpdateKDTree();
 
-	SuStoUI::NewFrame(App->window->window, susto_ui);
+	float width = App->editorUI->GameRect().right - App->editorUI->GameRect().left;
+	float heigth = App->editorUI->GameRect().bottom - App->editorUI->GameRect().top;
+	SuStoUI::NewFrame(SuStoVec2(width, heigth), susto_ui);
 
 	return ret;
 }

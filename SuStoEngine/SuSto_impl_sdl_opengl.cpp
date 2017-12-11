@@ -16,12 +16,12 @@ void SuStoUI::Init(SDL_Window* window, SuStoUIMain* ui_main)
 
 }
 
-void SuStoUI::NewFrame(SDL_Window* window, SuStoUIMain* ui_main)
+void SuStoUI::NewFrame(SuStoVec2 viewport_size, SuStoUIMain* ui_main)
 {
 	// Viewport 
-	int w, h;
-	SDL_GetWindowSize(window, &w, &h);
-	ui_main->SetViewport(SuStoVec2(w, h));
+	//int w, h;
+	//SDL_GetWindowSize(window, &w, &h);
+	ui_main->SetViewport(viewport_size);
 }
 
 void SuStoUI::Render(SuStoUIMain * ui_main, bool ortographic)
@@ -36,18 +36,20 @@ void SuStoUI::Render(SuStoUIMain * ui_main, bool ortographic)
 	GLfloat last_projection[16]; glGetFloatv(GL_PROJECTION_MATRIX, &last_projection[0]);
 	//
 
-	float4x4 trans = float4x4::FromTRS(float3(1000, 100, 0), Quat::identity, float3(1, 1, 1));
+	float4x4 trans = float4x4::FromTRS(float3(600, 500, 0), Quat::identity, float3(1, 1, 1));
 
 	glDisable(GL_DEPTH_TEST);
 
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
-	glOrtho(-1300.0f, ui_main->GetViewport().x, ui_main->GetViewport().y, -1000.0f, -10000.0f, +10000.0f);
+	glOrtho(-100, ui_main->GetViewport().x, ui_main->GetViewport().y, -500, -1.0f, +1.0f);
 	
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
+	//glTranslatef(600, 600, 0);
+	//glScalef(1, 1, 1);
 	//glMultMatrixf(trans.Transposed().ptr());
 
 	//Draw -------------

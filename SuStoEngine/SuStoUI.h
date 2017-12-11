@@ -137,17 +137,26 @@ private:
 	float* uvs = nullptr;
 };
 
-class SuStoTexture
+class PrintableElement
 {
 public:
-	SuStoTexture(byte* texture_data, uint texture_data_size, int format, SuStoVec2 size);
+	PrintableElement(uint texture_id, SuStoVec2 texture_size, SuStoVec2 pos);
+
+	uint GetNumVertices();
+	uint GetNumIndices();
+	uint GetNumUvs();
+
+	float* GetVertices();
+	uint* GetIndices();
+	float* GetUvs();
+
+	uint GetTextureId();
 
 private:
-	byte*  texture_data = nullptr;
-	uint   texture_data_size = 0;
-	uint   texture_id = 0;
-	int	   format = 0;
-	SuStoVec2 size;
+	uint       texture_id;
+	SuStoVec2  texture_size;
+	SuStoVec2  pos;
+	SuStoPlane plane;
 };
 
 

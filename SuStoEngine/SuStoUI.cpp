@@ -325,14 +325,6 @@ void SuStoPlane::CleanUp()
 	RELEASE_ARRAY(uvs);
 }
 
-SuStoTexture::SuStoTexture(byte * _texture_data, uint _texture_data_size, int _format, SuStoVec2 _size)
-{
-	texture_data = _texture_data;
-	texture_data_size = _texture_data_size;
-	format = _format;
-	size = _size;
-}
-
 SuStoUIMain::SuStoUIMain()
 {
 }

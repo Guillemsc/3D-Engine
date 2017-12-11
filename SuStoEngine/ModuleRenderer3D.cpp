@@ -144,12 +144,6 @@ bool ModuleRenderer3D::Start()
 {
 	bool ret = true;
 
-	susto_ui = new SuStoUIMain();
-	SuStoUI::Init(App->window->window, susto_ui);
-
-	SuStoPlane* pl = new SuStoPlane(SuStoVec2(10, 10));
-	susto_ui->Draw(pl);
-
 	return ret;
 }
 
@@ -176,8 +170,6 @@ bool ModuleRenderer3D::PreUpdate()
 	for (uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
-	SuStoUI::NewFrame(App->window->window, susto_ui);
-
 	return ret;
 }
 
@@ -185,9 +177,6 @@ bool ModuleRenderer3D::PreUpdate()
 bool ModuleRenderer3D::PostUpdate()
 {
 	bool ret = true;
-
-	// Render ui
-	SuStoUI::Render(susto_ui);
 
 	// Finish 3d Draw scene
 	fbo_texture->Unbind();

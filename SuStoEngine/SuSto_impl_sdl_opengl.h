@@ -4,12 +4,12 @@
 struct SDL_Window;
 
 class SuStoUIMain;
-//struct SuStoPlane;
+struct SuStoVec2;
 
 namespace SuStoUI
 {
 	void Init(SDL_Window* window, SuStoUIMain* ui_main);
-	void NewFrame(SDL_Window* window, SuStoUIMain* ui_main);
+	void NewFrame(SuStoVec2 viewport_size, SuStoUIMain* ui_main);
 	void Render(SuStoUIMain* ui_main, bool ortographic = false);
 	void EndFrame(SuStoUIMain* ui_main);
 }

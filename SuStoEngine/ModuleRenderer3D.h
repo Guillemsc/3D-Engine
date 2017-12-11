@@ -74,6 +74,4 @@ private:
 	bool wireframe = false;
 	bool points = false;
 	bool fill = false;
-
-	SuStoUIMain* susto_ui = nullptr;
 };
