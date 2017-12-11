@@ -6,7 +6,7 @@
 class UIButton : public UIElement
 {
 public:
-	UIButton(SuStoUIMain* main);
+	UIButton(SuStoUIMain* main, UICanvas* canvas);
 	~UIButton();
 
 	void Awake();

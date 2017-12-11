@@ -365,32 +365,37 @@ void SuStoUIMain::PushEvent(UIEvent ev)
 {
 }
 
-UIElement * SuStoUIMain::CreateElement(ElementType type)
+UICanvas * SuStoUIMain::CreateCanvas(SuStoVec2 pos, SuStoVec2 size)
+{
+	UICanvas* cv = nullptr;
+	cv = new UICanvas(this);
+
+	return cv;
+}
+
+UIElement * SuStoUIMain::CreateElement(ElementType type, UICanvas* canvas)
 {
 	UIElement* ret = nullptr;
 
 	switch (type)
 	{
-	case CANVAS:
-		ret = new UICanvas(this);
-		break;
 	case PANEL:
-		ret = new UIPanel(this);
+		ret = new UIPanel(this, canvas);
 		break;
 	case IMAGE:
-		ret = new UIImage(this);
+		ret = new UIImage(this, canvas);
 		break;
 	case TEXT:
-		ret = new UIText(this);
+		ret = new UIText(this, canvas);
 		break;
 	case BUTTON:
-		ret = new UIButton(this);
+		ret = new UIButton(this, canvas);
 		break;
 	case TEXT_INPUT:
-		ret = new UITextInput(this);
+		ret = new UITextInput(this, canvas);
 		break;
 	case CHECKBOX:
-		ret = new UICheckBox(this);
+		ret = new UICheckBox(this, canvas);
 		break;
 	default:
 		LOG_OUTPUT("Error while creating the element, type not found");
@@ -402,12 +407,34 @@ UIElement * SuStoUIMain::CreateElement(ElementType type)
 
 void SuStoUIMain::DeleteElement(UIElement * del)
 {
-	for (std::vector<UIElement*>::iterator it = elements.begin(); it != elements.end(); ++it)
+	for (std::list<UIElement*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it)
 	{
 		if (*it == del) 
+			return;
+	}
+
+	to_delete.push_back(del);
+}
+
+void SuStoUIMain::DeleteCanvas(UICanvas * can)
+{
+	if (can == nullptr)
+		return;
+
+	for (std::vector<UIElement*>::iterator it = elements.begin(); it != elements.end(); ++it)
+	{
+		if ((*it)->GetCanvas() == can)
 		{
-			to_delete.push_back(*it);
-			break;
+			DeleteElement(*it);
+		}
+	}
+
+	for (std::vector<UICanvas*>::iterator cv = canvas.begin(); cv != canvas.end(); ++cv)
+	{
+		if ((*cv) == can)
+		{
+			RELEASE(*cv);
+			canvas.erase(cv);
 		}
 	}
 }
@@ -432,12 +459,12 @@ SuStoVec2 SuStoUIMain::GetWindowViewport()
 	return window_viewport;
 }
 
-void SuStoUIMain::Draw(PrintableElement * plane)
+void SuStoUIMain::DrawPrintable(PrintableElement * plane)
 {
 	draw.push_back(plane);
 }
 
-void SuStoUIMain::Destroy(PrintableElement * element)
+void SuStoUIMain::DestroyPrintable(PrintableElement * element)
 {
 	for (std::vector<PrintableElement*>::iterator it = draw.begin(); it != draw.end(); ++it)
 	{
@@ -540,6 +567,11 @@ float * PrintableElement::GetUvs()
 uint PrintableElement::GetTextureId()
 {
 	return texture_id;
+}
+
+void PrintableElement::SetPos(SuStoVec2 pos)
+{
+	local_pos = pos;
 }
 
 SuStoVec2 PrintableElement::GetPos()

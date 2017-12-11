@@ -1,5 +1,15 @@
 #include "UIElement.h"
 
+ElementType UIElement::GetType()
+{
+	return type;
+}
+
+SuStoUIMain * UIElement::GetUIMain()
+{
+	return ui_main;
+}
+
 void UIElement::SetPos(const SuStoVec2& pos)
 {
 	rect.SetPos(pos);
@@ -31,15 +41,21 @@ SuStoRect UIElement::GetRect() const
 	return rect;
 }
 
+UICanvas * UIElement::GetCanvas()
+{
+	return canvas;
+}
+
 UIElement::UIElement()
 {
 	type = ElementType::UNDEFINED;
 }
 
-UIElement::UIElement(SuStoUIMain * main, ElementType type)
+UIElement::UIElement(SuStoUIMain * main, ElementType type, UICanvas* _canvas)
 {
 	ui_main = main;
 	this->type = type;
+	canvas = _canvas;
 }
 
 UIElement::~UIElement()

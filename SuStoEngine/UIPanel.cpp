@@ -1,6 +1,6 @@
 #include "UIPanel.h"
 
-UIPanel::UIPanel(SuStoUIMain * main) : UIElement(main, ElementType::PANEL)
+UIPanel::UIPanel(SuStoUIMain * main, UICanvas* canvas) : UIElement(main, ElementType::PANEL, canvas)
 {
 	LOG_OUTPUT("Panel Created");
 }

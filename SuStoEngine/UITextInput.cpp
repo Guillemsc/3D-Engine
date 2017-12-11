@@ -1,6 +1,6 @@
 #include "UITextInput.h"
 
-UITextInput::UITextInput(SuStoUIMain * main) : UIElement(main, ElementType::TEXT_INPUT)
+UITextInput::UITextInput(SuStoUIMain * main, UICanvas* canvas) : UIElement(main, ElementType::TEXT_INPUT, canvas)
 {
 	LOG_OUTPUT("Text Input Created");
 }

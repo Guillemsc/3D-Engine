@@ -1,6 +1,6 @@
 #include "UIText.h"
 
-UIText::UIText(SuStoUIMain * main) : UIElement(main, ElementType::TEXT)
+UIText::UIText(SuStoUIMain * main, UICanvas* canvas) : UIElement(main, ElementType::TEXT, canvas)
 {
 	LOG_OUTPUT("Text Created");
 }

@@ -6,9 +6,12 @@
 class UIImage : public UIElement
 {
 public:
-	UIImage(SuStoUIMain* main);
+	UIImage(SuStoUIMain* main, UICanvas* canvas);
 	~UIImage();
 
+	void SetImage(uint id, SuStoVec2 size);
+
+private:
 	void Awake();
 	void Start();
 	void Update();
@@ -17,8 +20,7 @@ public:
 	void OnEvent(UIEvent ev);
 
 private:
-
-public:
+	PrintableElement* image = nullptr;
 
 };
 

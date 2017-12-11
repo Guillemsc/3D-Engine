@@ -7,9 +7,9 @@
 
 #include "SuSto_event_system.h"
 
-#include "GeometryMath.h"
 
 class UIElement;
+class UICanvas;
 
 // -------------------------------
 // GLOBALS -----------------------
@@ -153,6 +153,7 @@ public:
 
 	uint GetTextureId();
 
+	void SetPos(SuStoVec2 pos);
 	SuStoVec2 GetPos();
 
 	void CleanUp();
@@ -167,7 +168,6 @@ private:
 
 enum ElementType
 {
-	CANVAS,
 	PANEL,
 	IMAGE,
 	TEXT,
@@ -193,16 +193,18 @@ public:
 
 	void PushEvent(UIEvent ev);
 
-	UIElement * CreateElement(ElementType type);
+	UICanvas* CreateCanvas(SuStoVec2 pos, SuStoVec2 size);
+	UIElement * CreateElement(ElementType type, UICanvas* canvas);
 	void DeleteElement(UIElement* del);
+	void DeleteCanvas(UICanvas* cv);
 
 	void SetViewport(SuStoVec2 view);
 	void SetWindowViewport(SuStoVec2 view);
 	SuStoVec2 GetViewport();
 	SuStoVec2 GetWindowViewport();
 
-	void Draw(PrintableElement* element);
-	void Destroy(PrintableElement* element);
+	void DrawPrintable(PrintableElement* element);
+	void DestroyPrintable(PrintableElement* element);
 	std::vector<PrintableElement*> GetDrawList();
 
 private:
@@ -210,6 +212,7 @@ private:
 
 private:
 	std::vector<UIElement*> elements;
+	std::vector<UICanvas*> canvas;
 	std::list<UIElement*>  to_delete;
 
 	std::vector<PrintableElement*> draw;

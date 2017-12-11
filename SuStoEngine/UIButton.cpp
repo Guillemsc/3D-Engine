@@ -1,6 +1,6 @@
 #include "UIButton.h"
 
-UIButton::UIButton(SuStoUIMain * main) : UIElement(main, ElementType::BUTTON)
+UIButton::UIButton(SuStoUIMain * main, UICanvas* canvas) : UIElement(main, ElementType::BUTTON, canvas)
 {
 	LOG_OUTPUT("Button Created");
 }

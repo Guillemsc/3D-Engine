@@ -1,6 +1,6 @@
 #include "UICheckBox.h"
 
-UICheckBox::UICheckBox(SuStoUIMain * main) : UIElement(main, ElementType::CHECKBOX)
+UICheckBox::UICheckBox(SuStoUIMain * main, UICanvas* canvas) : UIElement(main, ElementType::CHECKBOX, canvas)
 {
 	LOG_OUTPUT("Check Box Created");
 }

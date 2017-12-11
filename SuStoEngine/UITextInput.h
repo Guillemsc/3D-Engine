@@ -6,7 +6,7 @@
 class UITextInput : public UIElement
 {
 public:
-	UITextInput(SuStoUIMain* main);
+	UITextInput(SuStoUIMain* main, UICanvas* canvas);
 	~UITextInput();
 
 	void Awake();

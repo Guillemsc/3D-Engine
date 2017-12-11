@@ -3,7 +3,7 @@
 
 #include "UIElement.h"
 
-class UICanvas : public UIElement
+class UICanvas
 {
 public:
 	UICanvas(SuStoUIMain* main);
@@ -16,10 +16,14 @@ public:
 
 	void OnEvent(UIEvent ev);
 
+	void SetSize();
+
 private:
+	SuStoRect rect;
+	SuStoVec2 center;
 
 public:
-	
+
 };
 
 

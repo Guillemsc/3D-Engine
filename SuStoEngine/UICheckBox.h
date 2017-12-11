@@ -6,7 +6,7 @@
 class UICheckBox : public UIElement
 {
 public:
-	UICheckBox(SuStoUIMain* main);
+	UICheckBox(SuStoUIMain* main, UICanvas* canvas);
 	~UICheckBox();
 
 	void Awake();

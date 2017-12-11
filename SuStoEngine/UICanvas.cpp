@@ -1,6 +1,6 @@
 #include "UICanvas.h"
 
-UICanvas::UICanvas(SuStoUIMain * main) : UIElement(main, ElementType::CANVAS)
+UICanvas::UICanvas(SuStoUIMain * main)
 {
 	LOG_OUTPUT("Canvas Created");
 }

@@ -23,6 +23,8 @@
 
 #include "SuSto_impl_sdl_opengl.h"
 #include "SuStoUI.h"
+#include "UIImage.h"
+#include "UICanvas.h"
 
 ModuleGameObject::ModuleGameObject(bool enabled)
 {
@@ -66,8 +68,10 @@ bool ModuleGameObject::Start()
 
 	ResourceTextureLoader loader;
 	TextureInfo test = loader.LoadTexture("UI\\preview_164.png");
-	PrintableElement* el = new PrintableElement(test.id, SuStoVec2(test.size_x, test.size_y), SuStoVec2(100, 100));
-	susto_ui->Draw(el);
+
+	UICanvas* cv = susto_ui->CreateCanvas(SuStoVec2(0, 0), SuStoVec2(300, 300));
+	UIImage* b = (UIImage*)susto_ui->CreateElement(ElementType::IMAGE, cv);
+	b->SetImage(test.id, SuStoVec2(test.size_x, test.size_y));
 
 	return ret;
 }
