@@ -25,6 +25,7 @@
 #include "SuStoUI.h"
 #include "UIImage.h"
 #include "UICanvas.h"
+#include "UIButton.h"
 
 ModuleGameObject::ModuleGameObject(bool enabled)
 {
@@ -72,6 +73,9 @@ bool ModuleGameObject::Start()
 	UICanvas* cv = susto_ui->CreateCanvas(SuStoVec2(0, 0), SuStoVec2(300, 300));
 	UIImage* b = (UIImage*)susto_ui->CreateElement(ElementType::IMAGE, cv);
 	b->SetImage(test.id, SuStoVec2(test.size_x, test.size_y));
+
+	UIButton* button = (UIButton*)susto_ui->CreateElement(ElementType::BUTTON, cv);
+	//button->Se
 
 	return ret;
 }

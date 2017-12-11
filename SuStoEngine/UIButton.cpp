@@ -28,3 +28,36 @@ void UIButton::CleanUp()
 void UIButton::OnEvent(UIEvent ev)
 {
 }
+
+void UIButton::SetStandardImage(uint id, SuStoVec2 pos, SuStoVec2 size)
+{
+	if (standard != nullptr)
+	{
+		GetUIMain()->DestroyPrintable(standard);
+		standard = nullptr;
+	}
+
+	standard = new PrintableElement(id, size, pos);
+}
+
+void UIButton::SetHighlightImage(uint id, SuStoVec2 pos, SuStoVec2 size)
+{
+	if (highlight != nullptr)
+	{
+		GetUIMain()->DestroyPrintable(highlight);
+		highlight = nullptr;
+	}
+
+	highlight = new PrintableElement(id, size, pos);
+}
+
+void UIButton::SetClickImage(uint id, SuStoVec2 pos, SuStoVec2 size)
+{
+	if (click != nullptr)
+	{
+		GetUIMain()->DestroyPrintable(click);
+		click = nullptr;
+	}
+
+	click = new PrintableElement(id, size, pos);
+}

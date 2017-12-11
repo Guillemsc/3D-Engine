@@ -16,7 +16,15 @@ public:
 
 	void OnEvent(UIEvent ev);
 
+	void SetStandardImage(uint id, SuStoVec2 pos, SuStoVec2 size);
+	void SetHighlightImage(uint id, SuStoVec2 pos, SuStoVec2 size);
+	void SetClickImage(uint id, SuStoVec2 pos, SuStoVec2 size);
+
+
 private:
+	PrintableElement* standard = nullptr;
+	PrintableElement* highlight = nullptr;
+	PrintableElement* click = nullptr;
 
 public:
 
