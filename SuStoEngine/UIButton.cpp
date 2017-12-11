@@ -17,7 +17,15 @@ void UIButton::Start()
 {
 }
 
+void UIButton::PreUpdate()
+{
+}
+
 void UIButton::Update()
+{
+}
+
+void UIButton::PostUpdate()
 {
 }
 
@@ -60,4 +68,37 @@ void UIButton::SetClickImage(uint id, SuStoVec2 pos, SuStoVec2 size)
 	}
 
 	click = new PrintableElement(id, size, pos);
+}
+
+void UIButton::SetToStandard()
+{
+	if (current_state != standard)
+	{
+		GetUIMain()->DestroyPrintable(current_state);
+		current_state = standard;
+		state = BUTTON_STATE::STANDARD;
+		GetUIMain()->DrawPrintable(current_state);
+	}
+}
+
+void UIButton::SetToHighlight()
+{
+	if (current_state != highlight) 
+	{
+		GetUIMain()->DestroyPrintable(current_state);
+		current_state = highlight;
+		state = BUTTON_STATE::HIGHLIGHT;
+		GetUIMain()->DrawPrintable(current_state);
+	}
+}
+
+void UIButton::SetToClick()
+{
+	if (current_state != click)
+	{
+		GetUIMain()->DestroyPrintable(current_state);
+		current_state = click;
+		state = BUTTON_STATE::CLICK;
+		GetUIMain()->DrawPrintable(current_state);
+	}
 }

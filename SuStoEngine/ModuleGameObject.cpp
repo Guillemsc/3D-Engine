@@ -75,7 +75,7 @@ bool ModuleGameObject::Start()
 	b->SetImage(test.id, SuStoVec2(test.size_x, test.size_y));
 
 	UIButton* button = (UIButton*)susto_ui->CreateElement(ElementType::BUTTON, cv);
-	//button->Se
+	button->SetToStandard();
 
 	return ret;
 }
