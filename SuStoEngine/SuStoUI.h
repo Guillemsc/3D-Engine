@@ -103,6 +103,7 @@ struct SuStoColor
 
 struct SuStoPlane
 {
+	SuStoPlane();
 	SuStoPlane(SuStoVec2 size);
 
 	uint GetVerticesId();
@@ -192,7 +193,9 @@ public:
 	void DeleteElement(UIElement* del);
 
 	void SetViewport(SuStoVec2 view);
+	void SetWindowViewport(SuStoVec2 view);
 	SuStoVec2 GetViewport();
+	SuStoVec2 GetWindowViewport();
 
 	void Draw(SuStoPlane* plane);
 	std::vector<SuStoPlane*> GetDrawList();
@@ -207,6 +210,7 @@ private:
 	std::vector<SuStoPlane*> draw;
 
 private:
+	SuStoVec2 window_viewport;
 	SuStoVec2 viewport;
 };
 

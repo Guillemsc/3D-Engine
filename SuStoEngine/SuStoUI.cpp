@@ -182,6 +182,10 @@ float * SuStoColor::ptr()
 	return &r;
 }
 
+SuStoPlane::SuStoPlane()
+{
+}
+
 SuStoPlane::SuStoPlane(SuStoVec2 size)
 {
 	float length = size.y;
@@ -413,9 +417,19 @@ void SuStoUIMain::SetViewport(SuStoVec2 view)
 	viewport = view;
 }
 
+void SuStoUIMain::SetWindowViewport(SuStoVec2 view)
+{
+	window_viewport = view;
+}
+
 SuStoVec2 SuStoUIMain::GetViewport()
 {
 	return viewport;
+}
+
+SuStoVec2 SuStoUIMain::GetWindowViewport()
+{
+	return window_viewport;
 }
 
 void SuStoUIMain::Draw(SuStoPlane * plane)
@@ -468,4 +482,28 @@ bool ImGui::TextCmp(const char * text1, const char * text2)
 		ret = true;
 
 	return ret;
+}
+
+PrintableElement::PrintableElement(uint texture_id, SuStoVec2 texture_size, SuStoVec2 pos)
+{
+}
+
+uint PrintableElement::GetNumVertices()
+{
+	return uint();
+}
+
+uint PrintableElement::GetNumIndices()
+{
+	return uint();
+}
+
+uint PrintableElement::GetNumUvs()
+{
+	return uint();
+}
+
+float * PrintableElement::GetVertices()
+{
+	return nullptr;
 }

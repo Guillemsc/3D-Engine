@@ -21,12 +21,15 @@ void SuStoUI::NewFrame(SuStoUIMain* ui_main, SDL_Window* window, SuStoVec2 viewp
 	// Viewport 
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
-	ui_main->SetViewport(SuStoVec2(w, h));
+	ui_main->SetWindowViewport(SuStoVec2(w, h));
+
+	ui_main->SetViewport(viewport);
 }
 
-void SuStoUI::Render(SuStoUIMain * ui_main, SDL_Window* window, SuStoVec2 viewport, bool ortographic)
+void SuStoUI::Render(SuStoUIMain * ui_main, bool ortographic)
 {
-	SuStoVec2 view = ui_main->GetViewport();
+	SuStoVec2 window_viewport = ui_main->GetWindowViewport();
+	SuStoVec2 viewport = ui_main->GetViewport();
 
 	// 
 	GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
@@ -38,10 +41,9 @@ void SuStoUI::Render(SuStoUIMain * ui_main, SDL_Window* window, SuStoVec2 viewpo
 
 	float4x4 trans = float4x4::FromTRS(float3(600, 500, 0), Quat::identity, float3(1, 1, 1));
 
-
 	glDisable(GL_DEPTH_TEST);
 
-	glViewport(0, 0, view.x, view.y);
+	glViewport(0, 0, window_viewport.x, window_viewport.y);
 
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
