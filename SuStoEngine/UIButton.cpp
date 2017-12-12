@@ -45,7 +45,7 @@ void UIButton::SetStandardImage(uint id, SuStoVec2 pos, SuStoVec2 size)
 		standard = nullptr;
 	}
 
-	standard = new PrintableElement(id, size, pos);
+	standard = new PrintableElement(id, size, pos, this);
 }
 
 void UIButton::SetHighlightImage(uint id, SuStoVec2 pos, SuStoVec2 size)
@@ -56,7 +56,7 @@ void UIButton::SetHighlightImage(uint id, SuStoVec2 pos, SuStoVec2 size)
 		highlight = nullptr;
 	}
 
-	highlight = new PrintableElement(id, size, pos);
+	highlight = new PrintableElement(id, size, pos, this);
 }
 
 void UIButton::SetClickImage(uint id, SuStoVec2 pos, SuStoVec2 size)
@@ -67,7 +67,7 @@ void UIButton::SetClickImage(uint id, SuStoVec2 pos, SuStoVec2 size)
 		click = nullptr;
 	}
 
-	click = new PrintableElement(id, size, pos);
+	click = new PrintableElement(id, size, pos, this);
 }
 
 void UIButton::SetToStandard()

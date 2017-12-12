@@ -19,7 +19,7 @@ void UIImage::SetImage(uint id, SuStoVec2 size)
 		image = nullptr;
 	}
 
-	image = new PrintableElement(id, size, SuStoVec2(0, 0));
+	image = new PrintableElement(id, size, SuStoVec2(0, 0), this);
 	GetUIMain()->DrawPrintable(image);
 }
 

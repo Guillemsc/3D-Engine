@@ -141,7 +141,7 @@ private:
 class PrintableElement
 {
 public:
-	PrintableElement(uint texture_id, SuStoVec2 texture_size, SuStoVec2 pos);
+	PrintableElement(uint texture_id, SuStoVec2 texture_size, SuStoVec2 pos, UIElement* owner);
 
 	uint GetNumVertices();
 	uint GetNumIndices();
@@ -156,6 +156,8 @@ public:
 	void SetPos(SuStoVec2 pos);
 	SuStoVec2 GetPos();
 
+	UIElement* GetOwner();
+
 	void CleanUp();
 
 private:
@@ -163,11 +165,14 @@ private:
 	SuStoVec2  texture_size;
 	SuStoVec2  local_pos;
 	SuStoPlane plane;
+
+	UIElement* owner = nullptr;
 };
 
 
 enum ElementType
 {
+	CANVAS,
 	PANEL,
 	IMAGE,
 	TEXT,
@@ -193,7 +198,7 @@ public:
 
 	void PushEvent(UIEvent ev);
 
-	UICanvas* CreateCanvas(SuStoVec2 pos, SuStoVec2 size);
+	UICanvas* CreateCanvas(SuStoVec2 size);
 	UIElement * CreateElement(ElementType type, UICanvas* canvas);
 	void DeleteElement(UIElement* del);
 	void DeleteCanvas(UICanvas* cv);

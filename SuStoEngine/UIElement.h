@@ -3,6 +3,7 @@
 
 #include "SuStoUI.h"
 #include "SuSto_event_system.h"
+#include "GeometryMath.h"
 
 class UICanvas;
 
@@ -21,6 +22,9 @@ public:
 	virtual void CleanUp() {};
 
 	virtual void OnEvent(UIEvent ev) {};
+
+	void SetTransform(float* transform);
+	float* GetTransform();
 
 	ElementType GetType();
 	SuStoUIMain* GetUIMain();
@@ -41,6 +45,7 @@ private:
 	ElementType  type = ElementType::UNDEFINED;
 	SuStoRect    rect;
 	UICanvas*    canvas = nullptr;
+	float*		 transform = nullptr;
 };
 
 #endif

@@ -3,10 +3,16 @@
 
 #include "UIElement.h"
 
-class UICanvas
+enum UICanvasRenderMode
+{
+	WORLD_SPACE,
+	CAMERA_SPACE,
+};
+
+class UICanvas : public UIElement
 {
 public:
-	UICanvas(SuStoUIMain* main);
+	UICanvas(SuStoUIMain* ui_main);
 	~UICanvas();
 
 	void Awake();
@@ -16,11 +22,22 @@ public:
 
 	void OnEvent(UIEvent ev);
 
-	void SetSize();
+	void SetSize(SuStoVec2 size);
+
+	void SetScaleFactor(float set);
+	float GetScaleFactor();
+	void SetRenderMode(UICanvasRenderMode mode);
+	UICanvasRenderMode GetRenderMode();
 
 private:
-	SuStoRect rect;
+	PrintableElement* image = nullptr;
+
+	SuStoVec2 size;
 	SuStoVec2 center;
+	
+	float scale_factor = 1.0f;
+
+	UICanvasRenderMode render_mode = UICanvasRenderMode::WORLD_SPACE;
 
 public:
 

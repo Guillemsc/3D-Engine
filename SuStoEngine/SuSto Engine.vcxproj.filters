@@ -510,6 +510,9 @@
     <ClInclude Include="UITextInput.h">
       <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentCanvas.h">
+      <Filter>Sources\5. GameObjects ===========\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -838,6 +841,9 @@
     </ClCompile>
     <ClCompile Include="UITextInput.cpp">
       <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentCanvas.cpp">
+      <Filter>Sources\5. GameObjects ===========\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

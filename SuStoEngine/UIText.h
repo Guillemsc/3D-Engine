@@ -8,7 +8,7 @@
 class UIText : public UIElement
 {
 public:
-	UIText(SuStoUIMain* main, UICanvas* canvas);
+	UIText(SuStoUIMain* ui_main, UICanvas* canvas);
 	~UIText();
 
 	void Awake();

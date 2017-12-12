@@ -62,6 +62,8 @@ public:
 	void SetCanPick(bool set);
 	void SetCanMove(bool set);
 
+	SuStoUIMain* GetUIMain();
+
 private:
 	void DestroyGameObjects();
 	void MousePick();

@@ -365,10 +365,12 @@ void SuStoUIMain::PushEvent(UIEvent ev)
 {
 }
 
-UICanvas * SuStoUIMain::CreateCanvas(SuStoVec2 pos, SuStoVec2 size)
+UICanvas * SuStoUIMain::CreateCanvas(SuStoVec2 size)
 {
 	UICanvas* cv = nullptr;
 	cv = new UICanvas(this);
+
+	cv->SetSize(size);
 
 	return cv;
 }
@@ -525,13 +527,15 @@ bool ImGui::TextCmp(const char * text1, const char * text2)
 	return ret;
 }
 
-PrintableElement::PrintableElement(uint _texture_id, SuStoVec2 _texture_size, SuStoVec2 _pos)
+PrintableElement::PrintableElement(uint _texture_id, SuStoVec2 _texture_size, SuStoVec2 _pos, UIElement* _owner)
 {
 	texture_id = _texture_id;
 	texture_size = _texture_size;
 	local_pos = _pos;
 
 	plane = SuStoPlane(_texture_size);
+
+	owner = _owner;
 }
 
 uint PrintableElement::GetNumVertices()
@@ -577,6 +581,11 @@ void PrintableElement::SetPos(SuStoVec2 pos)
 SuStoVec2 PrintableElement::GetPos()
 {
 	return local_pos;
+}
+
+UIElement* PrintableElement::GetOwner()
+{
+	return owner;
 }
 
 void PrintableElement::CleanUp()

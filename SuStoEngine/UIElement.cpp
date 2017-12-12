@@ -1,5 +1,15 @@
 #include "UIElement.h"
 
+void UIElement::SetTransform(float * _transform)
+{
+	transform = _transform;
+}
+
+float * UIElement::GetTransform()
+{
+	return transform;
+}
+
 ElementType UIElement::GetType()
 {
 	return type;

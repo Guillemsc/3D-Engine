@@ -6,7 +6,7 @@
 class UIImage : public UIElement
 {
 public:
-	UIImage(SuStoUIMain* main, UICanvas* canvas);
+	UIImage(SuStoUIMain* ui_main, UICanvas* canvas);
 	~UIImage();
 
 	void SetImage(uint id, SuStoVec2 size);

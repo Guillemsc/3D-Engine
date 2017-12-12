@@ -7,6 +7,7 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "ComponentCamera.h"
+#include "ComponentCanvas.h"
 #include "ModuleGameObject.h"
 #include "Inspector.h"
 #include "ModuleRenderer3D.h"
@@ -193,6 +194,11 @@ Component* GameObject::AddComponent(ComponentType type, string unique_id)
 		case CAMERA:
 		{
 			ret = new ComponentCamera(this, new_id);
+		}
+		break;
+		case UI_CANVAS:
+		{
+			ret = new ComponentCanvas(this, new_id);
 		}
 		break;
 

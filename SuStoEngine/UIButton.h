@@ -13,7 +13,7 @@ enum BUTTON_STATE
 class UIButton : public UIElement
 {
 public:
-	UIButton(SuStoUIMain* main, UICanvas* canvas);
+	UIButton(SuStoUIMain* ui_main, UICanvas* canvas);
 	~UIButton();
 
 	void Awake();

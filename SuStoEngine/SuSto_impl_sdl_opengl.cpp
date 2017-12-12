@@ -7,9 +7,7 @@
 #include "SDL\include\SDL_syswm.h"
 #include "SDL\include\SDL_opengl.h"
 
-#include "App.h"
-
-#include "GeometryMath.h"
+#include "UICanvas.h"
 
 void SuStoUI::Init(SDL_Window* window, SuStoUIMain* ui_main)
 {
@@ -26,7 +24,7 @@ void SuStoUI::NewFrame(SuStoUIMain* ui_main, SDL_Window* window, SuStoVec2 viewp
 	ui_main->SetViewport(viewport);
 }
 
-void SuStoUI::Render(SuStoUIMain * ui_main, bool ortographic)
+void SuStoUI::Render(SuStoUIMain * ui_main)
 {
 	SuStoVec2 window_viewport = ui_main->GetWindowViewport();
 	SuStoVec2 viewport = ui_main->GetViewport();
@@ -39,22 +37,10 @@ void SuStoUI::Render(SuStoUIMain * ui_main, bool ortographic)
 	GLfloat last_projection[16]; glGetFloatv(GL_PROJECTION_MATRIX, &last_projection[0]);
 	//
 
-	float4x4 trans = float4x4::FromTRS(float3(600, 500, 0), Quat::identity, float3(1, 1, 1));
-
 	glDisable(GL_DEPTH_TEST);
 
 	glViewport(0, 0, window_viewport.x, window_viewport.y);
 
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	glOrtho(0, viewport.x, viewport.y, 0, -1.0f, +1.0f);
-	
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
-	glTranslatef(100, 100, 0);
-	glScalef(1, 1, 1);
 	//glMultMatrixf(trans.Transposed().ptr());
 
 	//Draw -------------
@@ -66,6 +52,32 @@ void SuStoUI::Render(SuStoUIMain * ui_main, bool ortographic)
 
 	for (std::vector<PrintableElement*>::iterator it = draw.begin(); it != draw.end(); ++it)
 	{
+		switch ((*it)->GetOwner()->GetCanvas()->GetRenderMode())
+		{
+			case UICanvasRenderMode::CAMERA_SPACE:
+			{
+				glMatrixMode(GL_PROJECTION);
+				glPushMatrix();
+				glLoadIdentity();
+				glOrtho(0, viewport.x, viewport.y, 0, -1.0f, +1.0f);
+
+				glMatrixMode(GL_MODELVIEW);
+				glPushMatrix();
+				glLoadIdentity();
+			}
+			break;
+			case UICanvasRenderMode::WORLD_SPACE:
+			{
+				glMatrixMode(GL_MODELVIEW);
+				glPushMatrix();
+				glMultMatrixf((*it)->GetOwner()->GetTransform());
+			}
+			break;
+		}
+
+	/*	glTranslatef(20, 400, 0);
+		glScalef(1, 1, 1);*/
+
 		// Vertices, indices, uvs and texture
 		glVertexPointer(3, GL_FLOAT, sizeof(float) * 3, (*it)->GetVertices());
 		glTexCoordPointer(3, GL_FLOAT, sizeof(float) * 3, (*it)->GetUvs());
@@ -76,16 +88,16 @@ void SuStoUI::Render(SuStoUIMain * ui_main, bool ortographic)
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 		// -----------------------------------
+
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+
+		glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
 	}
 
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
-
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
 
 	//------------------
 

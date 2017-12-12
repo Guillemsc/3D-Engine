@@ -6,7 +6,7 @@
 class UIPanel : public UIElement
 {
 public:
-	UIPanel(SuStoUIMain* main, UICanvas* canvas);
+	UIPanel(SuStoUIMain* ui_main, UICanvas* canvas);
 	~UIPanel();
 
 	void Awake();
