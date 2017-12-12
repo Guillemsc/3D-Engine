@@ -4,7 +4,7 @@
 #include <vector>
 
 #define MAX_KEYS 300
-#define MAX_MOUSE_BUTTONS 5
+#define MAX_MOUSE 5
 
 class UIElement;
 
@@ -60,7 +60,7 @@ public:
 	struct Keyboard
 	{
 		Key* keyboard = nullptr;
-		KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
+		KeyEvent mouse_buttons[MAX_MOUSE];
 
 		const bool GetKeyDown(int id);
 		const bool GetKeyRepeat(int id);
@@ -72,6 +72,10 @@ public:
 		std::vector<Key> keys_up;
 	};
 
+public:
+	KeyEvent GetMouseButton(int id) const;
+
+private:
 	MouseClick	mouse_click;
 	Keyboard	keyboard;
 
