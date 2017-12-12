@@ -72,11 +72,12 @@ bool ModuleGameObject::Start()
 	SuStoUI::Init(App->window->window, susto_ui);
 
 	ResourceTextureLoader loader;
-	TextureInfo test = loader.LoadTexture("UI\\preview_164.png");
+	TextureInfo test = loader.LoadTexture("UI\\preview_164.png", true);
 
 	//UICanvas* cv = susto_ui->CreateCanvas(SuStoVec2(300, 300));
 	//UIImage* b = (UIImage*)susto_ui->CreateElement(ElementType::IMAGE, cv);
 	//b->SetImage(test.id, SuStoVec2(test.size_x, test.size_y));
+
 
 	//UIButton* button = (UIButton*)susto_ui->CreateElement(ElementType::BUTTON, cv);
 	//button->SetStandardImage(test.id, SuStoVec2(108, 8), BUTTON_SIZE);

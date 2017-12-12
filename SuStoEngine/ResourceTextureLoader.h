@@ -30,8 +30,8 @@ public:
 	void ImportAllTextures();
 
 	void Unload(const char* filepath);
-
-	TextureInfo LoadTexture(const char * filename);
+	
+	TextureInfo LoadTexture(const char * filename, bool avoid_flip = false);
 	void UnloadTexture(unsigned int id);
 
 

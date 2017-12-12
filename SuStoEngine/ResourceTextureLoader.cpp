@@ -81,7 +81,7 @@ bool ResourceTextureLoader::Load(const char * filepath, std::vector<Resource*>& 
 	return ret;
 }
 
-TextureInfo ResourceTextureLoader::LoadTexture(const char* filename)
+TextureInfo ResourceTextureLoader::LoadTexture(const char* filename, bool avoid_flip)
 {
 	ILuint textureID;
 	ILenum error;
@@ -99,7 +99,7 @@ TextureInfo ResourceTextureLoader::LoadTexture(const char* filename)
 		iluGetImageInfo(&ImageInfo);
 
 		//Flip the image into the right way
-		if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
+		if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT && !avoid_flip)
 		{
 			iluFlipImage();
 		}

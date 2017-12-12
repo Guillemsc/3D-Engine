@@ -76,7 +76,7 @@ void UIButton::SetToStandard()
 	{
 		GetUIMain()->DestroyPrintable(current_state);
 		current_state = standard;
-		state = BUTTON_STATE::STANDARD;
+		state = ButtonState::STANDARD;
 		GetUIMain()->DrawPrintable(current_state);
 	}
 }
@@ -87,7 +87,7 @@ void UIButton::SetToHighlight()
 	{
 		GetUIMain()->DestroyPrintable(current_state);
 		current_state = highlight;
-		state = BUTTON_STATE::HIGHLIGHT;
+		state = ButtonState::HIGHLIGHT;
 		GetUIMain()->DrawPrintable(current_state);
 	}
 }
@@ -98,7 +98,7 @@ void UIButton::SetToClick()
 	{
 		GetUIMain()->DestroyPrintable(current_state);
 		current_state = click;
-		state = BUTTON_STATE::CLICK;
+		state = ButtonState::CLICK;
 		GetUIMain()->DrawPrintable(current_state);
 	}
 }

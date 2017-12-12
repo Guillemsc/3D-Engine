@@ -2,7 +2,9 @@
 #define SUSTO_EVENT_SYSTEM
 
 #include <vector>
+
 #define MAX_KEYS 300
+#define MAX_MOUSE 5
 
 class UIElement;
 
@@ -14,23 +16,29 @@ enum UIEventType
 	UIEVENT_NULL
 };
 
-//enum KeyEvent
-//{
-//	KEY_DOWN,
-//	KEY_UP,
-//	KEY_REPEAT,
-//
-//	KEY_NULL
-//};
+enum KeyEvent
+{
+	KEY_IDLE,
+	KEY_DOWN,
+	KEY_UP,
+	KEY_REPEAT
+};
 
 struct Key
 {
 	int key = 0;
-	//KeyEvent key_event = KeyEvent::KEY_NULL;
+	KeyEvent key_event = KeyEvent::KEY_IDLE;
 
 	bool operator == (const Key& comp_key)
 	{
 		if (key == comp_key.key)
+			return true;
+		return false;
+	}
+
+	bool operator == (int comp_key_event)
+	{
+		if (key_event == comp_key_event)
 			return true;
 		return false;
 	}
@@ -52,13 +60,11 @@ public:
 	struct Keyboard
 	{
 		Key* keyboard = nullptr;
+		KeyEvent mouse_buttons[MAX_MOUSE];
 
 		const bool GetKeyDown(int id);
 		const bool GetKeyRepeat(int id);
 		const bool GetKeyUp(int id);
-		const bool GetKeyDown(const char* key);
-		const bool GetKeyRepeat(const char* key);
-		const bool GetKeyUp(const char* key);
 
 		// Those lists are filled and cleaned every frame
 		std::vector<Key> keys_down;
@@ -66,6 +72,10 @@ public:
 		std::vector<Key> keys_up;
 	};
 
+public:
+	KeyEvent GetMouseButton(int id) const;
+
+private:
 	MouseClick	mouse_click;
 	Keyboard	keyboard;
 

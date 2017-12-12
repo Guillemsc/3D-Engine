@@ -3,7 +3,7 @@
 
 #include "UIElement.h"
 
-enum BUTTON_STATE
+enum ButtonState
 {
 	STANDARD,
 	HIGHLIGHT,
@@ -41,7 +41,7 @@ private:
 
 	PrintableElement* current_state = nullptr;
 
-	BUTTON_STATE state = BUTTON_STATE::STANDARD;
+	ButtonState state = ButtonState::STANDARD;
 
 public:
 
