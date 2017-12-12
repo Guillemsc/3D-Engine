@@ -1,15 +1,5 @@
 #include "UIElement.h"
 
-void UIElement::SetTransform(float * _transform)
-{
-	transform = _transform;
-}
-
-float * UIElement::GetTransform()
-{
-	return transform;
-}
-
 ElementType UIElement::GetType()
 {
 	return type;
@@ -20,35 +10,34 @@ SuStoUIMain * UIElement::GetUIMain()
 	return ui_main;
 }
 
-void UIElement::SetPos(const SuStoVec2& pos)
+void UIElement::SetTransform(float4x4 _transform)
 {
-	rect.SetPos(pos);
+	transform = _transform;
+}
+
+float4x4 UIElement::GetTransform()
+{
+	return transform;
+}
+
+void UIElement::SetPos(const SuStoVec2& _pos)
+{
+	pos = _pos;
 }
 
 SuStoVec2 UIElement::GetPos() const
 {
-	return rect.xy;
+	return pos;
 }
 
-void UIElement::SetSize(const SuStoVec2 & size)
+void UIElement::SetSize(const SuStoVec2 & _size)
 {
-	rect.SetSize(size);
+	size = _size;
 }
 
 SuStoVec2 UIElement::GetSize() const
 {
-	return rect.wh;
-}
-
-void UIElement::SetRect(const SuStoRect & _rect)
-{
-	rect.SetPos(_rect.xy);
-	rect.SetSize(_rect.wh);
-}
-
-SuStoRect UIElement::GetRect() const
-{
-	return rect;
+	return size;
 }
 
 UICanvas * UIElement::GetCanvas()

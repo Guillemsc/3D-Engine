@@ -7,6 +7,7 @@
 
 #include "SuSto_event_system.h"
 
+#include "GeometryMath.h"
 
 class UIElement;
 class UICanvas;
@@ -156,6 +157,11 @@ public:
 	void SetPos(SuStoVec2 pos);
 	SuStoVec2 GetPos();
 
+	SuStoVec2 GetSize();
+
+	float4x4 GetTransform();
+	float4x4 GetOrtoTransform();
+
 	UIElement* GetOwner();
 
 	void CleanUp();
@@ -163,10 +169,11 @@ public:
 private:
 	uint       texture_id;
 	SuStoVec2  texture_size;
-	SuStoVec2  local_pos;
 	SuStoPlane plane;
+	SuStoVec2  local_pos;
 
 	UIElement* owner = nullptr;
+	float4x4   transform;
 };
 
 
@@ -227,7 +234,7 @@ private:
 	SuStoVec2 viewport;
 };
 
-namespace ImGui
+namespace SuStoUI
 {
 	std::string ToUpperCase(std::string str);
 	std::string ToLowerCase(std::string str);

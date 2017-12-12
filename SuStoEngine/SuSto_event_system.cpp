@@ -15,7 +15,7 @@ UIEvent::~UIEvent()
 {
 }
 
-KeyEvent UIEvent::GetMouseButton(int id) const
+UIKeyEvent UIEvent::GetMouseButton(int id) const
 {
 	return keyboard.mouse_buttons[id];
 }

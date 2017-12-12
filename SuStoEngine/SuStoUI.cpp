@@ -351,6 +351,19 @@ void SuStoUIMain::PreUpdate()
 
 void SuStoUIMain::Update()
 {
+	for (std::vector<UICanvas*>::iterator it = canvas.begin(); it != canvas.end(); ++it)
+	{
+		(*it)->PreUpdate();
+		(*it)->Update();
+		(*it)->PostUpdate();
+	}
+
+	for (std::vector<UIElement*>::iterator it = elements.begin(); it != elements.end(); ++it)
+	{
+		(*it)->PreUpdate();
+		(*it)->Update();
+		(*it)->PostUpdate();
+	}
 }
 
 void SuStoUIMain::PostUpdate()
@@ -369,6 +382,8 @@ UICanvas * SuStoUIMain::CreateCanvas(SuStoVec2 size)
 {
 	UICanvas* cv = nullptr;
 	cv = new UICanvas(this);
+
+	canvas.push_back(cv);
 
 	cv->SetSize(size);
 
@@ -409,6 +424,15 @@ UIElement * SuStoUIMain::CreateElement(ElementType type, UICanvas* canvas)
 
 void SuStoUIMain::DeleteElement(UIElement * del)
 {
+	if (del == nullptr)
+		return;
+
+	if (del->GetType() == ElementType::CANVAS)
+	{
+		DeleteCanvas((UICanvas*)del);
+		return;
+	}
+
 	for (std::list<UIElement*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it)
 	{
 		if (*it == del) 
@@ -494,7 +518,7 @@ void SuStoUIMain::DestroyElements()
 	}
 }
 
-std::string ImGui::ToUpperCase(std::string str)
+std::string SuStoUI::ToUpperCase(std::string str)
 {
 	for (uint i = 0; i < str.size(); i++)
 	{
@@ -504,7 +528,7 @@ std::string ImGui::ToUpperCase(std::string str)
 	return str;
 }
 
-std::string ImGui::ToLowerCase(std::string str)
+std::string SuStoUI::ToLowerCase(std::string str)
 {
 	for (uint i = 0; i < str.size(); i++)
 	{
@@ -514,7 +538,7 @@ std::string ImGui::ToLowerCase(std::string str)
 	return str;
 }
 
-bool ImGui::TextCmp(const char * text1, const char * text2)
+bool SuStoUI::TextCmp(const char * text1, const char * text2)
 {
 	bool ret = false;
 
@@ -529,13 +553,14 @@ bool ImGui::TextCmp(const char * text1, const char * text2)
 
 PrintableElement::PrintableElement(uint _texture_id, SuStoVec2 _texture_size, SuStoVec2 _pos, UIElement* _owner)
 {
+	owner = _owner;
+
 	texture_id = _texture_id;
 	texture_size = _texture_size;
-	local_pos = _pos;
 
-	plane = SuStoPlane(_texture_size);
+	plane = SuStoPlane(SuStoVec2(_texture_size));
 
-	owner = _owner;
+	SetPos(local_pos);
 }
 
 uint PrintableElement::GetNumVertices()
@@ -581,6 +606,35 @@ void PrintableElement::SetPos(SuStoVec2 pos)
 SuStoVec2 PrintableElement::GetPos()
 {
 	return local_pos;
+}
+
+SuStoVec2 PrintableElement::GetSize()
+{
+	return texture_size;
+}
+
+float4x4 PrintableElement::GetTransform()
+{
+	float4x4 o_trans = GetOwner()->GetTransform();
+
+	o_trans[3][0] += local_pos.x;
+	o_trans[3][1] += local_pos.y;
+
+	transform = o_trans;
+
+	return transform;
+}
+
+float4x4 PrintableElement::GetOrtoTransform()
+{
+	float4x4 o_trans = GetOwner()->GetTransform();
+
+	o_trans[3][0] = local_pos.x;
+	o_trans[3][1] = local_pos.y;
+
+	transform = o_trans;
+
+	return transform;
 }
 
 UIElement* PrintableElement::GetOwner()

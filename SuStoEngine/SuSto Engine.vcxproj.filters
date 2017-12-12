@@ -513,6 +513,9 @@
     <ClInclude Include="ComponentCanvas.h">
       <Filter>Sources\5. GameObjects ===========\Components</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentImage.h">
+      <Filter>Sources\5. GameObjects ===========\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -843,6 +846,9 @@
       <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
     </ClCompile>
     <ClCompile Include="ComponentCanvas.cpp">
+      <Filter>Sources\5. GameObjects ===========\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentImage.cpp">
       <Filter>Sources\5. GameObjects ===========\Components</Filter>
     </ClCompile>
   </ItemGroup>

@@ -22,22 +22,22 @@ public:
 
 	void OnEvent(UIEvent ev);
 
-	void SetSize(SuStoVec2 size);
-
 	void SetScaleFactor(float set);
 	float GetScaleFactor();
+
 	void SetRenderMode(UICanvasRenderMode mode);
 	UICanvasRenderMode GetRenderMode();
 
+	void SetShowOnCamera(bool set);
+	bool GetShowOnCamera();
+
 private:
 	PrintableElement* image = nullptr;
-
-	SuStoVec2 size;
-	SuStoVec2 center;
 	
 	float scale_factor = 1.0f;
 
 	UICanvasRenderMode render_mode = UICanvasRenderMode::WORLD_SPACE;
+	bool show_on_camera = false;
 
 public:
 

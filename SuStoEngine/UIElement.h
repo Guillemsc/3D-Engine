@@ -23,11 +23,11 @@ public:
 
 	virtual void OnEvent(UIEvent ev) {};
 
-	void SetTransform(float* transform);
-	float* GetTransform();
-
 	ElementType GetType();
 	SuStoUIMain* GetUIMain();
+
+	void SetTransform(float4x4 transform);
+	float4x4 GetTransform();
 
 	void SetPos(const SuStoVec2& pos);
 	SuStoVec2 GetPos() const;
@@ -35,17 +35,16 @@ public:
 	void SetSize(const SuStoVec2 & size);
 	SuStoVec2 GetSize() const;
 
-	void SetRect(const SuStoRect& _rect);
-	SuStoRect GetRect() const;
-
 	UICanvas* GetCanvas();
 
 private:
 	SuStoUIMain* ui_main = nullptr;
 	ElementType  type = ElementType::UNDEFINED;
-	SuStoRect    rect;
 	UICanvas*    canvas = nullptr;
-	float*		 transform = nullptr;
+
+	SuStoVec2    size;
+	SuStoVec2    pos;
+	float4x4	 transform;
 };
 
 #endif

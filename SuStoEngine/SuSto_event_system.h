@@ -16,18 +16,18 @@ enum UIEventType
 	UIEVENT_NULL
 };
 
-enum KeyEvent
+enum UIKeyEvent
 {
-	KEY_IDLE,
-	KEY_DOWN,
-	KEY_UP,
-	KEY_REPEAT
+	UI_KEY_IDLE,
+	UI_KEY_DOWN,
+	UI_KEY_UP,
+	UI_KEY_REPEAT
 };
 
 struct Key
 {
 	int key = 0;
-	KeyEvent key_event = KeyEvent::KEY_IDLE;
+	UIKeyEvent key_event = UIKeyEvent::UI_KEY_IDLE;
 
 	bool operator == (const Key& comp_key)
 	{
@@ -60,7 +60,7 @@ public:
 	struct Keyboard
 	{
 		Key* keyboard = nullptr;
-		KeyEvent mouse_buttons[MAX_MOUSE];
+		UIKeyEvent mouse_buttons[MAX_MOUSE];
 
 		const bool GetKeyDown(int id);
 		const bool GetKeyRepeat(int id);
@@ -73,7 +73,7 @@ public:
 	};
 
 public:
-	KeyEvent GetMouseButton(int id) const;
+	UIKeyEvent GetMouseButton(int id) const;
 
 private:
 	MouseClick	mouse_click;

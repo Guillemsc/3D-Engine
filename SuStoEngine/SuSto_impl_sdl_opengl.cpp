@@ -22,6 +22,8 @@ void SuStoUI::NewFrame(SuStoUIMain* ui_main, SDL_Window* window, SuStoVec2 viewp
 	ui_main->SetWindowViewport(SuStoVec2(w, h));
 
 	ui_main->SetViewport(viewport);
+
+	ui_main->Update();
 }
 
 void SuStoUI::Render(SuStoUIMain * ui_main)
@@ -56,38 +58,44 @@ void SuStoUI::Render(SuStoUIMain * ui_main)
 		{
 			case UICanvasRenderMode::CAMERA_SPACE:
 			{
-				glMatrixMode(GL_PROJECTION);
-				glPushMatrix();
-				glLoadIdentity();
-				glOrtho(0, viewport.x, viewport.y, 0, -1.0f, +1.0f);
+				if ((*it)->GetOwner()->GetCanvas()->GetShowOnCamera())
+				{
+					glMatrixMode(GL_PROJECTION);
+					glPushMatrix();
+					glLoadIdentity();
+					glOrtho(0, viewport.x, viewport.y, 0, -1.0f, +1.0f);
+
+					glMatrixMode(GL_MODELVIEW);
+					glPushMatrix();
+					glLoadIdentity();
+					glMultMatrixf((*it)->GetOrtoTransform().ptr());
+
+					Draw((*it)->GetVertices(), (*it)->GetNumIndices(), (*it)->GetIndices(), (*it)->GetUvs(), (*it)->GetTextureId());
+
+					glMatrixMode(GL_PROJECTION);
+					glPopMatrix();
+
+					glMatrixMode(GL_MODELVIEW);
+					glPopMatrix();
+				}
 
 				glMatrixMode(GL_MODELVIEW);
 				glPushMatrix();
-				glLoadIdentity();
+				glMultMatrixf((*it)->GetTransform().ptr());
+
+				Draw((*it)->GetVertices(), (*it)->GetNumIndices(), (*it)->GetIndices(), (*it)->GetUvs(), (*it)->GetTextureId());
 			}
 			break;
 			case UICanvasRenderMode::WORLD_SPACE:
 			{
 				glMatrixMode(GL_MODELVIEW);
 				glPushMatrix();
-				glMultMatrixf((*it)->GetOwner()->GetTransform());
+				glMultMatrixf((*it)->GetTransform().ptr());
+
+				Draw((*it)->GetVertices(), (*it)->GetNumIndices(), (*it)->GetIndices(), (*it)->GetUvs(), (*it)->GetTextureId());
 			}
 			break;
 		}
-
-	/*	glTranslatef(20, 400, 0);
-		glScalef(1, 1, 1);*/
-
-		// Vertices, indices, uvs and texture
-		glVertexPointer(3, GL_FLOAT, sizeof(float) * 3, (*it)->GetVertices());
-		glTexCoordPointer(3, GL_FLOAT, sizeof(float) * 3, (*it)->GetUvs());
-
-		glBindTexture(GL_TEXTURE_2D, (*it)->GetTextureId());
-
-		glDrawElements(GL_TRIANGLES, (*it)->GetNumIndices(), GL_UNSIGNED_INT, (*it)->GetIndices());
-
-		glBindTexture(GL_TEXTURE_2D, 0);
-		// -----------------------------------
 
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
@@ -109,5 +117,17 @@ void SuStoUI::Render(SuStoUIMain * ui_main)
 
 void SuStoUI::EndFrame(SuStoUIMain* ui_main)
 {
+}
+
+void SuStoUI::Draw(float * vertices, uint num_indices, uint * indices, float * uvs, uint texture_id)
+{
+	glVertexPointer(3, GL_FLOAT, sizeof(float) * 3, vertices);
+	glTexCoordPointer(3, GL_FLOAT, sizeof(float) * 3, uvs);
+
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+
+	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, indices);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 

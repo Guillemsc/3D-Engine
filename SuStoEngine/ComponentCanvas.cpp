@@ -3,6 +3,7 @@
 #include "ModuleGameObject.h"
 #include "SuStoUI.h"
 #include "UICanvas.h"
+#include "imgui.h"
 
 ComponentCanvas::ComponentCanvas(GameObject * owner, std::string unique_id) : Component(ComponentType::UI_CANVAS, owner, unique_id)
 {
@@ -22,7 +23,7 @@ void ComponentCanvas::Start()
 
 void ComponentCanvas::Update()
 {
-	canvas->SetTransform(GetOwner()->transform->GetGlobalTransform().Transposed().ptr());
+	canvas->SetTransform(GetOwner()->transform->GetGlobalTransform().Transposed());
 }
 
 void ComponentCanvas::CleanUp()
@@ -31,6 +32,29 @@ void ComponentCanvas::CleanUp()
 
 void ComponentCanvas::InspectorDraw(std::vector<Component*> components)
 {
+	const char* items[] = { "World Space", "Camera Space" };
+	static int item2 = 0;
+	ImGui::Combo("Render Space", &item2, items, IM_ARRAYSIZE(items));  
+	{
+		switch (item2)
+		{
+		case 0:
+			canvas->SetRenderMode(UICanvasRenderMode::WORLD_SPACE);
+			break;
+		case 1:
+			canvas->SetRenderMode(UICanvasRenderMode::CAMERA_SPACE);
+			break;
+		}
+	}
+
+	if (item2 == 1)
+	{
+		bool show = canvas->GetShowOnCamera();
+		if(ImGui::Checkbox("Show on camera", &show))
+		{
+			canvas->SetShowOnCamera(show);
+		}
+	}
 }
 
 UICanvas * ComponentCanvas::GetCanvas()
