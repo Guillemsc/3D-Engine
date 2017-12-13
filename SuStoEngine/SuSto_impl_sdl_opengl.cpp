@@ -28,7 +28,7 @@ void SuStoUI::Init(SDL_Window* window, SuStoUIMain* ui_main)
 		LOG_OUTPUT("Error on SDL_Init_GameController");
 	}
 
-	event_system = new UIEvent();
+	ui_main->event_system = new UIEvent();
 }
 
 void SuStoUI::NewFrame(SuStoUIMain* ui_main, SDL_Window* window, SuStoVec2 viewport)
@@ -148,8 +148,10 @@ void SuStoUI::Draw(float * vertices, uint num_indices, uint * indices, float * u
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void SuStoUI::EventPreUpdate()
+void SuStoUI::EventPreUpdate(SuStoUIMain* ui_main)
 {
+	UIEvent* event_system = ui_main->event_system;
+
 	SDL_PumpEvents();
 
 	SDL_StartTextInput();
@@ -216,9 +218,9 @@ void SuStoUI::EventPreUpdate()
 	}
 }
 
-void SuStoUI::EventCleanUp()
+void SuStoUI::EventCleanUp(SuStoUIMain * ui_main)
 {
-	delete[] event_system->keyboard;
+	delete[] ui_main->event_system->keyboard;
 
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 }

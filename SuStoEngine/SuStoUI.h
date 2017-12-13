@@ -11,6 +11,7 @@
 
 class UIElement;
 class UICanvas;
+class UIEvent;
 enum UICanvasRenderMode;
 
 // -------------------------------
@@ -242,6 +243,10 @@ private:
 private:
 	SuStoVec2 window_viewport;
 	SuStoVec2 viewport;
+
+public:
+	UIEvent* event_system = nullptr;
+
 };
 
 namespace SuStoUI
