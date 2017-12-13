@@ -1,6 +1,6 @@
 #include "SuStoUI.h"
 #include "SuSto_impl_sdl_opengl.h"
-
+#include "SuSto_event_system.h"
 //#include "ModuleRenderer3D.h"
 
 #include "SDL\include\SDL.h"
@@ -11,7 +11,7 @@
 
 void SuStoUI::Init(SDL_Window* window, SuStoUIMain* ui_main)
 {
-
+	event_system = new UIEvent();
 }
 
 void SuStoUI::NewFrame(SuStoUIMain* ui_main, SDL_Window* window, SuStoVec2 viewport)
@@ -129,5 +129,90 @@ void SuStoUI::Draw(float * vertices, uint num_indices, uint * indices, float * u
 	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, indices);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void SuStoUI::EventPreUpdate()
+{
+	SDL_PumpEvents();
+
+	SDL_StartTextInput();
+	event_system->text_input.clear();
+
+	event_system->GetKeysDown().clear();
+	event_system->GetKeysRepeat().clear();
+	event_system->GetKeysUp().clear();
+
+	Key* keyboard = event_system->keyboard;
+
+	const Uint8* keys = SDL_GetKeyboardState(NULL);
+
+	for (int i = 0; i < MAX_KEYS; ++i)
+	{
+		if (keys[i] == 1)
+		{
+			if (keyboard[i].state == UIKeyEvent::UI_KEY_IDLE)
+			{
+				keyboard[i].state = UIKeyEvent::UI_KEY_DOWN;
+				event_system->AddKeyDown(keyboard[i]);
+			}
+			else
+			{
+				keyboard[i].state = UIKeyEvent::UI_KEY_REPEAT;
+				event_system->AddKeyRepeat(keyboard[i]);
+			}
+		}
+		else
+		{
+			if (keyboard[i].state == UIKeyEvent::UI_KEY_REPEAT || keyboard[i].state == UIKeyEvent::UI_KEY_DOWN)
+			{
+				keyboard[i].state = UIKeyEvent::UI_KEY_UP;
+				event_system->AddKeyUp(keyboard[i]);
+			}
+			else
+			{
+				keyboard[i].state = UIKeyEvent::UI_KEY_IDLE;
+			}
+		}
+	}
+
+	SDL_Event e;
+	while (SDL_PollEvent(&e))
+	{
+		switch (e.type)
+		{
+		case SDL_MOUSEWHEEL:
+			event_system->mouse_wheel = e.wheel.y;
+			break;
+
+		case SDL_MOUSEMOTION:
+			event_system->mouse_x = e.motion.x / SCREEN_SIZE;
+			event_system->mouse_y = e.motion.y / SCREEN_SIZE;
+
+			event_system->mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
+			event_system->mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
+			break;
+
+		case SDL_TEXTINPUT:
+			event_system->text_input.insert(event_system->text_input.size(), e.text.text);
+			break;
+		}
+	}
+}
+
+void SuStoUI::EventCleanUp()
+{
+	delete[] event_system->keyboard;
+
+	SDL_QuitSubSystem(SDL_INIT_EVENTS);
+}
+
+int SuStoUI::CharToKey(const char * key)
+{
+	return SDL_GetScancodeFromKey(SDL_GetKeyFromName(key));
+}
+
+const char * SuStoUI::KeyToChar(int key)
+{
+	return SDL_GetScancodeName((SDL_Scancode)key);
 }
 
