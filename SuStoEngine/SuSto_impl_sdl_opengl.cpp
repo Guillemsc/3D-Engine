@@ -11,6 +11,23 @@
 
 void SuStoUI::Init(SDL_Window* window, SuStoUIMain* ui_main)
 {
+	SDL_Init(0);
+
+	if (SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
+	{
+		LOG_OUTPUT("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
+	}
+
+	if (SDL_Init(SDL_INIT_VIDEO) != 0)
+	{
+		LOG_OUTPUT("Error on SDL_Init_Video");
+	}
+
+	if (SDL_Init(SDL_INIT_GAMECONTROLLER) != 0)
+	{
+		LOG_OUTPUT("Error on SDL_Init_GameController");
+	}
+
 	event_system = new UIEvent();
 }
 

@@ -19,12 +19,12 @@ namespace SuStoUI
 	void EndFrame(SuStoUIMain* ui_main);
 	void Draw(float* vertices, uint num_indices, uint* indices, float* uvs, uint texture_id);
 
-	UIEvent* event_system = nullptr;
 	void EventPreUpdate();
 	void EventCleanUp();
 	int CharToKey(const char* key);
 	const char* KeyToChar(int key);
 
+	UIEvent* event_system = nullptr;
 }
 
 #endif // !SUSTO_IMPL_STD_OPENGL
