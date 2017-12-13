@@ -72,11 +72,6 @@ bool SuStoVec3::operator==(const SuStoVec3 & comp)
 	return false;
 }
 
-SuStoVec3 SuStoVec3::Zero()
-{
-	return SuStoVec3(0, 0, 0);
-}
-
 float * SuStoVec3::ptr()
 {
 	return &x;
@@ -443,7 +438,14 @@ void SuStoUIMain::DeleteElement(UIElement * del)
 			return;
 	}
 
-	to_delete.push_back(del);
+	for (std::vector<UIElement*>::iterator it = elements.begin(); it != elements.end(); ++it)
+	{
+		if ((*it) == del)
+		{
+			to_delete.push_back(del);
+			break;
+		}
+	}
 }
 
 void SuStoUIMain::DeleteCanvas(UICanvas * can)
@@ -465,6 +467,7 @@ void SuStoUIMain::DeleteCanvas(UICanvas * can)
 		{
 			RELEASE(*cv);
 			canvas.erase(cv);
+			break;
 		}
 	}
 }

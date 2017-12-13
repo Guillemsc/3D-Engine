@@ -41,6 +41,7 @@ void UIImage::Update()
 
 void UIImage::CleanUp()
 {
+	GetUIMain()->DestroyPrintable(image);
 }
 
 void UIImage::OnEvent(UIEvent ev)

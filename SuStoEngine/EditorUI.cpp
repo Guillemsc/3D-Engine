@@ -132,6 +132,13 @@ bool EditorUI::Update()
 	return ret;
 }
 
+bool EditorUI::PostUpdate()
+{
+	bool ret = true;
+
+	return ret;
+}
+
 bool EditorUI::DrawEditor()
 {
 	bool ret = true;

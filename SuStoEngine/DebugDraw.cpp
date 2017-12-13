@@ -239,10 +239,10 @@ void DebugDraw(const Ray & ray, Color color, float max_dist)
 	glLineWidth(1.0f);
 }
 
-void DebugDraw(const float3 & point, Color color)
+void DebugDraw(const float3 & point, float size, Color color)
 {
 	glColor3f(color.r, color.g, color.b);
-	glPointSize(3.0f);
+	glPointSize(size);
 	glBegin(GL_POINTS);
 
 	glVertex3fv((GLfloat*)&point);

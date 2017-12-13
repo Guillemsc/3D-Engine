@@ -29,7 +29,6 @@ void Hierarchy::Draw()
 		if (ImGui::BeginMenu("+"))
 		{
 			ImGui::MenuItem("Create empty GameObject", NULL, &create_empty_game_object);
-			ImGui::MenuItem("Create Primitive", NULL, &create_cube_object);
 			ImGui::EndMenu();
 		}
 		ImGui::EndMenuBar();

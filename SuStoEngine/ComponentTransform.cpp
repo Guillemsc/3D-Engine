@@ -106,6 +106,11 @@ const float4x4 ComponentTransform::GetGlobalTransform() const
 	return global_transform;
 }
 
+const void ComponentTransform::SetGlobalTransform(const float4x4 & transform)
+{
+	global_transform = transform;
+}
+
 const float3 ComponentTransform::GetPosition() const
 {
 	return local_position;
