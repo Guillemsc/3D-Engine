@@ -32,8 +32,11 @@ public:
 	void SetPos(const SuStoVec2& pos);
 	SuStoVec2 GetPos() const;
 
-	void SetSize(const SuStoVec2 & size);
+	void SetSize(const SuStoVec2& size);
 	SuStoVec2 GetSize() const;
+
+	void SetAnchor(const SuStoVec2& anchor);
+	SuStoVec2 GetAnchor();
 
 	UICanvas* GetCanvas();
 
@@ -45,6 +48,8 @@ private:
 	SuStoVec2    size;
 	SuStoVec2    pos;
 	float4x4	 transform;
+
+	SuStoVec2    anchor = SuStoVec2(0.5f, 0.5f);
 };
 
 #endif

@@ -351,13 +351,6 @@ void SuStoUIMain::PreUpdate()
 
 void SuStoUIMain::Update()
 {
-	for (std::vector<UICanvas*>::iterator it = canvas.begin(); it != canvas.end(); ++it)
-	{
-		(*it)->PreUpdate();
-		(*it)->Update();
-		(*it)->PostUpdate();
-	}
-
 	for (std::vector<UIElement*>::iterator it = elements.begin(); it != elements.end(); ++it)
 	{
 		(*it)->PreUpdate();
@@ -384,8 +377,6 @@ UICanvas * SuStoUIMain::CreateCanvas(SuStoVec2 size)
 	cv = new UICanvas(this);
 
 	canvas.push_back(cv);
-
-	cv->SetSize(size);
 
 	return cv;
 }
@@ -551,7 +542,7 @@ bool SuStoUI::TextCmp(const char * text1, const char * text2)
 	return ret;
 }
 
-PrintableElement::PrintableElement(uint _texture_id, SuStoVec2 _texture_size, SuStoVec2 _pos, UIElement* _owner)
+PrintableElement::PrintableElement(uint _texture_id, SuStoVec2 _texture_size, UIElement* _owner)
 {
 	owner = _owner;
 
@@ -615,7 +606,7 @@ SuStoVec2 PrintableElement::GetSize()
 
 float4x4 PrintableElement::GetTransform()
 {
-	float4x4 o_trans = GetOwner()->GetTransform();
+	float4x4 o_trans = owner->GetTransform();
 
 	o_trans[3][0] += local_pos.x;
 	o_trans[3][1] += local_pos.y;
@@ -628,20 +619,12 @@ float4x4 PrintableElement::GetTransform()
 float4x4 PrintableElement::GetOrtoTransform()
 {
 	float4x4 owner_trans = GetOwner()->GetTransform();
-	float4x4 canvas_trans = GetOwner()->GetCanvas()->GetTransform();
-	float4x4 canvas_orto_trans = float4x4::zero;
 
-	if (GetOwner()->GetType() != ElementType::CANVAS)
-	{
-		canvas_orto_trans = GetOwner()->GetCanvas()->GetOrtoTransform();
-	}
+	float anchor_pos_x = GetOwner()->GetUIMain()->GetViewport().x * GetOwner()->GetAnchor().x;
+	float anchor_pos_y = GetOwner()->GetUIMain()->GetViewport().y * GetOwner()->GetAnchor().y;
 
-	float2 rect_dist(0, 0);
-	rect_dist.x = owner_trans[3][0] - (canvas_trans[3][0] + canvas_orto_trans[3][0]);
-	rect_dist.y = owner_trans[3][1] - (canvas_trans[3][1] + canvas_orto_trans[3][1]);
-
-	owner_trans[3][0] = canvas_orto_trans[3][0] + local_pos.x - rect_dist.x;
-	owner_trans[3][1] = canvas_orto_trans[3][1] + local_pos.y - rect_dist.y;
+	owner_trans[3][0] = anchor_pos_x + local_pos.x;
+	owner_trans[3][1] = anchor_pos_y + local_pos.y;
 
 	transform = owner_trans;
 

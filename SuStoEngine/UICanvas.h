@@ -9,7 +9,7 @@ enum UICanvasRenderMode
 	CAMERA_SPACE,
 };
 
-class UICanvas : public UIElement
+class UICanvas : UIElement
 {
 public:
 	UICanvas(SuStoUIMain* ui_main);
@@ -31,13 +31,12 @@ public:
 	void SetShowOnCamera(bool set);
 	bool GetShowOnCamera();
 
-	float4x4 GetOrtoTransform();
-
 private:
 	PrintableElement* image = nullptr;
 	
+	float4x4 transform;
+	
 	float scale_factor = 1.0f;
-
 	UICanvasRenderMode render_mode = UICanvasRenderMode::WORLD_SPACE;
 	bool show_on_camera = false;
 

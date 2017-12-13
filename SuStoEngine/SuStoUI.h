@@ -142,7 +142,7 @@ private:
 class PrintableElement
 {
 public:
-	PrintableElement(uint texture_id, SuStoVec2 texture_size, SuStoVec2 pos, UIElement* owner);
+	PrintableElement(uint texture_id, SuStoVec2 texture_size, UIElement* owner);
 
 	uint GetNumVertices();
 	uint GetNumIndices();
@@ -173,6 +173,7 @@ private:
 	SuStoVec2  local_pos;
 
 	UIElement* owner = nullptr;
+	UICanvas*  owner_c = nullptr;
 	float4x4   transform;
 };
 

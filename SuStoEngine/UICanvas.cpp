@@ -22,11 +22,7 @@ void UICanvas::Start()
 
 void UICanvas::Update()
 {
-	float center_x = GetUIMain()->GetViewport().x / 2;
-	float center_y = GetUIMain()->GetViewport().y / 2;
-
-	SetPos(SuStoVec2(center_x, center_y));
-	image->SetPos(SuStoVec2(center_x, center_y));
+	
 }
 
 void UICanvas::CleanUp()
@@ -66,9 +62,4 @@ void UICanvas::SetShowOnCamera(bool set)
 bool UICanvas::GetShowOnCamera()
 {
 	return show_on_camera;
-}
-
-float4x4 UICanvas::GetOrtoTransform()
-{
-	return image->GetOrtoTransform();
 }

@@ -40,6 +40,16 @@ SuStoVec2 UIElement::GetSize() const
 	return size;
 }
 
+void UIElement::SetAnchor(const SuStoVec2 & _anchor)
+{
+	anchor = _anchor;
+}
+
+SuStoVec2 UIElement::GetAnchor()
+{
+	return anchor;
+}
+
 UICanvas * UIElement::GetCanvas()
 {
 	return canvas;
