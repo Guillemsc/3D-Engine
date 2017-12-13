@@ -97,6 +97,8 @@ const void ComponentTransform::Scale(const float3 & scale)
 const void ComponentTransform::SetLocalTransform(const float4x4 & transform)
 {
 	local_transform = transform;
+
+	transform.Decompose(local_position, local_rotation_quat, local_scale);
 }
 
 const float4x4 ComponentTransform::GetGlobalTransform() const

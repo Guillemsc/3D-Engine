@@ -652,12 +652,6 @@ float4x4 PrintableElement::GetOrtoTransform()
 		o_trans = owner_c->GetOrthoTransform();
 	}
 
-	/*float anchor_pos_x = GetOwner()->GetUIMain()->GetViewport().x * GetOwner()->GetAnchor().x;
-	float anchor_pos_y = GetOwner()->GetUIMain()->GetViewport().y * GetOwner()->GetAnchor().y;
-
-	owner_trans[3][0] = anchor_pos_x + local_pos.x;
-	owner_trans[3][1] = anchor_pos_y + local_pos.y;*/
-
 	o_trans[3][0] += local_pos.x;
 	o_trans[3][1] += local_pos.y;
 

@@ -30,12 +30,12 @@ void ComponentImage::Update()
 		image->SetTransform(GetOwner()->transform->GetGlobalTransform().Transposed());
 
 		//float2 start = float2::zero;
-		//start.x = GetOwner()->transform->GetGlobalTransform()[3][0] - GetOwner()->transform->GetLocalTransform[3][0];
-		//start.y = GetOwner()->transform->GetGlobalTransform()[3][1] - GetOwner()->transform->GetLocalTransform[3][1];
+		//start.x = GetOwner()->transform->GetGlobalTransform()[3][0] - GetOwner()->transform->GetLocalTransform()[3][0];
+		//start.y = GetOwner()->transform->GetGlobalTransform()[3][1] - GetOwner()->transform->GetLocalTransform()[3][1];
 
 		//float2 new_local = float2::zero;
-		//new_local.x = canvas->GetTransform()[3][0] - start.x;
-		//new_local.y = canvas->GetTransform()[3][1] - start.y;
+		//new_local.x = image->GetCanvas()->GetTransform()[3][0] - start.x;
+		//new_local.y = image->GetCanvas()->GetTransform()[3][1] - start.y;
 
 		//float4x4 local = GetOwner()->transform->GetLocalTransform();
 		//local[3][0] = new_local.x;
