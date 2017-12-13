@@ -22,8 +22,6 @@ public:
 
 	void OnEvent(UIEvent ev);
 
-	void SetTransform(float4x4 trans);
-
 	void SetScaleFactor(float set);
 	float GetScaleFactor();
 
@@ -33,12 +31,18 @@ public:
 	void SetShowOnCamera(bool set);
 	bool GetShowOnCamera();
 
+	void SetTransform(float4x4 trans);
+	float4x4 GetTransform();
+	float4x4 GetOrthoTransform();
+
 private:
 	PrintableElement* image = nullptr;
 	
 	float scale_factor = 1.0f;
 	UICanvasRenderMode render_mode = UICanvasRenderMode::WORLD_SPACE;
 	bool show_on_camera = false;
+
+	float4x4 transform;
 
 public:
 

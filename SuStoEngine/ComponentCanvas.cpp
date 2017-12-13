@@ -12,8 +12,6 @@ ComponentCanvas::ComponentCanvas(GameObject * owner, std::string unique_id) : Co
 	SetName("UICanvas");
 
 	canvas = App->gameobj->GetUIMain()->CreateCanvas(SuStoVec2(100, 100));
-	//image = (UIImage*)App->gameobj->GetUIMain()->CreateElement(ElementType::IMAGE, canvas);
-	//image->SetImage(3, SuStoVec2(300, 300));
 }
 
 ComponentCanvas::~ComponentCanvas()

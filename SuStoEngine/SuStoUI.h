@@ -11,6 +11,7 @@
 
 class UIElement;
 class UICanvas;
+enum UICanvasRenderMode;
 
 // -------------------------------
 // GLOBALS -----------------------
@@ -142,7 +143,8 @@ private:
 class PrintableElement
 {
 public:
-	PrintableElement(uint texture_id, SuStoVec2 texture_size, UIElement* owner);
+	PrintableElement(uint texture_id, SuStoVec2 pos, SuStoVec2 texture_size, UIElement* owner);
+	PrintableElement(uint texture_id, SuStoVec2 pos, SuStoVec2 texture_size, UICanvas* owner);
 
 	uint GetNumVertices();
 	uint GetNumIndices();
@@ -162,7 +164,8 @@ public:
 	float4x4 GetTransform();
 	float4x4 GetOrtoTransform();
 
-	UIElement* GetOwner();
+	UICanvasRenderMode GetRenderMode();
+	bool GetShowOnCamera();
 
 	void CleanUp();
 

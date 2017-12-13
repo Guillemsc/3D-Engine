@@ -54,11 +54,11 @@ void SuStoUI::Render(SuStoUIMain * ui_main)
 
 	for (std::vector<PrintableElement*>::iterator it = draw.begin(); it != draw.end(); ++it)
 	{
-		switch ((*it)->GetOwner()->GetCanvas()->GetRenderMode())
+		switch ((*it)->GetRenderMode())
 		{
 			case UICanvasRenderMode::CAMERA_SPACE:
 			{
-				if ((*it)->GetOwner()->GetCanvas()->GetShowOnCamera())
+				if ((*it)->GetShowOnCamera())
 				{
 					glMatrixMode(GL_PROJECTION);
 					glPushMatrix();

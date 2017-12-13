@@ -4,7 +4,7 @@ UICanvas::UICanvas(SuStoUIMain * main) : UIElement(main, ElementType::CANVAS, th
 {
 	LOG_OUTPUT("Canvas Created");
 
-	image = new PrintableElement(0, SuStoVec2(200, 200), SuStoVec2(0, 0), this);
+	image = new PrintableElement(0, SuStoVec2(0, 0), SuStoVec2(200, 200), this);
 	main->DrawPrintable(image);
 }
 
@@ -22,7 +22,7 @@ void UICanvas::Start()
 
 void UICanvas::Update()
 {
-	
+
 }
 
 void UICanvas::CleanUp()
@@ -32,11 +32,6 @@ void UICanvas::CleanUp()
 
 void UICanvas::OnEvent(UIEvent ev)
 {
-}
-
-void UICanvas::SetTransform(float4x4 trans)
-{
-	transform = trans;
 }
 
 void UICanvas::SetScaleFactor(float set)
@@ -67,4 +62,24 @@ void UICanvas::SetShowOnCamera(bool set)
 bool UICanvas::GetShowOnCamera()
 {
 	return show_on_camera;
+}
+
+void UICanvas::SetTransform(float4x4 trans)
+{
+	transform = trans;
+}
+
+float4x4 UICanvas::GetTransform()
+{
+	return transform;
+}
+
+float4x4 UICanvas::GetOrthoTransform()
+{
+	float4x4 ortho_trans = transform;
+
+	ortho_trans[3][0] = GetUIMain()->GetViewport().x * 0.5f;
+	ortho_trans[3][1] = GetUIMain()->GetViewport().y * 0.5f;
+
+	return ortho_trans;
 }

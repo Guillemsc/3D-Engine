@@ -30,12 +30,18 @@ public:
 
 	void SetTransform(float4x4 transform);
 	float4x4 GetTransform();
+	float4x4 GetOrthoTransform();
 
 	void SetLocalPos(const SuStoVec2& pos);
 	SuStoVec2 GetLocalPos() const;
 
 	void SetAnchor(const SuStoVec2& anchor);
 	SuStoVec2 GetAnchor();
+
+	SuStoVec2 GetOrthoAnchorPos();
+	float4x4 GetAnchorPos();
+
+	float4x4 GetCanvasCenter();
 
 	UICanvas* GetCanvas();
 

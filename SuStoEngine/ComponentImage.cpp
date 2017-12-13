@@ -25,8 +25,24 @@ void ComponentImage::Start()
 
 void ComponentImage::Update()
 {
-	if(image != nullptr)
+	if (image != nullptr)
+	{
 		image->SetTransform(GetOwner()->transform->GetGlobalTransform().Transposed());
+
+		//float2 start = float2::zero;
+		//start.x = GetOwner()->transform->GetGlobalTransform()[3][0] - GetOwner()->transform->GetLocalTransform[3][0];
+		//start.y = GetOwner()->transform->GetGlobalTransform()[3][1] - GetOwner()->transform->GetLocalTransform[3][1];
+
+		//float2 new_local = float2::zero;
+		//new_local.x = canvas->GetTransform()[3][0] - start.x;
+		//new_local.y = canvas->GetTransform()[3][1] - start.y;
+
+		//float4x4 local = GetOwner()->transform->GetLocalTransform();
+		//local[3][0] = new_local.x;
+		//local[3][1] = new_local.y;
+
+		//GetOwner()->transform->SetLocalTransform(local);
+	}
 }
 
 void ComponentImage::CleanUp()

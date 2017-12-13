@@ -542,12 +542,26 @@ bool SuStoUI::TextCmp(const char * text1, const char * text2)
 	return ret;
 }
 
-PrintableElement::PrintableElement(uint _texture_id, SuStoVec2 _texture_size, UIElement* _owner)
+PrintableElement::PrintableElement(uint _texture_id, SuStoVec2 _pos, SuStoVec2 _texture_size, UIElement* _owner)
 {
 	owner = _owner;
 
 	texture_id = _texture_id;
 	texture_size = _texture_size;
+	local_pos = _pos;
+
+	plane = SuStoPlane(SuStoVec2(_texture_size));
+
+	SetPos(local_pos);
+}
+
+PrintableElement::PrintableElement(uint _texture_id, SuStoVec2 _pos, SuStoVec2 _texture_size, UICanvas * _owner)
+{
+	owner_c = _owner;
+
+	texture_id = _texture_id;
+	texture_size = _texture_size;
+	local_pos = _pos;
 
 	plane = SuStoPlane(SuStoVec2(_texture_size));
 
@@ -606,7 +620,16 @@ SuStoVec2 PrintableElement::GetSize()
 
 float4x4 PrintableElement::GetTransform()
 {
-	float4x4 o_trans = owner->GetTransform();
+	float4x4 o_trans = float4x4::zero;
+
+	if (owner != nullptr)
+	{
+		o_trans = owner->GetTransform();
+	}
+	else
+	{
+		o_trans = owner_c->GetTransform();
+	}
 
 	o_trans[3][0] += local_pos.x;
 	o_trans[3][1] += local_pos.y;
@@ -618,22 +641,59 @@ float4x4 PrintableElement::GetTransform()
 
 float4x4 PrintableElement::GetOrtoTransform()
 {
-	float4x4 owner_trans = GetOwner()->GetTransform();
+	float4x4 o_trans = float4x4::zero;
 
-	float anchor_pos_x = GetOwner()->GetUIMain()->GetViewport().x * GetOwner()->GetAnchor().x;
+	if (owner != nullptr)
+	{
+		o_trans = owner->GetOrthoTransform();
+	}
+	else
+	{
+		o_trans = owner_c->GetOrthoTransform();
+	}
+
+	/*float anchor_pos_x = GetOwner()->GetUIMain()->GetViewport().x * GetOwner()->GetAnchor().x;
 	float anchor_pos_y = GetOwner()->GetUIMain()->GetViewport().y * GetOwner()->GetAnchor().y;
 
 	owner_trans[3][0] = anchor_pos_x + local_pos.x;
-	owner_trans[3][1] = anchor_pos_y + local_pos.y;
+	owner_trans[3][1] = anchor_pos_y + local_pos.y;*/
 
-	transform = owner_trans;
+	o_trans[3][0] += local_pos.x;
+	o_trans[3][1] += local_pos.y;
 
-	return transform;
+	return o_trans;
 }
 
-UIElement* PrintableElement::GetOwner()
+UICanvasRenderMode PrintableElement::GetRenderMode()
 {
-	return owner;
+	UICanvasRenderMode ret = UICanvasRenderMode::CAMERA_SPACE;
+
+	if (owner != nullptr)
+	{
+		ret = owner->GetCanvas()->GetRenderMode();
+	}
+	else
+	{
+		ret = owner_c->GetRenderMode();
+	}
+
+	return ret;
+}
+
+bool PrintableElement::GetShowOnCamera()
+{
+	bool ret = false;
+
+	if (owner != nullptr)
+	{
+		ret = owner->GetCanvas()->GetShowOnCamera();
+	}
+	else
+	{
+		ret = owner_c->GetShowOnCamera();
+	}
+
+	return ret;
 }
 
 void PrintableElement::CleanUp()
