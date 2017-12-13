@@ -73,17 +73,21 @@ bool ModuleGameObject::Start()
 
 	ResourceTextureLoader loader;
 	TextureInfo test = loader.LoadTexture("UI\\preview_164.png", true);
+	TextureInfo standard = loader.LoadTexture("UI\\button_standard.png", true);
+	TextureInfo highlight = loader.LoadTexture("UI\\button_highlight.png", true);
+	TextureInfo click = loader.LoadTexture("UI\\button_click.png", true);
+	
 
-	/*UICanvas* cv = susto_ui->CreateCanvas(SuStoVec2(300, 300));
+	UICanvas* cv = susto_ui->CreateCanvas(SuStoVec2(300, 300));
 	UIImage* b = (UIImage*)susto_ui->CreateElement(ElementType::IMAGE, cv);
-	b->SetImage(test.id, SuStoVec2(test.size_x, test.size_y));*/
+	b->SetImage(test.id, SuStoVec2(test.size_x, test.size_y));
 
 
-	//UIButton* button = (UIButton*)susto_ui->CreateElement(ElementType::BUTTON, cv);
-	//button->SetStandardImage(test.id, SuStoVec2(108, 8), BUTTON_SIZE);
-	//button->SetHighlightImage(test.id, SuStoVec2(8 + BUTTON_PADDING.x + BUTTON_SIZE.x, 8), BUTTON_SIZE);
-	//button->SetClickImage(test.id, SuStoVec2(8 + 2* (BUTTON_PADDING.x + BUTTON_SIZE.x), 8), BUTTON_SIZE);
-	//button->SetToStandard();
+	UIButton* button = (UIButton*)susto_ui->CreateElement(ElementType::BUTTON, cv);
+	button->SetStandardImage(standard.id, SuStoVec2(108, 8), BUTTON_SIZE);
+	button->SetHighlightImage(highlight.id, SuStoVec2(8 + BUTTON_PADDING.x + BUTTON_SIZE.x, 8), BUTTON_SIZE);
+	button->SetClickImage(click.id, SuStoVec2(8 + 2* (BUTTON_PADDING.x + BUTTON_SIZE.x), 8), BUTTON_SIZE);
+	button->SetToStandard();
 
 	return ret;
 }
