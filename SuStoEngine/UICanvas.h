@@ -22,6 +22,8 @@ public:
 
 	void OnEvent(UIEvent ev);
 
+	void SetTransform(float4x4 trans);
+
 	void SetScaleFactor(float set);
 	float GetScaleFactor();
 
@@ -33,8 +35,6 @@ public:
 
 private:
 	PrintableElement* image = nullptr;
-	
-	float4x4 transform;
 	
 	float scale_factor = 1.0f;
 	UICanvasRenderMode render_mode = UICanvasRenderMode::WORLD_SPACE;

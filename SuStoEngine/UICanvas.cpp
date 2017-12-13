@@ -34,6 +34,11 @@ void UICanvas::OnEvent(UIEvent ev)
 {
 }
 
+void UICanvas::SetTransform(float4x4 trans)
+{
+	transform = trans;
+}
+
 void UICanvas::SetScaleFactor(float set)
 {
 	scale_factor = set;

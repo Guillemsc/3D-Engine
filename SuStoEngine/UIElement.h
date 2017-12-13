@@ -9,6 +9,8 @@ class UICanvas;
 
 class UIElement
 {
+	friend UICanvas;
+
 public:
 	UIElement();
 	UIElement(SuStoUIMain* main, ElementType type, UICanvas* canvas);
@@ -29,11 +31,8 @@ public:
 	void SetTransform(float4x4 transform);
 	float4x4 GetTransform();
 
-	void SetPos(const SuStoVec2& pos);
-	SuStoVec2 GetPos() const;
-
-	void SetSize(const SuStoVec2& size);
-	SuStoVec2 GetSize() const;
+	void SetLocalPos(const SuStoVec2& pos);
+	SuStoVec2 GetLocalPos() const;
 
 	void SetAnchor(const SuStoVec2& anchor);
 	SuStoVec2 GetAnchor();
@@ -46,7 +45,7 @@ private:
 	UICanvas*    canvas = nullptr;
 
 	SuStoVec2    size;
-	SuStoVec2    pos;
+	SuStoVec2    local_pos;
 	float4x4	 transform;
 
 	SuStoVec2    anchor = SuStoVec2(0.5f, 0.5f);

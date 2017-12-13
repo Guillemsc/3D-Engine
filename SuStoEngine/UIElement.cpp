@@ -10,34 +10,21 @@ SuStoUIMain * UIElement::GetUIMain()
 	return ui_main;
 }
 
-void UIElement::SetTransform(float4x4 _transform)
-{
-	transform = _transform;
-}
-
 float4x4 UIElement::GetTransform()
 {
+	float4x4 canvas_trans = canvas->g
+
 	return transform;
 }
 
-void UIElement::SetPos(const SuStoVec2& _pos)
+void UIElement::SetLocalPos(const SuStoVec2& _pos)
 {
-	pos = _pos;
+	local_pos = _pos;
 }
 
-SuStoVec2 UIElement::GetPos() const
+SuStoVec2 UIElement::GetLocalPos() const
 {
-	return pos;
-}
-
-void UIElement::SetSize(const SuStoVec2 & _size)
-{
-	size = _size;
-}
-
-SuStoVec2 UIElement::GetSize() const
-{
-	return size;
+	return local_pos;
 }
 
 void UIElement::SetAnchor(const SuStoVec2 & _anchor)
