@@ -52,7 +52,7 @@ private:
 
 	SuStoVec2    size;
 	SuStoVec2    local_pos;
-	float4x4	 transform;
+	float4x4     transform = float4x4::identity;
 
 	SuStoVec2    anchor = SuStoVec2(0.5f, 0.5f);
 };

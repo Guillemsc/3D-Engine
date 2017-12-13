@@ -9,7 +9,7 @@ enum UICanvasRenderMode
 	CAMERA_SPACE,
 };
 
-class UICanvas : UIElement
+class UICanvas
 {
 public:
 	UICanvas(SuStoUIMain* ui_main);
@@ -35,9 +35,9 @@ public:
 	float4x4 GetTransform();
 	float4x4 GetOrthoTransform();
 
-	AABB GetBbox();
-
 	PrintableElement* GetPlane();
+
+	SuStoUIMain* GetUIMain();
 
 private:
 	PrintableElement* image = nullptr;
@@ -46,7 +46,9 @@ private:
 	UICanvasRenderMode render_mode = UICanvasRenderMode::WORLD_SPACE;
 	bool show_on_camera = false;
 
-	float4x4 transform;
+	float4x4 transform = float4x4::identity;;
+
+	SuStoUIMain* ui_main = nullptr;
 
 public:
 

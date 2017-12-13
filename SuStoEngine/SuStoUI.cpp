@@ -563,7 +563,7 @@ PrintableElement::PrintableElement(uint _texture_id, SuStoVec2 _pos, SuStoVec2 _
 	texture_size = _texture_size;
 	local_pos = _pos;
 
-	plane = SuStoPlane(SuStoVec2(_texture_size));
+	plane = SuStoPlane(SuStoVec2(SuStoVec2(1, 1)));
 
 	SetPos(local_pos);
 }
@@ -638,7 +638,7 @@ SuStoVec2 PrintableElement::GetSize()
 
 float4x4 PrintableElement::GetTransform()
 {
-	float4x4 o_trans = float4x4::zero;
+	float4x4 o_trans = float4x4::identity;
 
 	if (owner != nullptr)
 	{
@@ -649,11 +649,10 @@ float4x4 PrintableElement::GetTransform()
 		o_trans = owner_c->GetTransform();
 	}
 
-	o_trans[3][0] += local_pos.x;
-	o_trans[3][1] += local_pos.y;
+	o_trans[0][3] += local_pos.x;
+	o_trans[1][3] += local_pos.y;
 
-	o_trans[0][0] += texture_size.x;
-	o_trans[1][1] += texture_size.y;
+	o_trans = o_trans * float4x4::Scale(float3(texture_size.x, texture_size.y, 0));
 
 	transform = o_trans;
 
@@ -662,7 +661,7 @@ float4x4 PrintableElement::GetTransform()
 
 float4x4 PrintableElement::GetOrtoTransform()
 {
-	float4x4 o_trans = float4x4::zero;
+	float4x4 o_trans = float4x4::identity;
 
 	if (owner != nullptr)
 	{
@@ -673,11 +672,10 @@ float4x4 PrintableElement::GetOrtoTransform()
 		o_trans = owner_c->GetOrthoTransform();
 	}
 
-	o_trans[3][0] += local_pos.x;
-	o_trans[3][1] += local_pos.y;
+	o_trans[0][3] += local_pos.x;
+	o_trans[1][3] += local_pos.y;
 
-	o_trans[0][0] += texture_size.x;
-	o_trans[1][1] += texture_size.y;
+	o_trans = o_trans * float4x4::Scale(float3(texture_size.x, texture_size.y, 0));
 
 	return o_trans;
 }

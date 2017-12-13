@@ -15,8 +15,8 @@ void UIElement::SetTransform(float4x4 _transform)
 {
 	transform = _transform;
 
-	local_pos.x = GetAnchorPos()[3][0] - transform[3][0];
-	local_pos.y = GetAnchorPos()[3][1] - transform[3][1];
+	local_pos.x = GetAnchorPos()[0][3] - transform[0][3];
+	local_pos.y = GetAnchorPos()[1][3] - transform[1][3];
 }
 
 float4x4 UIElement::GetTransform()
@@ -32,8 +32,8 @@ float4x4 UIElement::GetOrthoTransform()
 
 	float4x4 new_trans = transform;
 
-	new_trans[3][0] = GetOrthoAnchorPos().x + local_pos.x;
-	new_trans[3][1] = GetOrthoAnchorPos().y + local_pos.y;
+	new_trans[0][3] = GetOrthoAnchorPos().x + local_pos.x;
+	new_trans[1][3] = GetOrthoAnchorPos().y + local_pos.y;
 
 	return new_trans;
 }
@@ -80,12 +80,12 @@ float4x4 UIElement::GetAnchorPos()
 {
 	float4x4 anchor_pos = transform;
 
-	float4x4 start = float4x4::zero;
-	start[3][0] = GetCanvasCenter()[3][0] - (GetUIMain()->GetViewport().x / 2);
-	start[3][1] = GetCanvasCenter()[3][1] - (GetUIMain()->GetViewport().y / 2);
+	float4x4 start = float4x4::identity;
+	start[0][3] = GetCanvasCenter()[0][3] - (GetUIMain()->GetViewport().x / 2);
+	start[1][3] = GetCanvasCenter()[1][3] - (GetUIMain()->GetViewport().y / 2);
 
-	anchor_pos[3][0] = start[3][0] + GetOrthoAnchorPos().x;
-	anchor_pos[3][1] = start[3][1] + GetOrthoAnchorPos().y;
+	anchor_pos[0][3] = start[0][3] + GetOrthoAnchorPos().x;
+	anchor_pos[1][3] = start[1][3] + GetOrthoAnchorPos().y;
 
 	return anchor_pos;
 }

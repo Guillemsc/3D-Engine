@@ -1,11 +1,13 @@
 #include "UICanvas.h"
 
-UICanvas::UICanvas(SuStoUIMain * main) : UIElement(main, ElementType::CANVAS, this)
+UICanvas::UICanvas(SuStoUIMain * main)
 {
 	LOG_OUTPUT("Canvas Created");
 
-	image = new PrintableElement(0, SuStoVec2(0, 0), SuStoVec2(0, 0), this);
-	main->DrawPrintable(image);
+	ui_main = main;
+
+	image = new PrintableElement(0, SuStoVec2(0, 0), SuStoVec2(1, 1), this);
+	//main->DrawPrintable(image);
 }
 
 UICanvas::~UICanvas()
@@ -76,15 +78,20 @@ float4x4 UICanvas::GetTransform()
 
 float4x4 UICanvas::GetOrthoTransform()
 {
-	float4x4 ortho_trans = image->GetTransform();
+	float4x4 ortho_trans = transform;
 
-	ortho_trans[3][0] = GetUIMain()->GetViewport().x * 0.5f;
-	ortho_trans[3][1] = GetUIMain()->GetViewport().y * 0.5f;
+	ortho_trans[0][3] = (GetUIMain()->GetViewport().x * 0.5f);
+	ortho_trans[1][3] = (GetUIMain()->GetViewport().y * 0.5f);
 
 	return ortho_trans;
 }
 
-AABB UICanvas::GetBbox()
+PrintableElement * UICanvas::GetPlane()
 {
-	return image->GetBbox();
+	return image;
+}
+
+SuStoUIMain * UICanvas::GetUIMain()
+{
+	return ui_main;
 }

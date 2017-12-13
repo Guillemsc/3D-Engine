@@ -63,12 +63,12 @@ void SuStoUI::Render(SuStoUIMain * ui_main)
 					glMatrixMode(GL_PROJECTION);
 					glPushMatrix();
 					glLoadIdentity();
-					glOrtho(0, viewport.x, viewport.y, 0, -1.0f, +1.0f);
+					glOrtho(0, viewport.x, viewport.y, 0, -1000.0f, +1000.0f);
 
 					glMatrixMode(GL_MODELVIEW);
 					glPushMatrix();
 					glLoadIdentity();
-					glMultMatrixf((*it)->GetOrtoTransform().ptr());
+					glMultMatrixf((*it)->GetOrtoTransform().Transposed().ptr());
 
 					Draw((*it)->GetVertices(), (*it)->GetNumIndices(), (*it)->GetIndices(), (*it)->GetUvs(), (*it)->GetTextureId());
 
@@ -81,7 +81,7 @@ void SuStoUI::Render(SuStoUIMain * ui_main)
 
 				glMatrixMode(GL_MODELVIEW);
 				glPushMatrix();
-				glMultMatrixf((*it)->GetTransform().ptr());
+				glMultMatrixf((*it)->GetTransform().Transposed().ptr());
 
 				Draw((*it)->GetVertices(), (*it)->GetNumIndices(), (*it)->GetIndices(), (*it)->GetUvs(), (*it)->GetTextureId());
 			}
@@ -90,7 +90,7 @@ void SuStoUI::Render(SuStoUIMain * ui_main)
 			{
 				glMatrixMode(GL_MODELVIEW);
 				glPushMatrix();
-				glMultMatrixf((*it)->GetTransform().ptr());
+				glMultMatrixf((*it)->GetTransform().Transposed().ptr());
 
 				Draw((*it)->GetVertices(), (*it)->GetNumIndices(), (*it)->GetIndices(), (*it)->GetUvs(), (*it)->GetTextureId());
 			}

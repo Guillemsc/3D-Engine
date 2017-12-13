@@ -46,13 +46,13 @@ private:
 	void OnSaveSerialize(JSON_Doc config);
 
 private:
-	float4x4 local_transform;
+	float4x4 local_transform = float4x4::identity;
 	float3   local_position;
 	float3   local_rotation_euler;
 	Quat     local_rotation_quat;
 	float3   local_scale;
 
-	float4x4 global_transform;
+	float4x4 global_transform = float4x4::identity;
 
 };
 

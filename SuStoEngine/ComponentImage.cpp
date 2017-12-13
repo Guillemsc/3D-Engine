@@ -27,7 +27,7 @@ void ComponentImage::Update()
 {
 	if (image != nullptr)
 	{
-		image->SetTransform(GetOwner()->transform->GetGlobalTransform().Transposed());
+		image->SetTransform(GetOwner()->transform->GetGlobalTransform());
 
 		//float4x4 parent_pos = GetOwner()->GetParentTransform();
 
@@ -59,6 +59,8 @@ void ComponentImage::SetImage(uint texture_id, float2 texture_size)
 	if (image != nullptr)
 	{
 		image->SetImage(texture_id, SuStoVec2(texture_size.x, texture_size.y));
+
+		//image->SetAnchor(SuStoVec2(0.0f, 0.0f));
 	}
 }
 

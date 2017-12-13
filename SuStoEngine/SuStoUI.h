@@ -184,7 +184,7 @@ private:
 
 	UIElement* owner = nullptr;
 	UICanvas*  owner_c = nullptr;
-	float4x4   transform;
+	float4x4   transform = float4x4::identity;
 };
 
 

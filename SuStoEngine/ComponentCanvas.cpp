@@ -26,9 +26,9 @@ void ComponentCanvas::Start()
 
 void ComponentCanvas::Update()
 {
-	canvas->SetTransform(GetOwner()->transform->GetGlobalTransform().Transposed());
+	canvas->SetTransform(GetOwner()->transform->GetGlobalTransform());
 
-	//DebugDraw(canvas->GetBbox(), Red, true, 4.0f, canvas->GetTransform());
+	DebugDraw(canvas->GetPlane()->GetBbox(), Red, true, 4.0f, canvas->GetPlane()->GetTransform());
 }
 
 void ComponentCanvas::CleanUp()
