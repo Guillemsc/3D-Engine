@@ -3,6 +3,7 @@
 #include "ModuleGameObject.h"
 #include "SuStoUI.h"
 #include "UICanvas.h"
+#include "UIImage.h"
 #include "imgui.h"
 
 ComponentCanvas::ComponentCanvas(GameObject * owner, std::string unique_id) : Component(ComponentType::UI_CANVAS, owner, unique_id)
@@ -11,6 +12,8 @@ ComponentCanvas::ComponentCanvas(GameObject * owner, std::string unique_id) : Co
 	SetName("UICanvas");
 
 	canvas = App->gameobj->GetUIMain()->CreateCanvas(SuStoVec2(100, 100));
+	//image = (UIImage*)App->gameobj->GetUIMain()->CreateElement(ElementType::IMAGE, canvas);
+	//image->SetImage(3, SuStoVec2(300, 300));
 }
 
 ComponentCanvas::~ComponentCanvas()
@@ -54,6 +57,15 @@ void ComponentCanvas::InspectorDraw(std::vector<Component*> components)
 		{
 			canvas->SetShowOnCamera(show);
 		}
+	}
+
+	ImGui::Separator();
+
+	if (ImGui::Button("Add Image"))
+	{
+		GameObject* go = App->gameobj->Create();
+		go->AddComponent(ComponentType::UI_IMAGE);
+		GetOwner()->AddChild(go);
 	}
 }
 

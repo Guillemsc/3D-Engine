@@ -5,6 +5,7 @@ Component::Component(ComponentType _type, GameObject* _owner, std::string _uniqu
 	type = _type;
 	owner = _owner;
 	unique_id = _unique_id;
+	name = "---------NO NAME----------";
 
 	enabled = true;
 }

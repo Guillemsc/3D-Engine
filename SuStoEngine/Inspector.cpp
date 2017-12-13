@@ -139,7 +139,7 @@ void Inspector::Draw()
 				}
 			}
 
-			ImGui::PushID((*it)->GetName());
+			ImGui::PushID((*it)->GetUniqueId().c_str());
 			bool enabled = (*it)->GetEnabled();
 			if (ImGui::Checkbox("", &enabled))
 			{

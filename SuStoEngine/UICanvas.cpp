@@ -67,3 +67,8 @@ bool UICanvas::GetShowOnCamera()
 {
 	return show_on_camera;
 }
+
+float4x4 UICanvas::GetOrtoTransform()
+{
+	return image->GetOrtoTransform();
+}

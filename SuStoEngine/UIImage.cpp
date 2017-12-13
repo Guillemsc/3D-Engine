@@ -29,6 +29,7 @@ void UIImage::Awake()
 
 void UIImage::Start()
 {
+
 }
 
 void UIImage::Update()

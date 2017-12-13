@@ -8,6 +8,7 @@
 #include "ComponentMaterial.h"
 #include "ComponentCamera.h"
 #include "ComponentCanvas.h"
+#include "ComponentImage.h"
 #include "ModuleGameObject.h"
 #include "Inspector.h"
 #include "ModuleRenderer3D.h"
@@ -16,6 +17,7 @@
 #include "ResourceTexture.h"
 #include "JSONLoader.h"
 #include "ResourceManager.h"
+#include "UICanvas.h"
 
 #include "Glew/include/glew.h" 
 
@@ -201,8 +203,10 @@ Component* GameObject::AddComponent(ComponentType type, string unique_id)
 			ret = new ComponentCanvas(this, new_id);
 		}
 		break;
-
-	default:
+		case UI_IMAGE:
+		{
+			ret = new ComponentImage(this, new_id);
+		}
 		break;
 	}
 	
@@ -356,6 +360,10 @@ void GameObject::AddChild(GameObject * child)
 	// Add new parent
 	child->parent = this;
 	childs.push_back(child);
+	child->OnChangeParent();
+
+	//for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
+
 }
 
 void GameObject::RecursiveCalcGlobalTransform()
@@ -508,6 +516,31 @@ void GameObject::TestRay(const LineSegment& segment, bool& hit, float& dist)
 AABB GameObject::GetBbox() const
 {
 	return local_bbox;
+}
+
+UICanvas* GameObject::RecursiveFindCanvasOnParent()
+{
+	UICanvas* found = nullptr;
+
+	ComponentCanvas* ccan = (ComponentCanvas*)GetComponent(ComponentType::UI_CANVAS);
+
+	if (ccan != nullptr)
+	{
+		return ccan->GetCanvas();
+	}
+
+	if (parent != nullptr)
+		found = parent->RecursiveFindCanvasOnParent();
+
+	return found;
+}
+
+void GameObject::OnChangeParent()
+{
+	for (vector<Component*>::iterator it = components.begin(); it != components.end(); ++it)
+	{
+		(*it)->OnChangeParent();
+	}
 }
 
 void GameObject::OnLoadSerialize(JSON_Doc config)

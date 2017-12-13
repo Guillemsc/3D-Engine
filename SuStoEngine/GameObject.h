@@ -8,6 +8,7 @@
 #include "ComponentTransform.h"
 
 class ModuleGameObject;
+class UICanvas;
 
 class GameObject
 {
@@ -56,6 +57,10 @@ public:
 	void TestRay(const LineSegment& segment, bool& hit, float& dist);
 
 	AABB GetBbox() const;
+
+	UICanvas* RecursiveFindCanvasOnParent();
+
+	void OnChangeParent();
 
 	void OnSaveSerialize(JSON_Doc config);
 	void OnLoadSerialize(JSON_Doc config);

@@ -7,6 +7,7 @@
 class GameObject;
 class Camera3D;
 class UICanvas;
+class UIImage;
 
 class ComponentCanvas : public Component
 {

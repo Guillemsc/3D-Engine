@@ -31,6 +31,8 @@ public:
 	void SetShowOnCamera(bool set);
 	bool GetShowOnCamera();
 
+	float4x4 GetOrtoTransform();
+
 private:
 	PrintableElement* image = nullptr;
 	

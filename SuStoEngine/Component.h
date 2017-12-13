@@ -55,6 +55,8 @@ public:
 
 	void ForceUid(std::string uid);
 
+	virtual void OnChangeParent() {};
+
 private:
 	virtual void OnEnable() {};
 	virtual void OnDisable() {};

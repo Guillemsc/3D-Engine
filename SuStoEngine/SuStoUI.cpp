@@ -627,12 +627,23 @@ float4x4 PrintableElement::GetTransform()
 
 float4x4 PrintableElement::GetOrtoTransform()
 {
-	float4x4 o_trans = GetOwner()->GetTransform();
+	float4x4 owner_trans = GetOwner()->GetTransform();
+	float4x4 canvas_trans = GetOwner()->GetCanvas()->GetTransform();
+	float4x4 canvas_orto_trans = float4x4::zero;
 
-	o_trans[3][0] = local_pos.x;
-	o_trans[3][1] = local_pos.y;
+	if (GetOwner()->GetType() != ElementType::CANVAS)
+	{
+		canvas_orto_trans = GetOwner()->GetCanvas()->GetOrtoTransform();
+	}
 
-	transform = o_trans;
+	float2 rect_dist(0, 0);
+	rect_dist.x = owner_trans[3][0] - (canvas_trans[3][0] + canvas_orto_trans[3][0]);
+	rect_dist.y = owner_trans[3][1] - (canvas_trans[3][1] + canvas_orto_trans[3][1]);
+
+	owner_trans[3][0] = canvas_orto_trans[3][0] + local_pos.x - rect_dist.x;
+	owner_trans[3][1] = canvas_orto_trans[3][1] + local_pos.y - rect_dist.y;
+
+	transform = owner_trans;
 
 	return transform;
 }

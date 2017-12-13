@@ -5,14 +5,14 @@
 #include "GeometryMath.h"
 
 class GameObject;
-class Camera3D;
 class UIImage;
+class UICanvas;
 
-class ComponentCanvas : public Component
+class ComponentImage : public Component
 {
 public:
-	ComponentCanvas(GameObject* owner, std::string unique_id);
-	virtual ~ComponentCanvas();
+	ComponentImage(GameObject* owner, std::string unique_id);
+	virtual ~ComponentImage();
 
 	void Start();
 	void Update();
@@ -20,14 +20,19 @@ public:
 
 	void InspectorDraw(std::vector<Component*> components);
 
+	void SetImage(uint texture_id, float2 texture_size);
 	UIImage* GetImage();
 
 private:
 	void OnEnable();
 	void OnDisable();
 
+	virtual void OnChangeParent();
+
 	virtual void OnLoadSerialize(JSON_Doc config);
 	virtual void OnSaveSerialize(JSON_Doc config);
+
+	void TryBindCanvas();
 
 private:
 	UIImage* image = nullptr;
