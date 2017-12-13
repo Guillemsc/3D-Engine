@@ -350,6 +350,7 @@ void SuStoUIMain::Start()
 
 void SuStoUIMain::PreUpdate()
 {
+	SuStoUI::EventPreUpdate(this);
 }
 
 void SuStoUIMain::Update()
@@ -373,6 +374,7 @@ void SuStoUIMain::PostUpdate()
 
 void SuStoUIMain::CleanUp()
 {
+	SuStoUI::EventCleanUp(this);
 }
 
 void SuStoUIMain::PushEvent(UIEvent ev)

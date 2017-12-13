@@ -200,15 +200,15 @@ void SuStoUI::EventPreUpdate(SuStoUIMain* ui_main)
 		switch (e.type)
 		{
 		case SDL_MOUSEWHEEL:
-			event_system->mouse_wheel = e.wheel.y;
+			event_system->SetMouseWheel(e.wheel.y);
 			break;
 
 		case SDL_MOUSEMOTION:
-			event_system->mouse_x = e.motion.x / SCREEN_SIZE;
-			event_system->mouse_y = e.motion.y / SCREEN_SIZE;
+			event_system->SetMouseX(e.motion.x / SCREEN_SIZE);
+			event_system->SetMouseY(e.motion.y / SCREEN_SIZE);
 
-			event_system->mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
-			event_system->mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
+			event_system->SetMouseXMotion(e.motion.xrel / SCREEN_SIZE);
+			event_system->SetMouseYMotion(e.motion.yrel / SCREEN_SIZE);
 			break;
 
 		case SDL_TEXTINPUT:
@@ -235,3 +235,65 @@ const char * SuStoUI::KeyToChar(int key)
 	return SDL_GetScancodeName((SDL_Scancode)key);
 }
 
+const bool SuStoUI::GetKeyDown(int id, SuStoUIMain * ui_main)
+{
+	std::vector<Key> keys_down = ui_main->event_system->GetKeysDown();
+
+	if (!keys_down.empty())
+	{
+		for (std::vector<Key>::iterator it = keys_down.begin(); it != keys_down.end(); it++)
+		{
+			if (id == (*it).key)
+				return true;
+		}
+	}
+
+	return false;
+}
+
+const bool SuStoUI::GetKeyRepeat(int id, SuStoUIMain * ui_main)
+{
+	std::vector<Key> keys_repeat = ui_main->event_system->GetKeysRepeat();
+
+	if (!keys_repeat.empty())
+	{
+		for (std::vector<Key>::iterator it = keys_repeat.begin(); it != keys_repeat.end(); it++)
+		{
+			if (id == (*it).key)
+				return true;
+		}
+	}
+
+	return false;
+}
+
+const bool SuStoUI::GetKeyUp(int id, SuStoUIMain * ui_main)
+{
+	std::vector<Key> keys_up = ui_main->event_system->GetKeysUp();
+
+	if (!keys_up.empty())
+	{
+		for (std::vector<Key>::iterator it = keys_up.begin(); it != keys_up.end(); it++)
+		{
+			if (id == (*it).key)
+				return true;
+		}
+	}
+
+	return false;
+}
+
+const bool SuStoUI::GetKeyDown(const char * key, SuStoUIMain * ui_main)
+{
+	return GetKeyDown(CharToKey(key), ui_main);
+}
+
+const bool SuStoUI::GetKeyRepeat(const char * key, SuStoUIMain * ui_main)
+{
+	return GetKeyRepeat(CharToKey(key), ui_main);
+}
+
+const bool SuStoUI::GetKeyUp(const char * key, SuStoUIMain * ui_main)
+{
+	return GetKeyUp(CharToKey(key), ui_main);
+}

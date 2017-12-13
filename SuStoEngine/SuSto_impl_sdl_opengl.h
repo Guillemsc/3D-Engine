@@ -9,6 +9,8 @@ class UIEvent;
 struct SuStoVec2;
 struct SuStoRect;
 
+typedef unsigned int uint;
+
 #define SCREEN_SIZE 1
 
 namespace SuStoUI
@@ -21,8 +23,16 @@ namespace SuStoUI
 
 	void EventPreUpdate(SuStoUIMain * ui_main);
 	void EventCleanUp(SuStoUIMain * ui_main);
+
 	int CharToKey(const char* key);
 	const char* KeyToChar(int key);
+
+	const bool GetKeyDown(int id, SuStoUIMain * ui_main);
+	const bool GetKeyRepeat(int id, SuStoUIMain * ui_main);
+	const bool GetKeyUp(int id, SuStoUIMain * ui_main);
+	const bool GetKeyDown(const char * key, SuStoUIMain * ui_main);
+	const bool GetKeyRepeat(const char * key, SuStoUIMain * ui_main);
+	const bool GetKeyUp(const char * key, SuStoUIMain * ui_main);
 }
 
 #endif // !SUSTO_IMPL_STD_OPENGL

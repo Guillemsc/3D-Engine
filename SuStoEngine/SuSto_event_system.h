@@ -60,19 +60,31 @@ public:
 	void AddKeyRepeat(const Key& k);
 	void AddKeyUp(const Key& k);
 
+	int GetMouseX() const;
+	int GetMouseY() const;
+	int GetMouseWheel() const;
+	int GetMouseXMotion() const;
+	int GetMouseYMotion() const;
+
+	void SetMouseX(const int& x);
+	void SetMouseY(const int& y);
+	void SetMouseWheel(const int& wheel);
+	void SetMouseXMotion(const int& x_motion);
+	void SetMouseYMotion(const int& y_motion);
+
+
 private:
+	int				   mouse_x = 0;
+	int				   mouse_y = 0;
+	int				   mouse_wheel = 0;
+	int				   mouse_x_motion = 0;
+	int				   mouse_y_motion = 0;
 
 public:
 	Key*			   keyboard = nullptr;
 	UIKeyEvent		   mouse_buttons[MAX_MOUSE];
 
 	std::string		   text_input;
-
-	int				   mouse_x = 0;
-	int				   mouse_y = 0;
-	int				   mouse_wheel = 0;
-	int				   mouse_x_motion = 0;
-	int				   mouse_y_motion = 0;
 
 	bool			   right_clicking = false;
 

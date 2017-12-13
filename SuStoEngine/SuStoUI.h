@@ -6,6 +6,7 @@
 #include <string>
 
 #include "SuSto_event_system.h"
+#include "SuSto_impl_sdl_opengl.h"
 
 #include "GeometryMath.h"
 
