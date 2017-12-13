@@ -16,7 +16,21 @@ public:
 
 	void OnEvent(UIEvent ev);
 
+	void SetCheckFalseImage(uint id, SuStoVec2 pos, SuStoVec2 size);
+	void SetCheckTrueImage(uint id, SuStoVec2 pos, SuStoVec2 size);
+
+	void SetToFalse();
+	void SetToTrue();
+
+	const bool GetState() const;
+
 private:
+	PrintableElement* check_false = nullptr;
+	PrintableElement* check_true = nullptr;
+
+	PrintableElement* current_state = nullptr;
+
+	bool checkbox_state = false;
 
 public:
 
