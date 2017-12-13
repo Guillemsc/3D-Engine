@@ -4,7 +4,7 @@ UICanvas::UICanvas(SuStoUIMain * main) : UIElement(main, ElementType::CANVAS, th
 {
 	LOG_OUTPUT("Canvas Created");
 
-	image = new PrintableElement(0, SuStoVec2(0, 0), SuStoVec2(200, 200), this);
+	image = new PrintableElement(0, SuStoVec2(0, 0), SuStoVec2(0, 0), this);
 	main->DrawPrintable(image);
 }
 
@@ -22,7 +22,7 @@ void UICanvas::Start()
 
 void UICanvas::Update()
 {
-
+	image->SetSize(SuStoVec2(GetUIMain()->GetViewport().x, GetUIMain()->GetViewport().y));
 }
 
 void UICanvas::CleanUp()
@@ -76,10 +76,15 @@ float4x4 UICanvas::GetTransform()
 
 float4x4 UICanvas::GetOrthoTransform()
 {
-	float4x4 ortho_trans = transform;
+	float4x4 ortho_trans = image->GetTransform();
 
 	ortho_trans[3][0] = GetUIMain()->GetViewport().x * 0.5f;
 	ortho_trans[3][1] = GetUIMain()->GetViewport().y * 0.5f;
 
 	return ortho_trans;
+}
+
+AABB UICanvas::GetBbox()
+{
+	return image->GetBbox();
 }

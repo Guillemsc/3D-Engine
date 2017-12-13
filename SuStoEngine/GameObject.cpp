@@ -513,6 +513,16 @@ void GameObject::TestRay(const LineSegment& segment, bool& hit, float& dist)
 	}
 }
 
+float4x4 GameObject::GetParentTransform()
+{
+	float4x4 trans = float4x4::identity;
+
+	if (parent != nullptr)
+		trans = parent->transform->GetGlobalTransform();
+	
+	return trans;
+}
+
 AABB GameObject::GetBbox() const
 {
 	return local_bbox;

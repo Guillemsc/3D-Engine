@@ -124,6 +124,8 @@ struct SuStoPlane
 	uint* GetIndices();
 	float* GetUvs();
 
+	AABB GetBbox();
+
 	void CleanUp();
 
 private:
@@ -138,6 +140,8 @@ private:
 	uint   id_uvs = 0;
 	uint   num_uvs = 0;
 	float* uvs = nullptr;
+
+	AABB   bbox;
 };
 
 class PrintableElement
@@ -159,6 +163,7 @@ public:
 	void SetPos(SuStoVec2 pos);
 	SuStoVec2 GetPos();
 
+	void SetSize(SuStoVec2 size);
 	SuStoVec2 GetSize();
 
 	float4x4 GetTransform();
@@ -166,6 +171,8 @@ public:
 
 	UICanvasRenderMode GetRenderMode();
 	bool GetShowOnCamera();
+
+	AABB GetBbox();
 
 	void CleanUp();
 
@@ -209,7 +216,7 @@ public:
 
 	void PushEvent(UIEvent ev);
 
-	UICanvas* CreateCanvas(SuStoVec2 size);
+	UICanvas* CreateCanvas();
 	UIElement * CreateElement(ElementType type, UICanvas* canvas);
 	void DeleteElement(UIElement* del);
 	void DeleteCanvas(UICanvas* cv);

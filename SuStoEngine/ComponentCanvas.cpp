@@ -5,13 +5,15 @@
 #include "UICanvas.h"
 #include "UIImage.h"
 #include "imgui.h"
+#include "DebugDraw.h"
+#include "Color.h"
 
 ComponentCanvas::ComponentCanvas(GameObject * owner, std::string unique_id) : Component(ComponentType::UI_CANVAS, owner, unique_id)
 {
 	LOG_OUTPUT("Component UICanvas Created");
 	SetName("UICanvas");
 
-	canvas = App->gameobj->GetUIMain()->CreateCanvas(SuStoVec2(100, 100));
+	canvas = App->gameobj->GetUIMain()->CreateCanvas();
 }
 
 ComponentCanvas::~ComponentCanvas()
@@ -25,6 +27,8 @@ void ComponentCanvas::Start()
 void ComponentCanvas::Update()
 {
 	canvas->SetTransform(GetOwner()->transform->GetGlobalTransform().Transposed());
+
+	//DebugDraw(canvas->GetBbox(), Red, true, 4.0f, canvas->GetTransform());
 }
 
 void ComponentCanvas::CleanUp()

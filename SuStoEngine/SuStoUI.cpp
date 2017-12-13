@@ -249,6 +249,9 @@ SuStoPlane::SuStoPlane(SuStoVec2 size)
 	{
 		memcpy(uvs + i * 3, &uv[i].x, sizeof(float) * 3);
 	}
+
+	bbox.SetNegativeInfinity();
+	bbox.Enclose((vec*)vertices, num_vertices);
 }
 
 uint SuStoPlane::GetVerticesId()
@@ -311,6 +314,11 @@ float * SuStoPlane::GetUvs()
 	return uvs;
 }
 
+AABB SuStoPlane::GetBbox()
+{
+	return bbox;
+}
+
 void SuStoPlane::CleanUp()
 {
 	// Vertices
@@ -351,6 +359,11 @@ void SuStoUIMain::PreUpdate()
 
 void SuStoUIMain::Update()
 {
+	for (std::vector<UICanvas*>::iterator it = canvas.begin(); it != canvas.end(); ++it)
+	{
+		(*it)->Update();
+	}
+
 	for (std::vector<UIElement*>::iterator it = elements.begin(); it != elements.end(); ++it)
 	{
 		(*it)->PreUpdate();
@@ -371,7 +384,7 @@ void SuStoUIMain::PushEvent(UIEvent ev)
 {
 }
 
-UICanvas * SuStoUIMain::CreateCanvas(SuStoVec2 size)
+UICanvas * SuStoUIMain::CreateCanvas()
 {
 	UICanvas* cv = nullptr;
 	cv = new UICanvas(this);
@@ -563,7 +576,7 @@ PrintableElement::PrintableElement(uint _texture_id, SuStoVec2 _pos, SuStoVec2 _
 	texture_size = _texture_size;
 	local_pos = _pos;
 
-	plane = SuStoPlane(SuStoVec2(_texture_size));
+	plane = SuStoPlane(SuStoVec2(1, 1));
 
 	SetPos(local_pos);
 }
@@ -613,6 +626,11 @@ SuStoVec2 PrintableElement::GetPos()
 	return local_pos;
 }
 
+void PrintableElement::SetSize(SuStoVec2 size)
+{
+	texture_size = size;
+}
+
 SuStoVec2 PrintableElement::GetSize()
 {
 	return texture_size;
@@ -634,6 +652,9 @@ float4x4 PrintableElement::GetTransform()
 	o_trans[3][0] += local_pos.x;
 	o_trans[3][1] += local_pos.y;
 
+	o_trans[0][0] += texture_size.x;
+	o_trans[1][1] += texture_size.y;
+
 	transform = o_trans;
 
 	return transform;
@@ -654,6 +675,9 @@ float4x4 PrintableElement::GetOrtoTransform()
 
 	o_trans[3][0] += local_pos.x;
 	o_trans[3][1] += local_pos.y;
+
+	o_trans[0][0] += texture_size.x;
+	o_trans[1][1] += texture_size.y;
 
 	return o_trans;
 }
@@ -688,6 +712,11 @@ bool PrintableElement::GetShowOnCamera()
 	}
 
 	return ret;
+}
+
+AABB PrintableElement::GetBbox()
+{
+	return plane.GetBbox();
 }
 
 void PrintableElement::CleanUp()

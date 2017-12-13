@@ -55,6 +55,7 @@ public:
 	void RecursiveCalcBBox();
 	void RecursiveTestRay(const LineSegment& segment, GameObject*& closest, float& dist);
 	void TestRay(const LineSegment& segment, bool& hit, float& dist);
+	float4x4 GetParentTransform();
 
 	AABB GetBbox() const;
 

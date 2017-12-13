@@ -35,6 +35,10 @@ public:
 	float4x4 GetTransform();
 	float4x4 GetOrthoTransform();
 
+	AABB GetBbox();
+
+	PrintableElement* GetPlane();
+
 private:
 	PrintableElement* image = nullptr;
 	
