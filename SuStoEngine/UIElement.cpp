@@ -92,7 +92,7 @@ SuStoVec2 UIElement::GetOrthoAnchorPos()
 	float anchor_pos_x = GetUIMain()->GetViewport().x * GetAnchor().x;
 	float anchor_pos_y = GetUIMain()->GetViewport().y * GetAnchor().y;
 
-	return SuStoVec2(anchor_pos_x, -anchor_pos_y);
+	return SuStoVec2(anchor_pos_x, anchor_pos_y);
 }
 
 float4x4 UIElement::GetAnchorPos()
@@ -103,7 +103,7 @@ float4x4 UIElement::GetAnchorPos()
 	canvas_trans[1][3] -= GetUIMain()->GetViewport().y / 2;
 
 	canvas_trans[0][3] += GetOrthoAnchorPos().x;
-	canvas_trans[1][3] -= GetOrthoAnchorPos().y;
+	canvas_trans[1][3] += GetOrthoAnchorPos().y;
 
 	return canvas_trans;
 }
