@@ -35,13 +35,14 @@ public:
 	void SetLocalPos(const SuStoVec2& pos);
 	SuStoVec2 GetLocalPos() const;
 
+	void SetLocalScale(const SuStoVec2& scale);
+	SuStoVec2 GetLocalScale();
+
 	void SetAnchor(const SuStoVec2& anchor);
 	SuStoVec2 GetAnchor();
 
 	SuStoVec2 GetOrthoAnchorPos();
 	float4x4 GetAnchorPos();
-
-	float4x4 GetCanvasCenter();
 
 	UICanvas* GetCanvas();
 
@@ -52,6 +53,8 @@ private:
 
 	SuStoVec2    size;
 	SuStoVec2    local_pos;
+	Quat		 local_rot;
+	SuStoVec2    local_scale;
 	float4x4     transform = float4x4::identity;
 
 	SuStoVec2    anchor = SuStoVec2(0.5f, 0.5f);

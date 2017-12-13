@@ -13,6 +13,8 @@ ComponentCanvas::ComponentCanvas(GameObject * owner, std::string unique_id) : Co
 	LOG_OUTPUT("Component UICanvas Created");
 	SetName("UICanvas");
 
+	owner->SetName("Canvas");
+
 	canvas = App->gameobj->GetUIMain()->CreateCanvas();
 }
 
@@ -33,6 +35,7 @@ void ComponentCanvas::Update()
 
 void ComponentCanvas::CleanUp()
 {
+	App->gameobj->GetUIMain()->DeleteCanvas(canvas);
 }
 
 void ComponentCanvas::InspectorDraw(std::vector<Component*> components)
@@ -60,6 +63,8 @@ void ComponentCanvas::InspectorDraw(std::vector<Component*> components)
 			canvas->SetShowOnCamera(show);
 		}
 	}
+	else
+		canvas->SetShowOnCamera(false);
 
 	ImGui::Separator();
 

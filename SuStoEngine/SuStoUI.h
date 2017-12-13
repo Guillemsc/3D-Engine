@@ -69,7 +69,6 @@ struct SuStoVec3
 	SuStoVec3(const SuStoVec3& copy);
 	bool operator == (const SuStoVec3& comp);
 
-	SuStoVec3 Zero();
 	float* ptr();
 
 	float x, y, z = 0;

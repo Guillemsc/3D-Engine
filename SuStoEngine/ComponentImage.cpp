@@ -1,15 +1,20 @@
 #include "ComponentImage.h"
 #include "App.h"
+#include "Globals.h"
 #include "ModuleGameObject.h"
 #include "SuStoUI.h"
 #include "UICanvas.h"
 #include "UIImage.h"
 #include "imgui.h"
+#include "DebugDraw.h"
+#include "ModuleRenderer3D.h"
 
 ComponentImage::ComponentImage(GameObject * owner, std::string unique_id) : Component(ComponentType::UI_IMAGE, owner, unique_id)
 {
 	LOG_OUTPUT("Component UIImage Created");
 	SetName("UIImage");
+
+	owner->SetName("Image");
 
 	TryBindCanvas();
 }
@@ -20,7 +25,7 @@ ComponentImage::~ComponentImage()
 
 void ComponentImage::Start()
 {
-
+	
 }
 
 void ComponentImage::Update()
@@ -29,28 +34,44 @@ void ComponentImage::Update()
 	{
 		image->SetTransform(GetOwner()->transform->GetGlobalTransform());
 
-		//float4x4 parent_pos = GetOwner()->GetParentTransform();
-
-		//float4x4 new_pos = image->GetAnchorPos();
-		//new_pos[3][0] += image->GetLocalPos().x;
-		//new_pos[3][1] += image->GetLocalPos().y;
-
-		//float4x4 new_local = new_pos * parent_pos.Inverted();
-
-		//GetOwner()->transform->SetLocalTransform(new_local);
+		GetOwner()->transform->SetGlobalTransform(image->GetTransform());
 	}
 }
 
 void ComponentImage::CleanUp()
 {
+	App->gameobj->GetUIMain()->DeleteElement(image);
 }
 
 void ComponentImage::InspectorDraw(std::vector<Component*> components)
 {
-	if (image == nullptr)
-		ImGui::Text("No Canvas Found");
-	else
+	if (image != nullptr)
+	{
 		ImGui::Text("Canvas Found");
+
+		float2 anchor = float2(image->GetAnchor().x, image->GetAnchor().y);
+		if (ImGui::DragFloat2("Anchor", (float*)&anchor, 0.01))
+		{
+			image->SetAnchor(SuStoVec2(anchor.x, anchor.y));
+		}
+
+		float2 pos = float2(image->GetLocalPos().x, image->GetLocalPos().y);
+		if (ImGui::DragFloat2("Pos", (float*)&pos, 0.05))
+		{
+			image->SetLocalPos(SuStoVec2(pos.x, pos.y));
+		}
+
+		float2 scale = float2(image->GetLocalScale().x, image->GetLocalScale().y);
+		if (ImGui::DragFloat2("Scale", (float*)&scale, 0.05))
+		{
+			image->SetLocalScale(SuStoVec2(scale.x, scale.y));
+		}
+	}
+	else
+		ImGui::Text("No Canvas Found");
+
+	float4x4 anchor_trans = image->GetAnchorPos();
+	DebugDraw(float3(anchor_trans[0][3], anchor_trans[1][3], anchor_trans[2][3]), 100);
 	
 }
 
@@ -59,8 +80,6 @@ void ComponentImage::SetImage(uint texture_id, float2 texture_size)
 	if (image != nullptr)
 	{
 		image->SetImage(texture_id, SuStoVec2(texture_size.x, texture_size.y));
-
-		//image->SetAnchor(SuStoVec2(0.0f, 0.0f));
 	}
 }
 

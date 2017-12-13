@@ -21,6 +21,7 @@ public:
 	const float4x4 GetLocalTransform() const;
 	const void SetLocalTransform(const float4x4& transform);
 	const float4x4 GetGlobalTransform() const;
+	const void SetGlobalTransform(const float4x4& transform);
 
 	const void SetPosition(const float3& pos);
 	const void Translate(const float3& pos);
