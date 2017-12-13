@@ -2,19 +2,20 @@
 #define SUSTO_EVENT_SYSTEM
 
 #include <vector>
+#include <string>
 
 #define MAX_KEYS 300
 #define MAX_MOUSE 5
 
 class UIElement;
 
-enum UIEventType
-{
-	MOUSE_CLICK,
-	KEYBOARD,
-
-	UIEVENT_NULL
-};
+//enum UIEventType
+//{
+//	MOUSE_CLICK,
+//	KEYBOARD,
+//
+//	UIEVENT_NULL
+//};
 
 enum UIKeyEvent
 {
@@ -26,8 +27,9 @@ enum UIKeyEvent
 
 struct Key
 {
+public:
 	int key = 0;
-	UIKeyEvent key_event = UIKeyEvent::UI_KEY_IDLE;
+	UIKeyEvent state = UIKeyEvent::UI_KEY_IDLE;
 
 	bool operator == (const Key& comp_key)
 	{
@@ -38,7 +40,7 @@ struct Key
 
 	bool operator == (int comp_key_event)
 	{
-		if (key_event == comp_key_event)
+		if (state == comp_key_event)
 			return true;
 		return false;
 	}
@@ -47,39 +49,37 @@ struct Key
 class UIEvent
 {
 public:
-	UIEvent(UIEventType type);
+	UIEvent();
 	~UIEvent();
 
-	struct MouseClick
-	{
-		bool left_button = false;
-		bool right_button = false;
-		bool wheel_button = false;
-	};
+	std::vector<Key> GetKeysDown() const;
+	std::vector<Key> GetKeysRepeat() const;
+	std::vector<Key> GetKeysUp() const;
 
-	struct Keyboard
-	{
-		Key* keyboard = nullptr;
-		UIKeyEvent mouse_buttons[MAX_MOUSE];
-
-		const bool GetKeyDown(int id);
-		const bool GetKeyRepeat(int id);
-		const bool GetKeyUp(int id);
-
-		// Those lists are filled and cleaned every frame
-		std::vector<Key> keys_down;
-		std::vector<Key> keys_repeat;
-		std::vector<Key> keys_up;
-	};
-
-public:
-	UIKeyEvent GetMouseButton(int id) const;
+	void AddKeyDown(const Key& k);
+	void AddKeyRepeat(const Key& k);
+	void AddKeyUp(const Key& k);
 
 private:
-	MouseClick	mouse_click;
-	Keyboard	keyboard;
 
-	UIEventType event_type = UIEventType::UIEVENT_NULL;
+public:
+	Key*			   keyboard = nullptr;
+	UIKeyEvent		   mouse_buttons[MAX_MOUSE];
+
+	std::string		   text_input;
+
+	int				   mouse_x = 0;
+	int				   mouse_y = 0;
+	int				   mouse_wheel = 0;
+	int				   mouse_x_motion = 0;
+	int				   mouse_y_motion = 0;
+
+	bool			   right_clicking = false;
+
+private:
+	std::vector<Key> keys_down;
+	std::vector<Key> keys_repeat;
+	std::vector<Key> keys_up;
 };
 
 class EventSystem
