@@ -104,6 +104,8 @@ struct SuStoColor
 	float r, g, b, a = 0;
 };
 
+
+
 struct SuStoPlane
 {
 	SuStoPlane();
@@ -196,6 +198,11 @@ private:
 	float4x4   transform = float4x4::identity;
 };
 
+enum UIMode
+{
+	UI_EDIT,
+	UI_PLAY,
+};
 
 enum ElementType
 {
@@ -245,6 +252,9 @@ public:
 	void DestroyPrintable(PrintableElement* element);
 	std::vector<PrintableElement*> GetDrawList();
 
+	void SetUIMode(UIMode mode);
+	UIMode GetUIMode();
+
 private:
 	void DestroyElements();
 	void MousePick();
@@ -260,6 +270,8 @@ private:
 	SuStoVec2	window_viewport;
 	SuStoVec2	viewport;
 	Frustum		frustum;
+
+	UIMode		mode = UIMode::UI_EDIT;
 
 public:
 	UIEvent* event_system = nullptr;

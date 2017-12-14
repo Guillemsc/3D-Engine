@@ -543,6 +543,16 @@ std::vector<PrintableElement*> SuStoUIMain::GetDrawList()
 	return draw;
 }
 
+void SuStoUIMain::SetUIMode(UIMode _mode)
+{
+	mode = _mode;
+}
+
+UIMode SuStoUIMain::GetUIMode()
+{
+	return mode;
+}
+
 void SuStoUIMain::DestroyElements()
 {
 	for (std::list<UIElement*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it)

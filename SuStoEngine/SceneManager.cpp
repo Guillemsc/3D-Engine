@@ -11,6 +11,7 @@
 #include "ModuleCamera3D.h"
 #include "ResourceTexture.h"
 #include "ModuleWindow.h"
+#include "SuStoUI.h"
 #include "App.h"
 
 SceneManager::SceneManager(bool start_enabled) : Module(start_enabled)
@@ -227,6 +228,7 @@ void SceneManager::Edit()
 	if (state != EDIT)
 	{
 		state = EDIT;
+		App->gameobj->GetUIMain()->SetUIMode(UIMode::UI_EDIT);
 		pause = false;
 		step = false;
 
@@ -239,7 +241,7 @@ void SceneManager::Play()
 	if (state != PLAY)
 	{
 		state = PLAY;
-
+		App->gameobj->GetUIMain()->SetUIMode(UIMode::UI_PLAY);
 		SaveTmpScene();
 	}
 }

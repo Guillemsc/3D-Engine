@@ -77,7 +77,7 @@ void SuStoUI::Render(SuStoUIMain * ui_main)
 		{
 			case UICanvasRenderMode::CAMERA_SPACE:
 			{
-				if ((*it)->GetShowOnCamera())
+				if ((*it)->GetShowOnCamera() || ui_main->GetUIMode() == UIMode::UI_PLAY)
 				{
 					glMatrixMode(GL_PROJECTION);
 					glPushMatrix();
@@ -98,11 +98,14 @@ void SuStoUI::Render(SuStoUIMain * ui_main)
 					glPopMatrix();
 				}
 
-				glMatrixMode(GL_MODELVIEW);
-				glPushMatrix();
-				glMultMatrixf((*it)->GetTransform().Transposed().ptr());
+				if (ui_main->GetUIMode() == UIMode::UI_EDIT)
+				{
+					glMatrixMode(GL_MODELVIEW);
+					glPushMatrix();
+					glMultMatrixf((*it)->GetTransform().Transposed().ptr());
 
-				Draw((*it)->GetVertices(), (*it)->GetNumIndices(), (*it)->GetIndices(), (*it)->GetUvs(), (*it)->GetTextureId());
+					Draw((*it)->GetVertices(), (*it)->GetNumIndices(), (*it)->GetIndices(), (*it)->GetUvs(), (*it)->GetTextureId());
+				}
 			}
 			break;
 			case UICanvasRenderMode::WORLD_SPACE:
