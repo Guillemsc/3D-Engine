@@ -69,6 +69,7 @@ bool ModuleGameObject::Start()
 	cm->SetMesh(rm);
 
 	susto_ui = new SuStoUIMain();
+	susto_ui->SetFrustum(App->camera->GetCurrentCamera()->GetFrustum());
 	SuStoUI::Init(App->window->window, susto_ui);
 
 	ResourceTextureLoader loader;

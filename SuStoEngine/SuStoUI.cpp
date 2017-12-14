@@ -497,6 +497,16 @@ SuStoVec2 SuStoUIMain::GetWindowViewport()
 	return window_viewport;
 }
 
+void SuStoUIMain::SetFrustum(const Frustum & frustum_)
+{
+	frustum = frustum_;
+}
+
+Frustum SuStoUIMain::GetFrustum() const
+{
+	return frustum;
+}
+
 std::vector<UIElement*> SuStoUIMain::GetElementList()
 {
 	return elements;
@@ -550,25 +560,24 @@ void SuStoUIMain::MousePick()
 		//The point (1, 1) corresponds to the top-right corner of the near plane
 		//(-1, -1) is bottom-left
 
-		/*float first_normalized_x = (mouse_pos.x - window.left) / (window.right - window.left);
-		float first_normalized_y = (mouse_pos.y - window.top) / (window.bottom - window.top);
+		float first_normalized_x = (mouse_pos.x - window.x) / (window.w - window.x);
+		float first_normalized_y = (mouse_pos.y - window.y) / (window.h - window.y);
 
 		float normalized_x = (first_normalized_x * 2) - 1;
 		float normalized_y = 1 - (first_normalized_y * 2);
 
-		LineSegment picking = App->camera->GetCurrentCamera()->GetFrustum().UnProjectLineSegment(normalized_x, normalized_y);
+		LineSegment picking = GetFrustum().UnProjectLineSegment(normalized_x, normalized_y);
 
 		float distance = 99999999999;
-		GameObject* closest = nullptr;
+		PrintableElement* closest = nullptr;
 
-		vector<GameObject*> gos = App->gameobj->GetDynamicGameObjects();
-		kdtree->GetElementsToTest(picking, 0, App->camera->GetCurrentCamera()->GetFarPlaneDistance(), gos);
+		std::vector<PrintableElement*> elements_pick = GetDrawList();
 
-		for (vector<GameObject*>::iterator it = gos.begin(); it != gos.end(); it++)
+		for (std::vector<PrintableElement*>::iterator it = elements_pick.begin(); it != elements_pick.end(); it++)
 		{
 			bool hit;
 			float dist;
-			(*it)->TestRay(picking, hit, dist);
+			(*it)->TestRay(picking, hit);
 
 			if (hit)
 			{
@@ -579,12 +588,6 @@ void SuStoUIMain::MousePick()
 				}
 			}
 		}
-
-		//if (closest != nullptr)
-		//{
-		//	ClearSelection();
-		//	AddGameObjectToSelected(closest);
-		//}*/
 	}
 }
 
@@ -786,4 +789,18 @@ AABB PrintableElement::GetBbox()
 void PrintableElement::CleanUp()
 {
 	plane.CleanUp();
+}
+
+void PrintableElement::TestRay(const LineSegment& segment, bool& hit)
+{
+	hit = false;
+
+	// Check if intersects with bbox
+	if (GetBbox().IsFinite())
+	{
+		if (segment.Intersects(GetBbox()))
+		{		
+			hit = true;
+		}
+	}
 }
