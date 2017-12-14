@@ -180,6 +180,8 @@ public:
 
 	void CleanUp();
 
+	void TestRay(const LineSegment & segment, bool & hit);
+
 private:
 	uint       texture_id;
 	SuStoVec2  texture_size;
@@ -230,6 +232,9 @@ public:
 	SuStoVec2 GetViewport();
 	SuStoVec2 GetWindowViewport();
 
+	void SetFrustum(const Frustum& frustum_);
+	Frustum GetFrustum() const;
+
 	std::vector<UIElement*> GetElementList();
 	std::vector<UICanvas*> GetCanvasList();
 
@@ -249,8 +254,9 @@ private:
 	std::vector<PrintableElement*> draw;
 
 private:
-	SuStoVec2 window_viewport;
-	SuStoVec2 viewport;
+	SuStoVec2	window_viewport;
+	SuStoVec2	viewport;
+	Frustum		frustum;
 
 public:
 	UIEvent* event_system = nullptr;
