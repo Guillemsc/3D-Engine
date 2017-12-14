@@ -65,7 +65,7 @@ public:
 class UIEventSystem
 {
 public:
-	UIEventSystem();
+	UIEventSystem(SuStoUIMain* ui_main);
 	~UIEventSystem();
 	void CleanUp();
 
@@ -108,17 +108,17 @@ public:
 
 	std::string text_input;
 
-	bool		right_clicking = false;
-
 	std::function<int(const char*)> CharToKey;
 	std::function<const char*(int)> KeyToChar;
 
 private:
-	int		    mouse_x = 0;
-	int		    mouse_y = 0;
-	int		    mouse_wheel = 0;
-	int		    mouse_x_motion = 0;
-	int		    mouse_y_motion = 0;
+	SuStoUIMain* ui_main = nullptr;
+
+	int			 mouse_x = 0;
+	int			 mouse_y = 0;
+	int			 mouse_wheel = 0;
+	int			 mouse_x_motion = 0;
+	int			 mouse_y_motion = 0;
 
 private:
 	std::vector<UIKey> keys_down;

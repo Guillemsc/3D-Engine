@@ -106,8 +106,10 @@ void UIEventSystem::SetMouseYMotion(const int & y_motion)
 	mouse_y_motion = y_motion;
 }
 
-UIEventSystem::UIEventSystem()
+UIEventSystem::UIEventSystem(SuStoUIMain* _ui_main)
 {
+	ui_main = _ui_main;
+
 	keyboard = new UIKey[MAX_KEYS];
 
 	for (int i = 0; i < MAX_KEYS; ++i)
@@ -125,6 +127,7 @@ void UIEventSystem::CleanUp()
 
 void UIEventSystem::SendEvent(UIEvent ev)
 {
+	ui_main->PushEvent(ev);
 }
 
 void UIEventSystem::ResetInput()

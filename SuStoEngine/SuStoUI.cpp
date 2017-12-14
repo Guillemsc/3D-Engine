@@ -334,7 +334,7 @@ void SuStoPlane::CleanUp()
 
 SuStoUIMain::SuStoUIMain()
 {
-	event_system = new UIEventSystem();
+	event_system = new UIEventSystem(this);
 }
 
 SuStoUIMain::~SuStoUIMain()
@@ -391,6 +391,10 @@ UIEventSystem* SuStoUIMain::GetEventSystem()
 
 void SuStoUIMain::PushEvent(UIEvent ev)
 {
+	for (std::vector<UIElement*>::iterator it = elements.begin(); it != elements.end(); ++it)
+	{
+		(*it)->OnEvent(ev);
+	}
 }
 
 UICanvas * SuStoUIMain::CreateCanvas()
