@@ -164,6 +164,8 @@ public:
 	void SetPos(SuStoVec2 pos);
 	SuStoVec2 GetPos();
 
+	SuStoVec2 GetOrthoPos();
+
 	void SetSize(SuStoVec2 size);
 	SuStoVec2 GetSize();
 
@@ -181,6 +183,7 @@ public:
 	void CleanUp();
 
 	void TestRay(const LineSegment & segment, bool & hit);
+	bool CheckPoint(SuStoVec2 pos);
 
 private:
 	uint       texture_id;

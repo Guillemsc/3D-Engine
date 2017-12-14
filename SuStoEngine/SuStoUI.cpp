@@ -423,6 +423,8 @@ UIElement * SuStoUIMain::CreateElement(ElementType type, UICanvas* canvas)
 		break;
 	}
 
+	elements.push_back(ret);
+
 	return ret;
 }
 
@@ -695,6 +697,19 @@ SuStoVec2 PrintableElement::GetPos()
 	return local_pos;
 }
 
+SuStoVec2 PrintableElement::GetOrthoPos()
+{
+	SuStoVec2 ret;
+
+	if (HasOwner())
+	{
+		ret.x = owner->GetOrthoTransform()[0][3] + local_pos.x;
+		ret.y = owner->GetOrthoTransform()[1][3] + local_pos.y;
+	}
+	
+	return ret;
+}
+
 void PrintableElement::SetSize(SuStoVec2 size)
 {
 	texture_size = size;
@@ -813,4 +828,20 @@ void PrintableElement::TestRay(const LineSegment& segment, bool& hit)
 			hit = true;
 		}
 	}
+}
+
+bool PrintableElement::CheckPoint(SuStoVec2 pos)
+{
+	SuStoVec2 ortho_pos = GetOrthoPos();
+	SuStoVec2 half_size = SuStoVec2(texture_size.x / 2, texture_size.y / 2);
+
+	if (pos.x > ortho_pos.x - half_size.x && pos.x < ortho_pos.x + half_size.x)
+	{
+		if (pos.y > ortho_pos.y - half_size.y && pos.y < ortho_pos.y + half_size.y)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }

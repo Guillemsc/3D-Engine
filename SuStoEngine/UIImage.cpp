@@ -21,8 +21,6 @@ void UIImage::SetImage(uint id, SuStoVec2 size)
 
 	image = new PrintableElement(3, SuStoVec2(0, 0), size, this);
 	GetUIMain()->DrawPrintable(image);
-
-	
 }
 
 void UIImage::Awake()
@@ -36,7 +34,10 @@ void UIImage::Start()
 
 void UIImage::Update()
 {
-	
+	if (image->CheckPoint(SuStoVec2(0, 0)))
+	{
+		int i = 0;
+	}
 }
 
 void UIImage::CleanUp()
