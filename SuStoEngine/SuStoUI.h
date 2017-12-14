@@ -147,11 +147,22 @@ private:
 	AABB   bbox;
 };
 
+struct SuStoTexture
+{
+	SuStoTexture();
+	SuStoTexture(uint texture_id, SuStoVec2 texture_size);
+
+	uint	  id = 0;
+	SuStoVec2 size;
+};
+
 class PrintableElement
 {
 public:
 	PrintableElement(uint texture_id, SuStoVec2 pos, SuStoVec2 texture_size, UIElement* owner);
 	PrintableElement(uint texture_id, SuStoVec2 pos, SuStoVec2 texture_size, UICanvas* owner);
+
+	void SetTexture(uint texture_id, SuStoVec2 texture_size);
 
 	uint GetNumVertices();
 	uint GetNumIndices();
@@ -188,14 +199,13 @@ public:
 	bool CheckPoint(SuStoVec2 pos);
 
 private:
-	uint       texture_id;
-	SuStoVec2  texture_size;
-	SuStoPlane plane;
-	SuStoVec2  local_pos;
+	SuStoTexture texture;
+	SuStoPlane   plane;
+	SuStoVec2    local_pos;
 
-	UIElement* owner = nullptr;
-	UICanvas*  owner_c = nullptr;
-	float4x4   transform = float4x4::identity;
+	UIElement*   owner = nullptr;
+	UICanvas*    owner_c = nullptr;
+	float4x4     transform = float4x4::identity;
 };
 
 enum UIMode

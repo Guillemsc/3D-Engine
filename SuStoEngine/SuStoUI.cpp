@@ -640,8 +640,7 @@ PrintableElement::PrintableElement(uint _texture_id, SuStoVec2 _pos, SuStoVec2 _
 {
 	owner = _owner;
 
-	texture_id = _texture_id;
-	texture_size = _texture_size;
+	texture = SuStoTexture(_texture_id, _texture_size);
 	local_pos = _pos;
 
 	plane = SuStoPlane(SuStoVec2(SuStoVec2(1, 1)));
@@ -653,13 +652,18 @@ PrintableElement::PrintableElement(uint _texture_id, SuStoVec2 _pos, SuStoVec2 _
 {
 	owner_c = _owner;
 
-	texture_id = _texture_id;
-	texture_size = _texture_size;
+	texture = SuStoTexture(_texture_id, _texture_size);
 	local_pos = _pos;
 
 	plane = SuStoPlane(SuStoVec2(1, 1));
 
 	SetPos(local_pos);
+}
+
+void PrintableElement::SetTexture(uint _texture_id, SuStoVec2 _texture_size)
+{
+	texture.id = _texture_id;
+	texture.size = _texture_size;
 }
 
 uint PrintableElement::GetNumVertices()
@@ -694,7 +698,7 @@ float * PrintableElement::GetUvs()
 
 uint PrintableElement::GetTextureId()
 {
-	return texture_id;
+	return texture.id;
 }
 
 void PrintableElement::SetPos(SuStoVec2 pos)
@@ -722,12 +726,12 @@ SuStoVec2 PrintableElement::GetOrthoPos()
 
 void PrintableElement::SetSize(SuStoVec2 size)
 {
-	texture_size = size;
+	texture.size = size;
 }
 
 SuStoVec2 PrintableElement::GetSize()
 {
-	return texture_size;
+	return texture.size;
 }
 
 float4x4 PrintableElement::GetTransform()
@@ -746,7 +750,7 @@ float4x4 PrintableElement::GetTransform()
 	o_trans[0][3] += local_pos.x;
 	o_trans[1][3] += local_pos.y;
 
-	o_trans = o_trans * float4x4::Scale(float3(texture_size.x, texture_size.y, 0));
+	o_trans = o_trans * float4x4::Scale(float3(texture.size.x, texture.size.y, 0));
 
 	transform = o_trans;
 
@@ -769,7 +773,7 @@ float4x4 PrintableElement::GetOrtoTransform()
 	o_trans[0][3] += local_pos.x;
 	o_trans[1][3] += local_pos.y;
 
-	o_trans = o_trans * float4x4::Scale(float3(texture_size.x, texture_size.y, 0));
+	o_trans = o_trans * float4x4::Scale(float3(texture.size.x, texture.size.y, 0));
 
 	return o_trans;
 }
@@ -843,7 +847,7 @@ void PrintableElement::TestRay(const LineSegment& segment, bool& hit)
 bool PrintableElement::CheckPoint(SuStoVec2 pos)
 {
 	SuStoVec2 ortho_pos = GetOrthoPos();
-	SuStoVec2 half_size = SuStoVec2(texture_size.x / 2, texture_size.y / 2);
+	SuStoVec2 half_size = SuStoVec2(texture.size.x / 2, texture.size.y / 2);
 
 	if (pos.x > ortho_pos.x - half_size.x && pos.x < ortho_pos.x + half_size.x)
 	{
@@ -854,4 +858,14 @@ bool PrintableElement::CheckPoint(SuStoVec2 pos)
 	}
 
 	return false;
+}
+
+SuStoTexture::SuStoTexture()
+{
+}
+
+SuStoTexture::SuStoTexture(uint _texture_id, SuStoVec2 _texture_size)
+{
+	id = _texture_id;
+	size = _texture_size;
 }
