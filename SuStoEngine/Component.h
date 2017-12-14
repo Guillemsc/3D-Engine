@@ -46,6 +46,7 @@ public:
 	const bool GetEnabled() const;
 	void SetEnabled(const bool& set);
 	void SetName(const char* new_name);
+	const bool IsUI() const;
 
 	virtual void OnGetBoundingBox(AABB &bbox) {};
 	virtual void InspectorDraw(std::vector<Component*> components) {};

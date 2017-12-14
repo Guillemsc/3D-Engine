@@ -48,6 +48,11 @@ void Component::SetName(const char * new_name)
 	name = new_name;
 }
 
+const bool Component::IsUI() const
+{
+	return is_ui;
+}
+
 void Component::ForceUid(std::string uid)
 {
 	unique_id = uid;

@@ -16,6 +16,8 @@ ComponentCanvas::ComponentCanvas(GameObject * owner, std::string unique_id) : Co
 	owner->SetName("Canvas");
 
 	canvas = App->gameobj->GetUIMain()->CreateCanvas();
+
+	GetOwner()->SetIsUI(true);
 }
 
 ComponentCanvas::~ComponentCanvas()

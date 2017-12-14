@@ -545,6 +545,16 @@ UICanvas* GameObject::RecursiveFindCanvasOnParent()
 	return found;
 }
 
+void GameObject::SetIsUI(const bool & set)
+{
+	is_ui = set;
+}
+
+bool GameObject::IsUI() const
+{
+	return is_ui;
+}
+
 void GameObject::OnChangeParent()
 {
 	for (vector<Component*>::iterator it = components.begin(); it != components.end(); ++it)

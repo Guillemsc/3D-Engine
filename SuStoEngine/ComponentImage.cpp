@@ -16,6 +16,7 @@ ComponentImage::ComponentImage(GameObject * owner, std::string unique_id) : Comp
 
 	owner->SetName("Image");
 
+	GetOwner()->SetIsUI(true);
 	TryBindCanvas();
 }
 

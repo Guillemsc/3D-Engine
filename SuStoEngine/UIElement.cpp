@@ -20,7 +20,7 @@ float4x4 UIElement::GetTransform()
 {
 	float4x4 anchor_trans = GetAnchorPos();
 
-	anchor_trans = anchor_trans * float4x4::FromTRS(float3(local_pos.x, local_pos.y, 0), Quat::identity, float3(local_scale.x, local_scale.y, 0));
+	anchor_trans = anchor_trans * float4x4::FromTRS(float3(local_pos.x, local_pos.y, 0), Quat::identity, float3(local_scale.x, -local_scale.y, 0));
 
 	transform = anchor_trans;
 
@@ -37,6 +37,8 @@ float4x4 UIElement::GetOrthoTransform()
 
 	new_trans[0][3] = GetOrthoAnchorPos().x + local_pos.x;
 	new_trans[1][3] = GetOrthoAnchorPos().y - local_pos.y;
+
+	new_trans[1][1] = -new_trans[1][1];
 
 	return new_trans;
 }

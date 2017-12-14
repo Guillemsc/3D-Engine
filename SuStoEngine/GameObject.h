@@ -60,6 +60,8 @@ public:
 	AABB GetBbox() const;
 
 	UICanvas* RecursiveFindCanvasOnParent();
+	void SetIsUI(const bool & set);
+	bool IsUI() const;
 
 	void OnChangeParent();
 
@@ -90,6 +92,8 @@ private:
 
 	GameObject* parent = nullptr;
 	std::vector<GameObject*> childs;
+
+	bool		is_ui = false;
 
 	ModuleGameObject* go_module = nullptr;
 
