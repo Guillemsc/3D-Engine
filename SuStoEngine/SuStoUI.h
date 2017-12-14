@@ -265,10 +265,10 @@ public:
 
 	void SetUIMode(UIMode mode);
 	UIMode GetUIMode();
+	void MousePick();
 
 private:
 	void DestroyElements();
-	void MousePick();
 
 private:
 	EventSystem* event_system = nullptr;

@@ -118,7 +118,7 @@ bool ModuleGameObject::Update()
 
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && can_pick)
 	{
-		MousePick();
+		susto_ui->MousePick();
 	}
 
 	vector<Camera3D*> cameras = App->camera->GetCameras();
