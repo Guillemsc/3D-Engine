@@ -585,14 +585,14 @@ void SuStoUIMain::MousePick()
 		PrintableElement* closest = nullptr;
 
 		std::vector<PrintableElement*> elements_pick = GetDrawList();
-
+		/* 
 		for (std::vector<PrintableElement*>::iterator it = elements_pick.begin(); it != elements_pick.end(); it++)
 		{
 			if ((*it)->CheckPoint(mouse_pos))
 			{
 				closest = (*it);
 			}
-		}
+		}*/
 	}
 }
 
