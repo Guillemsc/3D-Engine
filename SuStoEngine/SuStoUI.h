@@ -227,12 +227,16 @@ public:
 	SuStoVec2 GetViewport();
 	SuStoVec2 GetWindowViewport();
 
+	std::vector<UIElement*> GetElementList();
+	std::vector<UICanvas*> GetCanvasList();
+
 	void DrawPrintable(PrintableElement* element);
 	void DestroyPrintable(PrintableElement* element);
 	std::vector<PrintableElement*> GetDrawList();
 
 private:
 	void DestroyElements();
+	void MousePick();
 
 private:
 	std::vector<UIElement*> elements;
@@ -247,7 +251,6 @@ private:
 
 public:
 	UIEvent* event_system = nullptr;
-
 };
 
 namespace SuStoUI

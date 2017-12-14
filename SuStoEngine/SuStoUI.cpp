@@ -354,6 +354,11 @@ void SuStoUIMain::PreUpdate()
 
 void SuStoUIMain::Update()
 {
+	if (SuStoUI::GetMouseButton(1, this) == 1)
+	{
+		MousePick();
+	}
+
 	for (std::vector<UICanvas*>::iterator it = canvas.begin(); it != canvas.end(); ++it)
 	{
 		(*it)->Update();
@@ -492,6 +497,16 @@ SuStoVec2 SuStoUIMain::GetWindowViewport()
 	return window_viewport;
 }
 
+std::vector<UIElement*> SuStoUIMain::GetElementList()
+{
+	return elements;
+}
+
+std::vector<UICanvas*> SuStoUIMain::GetCanvasList()
+{
+	return canvas;
+}
+
 void SuStoUIMain::DrawPrintable(PrintableElement * plane)
 {
 	draw.push_back(plane);
@@ -525,6 +540,54 @@ void SuStoUIMain::DestroyElements()
 	}
 }
 
+void SuStoUIMain::MousePick()
+{
+	SuStoRect window(0, 0, GetViewport().x, GetViewport().y);
+	SuStoVec2 mouse_pos(event_system->GetMouseX(), event_system->GetMouseY());
+
+	if (window.PointInRect(mouse_pos))
+	{
+		//The point (1, 1) corresponds to the top-right corner of the near plane
+		//(-1, -1) is bottom-left
+
+		/*float first_normalized_x = (mouse_pos.x - window.left) / (window.right - window.left);
+		float first_normalized_y = (mouse_pos.y - window.top) / (window.bottom - window.top);
+
+		float normalized_x = (first_normalized_x * 2) - 1;
+		float normalized_y = 1 - (first_normalized_y * 2);
+
+		LineSegment picking = App->camera->GetCurrentCamera()->GetFrustum().UnProjectLineSegment(normalized_x, normalized_y);
+
+		float distance = 99999999999;
+		GameObject* closest = nullptr;
+
+		vector<GameObject*> gos = App->gameobj->GetDynamicGameObjects();
+		kdtree->GetElementsToTest(picking, 0, App->camera->GetCurrentCamera()->GetFarPlaneDistance(), gos);
+
+		for (vector<GameObject*>::iterator it = gos.begin(); it != gos.end(); it++)
+		{
+			bool hit;
+			float dist;
+			(*it)->TestRay(picking, hit, dist);
+
+			if (hit)
+			{
+				if (dist < distance)
+				{
+					distance = dist;
+					closest = (*it);
+				}
+			}
+		}
+
+		//if (closest != nullptr)
+		//{
+		//	ClearSelection();
+		//	AddGameObjectToSelected(closest);
+		//}*/
+	}
+}
+
 std::string SuStoUI::ToUpperCase(std::string str)
 {
 	for (uint i = 0; i < str.size(); i++)
@@ -554,7 +617,7 @@ bool SuStoUI::TextCmp(const char * text1, const char * text2)
 
 	if (strcmp(text1, text2) == 0)
 		ret = true;
-
+	
 	return ret;
 }
 
