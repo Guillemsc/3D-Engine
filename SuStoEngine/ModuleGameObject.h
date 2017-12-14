@@ -85,10 +85,10 @@ private:
 	ImGuizmo::OPERATION current_gizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
 	float3 last_scale = float3::zero;
 
-	bool can_pick = true;
-	bool can_move = true;
+	bool			    can_pick = true;
+	bool			    can_move = true;
 
-	SuStoUIMain*	     susto_ui = nullptr;
+	SuStoUIMain*	    susto_ui = nullptr;
 };
 
 #endif // !_MODULE_GAME_OBJECT_H_

@@ -9,8 +9,13 @@
 
 #include "UICanvas.h"
 
-void SuStoUI::Init(SDL_Window* window, SuStoUIMain* ui_main)
+SuStoUIMain* SuStoUI::Init(SDL_Window* window)
 {
+	SuStoUIMain* ui_main = new SuStoUIMain();
+
+	ui_main->Awake();
+	ui_main->Start();
+
 	SDL_Init(0);
 
 	if (SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
@@ -28,19 +33,23 @@ void SuStoUI::Init(SDL_Window* window, SuStoUIMain* ui_main)
 		LOG_OUTPUT("Error on SDL_Init_GameController");
 	}
 
-	ui_main->event_system = new UIEvent();
+	ui_main->GetEventSystem()->CharToKey = SuStoUI::CharToKey;
+	ui_main->GetEventSystem()->KeyToChar = SuStoUI::KeyToChar;
+
+	return ui_main;
 }
 
 void SuStoUI::NewFrame(SuStoUIMain* ui_main, SDL_Window* window, SuStoVec2 viewport)
 {
+	// Event
+	SuStoUI::EventNewFrame(ui_main);
+
 	// Viewport 
 	int w, h;
 	SDL_GetWindowSize(window, &w, &h);
 	ui_main->SetWindowViewport(SuStoVec2(w, h));
 
 	ui_main->SetViewport(viewport);
-
-	SuStoUI::EventPreUpdate(ui_main);
 
 	ui_main->Update();
 }
@@ -62,8 +71,6 @@ void SuStoUI::Render(SuStoUIMain * ui_main)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glViewport(0, 0, window_viewport.x, window_viewport.y);
-
-	//glMultMatrixf(trans.Transposed().ptr());
 
 	//Draw -------------
 
@@ -154,23 +161,27 @@ void SuStoUI::Draw(float * vertices, uint num_indices, uint * indices, float * u
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void SuStoUI::EventPreUpdate(SuStoUIMain* ui_main)
+void SuStoUI::DeInit(SuStoUIMain * ui_main)
 {
-	UIEvent* event_system = ui_main->event_system;
+	SDL_QuitSubSystem(SDL_INIT_EVENTS);
+
+	RELEASE(ui_main);
+}
+
+void SuStoUI::EventNewFrame(SuStoUIMain* ui_main)
+{
+	UIEventSystem* event_system = ui_main->GetEventSystem();
+	UIKey* keyboard = event_system->keyboard;
+	UIKeyEvent* mouse_buttons = event_system->mouse_buttons;
 
 	SDL_PumpEvents();
-
 	SDL_StartTextInput();
-	event_system->text_input.clear();
 
-	event_system->GetKeysDown().clear();
-	event_system->GetKeysRepeat().clear();
-	event_system->GetKeysUp().clear();
-
-	Key* keyboard = event_system->keyboard;
+	event_system->ResetInput();
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
+	// Keys
 	for (int i = 0; i < MAX_KEYS; ++i)
 	{
 		if (keys[i] == 1)
@@ -200,6 +211,7 @@ void SuStoUI::EventPreUpdate(SuStoUIMain* ui_main)
 		}
 	}
 
+	// Mouse
 	int mouse_x = 0;
 	int mouse_y = 0;
 
@@ -210,8 +222,6 @@ void SuStoUI::EventPreUpdate(SuStoUIMain* ui_main)
 	event_system->SetMouseWheel(0);
 	event_system->SetMouseXMotion(0);
 	event_system->SetMouseYMotion(0);
-
-	UIKeyEvent* mouse_buttons = event_system->mouse_buttons;
 
 	for (int i = 0; i < 5; ++i)
 	{
@@ -255,13 +265,6 @@ void SuStoUI::EventPreUpdate(SuStoUIMain* ui_main)
 	}
 }
 
-void SuStoUI::EventCleanUp(SuStoUIMain * ui_main)
-{
-	delete[] ui_main->event_system->keyboard;
-
-	SDL_QuitSubSystem(SDL_INIT_EVENTS);
-}
-
 int SuStoUI::CharToKey(const char * key)
 {
 	return SDL_GetScancodeFromKey(SDL_GetKeyFromName(key));
@@ -272,70 +275,3 @@ const char * SuStoUI::KeyToChar(int key)
 	return SDL_GetScancodeName((SDL_Scancode)key);
 }
 
-const bool SuStoUI::GetKeyDown(int id, SuStoUIMain * ui_main)
-{
-	std::vector<Key> keys_down = ui_main->event_system->GetKeysDown();
-
-	if (!keys_down.empty())
-	{
-		for (std::vector<Key>::iterator it = keys_down.begin(); it != keys_down.end(); it++)
-		{
-			if (id == (*it).key)
-				return true;
-		}
-	}
-
-	return false;
-}
-
-const bool SuStoUI::GetKeyRepeat(int id, SuStoUIMain * ui_main)
-{
-	std::vector<Key> keys_repeat = ui_main->event_system->GetKeysRepeat();
-
-	if (!keys_repeat.empty())
-	{
-		for (std::vector<Key>::iterator it = keys_repeat.begin(); it != keys_repeat.end(); it++)
-		{
-			if (id == (*it).key)
-				return true;
-		}
-	}
-
-	return false;
-}
-
-const bool SuStoUI::GetKeyUp(int id, SuStoUIMain * ui_main)
-{
-	std::vector<Key> keys_up = ui_main->event_system->GetKeysUp();
-
-	if (!keys_up.empty())
-	{
-		for (std::vector<Key>::iterator it = keys_up.begin(); it != keys_up.end(); it++)
-		{
-			if (id == (*it).key)
-				return true;
-		}
-	}
-
-	return false;
-}
-
-const bool SuStoUI::GetKeyDown(const char * key, SuStoUIMain * ui_main)
-{
-	return GetKeyDown(CharToKey(key), ui_main);
-}
-
-const bool SuStoUI::GetKeyRepeat(const char * key, SuStoUIMain * ui_main)
-{
-	return GetKeyRepeat(CharToKey(key), ui_main);
-}
-
-const bool SuStoUI::GetKeyUp(const char * key, SuStoUIMain * ui_main)
-{
-	return GetKeyUp(CharToKey(key), ui_main);
-}
-
-const UIKeyEvent SuStoUI::GetMouseButton(int id, SuStoUIMain * ui_main)
-{
-	return ui_main->event_system->mouse_buttons[id];
-}

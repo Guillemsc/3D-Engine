@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <functional>
 
 #define MAX_KEYS 300
 #define MAX_MOUSE 5
@@ -25,7 +26,7 @@ enum UIKeyEvent
 	UI_KEY_REPEAT
 };
 
-enum MouseClick
+enum UIMouseClick
 {
 	UI_NULL_CLICK,		// 0
 	UI_LEFT_CLICK,		// 1
@@ -33,22 +34,22 @@ enum MouseClick
 	UI_RIGHT_CLICK		// 3
 };
 
-struct Key
+struct UIKey
 {
 public:
 	int key = 0;
 	UIKeyEvent state = UIKeyEvent::UI_KEY_IDLE;
 
-	bool operator == (const Key& comp_key)
+	bool operator == (const UIKey& comp_key)
 	{
 		if (key == comp_key.key)
 			return true;
 		return false;
 	}
 
-	bool operator == (int comp_key_event)
+	bool operator == (UIKeyEvent ev)
 	{
-		if (state == comp_key_event)
+		if (state == ev)
 			return true;
 		return false;
 	}
@@ -59,14 +60,22 @@ class UIEvent
 public:
 	UIEvent();
 	~UIEvent();
+};
 
-	std::vector<Key> GetKeysDown() const;
-	std::vector<Key> GetKeysRepeat() const;
-	std::vector<Key> GetKeysUp() const;
+class UIEventSystem
+{
+public:
+	UIEventSystem();
+	~UIEventSystem();
+	void CleanUp();
 
-	void AddKeyDown(const Key& k);
-	void AddKeyRepeat(const Key& k);
-	void AddKeyUp(const Key& k);
+	const bool GetKeyDown(const char* key);
+	const bool GetKeyRepeat(const char* key);
+	const bool GetKeyUp(const char* key);
+
+	void AddKeyDown(const UIKey& k);
+	void AddKeyRepeat(const UIKey& k);
+	void AddKeyUp(const UIKey& k);
 
 	int GetMouseX() const;
 	int GetMouseY() const;
@@ -80,35 +89,41 @@ public:
 	void SetMouseXMotion(const int& x_motion);
 	void SetMouseYMotion(const int& y_motion);
 
-
-private:
-	int				   mouse_x = 0;
-	int				   mouse_y = 0;
-	int				   mouse_wheel = 0;
-	int				   mouse_x_motion = 0;
-	int				   mouse_y_motion = 0;
-
-public:
-	Key*			   keyboard = nullptr;
-	UIKeyEvent		   mouse_buttons[MAX_MOUSE];
-
-	std::string		   text_input;
-
-	bool			   right_clicking = false;
-
-private:
-	std::vector<Key> keys_down;
-	std::vector<Key> keys_repeat;
-	std::vector<Key> keys_up;
-};
-
-class EventSystem
-{
-public:
-	EventSystem();
-	~EventSystem();
-
 	void SendEvent(UIEvent ev);
+
+	void ResetInput();
+
+private:
+	const bool GetKeyDown(int id);
+	const bool GetKeyRepeat(int id);
+	const bool GetKeyUp(int id);
+
+	std::vector<UIKey> GetKeysDown() const;
+	std::vector<UIKey> GetKeysRepeat() const;
+	std::vector<UIKey> GetKeysUp() const;
+
+public:
+	UIKey*		keyboard = nullptr;
+	UIKeyEvent	mouse_buttons[MAX_MOUSE];
+
+	std::string text_input;
+
+	bool		right_clicking = false;
+
+	std::function<int(const char*)> CharToKey;
+	std::function<const char*(int)> KeyToChar;
+
+private:
+	int		    mouse_x = 0;
+	int		    mouse_y = 0;
+	int		    mouse_wheel = 0;
+	int		    mouse_x_motion = 0;
+	int		    mouse_y_motion = 0;
+
+private:
+	std::vector<UIKey> keys_down;
+	std::vector<UIKey> keys_repeat;
+	std::vector<UIKey> keys_up;
 };
 
 #endif

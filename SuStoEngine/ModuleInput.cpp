@@ -76,10 +76,9 @@ bool ModuleInput::PreUpdate()
 	bool ret = true;
 
 	SDL_PumpEvents();
-
 	SDL_StartTextInput();
-	text_input.clear();
 
+	text_input.clear();
 	keys_down.clear();
 	keys_repeat.clear();
 	keys_up.clear();

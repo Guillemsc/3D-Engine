@@ -241,6 +241,7 @@ public:
 	void PostUpdate();
 	void CleanUp();
 
+	UIEventSystem* GetEventSystem();
 	void PushEvent(UIEvent ev);
 
 	UICanvas* CreateCanvas();
@@ -271,7 +272,7 @@ private:
 	void DestroyElements();
 
 private:
-	EventSystem* event_system = nullptr;
+	UIEventSystem* event_system = nullptr;
 
 	std::vector<UIElement*> elements;
 	std::vector<UICanvas*> canvas;

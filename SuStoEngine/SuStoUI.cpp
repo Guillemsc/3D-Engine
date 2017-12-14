@@ -334,6 +334,7 @@ void SuStoPlane::CleanUp()
 
 SuStoUIMain::SuStoUIMain()
 {
+	event_system = new UIEventSystem();
 }
 
 SuStoUIMain::~SuStoUIMain()
@@ -342,7 +343,7 @@ SuStoUIMain::~SuStoUIMain()
 
 void SuStoUIMain::Awake()
 {
-	event_system = new EventSystem();
+	
 }
 
 void SuStoUIMain::Start()
@@ -355,7 +356,7 @@ void SuStoUIMain::PreUpdate()
 
 void SuStoUIMain::Update()
 {
-	if (SuStoUI::GetMouseButton(1, this) == 1)
+	if (event_system->GetKeyDown("a"))
 	{
 		MousePick();
 	}
@@ -379,6 +380,13 @@ void SuStoUIMain::PostUpdate()
 
 void SuStoUIMain::CleanUp()
 {
+	event_system->CleanUp();
+	delete event_system;
+}
+
+UIEventSystem* SuStoUIMain::GetEventSystem()
+{
+	return event_system;
 }
 
 void SuStoUIMain::PushEvent(UIEvent ev)
