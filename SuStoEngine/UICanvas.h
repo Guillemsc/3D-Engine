@@ -39,6 +39,10 @@ public:
 
 	SuStoUIMain* GetUIMain();
 
+	void SetWorldSize(const SuStoVec2& size);
+	void SetCameraSize(const SuStoVec2& size);
+	SuStoVec2 GetCurrentSize();
+
 private:
 	PrintableElement* image = nullptr;
 	
@@ -49,6 +53,9 @@ private:
 	float4x4 transform = float4x4::identity;;
 
 	SuStoUIMain* ui_main = nullptr;
+
+	SuStoVec2 world_size;
+	SuStoVec2 camera_size;
 
 public:
 

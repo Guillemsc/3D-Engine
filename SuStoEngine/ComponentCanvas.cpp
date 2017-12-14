@@ -64,7 +64,15 @@ void ComponentCanvas::InspectorDraw(std::vector<Component*> components)
 		}
 	}
 	else
+	{
 		canvas->SetShowOnCamera(false);
+
+		float2 size = float2(canvas->GetCurrentSize().x, canvas->GetCurrentSize().y);
+		if (ImGui::DragFloat2("Size", (float*)&size, 0.01))
+		{
+			canvas->SetWorldSize(SuStoVec2(size.x, size.y));
+		}
+	}
 
 	ImGui::Separator();
 

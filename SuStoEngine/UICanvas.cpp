@@ -8,6 +8,8 @@ UICanvas::UICanvas(SuStoUIMain * main)
 
 	image = new PrintableElement(0, SuStoVec2(0, 0), SuStoVec2(1, 1), this);
 	//main->DrawPrintable(image);
+
+	SetWorldSize(SuStoVec2(1080, 720));
 }
 
 UICanvas::~UICanvas()
@@ -24,7 +26,9 @@ void UICanvas::Start()
 
 void UICanvas::Update()
 {
-	image->SetSize(SuStoVec2(GetUIMain()->GetViewport().x, GetUIMain()->GetViewport().y));
+	SetCameraSize(SuStoVec2(GetUIMain()->GetViewport().x, GetUIMain()->GetViewport().y));
+
+	image->SetSize(SuStoVec2(GetCurrentSize().x, GetCurrentSize().y));
 }
 
 void UICanvas::CleanUp()
@@ -94,4 +98,32 @@ PrintableElement * UICanvas::GetPlane()
 SuStoUIMain * UICanvas::GetUIMain()
 {
 	return ui_main;
+}
+
+void UICanvas::SetWorldSize(const SuStoVec2 & size)
+{
+	world_size = size;
+}
+
+void UICanvas::SetCameraSize(const SuStoVec2 & size)
+{
+	camera_size = size;
+}
+
+SuStoVec2 UICanvas::GetCurrentSize()
+{
+	SuStoVec2 ret;
+
+	switch (render_mode)
+	{
+	case UICanvasRenderMode::WORLD_SPACE:
+		ret = world_size;
+		break;
+
+	case UICanvasRenderMode::CAMERA_SPACE:
+		ret = camera_size;
+		break;
+	}
+
+	return ret;
 }
