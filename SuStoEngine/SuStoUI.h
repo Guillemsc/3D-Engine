@@ -264,10 +264,10 @@ public:
 
 	void SetUIMode(UIMode mode);
 	UIMode GetUIMode();
+	void MousePick();
 
 private:
 	void DestroyElements();
-	void MousePick();
 
 private:
 	std::vector<UIElement*> elements;

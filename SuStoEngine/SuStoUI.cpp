@@ -572,7 +572,7 @@ void SuStoUIMain::MousePick()
 		//The point (1, 1) corresponds to the top-right corner of the near plane
 		//(-1, -1) is bottom-left
 
-		float first_normalized_x = (mouse_pos.x - window.x) / (window.w - window.x);
+		/*float first_normalized_x = (mouse_pos.x - window.x) / (window.w - window.x);
 		float first_normalized_y = (mouse_pos.y - window.y) / (window.h - window.y);
 
 		float normalized_x = (first_normalized_x * 2) - 1;
@@ -580,24 +580,17 @@ void SuStoUIMain::MousePick()
 
 		LineSegment picking = GetFrustum().UnProjectLineSegment(normalized_x, normalized_y);
 
-		float distance = 99999999999;
+		float distance = 99999999999;*/
+		
 		PrintableElement* closest = nullptr;
 
 		std::vector<PrintableElement*> elements_pick = GetDrawList();
 
 		for (std::vector<PrintableElement*>::iterator it = elements_pick.begin(); it != elements_pick.end(); it++)
 		{
-			bool hit;
-			float dist;
-			(*it)->TestRay(picking, hit);
-
-			if (hit)
+			if ((*it)->CheckPoint(mouse_pos))
 			{
-				if (dist < distance)
-				{
-					distance = dist;
-					closest = (*it);
-				}
+				closest = (*it);
 			}
 		}
 	}
