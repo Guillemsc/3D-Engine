@@ -25,6 +25,14 @@ enum UIKeyEvent
 	UI_KEY_REPEAT
 };
 
+enum MouseClick
+{
+	UI_NULL_CLICK,		// 0
+	UI_LEFT_CLICK,		// 1
+	UI_MID_CLICK,		// 2
+	UI_RIGHT_CLICK		// 3
+};
+
 struct Key
 {
 public:

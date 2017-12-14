@@ -40,6 +40,8 @@ void SuStoUI::NewFrame(SuStoUIMain* ui_main, SDL_Window* window, SuStoVec2 viewp
 
 	ui_main->SetViewport(viewport);
 
+	SuStoUI::EventPreUpdate(ui_main);
+
 	ui_main->Update();
 }
 
@@ -194,6 +196,37 @@ void SuStoUI::EventPreUpdate(SuStoUIMain* ui_main)
 		}
 	}
 
+	int mouse_x = 0;
+	int mouse_y = 0;
+
+	Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
+
+	event_system->SetMouseX(mouse_x / SCREEN_SIZE);
+	event_system->SetMouseY(mouse_y / SCREEN_SIZE);
+	event_system->SetMouseWheel(0);
+	event_system->SetMouseXMotion(0);
+	event_system->SetMouseYMotion(0);
+
+	UIKeyEvent* mouse_buttons = event_system->mouse_buttons;
+
+	for (int i = 0; i < 5; ++i)
+	{
+		if (buttons & SDL_BUTTON(i))
+		{
+			if (mouse_buttons[i] == UIKeyEvent::UI_KEY_IDLE)
+				mouse_buttons[i] = UIKeyEvent::UI_KEY_DOWN;
+			else
+				mouse_buttons[i] = UIKeyEvent::UI_KEY_REPEAT;
+		}
+		else
+		{
+			if (mouse_buttons[i] == UIKeyEvent::UI_KEY_REPEAT || mouse_buttons[i] == UIKeyEvent::UI_KEY_DOWN)
+				mouse_buttons[i] = UIKeyEvent::UI_KEY_UP;
+			else
+				mouse_buttons[i] = UIKeyEvent::UI_KEY_IDLE;
+		}
+	}
+
 	SDL_Event e;
 	while (SDL_PollEvent(&e))
 	{
@@ -296,4 +329,9 @@ const bool SuStoUI::GetKeyRepeat(const char * key, SuStoUIMain * ui_main)
 const bool SuStoUI::GetKeyUp(const char * key, SuStoUIMain * ui_main)
 {
 	return GetKeyUp(CharToKey(key), ui_main);
+}
+
+const UIKeyEvent SuStoUI::GetMouseButton(int id, SuStoUIMain * ui_main)
+{
+	return ui_main->event_system->mouse_buttons[id];
 }

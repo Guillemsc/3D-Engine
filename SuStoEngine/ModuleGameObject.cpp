@@ -232,6 +232,8 @@ bool ModuleGameObject::CleanUp()
 	kdtree->CleanUp();
 	RELEASE(kdtree);
 
+	SuStoUI::EventCleanUp(susto_ui);
+
 	return ret;
 }
 
