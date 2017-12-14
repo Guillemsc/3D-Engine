@@ -342,6 +342,7 @@ SuStoUIMain::~SuStoUIMain()
 
 void SuStoUIMain::Awake()
 {
+	event_system = new EventSystem();
 }
 
 void SuStoUIMain::Start()

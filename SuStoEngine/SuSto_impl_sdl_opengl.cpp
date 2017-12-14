@@ -59,6 +59,7 @@ void SuStoUI::Render(SuStoUIMain * ui_main)
 	//
 
 	glDisable(GL_DEPTH_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glViewport(0, 0, window_viewport.x, window_viewport.y);
 

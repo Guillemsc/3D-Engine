@@ -12,6 +12,7 @@
 
 class UIElement;
 class UICanvas;
+class UIEventSystem;
 class UIEvent;
 enum UICanvasRenderMode;
 
@@ -270,13 +271,14 @@ private:
 	void MousePick();
 
 private:
+	EventSystem* event_system = nullptr;
+
 	std::vector<UIElement*> elements;
 	std::vector<UICanvas*> canvas;
 	std::list<UIElement*>  to_delete;
 
 	std::vector<PrintableElement*> draw;
 
-private:
 	SuStoVec2	window_viewport;
 	SuStoVec2	viewport;
 	Frustum		frustum;
@@ -284,7 +286,6 @@ private:
 	UIMode		mode = UIMode::UI_EDIT;
 
 public:
-	UIEvent* event_system = nullptr;
 };
 
 namespace SuStoUI
