@@ -173,6 +173,9 @@ public:
 	UICanvasRenderMode GetRenderMode();
 	bool GetShowOnCamera();
 
+	UIElement* GetOwner() const;
+	bool HasOwner();
+
 	AABB GetBbox();
 
 	void CleanUp();

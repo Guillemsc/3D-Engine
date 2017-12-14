@@ -778,6 +778,16 @@ bool PrintableElement::GetShowOnCamera()
 	return ret;
 }
 
+UIElement * PrintableElement::GetOwner() const
+{
+	return owner;
+}
+
+bool PrintableElement::HasOwner()
+{
+	return (owner != nullptr) ? true : false;
+}
+
 AABB PrintableElement::GetBbox()
 {
 	return plane.GetBbox();
