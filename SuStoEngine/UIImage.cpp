@@ -1,5 +1,6 @@
 #include "UIImage.h"
 #include "SuStoUI.h"
+#include "Globals.h"
 
 UIImage::UIImage(SuStoUIMain * main, UICanvas* canvas) : UIElement(main, ElementType::IMAGE, canvas)
 {
@@ -47,4 +48,10 @@ void UIImage::CleanUp()
 
 void UIImage::OnEvent(UIEvent ev)
 {
+	switch (ev.GetType())
+	{
+	case UIEventType::MOUSE_OVER:
+		LOG_OUTPUT("OVER!!");
+		break;
+	}
 }

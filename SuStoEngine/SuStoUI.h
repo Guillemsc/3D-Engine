@@ -90,7 +90,6 @@ struct SuStoRect
 	float* ptr();
 
 	float x, y, w, h = 0;
-	SuStoVec2 xy, wh;
 };
 
 struct SuStoColor
@@ -151,6 +150,7 @@ private:
 struct SuStoTexture
 {
 	SuStoTexture();
+	SuStoTexture(const SuStoTexture& copy);
 	SuStoTexture(uint texture_id, SuStoVec2 texture_size);
 
 	uint	  id = 0;
@@ -163,7 +163,7 @@ public:
 	PrintableElement(uint texture_id, SuStoVec2 pos, SuStoVec2 texture_size, UIElement* owner);
 	PrintableElement(uint texture_id, SuStoVec2 pos, SuStoVec2 texture_size, UICanvas* owner);
 
-	void SetTexture(uint texture_id, SuStoVec2 texture_size);
+	void SetTexture(SuStoTexture text);
 
 	uint GetNumVertices();
 	uint GetNumIndices();
@@ -249,9 +249,9 @@ public:
 	void DeleteElement(UIElement* del);
 	void DeleteCanvas(UICanvas* cv);
 
-	void SetViewport(SuStoVec2 view);
+	void SetViewport(SuStoRect view);
 	void SetWindowViewport(SuStoVec2 view);
-	SuStoVec2 GetViewport();
+	SuStoRect GetViewport();
 	SuStoVec2 GetWindowViewport();
 
 	void SetFrustum(const Frustum& frustum_);
@@ -266,10 +266,13 @@ public:
 
 	void SetUIMode(UIMode mode);
 	UIMode GetUIMode();
+
 	void MousePick();
 
 private:
 	void DestroyElements();
+
+	void CheckRenderCameraEvents();
 
 private:
 	UIEventSystem* event_system = nullptr;
@@ -281,7 +284,7 @@ private:
 	std::vector<PrintableElement*> draw;
 
 	SuStoVec2	window_viewport;
-	SuStoVec2	viewport;
+	SuStoRect	viewport;
 	Frustum		frustum;
 
 	UIMode		mode = UIMode::UI_EDIT;

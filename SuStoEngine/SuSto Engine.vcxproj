@@ -97,6 +97,7 @@
     <ClInclude Include="Algorithm\SAT.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="ComponentButton.h" />
     <ClInclude Include="ComponentCamera.h" />
     <ClInclude Include="ComponentCanvas.h" />
     <ClInclude Include="ComponentImage.h" />
@@ -243,6 +244,7 @@
     <ClCompile Include="Algorithm\Random\LCG.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="ComponentButton.cpp" />
     <ClCompile Include="ComponentCamera.cpp" />
     <ClCompile Include="ComponentCanvas.cpp" />
     <ClCompile Include="ComponentImage.cpp" />

@@ -9,6 +9,7 @@
 #include "ComponentCamera.h"
 #include "ComponentCanvas.h"
 #include "ComponentImage.h"
+#include "ComponentButton.h"
 #include "ModuleGameObject.h"
 #include "Inspector.h"
 #include "ModuleRenderer3D.h"
@@ -206,6 +207,11 @@ Component* GameObject::AddComponent(ComponentType type, string unique_id)
 		case UI_IMAGE:
 		{
 			ret = new ComponentImage(this, new_id);
+		}
+		break;
+		case UI_BUTTON:
+		{
+			ret = new ComponentButton(this, new_id);
 		}
 		break;
 	}

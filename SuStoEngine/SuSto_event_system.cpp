@@ -2,13 +2,18 @@
 #include "SuStoUI.h"
 
 
-UIEvent::UIEvent()
+UIEvent::UIEvent(UIEventType _type)
 {
-
+	type = _type;
 }
 
 UIEvent::~UIEvent()
 {
+}
+
+UIEventType UIEvent::GetType()
+{
+	return type;
 }
 
 std::vector<UIKey> UIEventSystem::GetKeysDown() const

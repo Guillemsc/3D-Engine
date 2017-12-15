@@ -5,9 +5,9 @@
 
 enum ButtonState
 {
-	STANDARD,
-	HIGHLIGHT,
-	CLICK
+	IDLE,
+	OVER,
+	PRESSED,
 };
 
 class UIButton : public UIElement
@@ -25,23 +25,18 @@ public:
 
 	void OnEvent(UIEvent ev);
 
-	void SetStandardImage(uint id, SuStoVec2 pos, SuStoVec2 size);
-	void SetHighlightImage(uint id, SuStoVec2 pos, SuStoVec2 size);
-	void SetClickImage(uint id, SuStoVec2 pos, SuStoVec2 size);
+	void SetIdleImage(uint id, SuStoVec2 size);
+	void SetOverImage(uint id, SuStoVec2 size);
+	void SetPressedImage(uint id, SuStoVec2 size);
 
-	void SetToStandard();
-	void SetToHighlight();
-	void SetToClick();
-
-
+	void SetState(ButtonState state);
 private:
-	PrintableElement* standard = nullptr;
-	PrintableElement* highlight = nullptr;
-	PrintableElement* click = nullptr;
+	PrintableElement* image = nullptr;
+	SuStoTexture idle;
+	SuStoTexture over;
+	SuStoTexture pressed;
 
-	PrintableElement* current_state = nullptr;
-
-	ButtonState state = ButtonState::STANDARD;
+	ButtonState state = ButtonState::IDLE;
 
 public:
 

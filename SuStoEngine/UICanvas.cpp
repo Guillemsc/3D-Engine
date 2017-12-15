@@ -26,7 +26,7 @@ void UICanvas::Start()
 
 void UICanvas::Update()
 {
-	SetCameraSize(SuStoVec2(GetUIMain()->GetViewport().x, GetUIMain()->GetViewport().y));
+	SetCameraSize(SuStoVec2(GetUIMain()->GetViewport().w, GetUIMain()->GetViewport().h));
 
 	image->SetSize(SuStoVec2(GetCurrentSize().x, GetCurrentSize().y));
 }

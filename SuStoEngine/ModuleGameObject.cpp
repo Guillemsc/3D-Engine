@@ -77,7 +77,6 @@ bool ModuleGameObject::Start()
 	TextureInfo highlight = loader.LoadTexture("UI\\button_highlight.png", true);
 	TextureInfo click = loader.LoadTexture("UI\\button_click.png", true);
 	
-
 	return ret;
 }
 
@@ -90,10 +89,12 @@ bool ModuleGameObject::PreUpdate()
 
 	UpdateKDTree();
 
-	float width = App->editorUI->GameRect().right - App->editorUI->GameRect().left;
-	float heigth = App->editorUI->GameRect().bottom - App->editorUI->GameRect().top;
+	float x = App->editorUI->GameRect().left;
+	float y = App->editorUI->GameRect().top;
+	float w = App->editorUI->GameRect().right - App->editorUI->GameRect().left;
+	float h = App->editorUI->GameRect().bottom - App->editorUI->GameRect().top;
 
-	SuStoUI::NewFrame(susto_ui, App->window->window, SuStoVec2(width, heigth));
+	SuStoUI::NewFrame(susto_ui, App->window->window, SuStoRect(x, y, w, h));
 
 	return ret;
 }

@@ -1,8 +1,13 @@
 #include "UIButton.h"
 
-UIButton::UIButton(SuStoUIMain * main, UICanvas* canvas) : UIElement(main, ElementType::BUTTON, canvas)
+UIButton::UIButton(SuStoUIMain * ui_main, UICanvas* canvas) : UIElement(ui_main, ElementType::BUTTON, canvas)
 {
 	LOG_OUTPUT("Button Created");
+
+	image = new PrintableElement(0, SuStoVec2(0, 0), SuStoVec2(90, 30), this);
+	ui_main->DrawPrintable(image);
+
+	SetState(ButtonState::IDLE);
 }
 
 UIButton::~UIButton()
@@ -19,6 +24,7 @@ void UIButton::Start()
 
 void UIButton::PreUpdate()
 {
+	
 }
 
 void UIButton::Update()
@@ -27,78 +33,57 @@ void UIButton::Update()
 
 void UIButton::PostUpdate()
 {
+	SetState(ButtonState::IDLE);
 }
 
 void UIButton::CleanUp()
 {
+	GetUIMain()->DestroyPrintable(image);
 }
 
 void UIButton::OnEvent(UIEvent ev)
 {
-}
-
-void UIButton::SetStandardImage(uint id, SuStoVec2 pos, SuStoVec2 size)
-{
-	if (standard != nullptr)
+	switch (ev.GetType())
 	{
-		GetUIMain()->DestroyPrintable(standard);
-		standard = nullptr;
-	}
-
-	standard = new PrintableElement(id, size, pos, this);
-}
-
-void UIButton::SetHighlightImage(uint id, SuStoVec2 pos, SuStoVec2 size)
-{
-	if (highlight != nullptr)
-	{
-		GetUIMain()->DestroyPrintable(highlight);
-		highlight = nullptr;
-	}
-
-	highlight = new PrintableElement(id, size, pos, this);
-}
-
-void UIButton::SetClickImage(uint id, SuStoVec2 pos, SuStoVec2 size)
-{
-	if (click != nullptr)
-	{
-		GetUIMain()->DestroyPrintable(click);
-		click = nullptr;
-	}
-
-	click = new PrintableElement(id, size, pos, this);
-}
-
-void UIButton::SetToStandard()
-{
-	if (current_state != standard)
-	{
-		GetUIMain()->DestroyPrintable(current_state);
-		current_state = standard;
-		state = ButtonState::STANDARD;
-		GetUIMain()->DrawPrintable(current_state);
+	case UIEventType::MOUSE_OVER:
+		SetState(ButtonState::OVER);
+		break;
+	default:
+		break;
 	}
 }
 
-void UIButton::SetToHighlight()
+void UIButton::SetIdleImage(uint id, SuStoVec2 size)
 {
-	if (current_state != highlight) 
-	{
-		GetUIMain()->DestroyPrintable(current_state);
-		current_state = highlight;
-		state = ButtonState::HIGHLIGHT;
-		GetUIMain()->DrawPrintable(current_state);
-	}
+	idle = SuStoTexture(id, size);
+	//SetState(ButtonState::IDLE);
 }
 
-void UIButton::SetToClick()
+void UIButton::SetOverImage(uint id, SuStoVec2 size)
 {
-	if (current_state != click)
+	over = SuStoTexture(id, size);
+	SetState(ButtonState::OVER);
+}
+
+void UIButton::SetPressedImage(uint id, SuStoVec2 size)
+{
+	pressed = SuStoTexture(id, size);
+}
+
+void UIButton::SetState(ButtonState state)
+{
+	switch (state)
 	{
-		GetUIMain()->DestroyPrintable(current_state);
-		current_state = click;
-		state = ButtonState::CLICK;
-		GetUIMain()->DrawPrintable(current_state);
+	case IDLE:
+		image->SetTexture(idle);
+		break;
+	case OVER:
+		image->SetTexture(over);
+		break;
+	case PRESSED:
+		image->SetTexture(pressed);
+		break;
+	default:
+		break;
 	}
 }

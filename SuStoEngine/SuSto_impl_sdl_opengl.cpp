@@ -39,7 +39,7 @@ SuStoUIMain* SuStoUI::Init(SDL_Window* window)
 	return ui_main;
 }
 
-void SuStoUI::NewFrame(SuStoUIMain* ui_main, SDL_Window* window, SuStoVec2 viewport)
+void SuStoUI::NewFrame(SuStoUIMain* ui_main, SDL_Window* window, SuStoRect viewport)
 {
 	// Event
 	SuStoUI::EventNewFrame(ui_main);
@@ -51,13 +51,15 @@ void SuStoUI::NewFrame(SuStoUIMain* ui_main, SDL_Window* window, SuStoVec2 viewp
 
 	ui_main->SetViewport(viewport);
 
+	ui_main->PreUpdate();
 	ui_main->Update();
+	ui_main->PostUpdate();
 }
 
 void SuStoUI::Render(SuStoUIMain * ui_main)
 {
 	SuStoVec2 window_viewport = ui_main->GetWindowViewport();
-	SuStoVec2 viewport = ui_main->GetViewport();
+	SuStoRect viewport = ui_main->GetViewport();
 
 	// 
 	GLint last_texture; glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
@@ -90,7 +92,7 @@ void SuStoUI::Render(SuStoUIMain * ui_main)
 					glMatrixMode(GL_PROJECTION);
 					glPushMatrix();
 					glLoadIdentity();
-					glOrtho(0, viewport.x, viewport.y, 0, -1000.0f, +1000.0f);
+					glOrtho(0, viewport.w, viewport.h, 0, -1000.0f, +1000.0f);
 
 					glMatrixMode(GL_MODELVIEW);
 					glPushMatrix();
@@ -217,8 +219,8 @@ void SuStoUI::EventNewFrame(SuStoUIMain* ui_main)
 
 	Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
 
-	event_system->SetMouseX(mouse_x / SCREEN_SIZE);
-	event_system->SetMouseY(mouse_y / SCREEN_SIZE);
+	event_system->SetMouseX((mouse_x / SCREEN_SIZE) - ui_main->GetViewport().x);
+	event_system->SetMouseY(mouse_y / SCREEN_SIZE - ui_main->GetViewport().y);
 	event_system->SetMouseWheel(0);
 	event_system->SetMouseXMotion(0);
 	event_system->SetMouseYMotion(0);

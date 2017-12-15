@@ -9,14 +9,15 @@
 #define MAX_MOUSE 5
 
 class UIElement;
+class SuStoUIMain;
 
-//enum UIEventType
-//{
-//	MOUSE_CLICK,
-//	KEYBOARD,
-//
-//	UIEVENT_NULL
-//};
+enum UIEventType
+{
+	MOUSE_OVER,
+	KEYBOARD,
+
+	UIEVENT_NULL
+};
 
 enum UIKeyEvent
 {
@@ -58,8 +59,19 @@ public:
 class UIEvent
 {
 public:
-	UIEvent();
+	UIEvent(UIEventType type);
 	~UIEvent();
+
+	struct MouseOver
+	{
+		UIElement* element = nullptr;
+
+	} mouse_over;
+
+	UIEventType GetType();
+
+private:
+	UIEventType type = UIEventType::UIEVENT_NULL;
 };
 
 class UIEventSystem

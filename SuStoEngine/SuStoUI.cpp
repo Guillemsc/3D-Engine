@@ -83,8 +83,6 @@ SuStoRect::SuStoRect()
 	y = 0;
 	w = 0;
 	h = 0;
-	xy = xy.Zero();
-	wh = wh.Zero();
 }
 
 SuStoRect::SuStoRect(float _x, float _y, float _w, float _h)
@@ -93,46 +91,40 @@ SuStoRect::SuStoRect(float _x, float _y, float _w, float _h)
 	y = _y;
 	w = _w;
 	h = _h;
-	xy = SuStoVec2(x, y);
-	wh = SuStoVec2(w, h);
 }
 
-SuStoRect::SuStoRect(const SuStoRect & copy)
+SuStoRect::SuStoRect(const SuStoRect& copy)
 {
 	x = copy.x;
 	y = copy.y;
 	w = copy.w;
 	h = copy.h;
-	xy = copy.xy;
-	wh = copy.wh;
 }
 
-bool SuStoRect::operator==(const SuStoRect & comp)
+bool SuStoRect::operator==(const SuStoRect& comp)
 {
 	if (x == comp.x && y == comp.y && w == comp.w && h == comp.h)
 		return true;
 	return false;
 }
 
-bool SuStoRect::PointInRect(const SuStoVec2 & point)
+bool SuStoRect::PointInRect(const SuStoVec2& point)
 {
 	if (point.x >= x && point.x <= x + w && point.y >= y && point.y <= y + h)
 		return true;
 	return false;
 }
 
-void SuStoRect::SetPos(const SuStoVec2 & pos)
+void SuStoRect::SetPos(const SuStoVec2& pos)
 {
 	x = pos.x;
 	y = pos.y;
-	xy = SuStoVec2(x, y);
 }
 
-void SuStoRect::SetSize(const SuStoVec2 & size)
+void SuStoRect::SetSize(const SuStoVec2& size)
 {
 	w = size.x;
 	h = size.y;
-	wh = SuStoVec2(w, h);
 }
 
 float * SuStoRect::ptr()
@@ -352,6 +344,8 @@ void SuStoUIMain::Start()
 
 void SuStoUIMain::PreUpdate()
 {
+	if(mode == UIMode::UI_PLAY)
+		CheckRenderCameraEvents();
 }
 
 void SuStoUIMain::Update()
@@ -376,6 +370,7 @@ void SuStoUIMain::Update()
 
 void SuStoUIMain::PostUpdate()
 {
+	DestroyElements();
 }
 
 void SuStoUIMain::CleanUp()
@@ -492,7 +487,7 @@ void SuStoUIMain::DeleteCanvas(UICanvas * can)
 	}
 }
 
-void SuStoUIMain::SetViewport(SuStoVec2 view)
+void SuStoUIMain::SetViewport(SuStoRect view)
 {
 	viewport = view;
 }
@@ -502,7 +497,7 @@ void SuStoUIMain::SetWindowViewport(SuStoVec2 view)
 	window_viewport = view;
 }
 
-SuStoVec2 SuStoUIMain::GetViewport()
+SuStoRect SuStoUIMain::GetViewport()
 {
 	return viewport;
 }
@@ -570,8 +565,32 @@ void SuStoUIMain::DestroyElements()
 {
 	for (std::list<UIElement*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it)
 	{
+		(*it)->CleanUp();
 		RELEASE(*it);
 		it = to_delete.erase(it);
+	}
+}
+
+void SuStoUIMain::CheckRenderCameraEvents()
+{
+	SuStoVec2 mouse_pos = SuStoVec2(GetEventSystem()->GetMouseX(), GetEventSystem()->GetMouseY());
+
+	PrintableElement* mouse_over = nullptr;
+
+	for (std::vector<PrintableElement*>::iterator it = draw.begin(); it != draw.end(); ++it)
+	{
+		if ((*it)->CheckPoint(mouse_pos) && (*it)->HasOwner() && (*it)->GetOwner()->GetCanvas()->GetRenderMode() == UICanvasRenderMode::CAMERA_SPACE)
+		{
+			mouse_over = *it;
+		}
+	}
+
+	// Mouse Over
+	if (mouse_over != nullptr)
+	{
+		UIEvent ev_mouse_over(UIEventType::MOUSE_OVER);
+		ev_mouse_over.mouse_over.element = mouse_over->GetOwner();
+		PushEvent(ev_mouse_over);
 	}
 }
 
@@ -666,10 +685,10 @@ PrintableElement::PrintableElement(uint _texture_id, SuStoVec2 _pos, SuStoVec2 _
 	SetPos(local_pos);
 }
 
-void PrintableElement::SetTexture(uint _texture_id, SuStoVec2 _texture_size)
+void PrintableElement::SetTexture(SuStoTexture text)
 {
-	texture.id = _texture_id;
-	texture.size = _texture_size;
+	texture.id = text.id;
+	texture.size = text.size;
 }
 
 uint PrintableElement::GetNumVertices()
@@ -868,6 +887,12 @@ bool PrintableElement::CheckPoint(SuStoVec2 pos)
 
 SuStoTexture::SuStoTexture()
 {
+}
+
+SuStoTexture::SuStoTexture(const SuStoTexture & copy)
+{
+	id = copy.id;
+	size = copy.size;
 }
 
 SuStoTexture::SuStoTexture(uint _texture_id, SuStoVec2 _texture_size)

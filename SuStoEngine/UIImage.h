@@ -21,7 +21,6 @@ private:
 
 private:
 	PrintableElement* image = nullptr;
-
 };
 
 

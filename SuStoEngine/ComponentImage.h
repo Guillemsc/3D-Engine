@@ -27,7 +27,7 @@ private:
 	void OnEnable();
 	void OnDisable();
 
-	virtual void OnChangeParent();
+	void OnChangeParent();
 
 	virtual void OnLoadSerialize(JSON_Doc config);
 	virtual void OnSaveSerialize(JSON_Doc config);
