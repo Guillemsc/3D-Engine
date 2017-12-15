@@ -49,6 +49,7 @@ void UIButton::OnEvent(UIEvent ev)
 	{
 	case UIEventType::MOUSE_OVER:
 		SetState(ButtonState::OVER);
+		LOG_OUTPUT("OVER");
 		break;
 	default:
 		break;
@@ -58,13 +59,11 @@ void UIButton::OnEvent(UIEvent ev)
 void UIButton::SetIdleImage(uint id, SuStoVec2 size)
 {
 	idle = SuStoTexture(id, size);
-	//SetState(ButtonState::IDLE);
 }
 
 void UIButton::SetOverImage(uint id, SuStoVec2 size)
 {
 	over = SuStoTexture(id, size);
-	SetState(ButtonState::OVER);
 }
 
 void UIButton::SetPressedImage(uint id, SuStoVec2 size)
