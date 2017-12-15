@@ -32,7 +32,7 @@ void ComponentCanvas::Update()
 {
 	canvas->SetTransform(GetOwner()->transform->GetGlobalTransform());
 
-	DebugDraw(canvas->GetPlane()->GetBbox(), Red, true, 4.0f, canvas->GetPlane()->GetTransform());
+	DebugDraw(canvas->GetPlane()->GetBbox(), Red, true, 4.0f);
 }
 
 void ComponentCanvas::CleanUp()

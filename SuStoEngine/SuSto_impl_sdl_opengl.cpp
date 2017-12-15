@@ -39,7 +39,7 @@ SuStoUIMain* SuStoUI::Init(SDL_Window* window)
 	return ui_main;
 }
 
-void SuStoUI::NewFrame(SuStoUIMain* ui_main, SDL_Window* window, SuStoRect viewport)
+void SuStoUI::NewFrame(SuStoUIMain* ui_main, SDL_Window* window, SuStoRect viewport, Frustum _frustum)
 {
 	// Event
 	SuStoUI::EventNewFrame(ui_main);
@@ -50,6 +50,8 @@ void SuStoUI::NewFrame(SuStoUIMain* ui_main, SDL_Window* window, SuStoRect viewp
 	ui_main->SetWindowViewport(SuStoVec2(w, h));
 
 	ui_main->SetViewport(viewport);
+
+	ui_main->SetFrustum(_frustum);
 
 	ui_main->PreUpdate();
 	ui_main->Update();

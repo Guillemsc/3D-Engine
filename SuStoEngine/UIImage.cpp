@@ -1,6 +1,7 @@
 #include "UIImage.h"
 #include "SuStoUI.h"
 #include "Globals.h"
+#include "DebugDraw.h"
 
 UIImage::UIImage(SuStoUIMain * main, UICanvas* canvas) : UIElement(main, ElementType::IMAGE, canvas)
 {
@@ -54,4 +55,9 @@ void UIImage::OnEvent(UIEvent ev)
 		LOG_OUTPUT("OVER!!");
 		break;
 	}
+}
+
+PrintableElement * UIImage::GetImage()
+{
+	return image;
 }

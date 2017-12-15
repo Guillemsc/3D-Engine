@@ -36,6 +36,9 @@ void ComponentImage::Update()
 		image->SetTransform(GetOwner()->transform->GetGlobalTransform());
 
 		GetOwner()->transform->SetGlobalTransform(image->GetTransform());
+
+
+			DebugDraw(image->GetImage()->GetBbox(), Red, true, 4.0f);
 	}
 }
 

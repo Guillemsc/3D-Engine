@@ -11,6 +11,8 @@ public:
 
 	void SetImage(uint id, SuStoVec2 size);
 
+	PrintableElement* GetImage();
+
 private:
 	void Awake();
 	void Start();

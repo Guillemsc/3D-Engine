@@ -7,6 +7,7 @@
 #include "UIButton.h"
 #include "UITextInput.h"
 #include "UICheckBox.h"
+#include "DebugDraw.h"
 
 // Data types
 SuStoVec2::SuStoVec2()
@@ -350,9 +351,9 @@ void SuStoUIMain::PreUpdate()
 
 void SuStoUIMain::Update()
 {
-	if (event_system->GetKeyDown("a"))
+	if (event_system->GetKeyDown("q"))
 	{
-		MousePick();
+		picking = MousePick(false);
 	}
 
 	for (std::vector<UICanvas*>::iterator it = canvas.begin(); it != canvas.end(); ++it)
@@ -594,38 +595,54 @@ void SuStoUIMain::CheckRenderCameraEvents()
 	}
 }
 
-void SuStoUIMain::MousePick()
+LineSegment SuStoUIMain::MousePick(bool ortho)
 {
-	SuStoRect window(0, 0, GetViewport().x, GetViewport().y);
-	SuStoVec2 mouse_pos(event_system->GetMouseX(), event_system->GetMouseY());
+	LineSegment picking;
 
-	if (window.PointInRect(mouse_pos))
+	SuStoVec2 window = GetWindowViewport();
+	SuStoVec2 mouse_pos(event_system->GetMouseX(), event_system->GetMouseY());
+	Frustum frust = GetFrustum();
+
+	if (mouse_pos.x > 0 && mouse_pos.y > 0);
 	{
 		//The point (1, 1) corresponds to the top-right corner of the near plane
 		//(-1, -1) is bottom-left
 
-		/*float first_normalized_x = (mouse_pos.x - window.x) / (window.w - window.x);
-		float first_normalized_y = (mouse_pos.y - window.y) / (window.h - window.y);
+		float first_normalized_x = (mouse_pos.x) / (GetViewport().w);
+		float first_normalized_y = (mouse_pos.y) / (GetViewport().h);
 
 		float normalized_x = (first_normalized_x * 2) - 1;
 		float normalized_y = 1 - (first_normalized_y * 2);
 
-		LineSegment picking = GetFrustum().UnProjectLineSegment(normalized_x, normalized_y);
+		if(ortho)
+			frust.SetOrthographic(window.x, window.y);
 
-		float distance = 99999999999;*/
+		picking = frust.UnProjectLineSegment(normalized_x, normalized_y);
+
+		float distance = 99999999999;
 		
 		PrintableElement* closest = nullptr;
 
 		std::vector<PrintableElement*> elements_pick = GetDrawList();
-		/* 
+		 
 		for (std::vector<PrintableElement*>::iterator it = elements_pick.begin(); it != elements_pick.end(); it++)
 		{
-			if ((*it)->CheckPoint(mouse_pos))
+			bool hit = false;
+			(*it)->TestRay(ortho, picking, hit);
+
+			if (hit)
 			{
 				closest = (*it);
 			}
-		}*/
+		}
 	}
+
+	return picking;
+}
+
+LineSegment SuStoUIMain::GetPicking()
+{
+	return picking;
 }
 
 std::string SuStoUI::ToUpperCase(std::string str)
@@ -847,7 +864,13 @@ bool PrintableElement::HasOwner()
 
 AABB PrintableElement::GetBbox()
 {
-	return plane.GetBbox();
+	bbox.SetNegativeInfinity();
+
+	bbox.Enclose(plane.GetBbox());
+
+	bbox.TransformAsAABB(GetTransform());
+
+	return bbox;
 }
 
 void PrintableElement::CleanUp()
@@ -855,7 +878,7 @@ void PrintableElement::CleanUp()
 	plane.CleanUp();
 }
 
-void PrintableElement::TestRay(const LineSegment& segment, bool& hit)
+void PrintableElement::TestRay(bool ortho, const LineSegment& segment, bool& hit)
 {
 	hit = false;
 
@@ -865,6 +888,7 @@ void PrintableElement::TestRay(const LineSegment& segment, bool& hit)
 		if (segment.Intersects(GetBbox()))
 		{		
 			hit = true;
+			LOG_OUTPUT("hit");
 		}
 	}
 }

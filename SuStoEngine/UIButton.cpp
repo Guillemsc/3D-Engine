@@ -1,4 +1,5 @@
 #include "UIButton.h"
+#include "DebugDraw.h"
 
 UIButton::UIButton(SuStoUIMain * ui_main, UICanvas* canvas) : UIElement(ui_main, ElementType::BUTTON, canvas)
 {
@@ -29,6 +30,7 @@ void UIButton::PreUpdate()
 
 void UIButton::Update()
 {
+
 }
 
 void UIButton::PostUpdate()

@@ -196,7 +196,7 @@ public:
 
 	void CleanUp();
 
-	void TestRay(const LineSegment & segment, bool & hit);
+	void TestRay(bool ortho, const LineSegment & segment, bool & hit);
 	bool CheckPoint(SuStoVec2 pos);
 
 private:
@@ -207,6 +207,8 @@ private:
 	UIElement*   owner = nullptr;
 	UICanvas*    owner_c = nullptr;
 	float4x4     transform = float4x4::identity;
+
+	AABB		 bbox;
 };
 
 enum UIMode
@@ -267,7 +269,8 @@ public:
 	void SetUIMode(UIMode mode);
 	UIMode GetUIMode();
 
-	void MousePick();
+	LineSegment MousePick(bool ortho);
+	LineSegment GetPicking();
 
 private:
 	void DestroyElements();
@@ -288,6 +291,8 @@ private:
 	Frustum		frustum;
 
 	UIMode		mode = UIMode::UI_EDIT;
+
+	LineSegment picking;
 
 public:
 };

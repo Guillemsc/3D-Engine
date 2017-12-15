@@ -94,7 +94,7 @@ bool ModuleGameObject::PreUpdate()
 	float w = App->editorUI->GameRect().right - App->editorUI->GameRect().left;
 	float h = App->editorUI->GameRect().bottom - App->editorUI->GameRect().top;
 
-	SuStoUI::NewFrame(susto_ui, App->window->window, SuStoRect(x, y, w, h));
+	SuStoUI::NewFrame(susto_ui, App->window->window, SuStoRect(x, y, w, h), App->camera->GetCurrentCamera()->GetFrustum());
 
 	return ret;
 }
@@ -103,12 +103,11 @@ bool ModuleGameObject::Update()
 {
 	bool ret = true;
 
-	SuStoUI::Render(susto_ui);
+	if (App->input->GetMouseButton(1))
+		MousePick();
 
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && can_pick)
-	{
-		susto_ui->MousePick();
-	}
+	SuStoUI::Render(susto_ui);
+	DebugDraw(susto_ui->GetPicking());
 
 	vector<Camera3D*> cameras = App->camera->GetCameras();
 

@@ -1,6 +1,9 @@
 #ifndef SUSTO_IMPL_STD_OPENGL
 #define SUSTO_IMPL_STD_OPENGL
 
+#include "SuStoUI.h"
+#include "GeometryMath.h"
+
 struct SDL_Window;
 
 class SuStoUIMain;
@@ -18,7 +21,7 @@ typedef unsigned int uint;
 namespace SuStoUI
 {
 	SuStoUIMain* Init(SDL_Window* window);
-	void NewFrame(SuStoUIMain* ui_main, SDL_Window* window, SuStoRect viewport);
+	void NewFrame(SuStoUIMain* ui_main, SDL_Window* window, SuStoRect viewport, Frustum frustum);
 	void Render(SuStoUIMain* ui_main);
 	void EndFrame(SuStoUIMain* ui_main);
 	void Draw(float* vertices, uint num_indices, uint* indices, float* uvs, uint texture_id);
