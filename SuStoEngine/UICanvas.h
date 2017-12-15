@@ -47,7 +47,7 @@ private:
 	PrintableElement* image = nullptr;
 	
 	float scale_factor = 1.0f;
-	UICanvasRenderMode render_mode = UICanvasRenderMode::WORLD_SPACE;
+	UICanvasRenderMode render_mode = UICanvasRenderMode::CAMERA_SPACE;
 	bool show_on_camera = false;
 
 	float4x4 transform = float4x4::identity;;

@@ -107,7 +107,7 @@ bool ModuleGameObject::Update()
 		MousePick();
 
 	SuStoUI::Render(susto_ui);
-	DebugDraw(susto_ui->GetPicking());
+	//DebugDraw(susto_ui->GetPicking());
 
 	vector<Camera3D*> cameras = App->camera->GetCameras();
 

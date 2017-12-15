@@ -270,7 +270,7 @@ public:
 	void SetUIMode(UIMode mode);
 	UIMode GetUIMode();
 
-	LineSegment MousePick(bool ortho);
+	LineSegment MousePick(bool ortho, PrintableElement*& closest);
 	LineSegment GetPicking();
 
 private:

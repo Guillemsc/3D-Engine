@@ -89,3 +89,8 @@ void UIButton::SetState(ButtonState state)
 		break;
 	}
 }
+
+PrintableElement * UIButton::GetImage()
+{
+	return image;
+}

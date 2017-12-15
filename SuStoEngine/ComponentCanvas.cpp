@@ -43,7 +43,7 @@ void ComponentCanvas::CleanUp()
 void ComponentCanvas::InspectorDraw(std::vector<Component*> components)
 {
 	const char* items[] = { "World Space", "Camera Space" };
-	static int item2 = 0;
+	static int item2 = 1;
 	ImGui::Combo("Render Space", &item2, items, IM_ARRAYSIZE(items));  
 	{
 		switch (item2)

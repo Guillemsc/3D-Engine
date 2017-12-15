@@ -34,6 +34,8 @@ void ComponentButton::Update()
 		button->SetTransform(GetOwner()->transform->GetGlobalTransform());
 
 		GetOwner()->transform->SetGlobalTransform(button->GetTransform());
+
+		DebugDraw(button->GetImage()->GetBbox(), Red, true, 4.0f);
 	}
 }
 

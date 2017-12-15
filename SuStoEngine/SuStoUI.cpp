@@ -351,9 +351,6 @@ void SuStoUIMain::PreUpdate()
 
 void SuStoUIMain::Update()
 {
-	if (mode == UIMode::UI_PLAY && )
-	picking = MousePick(true);
-
 	for (std::vector<UICanvas*>::iterator it = canvas.begin(); it != canvas.end(); ++it)
 	{
 		(*it)->Update();
@@ -576,13 +573,8 @@ void SuStoUIMain::CheckRenderCameraEvents()
 
 	PrintableElement* mouse_over = nullptr;
 
-	for (std::vector<PrintableElement*>::iterator it = draw.begin(); it != draw.end(); ++it)
-	{
-		if ((*it)->CheckPoint(mouse_pos) && (*it)->HasOwner() && (*it)->GetOwner()->GetCanvas()->GetRenderMode() == UICanvasRenderMode::CAMERA_SPACE)
-		{
-			mouse_over = *it;
-		}
-	}
+	if (mode == UIMode::UI_PLAY)
+		picking = MousePick(true, mouse_over);
 
 	// Mouse Over
 	if (mouse_over != nullptr)
@@ -593,7 +585,7 @@ void SuStoUIMain::CheckRenderCameraEvents()
 	}
 }
 
-LineSegment SuStoUIMain::MousePick(bool ortho)
+LineSegment SuStoUIMain::MousePick(bool ortho, PrintableElement*& _closest)
 {
 	LineSegment picking;
 
@@ -616,10 +608,8 @@ LineSegment SuStoUIMain::MousePick(bool ortho)
 		{
 			frust.SetOrthographic(GetViewport().w, GetViewport().h);
 
-			float3x4 id = float3x4::identity;
-
 			frust.SetWorldMatrix(float3x4::identity);
-			frust.SetPos(float3(GetViewport().w / 2, GetViewport().h / 2, +2));
+			frust.SetPos(float3(GetViewport().w / 2, GetViewport().h / 2, + 2));
 
 			picking = frust.UnProjectLineSegment(normalized_x, normalized_y);
 		}
@@ -644,6 +634,8 @@ LineSegment SuStoUIMain::MousePick(bool ortho)
 				closest = (*it);
 			}
 		}
+
+		_closest = closest;
 	}
 
 	return picking;

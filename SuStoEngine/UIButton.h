@@ -30,6 +30,9 @@ public:
 	void SetPressedImage(uint id, SuStoVec2 size);
 
 	void SetState(ButtonState state);
+
+	PrintableElement* GetImage();
+
 private:
 	PrintableElement* image = nullptr;
 	SuStoTexture idle;
