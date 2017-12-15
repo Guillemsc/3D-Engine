@@ -193,6 +193,7 @@ public:
 	bool HasOwner();
 
 	AABB GetBbox();
+	AABB GetOrtoBbox();
 
 	void CleanUp();
 

@@ -351,10 +351,8 @@ void SuStoUIMain::PreUpdate()
 
 void SuStoUIMain::Update()
 {
-	if (event_system->GetKeyDown("q"))
-	{
-		picking = MousePick(false);
-	}
+	if (mode == UIMode::UI_PLAY && )
+	picking = MousePick(true);
 
 	for (std::vector<UICanvas*>::iterator it = canvas.begin(); it != canvas.end(); ++it)
 	{
@@ -614,10 +612,21 @@ LineSegment SuStoUIMain::MousePick(bool ortho)
 		float normalized_x = (first_normalized_x * 2) - 1;
 		float normalized_y = 1 - (first_normalized_y * 2);
 
-		if(ortho)
-			frust.SetOrthographic(window.x, window.y);
+		if (ortho)
+		{
+			frust.SetOrthographic(GetViewport().w, GetViewport().h);
 
-		picking = frust.UnProjectLineSegment(normalized_x, normalized_y);
+			float3x4 id = float3x4::identity;
+
+			frust.SetWorldMatrix(float3x4::identity);
+			frust.SetPos(float3(GetViewport().w / 2, GetViewport().h / 2, +2));
+
+			picking = frust.UnProjectLineSegment(normalized_x, normalized_y);
+		}
+		else
+		{
+			picking = frust.UnProjectLineSegment(normalized_x, normalized_y);
+		}
 
 		float distance = 99999999999;
 		
@@ -873,6 +882,17 @@ AABB PrintableElement::GetBbox()
 	return bbox;
 }
 
+AABB PrintableElement::GetOrtoBbox()
+{
+	bbox.SetNegativeInfinity();
+
+	bbox.Enclose(plane.GetBbox());
+
+	bbox.TransformAsAABB(GetOrtoTransform());
+
+	return bbox;
+}
+
 void PrintableElement::CleanUp()
 {
 	plane.CleanUp();
@@ -883,12 +903,24 @@ void PrintableElement::TestRay(bool ortho, const LineSegment& segment, bool& hit
 	hit = false;
 
 	// Check if intersects with bbox
-	if (GetBbox().IsFinite())
+	if (ortho)
 	{
-		if (segment.Intersects(GetBbox()))
-		{		
-			hit = true;
-			LOG_OUTPUT("hit");
+		if (GetOrtoBbox().IsFinite())
+		{
+			if (segment.Intersects(GetOrtoBbox()))
+			{
+				hit = true;
+			}
+		}
+	}
+	else
+	{
+		if (GetBbox().IsFinite())
+		{
+			if (segment.Intersects(GetBbox()))
+			{
+				hit = true;
+			}
 		}
 	}
 }
