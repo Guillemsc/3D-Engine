@@ -358,9 +358,17 @@ void SuStoUIMain::Update()
 
 	for (std::vector<UIElement*>::iterator it = elements.begin(); it != elements.end(); ++it)
 	{
-		(*it)->PreUpdate();
-		(*it)->Update();
-		(*it)->PostUpdate();
+		if ((*it)->GetUIMain() != nullptr && (*it)->GetType() >= 0 && (*it)->GetType() < ElementType::UNDEFINED)
+		{
+			(*it)->PreUpdate();
+			(*it)->Update();
+			(*it)->PostUpdate();
+		}
+		else 
+		{
+			//DestroyPrintable((*it)->GetPrintable());
+			it = elements.erase(it);
+		}
 	}
 }
 
@@ -384,7 +392,8 @@ void SuStoUIMain::PushEvent(UIEvent ev)
 {
 	for (std::vector<UIElement*>::iterator it = elements.begin(); it != elements.end(); ++it)
 	{
-		(*it)->OnEvent(ev);
+		if (*it != nullptr && (*it)->GetType() >= 0 && (*it)->GetType() < ElementType::UNDEFINED)
+			(*it)->OnEvent(ev);
 	}
 }
 
@@ -636,6 +645,8 @@ LineSegment SuStoUIMain::MousePick(bool ortho, PrintableElement*& _closest)
 		}
 
 		_closest = closest;
+
+		delete[] closest;
 	}
 
 	return picking;
