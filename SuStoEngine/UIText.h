@@ -13,7 +13,9 @@ public:
 
 	void Awake();
 	void Start();
+	void PreUpdate();
 	void Update();
+	void PostUpdate();
 	void CleanUp();
 
 	void OnEvent(UIEvent ev);
@@ -21,7 +23,12 @@ public:
 	void SetText(const char* new_text);
 	std::string GetText() const;
 
+	PrintableElement* GetImage();
+
 private:
+	PrintableElement* image = nullptr;
+	SuStoTexture texture;
+
 	std::string text_data;
 
 public:
