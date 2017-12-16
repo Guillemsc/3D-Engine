@@ -213,6 +213,7 @@
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="KDTree.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="ResourceFontLoader.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ResourceMesh.h" />
     <ClInclude Include="ResourceMeshLoader.h" />
@@ -332,6 +333,7 @@
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="KDTree.cpp" />
     <ClCompile Include="Resource.cpp" />
+    <ClCompile Include="ResourceFontLoader.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ResourceMesh.cpp" />
     <ClCompile Include="ResourceMeshLoader.cpp" />

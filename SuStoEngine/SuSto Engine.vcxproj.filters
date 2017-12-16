@@ -525,6 +525,9 @@
     <ClInclude Include="ComponentText.h">
       <Filter>Sources\5. GameObjects ===========\Components</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceFontLoader.h">
+      <Filter>Sources\6. Resources =============\Loaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -868,6 +871,9 @@
     </ClCompile>
     <ClCompile Include="ComponentText.cpp">
       <Filter>Sources\5. GameObjects ===========\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceFontLoader.cpp">
+      <Filter>Sources\6. Resources =============\Loaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
