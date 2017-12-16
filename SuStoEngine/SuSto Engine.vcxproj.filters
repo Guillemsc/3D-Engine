@@ -519,6 +519,9 @@
     <ClInclude Include="ComponentButton.h">
       <Filter>Sources\5. GameObjects ===========\Components</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentCheckBox.h">
+      <Filter>Sources\5. GameObjects ===========\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -855,6 +858,9 @@
       <Filter>Sources\5. GameObjects ===========\Components</Filter>
     </ClCompile>
     <ClCompile Include="ComponentButton.cpp">
+      <Filter>Sources\5. GameObjects ===========\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentCheckBox.cpp">
       <Filter>Sources\5. GameObjects ===========\Components</Filter>
     </ClCompile>
   </ItemGroup>

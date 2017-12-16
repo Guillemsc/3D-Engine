@@ -90,6 +90,12 @@ void ComponentCanvas::InspectorDraw(std::vector<Component*> components)
 		go->AddComponent(ComponentType::UI_BUTTON);
 		GetOwner()->AddChild(go);
 	}
+	if (ImGui::Button("Add CheckBox"))
+	{
+		GameObject* go = App->gameobj->Create();
+		go->AddComponent(ComponentType::UI_CHECKBOX);
+		GetOwner()->AddChild(go);
+	}
 }
 
 UICanvas * ComponentCanvas::GetCanvas()

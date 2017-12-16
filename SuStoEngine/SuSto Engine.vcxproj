@@ -100,6 +100,7 @@
     <ClInclude Include="ComponentButton.h" />
     <ClInclude Include="ComponentCamera.h" />
     <ClInclude Include="ComponentCanvas.h" />
+    <ClInclude Include="ComponentCheckBox.h" />
     <ClInclude Include="ComponentImage.h" />
     <ClInclude Include="ComponentMesh.h" />
     <ClInclude Include="ComponentMaterial.h" />
@@ -247,6 +248,7 @@
     <ClCompile Include="ComponentButton.cpp" />
     <ClCompile Include="ComponentCamera.cpp" />
     <ClCompile Include="ComponentCanvas.cpp" />
+    <ClCompile Include="ComponentCheckBox.cpp" />
     <ClCompile Include="ComponentImage.cpp" />
     <ClCompile Include="ComponentMesh.cpp" />
     <ClCompile Include="ComponentMaterial.cpp" />

@@ -11,7 +11,9 @@ public:
 
 	void Awake();
 	void Start();
+	void PreUpdate();
 	void Update();
+	void PostUpdate();
 	void CleanUp();
 
 	void OnEvent(UIEvent ev);
@@ -22,12 +24,14 @@ public:
 	void SetState(const bool state);
 	const bool GetState() const;
 
+	PrintableElement * GetImage();
+
 private:
 	PrintableElement* image = nullptr;
 	SuStoTexture check_true;
 	SuStoTexture check_false;
 
-	bool checkbox_state = false;
+	bool state = false;
 
 public:
 

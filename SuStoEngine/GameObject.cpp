@@ -10,6 +10,7 @@
 #include "ComponentCanvas.h"
 #include "ComponentImage.h"
 #include "ComponentButton.h"
+#include "ComponentCheckBox.h"
 #include "ModuleGameObject.h"
 #include "Inspector.h"
 #include "ModuleRenderer3D.h"
@@ -212,6 +213,11 @@ Component* GameObject::AddComponent(ComponentType type, string unique_id)
 		case UI_BUTTON:
 		{
 			ret = new ComponentButton(this, new_id);
+		}
+		break;
+		case UI_CHECKBOX:
+		{
+			ret = new ComponentCheckBox(this, new_id);
 		}
 		break;
 	}
