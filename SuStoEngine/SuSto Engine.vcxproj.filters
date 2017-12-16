@@ -526,7 +526,7 @@
       <Filter>Sources\5. GameObjects ===========\Components</Filter>
     </ClInclude>
     <ClInclude Include="susto_truetype.h">
-      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
+      <Filter>Sources\2. Modules ==============\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

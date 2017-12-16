@@ -4,7 +4,7 @@
 #include "ModuleGameObject.h"
 #include "GameObject.h"
 #include "SuStoUI.h"
-#include "UIButton.h"
+#include "UIText.h"
 #include "imgui.h"
 #include "DebugDraw.h"
 
