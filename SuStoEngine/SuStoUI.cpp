@@ -8,6 +8,8 @@
 #include "UITextInput.h"
 #include "UICheckBox.h"
 #include "DebugDraw.h"
+#include "SuSto_fonts_system.h"
+#include "SuSto_fonts_system.h"
 
 // Data types
 SuStoVec2::SuStoVec2()
@@ -45,6 +47,9 @@ float * SuStoVec2::ptr()
 	return &x;
 }
 
+// ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
+
 SuStoVec3::SuStoVec3()
 {
 	x = 0;
@@ -77,6 +82,9 @@ float * SuStoVec3::ptr()
 {
 	return &x;
 }
+
+// ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 SuStoRect::SuStoRect()
 {
@@ -133,6 +141,9 @@ float * SuStoRect::ptr()
 	return &x;
 }
 
+// ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
+
 SuStoColor::SuStoColor()
 {
 	r = 0;
@@ -169,6 +180,10 @@ float * SuStoColor::ptr()
 {
 	return &r;
 }
+
+// ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
+
 
 SuStoPlane::SuStoPlane()
 {
@@ -325,9 +340,13 @@ void SuStoPlane::CleanUp()
 	RELEASE_ARRAY(uvs);
 }
 
+// ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
+
 SuStoUIMain::SuStoUIMain()
 {
 	event_system = new UIEventSystem(this);
+	fonts_system = new UIFontsSystem(this);
 }
 
 SuStoUIMain::~SuStoUIMain()
@@ -386,6 +405,11 @@ void SuStoUIMain::CleanUp()
 UIEventSystem* SuStoUIMain::GetEventSystem()
 {
 	return event_system;
+}
+
+UIFontsSystem * SuStoUIMain::GetFontsSystem()
+{
+	return fonts_system;
 }
 
 void SuStoUIMain::PushEvent(UIEvent ev)

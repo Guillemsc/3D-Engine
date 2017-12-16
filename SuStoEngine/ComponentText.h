@@ -1,5 +1,5 @@
-#ifndef __COMPONENT_BUTTON_H__
-#define __COMPONENT_BUTTON_H__
+#ifndef __COMPONENT_TEXT_H__
+#define __COMPONENT_TEXT_H__
 
 #include "Component.h"
 #include "GeometryMath.h"
