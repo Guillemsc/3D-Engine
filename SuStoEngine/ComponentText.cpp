@@ -31,11 +31,11 @@ void ComponentText::Update()
 {
 	if (text != nullptr)
 	{
-		text->SetTransform(GetOwner()->transform->GetGlobalTransform());
+	/*	text->SetTransform(GetOwner()->transform->GetGlobalTransform());
 
 		GetOwner()->transform->SetGlobalTransform(text->GetTransform());
 
-		DebugDraw(text->GetImage()->GetBbox(), Red, true, 4.0f);
+		DebugDraw(text->GetImage()->GetBbox(), Red, true, 4.0f);*/
 	}
 }
 
@@ -45,7 +45,7 @@ void ComponentText::CleanUp()
 
 void ComponentText::InspectorDraw(std::vector<Component*> components)
 {
-	if (text != nullptr)
+	/*if (text != nullptr)
 	{
 		ImGui::Text("Canvas Found");
 
@@ -71,7 +71,7 @@ void ComponentText::InspectorDraw(std::vector<Component*> components)
 		ImGui::Text("No Canvas Found");
 
 	float4x4 anchor_trans = text->GetAnchorPos();
-	DebugDraw(float3(anchor_trans[0][3], anchor_trans[1][3], anchor_trans[2][3]), 100);
+	DebugDraw(float3(anchor_trans[0][3], anchor_trans[1][3], anchor_trans[2][3]), 100);*/
 }
 
 UIText * ComponentText::GetText()

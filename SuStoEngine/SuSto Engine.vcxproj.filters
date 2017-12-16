@@ -525,6 +525,9 @@
     <ClInclude Include="ComponentText.h">
       <Filter>Sources\5. GameObjects ===========\Components</Filter>
     </ClInclude>
+    <ClInclude Include="susto_truetype.h">
+      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">

@@ -226,6 +226,7 @@
     <ClInclude Include="SuStoUI.h" />
     <ClInclude Include="SuSto_event_system.h" />
     <ClInclude Include="SuSto_impl_sdl_opengl.h" />
+    <ClInclude Include="susto_truetype.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Time\Clock.h" />
