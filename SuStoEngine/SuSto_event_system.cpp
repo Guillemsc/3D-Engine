@@ -31,6 +31,11 @@ std::vector<UIKey> UIEventSystem::GetKeysUp() const
 	return keys_up;
 }
 
+const UIKeyEvent UIEventSystem::GetMouseButton(int id)
+{
+	return mouse_buttons[id];
+}
+
 const bool UIEventSystem::GetKeyDown(const char * key)
 {
 	return GetKeyDown(CharToKey(key));

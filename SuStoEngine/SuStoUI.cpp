@@ -588,9 +588,23 @@ void SuStoUIMain::CheckRenderCameraEvents()
 	// Mouse Over
 	if (mouse_over != nullptr)
 	{
-		UIEvent ev_mouse_over(UIEventType::MOUSE_OVER);
-		ev_mouse_over.mouse_over.element = mouse_over->GetOwner();
-		PushEvent(ev_mouse_over);
+		if (event_system->GetMouseButton(UIMouseClick::UI_LEFT_CLICK) == UIKeyEvent::UI_KEY_DOWN)
+		{
+			UIEvent ev_mouse_click(UIEventType::MOUSE_CLICK);
+			ev_mouse_click.mouse_click.element = mouse_over->GetOwner();
+			PushEvent(ev_mouse_click);
+		}
+		else
+		{
+			UIEvent ev_mouse_over(UIEventType::MOUSE_OVER);
+			ev_mouse_over.mouse_over.element = mouse_over->GetOwner();
+			PushEvent(ev_mouse_over);
+		}
+	}
+	else 
+	{
+		UIEvent ev_mouse_out(UIEventType::MOUSE_OUT);
+		PushEvent(ev_mouse_out);
 	}
 }
 
@@ -645,8 +659,6 @@ LineSegment SuStoUIMain::MousePick(bool ortho, PrintableElement*& _closest)
 		}
 
 		_closest = closest;
-
-		delete[] closest;
 	}
 
 	return picking;

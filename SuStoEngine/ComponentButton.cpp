@@ -76,7 +76,7 @@ void ComponentButton::InspectorDraw(std::vector<Component*> components)
 
 UIButton * ComponentButton::GetButton()
 {
-	return nullptr;
+	return button;
 }
 
 void ComponentButton::SetIdleImage(uint texture_id, float2 texture_size)

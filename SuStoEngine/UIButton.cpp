@@ -21,11 +21,11 @@ void UIButton::Awake()
 
 void UIButton::Start()
 {
+	
 }
 
 void UIButton::PreUpdate()
 {
-	
 }
 
 void UIButton::Update()
@@ -35,7 +35,7 @@ void UIButton::Update()
 
 void UIButton::PostUpdate()
 {
-	SetState(ButtonState::IDLE);
+	SetState(state);
 }
 
 void UIButton::CleanUp()
@@ -51,6 +51,12 @@ void UIButton::OnEvent(UIEvent ev)
 		SetState(ButtonState::OVER);
 		LOG_OUTPUT("OVER");
 		break;
+	case UIEventType::MOUSE_OUT:
+		SetState(ButtonState::IDLE);
+		LOG_OUTPUT("IDLE");
+	case UIEventType::MOUSE_CLICK:
+		SetState(ButtonState::PRESSED);
+		LOG_OUTPUT("PRESSED");
 	default:
 		break;
 	}
@@ -73,6 +79,8 @@ void UIButton::SetPressedImage(uint id, SuStoVec2 size)
 
 void UIButton::SetState(ButtonState state)
 {
+	this->state = state;
+
 	switch (state)
 	{
 	case IDLE:

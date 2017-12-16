@@ -14,6 +14,9 @@ class SuStoUIMain;
 enum UIEventType
 {
 	MOUSE_OVER,
+	MOUSE_OUT,
+	MOUSE_CLICK,
+
 	KEYBOARD,
 
 	UIEVENT_NULL
@@ -68,6 +71,12 @@ public:
 
 	} mouse_over;
 
+	struct MouseClick
+	{
+		UIElement* element = nullptr;
+
+	} mouse_click;
+
 	UIEventType GetType();
 
 private:
@@ -80,6 +89,8 @@ public:
 	UIEventSystem(SuStoUIMain* ui_main);
 	~UIEventSystem();
 	void CleanUp();
+
+	const UIKeyEvent GetMouseButton(int id);
 
 	const bool GetKeyDown(const char* key);
 	const bool GetKeyRepeat(const char* key);

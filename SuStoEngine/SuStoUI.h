@@ -295,6 +295,8 @@ private:
 
 	LineSegment picking;
 
+	bool mouse_clicked = false;
+
 public:
 };
 
