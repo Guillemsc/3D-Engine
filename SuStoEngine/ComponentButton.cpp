@@ -42,7 +42,7 @@ void ComponentButton::Update()
 
 		GetOwner()->transform->SetGlobalTransform(button->GetTransform());
 
-		DebugDraw(button->GetImage()->GetOrthoPos(), Red, true, 4.0f);
+		DebugDraw(button->GetImage()->GetBbox(), Red, true, 4.0f);
 	}
 }
 
