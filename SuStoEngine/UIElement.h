@@ -58,6 +58,9 @@ private:
 	float4x4     transform = float4x4::identity;
 
 	SuStoVec2    anchor = SuStoVec2(0.5f, 0.5f);
+
+	bool mouse_over = false;
+	bool mouse_pressed = false;
 };
 
 #endif

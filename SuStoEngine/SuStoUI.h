@@ -310,7 +310,7 @@ private:
 
 	LineSegment picking;
 
-	bool mouse_clicked = false;
+	PrintableElement* last_mouse_over = nullptr;
 
 public:
 };

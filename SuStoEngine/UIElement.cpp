@@ -101,12 +101,6 @@ float4x4 UIElement::GetAnchorPos()
 	canvas_trans[0][3] += GetCanvas()->GetCurrentSize().x * GetAnchor().x;
 	canvas_trans[1][3] += GetCanvas()->GetCurrentSize().y * GetAnchor().y;
 
-	//canvas_trans[0][3] -= GetUIMain()->GetViewport().x / 2;
-	//canvas_trans[1][3] -= GetUIMain()->GetViewport().y / 2;
-
-	//canvas_trans[0][3] += GetUIMain()->GetViewport().x * GetAnchor().x;
-	//canvas_trans[1][3] += GetUIMain()->GetViewport().y * GetAnchor().y;
-
 	return canvas_trans;
 }
 UICanvas * UIElement::GetCanvas()

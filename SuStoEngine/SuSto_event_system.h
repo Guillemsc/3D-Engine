@@ -77,6 +77,12 @@ public:
 
 	} mouse_click;
 
+	struct MouseOut
+	{
+		UIElement* element = nullptr;
+
+	} mouse_out;
+
 	UIEventType GetType();
 
 private:
