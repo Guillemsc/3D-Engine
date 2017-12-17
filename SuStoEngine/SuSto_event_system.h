@@ -26,8 +26,8 @@ enum UIKeyEvent
 {
 	UI_KEY_IDLE,
 	UI_KEY_DOWN,
-	UI_KEY_UP,
-	UI_KEY_REPEAT
+	UI_KEY_REPEAT,
+	UI_KEY_UP
 };
 
 enum UIMouseClick
