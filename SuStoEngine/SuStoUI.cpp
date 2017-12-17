@@ -375,12 +375,20 @@ void SuStoUIMain::Update()
 		(*it)->Update();
 	}
 
+	uint max_l = 0;
 	for (std::vector<UIElement*>::iterator it = elements.begin(); it != elements.end(); ++it)
 	{
 		(*it)->PreUpdate();
 		(*it)->Update();
 		(*it)->PostUpdate();
+
+		if ((*it)->GetLayer() > max_l)
+		{
+			max_l = (*it)->GetLayer();
+		}
 	}
+
+	max_layer = max_l;
 }
 
 void SuStoUIMain::PostUpdate()
@@ -408,8 +416,7 @@ void SuStoUIMain::PushEvent(UIEvent ev)
 {
 	for (std::vector<UIElement*>::iterator it = elements.begin(); it != elements.end(); ++it)
 	{
-		if (*it != nullptr && (*it)->GetType() >= 0 && (*it)->GetType() < ElementType::UNDEFINED)
-			(*it)->OnEvent(ev);
+		(*it)->OnEvent(ev);
 	}
 }
 
@@ -453,6 +460,7 @@ UIElement * SuStoUIMain::CreateElement(ElementType type, UICanvas* canvas)
 	}
 
 	elements.push_back(ret);
+	ret->SetLayer(++max_layer);
 
 	return ret;
 }
@@ -604,7 +612,7 @@ void SuStoUIMain::CheckRenderCameraEvents()
 	// Mouse Over
 	if (mouse_over != nullptr)
 	{
-		if (event_system->GetMouseButton(UIMouseClick::UI_LEFT_CLICK) == UIKeyEvent::UI_KEY_DOWN)
+		if (event_system->GetMouseButton(UIMouseClick::UI_LEFT_CLICK) == (UIKeyEvent::UI_KEY_REPEAT || UIKeyEvent::UI_KEY_DOWN))
 		{
 			mouse_pressed = mouse_over;
 		}
@@ -664,7 +672,7 @@ LineSegment SuStoUIMain::MousePick(bool ortho, PrintableElement*& _closest)
 			frust.SetOrthographic(GetViewport().w, GetViewport().h);
 
 			frust.SetWorldMatrix(float3x4::identity);
-			frust.SetPos(float3(GetViewport().w / 2, GetViewport().h / 2, + 2));
+			frust.SetPos(float3((GetViewport().w / 2) - 3, (GetViewport().h / 2) + 10, + 2));
 
 			picking = frust.UnProjectLineSegment(normalized_x, normalized_y);
 		}
@@ -676,6 +684,7 @@ LineSegment SuStoUIMain::MousePick(bool ortho, PrintableElement*& _closest)
 		float distance = 99999999999;
 		
 		PrintableElement* closest = nullptr;
+		uint highest_layer = 0;
 
 		std::vector<PrintableElement*> elements_pick = GetDrawList();
 		 
@@ -687,9 +696,10 @@ LineSegment SuStoUIMain::MousePick(bool ortho, PrintableElement*& _closest)
 
 			(*it)->TestRay(ortho, picking, hit);
 
-			if (hit)
+			if (hit && (*it)->GetOwner()->GetLayer() >= highest_layer)
 			{
 				closest = (*it);
+				highest_layer = (*it)->GetOwner()->GetLayer();
 			}
 		}
 
@@ -938,7 +948,13 @@ AABB PrintableElement::GetOrtoBbox()
 
 	bbox.Enclose(plane.GetBbox());
 
-	bbox.TransformAsAABB(GetOrtoTransform());
+	float4x4 trans = GetOrtoTransform();
+
+	trans[1][3] = -trans[1][3];
+
+	trans[1][3] += owner->GetUIMain()->GetViewport().h;
+
+	bbox.TransformAsAABB(trans);
 
 	return bbox;
 }

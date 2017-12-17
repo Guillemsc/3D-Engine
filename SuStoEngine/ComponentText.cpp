@@ -72,6 +72,11 @@ void ComponentText::InspectorDraw(std::vector<Component*> components)
 		{
 			text->SetLocalScale(SuStoVec2(scale.x, scale.y));
 		}
+		char buffer[255];
+		if (ImGui::InputText("Text", buffer, 255))
+		{
+			text->SetText(buffer);
+		}
 	}
 	else
 		ImGui::Text("No Canvas Found");

@@ -38,6 +38,7 @@ public:
 	SuStoVec2 GetPressedSize() const;
 
 	void SetState(ButtonState state);
+	ButtonState GetState();
 
 	PrintableElement* GetImage();
 

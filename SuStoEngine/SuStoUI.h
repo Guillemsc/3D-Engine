@@ -312,6 +312,8 @@ private:
 
 	PrintableElement* last_mouse_over = nullptr;
 
+	uint max_layer = 0;
+
 public:
 };
 

@@ -45,21 +45,36 @@ void UIButton::CleanUp()
 
 void UIButton::OnEvent(UIEvent ev)
 {
-	if (ev.mouse_over.element == this || ev.mouse_click.element == this || ev.GetType() == UIEventType::MOUSE_OUT)
+	switch (ev.GetType())
 	{
-		switch (ev.GetType())
+	case UIEventType::MOUSE_OVER:
+	{
+		if (ev.mouse_over.element == this)
 		{
-		case UIEventType::MOUSE_OVER:
 			SetState(ButtonState::OVER);
-			break;
-		case UIEventType::MOUSE_OUT:
-			SetState(ButtonState::IDLE);
-		case UIEventType::MOUSE_CLICK:
-			SetState(ButtonState::PRESSED);
-		default:
-			break;
 		}
 	}
+		break;
+	case UIEventType::MOUSE_OUT:
+	{
+		if (ev.mouse_out.element == this)
+		{
+			SetState(ButtonState::IDLE);
+		}
+	}
+		break;
+	case UIEventType::MOUSE_CLICK:
+	{
+		if (ev.mouse_click.element == this)
+		{
+			SetState(ButtonState::PRESSED);
+		}
+	}
+		break;
+	default:
+		break;
+	}
+	
 }
 
 void UIButton::SetIdleImage(uint id, SuStoVec2 size)
@@ -125,6 +140,11 @@ void UIButton::SetState(ButtonState state)
 	default:
 		break;
 	}
+}
+
+ButtonState UIButton::GetState()
+{
+	return state;
 }
 
 PrintableElement * UIButton::GetImage()

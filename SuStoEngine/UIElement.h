@@ -46,6 +46,9 @@ public:
 
 	UICanvas* GetCanvas();
 
+	void SetLayer(uint layer);
+	uint GetLayer();
+
 private:
 	SuStoUIMain* ui_main = nullptr;
 	ElementType  type = ElementType::UNDEFINED;
@@ -61,6 +64,8 @@ private:
 
 	bool mouse_over = false;
 	bool mouse_pressed = false;
+
+	uint layer = 0;
 };
 
 #endif

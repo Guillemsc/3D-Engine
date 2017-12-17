@@ -36,7 +36,7 @@ float4x4 UIElement::GetOrthoTransform()
 	float4x4 new_trans = transform;
 
 	new_trans[0][3] = GetOrthoAnchorPos().x + local_pos.x;
-	new_trans[1][3] = GetOrthoAnchorPos().y - local_pos.y;
+	new_trans[1][3] = GetOrthoAnchorPos().y + local_pos.y;
 
 	new_trans[1][1] = -new_trans[1][1];
 
@@ -106,6 +106,16 @@ float4x4 UIElement::GetAnchorPos()
 UICanvas * UIElement::GetCanvas()
 {
 	return canvas;
+}
+
+void UIElement::SetLayer(uint _layer)
+{
+	layer = _layer;
+}
+
+uint UIElement::GetLayer()
+{
+	return layer;
 }
 
 UIElement::UIElement()

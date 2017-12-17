@@ -42,7 +42,7 @@ void ComponentButton::Update()
 
 		GetOwner()->transform->SetGlobalTransform(button->GetTransform());
 
-		DebugDraw(button->GetImage()->GetBbox(), Red, true, 4.0f);
+		DebugDraw(button->GetImage()->GetOrthoPos(), Red, true, 4.0f);
 	}
 }
 
@@ -76,11 +76,17 @@ void ComponentButton::InspectorDraw(std::vector<Component*> components)
 
 		ImGui::Separator();
 
-		vector<TextureInfo> textures = App->gameobj->GetTextures();
-		char* items = new char[textures.size()];
-		for (int i = 0; i < textures.size(); ++i)
+		if (button->GetState() == ButtonState::IDLE)
 		{
-			items[i] = i;
+			ImGui::Text("idle");
+		}
+		if (button->GetState() == ButtonState::OVER)
+		{
+			ImGui::Text("over");
+		}
+		if (button->GetState() == ButtonState::PRESSED)
+		{
+			ImGui::Text("pressed");
 		}
 	}
 	else

@@ -95,11 +95,11 @@ bool ModuleGameObject::Start()
 	GameObject* canvas_go = App->gameobj->Create();
 	canvas_go->AddComponent(UI_CANVAS);
 
-	GameObject* background_go = App->gameobj->Create();
-	canvas_go->AddChild(background_go);
+	//GameObject* background_go = App->gameobj->Create();
+	//canvas_go->AddChild(background_go);
 
-	ComponentImage* cimage = (ComponentImage*)background_go->AddComponent(UI_IMAGE);
-	cimage->SetImage(backgroud.id, float2(backgroud.size_x, backgroud.size_y));
+	//ComponentImage* cimage = (ComponentImage*)background_go->AddComponent(UI_IMAGE);
+	//cimage->SetImage(backgroud.id, float2(backgroud.size_x, backgroud.size_y));
 
 	GameObject* text_go = App->gameobj->Create();
 	canvas_go->AddChild(text_go);
@@ -145,7 +145,7 @@ bool ModuleGameObject::Update()
 		MousePick();
 
 	SuStoUI::Render(susto_ui);
-	//DebugDraw(susto_ui->GetPicking());
+	DebugDraw(susto_ui->GetPicking());
 
 	vector<Camera3D*> cameras = App->camera->GetCameras();
 
