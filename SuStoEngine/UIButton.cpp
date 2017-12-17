@@ -138,6 +138,7 @@ void UIButton::SetState(ButtonState state)
 		image->SetTexture(pressed);
 		break;
 	default:
+		image->SetTexture(idle);
 		break;
 	}
 }

@@ -612,7 +612,7 @@ void SuStoUIMain::CheckRenderCameraEvents()
 	// Mouse Over
 	if (mouse_over != nullptr)
 	{
-		if (event_system->GetMouseButton(UIMouseClick::UI_LEFT_CLICK) == (UIKeyEvent::UI_KEY_REPEAT || UIKeyEvent::UI_KEY_DOWN))
+		if (event_system->GetMouseButton(UIMouseClick::UI_LEFT_CLICK) == (UIKeyEvent::UI_KEY_REPEAT))
 		{
 			mouse_pressed = mouse_over;
 		}
@@ -624,13 +624,6 @@ void SuStoUIMain::CheckRenderCameraEvents()
 	}
 
 	// Send events ---------------------------
-	if (mouse_pressed != nullptr)
-	{
-		UIEvent ev_mouse_click(UIEventType::MOUSE_CLICK);
-		ev_mouse_click.mouse_click.element = mouse_pressed->GetOwner();
-		PushEvent(ev_mouse_click);
-	}
-
 	if (mouse_over != nullptr)
 	{
 		UIEvent ev_mouse_over(UIEventType::MOUSE_OVER);
@@ -643,6 +636,14 @@ void SuStoUIMain::CheckRenderCameraEvents()
 		UIEvent ev_mouse_out(UIEventType::MOUSE_OUT);
 		ev_mouse_out.mouse_out.element = mouse_out->GetOwner();
 		PushEvent(ev_mouse_out);
+	}
+
+	if (mouse_pressed != nullptr)
+	{
+		UIEvent ev_mouse_click(UIEventType::MOUSE_CLICK);
+		ev_mouse_click.mouse_click.element = mouse_pressed->GetOwner();
+		PushEvent(ev_mouse_click);
+		LOG_OUTPUT("presws");
 	}
 
 	last_mouse_over = mouse_over;
