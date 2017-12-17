@@ -1,2 +1,0 @@
-Info,  T27716: Load Models/BakerHouse/BakerHouse.fbx
-Error, T27716: Unable to open file "Models/BakerHouse/BakerHouse.fbx".
