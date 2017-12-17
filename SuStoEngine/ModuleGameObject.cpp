@@ -76,6 +76,8 @@ bool ModuleGameObject::Start()
 	TextureInfo standard = loader.LoadTexture("UI\\button_standard.png", true);
 	TextureInfo highlight = loader.LoadTexture("UI\\button_highlight.png", true);
 	TextureInfo click = loader.LoadTexture("UI\\button_click.png", true);
+	TextureInfo check_false = loader.LoadTexture("UI\\checkbox_false.png", true);
+	TextureInfo check_true = loader.LoadTexture("UI\\checkbox_true.png", true);
 	
 	return ret;
 }

@@ -136,6 +136,10 @@ bool JSONLoader::CleanUp()
 	return ret;
 }
 
+JSON_Doc::JSON_Doc()
+{
+}
+
 JSON_Doc::JSON_Doc(JSON_Value * _value, JSON_Object * _object, const char* _path)
 {
 	value = _value;

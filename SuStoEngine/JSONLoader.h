@@ -9,6 +9,7 @@
 class JSON_Doc
 {
 public:
+	JSON_Doc();
 	JSON_Doc(JSON_Value* value, JSON_Object* object, const char* path);
 	JSON_Doc(JSON_Doc& doc);
 	~JSON_Doc();
