@@ -43,13 +43,16 @@ void UICheckBox::CleanUp()
 
 void UICheckBox::OnEvent(UIEvent ev)
 {
-	switch (ev.GetType())
+	if (ev.mouse_over.element == this || ev.mouse_click.element == this)
 	{
-	case UIEventType::MOUSE_CLICK:
-		SetState(!state);
-		break;
-	default:
-		break;
+		switch (ev.GetType())
+		{
+		case UIEventType::MOUSE_CLICK:
+			SetState(!state);
+			break;
+		default:
+			break;
+		}
 	}
 }
 

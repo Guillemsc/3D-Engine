@@ -50,6 +50,10 @@ void UIText::CleanUp()
 
 void UIText::OnEvent(UIEvent ev)
 {
+	if (ev.mouse_over.element == this || ev.mouse_click.element == this)
+	{
+
+	}
 }
 
 void UIText::SetText(const char * new_text)

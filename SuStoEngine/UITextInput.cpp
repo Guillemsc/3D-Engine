@@ -27,6 +27,10 @@ void UITextInput::CleanUp()
 
 void UITextInput::OnEvent(UIEvent ev)
 {
+	if (ev.mouse_over.element == this || ev.mouse_click.element == this)
+	{
+
+	}
 }
 
 void UITextInput::SetBaseText(const char * base_text)

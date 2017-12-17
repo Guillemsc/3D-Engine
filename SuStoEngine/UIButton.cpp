@@ -45,20 +45,23 @@ void UIButton::CleanUp()
 
 void UIButton::OnEvent(UIEvent ev)
 {
-	switch (ev.GetType())
+	if (ev.mouse_over.element == this || ev.mouse_click.element == this)
 	{
-	case UIEventType::MOUSE_OVER:
-		SetState(ButtonState::OVER);
-		LOG_OUTPUT("OVER");
-		break;
-	case UIEventType::MOUSE_OUT:
-		SetState(ButtonState::IDLE);
-		LOG_OUTPUT("IDLE");
-	case UIEventType::MOUSE_CLICK:
-		SetState(ButtonState::PRESSED);
-		LOG_OUTPUT("PRESSED");
-	default:
-		break;
+		switch (ev.GetType())
+		{
+		case UIEventType::MOUSE_OVER:
+			SetState(ButtonState::OVER);
+			LOG_OUTPUT("OVER");
+			break;
+		case UIEventType::MOUSE_OUT:
+			SetState(ButtonState::IDLE);
+			LOG_OUTPUT("IDLE");
+		case UIEventType::MOUSE_CLICK:
+			SetState(ButtonState::PRESSED);
+			LOG_OUTPUT("PRESSED");
+		default:
+			break;
+		}
 	}
 }
 
