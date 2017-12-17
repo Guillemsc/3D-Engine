@@ -45,7 +45,7 @@ void UIButton::CleanUp()
 
 void UIButton::OnEvent(UIEvent ev)
 {
-	if (ev.mouse_over.element == this || ev.mouse_click.element == this)
+	if (ev.mouse_over.element == this || ev.mouse_click.element == this || ev.GetType() == UIEventType::MOUSE_OUT)
 	{
 		switch (ev.GetType())
 		{
