@@ -29,6 +29,12 @@ void ComponentCheckBox::Start()
 
 void ComponentCheckBox::Update()
 {
+	if (to_load)
+	{
+		OnLoadSerialize(config);
+		to_load = false;
+	}
+
 	if (checkbox != nullptr)
 	{
 		checkbox->SetTransform(GetOwner()->transform->GetGlobalTransform());
@@ -110,10 +116,32 @@ void ComponentCheckBox::OnChangeParent()
 
 void ComponentCheckBox::OnLoadSerialize(JSON_Doc config)
 {
+	if (checkbox != nullptr)
+	{
+		SuStoVec2 anchor(config.GetNumber("anchor_x", 0), config.GetNumber("anchor_y", 0));
+		SuStoVec2 pos(config.GetNumber("pos_x", 0), config.GetNumber("pos_y", 0));
+		SuStoVec2 scale(config.GetNumber("scale_x", 0), config.GetNumber("scale_y", 0));
+
+		checkbox->SetAnchor(anchor);
+		checkbox->SetLocalPos(pos);
+		checkbox->SetLocalScale(scale);
+	}
+
+	if (!to_load)
+	{
+		this->config = config;
+		to_load = true;
+	}
 }
 
 void ComponentCheckBox::OnSaveSerialize(JSON_Doc config)
 {
+	config.SetNumber("anchor_x", checkbox->GetAnchor().x);
+	config.SetNumber("anchor_y", checkbox->GetAnchor().y);
+	config.SetNumber("pos_x", checkbox->GetLocalPos().x);
+	config.SetNumber("pos_y", checkbox->GetLocalPos().y);
+	config.SetNumber("scale_x", checkbox->GetLocalScale().x);
+	config.SetNumber("scale_y", checkbox->GetLocalScale().y);
 }
 
 void ComponentCheckBox::TryBindCanvas()
@@ -126,8 +154,8 @@ void ComponentCheckBox::TryBindCanvas()
 		{
 			checkbox = (UICheckBox*)App->gameobj->GetUIMain()->CreateElement(ElementType::CHECKBOX, canvas);
 			
-			SetCheckFalseImage(4, float2(98, 28));
-			SetCheckTrueImage(5, float2(98, 28));
+			SetCheckFalseImage(7, float2(19, 19));
+			SetCheckTrueImage(8, float2(19, 19));
 		}
 	}
 }

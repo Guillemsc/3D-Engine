@@ -616,7 +616,7 @@ LineSegment SuStoUIMain::MousePick(bool ortho, PrintableElement*& _closest)
 	SuStoVec2 mouse_pos(event_system->GetMouseX(), event_system->GetMouseY());
 	Frustum frust = GetFrustum();
 
-	if (mouse_pos.x > 0 && mouse_pos.y > 0);
+	if (mouse_pos.x >= 0 && mouse_pos.y >= 0);
 	{
 		//The point (1, 1) corresponds to the top-right corner of the near plane
 		//(-1, -1) is bottom-left
@@ -650,11 +650,17 @@ LineSegment SuStoUIMain::MousePick(bool ortho, PrintableElement*& _closest)
 		for (std::vector<PrintableElement*>::iterator it = elements_pick.begin(); it != elements_pick.end(); it++)
 		{
 			bool hit = false;
-			(*it)->TestRay(ortho, picking, hit);
 
-			if (hit)
+			SuStoRect rect((*it)->GetPos().x, (*it)->GetPos().y, (*it)->GetSize().x, (*it)->GetSize().y);
+
+			if (rect.PointInRect(SuStoVec2(normalized_x, normalized_y)))
 			{
-				closest = (*it);
+				(*it)->TestRay(ortho, picking, hit);
+
+				if (hit)
+				{
+					closest = (*it);
+				}
 			}
 		}
 

@@ -8,6 +8,7 @@ class GameObject;
 class Camera3D;
 class UICanvas;
 class UICheckBox;
+class JSON_Doc;
 
 class ComponentCheckBox : public Component
 {
@@ -39,6 +40,8 @@ private:
 
 private:
 	UICheckBox* checkbox = nullptr;
+	JSON_Doc config;
+	bool to_load = false;
 };
 
 #endif // !_COMPONENT_CHECKBOX_H__

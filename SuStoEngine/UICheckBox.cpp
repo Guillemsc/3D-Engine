@@ -5,7 +5,7 @@ UICheckBox::UICheckBox(SuStoUIMain * ui_main, UICanvas* canvas) : UIElement(ui_m
 {
 	LOG_OUTPUT("Check Box Created");
 
-	image = new PrintableElement(0, SuStoVec2(0, 0), SuStoVec2(90, 30), this);
+	image = new PrintableElement(0, SuStoVec2(0, 0), SuStoVec2(19, 19), this);
 	ui_main->DrawPrintable(image);
 
 	SetState(false);
