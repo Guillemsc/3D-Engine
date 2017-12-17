@@ -79,6 +79,9 @@
     <Filter Include="Sources\2. Modules ==============\UI\Event System">
       <UniqueIdentifier>{4d8e2408-8dd8-4ba1-8e10-bbc640591513}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\2. Modules ==============\UI\Fonts System">
+      <UniqueIdentifier>{c74b86ac-29a0-410e-b4b6-f176b3368abf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleAudio.h">
@@ -525,8 +528,12 @@
     <ClInclude Include="ComponentText.h">
       <Filter>Sources\5. GameObjects ===========\Components</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceFontLoader.h" />
+    <ClInclude Include="SuSto_fonts_system.h">
+      <Filter>Sources\2. Modules ==============\UI\Fonts System</Filter>
+    </ClInclude>
     <ClInclude Include="susto_truetype.h">
-      <Filter>Sources\2. Modules ==============\UI</Filter>
+      <Filter>Sources\2. Modules ==============\UI\Fonts System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -871,6 +878,10 @@
     </ClCompile>
     <ClCompile Include="ComponentText.cpp">
       <Filter>Sources\5. GameObjects ===========\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceFontLoader.cpp" />
+    <ClCompile Include="SuSto_fonts_system.cpp">
+      <Filter>Sources\2. Modules ==============\UI\Fonts System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

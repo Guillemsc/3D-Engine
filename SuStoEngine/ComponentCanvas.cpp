@@ -84,6 +84,12 @@ void ComponentCanvas::InspectorDraw(std::vector<Component*> components)
 		go->AddComponent(ComponentType::UI_IMAGE);
 		GetOwner()->AddChild(go);
 	}
+	if (ImGui::Button("Add Text"))
+	{
+		GameObject* go = App->gameobj->Create();
+		go->AddComponent(ComponentType::UI_TEXT);
+		GetOwner()->AddChild(go);
+	}
 	if (ImGui::Button("Add Button"))
 	{
 		GameObject* go = App->gameobj->Create();

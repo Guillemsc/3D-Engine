@@ -31,6 +31,9 @@ namespace SuStoUI
 
 	int CharToKey(const char* key);
 	const char* KeyToChar(int key);
+	uint LoadTexture(unsigned char * buffer, uint buffer_size, uint width, uint height);
+	void UnLoadTexture(uint id);
+
 }
 
 #endif // !SUSTO_IMPL_STD_OPENGL

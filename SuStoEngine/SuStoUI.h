@@ -13,12 +13,13 @@
 class UIElement;
 class UICanvas;
 class UIEventSystem;
+class UIFontsSystem;
 class UIEvent;
 enum UICanvasRenderMode;
 
-// -------------------------------
-// GLOBALS -----------------------
-// -------------------------------
+// -----------------------------------------------------
+// GLOBALS ---------------------------------------------
+// -----------------------------------------------------
 typedef unsigned int uint;
 typedef unsigned char byte;
 typedef wchar_t wchar;
@@ -48,8 +49,8 @@ typedef wchar_t wchar;
 #define LOG_OUTPUT(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
 void log(const char file[], int line, const char* format, ...);
 
-// -------------------------------
-// -------------------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
 
 // Data types
 struct SuStoVec2 
@@ -65,6 +66,8 @@ struct SuStoVec2
 	float x, y = 0;
 };
 
+// -----------------------------------------------------
+
 struct SuStoVec3
 {
 	SuStoVec3();
@@ -76,6 +79,8 @@ struct SuStoVec3
 
 	float x, y, z = 0;
 };
+
+// -----------------------------------------------------
 
 struct SuStoRect
 {
@@ -92,6 +97,8 @@ struct SuStoRect
 	float x, y, w, h = 0;
 };
 
+// -----------------------------------------------------
+
 struct SuStoColor
 {
 	SuStoColor();
@@ -104,7 +111,7 @@ struct SuStoColor
 	float r, g, b, a = 0;
 };
 
-
+// -----------------------------------------------------
 
 struct SuStoPlane
 {
@@ -147,6 +154,8 @@ private:
 	AABB   bbox;
 };
 
+// -----------------------------------------------------
+
 struct SuStoTexture
 {
 	SuStoTexture();
@@ -156,6 +165,8 @@ struct SuStoTexture
 	uint	  id = 0;
 	SuStoVec2 size;
 };
+
+// -----------------------------------------------------
 
 class PrintableElement
 {
@@ -212,6 +223,8 @@ private:
 	AABB		 bbox;
 };
 
+// -----------------------------------------------------
+
 enum UIMode
 {
 	UI_EDIT,
@@ -245,6 +258,7 @@ public:
 	void CleanUp();
 
 	UIEventSystem* GetEventSystem();
+	UIFontsSystem* GetFontsSystem();
 	void PushEvent(UIEvent ev);
 
 	UICanvas* CreateCanvas();
@@ -280,6 +294,7 @@ private:
 
 private:
 	UIEventSystem* event_system = nullptr;
+	UIFontsSystem* fonts_system = nullptr;
 
 	std::vector<UIElement*> elements;
 	std::vector<UICanvas*> canvas;

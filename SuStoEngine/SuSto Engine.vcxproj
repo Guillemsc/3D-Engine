@@ -226,6 +226,7 @@
     <ClInclude Include="stb_truetype.h" />
     <ClInclude Include="SuStoUI.h" />
     <ClInclude Include="SuSto_event_system.h" />
+    <ClInclude Include="SuSto_fonts_system.h" />
     <ClInclude Include="SuSto_impl_sdl_opengl.h" />
     <ClInclude Include="susto_truetype.h" />
     <ClInclude Include="Timer.h" />
@@ -344,6 +345,7 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SuStoUI.cpp" />
     <ClCompile Include="SuSto_event_system.cpp" />
+    <ClCompile Include="SuSto_fonts_system.cpp" />
     <ClCompile Include="SuSto_impl_sdl_opengl.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Component.cpp" />

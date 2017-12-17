@@ -1,6 +1,7 @@
 #include "SuStoUI.h"
 #include "SuSto_impl_sdl_opengl.h"
 #include "SuSto_event_system.h"
+#include "SuSto_fonts_system.h"
 //#include "ModuleRenderer3D.h"
 
 #include "SDL\include\SDL.h"
@@ -35,6 +36,10 @@ SuStoUIMain* SuStoUI::Init(SDL_Window* window)
 
 	ui_main->GetEventSystem()->CharToKey = SuStoUI::CharToKey;
 	ui_main->GetEventSystem()->KeyToChar = SuStoUI::KeyToChar;
+	ui_main->GetFontsSystem()->LoadTexture = SuStoUI::LoadTexture;
+	ui_main->GetFontsSystem()->UnloadTexture = SuStoUI::UnLoadTexture;
+
+	ui_main->GetFontsSystem()->LoadFont("c:/windows/fonts/arial.ttf", "default");
 
 	return ui_main;
 }
@@ -277,5 +282,34 @@ int SuStoUI::CharToKey(const char * key)
 const char * SuStoUI::KeyToChar(int key)
 {
 	return SDL_GetScancodeName((SDL_Scancode)key);
+}
+
+uint SuStoUI::LoadTexture(unsigned char * buffer, uint buffer_size, uint width, uint height)
+{
+	uint id = 0;
+
+	glEnable(GL_BLEND);
+	glEnable(GL_ALPHA_TEST);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	glAlphaFunc(GL_GREATER, 1);
+
+	glGenTextures(1, &id);
+	glBindTexture(GL_TEXTURE_2D, id);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, width, height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, buffer);
+
+	glDisable(GL_ALPHA_TEST);
+	glDisable(GL_BLEND);
+
+	return id;
+}
+
+void SuStoUI::UnLoadTexture(uint id)
+{
+	glDeleteTextures(1, &id);
 }
 
