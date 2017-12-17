@@ -29,6 +29,12 @@ void ComponentText::Start()
 
 void ComponentText::Update()
 {
+	if (to_load)
+	{
+		OnLoadSerialize(config);
+		to_load = false;
+	}
+
 	if (text != nullptr)
 	{
 		text->SetTransform(GetOwner()->transform->GetGlobalTransform());
@@ -94,10 +100,32 @@ void ComponentText::OnChangeParent()
 
 void ComponentText::OnLoadSerialize(JSON_Doc config)
 {
+	if (text != nullptr)
+	{
+		SuStoVec2 anchor(config.GetNumber("anchor_x", 0), config.GetNumber("anchor_y", 0));
+		SuStoVec2 pos(config.GetNumber("pos_x", 0), config.GetNumber("pos_y", 0));
+		SuStoVec2 scale(config.GetNumber("scale_x", 0), config.GetNumber("scale_y", 0));
+
+		text->SetAnchor(anchor);
+		text->SetLocalPos(pos);
+		text->SetLocalScale(scale);
+	}
+
+	if (!to_load)
+	{
+		this->config = config;
+		to_load = true;
+	}
 }
 
 void ComponentText::OnSaveSerialize(JSON_Doc config)
 {
+	config.SetNumber("anchor_x", text->GetAnchor().x);
+	config.SetNumber("anchor_y", text->GetAnchor().y);
+	config.SetNumber("pos_x", text->GetLocalPos().x);
+	config.SetNumber("pos_y", text->GetLocalPos().y);
+	config.SetNumber("scale_x", text->GetLocalScale().x);
+	config.SetNumber("scale_y", text->GetLocalScale().y);
 }
 
 void ComponentText::TryBindCanvas()

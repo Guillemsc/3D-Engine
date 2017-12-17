@@ -39,6 +39,8 @@ private:
 
 private:
 	UIText* text = nullptr;
+	JSON_Doc config;
+	bool to_load = false;
 };
 
 #endif // !_COMPONENT_BUTTON_H__
