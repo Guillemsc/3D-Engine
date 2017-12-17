@@ -2,8 +2,9 @@
 #define _UI_TEXT_
 
 #include <string>
-
 #include "UIElement.h"
+
+class UIFont;
 
 class UIText : public UIElement
 {
@@ -23,13 +24,17 @@ public:
 	void SetText(const char* new_text);
 	std::string GetText() const;
 
+	void SetTextSize(uint size);
+	uint GetTextSize();
+
 	PrintableElement* GetImage();
 
 private:
 	PrintableElement* image = nullptr;
-	SuStoTexture texture;
+	UIFont*			  font = nullptr;
+	uint			  text_size = 100;
 
-	std::string text_data;
+	std::string		  text_data;
 
 public:
 

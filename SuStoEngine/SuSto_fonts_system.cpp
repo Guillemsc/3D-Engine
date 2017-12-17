@@ -1,6 +1,7 @@
 #define STB_TRUETYPE_IMPLEMENTATION
+
+#include "SuStoUI.h"
 #include "SuSto_fonts_system.h"
-#include "SuSto_impl_sdl_opengl.h"
 
 UIFontsSystem::UIFontsSystem(SuStoUIMain * _ui_main)
 {
@@ -15,7 +16,7 @@ void UIFontsSystem::CleanUp()
 {
 }
 
-void UIFontsSystem::LoadFont(const char * filepath)
+void UIFontsSystem::LoadFont(const char * filepath, const char* set_name)
 {
 	long size = 0;
 	unsigned char* fontBuffer = nullptr;
@@ -40,11 +41,49 @@ void UIFontsSystem::LoadFont(const char * filepath)
 	int b_h = 128; /* bitmap height */
 	int l_h = 64; /* line height */
 
-	unsigned char* bitmap = new unsigned char[b_w * b_h];
 
-	float scale = stbtt_ScaleForPixelHeight(&info, l_h);
+	UIFont* font = new UIFont(filepath, set_name, fontBuffer, size, b_w, b_h, l_h, info);
+	fonts.push_back(font);
+}
 
-	char* word = "how are you?";
+void UIFontsSystem::UnloadFont(const char * name)
+{
+	for (std::vector<UIFont*>::iterator it = fonts.begin(); it != fonts.end(); ++it)
+	{
+		if (SuStoUI::TextCmp((*it)->GetName(), name))
+		{
+			(*it)->CleanUp();
+			RELEASE(*it);
+			fonts.erase(it);
+			break;
+		}
+	}
+}
+
+UIFont* UIFontsSystem::GetFont(const char * name)
+{
+	UIFont* ret = nullptr;
+
+	for (std::vector<UIFont*>::iterator it = fonts.begin(); it != fonts.end(); ++it)
+	{
+		if (SuStoUI::TextCmp((*it)->GetName(), name))
+		{
+			return (*it);
+		}
+	}
+
+	return ret;
+}
+
+SuStoTexture UIFontsSystem::LoadText(const char * text, UIFont * font, uint size)
+{
+	stbtt_fontinfo info = font->GetInfo();
+
+	unsigned char* bitmap = new unsigned char[font->GetWidth()* font->GetHeight()];
+
+	float scale = stbtt_ScaleForPixelHeight(&info, font->GetLineHeight());
+
+	const char* word = text;
 
 	int ascent, descent, lineGap;
 	stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
@@ -53,6 +92,7 @@ void UIFontsSystem::LoadFont(const char * filepath)
 	descent *= scale;
 
 	int x = 0;
+	int y = 0;
 	for (int i = 0; i < strlen(word); ++i)
 	{
 		/* get bounding box for character (may be offset to account for chars that dip above or below the line */
@@ -60,11 +100,11 @@ void UIFontsSystem::LoadFont(const char * filepath)
 		stbtt_GetCodepointBitmapBox(&info, word[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
 
 		/* compute y (different characters have different heights */
-		int y = ascent + c_y1;
+		y = ascent + c_y1;
 
 		/* render character (stride and offset is important here) */
-		int byteOffset = x + (y  * b_w);
-		stbtt_MakeCodepointBitmap(&info, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, b_w, scale, scale, word[i]);
+		int byteOffset = x + (y  * font->GetWidth());
+		stbtt_MakeCodepointBitmap(&info, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, font->GetWidth(), scale, scale, word[i]);
 
 		/* how wide is this character */
 		int ax;
@@ -77,17 +117,81 @@ void UIFontsSystem::LoadFont(const char * filepath)
 		x += kern * scale;
 	}
 
-	//SuStoUI::LoadTexture(bitmap, size, b_w, b_h);
-	uint id = LoadTexture(bitmap, size, b_w, b_h);
-	SuStoVec2 text_size = SuStoVec2(b_w, b_h);
 
+	uint id = LoadTexture(bitmap, font->GetBitmapSize(), font->GetWidth(), ascent);
 
+	float val = size / font->GetWidth();
+
+	return SuStoTexture(id, SuStoVec2(size, val * ascent));
 }
+
+void UIFontsSystem::UnloadText(uint id)
+{
+	UnloadTexture(id);
+}
+
 
 UIFont::UIFont()
 {
 }
 
+UIFont::UIFont(const char* _filepath, const char * _name, unsigned char * _bitmap, uint _bitmap_size, int _height, int _width, int _line_height, stbtt_fontinfo _info)
+{
+	name = _name;
+	bitmap = _bitmap;
+	bitmap_size = _bitmap_size;
+	height = _height;
+	width = _width;
+	line_height = _line_height;
+	info = _info;
+	filepath = _filepath;
+}
+
 UIFont::~UIFont()
 {
+}
+
+void UIFont::CleanUp()
+{
+	RELEASE_ARRAY(bitmap);
+}
+
+const char * UIFont::GetName()
+{
+	return name;
+}
+
+unsigned char * UIFont::GetBitmap()
+{
+	return bitmap;
+}
+
+uint UIFont::GetBitmapSize()
+{
+	return bitmap_size;
+}
+
+int UIFont::GetWidth()
+{
+	return width;
+}
+
+int UIFont::GetHeight()
+{
+	return height;
+}
+
+int UIFont::GetLineHeight()
+{
+	return line_height;
+}
+
+stbtt_fontinfo UIFont::GetInfo()
+{
+	return info;
+}
+
+const char * UIFont::GetFilePath()
+{
+	return filepath;
 }
