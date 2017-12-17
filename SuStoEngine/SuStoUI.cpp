@@ -677,14 +677,11 @@ LineSegment SuStoUIMain::MousePick(bool ortho, PrintableElement*& _closest)
 
 			SuStoRect rect((*it)->GetPos().x, (*it)->GetPos().y, (*it)->GetSize().x, (*it)->GetSize().y);
 
-			if (rect.PointInRect(SuStoVec2(normalized_x, normalized_y)))
-			{
-				(*it)->TestRay(ortho, picking, hit);
+			(*it)->TestRay(ortho, picking, hit);
 
-				if (hit)
-				{
-					closest = (*it);
-				}
+			if (hit)
+			{
+				closest = (*it);
 			}
 		}
 
