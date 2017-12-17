@@ -65,7 +65,7 @@ public:
 
 	SuStoUIMain* GetUIMain();
 
-	vector<TextureInfo> GetTextures() const;
+	vector<TextureInfo> GetTextures();
 
 private:
 	void DestroyGameObjects();

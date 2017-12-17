@@ -29,6 +29,14 @@ public:
 	void SetOverImage(uint id, SuStoVec2 size);
 	void SetPressedImage(uint id, SuStoVec2 size);
 
+	int GetIdleId() const;
+	int GetOverId() const;
+	int GetPressedId() const;
+
+	SuStoVec2 GetIdleSize() const;
+	SuStoVec2 GetOverSize() const;
+	SuStoVec2 GetPressedSize() const;
+
 	void SetState(ButtonState state);
 
 	PrintableElement* GetImage();

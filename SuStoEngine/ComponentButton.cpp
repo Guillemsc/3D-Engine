@@ -7,6 +7,7 @@
 #include "UIButton.h"
 #include "imgui.h"
 #include "DebugDraw.h"
+#include "ResourceTextureLoader.h"
 
 ComponentButton::ComponentButton(GameObject * owner, std::string unique_id) : Component(ComponentType::UI_BUTTON, owner, unique_id)
 {
@@ -16,7 +17,7 @@ ComponentButton::ComponentButton(GameObject * owner, std::string unique_id) : Co
 	owner->SetName("Button");
 
 	GetOwner()->SetIsUI(true);
-	TryBindCanvas();
+	TryBindCanvas(true);
 }
 
 ComponentButton::~ComponentButton()
@@ -72,6 +73,22 @@ void ComponentButton::InspectorDraw(std::vector<Component*> components)
 		{
 			button->SetLocalScale(SuStoVec2(scale.x, scale.y));
 		}
+
+		ImGui::Separator();
+
+		vector<TextureInfo> textures = App->gameobj->GetTextures();
+	
+		const char* items[] = { "Preview", "Button_Standard", "Button_Highlight", "Button_Click", "Checkbox_False", "Checkbox_True", "Options" };
+		static int idle_item = button->GetIdleId() - 3;
+		static int over_item = button->GetOverId() - 3;
+		static int pressed_item = button->GetPressedId() - 3;
+
+		ImGui::Combo("Idle Texture", &idle_item, items, (int)(sizeof(items) / sizeof(*items)));
+		SetIdleImage(textures[idle_item].id, float2(textures[idle_item].size_x, textures[idle_item].size_y));
+		ImGui::Combo("Over Texture", &over_item, items, (int)(sizeof(items) / sizeof(*items)));
+		SetOverImage(textures[over_item].id, float2(textures[over_item].size_x, textures[over_item].size_y));
+		ImGui::Combo("Pressed Texture", &pressed_item, items, (int)(sizeof(items) / sizeof(*items)));
+		SetPressedImage(textures[pressed_item].id, float2(textures[pressed_item].size_x, textures[pressed_item].size_y));
 	}
 	else
 		ImGui::Text("No Canvas Found");
@@ -119,7 +136,7 @@ void ComponentButton::OnDisable()
 
 void ComponentButton::OnChangeParent()
 {
-	TryBindCanvas();
+	TryBindCanvas(false);
 }
 
 void ComponentButton::OnLoadSerialize(JSON_Doc config)
@@ -133,6 +150,10 @@ void ComponentButton::OnLoadSerialize(JSON_Doc config)
 		button->SetAnchor(anchor);
 		button->SetLocalPos(pos);
 		button->SetLocalScale(scale);
+
+		button->SetIdleImage(config.GetNumber("idle_id"), SuStoVec2(config.GetNumber("idle_size_x"), config.GetNumber("idle_size_y")));
+		button->SetOverImage(config.GetNumber("over_id"), SuStoVec2(config.GetNumber("over_size_x"), config.GetNumber("over_size_y")));
+		button->SetPressedImage(config.GetNumber("pressed_id"), SuStoVec2(config.GetNumber("pressed_size_x"), config.GetNumber("pressed_size_y")));
 	}
 
 	if (!to_load)
@@ -150,9 +171,19 @@ void ComponentButton::OnSaveSerialize(JSON_Doc config)
 	config.SetNumber("pos_y", button->GetLocalPos().y);
 	config.SetNumber("scale_x", button->GetLocalScale().x);
 	config.SetNumber("scale_y", button->GetLocalScale().y);
+
+	config.SetNumber("idle_id", button->GetIdleId());
+	config.SetNumber("idle_size_x", button->GetIdleSize().x);
+	config.SetNumber("idle_size_y", button->GetIdleSize().y);
+	config.SetNumber("over_id", button->GetOverId());
+	config.SetNumber("over_size_x", button->GetOverSize().x);
+	config.SetNumber("over_size_y", button->GetOverSize().y);
+	config.SetNumber("pressed_id", button->GetPressedId());
+	config.SetNumber("pressed_size_x", button->GetPressedSize().x);
+	config.SetNumber("pressed_size_y", button->GetPressedSize().y);
 }
 
-void ComponentButton::TryBindCanvas()
+void ComponentButton::TryBindCanvas(bool first_time)
 {
 	if (button == nullptr)
 	{
@@ -162,9 +193,16 @@ void ComponentButton::TryBindCanvas()
 		{
 			button = (UIButton*)App->gameobj->GetUIMain()->CreateElement(ElementType::BUTTON, canvas);
 
-			SetIdleImage(4, float2(98, 28));
-			SetOverImage(5, float2(98, 28));
-			SetPressedImage(6, float2(98, 28));
+			if (first_time)
+			{
+				SetIdleImage(4, float2(98, 28));
+				SetOverImage(5, float2(98, 28));
+				SetPressedImage(6, float2(98, 28));
+			}
+			
+			SetIdleImage(config.GetNumber("idle_id"), float2(config.GetNumber("idle_size_x"), config.GetNumber("idle_size_y")));
+			SetOverImage(config.GetNumber("over_id"), float2(config.GetNumber("over_size_x"), config.GetNumber("over_size_y")));
+			SetPressedImage(config.GetNumber("pressed_id"), float2(config.GetNumber("pressed_size_x"), config.GetNumber("pressed_size_y")));
 		}
 	}
 }

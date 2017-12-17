@@ -77,6 +77,36 @@ void UIButton::SetPressedImage(uint id, SuStoVec2 size)
 	pressed = SuStoTexture(id, size);
 }
 
+int UIButton::GetIdleId() const
+{
+	return idle.id;
+}
+
+int UIButton::GetOverId() const
+{
+	return over.id;
+}
+
+int UIButton::GetPressedId() const
+{
+	return pressed.id;
+}
+
+SuStoVec2 UIButton::GetIdleSize() const
+{
+	return idle.size;
+}
+
+SuStoVec2 UIButton::GetOverSize() const
+{
+	return over.size;
+}
+
+SuStoVec2 UIButton::GetPressedSize() const
+{
+	return pressed.size;
+}
+
 void UIButton::SetState(ButtonState state)
 {
 	this->state = state;

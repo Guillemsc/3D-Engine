@@ -36,7 +36,7 @@ private:
 	virtual void OnLoadSerialize(JSON_Doc config);
 	virtual void OnSaveSerialize(JSON_Doc config);
 
-	void TryBindCanvas();
+	void TryBindCanvas(bool first_time);
 
 private:
 	UIButton* button = nullptr;

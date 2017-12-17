@@ -526,7 +526,7 @@ SuStoUIMain * ModuleGameObject::GetUIMain()
 	return susto_ui;
 }
 
-vector<TextureInfo> ModuleGameObject::GetTextures() const
+vector<TextureInfo> ModuleGameObject::GetTextures()
 {
 	return textures;
 }

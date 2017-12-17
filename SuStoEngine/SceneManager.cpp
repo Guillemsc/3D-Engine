@@ -42,6 +42,8 @@ bool SceneManager::CleanUp()
 
 	App->scene_manager->SaveScene(current_scene.c_str());
 
+	SaveTmpScene();
+
 	return ret;
 }
 
