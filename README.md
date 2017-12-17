@@ -4,12 +4,11 @@
 
 3D Engine made by Guillem Sunyer Caldú and Simón Stoyanov Beltrán for the 3D engines subject during the 3rd year of Game Design and Game Development degree at CITM.
 
-Link to the Github Repository ![https://github.com/Guillemsc/3D-Engine](https://github.com/Guillemsc/3D-Engine)
+Link to the Github Repository https://github.com/Guillemsc/3D-Engine
 
-Link to the **Guillem Sunyer**'s Github page ![https://github.com/Guillemsc](https://github.com/Guillemsc/)
+Link to the **Guillem Sunyer**'s Github page https://github.com/Guillemsc
 
-Link to the **Simón Stoyanov**'s Github page ![https://github.com/SimonStoyanov](https://github.com/SimonStoyanov)
-
+Link to the **Simón Stoyanov**'s Github page https://github.com/SimonStoyanov
 
 ## Game Engine Instructions
 ### Main Menu Bar
@@ -89,6 +88,16 @@ The hardware window shows the capabilities of the hardware used by the user.
 ### Explorer
 At the explorer window the user can access its Assets directory. 
 The explorer will only show folders, .fbx, .png and .tga.
+
+### User Interface
+We created a user interface that can be accessed by creating UI components.
+First, to use the UI elements in a proper manner there must be a canvas which will be the parent of the elements created later.
+In this version of the engine the UI elements that can be used are:
+* **Button**
+* **Image**
+* **Checkbox**
+* **Text**
+* **Input Text**
 
 ## License
 MIT License
