@@ -77,7 +77,9 @@ void SuStoUI::Render(SuStoUIMain * ui_main)
 	//
 
 	glDisable(GL_DEPTH_TEST);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.998);
 
 	glViewport(0, 0, window_viewport.x, window_viewport.y);
 
@@ -145,6 +147,8 @@ void SuStoUI::Render(SuStoUIMain * ui_main)
 
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisable(GL_ALPHA_TEST);
+	glDisable(GL_BLEND);
 
 	//------------------
 
@@ -288,22 +292,17 @@ uint SuStoUI::LoadTexture(unsigned char * buffer, uint buffer_size, uint width, 
 {
 	uint id = 0;
 
-	glEnable(GL_BLEND);
-	glEnable(GL_ALPHA_TEST);
-
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-	glAlphaFunc(GL_GREATER, 1);
 
 	glGenTextures(1, &id);
 	glBindTexture(GL_TEXTURE_2D, id);
 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, width, height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, buffer);
-
-	glDisable(GL_ALPHA_TEST);
-	glDisable(GL_BLEND);
 
 	return id;
 }

@@ -54,14 +54,14 @@ void SceneManager::SaveScene(const char * scene_name)
 
 void SceneManager::LoadScene(const char * scene_name, bool set_scene_title)
 {
-	DestroyScene();
+	//DestroyScene();
 
-	string filepath = App->file_system->GetLibraryScenePath();
-	filepath += scene_name;
-	filepath += ".scene";
+	//string filepath = App->file_system->GetLibraryScenePath();
+	//filepath += scene_name;
+	//filepath += ".scene";
 
-	GameObject* go = nullptr;
-	LoadPrefab(filepath.c_str(), go);
+	//GameObject* go = nullptr;
+	//LoadPrefab(filepath.c_str(), go);
 }
 
 void SceneManager::DestroyScene()

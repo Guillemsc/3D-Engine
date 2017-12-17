@@ -51,14 +51,11 @@ void UIButton::OnEvent(UIEvent ev)
 		{
 		case UIEventType::MOUSE_OVER:
 			SetState(ButtonState::OVER);
-			LOG_OUTPUT("OVER");
 			break;
 		case UIEventType::MOUSE_OUT:
 			SetState(ButtonState::IDLE);
-			LOG_OUTPUT("IDLE");
 		case UIEventType::MOUSE_CLICK:
 			SetState(ButtonState::PRESSED);
-			LOG_OUTPUT("PRESSED");
 		default:
 			break;
 		}

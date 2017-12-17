@@ -93,11 +93,17 @@ SuStoTexture UIFontsSystem::LoadText(const char * text, UIFont * font, uint size
 
 	int x = 0;
 	int y = 0;
+
+	int bitmap_x = 0;
+	int bimtap_y = 0;
+
 	for (int i = 0; i < strlen(word); ++i)
 	{
 		/* get bounding box for character (may be offset to account for chars that dip above or below the line */
 		int c_x1, c_y1, c_x2, c_y2;
 		stbtt_GetCodepointBitmapBox(&info, word[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
+
+		bitmap_x += c_x2;
 
 		/* compute y (different characters have different heights */
 		y = ascent + c_y1;
@@ -117,12 +123,12 @@ SuStoTexture UIFontsSystem::LoadText(const char * text, UIFont * font, uint size
 		x += kern * scale;
 	}
 
+	int a = bitmap_x;
+	int b = font->GetWidth();
 
 	uint id = LoadTexture(bitmap, font->GetBitmapSize(), font->GetWidth(), ascent);
 
-	float val = size / font->GetWidth();
-
-	return SuStoTexture(id, SuStoVec2(size, val * ascent));
+	return SuStoTexture(id, SuStoVec2(font->GetWidth(), ascent));
 }
 
 void UIFontsSystem::UnloadText(uint id)

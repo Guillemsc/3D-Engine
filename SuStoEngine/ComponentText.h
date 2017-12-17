@@ -21,6 +21,7 @@ public:
 
 	void InspectorDraw(std::vector<Component*> components);
 
+	void SetText(const char* text);
 	UIText* GetText();
 
 	//void SetIdleImage(uint texture_id, float2 texture_size);

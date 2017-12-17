@@ -20,6 +20,9 @@
 #include "imgui.h"
 #include "Resource.h"
 #include "ResourceTextureLoader.h"
+#include "ComponentImage.h"
+#include "ComponentText.h"
+#include "ComponentButton.h"
 
 #include "SuSto_impl_sdl_opengl.h"
 #include "SuStoUI.h"
@@ -72,6 +75,7 @@ bool ModuleGameObject::Start()
 	susto_ui->SetFrustum(App->camera->GetCurrentCamera()->GetFrustum());
 
 	ResourceTextureLoader loader;
+	TextureInfo backgroud = loader.LoadTexture("UI\\background.png", true);
 	TextureInfo test = loader.LoadTexture("UI\\preview_164.png", true);
 	TextureInfo standard = loader.LoadTexture("UI\\button_standard.png", true);
 	TextureInfo highlight = loader.LoadTexture("UI\\button_highlight.png", true);
@@ -87,6 +91,28 @@ bool ModuleGameObject::Start()
 	textures.push_back(check_false);
 	textures.push_back(check_true);
 	textures.push_back(options);
+
+	GameObject* canvas_go = App->gameobj->Create();
+	canvas_go->AddComponent(UI_CANVAS);
+
+	GameObject* background_go = App->gameobj->Create();
+	canvas_go->AddChild(background_go);
+
+	ComponentImage* cimage = (ComponentImage*)background_go->AddComponent(UI_IMAGE);
+	cimage->SetImage(backgroud.id, float2(backgroud.size_x, backgroud.size_y));
+
+	GameObject* text_go = App->gameobj->Create();
+	canvas_go->AddChild(text_go);
+
+	ComponentText* ctext = (ComponentText*)text_go->AddComponent(UI_TEXT);
+	ctext->SetText("hi");
+
+	GameObject* button_start_go = App->gameobj->Create();
+	canvas_go->AddChild(button_start_go);
+
+	ComponentButton* cbutton = (ComponentButton*)button_start_go->AddComponent(UI_BUTTON);
+	cbutton->SetIdleImage(standard.id, float2(standard.size_x, standard.size_y));
+	cbutton->SetOverImage(highlight.id, float2(highlight.size_x, highlight.size_y));
 
 	return ret;
 }

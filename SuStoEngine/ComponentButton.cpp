@@ -77,18 +77,11 @@ void ComponentButton::InspectorDraw(std::vector<Component*> components)
 		ImGui::Separator();
 
 		vector<TextureInfo> textures = App->gameobj->GetTextures();
-	
-		const char* items[] = { "Preview", "Button_Standard", "Button_Highlight", "Button_Click", "Checkbox_False", "Checkbox_True", "Options" };
-		static int idle_item = button->GetIdleId() - 3;
-		static int over_item = button->GetOverId() - 3;
-		static int pressed_item = button->GetPressedId() - 3;
-
-		ImGui::Combo("Idle Texture", &idle_item, items, (int)(sizeof(items) / sizeof(*items)));
-		SetIdleImage(textures[idle_item].id, float2(textures[idle_item].size_x, textures[idle_item].size_y));
-		ImGui::Combo("Over Texture", &over_item, items, (int)(sizeof(items) / sizeof(*items)));
-		SetOverImage(textures[over_item].id, float2(textures[over_item].size_x, textures[over_item].size_y));
-		ImGui::Combo("Pressed Texture", &pressed_item, items, (int)(sizeof(items) / sizeof(*items)));
-		SetPressedImage(textures[pressed_item].id, float2(textures[pressed_item].size_x, textures[pressed_item].size_y));
+		char* items = new char[textures.size()];
+		for (int i = 0; i < textures.size(); ++i)
+		{
+			items[i] = i;
+		}
 	}
 	else
 		ImGui::Text("No Canvas Found");

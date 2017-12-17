@@ -80,6 +80,14 @@ void ComponentText::InspectorDraw(std::vector<Component*> components)
 	DebugDraw(float3(anchor_trans[0][3], anchor_trans[1][3], anchor_trans[2][3]), 100);
 }
 
+void ComponentText::SetText(const char * t)
+{
+	if (text != nullptr)
+	{
+		text->SetText(t);
+	}
+}
+
 UIText * ComponentText::GetText()
 {
 	return text;
