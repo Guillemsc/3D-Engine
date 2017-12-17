@@ -78,7 +78,16 @@ bool ModuleGameObject::Start()
 	TextureInfo click = loader.LoadTexture("UI\\button_click.png", true);
 	TextureInfo check_false = loader.LoadTexture("UI\\checkbox_false.png", true);
 	TextureInfo check_true = loader.LoadTexture("UI\\checkbox_true.png", true);
+	TextureInfo options = loader.LoadTexture("UI\\options.png", true);
 	
+	textures.push_back(test);
+	textures.push_back(standard);
+	textures.push_back(highlight);
+	textures.push_back(click);
+	textures.push_back(check_false);
+	textures.push_back(check_true);
+	textures.push_back(options);
+
 	return ret;
 }
 
@@ -224,6 +233,8 @@ bool ModuleGameObject::CleanUp()
 	RELEASE(kdtree);
 
 	SuStoUI::DeInit(susto_ui);
+
+	textures.clear();
 
 	return ret;
 }
@@ -513,6 +524,11 @@ void ModuleGameObject::SetCanMove(bool set)
 SuStoUIMain * ModuleGameObject::GetUIMain()
 {
 	return susto_ui;
+}
+
+vector<TextureInfo> ModuleGameObject::GetTextures() const
+{
+	return textures;
 }
 
 void ModuleGameObject::DestroyGameObjects()

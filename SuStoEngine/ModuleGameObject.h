@@ -8,6 +8,7 @@
 class KDTree;
 class Resource;
 class SuStoUIMain;
+struct TextureInfo;
 
 class ModuleGameObject : public Module
 {
@@ -64,6 +65,8 @@ public:
 
 	SuStoUIMain* GetUIMain();
 
+	vector<TextureInfo> GetTextures() const;
+
 private:
 	void DestroyGameObjects();
 	void MousePick();
@@ -89,6 +92,8 @@ private:
 	bool			    can_move = true;
 
 	SuStoUIMain*	    susto_ui = nullptr;
+
+	vector<TextureInfo>	textures;
 };
 
 #endif // !_MODULE_GAME_OBJECT_H_
