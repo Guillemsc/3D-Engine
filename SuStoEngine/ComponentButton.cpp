@@ -29,6 +29,12 @@ void ComponentButton::Start()
 
 void ComponentButton::Update()
 {
+	if (to_load)
+	{
+		OnLoadSerialize(config);
+		to_load = false;
+	}
+
 	if (button != nullptr)
 	{
 		button->SetTransform(GetOwner()->transform->GetGlobalTransform());
@@ -118,10 +124,32 @@ void ComponentButton::OnChangeParent()
 
 void ComponentButton::OnLoadSerialize(JSON_Doc config)
 {
+	if (button != nullptr)
+	{
+		SuStoVec2 anchor(config.GetNumber("anchor_x", 0), config.GetNumber("anchor_y", 0));
+		SuStoVec2 pos(config.GetNumber("pos_x", 0), config.GetNumber("pos_y", 0));
+		SuStoVec2 scale(config.GetNumber("scale_x", 0), config.GetNumber("scale_y", 0));
+
+		button->SetAnchor(anchor);
+		button->SetLocalPos(pos);
+		button->SetLocalScale(scale);
+	}
+
+	if (!to_load)
+	{
+		this->config = config;
+		to_load = true;
+	}
 }
 
 void ComponentButton::OnSaveSerialize(JSON_Doc config)
 {
+	config.SetNumber("anchor_x", button->GetAnchor().x);
+	config.SetNumber("anchor_y", button->GetAnchor().y);
+	config.SetNumber("pos_x", button->GetLocalPos().x);
+	config.SetNumber("pos_y", button->GetLocalPos().y);
+	config.SetNumber("scale_x", button->GetLocalScale().x);
+	config.SetNumber("scale_y", button->GetLocalScale().y);
 }
 
 void ComponentButton::TryBindCanvas()
