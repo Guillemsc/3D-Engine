@@ -1,0 +1,485 @@
+// Fonts
+
+$font-monsterrat: 'Montserrat', arial, sans-serif;
+$font-sanchez: 'Sanchez', times, serif;
+$font-roboto: 'Roboto', arial, sans-serif;
+$font-playfair: 'Playfair Display', times, serif;
+
+// Grid Overrides
+$grid-gutter-width: 30px !default; 
+$border-radius-base:  4px !default;
+$padding-base-vertical: 14px !default;
+
+// Colors Overrides
+$brand-primary: #44da82 !default;
+$brand-white: #fff;
+$brand-black: #000;
+$brand-gray: #ccc;
+$brand-lighter: #e9e9e9;
+$brand-body-color: #88929a;
+$brand-selection-color: #f9f6f0;
+
+// Form Overrides
+$input-border-focus:  $brand-primary !default;
+$form-group-margin-bottom:       30px !default;
+
+// Mixin
+@mixin transition($transition) {
+    -moz-transition:    $transition;
+    -o-transition:      $transition;
+    -webkit-transition: $transition;
+    -ms-transition: $transition;
+    transition:         $transition;
+}
+
+// Import Bootstrap
+@import 'bootstrap';
+
+
+// Template Base
+body {
+	font-family: $font-roboto;
+	font-weight: 300;
+	font-size: 14px;
+	line-height: 26px;
+	letter-spacing: .02em;
+	color: $brand-body-color;
+}
+a {
+	@include transition(.5s);
+	&:hover, &:active, &:focus {
+		outline: none;
+	}
+}
+p {
+	margin-bottom: 1.5em;
+}
+
+::-webkit-selection {
+  color: $brand-body-color;
+  background: $brand-selection-color;
+}
+
+::-moz-selection {
+  color: $brand-body-color;
+  background: $brand-selection-color;
+}
+
+::selection {
+  color: $brand-body-color;
+  background: $brand-selection-color;
+}
+
+
+// Template Layouts
+#fh5co-header {
+	position: relative;
+	z-index: 1;
+	background-attachment: fixed;
+	// background-size: cover;
+
+	.fh5co-overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		width: 100%;
+		z-index: 2;
+
+		background: rgba(68, 218, 130, .9);
+		// background: rgba(0, 0, 0, .4);
+		
+	}
+}
+
+#fh5co-header, 
+.fh5co-intro-wrap {
+	height: 700px;
+}
+.fh5co-intro-wrap {
+	display: table;
+	width: 100%;
+	.fh5co-intro {
+		position: relative;
+		z-index: 3;
+		width: 100%;
+		display: table-cell;
+		vertical-align: middle;
+		color: $brand-white;
+		.fh5co-intro-lead {
+			color: rgba(255,255,255,1);
+			line-height: 93px;
+			font-size: 72px;
+			font-weight: 700!important;
+			font-family: $font-monsterrat;
+			text-transform: uppercase;
+			letter-spacing: 5px;
+			margin: 0;
+
+			@media screen and (max-width: $screen-sm) {
+				font-size: 42px;
+				line-height: 63px;
+			}
+		}
+		.fh5co-intro-sub {
+			font-size: 31px;
+			font-weight: 300;
+			font-family: $font-roboto;
+			font-family: $font-sanchez;
+			line-height: 51px;
+			margin: 0 0 2.5em 0;
+			@media screen and (max-width: $screen-sm) {
+				font-size: 21px;
+				line-height: 41px;
+			}
+		}
+		a {
+			color: rgba(255,255,255,.7);
+			border-bottom: 1px solid rgba(255,255,255,.4);
+			text-decoration: none;
+			&:hover {
+				color: rgba(255,255,255,1);
+				border-bottom: 1px solid rgba(255,255,255,1);
+				text-decoration: none;
+			}
+		}
+	}
+}
+.fh5co-social {
+	a {
+		font-size: 45px;
+		display: inline-block;
+		text-decoration: none;
+		border-bottom: none!important;
+	}
+}
+
+
+#fh5co-main {
+	clear: both;
+}
+
+// Row Padded
+.row-padded {
+	padding: 7em 0;
+}
+
+// Section Heading
+.fh5co-section-heading {
+	font-family: $font-monsterrat;
+	margin: 0;
+	font-size: 14px;
+	position: relative;
+	font-weight: 400;
+	padding-bottom: 10px;
+	margin-bottom: 1.5em;
+	text-transform: uppercase;
+	color: $brand-black;
+	.fh5co-border {
+		display: block;
+		width: 100%;
+		bottom: 0;
+		height: 3px;
+		position: absolute;
+		background: $brand-primary;
+
+		@media screen and (max-width: $screen-md) {
+			background: transparent!important;
+		}
+	}
+}
+
+// Section Seperator
+.fh5co-section-seperator {
+	background-color: transparent;
+	background-size: cover;
+	background-attachment: fixed;
+	position: relative;
+	padding: 2em 0;
+	@media screen and (max-width: $screen-md) {
+		padding: 7em 0!important;
+	}
+	.fh5co-overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0, 0, 0, .4);
+	}
+	&, .fh5co-section-content-wrap {
+		height: 500px;
+		width: 100%;
+		@media screen and (max-width: $screen-md) {
+			height: inherit;
+		}
+	}
+	.fh5co-section-content-wrap {
+		display: table;
+		.fh5co-section-content {
+			width: 100%;
+			display: table-cell;
+			vertical-align: middle;
+		}
+	}
+	&.fh5co-section-seperator-white {
+		padding: 2em 0;
+		@media screen and (max-width: $screen-md) {
+			padding: 7em 0!important;
+		}
+		.fh5co-overlay {
+			background: rgba(0, 0, 0, .4);
+		}
+		.fh5co-section-heading { 
+			color: $brand-white!important;
+		}
+		&, .fh5co-section-content-wrap {
+			width: 100%;
+		}
+		.form-control {
+			color: $brand-white;
+			border: none!important;
+			background: rgba(255,255,255,.1);
+			
+			&::-webkit-input-placeholder {
+			   color: rgba(0, 0, 0, .3);
+			   font-style: italic;
+			}
+
+			&:-moz-placeholder { /* Firefox 18- */
+			   color: rgba(0, 0, 0, .3);
+			   font-style: italic;
+			}
+
+			&::-moz-placeholder {  /* Firefox 19+ */
+			   color: rgba(0, 0, 0, .3);
+			   font-style: italic;
+			}
+
+			&:-ms-input-placeholder {  
+			   color: rgba(0, 0, 0, .3);
+			   font-style: italic;
+			}
+
+			&:active, &:focus {
+				background: rgba(255,255,255,1);
+				color: $brand-black;
+			}
+		}
+	}
+}
+
+// Projects
+.fh5co-project {
+	> a {
+		margin-bottom: 1.5em;
+		display: block;
+		position: relative;
+		.fh5co-overlay {
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			top: 0;
+			background: rgba(68, 218, 130, .9);
+			z-index: 8;
+			opacity: 0;
+		}
+		.fh5co-overlay-text {
+			position: absolute; 
+			top: 50%;
+			text-align: center;
+			width: 100%;
+			margin-top: -15px;
+			z-index: 9;
+			color: $brand-white;
+			font-size: 20px;
+			font-family: $font-sanchez;
+			opacity: 0;
+		}
+	}
+}
+
+// Forms
+.form-control {
+	box-shadow: none;
+	background: transparent;
+	border: 1px solid rgba(0,0,0,.5);
+	&:active, &:focus, &:hover {
+		outline: none;
+		box-shadow: none;
+	}
+}
+.btn {
+	@include transition(.5s);
+	&:hover, &:active, &:focus {
+		outline: none;
+	}
+}
+
+// Blockquote
+.fh5co-testimony {
+	blockquote {
+		border-left: none;
+		padding-left: none;
+		> p {
+			font-size: 30px;
+			line-height: 41px;
+			color: $brand-white;
+			font-family: $font-sanchez;
+			em {
+				font-family: $font-playfair;
+				font-style: italic;
+				font-weight: 400;
+			}
+			.author {
+				font-size: 18px;
+				font-family: $font-monsterrat;
+				font-style: normal;
+				display: block;
+				font-weight: 400;
+				color: rgba(255,255,255,.5);
+			}
+		}
+	}
+}
+
+// Contacts
+.fh5co-contact {
+	color: rgba(255,255,255,.7);
+	padding: 0;
+	margin: 0 0 1.5em 0;
+	li {
+		position: relative;
+		padding: 0;
+		margin: 0 0 .5em 0;
+		padding-left: 30px;
+		list-style: none;
+
+		i {
+			position: absolute;
+			top: .5em;
+			left: 0;
+		}
+	}
+}
+
+#message {
+	height: 130px;
+	@media screen and (max-width: $screen-sm ) {
+		height: inherit;
+	}
+}
+
+@media screen and (max-width: $screen-xs ) {
+	.col-xxs-12 {
+		float: none!important;
+		display: block;
+		clear: both;
+		width: 100%;
+	}
+}
+#fh5co-footer {
+	p {
+		margin: 0;
+	}
+}
+
+.js .to-animate {
+	opacity: 0;
+}
+
+
+// Animations
+
+// Template Components
+
+// Accordion
+.fh5co-accordion {
+	border-bottom: 1px solid $brand-lighter;
+	float: left;
+	width: 100%;
+
+	.fh5co-accordion-head {
+		position: relative;
+		.fh5co-accordion-toggle {
+			position: absolute;
+			top: 50%;
+			margin-top: -13px;
+			right: 0;
+			text-transform: uppercase;
+			letter-spacing: 2px;
+			font-weight: 700;
+			font-size: 12px;
+		}
+		> h3 {
+			font-size: 18px;
+			font-family: $font-playfair;
+			font-style: italic;
+			color: $brand-black;
+			margin: 0;
+			padding: 1.5em .5em;
+			i {
+				padding-right: .5em;
+				color: #a1b0c5;
+				opacity: .5;
+				font-size: 1.5em;
+				margin-bottom: 0px;
+				float: left;
+			}
+		}
+	}
+	.fh5co-accordion-body {
+		display: none;
+		float: left;
+		width: 100%;
+		padding-left: 3.6em;
+	}
+	
+}
+
+// Counter
+.fh5co-counter {
+	font-size: 50px;
+	display: block;
+	color: $brand-white;
+	width: 100%;
+	font-family: $font-sanchez;
+	margin-bottom: .5em;
+}
+.fh5co-counter-label {
+	color: $brand-white;
+	text-transform: uppercase;
+	font-size: 13px;
+	font-family: $font-monsterrat;
+	letter-spacing: 5px;
+	margin-bottom: 2em;
+	display: block;
+}
+
+
+// Magnific Popup
+// Zoom
+.mfp-with-zoom .mfp-container,
+.mfp-with-zoom.mfp-bg {
+  opacity: 0;
+  -webkit-backface-visibility: hidden;
+  /* ideally, transition speed should match zoom duration */
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+}
+
+.mfp-with-zoom.mfp-ready .mfp-container {
+    opacity: 1;
+}
+.mfp-with-zoom.mfp-ready.mfp-bg {
+    opacity: 0.8;
+}
+
+.mfp-with-zoom.mfp-removing .mfp-container,
+.mfp-with-zoom.mfp-removing.mfp-bg {
+  opacity: 0;
+}
