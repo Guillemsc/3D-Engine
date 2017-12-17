@@ -629,6 +629,8 @@ void SuStoUIMain::CheckRenderCameraEvents()
 		UIEvent ev_mouse_over(UIEventType::MOUSE_OVER);
 		ev_mouse_over.mouse_over.element = mouse_over->GetOwner();
 		PushEvent(ev_mouse_over);
+		if (mouse_over->GetOwner()->MouseOver)
+			mouse_over->GetOwner()->MouseOver(ev_mouse_over);
 	}
 
 	if (mouse_out != nullptr)
@@ -636,6 +638,8 @@ void SuStoUIMain::CheckRenderCameraEvents()
 		UIEvent ev_mouse_out(UIEventType::MOUSE_OUT);
 		ev_mouse_out.mouse_out.element = mouse_out->GetOwner();
 		PushEvent(ev_mouse_out);
+		if (mouse_over->GetOwner()->MouseOut)
+			mouse_over->GetOwner()->MouseOut(ev_mouse_out);
 	}
 
 	if (mouse_pressed != nullptr)
@@ -643,7 +647,8 @@ void SuStoUIMain::CheckRenderCameraEvents()
 		UIEvent ev_mouse_click(UIEventType::MOUSE_CLICK);
 		ev_mouse_click.mouse_click.element = mouse_pressed->GetOwner();
 		PushEvent(ev_mouse_click);
-		LOG_OUTPUT("presws");
+		if (mouse_over->GetOwner()->MousePressed)
+			mouse_over->GetOwner()->MousePressed(ev_mouse_click);
 	}
 
 	last_mouse_over = mouse_over;

@@ -105,7 +105,7 @@ bool ModuleGameObject::Start()
 	canvas_go->AddChild(text_go);
 
 	ComponentText* ctext = (ComponentText*)text_go->AddComponent(UI_TEXT);
-	ctext->SetText("hi");
+	ctext->SetText("hdddddddddddddi");
 
 	GameObject* button_start_go = App->gameobj->Create();
 	canvas_go->AddChild(button_start_go);
@@ -114,6 +114,8 @@ bool ModuleGameObject::Start()
 	cbutton->SetIdleImage(standard.id, float2(standard.size_x, standard.size_y));
 	cbutton->SetOverImage(highlight.id, float2(highlight.size_x, highlight.size_y));
 	cbutton->SetPressedImage(click.id, float2(click.size_x, click.size_y));
+
+	cbutton->GetButton()->SetLocalPos(SuStoVec2(-100, -100));
 
 	return ret;
 }

@@ -79,8 +79,6 @@ SuStoTexture UIFontsSystem::LoadText(const char * text, UIFont * font, uint size
 {
 	stbtt_fontinfo info = font->GetInfo();
 
-	unsigned char* bitmap = new unsigned char[font->GetWidth()* font->GetHeight()];
-
 	float scale = stbtt_ScaleForPixelHeight(&info, font->GetLineHeight());
 
 	const char* word = text;
@@ -95,7 +93,35 @@ SuStoTexture UIFontsSystem::LoadText(const char * text, UIFont * font, uint size
 	int y = 0;
 
 	int bitmap_x = 0;
-	int bimtap_y = 0;
+	int bitmap_y = ascent - descent;
+
+	// Get size first
+	for (int i = 0; i < strlen(word); ++i)
+	{
+		int c_x1, c_y1, c_x2, c_y2;
+		stbtt_GetCodepointBitmapBox(&info, word[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
+
+		y = ascent + c_y1;
+
+		if (y > bitmap_y)
+			bitmap_y = y;
+
+		int ax;
+		stbtt_GetCodepointHMetrics(&info, word[i], &ax, 0);
+		x += ax * scale;
+
+		int kern;
+		kern = stbtt_GetCodepointKernAdvance(&info, word[i], word[i + 1]);
+		x += kern * scale;
+	}
+
+	bitmap_x = x;
+	//bitmap_y += 100;
+
+	x = 0;
+	y = 0;
+
+	unsigned char* bitmap = new unsigned char[bitmap_x * bitmap_y];
 
 	for (int i = 0; i < strlen(word); ++i)
 	{
@@ -103,14 +129,12 @@ SuStoTexture UIFontsSystem::LoadText(const char * text, UIFont * font, uint size
 		int c_x1, c_y1, c_x2, c_y2;
 		stbtt_GetCodepointBitmapBox(&info, word[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
 
-		bitmap_x += c_x2;
-
 		/* compute y (different characters have different heights */
 		y = ascent + c_y1;
 
 		/* render character (stride and offset is important here) */
-		int byteOffset = x + (y  * font->GetWidth());
-		stbtt_MakeCodepointBitmap(&info, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, font->GetWidth(), scale, scale, word[i]);
+		int byteOffset = x + (y * bitmap_x);
+		stbtt_MakeCodepointBitmap(&info, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, bitmap_x, scale, scale, word[i]);
 
 		/* how wide is this character */
 		int ax;
@@ -123,12 +147,63 @@ SuStoTexture UIFontsSystem::LoadText(const char * text, UIFont * font, uint size
 		x += kern * scale;
 	}
 
-	int a = bitmap_x;
-	int b = font->GetWidth();
+	uint id = LoadTexture(bitmap, font->GetBitmapSize(), bitmap_x, bitmap_y);
 
-	uint id = LoadTexture(bitmap, font->GetBitmapSize(), font->GetWidth(), ascent);
+	RELEASE_ARRAY(bitmap)
 
-	return SuStoTexture(id, SuStoVec2(font->GetWidth(), ascent));
+	return SuStoTexture(id, SuStoVec2(bitmap_x, bitmap_y));
+
+	//stbtt_fontinfo info = font->GetInfo();
+
+	//unsigned char* bitmap = new unsigned char[font->GetWidth()* font->GetHeight()];
+
+	//float scale = stbtt_ScaleForPixelHeight(&info, font->GetLineHeight());
+
+	//const char* word = text;
+
+	//int ascent, descent, lineGap;
+	//stbtt_GetFontVMetrics(&info, &ascent, &descent, &lineGap);
+
+	//ascent *= scale;
+	//descent *= scale;
+
+	//int x = 0;
+	//int y = 0;
+
+	//int bitmap_x = 0;
+	//int bimtap_y = 0;
+
+	//word = "dfasdf";
+
+	//for (int i = 0; i < strlen(word); ++i)
+	//{
+	//	/* get bounding box for character (may be offset to account for chars that dip above or below the line */
+	//	int c_x1, c_y1, c_x2, c_y2;
+	//	stbtt_GetCodepointBitmapBox(&info, word[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
+
+	//	/* compute y (different characters have different heights */
+	//	y = ascent + c_y1;
+
+	//	/* render character (stride and offset is important here) */
+	//	int byteOffset = x + (y * font->GetWidth());
+	//	stbtt_MakeCodepointBitmap(&info, bitmap + byteOffset, c_x2 - c_x1, c_y2 - c_y1, font->GetWidth(), scale, scale, word[i]);
+
+	//	/* how wide is this character */
+	//	int ax;
+	//	stbtt_GetCodepointHMetrics(&info, word[i], &ax, 0);
+	//	x += ax * scale;
+
+	//	/* add kerning */
+	//	int kern;
+	//	kern = stbtt_GetCodepointKernAdvance(&info, word[i], word[i + 1]);
+	//	x += kern * scale;
+	//}
+
+	//uint id = LoadTexture(bitmap, font->GetBitmapSize(), font->GetWidth()+1 , ascent);
+
+	//RELEASE_ARRAY(bitmap)
+
+	//return SuStoTexture(id, SuStoVec2(font->GetWidth(), ascent));
 }
 
 void UIFontsSystem::UnloadText(uint id)

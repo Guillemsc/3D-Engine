@@ -49,6 +49,10 @@ public:
 	void SetLayer(uint layer);
 	uint GetLayer();
 
+	std::function<void(UIEvent)> MouseOver;
+	std::function<void(UIEvent)> MouseOut;
+	std::function<void(UIEvent)> MousePressed;
+
 private:
 	SuStoUIMain* ui_main = nullptr;
 	ElementType  type = ElementType::UNDEFINED;
