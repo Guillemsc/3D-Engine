@@ -23,12 +23,15 @@
 #include "ComponentImage.h"
 #include "ComponentText.h"
 #include "ComponentButton.h"
+#include "ComponentTextInput.h"
 
 #include "SuSto_impl_sdl_opengl.h"
 #include "SuStoUI.h"
 #include "UIImage.h"
+#include "UIText.h"
 #include "UICanvas.h"
 #include "UIButton.h"
+#include "UITextInput.h"
 
 #define BUTTON_SIZE SuStoVec2(96, 25)
 #define BUTTON_PADDING SuStoVec2(9, 5)
@@ -64,13 +67,6 @@ bool ModuleGameObject::Start()
 {
 	bool ret = true;
 
-	GameObject* t = App->gameobj->Create();
-
-	ComponentMesh* cm = (ComponentMesh*)t->AddComponent(MESH);
-	ResourceMesh* rm = App->resource_manager->GetMeshLoader()->CreatePlaneMesh(float2(10, 10));
-
-	cm->SetMesh(rm);
-
 	susto_ui = SuStoUI::Init(App->window->window);
 	susto_ui->SetFrustum(App->camera->GetCurrentCamera()->GetFrustum());
 
@@ -92,8 +88,8 @@ bool ModuleGameObject::Start()
 	textures.push_back(check_true);
 	textures.push_back(options);
 
-	GameObject* canvas_go = App->gameobj->Create();
-	canvas_go->AddComponent(UI_CANVAS);
+	//GameObject* canvas_go = App->gameobj->Create();
+	//canvas_go->AddComponent(UI_CANVAS);
 
 	//GameObject* background_go = App->gameobj->Create();
 	//canvas_go->AddChild(background_go);
@@ -101,21 +97,39 @@ bool ModuleGameObject::Start()
 	//ComponentImage* cimage = (ComponentImage*)background_go->AddComponent(UI_IMAGE);
 	//cimage->SetImage(backgroud.id, float2(backgroud.size_x, backgroud.size_y));
 
-	GameObject* text_go = App->gameobj->Create();
-	canvas_go->AddChild(text_go);
+	//GameObject* text_go = App->gameobj->Create();
+	//canvas_go->AddChild(text_go);
 
-	ComponentText* ctext = (ComponentText*)text_go->AddComponent(UI_TEXT);
-	ctext->SetText("hdddddddddddddi");
+	//ComponentText* c_text = (ComponentText*)text_go->AddComponent(UI_TEXT);
+	//c_text->SetText("Select Username:");
+	//c_text->GetText()->SetClickThrough(true);
+	//c_text->GetText()->SetLocalPos(SuStoVec2(0, 150));
 
-	GameObject* button_start_go = App->gameobj->Create();
-	canvas_go->AddChild(button_start_go);
+	//GameObject* text_input_go = App->gameobj->Create();
+	//canvas_go->AddChild(text_input_go);
 
-	ComponentButton* cbutton = (ComponentButton*)button_start_go->AddComponent(UI_BUTTON);
-	cbutton->SetIdleImage(standard.id, float2(standard.size_x, standard.size_y));
-	cbutton->SetOverImage(highlight.id, float2(highlight.size_x, highlight.size_y));
-	cbutton->SetPressedImage(click.id, float2(click.size_x, click.size_y));
+	//ComponentTextInput* c_text_input = (ComponentTextInput*)text_input_go->AddComponent(UI_TEXT_INPUT);
+	//c_text_input->GetText()->SetLocalPos(SuStoVec2(0, 20));
+	//c_text_input->GetText()->SetLocalScale(SuStoVec2(0.7f, 0.7f));
 
-	cbutton->GetButton()->SetLocalPos(SuStoVec2(-100, -100));
+	//GameObject* button_start_go = App->gameobj->Create();
+	//canvas_go->AddChild(button_start_go);
+
+	//ComponentButton* cbutton = (ComponentButton*)button_start_go->AddComponent(UI_BUTTON);
+	//cbutton->SetIdleImage(standard.id, float2(standard.size_x, standard.size_y));
+	//cbutton->SetOverImage(highlight.id, float2(highlight.size_x, highlight.size_y));
+	//cbutton->SetPressedImage(click.id, float2(click.size_x, click.size_y));
+	//cbutton->GetButton()->SetLocalPos(SuStoVec2(0, -50));
+	//cbutton->GetButton()->SetLocalScale(SuStoVec2(1.7f, 1.7f));
+
+	//GameObject* button_text_go = App->gameobj->Create();
+	//canvas_go->AddChild(button_text_go);
+
+	//ComponentText* cbutton_text = (ComponentText*)button_text_go->AddComponent(UI_TEXT);
+	//cbutton_text->SetText("Start");
+	//cbutton_text->GetText()->SetClickThrough(true);
+	//cbutton_text->GetText()->SetLocalPos(SuStoVec2(0, -50));
+	//cbutton_text->GetText()->SetLocalScale(SuStoVec2(0.7f, 0.7f));
 
 	return ret;
 }
@@ -147,7 +161,7 @@ bool ModuleGameObject::Update()
 		MousePick();
 
 	SuStoUI::Render(susto_ui);
-	//DebugDraw(susto_ui->GetPicking());
+	DebugDraw(susto_ui->GetPicking());
 
 	vector<Camera3D*> cameras = App->camera->GetCameras();
 
@@ -246,6 +260,8 @@ bool ModuleGameObject::PostUpdate()
 	bool ret = true;
 
 	DestroyGameObjects();
+
+	SuStoUI::EndFrame(susto_ui);
 
 	return ret;
 }

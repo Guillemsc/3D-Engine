@@ -287,6 +287,8 @@ public:
 	LineSegment MousePick(bool ortho, PrintableElement*& closest);
 	LineSegment GetPicking();
 
+	UIElement* GetFocused();
+
 private:
 	void DestroyElements();
 
@@ -313,6 +315,8 @@ private:
 	PrintableElement* last_mouse_over = nullptr;
 
 	uint max_layer = 0;
+
+	UIElement* focused = nullptr;
 
 public:
 };

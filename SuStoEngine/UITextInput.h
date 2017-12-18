@@ -3,6 +3,8 @@
 
 #include "UIElement.h"
 
+class UIFont;
+
 class UITextInput : public UIElement
 {
 public:
@@ -17,14 +19,22 @@ public:
 	void OnEvent(UIEvent ev);
 
 	void SetBaseText(const char* base_text);
+	void SetTextSize(int size);
 	std::string GetText() const;
 
+	PrintableElement* GetImage();
+
 private:
-	std::string text_data;
-	bool		is_writting = false;
+	void SetText(const char* new_text);
 
-public:
+private:
+	PrintableElement* image = nullptr;
+	UIFont*			  font = nullptr;
+	uint			  text_size = 100;
 
+	std::string		  text_data;
+
+	bool			  fist_click = true;
 };
 
 

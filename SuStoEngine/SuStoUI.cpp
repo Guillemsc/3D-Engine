@@ -486,6 +486,9 @@ void SuStoUIMain::DeleteElement(UIElement * del)
 	{
 		if ((*it) == del)
 		{
+			if ((*it) == focused)
+				focused = nullptr;
+
 			to_delete.push_back(del);
 			break;
 		}
@@ -615,6 +618,7 @@ void SuStoUIMain::CheckRenderCameraEvents()
 		if (event_system->GetMouseButton(UIMouseClick::UI_LEFT_CLICK) == (UIKeyEvent::UI_KEY_REPEAT))
 		{
 			mouse_pressed = mouse_over;
+			focused = mouse_pressed->GetOwner();
 		}
 	}
 
@@ -704,8 +708,11 @@ LineSegment SuStoUIMain::MousePick(bool ortho, PrintableElement*& _closest)
 
 			if (hit && (*it)->GetOwner()->GetLayer() >= highest_layer)
 			{
-				closest = (*it);
-				highest_layer = (*it)->GetOwner()->GetLayer();
+				if (!(*it)->GetOwner()->GetClickThrough())
+				{
+					closest = (*it);
+					highest_layer = (*it)->GetOwner()->GetLayer();
+				}
 			}
 		}
 
@@ -718,6 +725,11 @@ LineSegment SuStoUIMain::MousePick(bool ortho, PrintableElement*& _closest)
 LineSegment SuStoUIMain::GetPicking()
 {
 	return picking;
+}
+
+UIElement * SuStoUIMain::GetFocused()
+{
+	return focused;
 }
 
 std::string SuStoUI::ToUpperCase(std::string str)

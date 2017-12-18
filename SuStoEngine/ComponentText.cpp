@@ -47,6 +47,8 @@ void ComponentText::Update()
 
 void ComponentText::CleanUp()
 {
+	App->gameobj->GetUIMain()->DeleteElement(text);
+	text = nullptr;
 }
 
 void ComponentText::InspectorDraw(std::vector<Component*> components)
@@ -72,11 +74,16 @@ void ComponentText::InspectorDraw(std::vector<Component*> components)
 		{
 			text->SetLocalScale(SuStoVec2(scale.x, scale.y));
 		}
+
+		ImGui::Separator();
+
 		char buffer[255];
+		strcpy(buffer, text->GetText().c_str());
 		if (ImGui::InputText("Text", buffer, 255))
 		{
 			text->SetText(buffer);
 		}
+		ImGui::Text("Keep in mind the key 'y' does not work due to crash problems");
 	}
 	else
 		ImGui::Text("No Canvas Found");

@@ -148,6 +148,11 @@ void UIEventSystem::ResetInput()
 	keys_up.clear();
 }
 
+void UIEventSystem::SetTextInput(std::string input)
+{
+	text_input.insert(text_input.size(), input);
+}
+
 const bool UIEventSystem::GetKeyDown(int id)
 {
 	if (!keys_down.empty())

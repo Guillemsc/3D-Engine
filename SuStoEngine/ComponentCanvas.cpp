@@ -38,6 +38,7 @@ void ComponentCanvas::Update()
 void ComponentCanvas::CleanUp()
 {
 	App->gameobj->GetUIMain()->DeleteCanvas(canvas);
+	canvas = nullptr;
 }
 
 void ComponentCanvas::InspectorDraw(std::vector<Component*> components)
@@ -100,6 +101,12 @@ void ComponentCanvas::InspectorDraw(std::vector<Component*> components)
 	{
 		GameObject* go = App->gameobj->Create();
 		go->AddComponent(ComponentType::UI_CHECKBOX);
+		GetOwner()->AddChild(go);
+	}
+	if (ImGui::Button("Add TextInput"))
+	{
+		GameObject* go = App->gameobj->Create();
+		go->AddComponent(ComponentType::UI_TEXT_INPUT);
 		GetOwner()->AddChild(go);
 	}
 }

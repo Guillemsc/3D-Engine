@@ -98,6 +98,9 @@ SuStoTexture UIFontsSystem::LoadText(const char * text, UIFont * font, uint size
 	// Get size first
 	for (int i = 0; i < strlen(word); ++i)
 	{
+		if (word[i] == 'y')
+			continue;
+
 		int c_x1, c_y1, c_x2, c_y2;
 		stbtt_GetCodepointBitmapBox(&info, word[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);
 
@@ -116,7 +119,6 @@ SuStoTexture UIFontsSystem::LoadText(const char * text, UIFont * font, uint size
 	}
 
 	bitmap_x = x;
-	//bitmap_y += 100;
 
 	x = 0;
 	y = 0;
@@ -125,6 +127,9 @@ SuStoTexture UIFontsSystem::LoadText(const char * text, UIFont * font, uint size
 
 	for (int i = 0; i < strlen(word); ++i)
 	{
+		if (word[i] == 'y')
+			continue;
+
 		/* get bounding box for character (may be offset to account for chars that dip above or below the line */
 		int c_x1, c_y1, c_x2, c_y2;
 		stbtt_GetCodepointBitmapBox(&info, word[i], scale, scale, &c_x1, &c_y1, &c_x2, &c_y2);

@@ -160,6 +160,8 @@ void SuStoUI::Render(SuStoUIMain * ui_main)
 
 void SuStoUI::EndFrame(SuStoUIMain* ui_main)
 {
+	UIEventSystem* event_system = ui_main->GetEventSystem();
+	event_system->ResetInput();
 }
 
 void SuStoUI::Draw(float * vertices, uint num_indices, uint * indices, float * uvs, uint texture_id)
@@ -188,9 +190,6 @@ void SuStoUI::EventNewFrame(SuStoUIMain* ui_main)
 	UIKeyEvent* mouse_buttons = event_system->mouse_buttons;
 
 	SDL_PumpEvents();
-	SDL_StartTextInput();
-
-	event_system->ResetInput();
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
@@ -272,10 +271,12 @@ void SuStoUI::EventNewFrame(SuStoUIMain* ui_main)
 			break;
 
 		case SDL_TEXTINPUT:
-			event_system->text_input.insert(event_system->text_input.size(), e.text.text);
+			/*event_system->text_input.insert(event_system->text_input.size(), e.text.text);*/
 			break;
 		}
 	}
+
+	SDL_StartTextInput();
 }
 
 int SuStoUI::CharToKey(const char * key)

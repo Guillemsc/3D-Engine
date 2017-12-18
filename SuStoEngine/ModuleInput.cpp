@@ -5,6 +5,9 @@
 #include "ModuleInput.h"
 #include "EditorUI.h"
 #include "JSONLoader.h"
+#include "ModuleGameObject.h"
+#include "SuStoUI.h"
+#include "SuSto_event_system.h"
 
 // SDL_GetScancode: https://wiki.libsdl.org/SDL_Keycode
 // To use PS3 Controller install this driver https://github.com/nefarius/ScpToolkit/releases/tag/v1.6.238.16010
@@ -189,6 +192,7 @@ bool ModuleInput::PreUpdate()
 
 		case SDL_TEXTINPUT:
 			text_input.insert(text_input.size(), e.text.text);
+			App->gameobj->GetUIMain()->GetEventSystem()->SetTextInput(e.text.text);
 			break;
 
 		case SDL_DROPFILE:

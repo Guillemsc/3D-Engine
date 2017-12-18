@@ -122,6 +122,8 @@ public:
 
 	void ResetInput();
 
+	void SetTextInput(std::string input);
+
 private:
 	const bool GetKeyDown(int id);
 	const bool GetKeyRepeat(int id);

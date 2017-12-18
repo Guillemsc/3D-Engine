@@ -45,7 +45,7 @@ void UIText::PostUpdate()
 
 void UIText::CleanUp()
 {
-	text_data.clear();
+	GetUIMain()->DestroyPrintable(image);
 }
 
 void UIText::OnEvent(UIEvent ev)
@@ -60,6 +60,7 @@ void UIText::SetText(const char * new_text)
 {
 	text_data = new_text;
 
+	GetUIMain()->GetFontsSystem()->UnloadText(image->GetTextureId());
 	SuStoTexture tex = GetUIMain()->GetFontsSystem()->LoadText(new_text, font, text_size);
 	image->SetTexture(tex);
 }

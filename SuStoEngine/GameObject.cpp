@@ -12,6 +12,7 @@
 #include "ComponentButton.h"
 #include "ComponentCheckBox.h"
 #include "ComponentText.h"
+#include "ComponentTextInput.h"
 #include "ModuleGameObject.h"
 #include "Inspector.h"
 #include "ModuleRenderer3D.h"
@@ -224,6 +225,11 @@ Component* GameObject::AddComponent(ComponentType type, string unique_id)
 		case UI_TEXT:
 		{
 			ret = new ComponentText(this, new_id);
+		}
+		break;
+		case UI_TEXT_INPUT:
+		{
+			ret = new ComponentTextInput(this, new_id);
 		}
 		break;
 	}

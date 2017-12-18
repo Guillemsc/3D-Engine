@@ -535,6 +535,9 @@
     <ClInclude Include="susto_truetype.h">
       <Filter>Sources\2. Modules ==============\UI\Fonts System</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentTextInput.h">
+      <Filter>Sources\5. GameObjects ===========\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -883,6 +886,10 @@
     <ClCompile Include="SuSto_fonts_system.cpp">
       <Filter>Sources\2. Modules ==============\UI\Fonts System</Filter>
     </ClCompile>
+    <ClCompile Include="ComponentTextInput.cpp">
+      <Filter>Sources\5. GameObjects ===========\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentTextImput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico">

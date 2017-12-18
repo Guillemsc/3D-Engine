@@ -48,6 +48,8 @@ void ComponentButton::Update()
 
 void ComponentButton::CleanUp()
 {
+	App->gameobj->GetUIMain()->DeleteElement(button);
+	button = nullptr;
 }
 
 void ComponentButton::InspectorDraw(std::vector<Component*> components)

@@ -36,7 +36,7 @@ float4x4 UIElement::GetOrthoTransform()
 	float4x4 new_trans = transform;
 
 	new_trans[0][3] = GetOrthoAnchorPos().x + local_pos.x;
-	new_trans[1][3] = GetOrthoAnchorPos().y + local_pos.y;
+	new_trans[1][3] = GetOrthoAnchorPos().y - local_pos.y;
 
 	new_trans[1][1] = -new_trans[1][1];
 
@@ -116,6 +116,21 @@ void UIElement::SetLayer(uint _layer)
 uint UIElement::GetLayer()
 {
 	return layer;
+}
+
+void UIElement::SetClickThrough(bool set)
+{
+	click_through = set;
+}
+
+bool UIElement::GetClickThrough()
+{
+	return click_through;
+}
+
+bool UIElement::OnFocus()
+{
+	return ui_main->GetFocused() == this;
 }
 
 UIElement::UIElement()

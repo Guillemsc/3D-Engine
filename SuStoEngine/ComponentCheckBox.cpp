@@ -47,6 +47,8 @@ void ComponentCheckBox::Update()
 
 void ComponentCheckBox::CleanUp()
 {
+	App->gameobj->GetUIMain()->DeleteElement(checkbox);
+	checkbox = nullptr;
 }
 
 void ComponentCheckBox::InspectorDraw(std::vector<Component*> components)

@@ -49,6 +49,11 @@ public:
 	void SetLayer(uint layer);
 	uint GetLayer();
 
+	void SetClickThrough(bool set);
+	bool GetClickThrough();
+
+	bool OnFocus();
+
 	std::function<void(UIEvent)> MouseOver;
 	std::function<void(UIEvent)> MouseOut;
 	std::function<void(UIEvent)> MousePressed;
@@ -70,6 +75,8 @@ private:
 	bool mouse_pressed = false;
 
 	uint layer = 0;
+
+	bool click_through = false;
 };
 
 #endif

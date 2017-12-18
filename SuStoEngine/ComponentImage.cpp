@@ -44,6 +44,7 @@ void ComponentImage::Update()
 void ComponentImage::CleanUp()
 {
 	App->gameobj->GetUIMain()->DeleteElement(image);
+	image = nullptr;
 }
 
 void ComponentImage::InspectorDraw(std::vector<Component*> components)
