@@ -67,21 +67,6 @@
     <Filter Include="Sources\6. Resources =============\Loaders">
       <UniqueIdentifier>{15b91578-5e35-4dc2-bd7f-b18595074ce9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\2. Modules ==============\UI">
-      <UniqueIdentifier>{f4502cdd-7657-4667-aa3a-60b747977d3b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\2. Modules ==============\UI\Elements">
-      <UniqueIdentifier>{e893e753-aa26-4cdd-bf71-404e0c529095}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\2. Modules ==============\UI\Implementations">
-      <UniqueIdentifier>{f7ab3e0f-7f8b-49e4-9cd1-476281407e76}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\2. Modules ==============\UI\Event System">
-      <UniqueIdentifier>{4d8e2408-8dd8-4ba1-8e10-bbc640591513}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\2. Modules ==============\UI\Fonts System">
-      <UniqueIdentifier>{c74b86ac-29a0-410e-b4b6-f176b3368abf}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleAudio.h">
@@ -480,64 +465,7 @@
     <ClInclude Include="Explorer.h">
       <Filter>Sources\4. Editor ================</Filter>
     </ClInclude>
-    <ClInclude Include="UICanvas.h">
-      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="SuStoUI.h">
-      <Filter>Sources\2. Modules ==============\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="SuSto_impl_sdl_opengl.h">
-      <Filter>Sources\2. Modules ==============\UI\Implementations</Filter>
-    </ClInclude>
-    <ClInclude Include="SuSto_event_system.h">
-      <Filter>Sources\2. Modules ==============\UI\Event System</Filter>
-    </ClInclude>
-    <ClInclude Include="UIElement.h">
-      <Filter>Sources\2. Modules ==============\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UIButton.h">
-      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="UIText.h">
-      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="UICheckBox.h">
-      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="UIPanel.h">
-      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="UIImage.h">
-      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="UITextInput.h">
-      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentCanvas.h">
-      <Filter>Sources\5. GameObjects ===========\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentImage.h">
-      <Filter>Sources\5. GameObjects ===========\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentButton.h">
-      <Filter>Sources\5. GameObjects ===========\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentCheckBox.h">
-      <Filter>Sources\5. GameObjects ===========\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentText.h">
-      <Filter>Sources\5. GameObjects ===========\Components</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceFontLoader.h" />
-    <ClInclude Include="SuSto_fonts_system.h">
-      <Filter>Sources\2. Modules ==============\UI\Fonts System</Filter>
-    </ClInclude>
-    <ClInclude Include="susto_truetype.h">
-      <Filter>Sources\2. Modules ==============\UI\Fonts System</Filter>
-    </ClInclude>
-    <ClInclude Include="ComponentTextInput.h">
-      <Filter>Sources\5. GameObjects ===========\Components</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -834,61 +762,7 @@
     <ClCompile Include="Explorer.cpp">
       <Filter>Sources\4. Editor ================</Filter>
     </ClCompile>
-    <ClCompile Include="SuStoUI.cpp">
-      <Filter>Sources\2. Modules ==============\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="SuSto_impl_sdl_opengl.cpp">
-      <Filter>Sources\2. Modules ==============\UI\Implementations</Filter>
-    </ClCompile>
-    <ClCompile Include="SuSto_event_system.cpp">
-      <Filter>Sources\2. Modules ==============\UI\Event System</Filter>
-    </ClCompile>
-    <ClCompile Include="UIElement.cpp">
-      <Filter>Sources\2. Modules ==============\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="UICanvas.cpp">
-      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="UIButton.cpp">
-      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="UIText.cpp">
-      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="UICheckBox.cpp">
-      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="UIPanel.cpp">
-      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="UIImage.cpp">
-      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="UITextInput.cpp">
-      <Filter>Sources\2. Modules ==============\UI\Elements</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentCanvas.cpp">
-      <Filter>Sources\5. GameObjects ===========\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentImage.cpp">
-      <Filter>Sources\5. GameObjects ===========\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentButton.cpp">
-      <Filter>Sources\5. GameObjects ===========\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentCheckBox.cpp">
-      <Filter>Sources\5. GameObjects ===========\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentText.cpp">
-      <Filter>Sources\5. GameObjects ===========\Components</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceFontLoader.cpp" />
-    <ClCompile Include="SuSto_fonts_system.cpp">
-      <Filter>Sources\2. Modules ==============\UI\Fonts System</Filter>
-    </ClCompile>
-    <ClCompile Include="ComponentTextInput.cpp">
-      <Filter>Sources\5. GameObjects ===========\Components</Filter>
-    </ClCompile>
     <ClCompile Include="ComponentTextImput.cpp" />
   </ItemGroup>
   <ItemGroup>

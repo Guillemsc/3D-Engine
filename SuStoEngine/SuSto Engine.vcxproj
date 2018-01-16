@@ -97,15 +97,9 @@
     <ClInclude Include="Algorithm\SAT.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="Color.h" />
-    <ClInclude Include="ComponentButton.h" />
     <ClInclude Include="ComponentCamera.h" />
-    <ClInclude Include="ComponentCanvas.h" />
-    <ClInclude Include="ComponentCheckBox.h" />
-    <ClInclude Include="ComponentImage.h" />
     <ClInclude Include="ComponentMesh.h" />
     <ClInclude Include="ComponentMaterial.h" />
-    <ClInclude Include="ComponentText.h" />
-    <ClInclude Include="ComponentTextInput.h" />
     <ClInclude Include="ComponentTransform.h" />
     <ClInclude Include="Configuration.h" />
     <ClInclude Include="Console.h" />
@@ -225,23 +219,10 @@
     <ClInclude Include="stb_rect_pack.h" />
     <ClInclude Include="stb_textedit.h" />
     <ClInclude Include="stb_truetype.h" />
-    <ClInclude Include="SuStoUI.h" />
-    <ClInclude Include="SuSto_event_system.h" />
-    <ClInclude Include="SuSto_fonts_system.h" />
-    <ClInclude Include="SuSto_impl_sdl_opengl.h" />
-    <ClInclude Include="susto_truetype.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Time\Clock.h" />
     <ClInclude Include="ToolsBar.h" />
-    <ClInclude Include="UIButton.h" />
-    <ClInclude Include="UICanvas.h" />
-    <ClInclude Include="UICheckBox.h" />
-    <ClInclude Include="UIElement.h" />
-    <ClInclude Include="UIImage.h" />
-    <ClInclude Include="UIPanel.h" />
-    <ClInclude Include="UIText.h" />
-    <ClInclude Include="UITextInput.h" />
     <ClInclude Include="XMLLoader.h" />
   </ItemGroup>
   <ItemGroup>
@@ -250,16 +231,10 @@
     <ClCompile Include="Algorithm\Random\LCG.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Color.cpp" />
-    <ClCompile Include="ComponentButton.cpp" />
     <ClCompile Include="ComponentCamera.cpp" />
-    <ClCompile Include="ComponentCanvas.cpp" />
-    <ClCompile Include="ComponentCheckBox.cpp" />
-    <ClCompile Include="ComponentImage.cpp" />
     <ClCompile Include="ComponentMesh.cpp" />
     <ClCompile Include="ComponentMaterial.cpp" />
-    <ClCompile Include="ComponentText.cpp" />
     <ClCompile Include="ComponentTextImput.cpp" />
-    <ClCompile Include="ComponentTextInput.cpp" />
     <ClCompile Include="ComponentTransform.cpp" />
     <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="Console.cpp" />
@@ -346,22 +321,10 @@
     <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="ResourceTextureLoader.cpp" />
     <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="SuStoUI.cpp" />
-    <ClCompile Include="SuSto_event_system.cpp" />
-    <ClCompile Include="SuSto_fonts_system.cpp" />
-    <ClCompile Include="SuSto_impl_sdl_opengl.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Time\Clock.cpp" />
     <ClCompile Include="ToolsBar.cpp" />
-    <ClCompile Include="UIButton.cpp" />
-    <ClCompile Include="UICanvas.cpp" />
-    <ClCompile Include="UICheckBox.cpp" />
-    <ClCompile Include="UIElement.cpp" />
-    <ClCompile Include="UIImage.cpp" />
-    <ClCompile Include="UIPanel.cpp" />
-    <ClCompile Include="UIText.cpp" />
-    <ClCompile Include="UITextInput.cpp" />
     <ClCompile Include="XMLLoader.cpp" />
   </ItemGroup>
   <ItemGroup>

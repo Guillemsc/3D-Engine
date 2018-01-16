@@ -20,22 +20,6 @@
 #include "imgui.h"
 #include "Resource.h"
 #include "ResourceTextureLoader.h"
-#include "ComponentImage.h"
-#include "ComponentText.h"
-#include "ComponentButton.h"
-#include "ComponentTextInput.h"
-
-#include "SuSto_impl_sdl_opengl.h"
-#include "SuStoUI.h"
-#include "UIImage.h"
-#include "UIText.h"
-#include "UICanvas.h"
-#include "UIButton.h"
-#include "UITextInput.h"
-
-#define BUTTON_SIZE SuStoVec2(96, 25)
-#define BUTTON_PADDING SuStoVec2(9, 5)
-
 
 ModuleGameObject::ModuleGameObject(bool enabled)
 {
@@ -67,70 +51,6 @@ bool ModuleGameObject::Start()
 {
 	bool ret = true;
 
-	susto_ui = SuStoUI::Init(App->window->window);
-	susto_ui->SetFrustum(App->camera->GetCurrentCamera()->GetFrustum());
-
-	ResourceTextureLoader loader;
-	TextureInfo backgroud = loader.LoadTexture("UI\\background.png", true);
-	TextureInfo test = loader.LoadTexture("UI\\preview_164.png", true);
-	TextureInfo standard = loader.LoadTexture("UI\\button_standard.png", true);
-	TextureInfo highlight = loader.LoadTexture("UI\\button_highlight.png", true);
-	TextureInfo click = loader.LoadTexture("UI\\button_click.png", true);
-	TextureInfo check_false = loader.LoadTexture("UI\\checkbox_false.png", true);
-	TextureInfo check_true = loader.LoadTexture("UI\\checkbox_true.png", true);
-	TextureInfo options = loader.LoadTexture("UI\\options.png", true);
-	
-	textures.push_back(test);
-	textures.push_back(standard);
-	textures.push_back(highlight);
-	textures.push_back(click);
-	textures.push_back(check_false);
-	textures.push_back(check_true);
-	textures.push_back(options);
-
-	//GameObject* canvas_go = App->gameobj->Create();
-	//canvas_go->AddComponent(UI_CANVAS);
-
-	//GameObject* background_go = App->gameobj->Create();
-	//canvas_go->AddChild(background_go);
-
-	//ComponentImage* cimage = (ComponentImage*)background_go->AddComponent(UI_IMAGE);
-	//cimage->SetImage(backgroud.id, float2(backgroud.size_x, backgroud.size_y));
-
-	//GameObject* text_go = App->gameobj->Create();
-	//canvas_go->AddChild(text_go);
-
-	//ComponentText* c_text = (ComponentText*)text_go->AddComponent(UI_TEXT);
-	//c_text->SetText("Select Username:");
-	//c_text->GetText()->SetClickThrough(true);
-	//c_text->GetText()->SetLocalPos(SuStoVec2(0, 150));
-
-	//GameObject* text_input_go = App->gameobj->Create();
-	//canvas_go->AddChild(text_input_go);
-
-	//ComponentTextInput* c_text_input = (ComponentTextInput*)text_input_go->AddComponent(UI_TEXT_INPUT);
-	//c_text_input->GetText()->SetLocalPos(SuStoVec2(0, 20));
-	//c_text_input->GetText()->SetLocalScale(SuStoVec2(0.7f, 0.7f));
-
-	//GameObject* button_start_go = App->gameobj->Create();
-	//canvas_go->AddChild(button_start_go);
-
-	//ComponentButton* cbutton = (ComponentButton*)button_start_go->AddComponent(UI_BUTTON);
-	//cbutton->SetIdleImage(standard.id, float2(standard.size_x, standard.size_y));
-	//cbutton->SetOverImage(highlight.id, float2(highlight.size_x, highlight.size_y));
-	//cbutton->SetPressedImage(click.id, float2(click.size_x, click.size_y));
-	//cbutton->GetButton()->SetLocalPos(SuStoVec2(0, -50));
-	//cbutton->GetButton()->SetLocalScale(SuStoVec2(1.7f, 1.7f));
-
-	//GameObject* button_text_go = App->gameobj->Create();
-	//canvas_go->AddChild(button_text_go);
-
-	//ComponentText* cbutton_text = (ComponentText*)button_text_go->AddComponent(UI_TEXT);
-	//cbutton_text->SetText("Start");
-	//cbutton_text->GetText()->SetClickThrough(true);
-	//cbutton_text->GetText()->SetLocalPos(SuStoVec2(0, -50));
-	//cbutton_text->GetText()->SetLocalScale(SuStoVec2(0.7f, 0.7f));
-
 	return ret;
 }
 
@@ -148,8 +68,6 @@ bool ModuleGameObject::PreUpdate()
 	float w = App->editorUI->GameRect().right - App->editorUI->GameRect().left;
 	float h = App->editorUI->GameRect().bottom - App->editorUI->GameRect().top;
 
-	SuStoUI::NewFrame(susto_ui, App->window->window, SuStoRect(x, y, w, h), App->camera->GetCurrentCamera()->GetFrustum());
-
 	return ret;
 }
 
@@ -159,9 +77,6 @@ bool ModuleGameObject::Update()
 
 	if (App->input->GetMouseButton(1))
 		MousePick();
-
-	SuStoUI::Render(susto_ui);
-	DebugDraw(susto_ui->GetPicking());
 
 	vector<Camera3D*> cameras = App->camera->GetCameras();
 
@@ -261,8 +176,6 @@ bool ModuleGameObject::PostUpdate()
 
 	DestroyGameObjects();
 
-	SuStoUI::EndFrame(susto_ui);
-
 	return ret;
 }
 
@@ -276,8 +189,6 @@ bool ModuleGameObject::CleanUp()
 
 	kdtree->CleanUp();
 	RELEASE(kdtree);
-
-	SuStoUI::DeInit(susto_ui);
 
 	textures.clear();
 

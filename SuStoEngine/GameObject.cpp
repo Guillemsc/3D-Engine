@@ -7,12 +7,6 @@
 #include "ComponentMesh.h"
 #include "ComponentMaterial.h"
 #include "ComponentCamera.h"
-#include "ComponentCanvas.h"
-#include "ComponentImage.h"
-#include "ComponentButton.h"
-#include "ComponentCheckBox.h"
-#include "ComponentText.h"
-#include "ComponentTextInput.h"
 #include "ModuleGameObject.h"
 #include "Inspector.h"
 #include "ModuleRenderer3D.h"
@@ -21,7 +15,6 @@
 #include "ResourceTexture.h"
 #include "JSONLoader.h"
 #include "ResourceManager.h"
-#include "UICanvas.h"
 
 #include "Glew/include/glew.h" 
 
@@ -200,36 +193,6 @@ Component* GameObject::AddComponent(ComponentType type, string unique_id)
 		case CAMERA:
 		{
 			ret = new ComponentCamera(this, new_id);
-		}
-		break;
-		case UI_CANVAS:
-		{
-			ret = new ComponentCanvas(this, new_id);
-		}
-		break;
-		case UI_IMAGE:
-		{
-			ret = new ComponentImage(this, new_id);
-		}
-		break;
-		case UI_BUTTON:
-		{
-			ret = new ComponentButton(this, new_id);
-		}
-		break;
-		case UI_CHECKBOX:
-		{
-			ret = new ComponentCheckBox(this, new_id);
-		}
-		break;
-		case UI_TEXT:
-		{
-			ret = new ComponentText(this, new_id);
-		}
-		break;
-		case UI_TEXT_INPUT:
-		{
-			ret = new ComponentTextInput(this, new_id);
 		}
 		break;
 	}
@@ -550,23 +513,6 @@ float4x4 GameObject::GetParentTransform()
 AABB GameObject::GetBbox() const
 {
 	return local_bbox;
-}
-
-UICanvas* GameObject::RecursiveFindCanvasOnParent()
-{
-	UICanvas* found = nullptr;
-
-	ComponentCanvas* ccan = (ComponentCanvas*)GetComponent(ComponentType::UI_CANVAS);
-
-	if (ccan != nullptr)
-	{
-		return ccan->GetCanvas();
-	}
-
-	if (parent != nullptr)
-		found = parent->RecursiveFindCanvasOnParent();
-
-	return found;
 }
 
 void GameObject::SetIsUI(const bool & set)

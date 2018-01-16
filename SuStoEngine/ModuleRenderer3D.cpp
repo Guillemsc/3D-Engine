@@ -11,9 +11,6 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
-#include "SuSto_impl_sdl_opengl.h"
-#include "SuStoUI.h"
-
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "Glew/Lib/glew32.lib") 
