@@ -3,6 +3,15 @@
 
 #include "Module.h"
 
+struct DecomposedFilePath
+{
+	std::string file_name;
+	std::string file_extension;
+	std::string file_extension_lower_case;
+	std::string path;
+	std::string file_path;
+};
+
 class FileSystem : public Module
 {
 public:
@@ -23,8 +32,6 @@ public:
 	bool FileExists(const char* path, const char* name, const char* extension = "");
 	bool FileRename(const char* filepath, const char* new_name);
 
-	bool CheckNameCollision(const char* filepath, std::string& new_name);
-
 	string GetAssetsPath();
 	string GetLibraryPath();
 	string GetLibraryMeshPath();
@@ -34,6 +41,8 @@ public:
 
 	string GetLookingPath();
 	void SetLookingPath(const string & new_path);
+
+	DecomposedFilePath DecomposeFilePath(std::string file_path);
 
 	// Example file.ex -> .ex
 	std::string GetFileExtension(const char* file_name);
@@ -46,8 +55,6 @@ public:
 
 	// Example C:/user/folder/file.ex -> C:/user/folder/
 	std::string GetPathFromFilePath(const char* file_path);
-
-	std::string ProcessFilePath(const char* file_path);
 
 private:
 

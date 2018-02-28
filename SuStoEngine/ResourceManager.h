@@ -5,6 +5,7 @@
 #include "Resource.h"
 #include <map>
 #include <vector>
+#include "ResourceLoader.h"
 
 class ResourceMeshLoader;
 class ResourceMesh;
@@ -19,9 +20,28 @@ public:
 	bool Start();
 	bool CleanUp();
 
+	// Resource management
 	Resource * Get(std::string unique_id);
-	Resource* CreateNewResource(ResourceType type, std::string unique_id = "");
-	void DeleteResource(std::string unique_id);
+	Resource * Get(std::string unique_id, ResourceType type);
+
+	ResourceLoader* GetLoader(ResourceType type);
+	ResourceType AssetExtensionToType(const char* extension);
+	ResourceType LibraryExtensionToType(const char* extension);
+
+	Resource* CreateNewResource(ResourceType type);
+	Resource* CreateNewResource(ResourceType type, std::string unique_id);
+	bool DeleteResource(std::string unique_id);
+
+	// Resource load, unload, export, import
+	void LoadResourceToEngine(const char* file_path);
+	void UnloadResourceFromEngine(Resource* resource);
+	void ExportResourceToLibrary(Resource* resource);
+	void ImportResourceFromLibrary(const char* uid);
+	void LoadResourceIntoScene(Resource* resource);
+	bool IsResourceOnLibrary(Resource* resource);
+	bool IsResourceOnAssets(Resource* resource);
+	void CreateResourcesMissingOnAssets();
+	void RemoveResourcesMissingOnLibrary();
 
 	void SaveResourceIntoFile(Resource* res);
 	bool LoadResource(const char* file_path);
@@ -30,20 +50,16 @@ public:
 	void LoadFileIntoScene(const char* file_path);
 	void DeImportFile(const char* file_path);
 
-	ResourceMeshLoader* GetMeshLoader();
-	ResourceTextureLoader* GetTextureLoader();
-
 	std::string GetNewUID();
 
 private:
+	void AddLoader(ResourceLoader* loader);
+
 	void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension);
 	void DeleteAllResources();
 
 private:
-	std::map<std::string, Resource*> resources;
-
-	ResourceMeshLoader*    mesh_loader = nullptr;
-	ResourceTextureLoader* texture_loader = nullptr;	
+	std::vector<ResourceLoader*> loaders;	
 };
 
 #endif

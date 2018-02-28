@@ -163,18 +163,6 @@ bool SceneManager::LoadPrefab(const char * file_path, GameObject *& loaded_go)
 	{
 		ret = true;
 
-		//if (set_scene_title)
-		//{
-		//	// Engine title --------------
-		//	string title_name = App->GetAppName();
-		//	title_name += " ";
-		//	title_name += App->GetVersion();
-		//	title_name += " - ";
-		//	title_name += scene_name;
-		//	App->window->SetTitle(title_name.c_str());
-		//	// ---------------------------
-		//}
-
 		// Load GameObjects
 		int game_objects_count = prefab->GetArrayCount("GameObjects");
 		for (int i = 0; i < game_objects_count; i++)

@@ -407,6 +407,7 @@ bool JSON_Doc::MoveToSection(const string& set)
 
 	if (obj != nullptr)
 	{
+		last_object = object;
 		object = obj;
 		ret = true;
 	}

@@ -89,6 +89,56 @@ void FileSystem::SetLookingPath(const string& new_path)
 	looking_path = new_path;
 }
 
+DecomposedFilePath FileSystem::DecomposeFilePath(std::string file_path)
+{
+	DecomposedFilePath ret;
+
+	bool adding_file_extension = false;
+	bool adding_file_name = false;
+
+	for (int i = 0; i < file_path.length(); ++i)
+	{
+		char curr_word = file_path[i];
+
+		// Formating --------------------
+
+		if (curr_word == '\\')
+			curr_word = '/';
+
+		ret.file_path += curr_word;
+
+		// ------------------------------
+
+		// File extension ---------------
+		if (adding_file_extension)
+			ret.file_extension += curr_word;
+	
+		if (curr_word == '.')
+		{
+			adding_file_extension = true;
+			ret.file_extension.clear();
+		}
+		// -------------------------------
+
+		// File name ---------------------
+
+		if (adding_file_name)
+			ret.file_name = curr_word;
+		
+		if (curr_word == '/')
+			adding_file_name = true;
+		
+		if (curr_word == '.')
+			adding_file_name = false;
+
+		// -------------------------------
+	}
+
+	ret.file_extension_lower_case = ToLowerCase(ret.file_extension);
+
+	return ret;
+}
+
 std::string FileSystem::GetFileExtension(const char * file_name)
 {
 	string ret;
@@ -387,101 +437,5 @@ bool FileSystem::FileRename(const char * filepath, const char * new_name)
 	return ret;
 }
 
-bool FileSystem::CheckNameCollision(const char * filepath, std::string& new_name)
-{
-	bool ret = false;
 
-	string last_new_name = new_name;
-	new_name.clear();
 
-	string path = App->file_system->GetPathFromFilePath(filepath);
-	string filename = App->file_system->GetFileNameFromFilePath(filepath);
-	string name = App->file_system->GetFilenameWithoutExtension(filename.c_str());
-	string extension = App->file_system->GetFileExtension(filename.c_str());
-
-	vector<std::string> files = App->file_system->GetFilesInPath(path.c_str());
-
-	for (vector<std::string>::iterator it = files.begin(); it != files.end(); ++it)
-	{
-		string cmp_filename = App->file_system->GetFileNameFromFilePath((*it).c_str());
-		string cmp_name = App->file_system->GetFilenameWithoutExtension(cmp_filename.c_str());
-
-		if (TextCmp(filename.c_str(), cmp_filename.c_str()))
-		{
-			ret = true;
-			string values;
-			bool finding = false;
-			bool found = false;
-			int val = 0;
-
-			// Already has a copy?
-			for (int i = cmp_name.length() - 1; i >= 0; --i)
-			{
-				char ch = cmp_name[i];
-
-				if (i == cmp_name.length() - 1 && !isdigit(ch))
-					break;
-
-				if (isdigit(ch))
-				{
-					values.insert(0, 1, ch);
-					finding = true;
-					continue;
-				}
-
-				if (finding && ch == '-')
-				{
-					val = atoi(values.c_str());
-					found = true;
-					break;
-				}
-			}
-
-			// Add value to copy
-			if (found)
-			{
-				for (int i = cmp_name.length() - 1; i >= 0; --i)
-				{
-					char ch = cmp_name[i];
-
-					if (isdigit(ch))
-					{
-						cmp_name.erase(i, 1);
-						continue;
-					}
-
-					if (finding && ch == '-')
-					{
-						cmp_name.erase(i, 1);
-						break;
-					}
-				}
-
-				new_name = cmp_name + "-" + std::to_string(val + 1);
-
-				string new_path = path + new_name + "." + extension;
-
-				CheckNameCollision(new_path.c_str(), new_name);
-
-				break;
-			}
-
-			// New copy
-			else
-			{
-				new_name = name + "-1";
-
-				string new_path = path + new_name + "." + extension;
-
-				CheckNameCollision(new_path.c_str(), new_name);
-
-				break;
-			}
-		}
-	}
-
-	if (!ret)
-		new_name = last_new_name;
-
-	return ret;
-}

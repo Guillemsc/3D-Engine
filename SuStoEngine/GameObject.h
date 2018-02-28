@@ -22,18 +22,17 @@ public:
 	void UpdateComponents();
 	void Draw();
 	void UpdateLogic();
+	void CleanUp();
 
 	void Enable();
 	void Disable();
 	const bool GetEnabled() const;
 	void SetEnabled(const bool& set);
-	void CleanUp();
 
 	Component* AddComponent(ComponentType type, std::string unique_id = "");
 	void RemoveComponent(ComponentType type);
 	bool ContainsComponent(ComponentType type);
 	std::vector<Component*> GetComponents();
-
 	Component* GetComponent(ComponentType type);
 
 	const char* GetName() const;
@@ -59,7 +58,6 @@ public:
 
 	AABB GetBbox() const;
 
-	UICanvas* RecursiveFindCanvasOnParent();
 	void SetIsUI(const bool & set);
 	bool IsUI() const;
 

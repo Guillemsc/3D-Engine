@@ -42,17 +42,22 @@ const float4x4 ComponentTransform::GetLocalTransform() const
 
 const void ComponentTransform::SetPosition(const float3 & pos)
 {
-	local_position = pos;
+	if (local_position.x != pos.x || local_position.y != pos.y || local_position.z != pos.z)
+	{
+		local_position = pos;
 
-	RecalculateLocalTransform();
+		RecalculateLocalTransform();
+	}
 }
 
 const void ComponentTransform::Translate(const float3 & pos)
 {
-	if(pos.x != 0 || pos.y != 0 || pos.z != 0)
+	if (pos.x != 0 || pos.y != 0 || pos.z != 0)
+	{
 		local_position += pos;
 
-	RecalculateLocalTransform();
+		RecalculateLocalTransform();
+	}
 }
 
 const void ComponentTransform::SetRotation(const float3 & rotation)
@@ -99,6 +104,7 @@ const void ComponentTransform::SetLocalTransform(const float4x4 & transform)
 	local_transform = transform;
 
 	transform.Decompose(local_position, local_rotation_quat, local_scale);
+	local_scale = local_rotation_quat.ToEulerXYZ();
 }
 
 const float4x4 ComponentTransform::GetGlobalTransform() const
@@ -108,7 +114,13 @@ const float4x4 ComponentTransform::GetGlobalTransform() const
 
 const void ComponentTransform::SetGlobalTransform(const float4x4 & transform)
 {
-	global_transform = transform;
+	if (GetOwner()->GetParent() != nullptr)
+	{
+		float4x4 new_local = transform * GetOwner()->GetParent()->transform->GetGlobalTransform().Inverted();
+		SetLocalTransform(new_local);
+	}
+	else
+		SetLocalTransform(transform);
 }
 
 const float3 ComponentTransform::GetPosition() const
@@ -169,7 +181,7 @@ void ComponentTransform::OnLoadSerialize(JSON_Doc config)
 void ComponentTransform::OnSaveSerialize(JSON_Doc config)
 {
 	config.SetNumber3("position", local_position);
-	config.SetNumber4("rotation", float4(local_rotation_quat.x, local_rotation_quat.y, local_rotation_quat.w, local_rotation_quat.z));
+	config.SetNumber4("rotation", float4(local_rotation_quat.x, local_rotation_quat.y, local_rotation_quat.z, local_rotation_quat.w));
 	config.SetNumber3("scale", local_scale);
 }
 

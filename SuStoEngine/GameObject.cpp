@@ -120,6 +120,16 @@ void GameObject::UpdateLogic()
 {
 }
 
+void GameObject::CleanUp()
+{
+	for (vector<Component*>::iterator it = components.begin(); it != components.end();)
+	{
+		(*it)->CleanUp();
+		RELEASE(*it);
+		it = components.erase(it);
+	}
+}
+
 void GameObject::Enable()
 {
 	if (!enabled)
@@ -144,16 +154,6 @@ const bool GameObject::GetEnabled() const
 void GameObject::SetEnabled(const bool& set)
 {
 	set ? Enable() : Disable();
-}
-
-void GameObject::CleanUp()
-{
-	for (vector<Component*>::iterator it = components.begin(); it != components.end();)
-	{
-		(*it)->CleanUp();
-		RELEASE(*it);
-		it = components.erase(it);
-	}
 }
 
 Component* GameObject::AddComponent(ComponentType type, string unique_id)
@@ -347,10 +347,8 @@ void GameObject::AddChild(GameObject * child)
 	// Add new parent
 	child->parent = this;
 	childs.push_back(child);
+
 	child->OnChangeParent();
-
-	//for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
-
 }
 
 void GameObject::RecursiveCalcGlobalTransform()

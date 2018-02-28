@@ -25,6 +25,7 @@ public:
 	ResourceType GetType();
 
 	std::string GetUniqueId();
+
 	bool IsUsed();
 	int  UsedCount();
 

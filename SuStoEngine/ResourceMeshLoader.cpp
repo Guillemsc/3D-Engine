@@ -21,7 +21,8 @@
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
 
-ResourceMeshLoader::ResourceMeshLoader()
+ResourceMeshLoader::ResourceMeshLoader() : 
+ResourceLoader(ResourceType::RT_MESH, App->file_system->GetAssetsPath().c_str(), App->file_system->GetLibraryMeshPath().c_str())
 {
 	
 }
@@ -30,24 +31,27 @@ ResourceMeshLoader::~ResourceMeshLoader()
 {
 }
 
-bool ResourceMeshLoader::Load(const char * filepath, vector<Resource*>& resources, bool as_new_gameobject)
+Resource * ResourceMeshLoader::CreateResource(std::string new_uid)
 {
-	bool ret = true;
+	Resource* ret = nullptr;
 
-	string path = App->file_system->GetPathFromFilePath(filepath);
-	string filename = App->file_system->GetFileNameFromFilePath(filepath);
-	string name = App->file_system->GetFilenameWithoutExtension(filename.c_str());
+	ret = new ResourceMesh(new_uid);
 
-	LOG_OUTPUT("\nStarting mesh scene Loading -------------------- \n\n");
+	return ret;
+}
+
+bool ResourceMeshLoader::LoadToEngine(const char* filepath, std::vector<Resource*>& resources)
+{
+	bool ret = false;
+
 	const aiScene* scene = aiImportFile(filepath, aiProcessPreset_TargetRealtime_MaxQuality);
-	LOG_OUTPUT("Finishing mesh scene Loading ---------------------");
 
 	if (scene == nullptr)
 		ret = false;
 
 	if (ret && !scene->HasMeshes())
 	{
-		LOG_OUTPUT("WARNING, scene has no meshes!");
+		LOG_OUTPUT("WARNING, scene has no meshes! Path: %s", filepath);
 		ret = false;
 	}
 
@@ -74,7 +78,7 @@ bool ResourceMeshLoader::Load(const char * filepath, vector<Resource*>& resource
 
 		// Create root go
 		GameObject* parent = nullptr;
-		
+
 		parent = App->gameobj->Create();
 		parent->transform->SetPosition(float3(position.x, position.y, position.z));
 		parent->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
@@ -83,7 +87,6 @@ bool ResourceMeshLoader::Load(const char * filepath, vector<Resource*>& resource
 		string name = App->file_system->GetFileNameFromFilePath(filepath);
 		name = App->file_system->GetFilenameWithoutExtension(name.c_str());
 		parent->SetName(name);
-		
 
 		// Total mesh bbox
 		AABB total_abb;
@@ -99,22 +102,103 @@ bool ResourceMeshLoader::Load(const char * filepath, vector<Resource*>& resource
 
 		used_resources.clear();
 
-		// Set camera focus
-		App->camera->GetCurrentCamera()->Focus(total_abb.CenterPoint(), total_abb.Size().Length());
-		
-		App->scene_manager->SavePrefab(filename.c_str(), "prefab", App->file_system->GetAssetsPath().c_str(), parent);
+		//// Set camera focus
+		//App->camera->GetCurrentCamera()->Focus(total_abb.CenterPoint(), total_abb.Size().Length());
 
-		if (!as_new_gameobject)
-			App->gameobj->Destroy(parent);
+		//App->scene_manager->SavePrefab(filename.c_str(), "prefab", App->file_system->GetAssetsPath().c_str(), parent);
+
+		//if (!as_new_gameobject)
+		//	App->gameobj->Destroy(parent);
 	}
-
-	// Release scene
-	if (scene != nullptr)
-		aiReleaseImport(scene);
 
 	return ret;
 }
 
+//bool ResourceMeshLoader::Load(const char * filepath, vector<Resource*>& resources, bool as_new_gameobject)
+//{
+//	bool ret = true;
+//
+//	string path = App->file_system->GetPathFromFilePath(filepath);
+//	string filename = App->file_system->GetFileNameFromFilePath(filepath);
+//	string name = App->file_system->GetFilenameWithoutExtension(filename.c_str());
+//
+//	LOG_OUTPUT("\nStarting mesh scene Loading -------------------- \n\n");
+//	const aiScene* scene = aiImportFile(filepath, aiProcessPreset_TargetRealtime_MaxQuality);
+//	LOG_OUTPUT("Finishing mesh scene Loading ---------------------");
+//
+//	if (scene == nullptr)
+//		ret = false;
+//
+//	if (ret && !scene->HasMeshes())
+//	{
+//		LOG_OUTPUT("WARNING, scene has no meshes!");
+//		ret = false;
+//	}
+//
+//	if (ret)
+//	{
+//		aiNode* root = scene->mRootNode;
+//
+//		// Root transform
+//		float3 position(0, 0, 0);
+//		Quat rotation(0, 0, 0, 0);
+//		float3 scale(0, 0, 0);
+//
+//		aiVector3D aitranslation;
+//		aiVector3D aiscaling;
+//		aiQuaternion airotation;
+//
+//		if (root != nullptr)
+//		{
+//			root->mTransformation.Decompose(aiscaling, airotation, aitranslation);
+//			position = float3(aitranslation.x, aitranslation.y, aitranslation.z);
+//			scale = float3(aiscaling.x, aiscaling.y, aiscaling.z);
+//			rotation = Quat(airotation.x, airotation.y, airotation.z, airotation.w);
+//		}
+//
+//		// Create root go
+//		GameObject* parent = nullptr;
+//		
+//		parent = App->gameobj->Create();
+//		parent->transform->SetPosition(float3(position.x, position.y, position.z));
+//		parent->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
+//		parent->transform->SetScale(float3(scale.x, scale.y, scale.z));
+//
+//		string name = App->file_system->GetFileNameFromFilePath(filepath);
+//		name = App->file_system->GetFilenameWithoutExtension(name.c_str());
+//		parent->SetName(name);
+//		
+//
+//		// Total mesh bbox
+//		AABB total_abb;
+//		total_abb.SetNegativeInfinity();
+//
+//		// Keep track of resources loaded (avoid repeating)
+//
+//		// Iterate
+//		for (int i = 0; i < root->mNumChildren; i++)
+//		{
+//			RecursiveLoadMesh(scene, root->mChildren[i], filepath, total_abb, resources, parent);
+//		}
+//
+//		used_resources.clear();
+//
+//		// Set camera focus
+//		App->camera->GetCurrentCamera()->Focus(total_abb.CenterPoint(), total_abb.Size().Length());
+//		
+//		App->scene_manager->SavePrefab(filename.c_str(), "prefab", App->file_system->GetAssetsPath().c_str(), parent);
+//
+//		if (!as_new_gameobject)
+//			App->gameobj->Destroy(parent);
+//	}
+//
+//	// Release scene
+//	if (scene != nullptr)
+//		aiReleaseImport(scene);
+//
+//	return ret;
+//}
+//
 void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node, const char * full_path, AABB & total_abb, 
 	vector<Resource*>& resources, GameObject * parent)
 {
@@ -195,9 +279,9 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 		}
 
 		// POSITION, ROTATION AND SCALE
-		float3 position(0, 0, 0);
-		Quat rotation(0, 0, 0, 0);
-		float3 scale(0, 0, 0);
+		float3 position = float3::zero;
+		Quat rotation = Quat::identity;
+		float3 scale = float3::one;
 
 		if (mesh_valid && node_valid)
 		{
@@ -337,278 +421,278 @@ void ResourceMeshLoader::AddResource(int index, ResourceType type, Resource * re
 	used_resources.push_back(used);
 }
 
-void ResourceMeshLoader::ImportAllMeshes()
-{
-	vector<string> files = App->file_system->GetFilesInPath(App->file_system->GetLibraryMeshPath().c_str(), "sustomesh");
-
-	for (vector<string>::iterator it = files.begin(); it != files.end(); it++)
-	{
-		Import((*it).c_str());
-	}
-}
-
-
-void ResourceMeshLoader::Import(const char * filepath)
-{
-	string path = App->file_system->GetPathFromFilePath(filepath);
-	string filename = App->file_system->GetFileNameFromFilePath(filepath);
-	string name = App->file_system->GetFilenameWithoutExtension(filename.c_str());
-
-	// -------------------------------------
-	// META --------------------------------
-	// -------------------------------------
-	string meta_name = path + name + ".meta";
-	JSON_Doc* doc = App->json->LoadJSON(meta_name.c_str());
-	string uid = doc->GetString("uid", "no_uid");
-	string resource_name = doc->GetString("name");
-
-	// -------------------------------------
-	// FILE --------------------------------
-	// -------------------------------------
-	//Open the file and get the size
-	FILE* file = fopen(filepath, "rb");
-	fseek(file, 0, SEEK_END);
-	uint size = ftell(file);
-	rewind(file);
-
-	// Create a buffer to get the data of the file
-	char* buffer = new char[size];
-	char* cursor = buffer;
-
-	// Read the file and close it
-	fread(buffer, sizeof(char), size, file);
-	fclose(file);
-
-	// Copy the ranges
-	// ranges[0] = Vertices, ranges[1] = Indices, ranges[2] = Uvs
-	uint ranges[3];
-	uint bytes = sizeof(ranges);
-	memcpy(ranges, cursor, bytes);
-	cursor += bytes;
-
-	// Store indices
-	uint* indices = new uint[ranges[1]];
-	bytes = sizeof(uint) * ranges[1];
-	memcpy(indices, cursor, bytes);
-	cursor += bytes;
-
-	// Store vertices
-	float* vertices = new float[ranges[0] * 3];
-	bytes = sizeof(float) * ranges[0] * 3;
-	memcpy(vertices, cursor, bytes);
-	cursor += bytes;
-
-	// Store UVs
-	float* uvs = new float[ranges[2] * 3];
-	bytes = sizeof(float) * ranges[2] * 3;
-	memcpy(uvs, cursor, bytes);
-	cursor += bytes;
-
-	// Create mesh --------------
-	ResourceMesh* new_mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(RT_MESH, uid);
-	new_mesh->SetFaces(vertices, ranges[0], indices, ranges[1]);
-	new_mesh->SetUvs(uvs, ranges[2]);
-
-	new_mesh->SetFileName(resource_name.c_str());
-
-	RELEASE_ARRAY(buffer);
-	RELEASE_ARRAY(indices);
-	RELEASE_ARRAY(vertices);
-	RELEASE_ARRAY(uvs);
-	App->json->UnloadJSON(doc);
-}
-
-bool ResourceMeshLoader::Export(const char * path, ResourceMesh* mesh)
-{
-	bool ret = true;
-
-	string name = mesh->GetUniqueId();
- 
-	// -------------------------------------
-	// FILE --------------------------------
-	// -------------------------------------
-	uint ranges[3] = { mesh->GetNumVertices(), mesh->GetNumIndices(), mesh->GetNumUVs() };
-	uint size = sizeof(ranges) +
-		sizeof(uint) * mesh->GetNumIndices() +
-		sizeof(float) * mesh->GetNumVertices() * 3 +
-		sizeof(float) * mesh->GetNumUVs() * 3;
-
-	// Allocate data
-	char* data = new char[size];
-	char* cursor = data;
-
-	// Store ranges
-	uint bytes = sizeof(ranges);
-	memcpy(cursor, ranges, bytes);
-	cursor += bytes;
-
-	// Store indices
-	bytes = sizeof(uint) * mesh->GetNumIndices();
-	memcpy(cursor, mesh->GetIndices(), bytes);
-	cursor += bytes;
-
-	// Store vertices
-	bytes = sizeof(float) * mesh->GetNumVertices() * 3;
-	memcpy(cursor, mesh->GetVertices(), bytes);
-	cursor += bytes;
-
-	// Store UVs
-	bytes = sizeof(float) * mesh->GetNumUVs() * 3;
-	memcpy(cursor, mesh->GetUVs(), bytes);
-
-	//fopen
-	if (App->file_system->FileSave(path, data, name.c_str(), "sustomesh", size) == false)
-	{
-		RELEASE_ARRAY(data);
-		return false;
-	}
-
-	RELEASE_ARRAY(data);
-
-	// -------------------------------------
-	// META --------------------------------
-	// -------------------------------------
-	string meta_name = path + name + ".meta";
-
-	JSON_Doc* doc = App->json->LoadJSON(meta_name.c_str());
-	if (doc == nullptr)
-		doc = App->json->CreateJSON(meta_name.c_str());
-
-	if (doc != nullptr)
-	{
-		doc->Clear();
-
-		doc->SetString("uid", mesh->GetUniqueId().c_str());
-		doc->SetString("name", mesh->GetFileName().c_str());
-
-		doc->Save();
-	}
-
-	App->json->UnloadJSON(doc);
-
-	return ret;
-}
-
-void ResourceMeshLoader::LoadIntoScene(const char * filepath)
-{
-	string path = App->file_system->GetPathFromFilePath(filepath);
-	string filename = App->file_system->GetFileNameFromFilePath(filepath);
-	string extension = ToLowerCase(App->file_system->GetFileExtension(filename.c_str()));
-	string name = App->file_system->GetFilenameWithoutExtension(filename.c_str());
-
-	string prefab_path = filepath;
-	prefab_path += ".prefab";
-
-	GameObject* loaded_go = nullptr;
-	App->scene_manager->LoadPrefab(prefab_path.c_str(), loaded_go);
-}
-
-void ResourceMeshLoader::Unload(const char * filepath)
-{
-	string path = App->file_system->GetPathFromFilePath(filepath);
-	string filename = App->file_system->GetFileNameFromFilePath(filepath);
-	string extension = App->file_system->GetFileExtension(filename.c_str());
-	string name = App->file_system->GetFilenameWithoutExtension(filename.c_str(), false);
-
-	string meta_path = path + filename + ".meta";
-	string prefab_path = path + filename + ".prefab";
-
-	JSON_Doc* meta = App->json->LoadJSON(meta_path.c_str());
-
-	if (meta != nullptr)
-	{
-		int resources_count = meta->GetArrayCount("resources");
-
-		for (int i = 0; i < resources_count; i++)
-		{
-			string res_uid = meta->GetStringFromArray("resources", i);
-
-			string resource_path = App->file_system->GetLibraryTexturePath() + res_uid + ".sustomesh";
-			string resource_meta_path = App->file_system->GetLibraryTexturePath() + res_uid + ".meta";
-
-			App->gameobj->DeleteGameObjectsUsingResource(App->resource_manager->Get(res_uid));
-
-			App->file_system->FileDelete(resource_path.c_str());
-			App->file_system->FileDelete(resource_meta_path.c_str());
-		}
-	}
-
-	App->file_system->FileDelete(meta_path.c_str());
-	App->file_system->FileDelete(prefab_path.c_str());
-	App->file_system->FileDelete(filepath);
-}
-
-ResourceMesh * ResourceMeshLoader::CreatePlaneMesh(float2 size)
-{
-	float length = size.y;
-	float width = size.x;
-	int resX = 2; // 2 minimum
-	int resZ = 2;
-
-	//vertices
-	uint num_vert = resX*resZ;
-	float3 ver[4];
-	for (int z = 0; z < resZ; z++)
-	{
-		// [ -length / 2, length / 2 ]
-		float zPos = ((float)z / (resZ - 1) - .5f) * length;
-		for (int x = 0; x < resX; x++)
-		{
-			// [ -width / 2, width / 2 ]
-			float xPos = ((float)x / (resX - 1) - .5f) * width;
-			ver[x + z * resX] = float3(xPos, 0.f, zPos);
-		}
-	}
-
-	float* vertices = new float[num_vert * 3];
-	for (int i = 0; i < num_vert; ++i)
-	{
-		memcpy(vertices + i * 3, &ver[i].x, sizeof(float) * 3);
-	}
-
-	//indices
-	uint num_indices = (resX - 1) * (resZ - 1) * 6;
-	uint ind[6];
-	int t = 0;
-	for (int face = 0; face < num_indices / 6; ++face)
-	{
-		int i = face % (resX - 1) + (face / (resZ - 1) * resX);
-
-		ind[t++] = i + resX;
-		ind[t++] = i + 1;
-		ind[t++] = i;
-
-		ind[t++] = i + resX;
-		ind[t++] = i + resX + 1;
-		ind[t++] = i + 1;
-	}
-	uint* indices = new uint[num_indices];
-	memcpy(indices, ind, sizeof(uint)*num_indices);
-
-	//uv
-	float3 uv[4];
-	for (int v = 0; v < resZ; v++)
-	{
-		for (int u = 0; u < resX; u++)
-		{
-			uv[u + v * resX] = float3((float)u / (resX - 1), (float)v / (resZ - 1), 0.f);
-		}
-	}
-
-	float* uvs = new float[num_vert * 3];
-	for (int i = 0; i < num_vert; ++i)
-	{
-		memcpy(uvs + i * 3, &uv[i].x, sizeof(float) * 3);
-	}
-
-	ResourceMesh* rmesh = (ResourceMesh*)App->resource_manager->CreateNewResource(ResourceType::RT_MESH);
-	rmesh->SetFaces(vertices, num_vert, indices, num_indices);
-	rmesh->SetUvs(uvs, num_vert);
-
-	RELEASE_ARRAY(vertices);
-	RELEASE_ARRAY(indices);
-	RELEASE_ARRAY(uvs);
-
-	return rmesh;
-}
+//void ResourceMeshLoader::ImportAllMeshes()
+//{
+//	vector<string> files = App->file_system->GetFilesInPath(App->file_system->GetLibraryMeshPath().c_str(), "sustomesh");
+//
+//	for (vector<string>::iterator it = files.begin(); it != files.end(); it++)
+//	{
+//		Import((*it).c_str());
+//	}
+//}
+//
+//
+//void ResourceMeshLoader::Import(const char * filepath)
+//{
+//	string path = App->file_system->GetPathFromFilePath(filepath);
+//	string filename = App->file_system->GetFileNameFromFilePath(filepath);
+//	string name = App->file_system->GetFilenameWithoutExtension(filename.c_str());
+//
+//	// -------------------------------------
+//	// META --------------------------------
+//	// -------------------------------------
+//	string meta_name = path + name + ".meta";
+//	JSON_Doc* doc = App->json->LoadJSON(meta_name.c_str());
+//	string uid = doc->GetString("uid", "no_uid");
+//	string resource_name = doc->GetString("name");
+//
+//	// -------------------------------------
+//	// FILE --------------------------------
+//	// -------------------------------------
+//	//Open the file and get the size
+//	FILE* file = fopen(filepath, "rb");
+//	fseek(file, 0, SEEK_END);
+//	uint size = ftell(file);
+//	rewind(file);
+//
+//	// Create a buffer to get the data of the file
+//	char* buffer = new char[size];
+//	char* cursor = buffer;
+//
+//	// Read the file and close it
+//	fread(buffer, sizeof(char), size, file);
+//	fclose(file);
+//
+//	// Copy the ranges
+//	// ranges[0] = Vertices, ranges[1] = Indices, ranges[2] = Uvs
+//	uint ranges[3];
+//	uint bytes = sizeof(ranges);
+//	memcpy(ranges, cursor, bytes);
+//	cursor += bytes;
+//
+//	// Store indices
+//	uint* indices = new uint[ranges[1]];
+//	bytes = sizeof(uint) * ranges[1];
+//	memcpy(indices, cursor, bytes);
+//	cursor += bytes;
+//
+//	// Store vertices
+//	float* vertices = new float[ranges[0] * 3];
+//	bytes = sizeof(float) * ranges[0] * 3;
+//	memcpy(vertices, cursor, bytes);
+//	cursor += bytes;
+//
+//	// Store UVs
+//	float* uvs = new float[ranges[2] * 3];
+//	bytes = sizeof(float) * ranges[2] * 3;
+//	memcpy(uvs, cursor, bytes);
+//	cursor += bytes;
+//
+//	// Create mesh --------------
+//	ResourceMesh* new_mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(RT_MESH, uid);
+//	new_mesh->SetFaces(vertices, ranges[0], indices, ranges[1]);
+//	new_mesh->SetUvs(uvs, ranges[2]);
+//
+//	new_mesh->SetFileName(resource_name.c_str());
+//
+//	RELEASE_ARRAY(buffer);
+//	RELEASE_ARRAY(indices);
+//	RELEASE_ARRAY(vertices);
+//	RELEASE_ARRAY(uvs);
+//	App->json->UnloadJSON(doc);
+//}
+//
+//bool ResourceMeshLoader::Export(const char * path, ResourceMesh* mesh)
+//{
+//	bool ret = true;
+//
+//	string name = mesh->GetUniqueId();
+// 
+//	// -------------------------------------
+//	// FILE --------------------------------
+//	// -------------------------------------
+//	uint ranges[3] = { mesh->GetNumVertices(), mesh->GetNumIndices(), mesh->GetNumUVs() };
+//	uint size = sizeof(ranges) +
+//		sizeof(uint) * mesh->GetNumIndices() +
+//		sizeof(float) * mesh->GetNumVertices() * 3 +
+//		sizeof(float) * mesh->GetNumUVs() * 3;
+//
+//	// Allocate data
+//	char* data = new char[size];
+//	char* cursor = data;
+//
+//	// Store ranges
+//	uint bytes = sizeof(ranges);
+//	memcpy(cursor, ranges, bytes);
+//	cursor += bytes;
+//
+//	// Store indices
+//	bytes = sizeof(uint) * mesh->GetNumIndices();
+//	memcpy(cursor, mesh->GetIndices(), bytes);
+//	cursor += bytes;
+//
+//	// Store vertices
+//	bytes = sizeof(float) * mesh->GetNumVertices() * 3;
+//	memcpy(cursor, mesh->GetVertices(), bytes);
+//	cursor += bytes;
+//
+//	// Store UVs
+//	bytes = sizeof(float) * mesh->GetNumUVs() * 3;
+//	memcpy(cursor, mesh->GetUVs(), bytes);
+//
+//	//fopen
+//	if (App->file_system->FileSave(path, data, name.c_str(), "sustomesh", size) == false)
+//	{
+//		RELEASE_ARRAY(data);
+//		return false;
+//	}
+//
+//	RELEASE_ARRAY(data);
+//
+//	// -------------------------------------
+//	// META --------------------------------
+//	// -------------------------------------
+//	string meta_name = path + name + ".meta";
+//
+//	JSON_Doc* doc = App->json->LoadJSON(meta_name.c_str());
+//	if (doc == nullptr)
+//		doc = App->json->CreateJSON(meta_name.c_str());
+//
+//	if (doc != nullptr)
+//	{
+//		doc->Clear();
+//
+//		doc->SetString("uid", mesh->GetUniqueId().c_str());
+//		doc->SetString("name", mesh->GetFileName().c_str());
+//
+//		doc->Save();
+//	}
+//
+//	App->json->UnloadJSON(doc);
+//
+//	return ret;
+//}
+//
+//void ResourceMeshLoader::LoadIntoScene(const char * filepath)
+//{
+//	string path = App->file_system->GetPathFromFilePath(filepath);
+//	string filename = App->file_system->GetFileNameFromFilePath(filepath);
+//	string extension = ToLowerCase(App->file_system->GetFileExtension(filename.c_str()));
+//	string name = App->file_system->GetFilenameWithoutExtension(filename.c_str());
+//
+//	string prefab_path = filepath;
+//	prefab_path += ".prefab";
+//
+//	GameObject* loaded_go = nullptr;
+//	App->scene_manager->LoadPrefab(prefab_path.c_str(), loaded_go);
+//}
+//
+//void ResourceMeshLoader::Unload(const char * filepath)
+//{
+//	string path = App->file_system->GetPathFromFilePath(filepath);
+//	string filename = App->file_system->GetFileNameFromFilePath(filepath);
+//	string extension = App->file_system->GetFileExtension(filename.c_str());
+//	string name = App->file_system->GetFilenameWithoutExtension(filename.c_str(), false);
+//
+//	string meta_path = path + filename + ".meta";
+//	string prefab_path = path + filename + ".prefab";
+//
+//	JSON_Doc* meta = App->json->LoadJSON(meta_path.c_str());
+//
+//	if (meta != nullptr)
+//	{
+//		int resources_count = meta->GetArrayCount("resources");
+//
+//		for (int i = 0; i < resources_count; i++)
+//		{
+//			string res_uid = meta->GetStringFromArray("resources", i);
+//
+//			string resource_path = App->file_system->GetLibraryTexturePath() + res_uid + ".sustomesh";
+//			string resource_meta_path = App->file_system->GetLibraryTexturePath() + res_uid + ".meta";
+//
+//			App->gameobj->DeleteGameObjectsUsingResource(App->resource_manager->Get(res_uid));
+//
+//			App->file_system->FileDelete(resource_path.c_str());
+//			App->file_system->FileDelete(resource_meta_path.c_str());
+//		}
+//	}
+//
+//	App->file_system->FileDelete(meta_path.c_str());
+//	App->file_system->FileDelete(prefab_path.c_str());
+//	App->file_system->FileDelete(filepath);
+//}
+//
+//ResourceMesh * ResourceMeshLoader::CreatePlaneMesh(float2 size)
+//{
+//	float length = size.y;
+//	float width = size.x;
+//	int resX = 2; // 2 minimum
+//	int resZ = 2;
+//
+//	//vertices
+//	uint num_vert = resX*resZ;
+//	float3 ver[4];
+//	for (int z = 0; z < resZ; z++)
+//	{
+//		// [ -length / 2, length / 2 ]
+//		float zPos = ((float)z / (resZ - 1) - .5f) * length;
+//		for (int x = 0; x < resX; x++)
+//		{
+//			// [ -width / 2, width / 2 ]
+//			float xPos = ((float)x / (resX - 1) - .5f) * width;
+//			ver[x + z * resX] = float3(xPos, 0.f, zPos);
+//		}
+//	}
+//
+//	float* vertices = new float[num_vert * 3];
+//	for (int i = 0; i < num_vert; ++i)
+//	{
+//		memcpy(vertices + i * 3, &ver[i].x, sizeof(float) * 3);
+//	}
+//
+//	//indices
+//	uint num_indices = (resX - 1) * (resZ - 1) * 6;
+//	uint ind[6];
+//	int t = 0;
+//	for (int face = 0; face < num_indices / 6; ++face)
+//	{
+//		int i = face % (resX - 1) + (face / (resZ - 1) * resX);
+//
+//		ind[t++] = i + resX;
+//		ind[t++] = i + 1;
+//		ind[t++] = i;
+//
+//		ind[t++] = i + resX;
+//		ind[t++] = i + resX + 1;
+//		ind[t++] = i + 1;
+//	}
+//	uint* indices = new uint[num_indices];
+//	memcpy(indices, ind, sizeof(uint)*num_indices);
+//
+//	//uv
+//	float3 uv[4];
+//	for (int v = 0; v < resZ; v++)
+//	{
+//		for (int u = 0; u < resX; u++)
+//		{
+//			uv[u + v * resX] = float3((float)u / (resX - 1), (float)v / (resZ - 1), 0.f);
+//		}
+//	}
+//
+//	float* uvs = new float[num_vert * 3];
+//	for (int i = 0; i < num_vert; ++i)
+//	{
+//		memcpy(uvs + i * 3, &uv[i].x, sizeof(float) * 3);
+//	}
+//
+//	ResourceMesh* rmesh = (ResourceMesh*)App->resource_manager->CreateNewResource(ResourceType::RT_MESH);
+//	rmesh->SetFaces(vertices, num_vert, indices, num_indices);
+//	rmesh->SetUvs(uvs, num_vert);
+//
+//	RELEASE_ARRAY(vertices);
+//	RELEASE_ARRAY(indices);
+//	RELEASE_ARRAY(uvs);
+//
+//	return rmesh;
+//}
 

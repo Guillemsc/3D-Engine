@@ -8,11 +8,22 @@
 #include "ResourceTextureLoader.h"
 #include "Globals.h"
 #include "JSONLoader.h"
+#include "ModuleGameObject.h"
 
 ResourceManager::ResourceManager(bool start_enabled)
 {
-	mesh_loader = new ResourceMeshLoader();
-	texture_loader = new ResourceTextureLoader();
+	ResourceMeshLoader* mesh_loader = new ResourceMeshLoader();
+	mesh_loader->CanLoadExtensionAsset("fbx");
+	mesh_loader->CanLoadExtensionLibrary("sustomesh");
+
+	ResourceTextureLoader* texture_loader = new ResourceTextureLoader();
+	mesh_loader->CanLoadExtensionAsset("png");
+	mesh_loader->CanLoadExtensionAsset("tga");
+	mesh_loader->CanLoadExtensionAsset("dds");
+	mesh_loader->CanLoadExtensionLibrary("dds");
+
+	AddLoader(mesh_loader);
+	AddLoader(texture_loader);
 }
 
 ResourceManager::~ResourceManager()
@@ -32,201 +43,416 @@ bool ResourceManager::CleanUp()
 
 	DeleteAllResources();
 
-	RELEASE(mesh_loader);
-	RELEASE(texture_loader);
+	return ret;
+}
+
+Resource* ResourceManager::Get(std::string unique_id)
+{
+	return Get(unique_id, ResourceType::RT_NULL);
+}
+
+Resource* ResourceManager::Get(std::string unique_id, ResourceType type)
+{
+	Resource* ret = nullptr;
+
+	for (std::vector<ResourceLoader*>::iterator it = loaders.begin(); it != loaders.end(); ++it)
+	{
+		ResourceLoader* curr_loader = (*it);
+
+		if (type == ResourceType::RT_NULL || type == curr_loader->GetLoaderType())
+		{
+			ret = curr_loader->GetResource(unique_id);
+
+			if (ret != nullptr)
+				break;
+		}
+	}
+	return ret;
+}
+
+ResourceLoader * ResourceManager::GetLoader(ResourceType type)
+{
+	ResourceLoader* ret = nullptr;
+
+	for (std::vector<ResourceLoader*>::iterator it = loaders.begin(); it != loaders.end(); ++it)
+	{
+		ResourceLoader* loader = (*it);
+
+		if (loader->GetLoaderType() == type)
+		{
+			ret = loader;
+			break;
+		}
+	}
 
 	return ret;
 }
 
-Resource * ResourceManager::Get(std::string _unique_id)
+ResourceType ResourceManager::AssetExtensionToType(const char * extension)
 {
-	std::map<std::string, Resource*>::iterator it = resources.find(_unique_id);
+	ResourceType ret = ResourceType::RT_NULL;
 
-	if (it != resources.end())
-		return it->second;
+	for (std::vector<ResourceLoader*>::iterator it = loaders.begin(); it != loaders.end(); ++it)
+	{
+		if ((*it)->CanLoadExtensionAsset(extension))
+		{
+			ret = (*it)->GetLoaderType();
+			break;
+		}
+	}
 
-	return nullptr;
+	return ret;
 }
 
-Resource * ResourceManager::CreateNewResource(ResourceType type, std::string _unique_id)
+ResourceType ResourceManager::LibraryExtensionToType(const char * extension)
 {
-	std::string new_id;
+	ResourceType ret = ResourceType::RT_NULL;
 
-	if (_unique_id == "")
-		new_id = GetNewUID();
-	else
-		new_id = _unique_id;
+	for (std::vector<ResourceLoader*>::iterator it = loaders.begin(); it != loaders.end(); ++it)
+	{
+		if ((*it)->CanLoadExtensionLibrary(extension))
+		{
+			ret = (*it)->GetLoaderType();
+			break;
+		}
+	}
+}
 
-	Resource* res = Get(_unique_id);
+Resource * ResourceManager::CreateNewResource(ResourceType type)
+{
+	std::string new_id = GetNewUID();
+	return CreateNewResource(type, new_id);
+}
+
+Resource* ResourceManager::CreateNewResource(ResourceType type, std::string unique_id)
+{
+	Resource* res = nullptr;
+
+	res = Get(unique_id);
 
 	if (res == nullptr)
 	{
-		switch (type)
-		{
-		case ResourceType::RT_MESH:
-			res = new ResourceMesh(new_id);
-			break;
-		case ResourceType::RT_TEXTURE:
-			res = new ResourceTexture(new_id);
-			break;
-		case ResourceType::RT_SCENE:
-			break;
-		}
+		ResourceLoader* loader = GetLoader(type);
 
-		if (res != nullptr)
+		if (loader != nullptr)
 		{
-			resources[new_id] = res;
+			res = loader->CreateResource(unique_id);
+
+			loader->AddResource(res);
 		}
 	}
 
 	return res;
 }
 
-void ResourceManager::DeleteResource(std::string unique_id)
-{
-	std::map<std::string, Resource*>::iterator it = resources.find(unique_id);
-
-	if (it != resources.end())
-	{
-		it->second->CleanUp();
-		RELEASE(it->second);
-		resources.erase(it);
-	}
-}
-
-void ResourceManager::SaveResourceIntoFile(Resource * res)
-{
-	if (res != nullptr)
-	{
-		switch (res->GetType())
-		{
-		case ResourceType::RT_MESH:
-			mesh_loader->Export(App->file_system->GetLibraryMeshPath().c_str(), (ResourceMesh*)res);
-			break;
-		case ResourceType::RT_TEXTURE:
-			texture_loader->Export(App->file_system->GetLibraryTexturePath().c_str(), (ResourceTexture*)res);
-			break;
-		case ResourceType::RT_SCENE:
-			break;
-		}
-	}
-}
-
-bool ResourceManager::LoadResource(const char * file_path)
-{
-	vector<Resource*> resources;
-	return LoadResource(file_path, resources);
-}
-
-bool ResourceManager::LoadResource(const char * file_path, vector<Resource*>& resources)
+bool ResourceManager::DeleteResource(std::string unique_id)
 {
 	bool ret = false;
 
-	resources.clear();
-
-	string name = App->file_system->GetFileNameFromFilePath(file_path);
-	string extension = ToLowerCase(App->file_system->GetFileExtension(name.c_str()));
-
-	bool valid_extension = false;
-
-	if (TextCmp("fbx", extension.c_str()))
+	for (std::vector<ResourceLoader*>::iterator it = loaders.begin(); it != loaders.end(); ++it)
 	{
-		ret = mesh_loader->Load(file_path, resources, true);
-		valid_extension = true;
-	}
-	else if (TextCmp("png", extension.c_str()) || TextCmp("dds", extension.c_str()) || TextCmp("tga", extension.c_str()))
-	{
-		ret = texture_loader->Load(file_path, resources);
-	}
+		ResourceLoader* loader = (*it);
 
-	if (ret)
-	{
-		App->file_system->FileCopyPaste(file_path, App->file_system->GetAssetsPath().c_str());
-		
-		// Save meta file ---------------------------
-		string uid = GetNewUID();
-		string json_name = App->file_system->GetAssetsPath() + name + ".meta";
-		JSON_Doc* meta = App->json->CreateJSON(json_name.c_str());
-		if (meta)
+		if (loader->DeleteResource(unique_id))
 		{
-			meta->SetString("uid", uid.c_str());
-
-			meta->SetArray("resources");
-			for (vector<Resource*>::iterator res = resources.begin(); res != resources.end(); ++res)
-			{
-				meta->AddStringToArray("resources", (*res)->GetUniqueId().c_str());
-			}
-
-			meta->Save();
+			ret = true;
+			break;
 		}
-
 	}
 
 	return ret;
 }
 
-void ResourceManager::ImportAllResources()
+void ResourceManager::LoadResourceToEngine(const char * file_path)
 {
-	mesh_loader->ImportAllMeshes();
-	texture_loader->ImportAllTextures();
-}
+	DecomposedFilePath deco_file = App->file_system->DecomposeFilePath(file_path);
 
-void ResourceManager::LoadFileIntoScene(const char * file_path)
-{
-	string name = App->file_system->GetFileNameFromFilePath(file_path);
-	string extension = ToLowerCase(App->file_system->GetFileExtension(name.c_str()));
+	ResourceType type = AssetExtensionToType(deco_file.file_extension.c_str());
 
-	if (TextCmp("fbx", extension.c_str()))
+	ResourceLoader* loader = GetLoader(type);
+
+	if (loader != nullptr)
 	{
-		mesh_loader->LoadIntoScene(file_path);
-	}
-	else if (TextCmp("png", extension.c_str()) || TextCmp("dds", extension.c_str()) || TextCmp("tga", extension.c_str()))
-	{
+		std::vector<Resource*> resources;
 
-	}
-}
+		bool ret = loader->LoadToEngine(file_path, resources);
 
-void ResourceManager::DeImportFile(const char * file_path)
-{
-	string name = App->file_system->GetFileNameFromFilePath(file_path);
-	string extension = ToLowerCase(App->file_system->GetFileExtension(name.c_str()));
-
-	if (TextCmp("fbx", extension.c_str()))
-	{
-		mesh_loader->Unload(file_path);
-	}
-	else if (TextCmp("png", extension.c_str()) || TextCmp("dds", extension.c_str()) || TextCmp("tga", extension.c_str()))
-	{
-		texture_loader->Unload(file_path);
+		if (ret)
+		{
+			// SUCCES
+		}
+		else
+		{
+			// ERROR
+		}
 	}
 }
 
-ResourceMeshLoader * ResourceManager::GetMeshLoader()
+void ResourceManager::UnloadResourceFromEngine(Resource * resource)
 {
-	return mesh_loader;
+	if (resource != nullptr)
+	{
+		ResourceLoader* loader = GetLoader(resource->GetType());
+
+		if (loader != nullptr)
+		{
+			std::vector<GameObject*> game_objects = App->gameobj->GetListGameObjects();
+
+			for (std::vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
+			{
+				loader->ClearFromGameObject(resource, (*it));
+			}
+
+			loader->UnloadFromEngine(resource);
+		}
+	}
 }
 
-ResourceTextureLoader * ResourceManager::GetTextureLoader()
+void ResourceManager::ExportResourceToLibrary(Resource * resource)
 {
-	return texture_loader;
+	if (resource != nullptr)
+	{
+		ResourceLoader* loader = GetLoader(resource->GetType());
+
+		if (loader != nullptr)
+		{
+			bool ret = loader->ExportToLibrary(resource);
+
+			if (ret)
+			{
+				// SUCCES
+			}
+			else
+			{
+				// ERROR
+			}
+		}
+	}
 }
+
+void ResourceManager::ImportResourceFromLibrary(const char * file_path)
+{
+	DecomposedFilePath deco_file = App->file_system->DecomposeFilePath(file_path);
+
+	ResourceType type = LibraryExtensionToType(deco_file.file_extension.c_str());
+	
+	ResourceLoader* loader = GetLoader(type);
+
+	if (loader != nullptr)
+	{
+		bool ret = loader->ImportFromLibrary(deco_file.file_name.c_str());
+
+		if (ret)
+		{
+			// SUCCES
+		}
+		else
+		{
+			// ERROR
+		}
+	}
+}
+
+void ResourceManager::LoadResourceIntoScene(Resource * resource)
+{
+	if (resource != nullptr)
+	{
+		ResourceLoader* loader = GetLoader(resource->GetType());
+
+		if (loader != nullptr)
+		{
+			bool ret = loader->LoadIntoScene(resource);
+
+			if (ret)
+			{
+				// SUCCES
+			}
+			else
+			{
+				// ERROR
+			}
+		}
+	}
+}
+
+bool ResourceManager::IsResourceOnLibrary(Resource * resource)
+{
+	bool ret = false;
+
+	if (resource != nullptr)
+	{
+		ResourceLoader* loader = GetLoader(resource->GetType());
+
+		if (loader != nullptr)
+		{
+			ret = loader->IsResourceOnLibrary(resource);
+		}
+	}
+
+	return ret;
+}
+
+bool ResourceManager::IsResourceOnAssets(Resource * resource)
+{
+	bool ret = false;
+
+	if (resource != nullptr)
+	{
+		ResourceLoader* loader = GetLoader(resource->GetType());
+
+		if (loader != nullptr)
+		{
+			ret = loader->IsResourceOnAssets(resource);
+		}
+	}
+
+	return ret;
+}
+
+void ResourceManager::CreateResourcesMissingOnAssets()
+{
+	for (std::vector<ResourceLoader*>::iterator it = loaders.begin(); it != loaders.end(); ++it)
+	{
+		(*it)->CreateResourcesMissingOnAssets();
+	}
+}
+
+void ResourceManager::RemoveResourcesMissingOnLibrary()
+{
+	for (std::vector<ResourceLoader*>::iterator it = loaders.begin(); it != loaders.end(); ++it)
+	{
+		(*it)->RemoveResourcesMissingOnLibrary();
+	}
+}
+
+//void ResourceManager::SaveResourceIntoFile(Resource * res)
+//{
+//	if (res != nullptr)
+//	{
+//		switch (res->GetType())
+//		{
+//		case ResourceType::RT_MESH:
+//			mesh_loader->Export(App->file_system->GetLibraryMeshPath().c_str(), (ResourceMesh*)res);
+//			break;
+//		case ResourceType::RT_TEXTURE:
+//			texture_loader->Export(App->file_system->GetLibraryTexturePath().c_str(), (ResourceTexture*)res);
+//			break;
+//		case ResourceType::RT_SCENE:
+//			break;
+//		}
+//	}
+//}
+//
+//bool ResourceManager::LoadResource(const char * file_path)
+//{
+//	vector<Resource*> resources;
+//	return LoadResource(file_path, resources);
+//}
+//
+//bool ResourceManager::LoadResource(const char * file_path, vector<Resource*>& resources)
+//{
+//	bool ret = false;
+//
+//	resources.clear();
+//
+//	string name = App->file_system->GetFileNameFromFilePath(file_path);
+//	string extension = ToLowerCase(App->file_system->GetFileExtension(name.c_str()));
+//
+//	bool valid_extension = false;
+//
+//	if (TextCmp("fbx", extension.c_str()))
+//	{
+//		ret = mesh_loader->Load(file_path, resources, true);
+//		valid_extension = true;
+//	}
+//	else if (TextCmp("png", extension.c_str()) || TextCmp("dds", extension.c_str()) || TextCmp("tga", extension.c_str()))
+//	{
+//		ret = texture_loader->Load(file_path, resources);
+//	}
+//
+//	if (ret)
+//	{
+//		App->file_system->FileCopyPaste(file_path, App->file_system->GetAssetsPath().c_str());
+//		
+//		// Save meta file ---------------------------
+//		string uid = GetNewUID();
+//		string json_name = App->file_system->GetAssetsPath() + name + ".meta";
+//		JSON_Doc* meta = App->json->CreateJSON(json_name.c_str());
+//		if (meta)
+//		{
+//			meta->SetString("uid", uid.c_str());
+//
+//			meta->SetArray("resources");
+//			for (vector<Resource*>::iterator res = resources.begin(); res != resources.end(); ++res)
+//			{
+//				meta->AddStringToArray("resources", (*res)->GetUniqueId().c_str());
+//			}
+//
+//			meta->Save();
+//		}
+//
+//	}
+//
+//	return ret;
+//}
+//
+//void ResourceManager::ImportAllResources()
+//{
+//	mesh_loader->ImportAllMeshes();
+//	texture_loader->ImportAllTextures();
+//}
+//
+//void ResourceManager::LoadFileIntoScene(const char * file_path)
+//{
+//	string name = App->file_system->GetFileNameFromFilePath(file_path);
+//	string extension = ToLowerCase(App->file_system->GetFileExtension(name.c_str()));
+//
+//	if (TextCmp("fbx", extension.c_str()))
+//	{
+//		mesh_loader->LoadIntoScene(file_path);
+//	}
+//	else if (TextCmp("png", extension.c_str()) || TextCmp("dds", extension.c_str()) || TextCmp("tga", extension.c_str()))
+//	{
+//
+//	}
+//}
+//
+//void ResourceManager::DeImportFile(const char * file_path)
+//{
+//	string name = App->file_system->GetFileNameFromFilePath(file_path);
+//	string extension = ToLowerCase(App->file_system->GetFileExtension(name.c_str()));
+//
+//	if (TextCmp("fbx", extension.c_str()))
+//	{
+//		mesh_loader->Unload(file_path);
+//	}
+//	else if (TextCmp("png", extension.c_str()) || TextCmp("dds", extension.c_str()) || TextCmp("tga", extension.c_str()))
+//	{
+//		texture_loader->Unload(file_path);
+//	}
+//}
 
 std::string ResourceManager::GetNewUID()
 {
 	return GetUIDRandomHexadecimal();
 }
 
-void ResourceManager::OnLoadFile(const char * file_path, const char * file_name, const char * file_extension)
+void ResourceManager::AddLoader(ResourceLoader * loader)
 {
-	LoadResource(file_path);
+	loaders.push_back(loader);
 }
 
-void ResourceManager::DeleteAllResources()
-{
-	for (map<std::string, Resource*>::iterator it = resources.begin(); it != resources.end();)
-	{
-		(*it).second->CleanUp();
-		RELEASE(it->second);
-		it = resources.erase(it);
-	}
-}
+//void ResourceManager::OnLoadFile(const char * file_path, const char * file_name, const char * file_extension)
+//{
+//	LoadResource(file_path);
+//}
+//
+//void ResourceManager::DeleteAllResources()
+//{
+//	for (map<std::string, Resource*>::iterator it = resources.begin(); it != resources.end();)
+//	{
+//		(*it).second->CleanUp();
+//		RELEASE(it->second);
+//		it = resources.erase(it);
+//	}
+//}

@@ -75,7 +75,7 @@ bool ModuleGameObject::Update()
 {
 	bool ret = true;
 
-	if (App->input->GetMouseButton(1))
+	if (App->input->GetMouseButton(1) && can_pick)
 		MousePick();
 
 	vector<Camera3D*> cameras = App->camera->GetCameras();
@@ -98,38 +98,42 @@ bool ModuleGameObject::Update()
 
 	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
 	{
-		float4x4 transform = (*it)->transform->GetGlobalTransform().Transposed();
+		float4x4 global_transform_trans = (*it)->transform->GetGlobalTransform().Transposed();
+		float t[16];
 
-		float transformation[16];
 		ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetOpenGLViewMatrix().ptr(),
 			App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr(),
 			current_gizmo_operation,
-			ImGuizmo::MODE::WORLD,
-			transform.ptr(), transformation);
+			ImGuizmo::MODE::LOCAL,
+			global_transform_trans.ptr(), t);
+
+		float4x4 moved_transformation = float4x4(
+			t[0], t[4], t[8], t[12],
+			t[1], t[5], t[9], t[13],
+			t[2], t[6], t[10], t[14],
+			t[3], t[7], t[11], t[15]);
 
 		if (ImGuizmo::IsUsing() && can_move)
 		{
-			float addition[3];
-			float rotation[3];
-			float scale[3];
-			ImGuizmo::DecomposeMatrixToComponents(transformation, addition, rotation, scale);
-			float3 add(addition[0], addition[1], addition[2]);
-			float3 rot(rotation[0], rotation[1], rotation[2]);
-			float3 sc(scale[0], scale[1], scale[2]);
+			float3 pos;
+			Quat quat_rot;
+			float3 scal;
+			moved_transformation.Decompose(pos, quat_rot, scal);
+			float3 rot = float3(quat_rot.ToEulerXYZ().x * RADTODEG, quat_rot.ToEulerXYZ().y * RADTODEG, quat_rot.ToEulerXYZ().z * RADTODEG);
 
 			switch (current_gizmo_operation)
 			{
 				case ImGuizmo::OPERATION::TRANSLATE:
 				{
-					if (add.IsFinite()) 
+					if (pos.IsFinite())
 					{
-						if ((*it)->parent != nullptr) 
+						if ((*it)->parent != nullptr)
 						{
-							add = (*it)->parent->transform->GetGlobalTransform().Inverted().TransformPos(add);
+							pos = (*it)->parent->transform->GetGlobalTransform().Inverted().TransformPos(pos);
 						}
 
-						(*it)->transform->Translate(add);
-					}		
+						(*it)->transform->Translate(pos);
+					}
 				}
 				break;
 
@@ -141,26 +145,31 @@ bool ModuleGameObject::Update()
 						{
 							rot = (*it)->parent->transform->GetGlobalTransform().Inverted().TransformPos(rot);
 						}
+
 						(*it)->transform->Rotate(rot);
 					}				
 				}
 				break;
 				case ImGuizmo::OPERATION::SCALE:
 				{
-					if (sc.IsFinite()) 
+					/*if (sc.IsFinite()) 
 					{
 						(*it)->transform->SetScale(sc);
-					}
+					}*/
 				}
 				break;
 			}
 		}
 	}
 
-	if (ImGuizmo::IsOver())
+	if (ImGuizmo::IsOver() || ImGuizmo::IsUsing())
+	{
 		can_pick = false;
+	}
 	else
+	{
 		can_pick = true;
+	}
 	
 	if (show_kdtree)
 		kdtree->DebugDraw();
@@ -195,22 +204,21 @@ bool ModuleGameObject::CleanUp()
 	return ret;
 }
 
-GameObject * ModuleGameObject::Create(std::string force_id)
+GameObject * ModuleGameObject::Create(std::string id)
 {
-	string new_id;
-
-	if (force_id == "")
-		new_id = App->resource_manager->GetNewUID();
-	else
-		new_id = force_id;
-
-	GameObject* game_object = new GameObject(new_id, this);
+	GameObject* game_object = new GameObject(id, this);
 
 	game_objects.push_back(game_object);
 	root->AddChild(game_object);
 	game_object->Start();
 
 	return game_object;
+}
+
+GameObject * ModuleGameObject::Create()
+{
+	string new_id = App->resource_manager->GetNewUID();
+	return Create(new_id);
 }
 
 void ModuleGameObject::Destroy(GameObject * go)
@@ -395,42 +403,6 @@ const vector<GameObject*> ModuleGameObject::GetDynamicGameObjects() const
 	return dynamics;
 }
 
-void ModuleGameObject::DeleteGameObjectsUsingResource(Resource * res)
-{
-	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
-	{
-		switch (res->GetType())
-		{
-		case RT_MESH:
-		{
-			ComponentMesh* cmesh = (ComponentMesh*)(*it)->GetComponent(MESH);
-			if (cmesh != nullptr)
-			{
-				if (cmesh->GetMesh() == (ResourceMesh*)res)
-				{
-					(*it)->RemoveComponent(MESH);
-					Destroy((*it));
-				}
-			}
-		}
-			break;
-		case RT_TEXTURE:
-		{
-			ComponentMaterial* cmat = (ComponentMaterial*)(*it)->GetComponent(MATERIAL);
-			if (cmat != nullptr)
-			{
-				if (cmat->GetTexture() == (ResourceTexture*)res)
-				{
-					(*it)->RemoveComponent(MATERIAL);
-					Destroy((*it));
-				}
-			}
-		}
-			break;
-		}
-	}
-}
-
 void ModuleGameObject::SetGuizmoOperation(ImGuizmo::OPERATION op)
 {
 	current_gizmo_operation = op;
@@ -475,11 +447,6 @@ void ModuleGameObject::SetCanPick(bool set)
 void ModuleGameObject::SetCanMove(bool set)
 {
 	can_move = set;
-}
-
-SuStoUIMain * ModuleGameObject::GetUIMain()
-{
-	return susto_ui;
 }
 
 vector<TextureInfo> ModuleGameObject::GetTextures()

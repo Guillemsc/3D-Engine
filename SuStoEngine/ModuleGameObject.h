@@ -7,7 +7,6 @@
 
 class KDTree;
 class Resource;
-class SuStoUIMain;
 struct TextureInfo;
 
 class ModuleGameObject : public Module
@@ -25,7 +24,8 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	GameObject* Create(std::string unique_id = "");
+	GameObject* Create(std::string id);
+	GameObject* Create();
 	void Destroy(GameObject* go);
 	GameObject* Find(std::string unique_id);
 	void DestroyAllGameObjects();
@@ -49,8 +49,6 @@ public:
 
 	const vector<GameObject*> GetDynamicGameObjects() const;
 
-	void DeleteGameObjectsUsingResource(Resource* res);
-
 	void SetGuizmoOperation(ImGuizmo::OPERATION op);
 
 	KDTree* GetKDTree();
@@ -62,8 +60,6 @@ public:
 
 	void SetCanPick(bool set);
 	void SetCanMove(bool set);
-
-	SuStoUIMain* GetUIMain();
 
 	vector<TextureInfo> GetTextures();
 
@@ -90,8 +86,6 @@ private:
 
 	bool			    can_pick = true;
 	bool			    can_move = true;
-
-	SuStoUIMain*	    susto_ui = nullptr;
 
 	vector<TextureInfo>	textures;
 };

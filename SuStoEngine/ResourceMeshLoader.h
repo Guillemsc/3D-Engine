@@ -1,6 +1,7 @@
 #ifndef __RESOURCE_MESH_LOADER_H__
 #define __RESOURCE_MESH_LOADER_H__
 
+#include "ResourceLoader.h"
 #include "Assimp\include\DefaultLogger.hpp"
 #include "Assimp\include\scene.h"
 #include "GeometryMath.h"
@@ -46,22 +47,42 @@ private:
 	ResourceType type = ResourceType::RT_NULL;
 };
 
-class ResourceMeshLoader
+class ResourceMeshLoader : public ResourceLoader
 {
 public:
 	ResourceMeshLoader();
 	virtual ~ResourceMeshLoader();
 
-	bool Load(const char* filepath, std::vector<Resource*>& resources, bool as_new_gameobject = true);
-	void Import(const char* filepath);
-	bool Export(const char* path, ResourceMesh* mesh);
-	void ImportAllMeshes();
+	// NEW
+	Resource* CreateResource(std::string new_uid);
 
-	void LoadIntoScene(const char* filepath);
+	bool LoadToEngine(const char* filepath, std::vector<Resource*>& resources);
+	bool UnloadFromEngine(Resource* resource);
 
-	void Unload(const char* filepath);
+	void ClearFromGameObject(Resource* resource, GameObject* go);
 
-	ResourceMesh* CreatePlaneMesh(float2 size);
+	bool ExportToLibrary(Resource* resource);
+	bool ImportFromLibrary(const char* uid);
+
+	bool LoadIntoScene(Resource* resource);
+
+	bool IsResourceOnLibrary(Resource* resource);
+	bool IsResourceOnAssets(Resource* resource);
+
+	void CreateResourcesMissingOnAssets();
+	void RemoveResourcesMissingOnLibrary();
+	// ---
+
+	//bool Load(const char* filepath, std::vector<Resource*>& resources, bool as_new_gameobject = true);
+	//void Import(const char* filepath);
+	//bool Export(const char* path, ResourceMesh* mesh);
+	//void ImportAllMeshes();
+
+	//void LoadIntoScene(const char* filepath);
+
+	//void Unload(const char* filepath);
+
+	//ResourceMesh* CreatePlaneMesh(float2 size);
 
 private:
 	void RecursiveLoadMesh(const aiScene* scene, aiNode* node, const char* full_path, AABB& total_abb, std::vector<Resource*>& resources, GameObject* parent = nullptr);

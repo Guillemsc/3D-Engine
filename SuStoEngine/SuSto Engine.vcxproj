@@ -208,7 +208,7 @@
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="KDTree.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="ResourceFontLoader.h" />
+    <ClInclude Include="ResourceLoader.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ResourceMesh.h" />
     <ClInclude Include="ResourceMeshLoader.h" />
@@ -234,7 +234,6 @@
     <ClCompile Include="ComponentCamera.cpp" />
     <ClCompile Include="ComponentMesh.cpp" />
     <ClCompile Include="ComponentMaterial.cpp" />
-    <ClCompile Include="ComponentTextImput.cpp" />
     <ClCompile Include="ComponentTransform.cpp" />
     <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="Console.cpp" />
@@ -313,7 +312,7 @@
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="KDTree.cpp" />
     <ClCompile Include="Resource.cpp" />
-    <ClCompile Include="ResourceFontLoader.cpp" />
+    <ClCompile Include="ResourceLoader.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ResourceMesh.cpp" />
     <ClCompile Include="ResourceMeshLoader.cpp" />

@@ -465,7 +465,9 @@
     <ClInclude Include="Explorer.h">
       <Filter>Sources\4. Editor ================</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceFontLoader.h" />
+    <ClInclude Include="ResourceLoader.h">
+      <Filter>Sources\6. Resources =============\Loaders</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -762,8 +764,9 @@
     <ClCompile Include="Explorer.cpp">
       <Filter>Sources\4. Editor ================</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceFontLoader.cpp" />
-    <ClCompile Include="ComponentTextImput.cpp" />
+    <ClCompile Include="ResourceLoader.cpp">
+      <Filter>Sources\6. Resources =============\Loaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico">
