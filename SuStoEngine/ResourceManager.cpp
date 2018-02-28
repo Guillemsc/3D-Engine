@@ -116,6 +116,8 @@ ResourceType ResourceManager::LibraryExtensionToType(const char * extension)
 			break;
 		}
 	}
+	
+	return ret;
 }
 
 Resource * ResourceManager::CreateNewResource(ResourceType type)
