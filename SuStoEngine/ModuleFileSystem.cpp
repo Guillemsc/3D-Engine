@@ -197,8 +197,15 @@ int FileSystem::GetFileNameNumber(const char * filename)
 			adding = false;
 		}
 
-		if (adding && isdigit(name[i]))
+		if (adding)
 		{
+			if (!isdigit(name[i]))
+			{
+				number_str.clear();
+				adding = false;
+				continue;
+			}
+
 			number_str += name[i];
 		}
 	}
