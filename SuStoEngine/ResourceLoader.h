@@ -2,6 +2,7 @@
 #define __RESOURCE_LOADER_H__
 
 #include "Resource.h"
+#include "ModuleFileSystem.h"
 #include <map>
 #include <vector>
 
@@ -35,7 +36,7 @@ public:
 	ResourceType GetLoaderType();
 
 	// Loads a file from outside the engine as a new resource
-	virtual bool LoadToEngine(const char* filepath, std::vector<Resource*>& resources) { return false; };
+	virtual bool LoadToEngine(DecomposedFilePath decomposed_file_path, std::vector<Resource*>& resources) { return false; };
 
 	// Unloads a loaded resource from the engine
 	virtual bool UnloadFromEngine(Resource* resource) { return false; };
@@ -64,7 +65,7 @@ public:
 	// Removes resources that are on the asets folder, but missing on the library folder
 	virtual void RemoveResourcesMissingOnLibrary() {};
 
-private:
+protected:
 	ResourceType resources_to_load = ResourceType::RT_NULL;
 	const char* assets_path = nullptr;
 	const char* library_path = nullptr;

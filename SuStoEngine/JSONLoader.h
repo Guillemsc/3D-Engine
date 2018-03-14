@@ -57,7 +57,6 @@ private:
 private:
 	JSON_Value*  value = nullptr;
 	JSON_Object* object = nullptr;
-	JSON_Object* last_object = nullptr;
 	JSON_Object* root = nullptr;
 	string		 path;
 };

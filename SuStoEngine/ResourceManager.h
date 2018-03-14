@@ -17,8 +17,11 @@ public:
 	ResourceManager(bool start_enabled = true);
 	virtual ~ResourceManager();
 
+	bool Awake();
 	bool Start();
 	bool CleanUp();
+
+	void OnLoadFile(const char* filepath);
 
 	// Resource management
 	Resource * Get(std::string unique_id);
@@ -43,20 +46,21 @@ public:
 	void CreateResourcesMissingOnAssets();
 	void RemoveResourcesMissingOnLibrary();
 
-	void SaveResourceIntoFile(Resource* res);
-	bool LoadResource(const char* file_path);
-	bool LoadResource(const char* file_path, vector<Resource*>& resources);
-	void ImportAllResources();
-	void LoadFileIntoScene(const char* file_path);
-	void DeImportFile(const char* file_path);
+
+	//void SaveResourceIntoFile(Resource* res);
+	//bool LoadResource(const char* file_path);
+	//bool LoadResource(const char* file_path, vector<Resource*>& resources);
+	//void ImportAllResources();
+	//void LoadFileIntoScene(const char* file_path);
+	//void DeImportFile(const char* file_path);
 
 	std::string GetNewUID();
 
 private:
 	void AddLoader(ResourceLoader* loader);
 
-	void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension);
-	void DeleteAllResources();
+	//void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension);
+	//void DeleteAllResources();
 
 private:
 	std::vector<ResourceLoader*> loaders;	

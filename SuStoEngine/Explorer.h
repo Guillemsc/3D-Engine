@@ -29,9 +29,9 @@ public:
 
 	void Start();
 	void Draw();
-	void CleanUp();
+	//void CleanUp();
 
-	vector<string> OrderFiles(vector<string> files);
+	//vector<string> OrderFiles(vector<string> files);
 	string GetParentDirectory(string child);
 	//void DeleteFileInAssets(string path, string filename);
 

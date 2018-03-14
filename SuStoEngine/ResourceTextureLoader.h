@@ -26,23 +26,23 @@ public:
 	virtual ~ResourceTextureLoader();
 
 	// NEW
-	Resource* CreateResource(std::string new_uid);
+	//Resource* CreateResource(std::string new_uid);
 
-	bool LoadToEngine(const char* filepath, std::vector<Resource*>& resources);
-	bool UnloadFromEngine(Resource* resource);
+	//bool LoadToEngine(const char* filepath, std::vector<Resource*>& resources);
+	//bool UnloadFromEngine(Resource* resource);
 
-	void ClearFromGameObject(Resource* resource, GameObject* go);
+	//void ClearFromGameObject(Resource* resource, GameObject* go);
 
-	bool ExportToLibrary(Resource* resource);
-	bool ImportFromLibrary(const char* uid);
+	//bool ExportToLibrary(Resource* resource);
+	//bool ImportFromLibrary(const char* uid);
 
-	bool LoadIntoScene(Resource* resource);
+	//bool LoadIntoScene(Resource* resource);
 
-	bool IsResourceOnLibrary(Resource* resource);
-	bool IsResourceOnAssets(Resource* resource);
+	//bool IsResourceOnLibrary(Resource* resource);
+	//bool IsResourceOnAssets(Resource* resource);
 
-	void CreateResourcesMissingOnAssets();
-	void RemoveResourcesMissingOnLibrary();
+	//void CreateResourcesMissingOnAssets();
+	//void RemoveResourcesMissingOnLibrary();
 	// ---
 
 	//bool Load(const char* filepath, std::vector<Resource*>& resources);
@@ -51,9 +51,9 @@ public:
 	//void ImportAllTextures();
 
 	//void Unload(const char* filepath);
-	
-	TextureInfo LoadTexture(const char * filename, bool avoid_flip = false);
-	void UnloadTexture(unsigned int id);
+	//
+	//TextureInfo LoadTexture(const char * filename, bool avoid_flip = false);
+	//void UnloadTexture(unsigned int id);
 
 
 private:

@@ -575,3 +575,8 @@ void Camera3D::Focus(const float3 & focus_center, const float & distance)
 
 	Look(focus_center);
 }
+
+void Camera3D::Focus(const AABB & aabb)
+{
+	Focus(aabb.CenterPoint(), aabb.Size().Length());
+}

@@ -40,18 +40,18 @@ Resource * ResourceMeshLoader::CreateResource(std::string new_uid)
 	return ret;
 }
 
-bool ResourceMeshLoader::LoadToEngine(const char* filepath, std::vector<Resource*>& resources)
+bool ResourceMeshLoader::LoadToEngine(DecomposedFilePath d_filepath, std::vector<Resource*>& resources)
 {
 	bool ret = false;
 
-	const aiScene* scene = aiImportFile(filepath, aiProcessPreset_TargetRealtime_MaxQuality);
+	const aiScene* scene = aiImportFile(d_filepath.file_path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 
 	if (scene == nullptr)
 		ret = false;
 
 	if (ret && !scene->HasMeshes())
 	{
-		LOG_OUTPUT("WARNING, scene has no meshes! Path: %s", filepath);
+		LOG_OUTPUT("WARNING, scene has no meshes! Path: %s", d_filepath.file_path.c_str());
 		ret = false;
 	}
 
@@ -84,9 +84,9 @@ bool ResourceMeshLoader::LoadToEngine(const char* filepath, std::vector<Resource
 		parent->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 		parent->transform->SetScale(float3(scale.x, scale.y, scale.z));
 
-		string name = App->file_system->GetFileNameFromFilePath(filepath);
+		string name = App->file_system->GetFileNameFromFilePath(d_filepath.file_path.c_str());
 		name = App->file_system->GetFilenameWithoutExtension(name.c_str());
-		parent->SetName(name);
+		parent->SetName(d_filepath.file_name.c_str());
 
 		// Total mesh bbox
 		AABB total_abb;
@@ -97,108 +97,33 @@ bool ResourceMeshLoader::LoadToEngine(const char* filepath, std::vector<Resource
 		// Iterate
 		for (int i = 0; i < root->mNumChildren; i++)
 		{
-			RecursiveLoadMesh(scene, root->mChildren[i], filepath, total_abb, resources, parent);
+			RecursiveLoadMesh(scene, root->mChildren[i], d_filepath.file_path.c_str(), total_abb, resources, parent);
 		}
 
 		used_resources.clear();
 
-		//// Set camera focus
-		//App->camera->GetCurrentCamera()->Focus(total_abb.CenterPoint(), total_abb.Size().Length());
+		// Set camera focus
+		App->camera->GetEditorCamera()->Focus(total_abb);
 
-		//App->scene_manager->SavePrefab(filename.c_str(), "prefab", App->file_system->GetAssetsPath().c_str(), parent);
+		// Create fbx prefab
+		App->scene_manager->SavePrefab((d_filepath.file_name + d_filepath.file_extension).c_str(), "prefab", assets_path, parent);
 
-		//if (!as_new_gameobject)
-		//	App->gameobj->Destroy(parent);
+		// Crate meta
+		JSON_Doc* doc = App->json->LoadJSON((d_filepath.file_name + d_filepath.file_extension).c_str());
+		if (doc != nullptr)
+		{
+			string uid = doc->GetString("uid", "no_uid");
+			doc->SetArray("resources");
+
+			for (std::vector<Resource*>::iterator it = resources.begin(); it != resources.end(); ++it)
+			{
+				doc->AddStringToArray("resources", (*it)->GetUniqueId().c_str());
+			}
+		}
 	}
 
 	return ret;
 }
-
-//bool ResourceMeshLoader::Load(const char * filepath, vector<Resource*>& resources, bool as_new_gameobject)
-//{
-//	bool ret = true;
-//
-//	string path = App->file_system->GetPathFromFilePath(filepath);
-//	string filename = App->file_system->GetFileNameFromFilePath(filepath);
-//	string name = App->file_system->GetFilenameWithoutExtension(filename.c_str());
-//
-//	LOG_OUTPUT("\nStarting mesh scene Loading -------------------- \n\n");
-//	const aiScene* scene = aiImportFile(filepath, aiProcessPreset_TargetRealtime_MaxQuality);
-//	LOG_OUTPUT("Finishing mesh scene Loading ---------------------");
-//
-//	if (scene == nullptr)
-//		ret = false;
-//
-//	if (ret && !scene->HasMeshes())
-//	{
-//		LOG_OUTPUT("WARNING, scene has no meshes!");
-//		ret = false;
-//	}
-//
-//	if (ret)
-//	{
-//		aiNode* root = scene->mRootNode;
-//
-//		// Root transform
-//		float3 position(0, 0, 0);
-//		Quat rotation(0, 0, 0, 0);
-//		float3 scale(0, 0, 0);
-//
-//		aiVector3D aitranslation;
-//		aiVector3D aiscaling;
-//		aiQuaternion airotation;
-//
-//		if (root != nullptr)
-//		{
-//			root->mTransformation.Decompose(aiscaling, airotation, aitranslation);
-//			position = float3(aitranslation.x, aitranslation.y, aitranslation.z);
-//			scale = float3(aiscaling.x, aiscaling.y, aiscaling.z);
-//			rotation = Quat(airotation.x, airotation.y, airotation.z, airotation.w);
-//		}
-//
-//		// Create root go
-//		GameObject* parent = nullptr;
-//		
-//		parent = App->gameobj->Create();
-//		parent->transform->SetPosition(float3(position.x, position.y, position.z));
-//		parent->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
-//		parent->transform->SetScale(float3(scale.x, scale.y, scale.z));
-//
-//		string name = App->file_system->GetFileNameFromFilePath(filepath);
-//		name = App->file_system->GetFilenameWithoutExtension(name.c_str());
-//		parent->SetName(name);
-//		
-//
-//		// Total mesh bbox
-//		AABB total_abb;
-//		total_abb.SetNegativeInfinity();
-//
-//		// Keep track of resources loaded (avoid repeating)
-//
-//		// Iterate
-//		for (int i = 0; i < root->mNumChildren; i++)
-//		{
-//			RecursiveLoadMesh(scene, root->mChildren[i], filepath, total_abb, resources, parent);
-//		}
-//
-//		used_resources.clear();
-//
-//		// Set camera focus
-//		App->camera->GetCurrentCamera()->Focus(total_abb.CenterPoint(), total_abb.Size().Length());
-//		
-//		App->scene_manager->SavePrefab(filename.c_str(), "prefab", App->file_system->GetAssetsPath().c_str(), parent);
-//
-//		if (!as_new_gameobject)
-//			App->gameobj->Destroy(parent);
-//	}
-//
-//	// Release scene
-//	if (scene != nullptr)
-//		aiReleaseImport(scene);
-//
-//	return ret;
-//}
-//
 void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node, const char * full_path, AABB & total_abb, 
 	vector<Resource*>& resources, GameObject * parent)
 {
@@ -294,11 +219,7 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 			scale = float3(aiscaling.x, aiscaling.y, aiscaling.z);
 			rotation = Quat(airotation.x, airotation.y, airotation.z, airotation.w);
 
-			mesh->SetTransform(
-				float3(position.x, position.y, position.z),
-				Quat(rotation.x, rotation.y, rotation.w, rotation.z),
-				float3(scale.x, scale.y, scale.z));
-
+			mesh->SetTransform(position, rotation, scale);
 		}
 
 		// GENERAL BBOX
@@ -310,78 +231,78 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 			total_abb.Enclose(mesh_with_scale);
 		}
 
-		// MATERIALS
-		ResourceTexture* texture = nullptr;
-		if (mesh_valid && node_valid)
-		{
-			// Check if its already loaded
-			Resource* res_tex = nullptr;
-			bool texture_already_loaded = false;
-			if (ResourceIsUsed(aimesh->mMaterialIndex, RT_TEXTURE, res_tex))
-			{
-				texture = (ResourceTexture*)res_tex;
-				texture_already_loaded = true;
-			}
+		//// MATERIALS
+		//ResourceTexture* texture = nullptr;
+		//if (mesh_valid && node_valid)
+		//{
+		//	// Check if its already loaded
+		//	Resource* res_tex = nullptr;
+		//	bool texture_already_loaded = false;
+		//	if (ResourceIsUsed(aimesh->mMaterialIndex, RT_TEXTURE, res_tex))
+		//	{
+		//		texture = (ResourceTexture*)res_tex;
+		//		texture_already_loaded = true;
+		//	}
 
-			if (!texture_already_loaded)
-			{
-				aiMaterial* material = scene->mMaterials[aimesh->mMaterialIndex];
+		//	if (!texture_already_loaded)
+		//	{
+		//		aiMaterial* material = scene->mMaterials[aimesh->mMaterialIndex];
 
-				string path = App->file_system->GetPathFromFilePath(full_path);
+		//		string path = App->file_system->GetPathFromFilePath(full_path);
 
-				// Difuse -------------------
-				aiString file;
-				material->GetTexture(aiTextureType_DIFFUSE, 0, &file);
-				path += App->file_system->GetFileNameFromFilePath(file.C_Str());
+		//		// Difuse -------------------
+		//		aiString file;
+		//		material->GetTexture(aiTextureType_DIFFUSE, 0, &file);
+		//		path += App->file_system->GetFileNameFromFilePath(file.C_Str());
 
-				vector<Resource*> tex;
-				App->resource_manager->LoadResource(path.c_str(), tex);
-				if (!tex.empty())
-				{
-					texture = (ResourceTexture*)*tex.begin();
-					AddResource(aimesh->mMaterialIndex, RT_TEXTURE, texture);
-				}
-			}
-		}
+		//		vector<Resource*> tex;
+		//		App->resource_manager->LoadResource(path.c_str(), tex);
+		//		if (!tex.empty())
+		//		{
+		//			texture = (ResourceTexture*)*tex.begin();
+		//			AddResource(aimesh->mMaterialIndex, RT_TEXTURE, texture);
+		//		}
+		//	}
+		//}
 
 		// CREATE GAME OBJECT
-		if (mesh_valid && node_valid && parent != nullptr)
-		{
-			go = App->gameobj->Create();
+		//if (mesh_valid && node_valid && parent != nullptr)
+		//{
+		//	go = App->gameobj->Create();
 
-			if (name == "")
-				name = "no_name";
+		//	if (name == "")
+		//		name = "no_name";
 
-			go->SetName(name);
+		//	go->SetName(name);
 
-			parent->AddChild(go);
+		//	parent->AddChild(go);
 
-			go->transform->SetPosition(mesh->GetPosition());
-			go->transform->SetRotation(mesh->GetRotation());
-			go->transform->SetScale(mesh->GetScale());
+		//	go->transform->SetPosition(mesh->GetPosition());
+		//	go->transform->SetRotation(mesh->GetRotation());
+		//	go->transform->SetScale(mesh->GetScale());
 
-			go->AddComponent(MESH);
-			ComponentMesh* cmesh = (ComponentMesh*)go->GetComponent(MESH);
-			cmesh->SetMesh(mesh);
+		//	go->AddComponent(MESH);
+		//	ComponentMesh* cmesh = (ComponentMesh*)go->GetComponent(MESH);
+		//	cmesh->SetMesh(mesh);
 
-			if (texture != nullptr)
-			{
-				go->AddComponent(MATERIAL);
-				ComponentMaterial* cmaterial = (ComponentMaterial*)go->GetComponent(MATERIAL);
-				cmaterial->SetTexture(texture);
-			}
-		}
+		//	if (texture != nullptr)
+		//	{
+		//		go->AddComponent(MATERIAL);
+		//		ComponentMaterial* cmaterial = (ComponentMaterial*)go->GetComponent(MATERIAL);
+		//		cmaterial->SetTexture(texture);
+		//	}
+		//}
 
-		if (mesh_valid && node_valid && !mesh_already_loaded && mesh != nullptr)
-		{
-			App->resource_manager->SaveResourceIntoFile(mesh);
+		//if (mesh_valid && node_valid && !mesh_already_loaded && mesh != nullptr)
+		//{
+		//	App->resource_manager->SaveResourceIntoFile(mesh);
 
-			AddResource(mesh_index, RT_MESH, mesh);
+		//	AddResource(mesh_index, RT_MESH, mesh);
 
-			resources.push_back(mesh);
-		}
-		else if (!mesh_valid && !mesh_already_loaded && mesh != nullptr)
-			App->resource_manager->DeleteResource(mesh->GetUniqueId());
+		//	resources.push_back(mesh);
+		//}
+		//else if (!mesh_valid && !mesh_already_loaded && mesh != nullptr)
+		//	App->resource_manager->DeleteResource(mesh->GetUniqueId());
 	}
 
 	// Select parent

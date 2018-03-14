@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <fstream>
 #include <iostream>
+#include <ctype.h>
 #include "Functions.h"
 
 FileSystem::FileSystem(bool start_enabled)
@@ -95,6 +96,7 @@ DecomposedFilePath FileSystem::DecomposeFilePath(std::string file_path)
 
 	bool adding_file_extension = false;
 	bool adding_file_name = false;
+	int last_bar_pos = 0;
 
 	for (int i = 0; i < file_path.length(); ++i)
 	{
@@ -102,8 +104,8 @@ DecomposedFilePath FileSystem::DecomposeFilePath(std::string file_path)
 
 		// Formating --------------------
 
-		if (curr_word == '\\')
-			curr_word = '/';
+		if (curr_word == '/')
+			curr_word = '\\';
 
 		ret.file_path += curr_word;
 
@@ -112,7 +114,7 @@ DecomposedFilePath FileSystem::DecomposeFilePath(std::string file_path)
 		// File extension ---------------
 		if (adding_file_extension)
 			ret.file_extension += curr_word;
-	
+
 		if (curr_word == '.')
 		{
 			adding_file_extension = true;
@@ -122,19 +124,125 @@ DecomposedFilePath FileSystem::DecomposeFilePath(std::string file_path)
 
 		// File name ---------------------
 
-		if (adding_file_name)
-			ret.file_name = curr_word;
-		
-		if (curr_word == '/')
-			adding_file_name = true;
-		
 		if (curr_word == '.')
+		{
 			adding_file_name = false;
+		}
+
+		if (adding_file_name)
+			ret.file_name += curr_word;
+
+		if (curr_word == '\\')
+		{
+			last_bar_pos = i;
+			adding_file_name = true;
+			ret.file_name.clear();
+		}
 
 		// -------------------------------
 	}
 
 	ret.file_extension_lower_case = ToLowerCase(ret.file_extension);
+
+	// Path ---------------------
+
+	for (int i = 0; i <= last_bar_pos; i++)
+	{
+		ret.path += ret.file_path[i];
+	}
+
+	// --------------------------
+
+	return ret;
+}
+
+std::string FileSystem::NewNameForFileNameCollision(const char * filename)
+{
+	string ret;
+
+	int number = GetFileNameNumber(filename);
+
+	if (number != -1)
+	{
+		ret = SetFileNameNumber(filename, number + 1);
+	}
+	else
+	{
+		ret = SetFileNameNumber(filename, 1);
+	}
+
+	return ret;
+}
+
+int FileSystem::GetFileNameNumber(const char * filename)
+{
+	int ret = -1;
+
+	std::string name = filename;
+
+	std::string number_str;
+	bool adding = false;
+
+	for (int i = 0; i < name.size(); ++i)
+	{
+		if (name[i] == '(')
+		{
+			adding = true;
+			number_str.clear();
+			continue;
+		}
+
+		if (name[i] == ')')
+		{
+			adding = false;
+		}
+
+		if (adding && isdigit(name[i]))
+		{
+			number_str += name[i];
+		}
+	}
+
+	if (number_str.size() > 0)
+	{
+		ret = atoi(number_str.c_str());
+	}
+
+	return ret;
+}
+
+std::string FileSystem::SetFileNameNumber(const char * filename, int number)
+{
+	std::string ret = filename;
+
+	if (GetFileNameNumber(filename) != -1)
+	{
+		int start = 0;
+		bool has_start = false;
+		bool has_end = false;
+		int end = 0;
+
+		for (int i = ret.size() - 1; i >= 0; --i)
+		{
+			if (ret[i] == ')')
+			{
+				start = i;
+				has_start = true;
+			}
+
+			if (ret[i] == '(' && has_start)
+			{
+				end = i;
+				has_end = true;
+				break;
+			}
+		}
+
+		if (has_start && has_end)
+			ret = ret.substr(0, end);
+	}
+
+	ret += ('(' + std::to_string(number) + ')');
 
 	return ret;
 }
@@ -160,13 +268,13 @@ std::string FileSystem::GetFileExtension(const char * file_name)
 	return ret;
 }
 
-std::string FileSystem::GetFilenameWithoutExtension(const char * file_name, bool without_)
+std::string FileSystem::GetFilenameWithoutExtension(const char * file_name)
 {
 	string ret;
 
 	for (int i = 0; file_name[i] != '\0'; i++)
 	{
-		if (file_name[i] == '.' || (without_ && file_name[i] == '_'))
+		if (file_name[i] == '.')
 		{
 			break;
 		}
@@ -202,7 +310,7 @@ std::string FileSystem::GetPathFromFilePath(const char * file_path)
 	int last = 0;
 	for (int i = 0; file_path[i] != '\0'; i++)
 	{
-		if (file_path[i] == '\\' || file_path[i] == '/')
+		if (file_path[i] == '\\')
 		{
 			last = i;
 			last++;
@@ -290,11 +398,26 @@ void FileSystem::FileCopyPaste(const char * filepath, const char * new_path)
 
 	path += GetFileNameFromFilePath(filepath);
 	
-	if (CopyFile(filepath, path.c_str(), false))
-	{
-		LOG_OUTPUT("Error moving file:[%s] to [%s]", filepath, path.c_str())
-	}
+	CopyFile(filepath, path.c_str(), false);
 	
+	DWORD error = GetLastError();
+
+	if(error != 0)
+		LOG_OUTPUT("Error moving file:[%s] to [%s]", filepath, path.c_str())
+}
+
+void FileSystem::FileCopyPasteWithNewName(const char * filepath, const char * new_path, const char * new_name)
+{
+	DecomposedFilePath d_filepath = DecomposeFilePath(filepath);
+
+	std::string changed_original_filepath = d_filepath.path + new_name + "." + d_filepath.file_extension;
+
+	if (FileRename(filepath, new_name))
+	{
+		FileCopyPaste(changed_original_filepath.c_str(), new_path);
+
+		FileRename(changed_original_filepath.c_str(), d_filepath.file_name.c_str());
+	}
 }
 
 void FileSystem::FileDelete(const char * filepath)
@@ -417,6 +540,17 @@ bool FileSystem::FileExists(const char * path, const char * name, const char * e
 	}
 
 	return false;
+}
+
+bool FileSystem::FileExists(const char * filepath)
+{
+	bool ret = false;
+
+	DecomposedFilePath d_filepath = DecomposeFilePath(filepath);
+
+	ret = FileExists(d_filepath.file_extension.c_str(), d_filepath.file_name.c_str(), d_filepath.file_extension.c_str());
+
+	return ret;
 }
 
 bool FileSystem::FileRename(const char * filepath, const char * new_name)

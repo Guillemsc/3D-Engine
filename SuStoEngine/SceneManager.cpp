@@ -27,9 +27,9 @@ bool SceneManager::Start()
 
 	current_scene = "test";
 
-	App->resource_manager->ImportAllResources();
+	//App->resource_manager->ImportAllResources();
 
-	LoadTmpScene();
+	//LoadTmpScene();
 	//App->scene_manager->LoadScene(current_scene.c_str());
 
 	return ret;

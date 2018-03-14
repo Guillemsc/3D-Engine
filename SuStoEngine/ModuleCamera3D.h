@@ -45,6 +45,7 @@ public:
 	void Orbit(const float3& rotate_center, const float& motion_x, const float& motion_y);
 	void Rotate(const float& motion_x, const float& motion_y);
 	void Focus(const float3& focus_center, const float& distance);
+	void Focus(const AABB& aabb);
 
 	void Look(const float3& look_pos);
 

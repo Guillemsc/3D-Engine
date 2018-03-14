@@ -56,21 +56,21 @@ public:
 	// NEW
 	Resource* CreateResource(std::string new_uid);
 
-	bool LoadToEngine(const char* filepath, std::vector<Resource*>& resources);
-	bool UnloadFromEngine(Resource* resource);
+	bool LoadToEngine(DecomposedFilePath decomposed_file_path, std::vector<Resource*>& resources);
+	//bool UnloadFromEngine(Resource* resource);
 
-	void ClearFromGameObject(Resource* resource, GameObject* go);
+	//void ClearFromGameObject(Resource* resource, GameObject* go);
 
-	bool ExportToLibrary(Resource* resource);
-	bool ImportFromLibrary(const char* uid);
+	//bool ExportToLibrary(Resource* resource);
+	//bool ImportFromLibrary(const char* uid);
 
-	bool LoadIntoScene(Resource* resource);
+	//bool LoadIntoScene(Resource* resource);
 
-	bool IsResourceOnLibrary(Resource* resource);
-	bool IsResourceOnAssets(Resource* resource);
+	//bool IsResourceOnLibrary(Resource* resource);
+	//bool IsResourceOnAssets(Resource* resource);
 
-	void CreateResourcesMissingOnAssets();
-	void RemoveResourcesMissingOnLibrary();
+	//void CreateResourcesMissingOnAssets();
+	//void RemoveResourcesMissingOnLibrary();
 	// ---
 
 	//bool Load(const char* filepath, std::vector<Resource*>& resources, bool as_new_gameobject = true);

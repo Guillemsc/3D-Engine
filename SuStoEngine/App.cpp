@@ -278,7 +278,7 @@ void Application::LoadFile(const char * filepath)
 
 	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
-		(*it)->OnLoadFile(filepath, name.c_str(), extension.c_str());
+		(*it)->OnLoadFile(filepath);
 	}
 }
 

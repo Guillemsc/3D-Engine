@@ -12,22 +12,31 @@
 
 ResourceManager::ResourceManager(bool start_enabled)
 {
-	ResourceMeshLoader* mesh_loader = new ResourceMeshLoader();
-	mesh_loader->CanLoadExtensionAsset("fbx");
-	mesh_loader->CanLoadExtensionLibrary("sustomesh");
 
-	ResourceTextureLoader* texture_loader = new ResourceTextureLoader();
-	mesh_loader->CanLoadExtensionAsset("png");
-	mesh_loader->CanLoadExtensionAsset("tga");
-	mesh_loader->CanLoadExtensionAsset("dds");
-	mesh_loader->CanLoadExtensionLibrary("dds");
-
-	AddLoader(mesh_loader);
-	AddLoader(texture_loader);
 }
 
 ResourceManager::~ResourceManager()
 {
+}
+
+bool ResourceManager::Awake()
+{
+	bool ret = true;
+
+	ResourceMeshLoader* mesh_loader = new ResourceMeshLoader();
+	mesh_loader->AddAssetExtensionToLoad("fbx");
+	mesh_loader->AddLibraryExtensionToLoad("sustomesh");
+
+	ResourceTextureLoader* texture_loader = new ResourceTextureLoader();
+	mesh_loader->AddAssetExtensionToLoad("png");
+	mesh_loader->AddAssetExtensionToLoad("tga");
+	mesh_loader->AddAssetExtensionToLoad("dds");
+	mesh_loader->AddLibraryExtensionToLoad("dds");
+
+	AddLoader(mesh_loader);
+	AddLoader(texture_loader);
+
+	return ret;
 }
 
 bool ResourceManager::Start()
@@ -41,9 +50,14 @@ bool ResourceManager::CleanUp()
 {
 	bool ret = true;
 
-	DeleteAllResources();
+	//DeleteAllResources();
 
 	return ret;
+}
+
+void ResourceManager::OnLoadFile(const char * filepath)
+{
+	LoadResourceToEngine(filepath);
 }
 
 Resource* ResourceManager::Get(std::string unique_id)
@@ -171,21 +185,39 @@ void ResourceManager::LoadResourceToEngine(const char * file_path)
 
 	ResourceType type = AssetExtensionToType(deco_file.file_extension.c_str());
 
-	ResourceLoader* loader = GetLoader(type);
-
-	if (loader != nullptr)
+	if (type != ResourceType::RT_NULL)
 	{
-		std::vector<Resource*> resources;
-
-		bool ret = loader->LoadToEngine(file_path, resources);
-
-		if (ret)
+		while (1)
 		{
-			// SUCCES
+			if (App->file_system->FileExists(App->file_system->GetAssetsPath().c_str(), deco_file.file_name.c_str(), deco_file.file_extension.c_str()))
+			{
+				std::string new_name = App->file_system->NewNameForFileNameCollision(deco_file.file_name.c_str());
+
+				deco_file.file_name = new_name;
+			}
+			else
+			{
+				App->file_system->FileCopyPasteWithNewName(file_path, App->file_system->GetAssetsPath().c_str(), deco_file.file_name.c_str());
+				break;
+			}
 		}
-		else
+
+		ResourceLoader* loader = GetLoader(type);
+
+		if (loader != nullptr)
 		{
-			// ERROR
+			std::vector<Resource*> resources;
+
+			bool ret = loader->LoadToEngine(deco_file, resources);
+
+			if (ret)
+			{
+				// SUCCES
+			}
+			else
+			{
+				// ERROR
+			}
 		}
 	}
 }

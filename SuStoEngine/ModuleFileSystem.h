@@ -26,11 +26,13 @@ public:
 	string CreateFolder(const char* path, const char* name);
 	void FileMove(const char* filepath, const char* new_path, bool replace_existing = true);
 	void FileCopyPaste(const char* filepath, const char* new_path);
+	void FileCopyPasteWithNewName(const char* filepath, const char* new_path, const char* new_name);
 	void FileDelete(const char* filepath);
 	bool FileSave(const char * path, const char * file_content, const char * name, const char * extension, int size);
 	vector<string> GetFilesInPath(const char* path, const char* extension = "");
 	bool FileExists(const char* path, const char* name, const char* extension = "");
-	bool FileRename(const char* filepath, const char* new_name);
+	bool FileExists(const char* filepath);
+	bool FileRename(const char* filepath, const char* new_name);	
 
 	string GetAssetsPath();
 	string GetLibraryPath();
@@ -39,16 +41,20 @@ public:
 	string GetLibraryScenePath();
 	string GetSettingsPath();
 
-	string GetLookingPath();
+	std::string GetLookingPath();
 	void SetLookingPath(const string & new_path);
 
 	DecomposedFilePath DecomposeFilePath(std::string file_path);
+
+	std::string NewNameForFileNameCollision(const char* filename);
+	int GetFileNameNumber(const char* filename);
+	std::string SetFileNameNumber(const char* filename, int number);
 
 	// Example file.ex -> .ex
 	std::string GetFileExtension(const char* file_name);
 
 	// Example file.ex -> file
-	std::string GetFilenameWithoutExtension(const char* file_name, bool without_ = true);
+	std::string GetFilenameWithoutExtension(const char* file_name);
 
 	// Example C:/user/folder/file.ex -> file.ex
 	std::string GetFileNameFromFilePath(const char* file_path);
