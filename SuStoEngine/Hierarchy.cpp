@@ -21,7 +21,7 @@ void Hierarchy::Start()
 
 void Hierarchy::Draw()
 {
-	igBeginDock("Hierarchy", &visible, ImGuiWindowFlags_MenuBar);
+	ImGui::BeginDock("Hierarchy", false, &visible, false, ImGuiWindowFlags_MenuBar);
 	
 	// Menu
 	if (ImGui::BeginMenuBar())
@@ -42,7 +42,7 @@ void Hierarchy::Draw()
 		PrintGoAndChildsRecursive((*it));
 	}
 
-	igEndDock(); 
+	ImGui::EndDock(); 
 
 	// Create
 	if (create_empty_game_object)

@@ -30,7 +30,7 @@ void Console::Draw()
 		visible = !visible;
 	}
 
-	igBeginDock("Console", &visible, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+	ImGui::BeginDock("Console", false, &visible, false, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 		
 	if (ImGui::SmallButton("Clear"))
 		CommandInput(".Clear");
@@ -96,7 +96,7 @@ void Console::Draw()
 		send_text_input = false;
 	}
 	
-	igEndDock();
+	ImGui::EndDock();
 }
 
 void Console::AddLog(const char * txt, console_text_type type)

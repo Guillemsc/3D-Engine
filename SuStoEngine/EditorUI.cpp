@@ -110,10 +110,6 @@ bool EditorUI::PreUpdate()
 	// ImGuizmo begin frame
 	ImGuizmo::BeginFrame();
 
-	// Begin docking workspace
-	igBeginWorkspace(&workspace_visible, ImVec2(-3, 25), ImVec2(App->window->GetWindowSize().x, App->window->GetWindowSize().y - 22),
-		ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
-
 	return ret;
 }
 
@@ -121,13 +117,7 @@ bool EditorUI::Update()
 {
 	bool ret = true;
 
-	// Draw editor elements
-	for (vector<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
-	{
-		(*it)->Draw();
-	}
-
-	igEndWorkspace();
+	DrawDockingEditor();
 
 	return ret;
 }
@@ -260,6 +250,27 @@ void EditorUI::AddExistingLayout(const char * layout)
 	layouts.push_back(layout);
 }
 
+void EditorUI::DrawDockingEditor()
+{
+	ImVec2 display_size = ImGui::GetIO().DisplaySize;
+	display_size.y -= 40;
+	ImGui::SetNextWindowSize(display_size);
+	ImGui::SetNextWindowPos(ImVec2(0, 40));
+	ImGui::Begin("PanelEditor", NULL, ImVec2(0, 0), 1.0f, ImGuiWindowFlags_NoMove |
+		ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoResize |
+		ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar);
+	ImGui::BeginDockspace();
+
+	// Draw editor elements
+	for (vector<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
+	{
+		(*it)->Draw();
+	}
+
+	ImGui::EndDockspace();
+	ImGui::End();
+}
+
 void EditorUI::SetCurrentLayout(const char * current)
 {
 	for (list<string>::iterator it = layouts.begin(); it != layouts.end(); it++)
@@ -290,7 +301,7 @@ void EditorUI::LoadCurrentLayout()
 	{
 		layout->MoveToRoot();
 
-		getDockContext()->LoadLayout(layout, current_layout.c_str());
+		ImGui::LoadLayout(layout, current_layout.c_str());
 	}
 }
 
@@ -300,7 +311,7 @@ void EditorUI::SaveCurrentLayout()
 	{
 		layout->MoveToRoot();
 
-		getDockContext()->SaveLayout(layout, current_layout.c_str());
+		ImGui::SaveLayout(layout, current_layout.c_str());
 		layout->Save();
 	}
 }

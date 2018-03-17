@@ -34,7 +34,7 @@ void ProfilerViewer::Draw()
 	}
 
 	ImGui::SetNextWindowSize(ImVec2(400, 800), 2);
-	igBeginDock("Profiler", &visible, 0);
+	ImGui::BeginDock("Profiler", false, &visible, false, 0);
 	
 	ImGui::Text("Mode:");
 	ImGui::RadioButton("General", &profiler_mode, 1); ImGui::SameLine();
@@ -160,5 +160,5 @@ void ProfilerViewer::Draw()
 	}
 		
 	
-	igEndDock();
+	ImGui::EndDock();
 }

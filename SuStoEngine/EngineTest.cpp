@@ -24,7 +24,7 @@ void EngineTest::Start()
 
 void EngineTest::Draw()
 {
-	igBeginDock("Engine Tests", &visible, 0);
+	ImGui::BeginDock("Engine Tests", false, &visible, false);
 	
 	ImGui::Separator();
 
@@ -40,7 +40,7 @@ void EngineTest::Draw()
 
 	}
 	
-	igEndDock();
+	ImGui::EndDock();
 }
 
 void EngineTest::GenerateRandomNumbers(float2 range, int quantity)

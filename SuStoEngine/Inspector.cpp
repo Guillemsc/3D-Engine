@@ -19,7 +19,7 @@ void Inspector::Start()
 
 void Inspector::Draw()
 {
-	igBeginDock("Inspector", &visible, ImGuiWindowFlags_MenuBar);
+	ImGui::BeginDock("Inspector", false, &visible, false, ImGuiWindowFlags_MenuBar);
 
 	vector<GameObject*> selected = App->gameobj->GetSelectedGameObjects();
 
@@ -157,5 +157,5 @@ void Inspector::Draw()
 		}
 	}
 	
-	igEndDock();
+	ImGui::EndDock();
 }

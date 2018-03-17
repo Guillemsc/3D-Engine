@@ -58,7 +58,7 @@ void Configuration::Draw()
 	ImGui::SetNextWindowPos(ImVec2(window_width - window_width / 4, 23), 2);
 	ImGui::SetNextWindowSize(ImVec2(window_width / 4, window_height - 23), 2);
 
-	igBeginDock("Configuration", &visible, 0);
+	ImGui::BeginDock("Configuration", false, &visible, false);
 	
 	// ---------------------------------------------------------------------
 	// App -----------------------------------------------------------------
@@ -224,7 +224,7 @@ void Configuration::Draw()
 	}
 	
 
-	igEndDock();
+	ImGui::EndDock();
 }
 
 void Configuration::OpenGLOptions()

@@ -18,13 +18,13 @@ Game::~Game()
 
 void Game::Start()
 {
-	dock = getDockContext();
+	
 	position = { 0, 0 };
 }
 
 void Game::Draw()
 {
-	igBeginDock("Game", &visible, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+	ImGui::BeginDock("Game", false, &visible, false, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 	
 	ImGuizmo::SetDrawlist();
 
@@ -44,7 +44,7 @@ void Game::Draw()
 
 	ImGui::Image((void*)App->renderer3D->GetScreenTexture(), ImVec2(size.x, size.y), ImVec2(0, 1), ImVec2(1, 0));
 
-	igEndDock();
+	ImGui::EndDock();
 }
 
 void Game::CleanUp()

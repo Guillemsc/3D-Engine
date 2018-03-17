@@ -656,7 +656,9 @@ enum ImGuiCol_
     ImGuiCol_PlotHistogramHovered,
     ImGuiCol_TextSelectedBg,
     ImGuiCol_ModalWindowDarkening,  // darken entire screen when a modal window is active
-    ImGuiCol_COUNT
+    ImGuiCol_COUNT,
+	ImGuiCol_PanelLines,
+	ImGuiCol_PanelLinesHovered
 
     // Obsolete names (will be removed)
 #ifndef IMGUI_DISABLE_OBSOLETE_FUNCTIONS

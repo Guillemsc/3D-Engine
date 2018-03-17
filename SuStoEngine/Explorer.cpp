@@ -35,7 +35,7 @@ void Explorer::Start()
 
 void Explorer::Draw()
 {
-	igBeginDock("Explorer", &visible, ImGuiWindowFlags_MenuBar);	
+	ImGui::BeginDock("Explorer", false, &visible, false, ImGuiWindowFlags_MenuBar);	
 	
 	string looking_path = App->file_system->GetLookingPath();
 
@@ -177,7 +177,7 @@ void Explorer::Draw()
 	}
 	
 
-	igEndDock();
+	ImGui::EndDock();
 }
 
 //void Explorer::CleanUp()

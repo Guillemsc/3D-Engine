@@ -87,6 +87,7 @@ public:
 private:
 	void AddEditor(EditorElement* el);
 	void AddExistingLayout(const char* layout);
+	void DrawDockingEditor();
 
 private:
 	MainBar*		     main_bar = nullptr;
