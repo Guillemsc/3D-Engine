@@ -106,10 +106,10 @@ bool ResourceMeshLoader::LoadToEngine(DecomposedFilePath d_filepath, std::vector
 		App->camera->GetEditorCamera()->Focus(total_abb);
 
 		// Create fbx prefab
-		App->scene_manager->SavePrefab((d_filepath.file_name + d_filepath.file_extension).c_str(), "prefab", assets_path, parent);
+		App->scene_manager->SavePrefab((d_filepath.file_name + "." + d_filepath.file_extension).c_str(), "prefab", assets_path.c_str(), parent);
 
 		// Crate meta
-		JSON_Doc* doc = App->json->LoadJSON((d_filepath.file_name + d_filepath.file_extension).c_str());
+		JSON_Doc* doc = App->json->LoadJSON((assets_path + d_filepath.file_name + ".meta").c_str());
 		if (doc != nullptr)
 		{
 			std::string uid = doc->GetString("uid", "no_uid");
@@ -119,6 +119,8 @@ bool ResourceMeshLoader::LoadToEngine(DecomposedFilePath d_filepath, std::vector
 			{
 				doc->AddStringToArray("resources", (*it)->GetUniqueId().c_str());
 			}
+
+			doc->Save();
 		}
 
 		App->resource_manager->LoadLibraryResourceIntoScene(d_filepath.file_path.c_str());
@@ -220,7 +222,7 @@ bool ResourceMeshLoader::ExportToLibrary(Resource * resource)
 		memcpy(cursor, mesh->GetUVs(), bytes);
 
 		//fopen
-		if (App->file_system->FileSave(library_path, data, name.c_str(), "sustomesh", size) == false)
+		if (App->file_system->FileSave(library_path.c_str(), data, name.c_str(), "sustomesh", size) == false)
 		{
 			RELEASE_ARRAY(data);
 			return false;

@@ -3,7 +3,7 @@
 #include "Globals.h"
 #include "Functions.h"
 
-ResourceLoader::ResourceLoader(ResourceType _resources_to_load, const char* _assets_path, const char* _library_path)
+ResourceLoader::ResourceLoader(ResourceType _resources_to_load, std::string _assets_path, std::string _library_path)
 {
 	resources_to_load = _resources_to_load;
 	assets_path = _assets_path;
