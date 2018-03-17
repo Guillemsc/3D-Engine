@@ -39,7 +39,7 @@ public:
 	virtual bool LoadToEngine(DecomposedFilePath decomposed_file_path, std::vector<Resource*>& resources) { return false; };
 
 	// Unloads a loaded resource from the engine
-	virtual bool UnloadFromEngine(Resource* resource) { return false; };
+	virtual bool UnloadFromEngine(DecomposedFilePath decomposed_file_path) { return false; };
 
 	// Removes elements of a GameObject that use this resource
 	virtual void ClearFromGameObject(Resource* resource, GameObject* go) {  };
@@ -51,7 +51,7 @@ public:
 	virtual bool ImportFromLibrary(const char* uid) { return false; };
 
 	// Loads a resource into the scene as s new game object
-	virtual bool LoadIntoScene(Resource* resource) { return false; };
+	virtual bool LoadLibraryResourceIntoScene(DecomposedFilePath decomposed_file_path) { return false; };
 
 	// Returns true if the resource can be found on the library folder
 	virtual bool IsResourceOnLibrary(Resource* resource) { return false; };

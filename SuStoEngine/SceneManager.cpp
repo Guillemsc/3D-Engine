@@ -199,6 +199,17 @@ bool SceneManager::LoadPrefab(const char * file_path, GameObject *& loaded_go)
 	return ret;
 }
 
+bool SceneManager::LoadPrefab(const char * file_path)
+{
+	bool ret = true;
+
+	GameObject* go = nullptr;
+
+	ret = LoadPrefab(file_path, go);
+
+	return ret;
+}
+
 SceneState SceneManager::GetState()
 {
 	return state;

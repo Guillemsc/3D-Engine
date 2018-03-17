@@ -2,6 +2,7 @@
 #define _FILESYSTEM_H_
 
 #include "Module.h"
+#include <filesystem>
 
 struct DecomposedFilePath
 {
@@ -33,6 +34,7 @@ public:
 	bool FileExists(const char* path, const char* name, const char* extension = "");
 	bool FileExists(const char* filepath);
 	bool FileRename(const char* filepath, const char* new_name);	
+
 
 	string GetAssetsPath();
 	string GetLibraryPath();

@@ -37,10 +37,11 @@ public:
 
 	// Resource load, unload, export, import
 	void LoadResourceToEngine(const char* file_path);
-	void UnloadResourceFromEngine(Resource* resource);
+	void UnloadResourceFromEngine(const char* filepath);
+	void ClearResourceFromGameObjects(Resource* res);
 	void ExportResourceToLibrary(Resource* resource);
 	void ImportResourceFromLibrary(const char* uid);
-	void LoadResourceIntoScene(Resource* resource);
+	void LoadLibraryResourceIntoScene(const char* filepath);
 	bool IsResourceOnLibrary(Resource* resource);
 	bool IsResourceOnAssets(Resource* resource);
 	void CreateResourcesMissingOnAssets();

@@ -179,9 +179,9 @@ bool ResourceManager::DeleteResource(std::string unique_id)
 	return ret;
 }
 
-void ResourceManager::LoadResourceToEngine(const char * file_path)
+void ResourceManager::LoadResourceToEngine(const char * filepath)
 {
-	DecomposedFilePath deco_file = App->file_system->DecomposeFilePath(file_path);
+	DecomposedFilePath deco_file = App->file_system->DecomposeFilePath(filepath);
 
 	ResourceType type = AssetExtensionToType(deco_file.file_extension.c_str());
 
@@ -197,7 +197,7 @@ void ResourceManager::LoadResourceToEngine(const char * file_path)
 			}
 			else
 			{
-				App->file_system->FileCopyPasteWithNewName(file_path, App->file_system->GetAssetsPath().c_str(), deco_file.file_name.c_str());
+				App->file_system->FileCopyPasteWithNewName(filepath, App->file_system->GetAssetsPath().c_str(), deco_file.file_name.c_str());
 				break;
 			}
 		}
@@ -222,22 +222,33 @@ void ResourceManager::LoadResourceToEngine(const char * file_path)
 	}
 }
 
-void ResourceManager::UnloadResourceFromEngine(Resource * resource)
+void ResourceManager::UnloadResourceFromEngine(const char* filepath)
 {
-	if (resource != nullptr)
+	DecomposedFilePath d_filepath = App->file_system->DecomposeFilePath(filepath);
+
+	ResourceType type = AssetExtensionToType(d_filepath.file_extension.c_str());
+	ResourceLoader* loader = GetLoader(type);
+
+	if (loader != nullptr)
 	{
-		ResourceLoader* loader = GetLoader(resource->GetType());
+		loader->UnloadFromEngine(d_filepath);
+	}
+}
 
-		if (loader != nullptr)
+void ResourceManager::ClearResourceFromGameObjects(Resource * res)
+{
+	if (res != nullptr)
+	{
+		ResourceLoader* load = GetLoader(res->GetType());
+
+		if (load != nullptr)
 		{
-			std::vector<GameObject*> game_objects = App->gameobj->GetListGameObjects();
+			std::vector<GameObject*> game_object = App->gameobj->GetListGameObjects();
 
-			for (std::vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
+			for (std::vector<GameObject*>::iterator it = game_object.begin(); it != game_object.end(); ++it)
 			{
-				loader->ClearFromGameObject(resource, (*it));
+				load->ClearFromGameObject(res, (*it));
 			}
-
-			loader->UnloadFromEngine(resource);
 		}
 	}
 }
@@ -264,9 +275,9 @@ void ResourceManager::ExportResourceToLibrary(Resource * resource)
 	}
 }
 
-void ResourceManager::ImportResourceFromLibrary(const char * file_path)
+void ResourceManager::ImportResourceFromLibrary(const char * filepath)
 {
-	DecomposedFilePath deco_file = App->file_system->DecomposeFilePath(file_path);
+	DecomposedFilePath deco_file = App->file_system->DecomposeFilePath(filepath);
 
 	ResourceType type = LibraryExtensionToType(deco_file.file_extension.c_str());
 	
@@ -287,26 +298,28 @@ void ResourceManager::ImportResourceFromLibrary(const char * file_path)
 	}
 }
 
-void ResourceManager::LoadResourceIntoScene(Resource * resource)
+void ResourceManager::LoadLibraryResourceIntoScene(const char* filepath)
 {
-	if (resource != nullptr)
+	DecomposedFilePath deco_file = App->file_system->DecomposeFilePath(filepath);
+
+	ResourceType type = LibraryExtensionToType(deco_file.file_extension.c_str());
+	
+	ResourceLoader* loader = GetLoader(type);
+
+	if (loader != nullptr)
 	{
-		ResourceLoader* loader = GetLoader(resource->GetType());
+		bool ret = loader->LoadLibraryResourceIntoScene(deco_file);
 
-		if (loader != nullptr)
+		if (ret)
 		{
-			bool ret = loader->LoadIntoScene(resource);
-
-			if (ret)
-			{
-				// SUCCES
-			}
-			else
-			{
-				// ERROR
-			}
+			// SUCCES
+		}
+		else
+		{
+			// ERROR
 		}
 	}
+	
 }
 
 bool ResourceManager::IsResourceOnLibrary(Resource * resource)
