@@ -64,7 +64,7 @@ public:
 	bool ExportToLibrary(Resource* resource);
 	bool ImportFromLibrary(const char* uid);
 
-	bool LoadLibraryResourceIntoScene(DecomposedFilePath decomposed_file_path);
+	bool LoadAssetResourceIntoScene(DecomposedFilePath decomposed_file_path);
 
 	//bool IsResourceOnLibrary(Resource* resource);
 	//bool IsResourceOnAssets(Resource* resource);

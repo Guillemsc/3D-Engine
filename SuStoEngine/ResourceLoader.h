@@ -51,7 +51,7 @@ public:
 	virtual bool ImportFromLibrary(const char* uid) { return false; };
 
 	// Loads a resource into the scene as s new game object
-	virtual bool LoadLibraryResourceIntoScene(DecomposedFilePath decomposed_file_path) { return false; };
+	virtual bool LoadAssetResourceIntoScene(DecomposedFilePath decomposed_file_path) { return false; };
 
 	// Returns true if the resource can be found on the library folder
 	virtual bool IsResourceOnLibrary(Resource* resource) { return false; };

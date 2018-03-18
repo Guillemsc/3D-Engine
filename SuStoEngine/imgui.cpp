@@ -4662,7 +4662,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
 }
 
 // Old Begin() API with 5 parameters, avoid calling this version directly! Use SetNextWindowSize()+Begin() instead.
-#ifndef IMGUI_DISABLE_OBSOLETE_FUNCTIONS
+
 bool ImGui::Begin(const char* name, bool* p_open, const ImVec2& size_on_first_use, float bg_alpha_override, ImGuiWindowFlags flags)
 {
     // Old API feature: we could pass the initial window size as a parameter, however this was very misleading because in most cases it would only affect the window when it didn't have storage in the .ini file.
@@ -4685,7 +4685,7 @@ bool ImGui::Begin(const char* name, bool* p_open, const ImVec2& size_on_first_us
         g.Style.Colors[bg_color_idx] = bg_color_backup;
     return ret;
 }
-#endif // IMGUI_DISABLE_OBSOLETE_FUNCTIONS
+
 
 void ImGui::End()
 {

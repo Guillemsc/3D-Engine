@@ -109,7 +109,8 @@ bool ResourceMeshLoader::LoadToEngine(DecomposedFilePath d_filepath, std::vector
 		App->scene_manager->SavePrefab((d_filepath.file_name + "." + d_filepath.file_extension).c_str(), "prefab", assets_path.c_str(), parent);
 
 		// Crate meta
-		JSON_Doc* doc = App->json->LoadJSON((assets_path + d_filepath.file_name + ".meta").c_str());
+		std::string meta_path = (assets_path + d_filepath.file_name + ".meta");
+		JSON_Doc* doc = App->json->CreateJSON(meta_path.c_str());
 		if (doc != nullptr)
 		{
 			std::string uid = doc->GetString("uid", "no_uid");
@@ -122,8 +123,6 @@ bool ResourceMeshLoader::LoadToEngine(DecomposedFilePath d_filepath, std::vector
 
 			doc->Save();
 		}
-
-		App->resource_manager->LoadLibraryResourceIntoScene(d_filepath.file_path.c_str());
 	}
 
 	return ret;
@@ -327,11 +326,11 @@ bool ResourceMeshLoader::ImportFromLibrary(const char * uid)
 
 	return true;
 }
-bool ResourceMeshLoader::LoadLibraryResourceIntoScene(DecomposedFilePath decomposed_file_path)
+bool ResourceMeshLoader::LoadAssetResourceIntoScene(DecomposedFilePath decomposed_file_path)
 {
 	bool ret = true;
 
-	std::string prefab_path = decomposed_file_path.file_path + decomposed_file_path.file_name + ".prefab";
+	std::string prefab_path = decomposed_file_path.file_path + ".prefab";
 
 	App->scene_manager->LoadPrefab(prefab_path.c_str());
 

@@ -41,7 +41,7 @@ public:
 	void ClearResourceFromGameObjects(Resource* res);
 	void ExportResourceToLibrary(Resource* resource);
 	void ImportResourceFromLibrary(const char* uid);
-	void LoadLibraryResourceIntoScene(const char* filepath);
+	void LoadAssetResourceIntoScene(const char* filepath);
 	bool IsResourceOnLibrary(Resource* resource);
 	bool IsResourceOnAssets(Resource* resource);
 	void CreateResourcesMissingOnAssets();
