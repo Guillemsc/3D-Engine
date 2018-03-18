@@ -109,7 +109,7 @@ bool ResourceMeshLoader::LoadToEngine(DecomposedFilePath d_filepath, std::vector
 		App->scene_manager->SavePrefab((d_filepath.file_name + "." + d_filepath.file_extension).c_str(), "prefab", assets_path.c_str(), parent);
 
 		// Crate meta
-		std::string meta_path = (assets_path + d_filepath.file_name + ".meta");
+		std::string meta_path = (assets_path + d_filepath.file_name + "." + d_filepath.file_extension + ".meta");
 		JSON_Doc* doc = App->json->CreateJSON(meta_path.c_str());
 		if (doc != nullptr)
 		{
@@ -138,8 +138,6 @@ bool ResourceMeshLoader::UnloadFromEngine(DecomposedFilePath d_filepath)
 	App->file_system->FileDelete(prefab_file.c_str());
 
 	JSON_Doc* doc = App->json->LoadJSON(meta_file.c_str());
-	if(doc == nullptr)
-		doc = App->json->CreateJSON(meta_file.c_str());
 
 	if (doc != nullptr)
 	{
@@ -154,8 +152,8 @@ bool ResourceMeshLoader::UnloadFromEngine(DecomposedFilePath d_filepath)
 				App->resource_manager->ClearResourceFromGameObjects(res);
 			}
 
-			std::string resource_path = assets_path + uid + ".sustomesh";
-			std::string meta_path = assets_path + uid + ".meta";
+			std::string resource_path = library_path + uid + ".sustomesh";
+			std::string meta_path = library_path + uid + ".meta";
 
 			App->file_system->FileDelete(resource_path.c_str());
 			App->file_system->FileDelete(meta_path.c_str());
@@ -172,9 +170,12 @@ void ResourceMeshLoader::ClearFromGameObject(Resource * resource, GameObject * g
 	{
 		ComponentMesh* mesh = (ComponentMesh*)go->GetComponent(ComponentType::MESH);
 
-		if (mesh->GetMesh() == resource)
+		if (mesh != nullptr)
 		{
-			mesh->RemoveMesh();
+			if (mesh->GetMesh() == resource)
+			{
+				mesh->RemoveMesh();
+			}
 		}
 	}
 }
