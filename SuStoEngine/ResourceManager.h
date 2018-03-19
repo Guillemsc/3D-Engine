@@ -42,18 +42,10 @@ public:
 	void ExportResourceToLibrary(Resource* resource);
 	void ImportResourceFromLibrary(const char* uid);
 	void LoadAssetResourceIntoScene(const char* filepath);
-	bool IsResourceOnLibrary(Resource* resource);
-	bool IsResourceOnAssets(Resource* resource);
-	void CreateResourcesMissingOnAssets();
-	void RemoveResourcesMissingOnLibrary();
+	bool IsResourceOnLibrary(std::string uid);
+	void CreateResourcesMissingOnLibrary();
+	void RemoveResourcesMissingOnAssets();
 	void RenameLibraryResource(const char* filepath, const char* new_name);
-
-	//void SaveResourceIntoFile(Resource* res);
-	//bool LoadResource(const char* file_path);
-	//bool LoadResource(const char* file_path, vector<Resource*>& resources);
-	//void ImportAllResources();
-	//void LoadFileIntoScene(const char* file_path);
-	//void DeImportFile(const char* file_path);
 
 	std::string GetNewUID();
 

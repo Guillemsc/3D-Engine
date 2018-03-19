@@ -122,6 +122,7 @@ bool ResourceMeshLoader::LoadToEngine(DecomposedFilePath d_filepath, std::vector
 			}
 
 			doc->Save();
+			App->json->UnloadJSON(doc);
 		}
 	}
 
@@ -151,6 +152,8 @@ bool ResourceMeshLoader::UnloadFromEngine(DecomposedFilePath d_filepath)
 			{
 				App->resource_manager->ClearResourceFromGameObjects(res);
 			}
+
+			App->resource_manager->DeleteResource(uid);
 
 			std::string resource_path = library_path + uid + ".sustomesh";
 			std::string meta_path = library_path + uid + ".meta";
@@ -336,6 +339,26 @@ bool ResourceMeshLoader::LoadAssetResourceIntoScene(DecomposedFilePath decompose
 	App->scene_manager->LoadPrefab(prefab_path.c_str());
 
 	return ret;
+}
+bool ResourceMeshLoader::IsResourceOnLibrary(std::string uid)
+{
+	bool ret = false;
+
+	std::string filepath = library_path + uid + ".sustomesh";
+	std::string meta = library_path + uid + ".meta";
+
+	if (App->file_system->FileExists(filepath.c_str()) && App->file_system->FileExists(meta.c_str()))
+	{
+		ret = true;
+	}
+	
+	return ret;
+}
+void ResourceMeshLoader::CreateResourcesMissingOnLibrary()
+{
+}
+void ResourceMeshLoader::RemoveResourcesMissingOnAssets()
+{
 }
 void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node, const char * full_path, AABB & total_abb, 
 	vector<Resource*>& resources, GameObject * parent)

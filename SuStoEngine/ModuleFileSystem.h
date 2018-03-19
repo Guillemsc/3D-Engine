@@ -31,7 +31,10 @@ public:
 	void FileCopyPasteWithNewName(const char* filepath, const char* new_path, const char* new_name);
 	bool FileDelete(const char* filepath);
 	bool FileSave(const char * path, const char * file_content, const char * name, const char * extension, int size);
-	vector<string> GetFilesInPath(const char* path, const char* extension = "");
+	std::vector<std::string> GetFilesAndFoldersInPath(const char* path, const char* extension = "");
+	std::vector<std::string> GetFoldersInPath(const char* path);
+	std::vector<std::string> GetFilesInPath(const char* path, const char* extension = "");
+	std::vector<std::string> GetFilesInPathAndChilds(const char* path);
 	bool FileExists(const char* path, const char* name, const char* extension = "");
 	bool FileExists(const char* filepath);
 	bool FileRename(const char* filepath, const char* new_name);	

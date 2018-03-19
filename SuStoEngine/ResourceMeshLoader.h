@@ -66,11 +66,10 @@ public:
 
 	bool LoadAssetResourceIntoScene(DecomposedFilePath decomposed_file_path);
 
-	//bool IsResourceOnLibrary(Resource* resource);
-	//bool IsResourceOnAssets(Resource* resource);
+	bool IsResourceOnLibrary(std::string uid);
 
-	//void CreateResourcesMissingOnAssets();
-	//void RemoveResourcesMissingOnLibrary();
+	void CreateResourcesMissingOnLibrary();
+	void RemoveResourcesMissingOnAssets();
 
 	//bool RenameLibraryResource(DecomposedFilePath decomposed_file_path, const char* new_name);
 	// ---

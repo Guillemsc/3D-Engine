@@ -22,9 +22,6 @@ public:
 	void SetFileName(const char* file_name);
 	std::string GetFileName();
 
-	void SetFilePath(const char* file_path);
-	std::string GetFilePath();
-
 	ResourceType GetType();
 
 	std::string GetUniqueId();
@@ -45,7 +42,6 @@ private:
 	int			 count_ref = 0;
 
 	std::string file_name;
-	std::string file_path;
 };
 
 #endif

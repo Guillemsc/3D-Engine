@@ -103,19 +103,22 @@ JSON_Doc* JSONLoader::CreateJSON(const char * path)
 
 void JSONLoader::UnloadJSON(JSON_Doc * son)
 {
-	for (list<JSON_Doc*>::iterator it = jsons.begin(); it != jsons.end();)
+	if (son != nullptr)
 	{
-		if ((*it) == son)
+		for (list<JSON_Doc*>::iterator it = jsons.begin(); it != jsons.end();)
 		{
-			(*it)->CleanUp();
-			RELEASE(*it);
+			if ((*it) == son)
+			{
+				(*it)->CleanUp();
+				RELEASE(*it);
 
-			it = jsons.erase(it);
-			break;
+				it = jsons.erase(it);
+				break;
+			}
+			else
+				++it;
+
 		}
-		else
-			++it;
-		
 	}
 }
 

@@ -55,7 +55,7 @@ void Explorer::Draw()
 		ImGui::EndMenuBar();
 	}
 
-	vector<string> files = App->file_system->GetFilesInPath(looking_path.c_str());
+	vector<string> files = App->file_system->GetFilesAndFoldersInPath(looking_path.c_str());
 	//files = OrderFiles(files);
 
 	int i = 0;

@@ -54,19 +54,16 @@ public:
 	virtual bool LoadAssetResourceIntoScene(DecomposedFilePath decomposed_file_path) { return false; };
 
 	// Returns true if the resource can be found on the library folder
-	virtual bool IsResourceOnLibrary(Resource* resource) { return false; };
-
-	// Returns true if the resource can be found on the assets folder
-	virtual bool IsResourceOnAssets(Resource* resource) { return false; };
+	virtual bool IsResourceOnLibrary(std::string uid) { return false; };
 
 	// Exports again resources that are missing on the assets folder, but that are on the library folder
-	virtual void CreateResourcesMissingOnAssets() {};
+	virtual void CreateResourcesMissingOnLibrary() {};
 
 	// Removes resources that are on the asets folder, but missing on the library folder
-	virtual void RemoveResourcesMissingOnLibrary() {};
+	virtual void RemoveResourcesMissingOnAssets() {};
 
 	// Renames the library resource and all other necessary files
-	virtual bool RenameLibraryResource(DecomposedFilePath decomposed_file_path, const char* new_name) {};
+	virtual bool RenameLibraryResource(DecomposedFilePath decomposed_file_path, const char* new_name) { return false; };
 
 protected:
 	ResourceType resources_to_load = ResourceType::RT_NULL;

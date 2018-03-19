@@ -541,13 +541,20 @@ bool FileSystem::FileSave(const char * path, const char* file_content, const cha
 	return ret;
 }
 
-vector<string> FileSystem::GetFilesInPath(const char * path, const char* extension)
+std::vector<std::string> FileSystem::GetFilesAndFoldersInPath(const char * path, const char* extension)
 {
-	vector<string> files;
+	std::string s_path = path;
+
+	if (s_path[s_path.length() - 1] != '\\')
+	{
+		s_path += '\\';
+	}
+
+	std::vector<std::string> files;
 
 	WIN32_FIND_DATA search_data;
 
-	string path_ex = path;
+	std::string path_ex = s_path;
 
 	if (!TextCmp(extension, ""))
 	{
@@ -561,11 +568,24 @@ vector<string> FileSystem::GetFilesInPath(const char * path, const char* extensi
 
 	HANDLE handle = FindFirstFile(path_ex.c_str(), &search_data);
 
+	int counter = 0;
 	while (handle != INVALID_HANDLE_VALUE)
 	{
-		string path_new = path;
-		path_new += search_data.cFileName;
-		files.push_back(path_new);
+		bool can_add = true;
+		if ((search_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+		{
+			if (TextCmp("..", search_data.cFileName) || TextCmp(".", search_data.cFileName))
+			{
+				can_add = false;
+			}
+		}
+
+		if (can_add)
+		{
+			string path_new = s_path;
+			path_new += search_data.cFileName;
+			files.push_back(path_new);
+		}
 
 		if (FindNextFile(handle, &search_data) == FALSE)
 			break;
@@ -575,6 +595,116 @@ vector<string> FileSystem::GetFilesInPath(const char * path, const char* extensi
 		FindClose(handle);
 
 	return files;
+}
+
+std::vector<std::string> FileSystem::GetFoldersInPath(const char * path)
+{
+	std::string s_path = path;
+
+	if (s_path[s_path.length() - 1] != '\\')
+	{
+		s_path += '\\';
+	}
+
+	std::vector<std::string> files;
+
+	WIN32_FIND_DATA search_data;
+
+	std::string path_ex = s_path;
+	path_ex += "*.*";
+
+	HANDLE handle = FindFirstFile(path_ex.c_str(), &search_data);
+
+	while (handle != INVALID_HANDLE_VALUE && (search_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+	{
+		if (!TextCmp("..", search_data.cFileName) && !TextCmp(".", search_data.cFileName))
+		{
+			string path_new = s_path;
+			path_new += search_data.cFileName + std::string("\\");
+			files.push_back(path_new);
+		}
+		
+		if (FindNextFile(handle, &search_data) == FALSE)
+			break;
+	}
+
+	if (handle)
+		FindClose(handle);
+
+	return files;
+}
+
+std::vector<std::string> FileSystem::GetFilesInPath(const char * path, const char * extension)
+{
+	std::string s_path = path;
+
+	if (s_path[s_path.length() - 1] != '\\')
+	{
+		s_path += '\\';
+	}
+
+	std::vector<std::string> files;
+
+	WIN32_FIND_DATA search_data;
+
+	std::string path_ex = s_path;
+
+	if (!TextCmp(extension, ""))
+	{
+		path_ex += "*.";
+		path_ex += extension;
+	}
+	else
+	{
+		path_ex += "*.*";
+	}
+
+	HANDLE handle = FindFirstFile(path_ex.c_str(), &search_data);
+
+	while (handle != INVALID_HANDLE_VALUE && !(search_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+	{
+		string path_new = s_path;
+		path_new += search_data.cFileName;
+		files.push_back(path_new);
+
+		if (FindNextFile(handle, &search_data) == FALSE)
+			break;
+	}
+
+	if (handle)
+		FindClose(handle);
+
+	return files;
+}
+
+std::vector<std::string> FileSystem::GetFilesInPathAndChilds(const char * path)
+{
+	std::vector<std::string> ret;
+
+	if (FolderExists(path))
+	{
+		std::vector<std::string> folders_to_look;
+		folders_to_look.push_back(path);
+
+		while (folders_to_look.size() > 0)
+		{
+			std::vector<std::string>::iterator fol_it = folders_to_look.begin();
+
+			std::vector<std::string> files = App->file_system->GetFilesInPath((*fol_it).c_str());
+
+			if(files.size() > 0)
+				ret.insert(ret.begin(), files.begin(), files.end());
+
+			std::vector<std::string> new_directories = App->file_system->GetFoldersInPath((*fol_it).c_str());
+
+			if(new_directories.size() > 0)
+				folders_to_look.insert(folders_to_look.end(), new_directories.begin(), new_directories.end());
+
+			folders_to_look.erase(folders_to_look.begin());
+		}
+	}
+
+	return ret;
 }
 
 bool FileSystem::FileExists(const char * path, const char * name, const char * extension)

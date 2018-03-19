@@ -312,53 +312,34 @@ void ResourceManager::LoadAssetResourceIntoScene(const char* filepath)
 	}
 }
 
-bool ResourceManager::IsResourceOnLibrary(Resource * resource)
+bool ResourceManager::IsResourceOnLibrary(std::string uid)
 {
 	bool ret = false;
-
-	if (resource != nullptr)
+	
+	for (std::vector<ResourceLoader*>::iterator it = loaders.begin(); it != loaders.end(); ++it)
 	{
-		ResourceLoader* loader = GetLoader(resource->GetType());
+		ret = (*it)->IsResourceOnLibrary(uid);
 
-		if (loader != nullptr)
-		{
-			ret = loader->IsResourceOnLibrary(resource);
-		}
-	}
+		if (ret)
+			break;
+	}	
 
 	return ret;
 }
 
-bool ResourceManager::IsResourceOnAssets(Resource * resource)
-{
-	bool ret = false;
-
-	if (resource != nullptr)
-	{
-		ResourceLoader* loader = GetLoader(resource->GetType());
-
-		if (loader != nullptr)
-		{
-			ret = loader->IsResourceOnAssets(resource);
-		}
-	}
-
-	return ret;
-}
-
-void ResourceManager::CreateResourcesMissingOnAssets()
+void ResourceManager::CreateResourcesMissingOnLibrary()
 {
 	for (std::vector<ResourceLoader*>::iterator it = loaders.begin(); it != loaders.end(); ++it)
 	{
-		(*it)->CreateResourcesMissingOnAssets();
+		(*it)->CreateResourcesMissingOnLibrary();
 	}
 }
 
-void ResourceManager::RemoveResourcesMissingOnLibrary()
+void ResourceManager::RemoveResourcesMissingOnAssets()
 {
 	for (std::vector<ResourceLoader*>::iterator it = loaders.begin(); it != loaders.end(); ++it)
 	{
-		(*it)->RemoveResourcesMissingOnLibrary();
+		(*it)->RemoveResourcesMissingOnAssets();
 	}
 }
 

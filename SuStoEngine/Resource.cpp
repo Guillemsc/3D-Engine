@@ -21,16 +21,6 @@ std::string Resource::GetFileName()
 	return file_name;
 }
 
-void Resource::SetFilePath(const char * _file_path)
-{
-	file_path = _file_path;
-}
-
-std::string Resource::GetFilePath()
-{
-	return file_path;
-}
-
 ResourceType Resource::GetType()
 {
 	return type;
