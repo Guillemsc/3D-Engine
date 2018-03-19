@@ -36,7 +36,7 @@ public:
 	bool DeleteResource(std::string unique_id);
 
 	// Resource load, unload, export, import
-	void LoadResourceToEngine(const char* file_path);
+	void LoadResourceToEngine(const char* filepath);
 	void UnloadResourceFromEngine(const char* filepath);
 	void ClearResourceFromGameObjects(Resource* res);
 	void ExportResourceToLibrary(Resource* resource);
@@ -46,7 +46,7 @@ public:
 	bool IsResourceOnAssets(Resource* resource);
 	void CreateResourcesMissingOnAssets();
 	void RemoveResourcesMissingOnLibrary();
-
+	void RenameLibraryResource(const char* filepath, const char* new_name);
 
 	//void SaveResourceIntoFile(Resource* res);
 	//bool LoadResource(const char* file_path);

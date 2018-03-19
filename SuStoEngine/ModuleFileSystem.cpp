@@ -494,8 +494,10 @@ void FileSystem::FileCopyPasteWithNewName(const char * filepath, const char * ne
 	}
 }
 
-void FileSystem::FileDelete(const char * filepath)
+bool FileSystem::FileDelete(const char * filepath)
 {
+	bool ret = false;
+
 	if (DeleteFile(filepath) == 0)
 	{
 		DWORD error = GetLastError();
@@ -505,6 +507,10 @@ void FileSystem::FileDelete(const char * filepath)
 			CONSOLE_LOG("Error deleting file (path not found)): %s", filepath);
 		}
 	}
+	else
+		ret = true;
+
+	return ret;
 }
 
 bool FileSystem::FileSave(const char * path, const char* file_content, const char* name, const char* extension, int size)
@@ -618,30 +624,22 @@ bool FileSystem::FileExists(const char * path, const char * name, const char * e
 
 bool FileSystem::FileExists(const char * filepath)
 {
-	bool ret = false;
-
 	DecomposedFilePath d_filepath = DecomposeFilePath(filepath);
 
-	ret = FileExists(d_filepath.path.c_str(), d_filepath.file_name.c_str(), d_filepath.file_extension.c_str());
-
-	return ret;
+	return FileExists(d_filepath.path.c_str(), d_filepath.file_name.c_str(), d_filepath.file_extension.c_str());
 }
 
 bool FileSystem::FileRename(const char * filepath, const char * new_name)
 {
 	bool ret = false;
 
-	string path = GetPathFromFilePath(filepath);
-	string name = GetFileNameFromFilePath(filepath);
-	string extension = GetFileExtension(name.c_str());
+	DecomposedFilePath d_filepath = DecomposeFilePath(filepath);
 
-	string new_filepath = path + new_name + "." + extension;
+	string new_filepath = d_filepath.path + new_name + "." + d_filepath.file_extension;
 
-	int result;
-	result = rename(filepath, new_filepath.c_str());
-	if (result == 0)
+	if (rename(filepath, new_filepath.c_str()) == 0)
 		ret = true;
-
+	
 	return ret;
 }
 

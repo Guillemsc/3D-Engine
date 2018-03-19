@@ -29,7 +29,7 @@ public:
 	bool FileCopyPaste(const char* filepath, const char* new_path, std::string &resultant_path);
 	bool FileCopyPaste(const char* filepath, const char* new_path);
 	void FileCopyPasteWithNewName(const char* filepath, const char* new_path, const char* new_name);
-	void FileDelete(const char* filepath);
+	bool FileDelete(const char* filepath);
 	bool FileSave(const char * path, const char * file_content, const char * name, const char * extension, int size);
 	vector<string> GetFilesInPath(const char* path, const char* extension = "");
 	bool FileExists(const char* path, const char* name, const char* extension = "");

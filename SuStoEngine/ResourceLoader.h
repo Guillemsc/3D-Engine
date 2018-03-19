@@ -66,7 +66,7 @@ public:
 	virtual void RemoveResourcesMissingOnLibrary() {};
 
 	// Renames the library resource and all other necessary files
-	virtual void RenameLibraryResource(DecomposedFilePath decomposed_file_path, const char* new_name) {};
+	virtual bool RenameLibraryResource(DecomposedFilePath decomposed_file_path, const char* new_name) {};
 
 protected:
 	ResourceType resources_to_load = ResourceType::RT_NULL;

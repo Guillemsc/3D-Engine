@@ -71,6 +71,8 @@ public:
 
 	//void CreateResourcesMissingOnAssets();
 	//void RemoveResourcesMissingOnLibrary();
+
+	//bool RenameLibraryResource(DecomposedFilePath decomposed_file_path, const char* new_name);
 	// ---
 
 	//bool Load(const char* filepath, std::vector<Resource*>& resources, bool as_new_gameobject = true);

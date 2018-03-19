@@ -310,7 +310,6 @@ void ResourceManager::LoadAssetResourceIntoScene(const char* filepath)
 			// ERROR
 		}
 	}
-	
 }
 
 bool ResourceManager::IsResourceOnLibrary(Resource * resource)
@@ -360,6 +359,29 @@ void ResourceManager::RemoveResourcesMissingOnLibrary()
 	for (std::vector<ResourceLoader*>::iterator it = loaders.begin(); it != loaders.end(); ++it)
 	{
 		(*it)->RemoveResourcesMissingOnLibrary();
+	}
+}
+
+void ResourceManager::RenameLibraryResource(const char * filepath, const char * new_name)
+{
+	DecomposedFilePath d_filepath = App->file_system->DecomposeFilePath(filepath);
+
+	ResourceType type = AssetExtensionToType(d_filepath.file_extension.c_str());
+
+	ResourceLoader* loader = GetLoader(type);
+
+	if (loader != nullptr)
+	{
+		bool ret = loader->RenameLibraryResource(d_filepath, new_name);
+
+		if (ret)
+		{
+			// SUCCES
+		}
+		else
+		{
+			// ERROR
+		}
 	}
 }
 
