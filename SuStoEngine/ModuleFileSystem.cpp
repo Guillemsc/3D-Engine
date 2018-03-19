@@ -584,6 +584,10 @@ std::vector<std::string> FileSystem::GetFilesAndFoldersInPath(const char * path,
 		{
 			string path_new = s_path;
 			path_new += search_data.cFileName;
+
+			if ((search_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+				path_new += "\\";
+
 			files.push_back(path_new);
 		}
 
@@ -615,13 +619,16 @@ std::vector<std::string> FileSystem::GetFoldersInPath(const char * path)
 
 	HANDLE handle = FindFirstFile(path_ex.c_str(), &search_data);
 
-	while (handle != INVALID_HANDLE_VALUE && (search_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+	while (handle != INVALID_HANDLE_VALUE)
 	{
-		if (!TextCmp("..", search_data.cFileName) && !TextCmp(".", search_data.cFileName))
+		if ((search_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 		{
-			string path_new = s_path;
-			path_new += search_data.cFileName + std::string("\\");
-			files.push_back(path_new);
+			if (!TextCmp("..", search_data.cFileName) && !TextCmp(".", search_data.cFileName))
+			{
+				string path_new = s_path;
+				path_new += search_data.cFileName + std::string("\\");
+				files.push_back(path_new);
+			}
 		}
 		
 		if (FindNextFile(handle, &search_data) == FALSE)
@@ -661,11 +668,14 @@ std::vector<std::string> FileSystem::GetFilesInPath(const char * path, const cha
 
 	HANDLE handle = FindFirstFile(path_ex.c_str(), &search_data);
 
-	while (handle != INVALID_HANDLE_VALUE && !(search_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+	while (handle != INVALID_HANDLE_VALUE)
 	{
-		string path_new = s_path;
-		path_new += search_data.cFileName;
-		files.push_back(path_new);
+		if (!(search_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+		{
+			string path_new = s_path;
+			path_new += search_data.cFileName;
+			files.push_back(path_new);
+		}
 
 		if (FindNextFile(handle, &search_data) == FALSE)
 			break;
