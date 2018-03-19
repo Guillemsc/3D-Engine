@@ -57,7 +57,7 @@ bool ResourceManager::CleanUp()
 
 void ResourceManager::OnLoadFile(const char * filepath)
 {
-	LoadResourceToEngine(filepath);
+	LoadFileToEngine(filepath);
 }
 
 Resource* ResourceManager::Get(std::string unique_id)
@@ -179,7 +179,7 @@ bool ResourceManager::DeleteResource(std::string unique_id)
 	return ret;
 }
 
-void ResourceManager::LoadResourceToEngine(const char * filepath)
+void ResourceManager::LoadFileToEngine(const char * filepath)
 {
 	DecomposedFilePath deco_file = App->file_system->DecomposeFilePath(filepath);
 
@@ -198,7 +198,7 @@ void ResourceManager::LoadResourceToEngine(const char * filepath)
 			{
 				std::vector<Resource*> resources;
 
-				bool ret = loader->LoadToEngine(deco_file, resources);
+				bool ret = loader->LoadFileToEngine(deco_file, resources);
 
 				if (ret)
 				{
@@ -213,7 +213,7 @@ void ResourceManager::LoadResourceToEngine(const char * filepath)
 	}
 }
 
-void ResourceManager::UnloadResourceFromEngine(const char* filepath)
+void ResourceManager::UnloadAssetFromEngine(const char* filepath)
 {
 	DecomposedFilePath d_filepath = App->file_system->DecomposeFilePath(filepath);
 
@@ -222,7 +222,20 @@ void ResourceManager::UnloadResourceFromEngine(const char* filepath)
 
 	if (loader != nullptr)
 	{
-		loader->UnloadFromEngine(d_filepath);
+		loader->UnloadAssetFromEngine(d_filepath);
+	}
+}
+
+void ResourceManager::ExportAssetToLibrary(const char * filepath)
+{
+	DecomposedFilePath d_filepath = App->file_system->DecomposeFilePath(filepath);
+
+	ResourceType type = AssetExtensionToType(d_filepath.file_extension.c_str());
+	ResourceLoader* loader = GetLoader(type);
+
+	if (loader != nullptr)
+	{
+		loader->ExportAssetToLibrary(d_filepath);
 	}
 }
 
@@ -252,7 +265,7 @@ void ResourceManager::ExportResourceToLibrary(Resource * resource)
 
 		if (loader != nullptr)
 		{
-			bool ret = loader->ExportToLibrary(resource);
+			bool ret = loader->ExportResourceToLibrary(resource);
 
 			if (ret)
 			{
@@ -276,7 +289,7 @@ void ResourceManager::ImportResourceFromLibrary(const char * filepath)
 
 	if (loader != nullptr)
 	{
-		bool ret = loader->ImportFromLibrary(deco_file.file_name.c_str());
+		bool ret = loader->ImportResourceFromLibrary(deco_file.file_name.c_str());
 
 		if (ret)
 		{
@@ -312,26 +325,24 @@ void ResourceManager::LoadAssetResourceIntoScene(const char* filepath)
 	}
 }
 
-bool ResourceManager::IsResourceOnLibrary(std::string uid)
+bool ResourceManager::IsAssetOnLibrary(const char * filepath)
 {
-	bool ret = false;
-	
-	for (std::vector<ResourceLoader*>::iterator it = loaders.begin(); it != loaders.end(); ++it)
-	{
-		ret = (*it)->IsResourceOnLibrary(uid);
-
-		if (ret)
-			break;
-	}	
-
-	return ret;
+	return false;
 }
 
 void ResourceManager::CreateResourcesMissingOnLibrary()
 {
-	for (std::vector<ResourceLoader*>::iterator it = loaders.begin(); it != loaders.end(); ++it)
+	std::vector<std::string> library_files = App->file_system->GetFilesInPathAndChilds(App->file_system->GetAssetsPath().c_str());
+
+	for (std::vector<std::string>::iterator fil_it = library_files.begin(); fil_it != library_files.end(); ++fil_it)
 	{
-		(*it)->CreateResourcesMissingOnLibrary();
+		DecomposedFilePath deco_file = App->file_system->DecomposeFilePath((*fil_it));
+
+		ResourceType type = AssetExtensionToType(deco_file.file_extension.c_str());
+
+		ResourceLoader* loader = GetLoader(type);
+
+
 	}
 }
 
@@ -339,7 +350,7 @@ void ResourceManager::RemoveResourcesMissingOnAssets()
 {
 	for (std::vector<ResourceLoader*>::iterator it = loaders.begin(); it != loaders.end(); ++it)
 	{
-		(*it)->RemoveResourcesMissingOnAssets();
+		
 	}
 }
 

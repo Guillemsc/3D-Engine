@@ -35,14 +35,15 @@ public:
 	Resource* CreateNewResource(ResourceType type, std::string unique_id);
 	bool DeleteResource(std::string unique_id);
 
-	// Resource load, unload, export, import
-	void LoadResourceToEngine(const char* filepath);
-	void UnloadResourceFromEngine(const char* filepath);
+	// Resource, assets and library management
+	void LoadFileToEngine(const char* filepath);
+	void UnloadAssetFromEngine(const char* filepath);
+	void ExportAssetToLibrary(const char* filepath);
 	void ClearResourceFromGameObjects(Resource* res);
 	void ExportResourceToLibrary(Resource* resource);
 	void ImportResourceFromLibrary(const char* uid);
 	void LoadAssetResourceIntoScene(const char* filepath);
-	bool IsResourceOnLibrary(std::string uid);
+	bool IsAssetOnLibrary(const char* filepath);
 	void CreateResourcesMissingOnLibrary();
 	void RemoveResourcesMissingOnAssets();
 	void RenameLibraryResource(const char* filepath, const char* new_name);

@@ -40,7 +40,7 @@ Resource * ResourceMeshLoader::CreateResource(std::string new_uid)
 	return ret;
 }
 
-bool ResourceMeshLoader::LoadToEngine(DecomposedFilePath d_filepath, std::vector<Resource*>& resources)
+bool ResourceMeshLoader::LoadFileToEngine(DecomposedFilePath d_filepath, std::vector<Resource*>& resources)
 {
 	bool ret = true;
 
@@ -128,7 +128,7 @@ bool ResourceMeshLoader::LoadToEngine(DecomposedFilePath d_filepath, std::vector
 
 	return ret;
 }
-bool ResourceMeshLoader::UnloadFromEngine(DecomposedFilePath d_filepath)
+bool ResourceMeshLoader::UnloadAssetFromEngine(DecomposedFilePath d_filepath)
 {
 	bool ret = true;
 
@@ -182,7 +182,7 @@ void ResourceMeshLoader::ClearFromGameObject(Resource * resource, GameObject * g
 		}
 	}
 }
-bool ResourceMeshLoader::ExportToLibrary(Resource * resource)
+bool ResourceMeshLoader::ExportResourceToLibrary(Resource * resource)
 {
 	bool ret = true;
 
@@ -258,7 +258,7 @@ bool ResourceMeshLoader::ExportToLibrary(Resource * resource)
 
 	return ret;
 }
-bool ResourceMeshLoader::ImportFromLibrary(const char * uid)
+bool ResourceMeshLoader::ImportResourceFromLibrary(const char * uid)
 {
 	bool ret = true;
 
@@ -340,26 +340,38 @@ bool ResourceMeshLoader::LoadAssetResourceIntoScene(DecomposedFilePath decompose
 
 	return ret;
 }
-bool ResourceMeshLoader::IsResourceOnLibrary(std::string uid)
+bool ResourceMeshLoader::IsAssetOnLibrary(DecomposedFilePath d_filepath)
 {
 	bool ret = false;
 
-	std::string filepath = library_path + uid + ".sustomesh";
-	std::string meta = library_path + uid + ".meta";
+	std::string meta_file = d_filepath.file_path + ".meta";
 
-	if (App->file_system->FileExists(filepath.c_str()) && App->file_system->FileExists(meta.c_str()))
+	JSON_Doc* doc = App->json->LoadJSON(meta_file.c_str());
+	if(doc != nullptr)
 	{
-		ret = true;
+		int resources_count = doc->GetArrayCount("resources");
+		int correct = 0;
+		for (int i = 0; i < resources_count; ++i)
+		{
+			std::string uid = doc->GetStringFromArray("resources", i);
+
+			std::string resource_path = library_path + uid + ".sustomesh";
+			std::string meta_path = library_path + uid + ".meta";
+
+			if (App->file_system->FileExists(resource_path.c_str()) && App->file_system->FileExists(meta_path.c_str()))
+			{
+				++correct;
+			}
+		}
+
+		if (correct == resources_count)
+			ret = true;
 	}
 	
 	return ret;
 }
-void ResourceMeshLoader::CreateResourcesMissingOnLibrary()
-{
-}
-void ResourceMeshLoader::RemoveResourcesMissingOnAssets()
-{
-}
+
+
 void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node, const char * full_path, AABB & total_abb, 
 	vector<Resource*>& resources, GameObject * parent)
 {
@@ -531,7 +543,7 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 
 		if (mesh_valid && node_valid && !mesh_already_loaded && mesh != nullptr)
 		{
-			ExportToLibrary(mesh);
+			ExportResourceToLibrary(mesh);
 
 			AddResource(mesh_index, RT_MESH, mesh);
 

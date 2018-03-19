@@ -130,7 +130,7 @@ void Explorer::Draw()
 			if (ImGui::Button("Delete"))
 			{
 				path_delete = (*it).c_str();
-				App->resource_manager->UnloadResourceFromEngine(path_delete.c_str());
+				App->resource_manager->UnloadAssetFromEngine(path_delete.c_str());
 				ImGui::OpenPopup("Delete PopUp");
 			}
 			if (ImGui::Button("Rename"))
@@ -163,7 +163,7 @@ void Explorer::Draw()
 
 		if (ImGui::Button("Yes, I'm sure", ImVec2(160, 0)))
 		{
-			App->resource_manager->UnloadResourceFromEngine(path_delete.c_str());
+			App->resource_manager->UnloadAssetFromEngine(path_delete.c_str());
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::SameLine();

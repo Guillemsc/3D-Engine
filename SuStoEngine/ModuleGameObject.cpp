@@ -51,9 +51,6 @@ bool ModuleGameObject::Start()
 {
 	bool ret = true;
 
-	std::vector<string> a = App->file_system->GetFilesInPathAndChilds("C:\\Users\\Guillem\\Documents\\GitHub\\3D-Engine\\Debug\\Library\\");
-	//App->file_system->FileCopyPaste("C:\\Users\\Guillem\\Documents\\GitHub\\3D-Engine\\SuStoEngine\\Resources\\Models\\BakerHouse(1).fbx", "C:\\Users\\Guillem\\Documents\\GitHub\\3D-Engine\\SuStoEngine\\Resources\\Models\\BakerHouse\\");
-
 	return ret;
 }
 
