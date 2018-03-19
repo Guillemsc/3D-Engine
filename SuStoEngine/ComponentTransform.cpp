@@ -7,7 +7,7 @@
 
 ComponentTransform::ComponentTransform(GameObject * owner, std::string unique_id) : Component(ComponentType::TRANSFORM, owner, unique_id)
 {
-	LOG_OUTPUT("Component Transform Created");
+	CONSOLE_LOG("Component Transform Created");
 	SetName("Transform");
 }
 

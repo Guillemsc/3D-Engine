@@ -30,7 +30,7 @@ bool ModuleCamera3D::Awake()
 {
 	bool ret = true;
 
-	LOG_OUTPUT("Loading Camera3D");
+	CONSOLE_LOG("Loading Camera3D");
 
 	return ret;
 }
@@ -40,7 +40,7 @@ bool ModuleCamera3D::Start()
 {
 	bool ret = true;
 
-	LOG_OUTPUT("Setting up the camera");
+	CONSOLE_LOG("Setting up the camera");
 
 	return ret;
 }
@@ -50,7 +50,7 @@ bool ModuleCamera3D::CleanUp()
 {
 	bool ret = true;
 
-	LOG_OUTPUT("Cleaning cameras");
+	CONSOLE_LOG("Cleaning cameras");
 
 	DestroyAllCameras();
 

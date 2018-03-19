@@ -67,6 +67,9 @@
     <Filter Include="Sources\6. Resources =============\Loaders">
       <UniqueIdentifier>{15b91578-5e35-4dc2-bd7f-b18595074ce9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\ThirdParties\tinyfile">
+      <UniqueIdentifier>{f5f16706-eac0-4e6b-8184-32e70f3e036c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleAudio.h">
@@ -468,6 +471,9 @@
     <ClInclude Include="ResourceLoader.h">
       <Filter>Sources\6. Resources =============\Loaders</Filter>
     </ClInclude>
+    <ClInclude Include="tinyfiledialogs.h">
+      <Filter>Sources\ThirdParties\tinyfile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -766,6 +772,9 @@
     </ClCompile>
     <ClCompile Include="ResourceLoader.cpp">
       <Filter>Sources\6. Resources =============\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyfiledialogs.c">
+      <Filter>Sources\ThirdParties\tinyfile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -12,7 +12,7 @@
 
 ComponentMesh::ComponentMesh(GameObject * owner, std::string unique_id) : Component(MESH, owner, unique_id)
 {
-	LOG_OUTPUT("Component Mesh Created");
+	CONSOLE_LOG("Component Mesh Created");
 	SetName("Mesh");
 }
 

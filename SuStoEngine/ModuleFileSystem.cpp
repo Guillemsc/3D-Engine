@@ -354,12 +354,12 @@ string FileSystem::CreateFolder(const char * path, const char * name)
 
 	if (error == ERROR_PATH_NOT_FOUND)
 	{
-		LOG_OUTPUT("Error creating folder (path not found): %s", path);
+		CONSOLE_LOG("Error creating folder (path not found): %s", path);
 		return ret;
 	}
 	else if (error == ERROR_ALREADY_EXISTS)
 	{
-		LOG_OUTPUT("Error creating folder (Folder aleady exists): %s", filepath.c_str())
+		CONSOLE_LOG("Error creating folder (Folder aleady exists): %s", filepath.c_str())
 	}
 
 	ret = filepath + '\\';
@@ -369,48 +369,115 @@ string FileSystem::CreateFolder(const char * path, const char * name)
 
 void FileSystem::FileMove(const char * filepath, const char * new_path, bool replace_existing)
 {
-	string path = new_path;
+	std::string s_new_path = new_path;
 
-	if (path[path.length()-1] != '\\')
+	if (s_new_path[s_new_path.length() - 1] != '\\')
 	{
-		path += '\\';
+		s_new_path += '\\';
 	}
 
-	path += GetFileNameFromFilePath(filepath);
+	if (FolderExists(s_new_path.c_str()) && FileExists(filepath))
+	{
+		DecomposedFilePath d_filepath = DecomposeFilePath(filepath);
 
-	if (!replace_existing)
-	{
-		if (MoveFile(filepath, path.c_str()))
+		if (!replace_existing)
 		{
-			LOG_OUTPUT("Error moving file:[%s] to [%s]", filepath, path.c_str())
+			std::string new_filepath = s_new_path + d_filepath.file_name + "." + d_filepath.file_extension;
+
+			bool need_rename = false;
+			while (App->file_system->FileExists(new_filepath.c_str()))
+			{		
+				std::string check_new_name = NewNameForFileNameCollision(d_filepath.file_name.c_str());
+				d_filepath.file_name = check_new_name;
+
+				new_filepath = s_new_path + d_filepath.file_name + "." + d_filepath.file_extension;
+
+				need_rename = true;
+			}
+
+			if(need_rename)
+				FileRename(d_filepath.file_path.c_str(), d_filepath.file_name.c_str());
+
+			std::string curr_path = d_filepath.path + d_filepath.file_name + "." + d_filepath.file_extension;
+			std::string curr_new_path = s_new_path + d_filepath.file_name + "." + d_filepath.file_extension;
+			if (MoveFileEx(curr_path.c_str(), curr_new_path.c_str(), MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING) == 0)
+			{
+				DWORD error = GetLastError();
+				if (error != 0)
+					CONSOLE_LOG("Error moving file:[%s] to [%s]", filepath, s_new_path.c_str())
+			}
 		}
-	}
-	else
-	{
-		if (MoveFileEx(filepath, path.c_str(), MOVEFILE_REPLACE_EXISTING))
+		else
 		{
-			LOG_OUTPUT("Error moving file:[%s] to [%s]", filepath, path.c_str())
+			std::string curr_new_path = s_new_path + d_filepath.file_name + "." + d_filepath.file_extension;
+			if (MoveFileEx(filepath, s_new_path.c_str(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_COPY_ALLOWED) == 0)
+			{
+				DWORD error = GetLastError();
+				if (error != 0)
+					CONSOLE_LOG("Error moving file:[%s] to [%s]", filepath, s_new_path.c_str())
+			}
 		}
+
 	}
 }
 
-void FileSystem::FileCopyPaste(const char * filepath, const char * new_path)
+bool FileSystem::FileCopyPaste(const char * filepath, const char * new_path, std::string &resultant_path)
 {
-	string path = new_path;
+	bool ret = false;
 
-	if (path[path.length() - 1] != '\\')
+	std::string s_new_path = new_path;
+
+	if (s_new_path[s_new_path.length() - 1] != '\\')
 	{
-		path += '\\';
+		s_new_path += '\\';
 	}
 
-	path += GetFileNameFromFilePath(filepath);
-	
-	CopyFile(filepath, path.c_str(), false);
-	
-	DWORD error = GetLastError();
+	if (FolderExists(s_new_path.c_str()) && FileExists(filepath))
+	{
+		DecomposedFilePath d_filepath = DecomposeFilePath(filepath);
+		std::string original_name = d_filepath.file_name;
 
-	if(error != 0)
-		LOG_OUTPUT("Error moving file:[%s] to [%s]", filepath, path.c_str())
+		std::string new_filepath = s_new_path + d_filepath.file_name + "." + d_filepath.file_extension;
+
+		bool need_rename = false;
+		while (App->file_system->FileExists(new_filepath.c_str()))
+		{
+			std::string check_new_name = NewNameForFileNameCollision(d_filepath.file_name.c_str());
+			d_filepath.file_name = check_new_name;
+
+			new_filepath = s_new_path + d_filepath.file_name + "." + d_filepath.file_extension;
+
+			need_rename = true;
+		}
+
+		if (need_rename)
+			FileRename(d_filepath.file_path.c_str(), d_filepath.file_name.c_str());
+
+		std::string curr_path = d_filepath.path + d_filepath.file_name + "." + d_filepath.file_extension;
+		std::string curr_new_path = s_new_path + d_filepath.file_name + "." + d_filepath.file_extension;
+		if (CopyFile(curr_path.c_str(), curr_new_path.c_str(), false) == 0)
+		{
+			DWORD error = GetLastError();
+			if (error != 0)
+				CONSOLE_LOG("Error moving file:[%s] to [%s]", filepath, s_new_path.c_str())
+		}
+		else
+		{
+			resultant_path = curr_new_path;
+			ret = true;
+		}
+
+		if (need_rename)
+			FileRename(curr_path.c_str(), original_name.c_str());
+	}
+
+	return ret;
+}
+
+bool FileSystem::FileCopyPaste(const char * filepath, const char * new_path)
+{
+	std::string result;
+	return FileCopyPaste(filepath, new_path, result);
 }
 
 void FileSystem::FileCopyPasteWithNewName(const char * filepath, const char * new_path, const char * new_name)
@@ -435,7 +502,7 @@ void FileSystem::FileDelete(const char * filepath)
 
 		if (error == ERROR_FILE_NOT_FOUND)
 		{
-			LOG_OUTPUT("Error deleting file (path not found)): %s", filepath);
+			CONSOLE_LOG("Error deleting file (path not found)): %s", filepath);
 		}
 	}
 }
@@ -459,7 +526,7 @@ bool FileSystem::FileSave(const char * path, const char* file_content, const cha
 	}
 	else 
 	{
-		LOG_OUTPUT("Error saving file %s: ", name);
+		CONSOLE_LOG("Error saving file %s: ", name);
 	}
 
 	if(new_file)
@@ -555,7 +622,7 @@ bool FileSystem::FileExists(const char * filepath)
 
 	DecomposedFilePath d_filepath = DecomposeFilePath(filepath);
 
-	ret = FileExists(d_filepath.file_extension.c_str(), d_filepath.file_name.c_str(), d_filepath.file_extension.c_str());
+	ret = FileExists(d_filepath.path.c_str(), d_filepath.file_name.c_str(), d_filepath.file_extension.c_str());
 
 	return ret;
 }
@@ -574,6 +641,17 @@ bool FileSystem::FileRename(const char * filepath, const char * new_name)
 	result = rename(filepath, new_filepath.c_str());
 	if (result == 0)
 		ret = true;
+
+	return ret;
+}
+
+bool FileSystem::FolderExists(const char * path)
+{
+	bool ret = true;
+
+	DWORD ftyp = GetFileAttributesA(path);
+	if (ftyp == INVALID_FILE_ATTRIBUTES)
+		ret = false;
 
 	return ret;
 }

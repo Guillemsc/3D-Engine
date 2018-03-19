@@ -9,7 +9,7 @@
 
 ComponentCamera::ComponentCamera(GameObject * owner, std::string unique_id) : Component(CAMERA, owner, unique_id)
 {
-	LOG_OUTPUT("Component Camera Created");
+	CONSOLE_LOG("Component Camera Created");
 	SetName("Camera");
 
 	camera = App->camera->CreateCamera();

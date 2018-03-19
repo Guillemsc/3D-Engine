@@ -187,36 +187,27 @@ void ResourceManager::LoadResourceToEngine(const char * filepath)
 
 	if (type != ResourceType::RT_NULL)
 	{
-		while (1)
+		std::string new_path;
+		if (App->file_system->FileCopyPaste(filepath, App->file_system->GetAssetsPath().c_str(), new_path))
 		{
-			if (App->file_system->FileExists(App->file_system->GetAssetsPath().c_str(), deco_file.file_name.c_str(), deco_file.file_extension.c_str()))
+			deco_file = App->file_system->DecomposeFilePath(new_path.c_str());
+
+			ResourceLoader* loader = GetLoader(type);
+
+			if (loader != nullptr)
 			{
-				std::string new_name = App->file_system->NewNameForFileNameCollision(deco_file.file_name.c_str());
+				std::vector<Resource*> resources;
 
-				deco_file.file_name = new_name;
-			}
-			else
-			{
-				App->file_system->FileCopyPasteWithNewName(filepath, App->file_system->GetAssetsPath().c_str(), deco_file.file_name.c_str());
-				break;
-			}
-		}
+				bool ret = loader->LoadToEngine(deco_file, resources);
 
-		ResourceLoader* loader = GetLoader(type);
-
-		if (loader != nullptr)
-		{
-			std::vector<Resource*> resources;
-
-			bool ret = loader->LoadToEngine(deco_file, resources);
-
-			if (ret)
-			{
-				// SUCCES
-			}
-			else
-			{
-				// ERROR
+				if (ret)
+				{
+					// SUCCES
+				}
+				else
+				{
+					// ERROR
+				}
 			}
 		}
 	}

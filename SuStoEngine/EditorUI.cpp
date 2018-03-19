@@ -39,7 +39,7 @@ bool EditorUI::Awake()
 {
 	bool ret = true;
 
-	LOG_OUTPUT("Loading ImGui");
+	CONSOLE_LOG("Loading ImGui");
 
 	ret = ImGui_ImplSdlGL2_Init(App->window->window);
 
@@ -145,7 +145,7 @@ bool EditorUI::CleanUp()
 
 	SaveLayoutsInfo();
 
-	LOG_OUTPUT("Destroying ImGui");
+	CONSOLE_LOG("Destroying ImGui");
 
 	for (vector<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
 	{

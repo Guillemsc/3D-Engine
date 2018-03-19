@@ -83,7 +83,7 @@ bool SceneManager::SavePrefab(const char* name, const char* extension, const cha
 {
 	bool ret = false;
 
-	LOG_OUTPUT("Saving prefab with name: %s", name);
+	CONSOLE_LOG("Saving prefab with name: %s", name);
 
 	ClearRelations();
 
@@ -153,7 +153,7 @@ bool SceneManager::LoadPrefab(const char * file_path, GameObject *& loaded_go)
 
 	string file_name = App->file_system->GetFileNameFromFilePath(file_path);
 
-	LOG_OUTPUT("Loading prefab with name: %s", file_name.c_str());
+	CONSOLE_LOG("Loading prefab with name: %s", file_name.c_str());
 
 	ClearRelations();
 

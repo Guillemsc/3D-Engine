@@ -6,9 +6,11 @@
 #include "Profiler.h"
 #include "IDGenerator.h"
 #include "Module.h"
+#include "Console.h"
 
 class Profiler;
 class JSON_Doc;
+
 
 class XMLLoader;
 class JSONLoader;
@@ -59,9 +61,12 @@ public:
 	SDL_version GetSDLVersion();
 	const char* GetBasePath();
 
-
 	void GoToBrowser(const char* url);
 	void GoToFolder(const char* folder);
+
+	void AddLog(ConsoleText text);
+	std::list<ConsoleText> GetLogs() const;
+	void ClearLogs();
 
 private:
 	void AddModule(Module* mod);
@@ -84,8 +89,6 @@ public:
 	SceneManager*	   scene_manager = nullptr;
 	ResourceManager*   resource_manager = nullptr;
 
-	std::list<string>  logs;
-
 	Profiler*		   profiler = nullptr;
 	IDGen*		       id = nullptr;
 
@@ -98,6 +101,8 @@ private:
 	std::string		   title = "";
 	std::string		   organization = "";
 	std::string		   version = "";
+
+	std::list<ConsoleText>  logs;
 
 	bool		       end_app = false;
 

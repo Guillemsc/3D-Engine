@@ -11,19 +11,21 @@ class Application;
 struct ImColor;
 struct ImGuiTextEditCallbackData;
 
-enum console_text_type
+enum ConsoleTextType
 {
-	console_text_type_default,   // 0
-	console_text_type_info,		 // 1
-	console_text_type_succes,	 // 2
-	console_text_type_warning,	 // 3
-	console_text_type_error,	 // 4
+	C_T_T_DEFAULT,
+	C_T_T_INFO,
+	C_T_T_SUCCES,
+	C_T_T_WARNING,
+	C_T_T_ERROR,
 };
 
-struct console_text
+struct ConsoleText
 {
-	string txt;
-	console_text_type type = console_text_type_default;
+	ConsoleText(std::string txt, ConsoleTextType type = ConsoleTextType::C_T_T_DEFAULT);
+
+	std::string txt;
+	ConsoleTextType type = ConsoleTextType::C_T_T_DEFAULT;
 };
 
 class Console : public EditorElement
@@ -35,24 +37,23 @@ public:
 	void Start();
 	void Draw();
 
-	void AddLog(const char* txt, console_text_type type = console_text_type_default);
+	void AddLog(const char* txt, ConsoleTextType type = ConsoleTextType::C_T_T_DEFAULT);
+	void AddLog(ConsoleText console_text);
 	void Clear();
 
 private:
 	void ScrollBottom();
 	void CommandInput(const char* txt);
-	ImColor GetColorByTextType(console_text_type type);
+	ImColor GetColorByTextType(ConsoleTextType type);
 	void AddLogs();
 
 private:
-	list<console_text> console_items;
+	list<ConsoleText> console_items;
 	int  max_items = 0;
 	bool enabled = false;
 	char input_buffer[255];
 	bool scroll_bottom = false;
 	bool send_text_input = false;
 };
-
-static int TextChangeCallback(ImGuiTextEditCallbackData* data);
 
 #endif // __Console_H__

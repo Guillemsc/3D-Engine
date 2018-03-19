@@ -8,7 +8,7 @@
 
 ComponentMaterial::ComponentMaterial(GameObject * owner, std::string unique_id) : Component(ComponentType::MATERIAL, owner, unique_id)
 {
-	LOG_OUTPUT("Component Material Created");
+	CONSOLE_LOG("Component Material Created");
 	SetName("Material");
 }
 

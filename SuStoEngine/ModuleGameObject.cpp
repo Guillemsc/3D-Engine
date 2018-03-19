@@ -34,7 +34,7 @@ bool ModuleGameObject::Awake()
 {
 	bool ret = true;
 
-	LOG_OUTPUT("Creating Module GameObject");	
+	CONSOLE_LOG("Creating Module GameObject");	
 
 	// KDTree
 	kdtree = new KDTree();
@@ -50,6 +50,8 @@ bool ModuleGameObject::Awake()
 bool ModuleGameObject::Start()
 {
 	bool ret = true;
+
+	//App->file_system->FileCopyPaste("C:\\Users\\Guillem\\Documents\\GitHub\\3D-Engine\\SuStoEngine\\Resources\\Models\\BakerHouse(1).fbx", "C:\\Users\\Guillem\\Documents\\GitHub\\3D-Engine\\SuStoEngine\\Resources\\Models\\BakerHouse\\");
 
 	return ret;
 }

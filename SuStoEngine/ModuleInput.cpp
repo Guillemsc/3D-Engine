@@ -46,25 +46,25 @@ bool ModuleInput::Awake()
 {
 	bool ret = true;
 
-	LOG_OUTPUT("Init SDL input event system");
+	CONSOLE_LOG("Init SDL input event system");
 
 	SDL_Init(0);
 
 	if (SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
-		LOG_OUTPUT("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
+		CONSOLE_LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
-		LOG_OUTPUT("Error on SDL_Init_Video");
+		CONSOLE_LOG("Error on SDL_Init_Video");
 		ret = false;
 	}
 
 	if (SDL_Init(SDL_INIT_GAMECONTROLLER) != 0)
 	{
-		LOG_OUTPUT("Error on SDL_Init_GameController");
+		CONSOLE_LOG("Error on SDL_Init_GameController");
 		ret = false;
 	}
 
@@ -208,7 +208,7 @@ bool ModuleInput::CleanUp()
 {
 	bool ret = true;
 
-	LOG_OUTPUT("Quitting SDL input event subsystem");
+	CONSOLE_LOG("Quitting SDL input event subsystem");
 
 	delete[] keyboard;
 

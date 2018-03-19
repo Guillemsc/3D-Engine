@@ -23,7 +23,7 @@ public:
 	{}
 	void write(const char* message)
 	{
-		LOG_OUTPUT(message);
+		CONSOLE_LOG(message);
 	}
 };
 

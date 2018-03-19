@@ -47,7 +47,7 @@ void Console::Draw()
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1));
 
 	// Scrollable texts
-	for (list<console_text>::iterator it = console_items.begin(); it != console_items.end(); it++)
+	for (list<ConsoleText>::iterator it = console_items.begin(); it != console_items.end(); it++)
 	{
 		ImVec4 col = GetColorByTextType((*it).type);
 		ImGui::PushStyleColor(ImGuiCol_Text, col);
@@ -69,7 +69,7 @@ void Console::Draw()
 
 	// Text input
 	if (ImGui::InputText("", input_buffer, 254, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackCompletion
-		| ImGuiInputTextFlags_CallbackHistory, &TextChangeCallback, (void*)this))
+		| ImGuiInputTextFlags_CallbackHistory))
 	{
 		send_text_input = true;
 	}
@@ -99,13 +99,14 @@ void Console::Draw()
 	ImGui::EndDock();
 }
 
-void Console::AddLog(const char * txt, console_text_type type)
+void Console::AddLog(const char * txt, ConsoleTextType type)
 {
-	console_text ct;
-	ct.txt = txt;
-	ct.type = type;
+	AddLog(ConsoleText(txt, type));
+}
 
-	console_items.push_back(ct);
+void Console::AddLog(ConsoleText console_text)
+{
+	console_items.push_back(console_text);
 
 	if (console_items.size() > MAX_LINES) {
 		console_items.pop_front();
@@ -138,29 +139,29 @@ void Console::CommandInput(const char * txt)
 	}
 }
 
-ImColor Console::GetColorByTextType(console_text_type type)
+ImColor Console::GetColorByTextType(ConsoleTextType type)
 {
 	ImColor ret(255, 255, 255, 255);
 
 	switch (type)
 	{
-	case console_text_type::console_text_type_default:
+	case ConsoleTextType::C_T_T_DEFAULT:
 		ret = { 255, 255, 255, 255 };
 		break;
 
-	case console_text_type::console_text_type_info:
+	case ConsoleTextType::C_T_T_INFO:
 		ret = { 255, 255, 255, 255 };
 		break;
 
-	case console_text_type::console_text_type_error:
+	case ConsoleTextType::C_T_T_ERROR:
 		ret = { 255, 80, 80, 255 };
 		break;
 
-	case console_text_type::console_text_type_succes:
+	case ConsoleTextType::C_T_T_SUCCES:
 		ret = { 255, 255, 255, 255 };
 		break;
 
-	case console_text_type::console_text_type_warning:
+	case ConsoleTextType::C_T_T_WARNING:
 		ret = { 255, 255, 255, 255 };
 		break;
 	default:
@@ -172,16 +173,18 @@ ImColor Console::GetColorByTextType(console_text_type type)
 
 void Console::AddLogs()
 {
-	for (list<string>::iterator it = App->logs.begin(); it != App->logs.end(); it++)
+	list<ConsoleText> logs = App->GetLogs();
+
+	for (list<ConsoleText>::iterator it = logs.begin(); it != logs.end(); it++)
 	{
-		AddLog((*it).c_str());
+		AddLog((*it));
 	}
 
-	App->logs.clear();
+	App->ClearLogs();
 }
 
-static int TextChangeCallback(ImGuiTextEditCallbackData * data)
+ConsoleText::ConsoleText(std::string _txt, ConsoleTextType _type)
 {
-	int i = 0;
-	return 1;
+	txt = _txt;
+	type = _type;
 }

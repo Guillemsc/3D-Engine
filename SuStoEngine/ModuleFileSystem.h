@@ -25,8 +25,9 @@ public:
 	bool CleanUp();
 
 	string CreateFolder(const char* path, const char* name);
-	void FileMove(const char* filepath, const char* new_path, bool replace_existing = true);
-	void FileCopyPaste(const char* filepath, const char* new_path);
+	void FileMove(const char* filepath, const char* new_path, bool replace_existing = false);
+	bool FileCopyPaste(const char* filepath, const char* new_path, std::string &resultant_path);
+	bool FileCopyPaste(const char* filepath, const char* new_path);
 	void FileCopyPasteWithNewName(const char* filepath, const char* new_path, const char* new_name);
 	void FileDelete(const char* filepath);
 	bool FileSave(const char * path, const char * file_content, const char * name, const char * extension, int size);
@@ -34,7 +35,7 @@ public:
 	bool FileExists(const char* path, const char* name, const char* extension = "");
 	bool FileExists(const char* filepath);
 	bool FileRename(const char* filepath, const char* new_name);	
-
+	bool FolderExists(const char* path);
 
 	string GetAssetsPath();
 	string GetLibraryPath();

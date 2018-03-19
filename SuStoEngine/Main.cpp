@@ -20,7 +20,7 @@ Application* App = nullptr;
 
 int main(int argc, char ** argv)
 {
-	LOG_OUTPUT("Engine starting");
+	CONSOLE_LOG("Engine starting");
 
 	int main_return = EXIT_FAILURE;
 	MainState state = MainState::MAIN_CREATION;
@@ -31,17 +31,17 @@ int main(int argc, char ** argv)
 		{
 		case MainState::MAIN_CREATION:
 
-			LOG_OUTPUT("CREATION PHASE ===============================");
+			CONSOLE_LOG("CREATION PHASE ===============================");
 			App = new Application(argc, argv);
 			state = MainState::MAIN_AWAKE;
 			break;
 
 		case MainState::MAIN_AWAKE:
 
-			LOG_OUTPUT("AWAKE PHASE ===============================");
+			CONSOLE_LOG("AWAKE PHASE ===============================");
 			if (App->Awake() == false)
 			{
-				LOG_OUTPUT("Application Awake exits with ERROR");
+				CONSOLE_LOG("Application Awake exits with ERROR");
 				state = MainState::MAIN_EXIT;
 			}
 			else
@@ -53,16 +53,16 @@ int main(int argc, char ** argv)
 
 		case MainState::MAIN_START:
 
-			LOG_OUTPUT("START PHASE ===============================");
+			CONSOLE_LOG("START PHASE ===============================");
 			if (App->Start() == false)
 			{
-				LOG_OUTPUT("Application Start exits with ERROR");
+				CONSOLE_LOG("Application Start exits with ERROR");
 				state = MainState::MAIN_EXIT;
 			}
 			else
 			{
 				state = MainState::MAIN_UPDATE;
-				LOG_OUTPUT("UPDATE PHASE ===============================");
+				CONSOLE_LOG("UPDATE PHASE ===============================");
 			}
 
 			break;
@@ -78,10 +78,10 @@ int main(int argc, char ** argv)
 
 		case MainState::MAIN_CLEAN:
 
-			LOG_OUTPUT("CLEANUP PHASE ===============================");
+			CONSOLE_LOG("CLEANUP PHASE ===============================");
 			if (App->CleanUp() == false)
 			{
-				LOG_OUTPUT("Application CleanUp exits with ERROR");
+				CONSOLE_LOG("Application CleanUp exits with ERROR");
 			}
 			else
 				main_return = EXIT_SUCCESS;
@@ -93,7 +93,7 @@ int main(int argc, char ** argv)
 		}
 	}
 
-	LOG_OUTPUT("Exiting engine");
+	CONSOLE_LOG("Exiting engine");
 	delete App;
 
 	return main_return;

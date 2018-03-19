@@ -7,6 +7,8 @@
 #include <windows.h>
 #include <stdio.h>
 
+enum ConsoleTextType;
+
 // Deletes a buffer
 #define RELEASE( x )		\
     {                       \
@@ -42,9 +44,14 @@ template <class VALUE_TYPE> void SWAP(VALUE_TYPE& a, VALUE_TYPE& b)
 	b = tmp;
 }
 
-#define LOG_OUTPUT(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
+#define CONSOLE_LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
+#define CONSOLE_INFO(format, ...) log(ConsoleTextType::C_T_T_INFO, __FILE__, __LINE__, format, __VA_ARGS__);
+#define CONSOLE_SUCCES(format, ...) log(ConsoleTextType::C_T_T_SUCCES, __FILE__, __LINE__, format, __VA_ARGS__);
+#define CONSOLE_WARNING(format, ...) log(ConsoleTextType::C_T_T_WARNING, __FILE__, __LINE__, format, __VA_ARGS__);
+#define CONSOLE_ERROR(format, ...) log(ConsoleTextType::C_T_T_ERROR, __FILE__, __LINE__, format, __VA_ARGS__);
 
 void log(const char file[], int line, const char* format, ...);
+void log(ConsoleTextType type, const char file[], int line, const char* format, ...);
 
 #define CAP(n) ((n <= 0.0f) ? n=0.0f : (n >= 1.0f) ? n=1.0f : n=n)
 
@@ -56,9 +63,4 @@ void log(const char file[], int line, const char* format, ...);
 #define QUARTER_PI 0.78539816339744830961f
 #define INV_PI	   0.31830988618379067154f
 #define INV_TWO_PI 0.15915494309189533576f
-#define HAVE_M_PI
-
-#define DEBUG_DRAW_IMPLEMENTATION
-
-typedef unsigned int uint;
 

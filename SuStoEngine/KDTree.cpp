@@ -180,7 +180,7 @@ void KDTree::Node::CreatePartition()
 	}
 	else
 	{
-		LOG_OUTPUT("K-D Tree: This node already has partitions");
+		CONSOLE_LOG("K-D Tree: This node already has partitions");
 	}
 }
 

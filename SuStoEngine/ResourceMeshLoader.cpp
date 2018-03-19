@@ -51,7 +51,7 @@ bool ResourceMeshLoader::LoadToEngine(DecomposedFilePath d_filepath, std::vector
 
 	if (ret && !scene->HasMeshes())
 	{
-		LOG_OUTPUT("WARNING, scene has no meshes! Path: %s", d_filepath.file_path.c_str());
+		CONSOLE_LOG("WARNING, scene has no meshes! Path: %s", d_filepath.file_path.c_str());
 		ret = false;
 	}
 
@@ -373,7 +373,7 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 
 			if (!aimesh->HasFaces())
 			{
-				LOG_OUTPUT("WARNING, geometry has no faces!");
+				CONSOLE_LOG("WARNING, geometry has no faces!");
 				mesh_valid = false;
 			}
 		}
@@ -394,7 +394,7 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 				}
 				else
 				{
-					LOG_OUTPUT("WARNING, geometry face with != 3 indices!");
+					CONSOLE_LOG("WARNING, geometry face with != 3 indices!");
 					mesh_valid = false;
 				}
 			}

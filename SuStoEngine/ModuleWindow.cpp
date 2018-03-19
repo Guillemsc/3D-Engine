@@ -58,7 +58,7 @@ bool ModuleWindow::Awake()
 {
 	bool ret = true;
 
-	LOG_OUTPUT("Init SDL window & surface");
+	CONSOLE_LOG("Init SDL window & surface");
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -69,7 +69,7 @@ bool ModuleWindow::Awake()
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		LOG_OUTPUT("SDL_VIDEO could not initialize! SDL_Error: %s\n", SDL_GetError());
+		CONSOLE_LOG("SDL_VIDEO could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 	else
@@ -108,7 +108,7 @@ bool ModuleWindow::Update()
 // Called before quitting
 bool ModuleWindow::CleanUp()
 {
-	LOG_OUTPUT("Destroying SDL window and quitting all SDL systems");
+	CONSOLE_LOG("Destroying SDL window and quitting all SDL systems");
 
 	cursor->CleanUp();
 	delete cursor;
@@ -132,7 +132,7 @@ SDL_Window* ModuleWindow::GenerateWindow(SDL_Window* window, SDL_Surface* surfac
 
 	if (window == NULL)
 	{
-		LOG_OUTPUT("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+		CONSOLE_LOG("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 		return nullptr;
 	}
 	else

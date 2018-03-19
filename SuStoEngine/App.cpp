@@ -373,6 +373,21 @@ void Application::GoToFolder(const char * folder)
 	ShellExecute(NULL, "open", folder, NULL, NULL, SW_SHOWMAXIMIZED);
 }
 
+void Application::AddLog(ConsoleText text)
+{
+	logs.push_back(text);
+}
+
+std::list<ConsoleText> Application::GetLogs() const
+{
+	return logs;
+}
+
+void Application::ClearLogs()
+{
+	logs.clear();
+}
+
 void Application::AddModule(Module* mod)
 {
 	modules.push_back(mod);

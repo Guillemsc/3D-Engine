@@ -76,7 +76,7 @@ ResourceTextureLoader::~ResourceTextureLoader()
 //	}
 //	else
 //	{
-//		LOG_OUTPUT("Cannot load image %s. Error: %s", filepath, iluErrorString(ilGetError()));
+//		CONSOLE_LOG("Cannot load image %s. Error: %s", filepath, iluErrorString(ilGetError()));
 //	}
 //
 //	return ret;
@@ -109,7 +109,7 @@ ResourceTextureLoader::~ResourceTextureLoader()
 //		if (!ilConvertImage(ilGetInteger(IL_IMAGE_FORMAT), IL_UNSIGNED_BYTE))
 //		{
 //			error = ilGetError();
-//			LOG_OUTPUT("Image conversion failed - IL reportes error: %i, %s", error, iluErrorString(error));
+//			CONSOLE_LOG("Image conversion failed - IL reportes error: %i, %s", error, iluErrorString(error));
 //			exit(-1);
 //		}
 //
@@ -122,13 +122,13 @@ ResourceTextureLoader::~ResourceTextureLoader()
 //			ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 
 //			0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData());
 //
-//		LOG_OUTPUT("Texture Application Successful.");
+//		CONSOLE_LOG("Texture Application Successful.");
 //	}
 //
 //	else
 //	{
 //		error = ilGetError();
-//		LOG_OUTPUT("Image Load failed - IL reportes error: %i, %s", error, iluErrorString(error));
+//		CONSOLE_LOG("Image Load failed - IL reportes error: %i, %s", error, iluErrorString(error));
 //	}
 //
 //	//RELEASE MEMORY used by the image
@@ -236,7 +236,7 @@ ResourceTextureLoader::~ResourceTextureLoader()
 //		}
 //		else
 //		{
-//			LOG_OUTPUT("Cannot load image %s. Error: %s", filepath, iluErrorString(ilGetError()));
+//			CONSOLE_LOG("Cannot load image %s. Error: %s", filepath, iluErrorString(ilGetError()));
 //		}
 //
 //		App->json->UnloadJSON(doc);

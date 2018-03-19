@@ -30,7 +30,7 @@ GameObject::~GameObject()
 
 void GameObject::Start()
 {
-	LOG_OUTPUT("Game Object Created");
+	CONSOLE_LOG("Game Object Created");
 
 	SetName("GameObject");
 

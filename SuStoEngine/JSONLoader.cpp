@@ -15,7 +15,7 @@ bool JSONLoader::Awake()
 {
 	bool ret = true;
 
-	LOG_OUTPUT("Loading JSON Module");
+	CONSOLE_LOG("Loading JSON Module");
 
 	return ret;
 }
@@ -42,11 +42,11 @@ JSON_Doc* JSONLoader::LoadJSON(const char * path)
 
 		if (user_data == nullptr || root_object == nullptr)
 		{
-			LOG_OUTPUT("Error loading %s", path);
+			CONSOLE_LOG("Error loading %s", path);
 		}
 		else
 		{
-			LOG_OUTPUT("Succes loading %s", path);
+			CONSOLE_LOG("Succes loading %s", path);
 
 			JSON_Doc* new_doc = new JSON_Doc(user_data, root_object, path);
 			jsons.push_back(new_doc);
@@ -75,7 +75,7 @@ JSON_Doc* JSONLoader::CreateJSON(const char * path)
 
 	if (exists)
 	{
-		LOG_OUTPUT("Error creating %s. There is already a file with this path/name", path);
+		CONSOLE_LOG("Error creating %s. There is already a file with this path/name", path);
 	}
 	else
 	{
@@ -83,7 +83,7 @@ JSON_Doc* JSONLoader::CreateJSON(const char * path)
 
 		if (root_value == nullptr)
 		{
-			LOG_OUTPUT("Error creating %s. Wrong path?", path);
+			CONSOLE_LOG("Error creating %s. Wrong path?", path);
 		}
 		else
 		{
@@ -123,7 +123,7 @@ bool JSONLoader::CleanUp()
 {
 	bool ret = true;
 
-	LOG_OUTPUT("Unloading JSON Module");
+	CONSOLE_LOG("Unloading JSON Module");
 
 	for (list<JSON_Doc*>::iterator it = jsons.begin(); it != jsons.end();)
 	{

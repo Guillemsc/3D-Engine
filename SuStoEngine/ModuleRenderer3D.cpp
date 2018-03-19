@@ -30,14 +30,14 @@ bool ModuleRenderer3D::Awake()
 {
 	bool ret = true;
 
-	LOG_OUTPUT("Creating 3D Renderer context");
+	CONSOLE_LOG("Creating 3D Renderer context");
 
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
 
 	if (context == NULL)
 	{
-		LOG_OUTPUT("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
+		CONSOLE_LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 
@@ -46,27 +46,27 @@ bool ModuleRenderer3D::Awake()
 
 	if (err != GLEW_OK)
 	{
-		LOG_OUTPUT("Glew library could not init %s\n", glewGetErrorString(err));
+		CONSOLE_LOG("Glew library could not init %s\n", glewGetErrorString(err));
 		ret = false;
 	}
 	else 
 	{
-		LOG_OUTPUT("Glew library is being used correctly\n");
-		LOG_OUTPUT("Using Glew %s\n", glewGetString(GLEW_VERSION));
+		CONSOLE_LOG("Glew library is being used correctly\n");
+		CONSOLE_LOG("Using Glew %s\n", glewGetString(GLEW_VERSION));
 	}
 
 	// OpenGL
 	if (ret == true)
 	{
 		// get version info
-		LOG_OUTPUT("Vendor: %s", glGetString(GL_VENDOR));
-		LOG_OUTPUT("Renderer: %s", glGetString(GL_RENDERER));
-		LOG_OUTPUT("OpenGL version supported %s", glGetString(GL_VERSION));
-		LOG_OUTPUT("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		CONSOLE_LOG("Vendor: %s", glGetString(GL_VENDOR));
+		CONSOLE_LOG("Renderer: %s", glGetString(GL_RENDERER));
+		CONSOLE_LOG("OpenGL version supported %s", glGetString(GL_VERSION));
+		CONSOLE_LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 		//Use Vsync
 		if (SDL_GL_SetSwapInterval(App->window->GetVsync()) < 0)
-			LOG_OUTPUT("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+			CONSOLE_LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 
 		fbo_texture = new FBO();
 		fbo_texture->Create(App->window->GetWindowSize().x, App->window->GetWindowSize().y);
@@ -79,7 +79,7 @@ bool ModuleRenderer3D::Awake()
 		GLenum error = glGetError();
 		if (error != GL_NO_ERROR)
 		{
-			LOG_OUTPUT("Error initializing OpenGL! %s\n", gluErrorString(error));
+			CONSOLE_LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 
@@ -91,7 +91,7 @@ bool ModuleRenderer3D::Awake()
 		error = glGetError();
 		if (error != GL_NO_ERROR)
 		{
-			LOG_OUTPUT("Error initializing OpenGL! %s\n", gluErrorString(error));
+			CONSOLE_LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 
@@ -105,7 +105,7 @@ bool ModuleRenderer3D::Awake()
 		error = glGetError();
 		if (error != GL_NO_ERROR)
 		{
-			LOG_OUTPUT("Error initializing OpenGL! %s\n", gluErrorString(error));
+			CONSOLE_LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 
@@ -199,7 +199,7 @@ bool ModuleRenderer3D::CleanUp()
 {
 	bool ret = true;
 
-	LOG_OUTPUT("Destroying 3D Renderer");
+	CONSOLE_LOG("Destroying 3D Renderer");
 
 	fbo_texture->Unbind();
 	RELEASE(fbo_texture);

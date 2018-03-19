@@ -15,7 +15,7 @@ bool XMLLoader::Awake()
 {
 	bool ret = true;
 
-	LOG_OUTPUT("Loading XML Module");
+	CONSOLE_LOG("Loading XML Module");
 
 	return ret;
 }
@@ -40,11 +40,11 @@ void XMLLoader::LoadXML(const char * path, pugi::xml_document & doc)
 
 		if (!result)
 		{
-			LOG_OUTPUT("Error loading '%s', probably wrong XML file name", path);
+			CONSOLE_LOG("Error loading '%s', probably wrong XML file name", path);
 		}
 		else
 		{
-			LOG_OUTPUT("Succes loading '%s'", path);
+			CONSOLE_LOG("Succes loading '%s'", path);
 			xml_doc* new_doc = new xml_doc();
 			new_doc->path = path;
 			new_doc->doc.reset(doc);
@@ -58,7 +58,7 @@ bool XMLLoader::CleanUp()
 {
 	bool ret = true;
 
-	LOG_OUTPUT("Unloading XML Module")
+	CONSOLE_LOG("Unloading XML Module")
 
 	for (std::list<xml_doc*>::iterator it = xmls.begin(); it != xmls.end();)
 	{
