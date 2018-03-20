@@ -167,6 +167,10 @@ bool ResourceMeshLoader::UnloadAssetFromEngine(DecomposedFilePath d_filepath)
 
 	return ret;
 }
+bool ResourceMeshLoader::ExportAssetToLibrary(DecomposedFilePath decomposed_file_path)
+{
+	return false;
+}
 void ResourceMeshLoader::ClearFromGameObject(Resource * resource, GameObject * go)
 {
 	if (go != nullptr)
