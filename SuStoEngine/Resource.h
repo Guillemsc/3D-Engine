@@ -3,6 +3,14 @@
 
 #include <string>
 
+// RESOURCES
+// - 3D Model
+// - Mesh
+// - Texture
+// - Material
+// - Font
+//
+
 enum ResourceType
 {
 	RT_NULL,
