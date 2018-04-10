@@ -26,8 +26,8 @@ public:
 
 	string CreateFolder(const char* path, const char* name);
 	void FileMove(const char* filepath, const char* new_path, bool replace_existing = false);
-	bool FileCopyPaste(const char* filepath, const char* new_path, std::string &resultant_path);
-	bool FileCopyPaste(const char* filepath, const char* new_path);
+	bool FileCopyPaste(const char* filepath, const char* new_path, bool overwrite, std::string &resultant_path);
+	bool FileCopyPaste(const char* filepath, const char* new_path, bool overwrite);
 	void FileCopyPasteWithNewName(const char* filepath, const char* new_path, const char* new_name);
 	bool FileDelete(const char* filepath);
 	bool FileSave(const char * path, const char * file_content, const char * name, const char * extension, int size);
@@ -43,6 +43,7 @@ public:
 	string GetAssetsPath();
 	string GetLibraryPath();
 	string GetLibraryMeshPath();
+	string GetLibraryPrefabPath();
 	string GetLibraryTexturePath();
 	string GetLibraryScenePath();
 	string GetSettingsPath();
@@ -74,6 +75,7 @@ private:
 	string assets_path;
 	string library_path;
 	string library_mesh_path;
+	string library_prefab_path;
 	string library_texture_path;
 	string library_scene_path;
 	string settings_path;

@@ -181,32 +181,35 @@ bool ResourceManager::DeleteResource(std::string unique_id)
 
 void ResourceManager::LoadFileToEngine(const char * filepath)
 {
-	DecomposedFilePath deco_file = App->file_system->DecomposeFilePath(filepath);
-
-	ResourceType type = AssetExtensionToType(deco_file.file_extension.c_str());
-
-	if (type != ResourceType::RT_NULL)
+	if (App->file_system->FileExists(filepath))
 	{
-		std::string new_path;
-		if (App->file_system->FileCopyPaste(filepath, App->file_system->GetAssetsPath().c_str(), new_path))
+		DecomposedFilePath deco_file = App->file_system->DecomposeFilePath(filepath);
+
+		ResourceType type = AssetExtensionToType(deco_file.file_extension.c_str());
+
+		if (type != ResourceType::RT_NULL)
 		{
-			deco_file = App->file_system->DecomposeFilePath(new_path.c_str());
-
-			ResourceLoader* loader = GetLoader(type);
-
-			if (loader != nullptr)
+			std::string new_path;
+			if (App->file_system->FileCopyPaste(filepath, App->file_system->GetAssetsPath().c_str(), false, new_path))
 			{
-				std::vector<Resource*> resources;
+				deco_file = App->file_system->DecomposeFilePath(new_path.c_str());
 
-				bool ret = loader->LoadFileToEngine(deco_file, resources);
+				ResourceLoader* loader = GetLoader(type);
 
-				if (ret)
+				if (loader != nullptr)
 				{
-					// SUCCES
-				}
-				else
-				{
-					// ERROR
+					std::vector<Resource*> resources;
+
+					bool ret = loader->LoadFileToEngine(deco_file, resources);
+
+					if (ret)
+					{
+						// SUCCES
+					}
+					else
+					{
+						// ERROR
+					}
 				}
 			}
 		}
@@ -354,7 +357,7 @@ void ResourceManager::RemoveResourcesMissingOnAssets()
 	}
 }
 
-void ResourceManager::RenameLibraryResource(const char * filepath, const char * new_name)
+void ResourceManager::RenameAsset(const char * filepath, const char * new_name)
 {
 	DecomposedFilePath d_filepath = App->file_system->DecomposeFilePath(filepath);
 
@@ -364,7 +367,7 @@ void ResourceManager::RenameLibraryResource(const char * filepath, const char * 
 
 	if (loader != nullptr)
 	{
-		bool ret = loader->RenameLibraryResource(d_filepath, new_name);
+		bool ret = loader->RenameAsset(d_filepath, new_name);
 
 		if (ret)
 		{

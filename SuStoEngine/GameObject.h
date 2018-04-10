@@ -46,9 +46,10 @@ public:
 	GameObject* GetParent();
 	const std::vector<GameObject*> GetChilds() const;
 	const uint GetChildsCount() const;
-	const void SetParentToNull();
+	void EraseParent(bool send_to_root = true);
 	void EraseChild(GameObject* child, bool send_child_to_root = true);
 	void AddChild(GameObject* child);
+	bool HasChild(GameObject* child);
 
 	void RecursiveCalcGlobalTransform();
 	void RecursiveCalcBBox();

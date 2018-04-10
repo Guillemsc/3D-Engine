@@ -307,9 +307,16 @@ const uint GameObject::GetChildsCount() const
 	return childs.size();
 }
 
-const void GameObject::SetParentToNull()
+void GameObject::EraseParent(bool send_to_root)
 {
-	parent = nullptr;
+	if (parent != nullptr)
+	{
+		parent->EraseChild(this);
+		parent = nullptr;
+
+		if(send_parent_to_root)
+			App->gameobj->GetRoot()->AddChild(this);
+	}
 }
 
 void GameObject::EraseChild(GameObject * child, bool send_child_to_root)
@@ -319,8 +326,8 @@ void GameObject::EraseChild(GameObject * child, bool send_child_to_root)
 		if ((*it) == child)
 		{
 			// Clean
-			child->SetParentToNull();
 			childs.erase(it);
+			child->parent = nullptr;
 
 			// Add to root
 			if (send_child_to_root)
@@ -337,18 +344,37 @@ void GameObject::EraseChild(GameObject * child, bool send_child_to_root)
 
 void GameObject::AddChild(GameObject * child)
 {
-	if (child == nullptr)
+	if (child == nullptr && !HasChild(child))
 		return;
 
 	// Clean from parent
 	if (child->parent != nullptr)
+	{
 		child->parent->EraseChild(child, false);
+		child->parent = nullptr;
+	}
 	
 	// Add new parent
 	child->parent = this;
 	childs.push_back(child);
 
 	child->OnChangeParent();
+}
+
+bool GameObject::HasChild(GameObject * child)
+{
+	bool ret = false;
+
+	for (std::vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); ++it)
+	{
+		if ((*it) == child)
+		{
+			ret = true;
+			break;
+		}
+	}
+
+	return ret;
 }
 
 void GameObject::RecursiveCalcGlobalTransform()

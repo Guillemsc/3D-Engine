@@ -46,7 +46,7 @@ public:
 	bool IsAssetOnLibrary(const char* filepath);
 	void CreateResourcesMissingOnLibrary();
 	void RemoveResourcesMissingOnAssets();
-	void RenameLibraryResource(const char* filepath, const char* new_name);
+	void RenameAsset(const char* filepath, const char* new_name);
 
 	std::string GetNewUID();
 

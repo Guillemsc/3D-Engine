@@ -221,6 +221,51 @@ GameObject * ModuleGameObject::Create()
 	return Create(new_id);
 }
 
+GameObject * ModuleGameObject::CreateWithoutAddingToList()
+{
+	GameObject* game_object = new GameObject(App->resource_manager->GetNewUID(), this);
+
+	game_object->Start();
+
+	return game_object;
+}
+
+void ModuleGameObject::AddToScene(GameObject * go)
+{
+	if (!ExistsOnScene(go))
+	{
+		scene_game_objects.push_back(go);
+		root->AddChild(go);
+	}
+}
+
+void ModuleGameObject::RemoveFromScene(GameObject * go)
+{
+	for (vector<GameObject*>::iterator it = scene_game_objects.begin(); it != scene_game_objects.end(); ++it)
+	{
+		if ((*it) == go)
+		{
+			scene_game_objects.erase(it);
+			go->EraseParent();
+		}
+	}
+}
+
+bool ModuleGameObject::ExistsOnScene(GameObject * go)
+{
+	bool ret = false;
+
+	for(vector<GameObject*>::iterator it = scene_game_objects.begin(); it != scene_game_objects.end(); ++it)
+	{
+		if ((*it) == go)
+		{
+			ret = true;
+		}
+	}
+
+	ret = true;
+}
+
 void ModuleGameObject::Destroy(GameObject * go)
 {
 	for (list<GameObject*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it)
@@ -462,7 +507,7 @@ void ModuleGameObject::DestroyGameObjects()
 		vector<GameObject*> childs = (*to_del)->GetChilds();
 		for (vector<GameObject*>::iterator ch = childs.begin(); ch != childs.end(); ++ch)
 		{
-			(*ch)->SetParentToNull();
+			(*ch)->parent = nullptr;
 			Destroy(*ch);
 		}
 		
@@ -487,6 +532,7 @@ void ModuleGameObject::DestroyGameObjects()
 		// Delete from selected
 		RemoveGameObjectFromSelected(*to_del);
 		RemoveGameObjectFromStatic(*to_del);
+		RemoveFromScene(*to_del);
 
 		// Free
 		(*to_del)->CleanUp();

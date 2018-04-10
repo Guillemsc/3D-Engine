@@ -59,7 +59,7 @@ public:
 	virtual bool IsAssetOnLibrary(DecomposedFilePath decomposed_file_path) { return false; };
 
 	// Renames the library resource and all other necessary files
-	virtual bool RenameLibraryResource(DecomposedFilePath decomposed_file_path, const char* new_name) { return false; };
+	virtual bool RenameAsset(DecomposedFilePath decomposed_file_path, const char* new_name) { return false; };
 
 protected:
 	ResourceType resources_to_load = ResourceType::RT_NULL;

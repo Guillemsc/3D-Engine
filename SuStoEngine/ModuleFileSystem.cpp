@@ -13,6 +13,7 @@ FileSystem::FileSystem(bool start_enabled)
 	assets_path = CreateFolder(App->GetBasePath(), "Assets");
 	library_path = CreateFolder(App->GetBasePath(), "Library");
 	library_mesh_path = CreateFolder(library_path.c_str(), "Meshes");
+	library_prefab_path = CreateFolder(library_path.c_str(), "Prefabs");
 	library_texture_path = CreateFolder(library_path.c_str(), "Textures");
 	library_scene_path = CreateFolder(library_path.c_str(), "Scenes");
 	settings_path = CreateFolder(App->GetBasePath(), "Settings");
@@ -63,6 +64,11 @@ string FileSystem::GetLibraryPath()
 string FileSystem::GetLibraryMeshPath()
 {
 	return library_mesh_path;
+}
+
+string FileSystem::GetLibraryPrefabPath()
+{
+	return library_prefab_path;
 }
 
 string FileSystem::GetLibraryTexturePath()
@@ -421,7 +427,7 @@ void FileSystem::FileMove(const char * filepath, const char * new_path, bool rep
 	}
 }
 
-bool FileSystem::FileCopyPaste(const char * filepath, const char * new_path, std::string &resultant_path)
+bool FileSystem::FileCopyPaste(const char * filepath, const char * new_path, bool overwrite, std::string &resultant_path)
 {
 	bool ret = false;
 
@@ -439,45 +445,68 @@ bool FileSystem::FileCopyPaste(const char * filepath, const char * new_path, std
 
 		std::string new_filepath = s_new_path + d_filepath.file_name + "." + d_filepath.file_extension;
 
-		bool need_rename = false;
-		while (App->file_system->FileExists(new_filepath.c_str()))
+		if (!overwrite)
 		{
-			std::string check_new_name = NewNameForFileNameCollision(d_filepath.file_name.c_str());
-			d_filepath.file_name = check_new_name;
+			bool need_rename = false;
+			while (App->file_system->FileExists(new_filepath.c_str()))
+			{
+				std::string check_new_name = NewNameForFileNameCollision(d_filepath.file_name.c_str());
+				d_filepath.file_name = check_new_name;
 
-			new_filepath = s_new_path + d_filepath.file_name + "." + d_filepath.file_extension;
+				new_filepath = s_new_path + d_filepath.file_name + "." + d_filepath.file_extension;
 
-			need_rename = true;
-		}
+				need_rename = true;
+			}
 
-		if (need_rename)
-			FileRename(d_filepath.file_path.c_str(), d_filepath.file_name.c_str());
+			if (need_rename)
+				FileRename(d_filepath.file_path.c_str(), d_filepath.file_name.c_str());
 
-		std::string curr_path = d_filepath.path + d_filepath.file_name + "." + d_filepath.file_extension;
-		std::string curr_new_path = s_new_path + d_filepath.file_name + "." + d_filepath.file_extension;
-		if (CopyFile(curr_path.c_str(), curr_new_path.c_str(), false) == 0)
-		{
-			DWORD error = GetLastError();
-			if (error != 0)
-				CONSOLE_LOG("Error moving file:[%s] to [%s]", filepath, s_new_path.c_str())
+			std::string curr_path = d_filepath.path + d_filepath.file_name + "." + d_filepath.file_extension;
+			std::string curr_new_path = s_new_path + d_filepath.file_name + "." + d_filepath.file_extension;
+			if (CopyFile(curr_path.c_str(), curr_new_path.c_str(), false) == 0)
+			{
+				DWORD error = GetLastError();
+				if (error != 0)
+					CONSOLE_LOG("Error moving file:[%s] to [%s]", filepath, s_new_path.c_str())
+			}
+			else
+			{
+				resultant_path = curr_new_path;
+				ret = true;
+			}
+
+			if (need_rename)
+				FileRename(curr_path.c_str(), original_name.c_str());
 		}
 		else
 		{
-			resultant_path = curr_new_path;
-			ret = true;
-		}
+			if (App->file_system->FileExists(new_filepath.c_str()))
+			{
+				App->file_system->FileDelete(new_filepath.c_str());
+			}
 
-		if (need_rename)
-			FileRename(curr_path.c_str(), original_name.c_str());
+			if (CopyFile(filepath, new_filepath.c_str(), false) == 0)
+			{
+				DWORD error = GetLastError();
+				if (error != 0)
+					CONSOLE_LOG("Error moving file:[%s] to [%s]", filepath, s_new_path.c_str())
+			}
+			else
+			{
+				resultant_path = new_filepath;
+				ret = true;
+			}
+			
+		}
 	}
 
 	return ret;
 }
 
-bool FileSystem::FileCopyPaste(const char * filepath, const char * new_path)
+bool FileSystem::FileCopyPaste(const char * filepath, const char * new_path, bool overwrite = false)
 {
 	std::string result;
-	return FileCopyPaste(filepath, new_path, result);
+	return FileCopyPaste(filepath, new_path, overwrite, result);
 }
 
 void FileSystem::FileCopyPasteWithNewName(const char * filepath, const char * new_path, const char * new_name)
@@ -488,7 +517,7 @@ void FileSystem::FileCopyPasteWithNewName(const char * filepath, const char * ne
 
 	if (FileRename(filepath, new_name))
 	{
-		FileCopyPaste(changed_original_filepath.c_str(), new_path);
+		FileCopyPaste(changed_original_filepath.c_str(), new_path, false);
 
 		FileRename(changed_original_filepath.c_str(), d_filepath.file_name.c_str());
 	}

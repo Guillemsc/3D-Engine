@@ -2,7 +2,7 @@
 #include "App.h"
 #include "ModuleRenderer3D.h"
 
-ResourceTexture::ResourceTexture(std::string unique_id) : Resource(unique_id, RT_TEXTURE)
+ResourceTexture::ResourceTexture(std::string unique_id) : Resource(unique_id, ResourceType::RT_TEXTURE)
 {
 }
 

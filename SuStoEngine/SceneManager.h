@@ -67,7 +67,7 @@ public:
 private:
 	void ClearRelations();
 	void AddRelationGo(GameObject* go);
-	void AddRleationIdGo(int id, GameObject* go, int parent_id = -1);
+	void AddRelationIdGo(int id, GameObject* go, int parent_id = -1);
 	int GetRelationGo(GameObject* go);
 	GameObject* GetRelationId(int id);
 

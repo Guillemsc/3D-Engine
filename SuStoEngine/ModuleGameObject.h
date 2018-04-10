@@ -26,8 +26,15 @@ public:
 
 	GameObject* Create(std::string id);
 	GameObject* Create();
-	void Destroy(GameObject* go);
+	GameObject* CreateWithoutAddingToList();
+
+	void AddToScene(GameObject* go);
+	void RemoveFromScene(GameObject* go);
+	bool ExistsOnScene(GameObject* go);
+
 	GameObject* Find(std::string unique_id);
+
+	void Destroy(GameObject* go);
 	void DestroyAllGameObjects();
 	void DestroyAllGameObjectsNow();
 
@@ -70,6 +77,7 @@ private:
 
 private:
 	vector<GameObject*> game_objects;
+	vector<GameObject*> scene_game_objects;
 	list<GameObject*>   to_delete;
 	vector<GameObject*> selected;
 	vector<GameObject*> statics;

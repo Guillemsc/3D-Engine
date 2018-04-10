@@ -22,7 +22,7 @@
 
 
 ResourceMeshLoader::ResourceMeshLoader() : 
-ResourceLoader(ResourceType::RT_MESH, App->file_system->GetAssetsPath().c_str(), App->file_system->GetLibraryMeshPath().c_str())
+ResourceLoader(ResourceType::RT_MESH, App->file_system->GetAssetsPath(), App->file_system->GetLibraryMeshPath())
 {
 	
 }

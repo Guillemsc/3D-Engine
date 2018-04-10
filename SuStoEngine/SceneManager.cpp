@@ -174,7 +174,7 @@ bool SceneManager::LoadPrefab(const char * file_path, GameObject *& loaded_go)
 			int parent_id = go_node.GetNumber("parent_id", -1);
 			GameObject* go = App->gameobj->Create();
 
-			AddRleationIdGo(id, go, parent_id);
+			AddRelationIdGo(id, go, parent_id);
 
 			if(go != nullptr)
 				go->OnLoadSerialize(go_node);
@@ -295,7 +295,7 @@ void SceneManager::AddRelationGo(GameObject * go)
 	relations.push_back(rel);
 }
 
-void SceneManager::AddRleationIdGo(int id, GameObject * go, int parent_id)
+void SceneManager::AddRelationIdGo(int id, GameObject * go, int parent_id)
 {
 	if (parent_id == -1)
 	{

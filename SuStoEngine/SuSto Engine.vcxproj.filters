@@ -474,6 +474,12 @@
     <ClInclude Include="tinyfiledialogs.h">
       <Filter>Sources\6. ThirdParties ============\tinyfile</Filter>
     </ClInclude>
+    <ClInclude Include="ResourcePrefabLoader.h">
+      <Filter>Sources\5. Resources =============\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourcePrefab.h">
+      <Filter>Sources\5. Resources =============</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -775,6 +781,12 @@
     </ClCompile>
     <ClCompile Include="tinyfiledialogs.c">
       <Filter>Sources\6. ThirdParties ============\tinyfile</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourcePrefabLoader.cpp">
+      <Filter>Sources\5. Resources =============\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourcePrefab.cpp">
+      <Filter>Sources\5. Resources =============</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

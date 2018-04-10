@@ -69,7 +69,7 @@ public:
 
 	bool IsAssetOnLibrary(DecomposedFilePath d_filepath);
 
-	//bool RenameLibraryResource(DecomposedFilePath decomposed_file_path, const char* new_name);
+	bool RenameAsset(DecomposedFilePath decomposed_file_path, const char* new_name);
 	// ---
 
 	//bool Load(const char* filepath, std::vector<Resource*>& resources, bool as_new_gameobject = true);
