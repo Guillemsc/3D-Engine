@@ -10,7 +10,7 @@
 #include "JSONLoader.h"
 #include "ModuleGameObject.h"
 
-ResourceManager::ResourceManager(bool start_enabled)
+ResourceManager::ResourceManager(bool start_enabled) : Module(start_enabled)
 {
 
 }

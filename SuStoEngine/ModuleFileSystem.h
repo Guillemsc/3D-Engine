@@ -1,5 +1,5 @@
-#ifndef _FILESYSTEM_H_
-#define _FILESYSTEM_H_
+#ifndef __MODULE_FILE_SYSTEM_H__
+#define __MODULE_FILE_SYSTEM_H__
 
 #include "Module.h"
 #include <filesystem>
@@ -83,4 +83,4 @@ private:
 	string looking_path;
 };
 
-#endif // __FILESYSTEM_H__
+#endif // __MODULE_FILE_SYSTEM_H__

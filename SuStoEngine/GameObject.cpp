@@ -15,6 +15,7 @@
 #include "ResourceTexture.h"
 #include "JSONLoader.h"
 #include "ResourceManager.h"
+#include "ModuleEventSystem.h"
 
 #include "Glew/include/glew.h" 
 
@@ -314,7 +315,7 @@ void GameObject::EraseParent(bool send_to_root)
 		parent->EraseChild(this);
 		parent = nullptr;
 
-		if(send_parent_to_root)
+		if(send_to_root)
 			App->gameobj->GetRoot()->AddChild(this);
 	}
 }
@@ -357,8 +358,6 @@ void GameObject::AddChild(GameObject * child)
 	// Add new parent
 	child->parent = this;
 	childs.push_back(child);
-
-	child->OnChangeParent();
 }
 
 bool GameObject::HasChild(GameObject * child)
@@ -549,14 +548,6 @@ bool GameObject::IsUI() const
 	return is_ui;
 }
 
-void GameObject::OnChangeParent()
-{
-	for (vector<Component*>::iterator it = components.begin(); it != components.end(); ++it)
-	{
-		(*it)->OnChangeParent();
-	}
-}
-
 void GameObject::OnLoadSerialize(JSON_Doc config)
 {
 	name = config.GetString("name");
@@ -615,6 +606,14 @@ void GameObject::SetDebugDraw(bool set)
 {
 	debug_draw = set;
 }
+
+void GameObject::OnChangeParent(Event ev)
+{
+}
+
+void GameObject::OnDestroy(Event ev)
+{
+}
  
 void GameObject::DrawBBox()
 {
@@ -630,4 +629,6 @@ void GameObject::DrawBBox()
 	}
 }
 
-
+void Function(Event ev)
+{
+}

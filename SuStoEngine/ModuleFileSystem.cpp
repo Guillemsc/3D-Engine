@@ -6,7 +6,7 @@
 #include <ctype.h>
 #include "Functions.h"
 
-FileSystem::FileSystem(bool start_enabled)
+FileSystem::FileSystem(bool start_enabled) : Module(start_enabled)
 {
 	SetName("FileSystem");
 

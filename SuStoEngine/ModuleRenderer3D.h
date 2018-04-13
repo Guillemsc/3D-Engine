@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __MODULE_RENDERER_H__
+#define __MODULE_RENDERER_H__
+
 #include "Module.h"
 #include "Globals.h"
 #include "glmath.h"
@@ -75,3 +77,5 @@ private:
 	bool points = false;
 	bool fill = false;
 };
+
+#endif // !__MODULE_RENDERER_H__

@@ -20,8 +20,9 @@
 #include "imgui.h"
 #include "Resource.h"
 #include "ResourceTextureLoader.h"
+#include "ModuleEventSystem.h"
 
-ModuleGameObject::ModuleGameObject(bool enabled)
+ModuleGameObject::ModuleGameObject(bool enabled) : Module(enabled)
 {
 	SetName("GameObject");
 }
@@ -35,6 +36,9 @@ bool ModuleGameObject::Awake()
 	bool ret = true;
 
 	CONSOLE_LOG("Creating Module GameObject");	
+
+	App->event_system->Suscribe(EventType::ET_GAMEOBJECT_DESTROY, GameObjectEvents);
+	App->event_system->Suscribe(EventType::ET_GAMEOBJECT_CHANGE_PARENT, GameObjectEvents);
 
 	// KDTree
 	kdtree = new KDTree();
@@ -263,7 +267,7 @@ bool ModuleGameObject::ExistsOnScene(GameObject * go)
 		}
 	}
 
-	ret = true;
+	return ret;
 }
 
 void ModuleGameObject::Destroy(GameObject * go)
@@ -599,3 +603,6 @@ void ModuleGameObject::UpdateKDTree()
 	}
 }
 
+void GameObjectEvents(Event ev)
+{
+}

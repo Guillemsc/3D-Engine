@@ -12,6 +12,7 @@
 #include "ModuleFileSystem.h"
 #include "SceneManager.h"
 #include "ResourceManager.h"
+#include "ModuleEventSystem.h"
 #include "imgui.h"
 
 #include "mmgr\nommgr.h"
@@ -34,6 +35,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	editorUI = new EditorUI();
 	scene_manager = new SceneManager();
 	resource_manager = new ResourceManager();
+	event_system = new ModuleEventSystem();
 
 	// The order of calls is very important!
 	// Modules will Awake() Start() and Update in this order
@@ -43,6 +45,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(xml);
 	AddModule(json);
 	AddModule(file_system);
+	AddModule(event_system);
 	AddModule(resource_manager);
 	AddModule(window);
 	AddModule(camera);

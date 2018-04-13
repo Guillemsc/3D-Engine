@@ -9,6 +9,7 @@
 
 class ModuleGameObject;
 class UICanvas;
+class Event;
 
 class GameObject
 {
@@ -62,15 +63,16 @@ public:
 	void SetIsUI(const bool & set);
 	bool IsUI() const;
 
-	void OnChangeParent();
-
 	void OnSaveSerialize(JSON_Doc config);
 	void OnLoadSerialize(JSON_Doc config);
 
 	void SetDraw(bool set);
 
 	void SetDebugDraw(bool set);
- 
+
+	void OnChangeParent(Event ev);
+	void OnDestroy(Event ev);
+
 private:
 	void DrawBBox();
 

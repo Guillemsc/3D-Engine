@@ -42,6 +42,8 @@ bool ResourcePrefabLoader::LoadFileToEngine(DecomposedFilePath decomposed_file_p
 bool ResourcePrefabLoader::UnloadAssetFromEngine(DecomposedFilePath decomposed_file_path)
 {
 	App->file_system->FileDelete(decomposed_file_path.file_path.c_str());
+
+	return true;
 }
 
 bool ResourcePrefabLoader::GetGameObjectFromPrefabPath(const char * filepath, GameObject *& go)
@@ -65,15 +67,11 @@ bool ResourcePrefabLoader::GetGameObjectFromPrefabPath(const char * filepath, Ga
 
 			int id = go_node.GetNumber("id", -1);
 			int parent_id = go_node.GetNumber("parent_id", -1);
-			GameObject* go = new GameObject();
 
 			AddRelationIdGo(id, go, parent_id);
 
 			if (go != nullptr)
 				go->OnLoadSerialize(go_node);
-
-			if (i == 0)
-				loaded_go = go;
 		}
 
 		for (vector<Relation>::iterator it = relations.begin(); it != relations.end(); ++it)

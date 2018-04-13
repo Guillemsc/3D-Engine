@@ -1,5 +1,5 @@
-#ifndef _MODULE_GAME_OBJECT_H_
-#define _MODULE_GAME_OBJECT_H_
+#ifndef __MODULE_GAME_OBJECT_H__
+#define __MODULE_GAME_OBJECT_H__
 
 #include "Module.h"
 #include "GameObject.h"
@@ -8,6 +8,7 @@
 class KDTree;
 class Resource;
 struct TextureInfo;
+class Event;
 
 class ModuleGameObject : public Module
 {
@@ -98,4 +99,6 @@ private:
 	vector<TextureInfo>	textures;
 };
 
-#endif // !_MODULE_GAME_OBJECT_H_
+void GameObjectEvents(Event ev);
+
+#endif // !__MODULE_GAME_OBJECT_H__

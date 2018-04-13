@@ -480,6 +480,9 @@
     <ClInclude Include="ResourcePrefab.h">
       <Filter>Sources\5. Resources =============</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleEventSystem.h">
+      <Filter>Sources\2. Modules ==============</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -787,6 +790,9 @@
     </ClCompile>
     <ClCompile Include="ResourcePrefab.cpp">
       <Filter>Sources\5. Resources =============</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleEventSystem.cpp">
+      <Filter>Sources\2. Modules ==============</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

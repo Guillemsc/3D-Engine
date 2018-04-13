@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __MODULE_INPUT_H__
+#define __MODULE_INPUT_H__
+
 #include "Module.h"
 #include "Globals.h"
 #include "Functions.h"
@@ -105,3 +107,5 @@ private:
 public:
 	bool			   right_clicking = false;
 };
+
+#endif // !__MODULE_INPUT_H__
