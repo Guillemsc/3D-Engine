@@ -25,12 +25,12 @@ public:
 
 	void InspectorDraw(std::vector<Component*> components);
 
+	void OnLoadAbstraction(DataAbstraction& abs);
+	void OnSaveAbstraction(DataAbstraction& abs);
+
 private:
 	void OnEnable();
 	void OnDisable();
-
-	void OnLoadAbstraction(DataAbstraction& abs);
-	void OnSaveAbstraction(DataAbstraction& abs);
 
 private:
 	ResourceTexture* texture = nullptr;

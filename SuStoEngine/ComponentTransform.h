@@ -39,13 +39,13 @@ public:
 
 	void InspectorDraw(std::vector<Component*> components);
 
+	void OnLoadAbstraction(DataAbstraction& abs);
+	void OnSaveAbstraction(DataAbstraction& abs);
+
 private:
 	void RecalculateLocalTransform();
 	void OnEnable();
 	void OnDisable();
-
-	void OnLoadAbstraction(DataAbstraction& abs);
-	void OnSaveAbstraction(DataAbstraction& abs);
 
 private:
 	float4x4 local_transform = float4x4::identity;

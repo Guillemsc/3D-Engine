@@ -174,7 +174,7 @@ void ComponentTransform::OnLoadAbstraction(DataAbstraction& abs)
 	float3 scale = abs.GetFloat3("scale");
 
 	SetPosition(position);
-	SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
+	SetRotation(Quat(rotation.x, rotation.y, rotation.z, rotation.w));
 	SetScale(scale);
 }
 

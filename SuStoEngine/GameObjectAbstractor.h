@@ -16,10 +16,6 @@ class DataAbstraction
 {
 public:
 	DataAbstraction() {}
-	DataAbstraction(ComponentType comp_type)
-	{
-		type = comp_type;
-	}
 
 	void AddInt(std::string name, int val);
 	void AddBool(std::string name, bool val);
@@ -42,13 +38,12 @@ private:
 	std::map<std::string, std::string> strings;
 	std::map<std::string, float3> floats3;
 	std::map<std::string, float4> floats4;
-
-	ComponentType type;
 };
 
 class IDRelation
 {
 	friend GameObjectAbstraction;
+	friend GameObjectAbstractor;
 
 public:
 	IDRelation(int _id, GameObject* _go)
@@ -69,6 +64,7 @@ class GORelation
 {
 	friend GameObjectAbstraction;
 
+public:
 	GORelation(int _id, int _id_parent)
 	{
 		id = _id;

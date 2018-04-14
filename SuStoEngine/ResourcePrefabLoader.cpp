@@ -93,6 +93,8 @@ ResourcePrefab * ResourcePrefabLoader::CreatePrefab(GameObject * go)
 
 	rprefab->SetAbstraction(abs);
 
+	App->gameobj->GetAbstractor()->DeAbstract(abs);
+
 	return rprefab;
 }
 

@@ -345,7 +345,7 @@ void GameObject::EraseChild(GameObject * child, bool send_child_to_root)
 
 void GameObject::AddChild(GameObject * child)
 {
-	if (child == nullptr && !HasChild(child))
+	if (child == nullptr || HasChild(child) || child == this || child == parent)
 		return;
 
 	// Clean from parent

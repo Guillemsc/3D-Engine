@@ -64,7 +64,58 @@ GameObject * GameObjectAbstractor::DeAbstract(GameObjectAbstraction abs)
 	{
 		for (std::vector<IDRelation>::iterator it = abs.id_relations.begin(); it != abs.id_relations.end(); ++it)
 		{
+			GameObject* obj = App->gameobj->Create();
 
+			if (obj != nullptr)
+			{
+				obj->OnLoadAbstraction((*it).data_game_object);
+
+				for (std::vector<DataAbstraction>::iterator comp = (*it).data_components.begin(); comp != (*it).data_components.end(); ++comp)
+				{
+					int comp_int = (*comp).GetInt("type", -1);
+
+					if (comp_int != -1)
+					{
+						ComponentType type = static_cast<ComponentType>(comp_int);
+
+						if (type != ComponentType::TRANSFORM)
+						{
+							Component* component = obj->AddComponent(type);
+
+							if (component != nullptr)
+							{
+								component->OnLoadAbstraction(*comp);
+							}
+						}
+						else
+						{
+							obj->transform->OnLoadAbstraction(*comp);
+						}
+					}
+				}
+
+				(*it).go = obj;
+			}
+		}
+
+		for (std::vector<GORelation>::iterator it = abs.go_relations.begin(); it != abs.go_relations.end(); ++it)
+		{
+			int id = (*it).id;
+			int id_parent = (*it).id_parent;
+
+			GameObject* obj = nullptr;
+			GameObject* parent_obj = nullptr;
+
+			if (id != -1 && id_parent != -1)
+			{
+				obj = abs.GetGoFromId(id);
+				parent_obj = abs.GetGoFromId(id_parent);
+
+				if (obj != nullptr && parent_obj != nullptr)
+				{
+					parent_obj->AddChild(obj);
+				}
+			}
 		}
 	}
 
@@ -103,21 +154,27 @@ void GameObjectAbstraction::AddRelation(int id, int parent_id)
 
 int GameObjectAbstraction::AddGo(GameObject * go)
 {
-	IDRelation relation(++max_id, go);
-	
-	std::vector<Component*> components_list = go->GetComponents();
-
-	for (std::vector<Component*>::iterator it = components_list.begin(); it != components_list.end(); ++it)
+	if (go != nullptr)
 	{
-		Component* curr = (*it);
+		IDRelation relation(++max_id, go);
 
-		DataAbstraction comp_abs(curr->GetType());
-		curr->OnSaveAbstraction(comp_abs);
+		go->OnSaveAbstraction(relation.data_game_object);
 
-		relation.data_components.push_back(comp_abs);
+		std::vector<Component*> components_list = go->GetComponents();
+
+		for (std::vector<Component*>::iterator it = components_list.begin(); it != components_list.end(); ++it)
+		{
+			Component* curr = (*it);
+
+			DataAbstraction comp_abs;
+			comp_abs.AddInt("type", curr->GetType());
+			curr->OnSaveAbstraction(comp_abs);
+
+			relation.data_components.push_back(comp_abs);
+		}
+
+		id_relations.push_back(relation);
 	}
-
-	id_relations.push_back(relation);
 
 	return max_id;
 }
