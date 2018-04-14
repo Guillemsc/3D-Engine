@@ -1,8 +1,11 @@
 #include "App.h"
 #include "ModuleGameObject.h"
 #include "GameObjectAbstractor.h"
+#include "ModuleFileSystem.h"
 #include "GameObject.h"
 #include "Component.h"
+#include "JSONLoader.h"
+#include "GeometryMath.h"
 
 GameObjectAbstractor::GameObjectAbstractor()
 {
@@ -120,6 +123,37 @@ GameObject * GameObjectAbstractor::DeAbstract(GameObjectAbstraction abs)
 	}
 
 	return ret;
+}
+
+void GameObjectAbstractor::Serialize(GameObjectAbstraction abs, const char* path, const char* name, const char* extension)
+{
+	if (abs.GetValid())
+	{
+		if (App->file_system->FolderExists(path))
+		{
+			std::string filepath = std::string(path) + std::string(name) + std::string(".") + std::string(extension);
+
+			JSON_Doc* doc = App->json->CreateJSON(path, name, extension);
+
+			if (doc != nullptr)
+			{
+				doc->SetArray("GameObjects");
+
+				int curr_go_count = 0;
+
+				for (std::vector<IDRelation>::iterator it = abs.id_relations.begin(); it != abs.id_relations.end(); ++it)
+				{
+					std::string curr_go_section_name = "GameObject_" + std::to_string(curr_go_count);
+
+					doc->AddSectionToArray(curr_go_section_name);
+					if (doc->MoveToSection(curr_go_section_name));
+					{
+						
+					}
+				}
+			}
+		}
+	}
 }
 
 GameObjectAbstraction::GameObjectAbstraction()
@@ -299,4 +333,125 @@ float4 DataAbstraction::GetFloat4(std::string name, float4 def)
 		return it->second;
 
 	return def;
+}
+
+void DataAbstraction::Serialize(JSON_Doc doc)
+{
+	int counter = 0;
+
+	doc.SetNumber("ints_count", ints.count);
+	for (std::map<std::string, int>::iterator it = ints.begin(); it != ints.end(); ++it)
+	{
+		std::string int_name = "int_name_" + std::to_string(counter);
+		std::string int_value = "int_value_" + std::to_string(counter);
+
+		doc.SetString(int_name, (*it).first.c_str());
+		doc.SetNumber(int_value, (*it).second);
+
+		++counter;
+	}
+	
+	counter = 0;
+	doc.SetNumber("bools_count", bools.count);
+	for (std::map<std::string, bool>::iterator it = bools.begin(); it != bools.end(); ++it)
+	{
+		std::string bool_name = "bool_name_" + std::to_string(counter);
+		std::string bool_value = "bool_value_" + std::to_string(counter);
+
+		doc.SetString(bool_name, (*it).first.c_str());
+		doc.SetBool(bool_value, (*it).second);
+
+		++counter;
+	}
+
+	counter = 0;
+	doc.SetNumber("floats_count", floats.count);
+	for (std::map<std::string, float>::iterator it = floats.begin(); it != floats.end(); ++it)
+	{
+		std::string float_name = "float_name_" + std::to_string(counter);
+		std::string float_number = "float_value_" + std::to_string(counter);
+
+		doc.SetString(float_name, (*it).first.c_str());
+		doc.SetNumber(float_number, (*it).second);
+		++counter;
+	}
+
+	counter = 0;
+	doc.SetNumber("strings_count", strings.count);
+	for (std::map<std::string, std::string>::iterator it = strings.begin(); it != strings.end(); ++it)
+	{
+		std::string string_name = "string_name_" + std::to_string(counter);
+		std::string string_value = "string_value_" + std::to_string(counter);
+
+		doc.SetString(string_name, (*it).first.c_str());
+		doc.SetString(string_value, (*it).second.c_str());
+
+		++counter;
+	}
+
+	counter = 0;
+	doc.SetNumber("floats3_count", floats3.count);
+	for (std::map<std::string, float3>::iterator it = floats3.begin(); it != floats3.end(); ++it)
+	{
+		std::string float3_name = "float3_name_" + std::to_string(counter);
+		std::string float3_value = "float3_value_" + std::to_string(counter);
+
+		doc.SetString(float3_name, (*it).first.c_str());
+		doc.SetNumber3(float3_value, (*it).second);
+
+		++counter;
+	}
+
+	counter = 0;
+	doc.SetNumber("floats4_count", floats4.count);
+	for (std::map<std::string, float4>::iterator it = floats4.begin(); it != floats4.end(); ++it)
+	{
+		std::string float4_name = "float4_name_" + std::to_string(counter);
+		std::string float4_value = "float4_value_" + std::to_string(counter);
+
+		doc.SetString(float4_name, (*it).first.c_str());
+		doc.SetNumber4(float4_value, (*it).second);
+
+		++counter;
+	}
+}
+
+void DataAbstraction::DeSerialize(JSON_Doc doc)
+{
+	int ints_count = doc.GetNumber("ints_count", 0);
+	int bools_count = doc.GetNumber("bools_count", 0);
+	int floats_count = doc.GetNumber("floats_count", 0);
+	int strings_count = doc.GetNumber("strings_count", 0);
+	int floats3_count = doc.GetNumber("floats3_count", 0);
+	int floats4_count = doc.GetNumber("floats4_count", 0);
+
+	for (int i = 0; i < ints_count; ++i)
+	{
+
+	}
+
+	for (int i = 0; i < bools_count; ++i)
+	{
+
+	}
+
+	for (int i = 0; i < floats_count; ++i)
+	{
+
+	}
+
+	for (int i = 0; i < strings_count; ++i)
+	{
+
+	}
+
+	for (int i = 0; i < floats3_count; ++i)
+	{
+
+	}
+
+	for (int i = 0; i < floats4_count; ++i)
+	{
+
+	}
 }

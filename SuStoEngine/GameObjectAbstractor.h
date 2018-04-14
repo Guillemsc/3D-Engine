@@ -31,6 +31,9 @@ public:
 	float3 GetFloat3(std::string name, float3 def = float3::zero);
 	float4 GetFloat4(std::string name, float4 def = float4::zero);
 
+	void Serialize(JSON_Doc doc);
+	void DeSerialize(JSON_Doc doc);
+
 private:
 	std::map<std::string, int> ints;
 	std::map<std::string, bool> bools;
@@ -109,6 +112,8 @@ public:
 
 	GameObjectAbstraction Abstract(GameObject* go);
 	GameObject* DeAbstract(GameObjectAbstraction abs);
+	void Serialize(GameObjectAbstraction abs, const char* path, const char* name, const char* extension = "json");
+	GameObjectAbstraction DeSerialize(const char* filepath);
 };
 
 #endif //!__GAME_OBJECT_ABSTRACTOR_H__

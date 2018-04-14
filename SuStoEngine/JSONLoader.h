@@ -71,7 +71,7 @@ public:
 	bool CleanUp();
 
 	JSON_Doc* LoadJSON(const char* path);
-	JSON_Doc* CreateJSON(const char* path);
+	JSON_Doc* CreateJSON(const char * path, const char* name, const char* extension);
 	void UnloadJSON(JSON_Doc* path);
 
 private:
