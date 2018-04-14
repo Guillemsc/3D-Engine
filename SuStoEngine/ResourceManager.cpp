@@ -9,6 +9,7 @@
 #include "Globals.h"
 #include "JSONLoader.h"
 #include "ModuleGameObject.h"
+#include "ResourcePrefabLoader.h"
 
 ResourceManager::ResourceManager(bool start_enabled)
 {
@@ -33,8 +34,11 @@ bool ResourceManager::Awake()
 	mesh_loader->AddAssetExtensionToLoad("dds");
 	mesh_loader->AddLibraryExtensionToLoad("dds");
 
+	ResourcePrefabLoader* prefab_loader = new ResourcePrefabLoader();
+
 	AddLoader(mesh_loader);
 	AddLoader(texture_loader);
+	AddLoader(prefab_loader);
 
 	return ret;
 }

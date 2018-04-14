@@ -26,11 +26,6 @@ public:
 
 	GameObject* Create(std::string id);
 	GameObject* Create();
-	GameObject* CreateWithoutAddingToList();
-
-	void AddToScene(GameObject* go);
-	void RemoveFromScene(GameObject* go);
-	bool ExistsOnScene(GameObject* go);
 
 	GameObject* Find(std::string unique_id);
 
@@ -68,7 +63,7 @@ public:
 	void SetCanPick(bool set);
 	void SetCanMove(bool set);
 
-	vector<TextureInfo> GetTextures();
+	GameObjectAbstractor* GetAbstractor() const;
 
 private:
 	void DestroyGameObjects();
@@ -76,26 +71,25 @@ private:
 	void UpdateKDTree();
 
 private:
-	vector<GameObject*> game_objects;
-	vector<GameObject*> scene_game_objects;
-	list<GameObject*>   to_delete;
-	vector<GameObject*> selected;
-	vector<GameObject*> statics;
-	GameObject*			root = nullptr;
+	vector<GameObject*>   game_objects;
+	list<GameObject*>     to_delete;
+	vector<GameObject*>   selected;
+	vector<GameObject*>   statics;
+	GameObject*			  root = nullptr;
+						  
+	KDTree*				  kdtree = nullptr;
+	bool				  update_kdtree = false;
+						  
+	bool				  show_kdtree = false;
+	bool				  show_bboxes = false;
+						  
+	ImGuizmo::OPERATION   current_gizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
+	float3 last_scale =   float3::zero;
+						  
+	bool			      can_pick = true;
+	bool			      can_move = true;
 
-	KDTree*				kdtree = nullptr;
-	bool				update_kdtree = false;
-
-	bool				show_kdtree = false;
-	bool				show_bboxes = false;
-
-	ImGuizmo::OPERATION current_gizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
-	float3 last_scale = float3::zero;
-
-	bool			    can_pick = true;
-	bool			    can_move = true;
-
-	vector<TextureInfo>	textures;
+	GameObjectAbstractor* go_abstractor = nullptr;
 };
 
 #endif // !_MODULE_GAME_OBJECT_H_

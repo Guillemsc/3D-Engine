@@ -48,7 +48,7 @@ bool SceneManager::CleanUp()
 
 void SceneManager::SaveScene(const char * scene_name)
 {
-	SavePrefab(scene_name, "scene", App->file_system->GetLibraryScenePath().c_str(), App->gameobj->GetRoot());
+	//SavePrefab(scene_name, "scene", App->file_system->GetLibraryScenePath().c_str(), App->gameobj->GetRoot());
 }
 
 void SceneManager::LoadScene(const char * scene_name, bool set_scene_title)
@@ -71,143 +71,12 @@ void SceneManager::DestroyScene()
 
 void SceneManager::SaveTmpScene()
 {
-	SaveScene("tmp_scene");
+	/*SaveScene("tmp_scene");*/
 }
 
 void SceneManager::LoadTmpScene()
 {
-	LoadScene("tmp_scene", false);
-}
-
-bool SceneManager::SavePrefab(const char* name, const char* extension, const char* path, GameObject* go)
-{
-	bool ret = false;
-
-	CONSOLE_LOG("Saving prefab with name: %s", name);
-
-	ClearRelations();
-
-	string filepath = path;
-	filepath += name;
-	filepath += ".";
-	filepath += extension;
-
-	JSON_Doc* prefab = App->json->LoadJSON(filepath.c_str());
-
-	if (prefab == nullptr)
-		prefab = App->json->CreateJSON(filepath.c_str());
-
-	if (prefab != nullptr)
-	{
-		prefab->Clear();
-
-		vector<GameObject*> game_objects;
-		App->gameobj->RecursiveGetGameObjectTree(go, game_objects);
-
-		for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); it++)
-		{
-			AddRelationGo((*it));
-		}
-
-		// Store GameObjects
-		prefab->SetArray("GameObjects");
-
-		for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); it++)
-		{
-			prefab->MoveToRoot();
-
-			if ((*it) != App->gameobj->GetRoot())
-			{
-				JSON_Doc go_node = prefab->GetJsonNode();
-
-				// Add and move to a new secion on the gameobjects array
-				go_node.AddSectionToArray("GameObjects");
-				go_node.MoveToSectionFromArray("GameObjects", go_node.GetArrayCount("GameObjects") - 1);
-
-				// Set relation id
-				go_node.SetNumber("id", GetRelationGo((*it)));
-				
-				// Set parent relation id
-				if((*it)->GetParent() != nullptr && (*it)->GetParent() != App->gameobj->GetRoot())
-					go_node.SetNumber("parent_id", GetRelationGo((*it)->GetParent()));
-				else
-					go_node.SetNumber("parent_id", -1);
-
-				(*it)->OnSaveSerialize(go_node);
-			}
-		}
-
-		prefab->Save();
-
-		ret = true;
-	}
-
-	ClearRelations();
-
-	return ret;
-}
-
-bool SceneManager::LoadPrefab(const char * file_path, GameObject *& loaded_go)
-{
-	bool ret = false;
-
-	string file_name = App->file_system->GetFileNameFromFilePath(file_path);
-
-	CONSOLE_LOG("Loading prefab with name: %s", file_name.c_str());
-
-	ClearRelations();
-
-	JSON_Doc* prefab = App->json->LoadJSON(file_path);
-
-	if (prefab != nullptr)
-	{
-		ret = true;
-
-		// Load GameObjects
-		int game_objects_count = prefab->GetArrayCount("GameObjects");
-		for (int i = 0; i < game_objects_count; i++)
-		{
-			JSON_Doc go_node = prefab->GetJsonNode();
-			go_node.MoveToSectionFromArray("GameObjects", i);
-
-			int id = go_node.GetNumber("id", -1);
-			int parent_id = go_node.GetNumber("parent_id", -1);
-			GameObject* go = App->gameobj->Create();
-
-			AddRelationIdGo(id, go, parent_id);
-
-			if(go != nullptr)
-				go->OnLoadSerialize(go_node);
-
-			if (i == 0)
-				loaded_go = go;
-		}
-
-		for (vector<Relation>::iterator it = relations.begin(); it != relations.end(); ++it)
-		{
-			GameObject* parent = GetRelationId((*it).id_parent);
-
-			if (parent != nullptr)
-				parent->AddChild((*it).go);
-		}
-
-		prefab->MoveToRoot();
-	}
-
-	ClearRelations();
-
-	return ret;
-}
-
-bool SceneManager::LoadPrefab(const char * file_path)
-{
-	bool ret = true;
-
-	GameObject* go = nullptr;
-
-	ret = LoadPrefab(file_path, go);
-
-	return ret;
+	/*LoadScene("tmp_scene", false);*/
 }
 
 SceneState SceneManager::GetState()
@@ -281,57 +150,5 @@ float SceneManager::GetGameDT()
 float SceneManager::GetGameExecutionTime()
 {
 	return 0.0f;
-}
-
-void SceneManager::ClearRelations()
-{
-	relations.clear();
-}
-
-void SceneManager::AddRelationGo(GameObject * go)
-{
-	int id = relations.size();
-	Relation rel(id, go);
-	relations.push_back(rel);
-}
-
-void SceneManager::AddRelationIdGo(int id, GameObject * go, int parent_id)
-{
-	if (parent_id == -1)
-	{
-		Relation rel(id, go);
-		relations.push_back(rel);
-	}
-	else
-	{
-		Relation rel(id, go, parent_id);
-		relations.push_back(rel);
-	}
-}
-
-int SceneManager::GetRelationGo(GameObject * go)
-{
-	for (vector<Relation>::iterator it = relations.begin(); it != relations.end(); ++it)
-	{
-		if ((*it).go == go)
-		{
-			return (*it).id;
-		}
-	}
-
-	return -1;
-}
-
-GameObject * SceneManager::GetRelationId(int id)
-{
-	for (vector<Relation>::iterator it = relations.begin(); it != relations.end(); ++it)
-	{
-		if ((*it).id == id)
-		{
-			return (*it).go;
-		}
-	}
-
-	return nullptr;
 }
 

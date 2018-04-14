@@ -79,20 +79,20 @@ void ComponentCamera::OnDisable()
 {
 }
 
-void ComponentCamera::OnLoadSerialize(JSON_Doc config)
+void ComponentCamera::OnLoadAbstraction(DataAbstraction& abs)
 {
-	float far_plane_distance = config.GetNumber("far_plane_distance", 1000);
-	float near_plane_distance = config.GetNumber("near_plane_distance", 0.1f);
-	float fov = config.GetNumber("fov", 60.0f);
+	float far_plane_distance = abs.GetFloat("far_plane_distance", 1000);
+	float near_plane_distance = abs.GetFloat("near_plane_distance", 0.1f);
+	float fov = abs.GetFloat("fov", 60.0f);
 
 	camera->SetFarPlaneDistance(far_plane_distance);
 	camera->SetNearPlaneDistance(near_plane_distance);
 	camera->SetFOV(fov);
 }
 
-void ComponentCamera::OnSaveSerialize(JSON_Doc config)
+void ComponentCamera::OnSaveAbstraction(DataAbstraction& abs)
 {
-	config.SetNumber("far_plane_distance", camera->GetFarPlaneDistance());
-	config.SetNumber("near_plane_distance", camera->GetNearPlaneDistance());
-	config.SetNumber("fov", camera->GetVerticalFOV());
+	abs.AddFloat("far_plane_distance", camera->GetFarPlaneDistance());
+	abs.AddFloat("near_plane_distance", camera->GetNearPlaneDistance());
+	abs.AddFloat("fov", camera->GetVerticalFOV());
 }

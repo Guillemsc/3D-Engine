@@ -11,3 +11,13 @@ ResourcePrefab::~ResourcePrefab()
 void ResourcePrefab::CleanUp()
 {
 }
+
+void ResourcePrefab::SetAbstraction(const GameObjectAbstraction & _abstraction)
+{
+	abstraction = _abstraction;
+}
+
+GameObjectAbstraction ResourcePrefab::GetAbstraction() const
+{
+	return abstraction;
+}

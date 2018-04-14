@@ -95,19 +95,19 @@ void ComponentMesh::InspectorDraw(std::vector<Component*> components)
 	ImGui::Text("Id uv: %d", mesh->GetIdUV());
 }
 
-void ComponentMesh::OnLoadSerialize(JSON_Doc config)
+void ComponentMesh::OnLoadAbstraction(DataAbstraction& abs)
 {
-	string mesh_id = config.GetString("mesh_id", "no_id");
+	string mesh_id = abs.GetString("mesh_id", "no_id");
 
 	ResourceMesh* rmesh = (ResourceMesh*)App->resource_manager->Get(mesh_id);
 	SetMesh(rmesh);
 }
 
-void ComponentMesh::OnSaveSerialize(JSON_Doc config)
+void ComponentMesh::OnSaveAbstraction(DataAbstraction& abs)
 {
 	if (has_mesh)
 	{
-		config.SetString("mesh_id", mesh->GetUniqueId().c_str());
+		abs.AddString("mesh_id", mesh->GetUniqueId().c_str());
 	}
 }
 

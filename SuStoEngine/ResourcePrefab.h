@@ -3,9 +3,10 @@
 
 #include "Resource.h"
 #include <string>
-#include "Globals.h"
 #include "GeometryMath.h"
-#include "GameObject.h"
+#include "GameObjectAbstractor.h"
+
+class GameObject;
 
 class ResourcePrefab : public Resource
 {
@@ -15,10 +16,13 @@ public:
 
 	void CleanUp();
 
+	void SetAbstraction(const GameObjectAbstraction& abstraction);
+	GameObjectAbstraction GetAbstraction() const;
+
 private:
 
 private:
-	GameObject* base_go = nullptr;
+	GameObjectAbstraction abstraction;
 };
 
 #endif //!__RESOURCE_PREFAB_H__

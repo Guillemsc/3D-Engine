@@ -314,7 +314,7 @@ void GameObject::EraseParent(bool send_to_root)
 		parent->EraseChild(this);
 		parent = nullptr;
 
-		if(send_parent_to_root)
+		if(send_to_root)
 			App->gameobj->GetRoot()->AddChild(this);
 	}
 }
@@ -557,58 +557,27 @@ void GameObject::OnChangeParent()
 	}
 }
 
-void GameObject::OnLoadSerialize(JSON_Doc config)
+void GameObject::OnLoadAbstraction(DataAbstraction & abs)
 {
-	name = config.GetString("name");
-	
-	bool stat = config.GetBool("static");
+	name = abs.GetString("name");
+
+	bool stat = abs.GetBool("static");
+
 	if (stat)
 		App->gameobj->AddGameObjectToStatic(this);
+}
 
-	int components_count = config.GetArrayCount("Components");
+void GameObject::OnSaveAbstraction(DataAbstraction & abs)
+{
+	// Set the name
+	abs.AddString("name", name.c_str());
 
-	for (int i = 0; i < components_count; i++)
-	{
-		JSON_Doc comp_node = config.GetJsonNode();
-		comp_node.MoveToSectionFromArray("Components", i);
-
-		ComponentType type = static_cast<ComponentType>((int)comp_node.GetNumber("type", 0));
-
-		if (type != TRANSFORM)
-		{
-			Component* c = AddComponent(type);
-			c->OnLoadSerialize(comp_node);
-		}
-		else
-			transform->OnLoadSerialize(comp_node);
-	}
+	abs.AddBool("static", is_static);
 }
 
 void GameObject::SetDraw(bool set)
 {
 	draw = set;
-}
-
-void GameObject::OnSaveSerialize(JSON_Doc doc)
-{
-	// Set the name
-	doc.SetString("name", name.c_str());
-
-	doc.SetBool("static", is_static);
-
-	doc.SetArray("Components");
-
-	// Save components
-	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
-	{
-		// Add and move to a new section on the components array
-		JSON_Doc comp_doc = doc.GetJsonNode();
-		comp_doc.AddSectionToArray("Components");
-		comp_doc.MoveToSectionFromArray("Components", doc.GetArrayCount("Components") - 1);
-
-		comp_doc.SetNumber("type", (*it)->GetType());
-		(*it)->OnSaveSerialize(comp_doc);
-	}
 }
 
 void GameObject::SetDebugDraw(bool set)

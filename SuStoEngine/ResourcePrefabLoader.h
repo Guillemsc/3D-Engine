@@ -7,26 +7,6 @@
 
 class ResourcePrefab;
 
-struct Relation
-{
-	Relation(int _id, GameObject* _go)
-	{
-		id = _id;
-		go = _go;
-		id_parent = -1;
-	}
-	Relation(int _id, GameObject* _go, int _id_parent)
-	{
-		id = _id;
-		go = _go;
-		id_parent = _id_parent;
-	}
-
-	int id = 0;
-	GameObject* go = nullptr;
-	int id_parent = 0;
-};
-
 class ResourcePrefabLoader : public ResourceLoader
 {
 public:
@@ -63,17 +43,11 @@ public:
 	//void UnloadTexture(unsigned int id);
 
 	bool GetGameObjectFromPrefabPath(const char* filepath, GameObject*& go);
-	ResourcePrefab* CreateNewPrefabFromGameObject(GameObject* go);
+	ResourcePrefab* CreatePrefab(GameObject* go);
 
 private:
-	void ClearRelations();
-	void AddRelationGo(GameObject* go);
-	void AddRelationIdGo(int id, GameObject* go, int parent_id = -1);
-	int GetRelationGo(GameObject* go);
-	GameObject* GetRelationId(int id);
 
 private:
-	std::vector<Relation> relations;
 
 };
 

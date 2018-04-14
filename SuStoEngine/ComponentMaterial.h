@@ -4,6 +4,7 @@
 #include "Component.h"
 #include "GeometryMath.h"
 
+
 class GameObject;
 class ResourceTexture;
 
@@ -28,8 +29,8 @@ private:
 	void OnEnable();
 	void OnDisable();
 
-	void OnLoadSerialize(JSON_Doc config);
-	void OnSaveSerialize(JSON_Doc config);
+	void OnLoadAbstraction(DataAbstraction& abs);
+	void OnSaveAbstraction(DataAbstraction& abs);
 
 private:
 	ResourceTexture* texture = nullptr;

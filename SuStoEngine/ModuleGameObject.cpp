@@ -38,6 +38,7 @@ bool ModuleGameObject::Awake()
 
 	// KDTree
 	kdtree = new KDTree();
+	go_abstractor = new GameObjectAbstractor();
 
 	// Root GameObject
 	root = new GameObject("Root", this);
@@ -199,7 +200,7 @@ bool ModuleGameObject::CleanUp()
 	kdtree->CleanUp();
 	RELEASE(kdtree);
 
-	textures.clear();
+	RELEASE(go_abstractor);
 
 	return ret;
 }
@@ -219,51 +220,6 @@ GameObject * ModuleGameObject::Create()
 {
 	string new_id = App->resource_manager->GetNewUID();
 	return Create(new_id);
-}
-
-GameObject * ModuleGameObject::CreateWithoutAddingToList()
-{
-	GameObject* game_object = new GameObject(App->resource_manager->GetNewUID(), this);
-
-	game_object->Start();
-
-	return game_object;
-}
-
-void ModuleGameObject::AddToScene(GameObject * go)
-{
-	if (!ExistsOnScene(go))
-	{
-		scene_game_objects.push_back(go);
-		root->AddChild(go);
-	}
-}
-
-void ModuleGameObject::RemoveFromScene(GameObject * go)
-{
-	for (vector<GameObject*>::iterator it = scene_game_objects.begin(); it != scene_game_objects.end(); ++it)
-	{
-		if ((*it) == go)
-		{
-			scene_game_objects.erase(it);
-			go->EraseParent();
-		}
-	}
-}
-
-bool ModuleGameObject::ExistsOnScene(GameObject * go)
-{
-	bool ret = false;
-
-	for(vector<GameObject*>::iterator it = scene_game_objects.begin(); it != scene_game_objects.end(); ++it)
-	{
-		if ((*it) == go)
-		{
-			ret = true;
-		}
-	}
-
-	ret = true;
 }
 
 void ModuleGameObject::Destroy(GameObject * go)
@@ -494,9 +450,9 @@ void ModuleGameObject::SetCanMove(bool set)
 	can_move = set;
 }
 
-vector<TextureInfo> ModuleGameObject::GetTextures()
+GameObjectAbstractor * ModuleGameObject::GetAbstractor() const
 {
-	return textures;
+	return go_abstractor;
 }
 
 void ModuleGameObject::DestroyGameObjects()
@@ -532,7 +488,6 @@ void ModuleGameObject::DestroyGameObjects()
 		// Delete from selected
 		RemoveGameObjectFromSelected(*to_del);
 		RemoveGameObjectFromStatic(*to_del);
-		RemoveFromScene(*to_del);
 
 		// Free
 		(*to_del)->CleanUp();

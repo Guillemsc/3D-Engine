@@ -106,7 +106,7 @@ bool ResourceMeshLoader::LoadFileToEngine(DecomposedFilePath d_filepath, std::ve
 		App->camera->GetEditorCamera()->Focus(total_abb);
 
 		// Create fbx prefab
-		App->scene_manager->SavePrefab((d_filepath.file_name + "." + d_filepath.file_extension).c_str(), "prefab", assets_path.c_str(), parent);
+		//App->scene_manager->SavePrefab((d_filepath.file_name + "." + d_filepath.file_extension).c_str(), "prefab", assets_path.c_str(), parent);
 
 		// Crate meta
 		std::string meta_path = (assets_path + d_filepath.file_name + "." + d_filepath.file_extension + ".meta");
@@ -340,7 +340,7 @@ bool ResourceMeshLoader::LoadAssetResourceIntoScene(DecomposedFilePath decompose
 
 	std::string prefab_path = decomposed_file_path.file_path + ".prefab";
 
-	App->scene_manager->LoadPrefab(prefab_path.c_str());
+	//App->scene_manager->LoadPrefab(prefab_path.c_str());
 
 	return ret;
 }

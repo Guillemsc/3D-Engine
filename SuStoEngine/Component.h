@@ -6,6 +6,7 @@
 #include <string>
 #include "GeometryMath.h"
 #include "JSONLoader.h"
+#include "GameObjectAbstractor.h"
 
 class GameObject;
 
@@ -50,8 +51,8 @@ public:
 	virtual void OnGetBoundingBox(AABB &bbox) {};
 	virtual void InspectorDraw(std::vector<Component*> components) {};
 
-	virtual void OnLoadSerialize(JSON_Doc config) {};
-	virtual void OnSaveSerialize(JSON_Doc config) {};
+	virtual void OnLoadAbstraction(DataAbstraction& config) {};
+	virtual void OnSaveAbstraction(DataAbstraction& config) {};
 
 	void ForceUid(std::string uid);
 

@@ -112,6 +112,7 @@
     <ClInclude Include="FBO.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjectAbstractor.h" />
     <ClInclude Include="Geometry\AABB.h" />
     <ClInclude Include="Geometry\AABB2D.h" />
     <ClInclude Include="Geometry\Capsule.h" />
@@ -249,6 +250,7 @@
     <ClCompile Include="FBO.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObjectAbstractor.cpp" />
     <ClCompile Include="Geometry\AABB.cpp" />
     <ClCompile Include="Geometry\Capsule.cpp" />
     <ClCompile Include="Geometry\Circle.cpp" />

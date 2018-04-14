@@ -6,6 +6,8 @@
 #include "Inspector.h"
 #include "ModuleInput.h"
 #include "JSONLoader.h"
+#include "ResourceManager.h"
+#include "ResourcePrefabLoader.h"
 
 Hierarchy::Hierarchy(bool start_enabled)
 {
@@ -114,6 +116,12 @@ void Hierarchy::PrintGoAndChildsRecursive(GameObject * go)
 		if (ImGui::Button("Delete"))
 		{
 			App->gameobj->DestroySelectedGameObjects();
+		}
+
+		if (ImGui::Button("Create Prefab"))
+		{
+			ResourcePrefabLoader* loader = (ResourcePrefabLoader*)App->resource_manager->GetLoader(ResourceType::RT_PREFAB);
+			loader->CreatePrefab(*App->gameobj->GetSelectedGameObjects().begin());
 		}
 
 		ImGui::EndPopup();

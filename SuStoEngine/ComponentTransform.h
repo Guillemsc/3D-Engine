@@ -3,6 +3,7 @@
 
 #include "GeometryMath.h"
 #include "Component.h"
+#include "GameObjectAbstractor.h"
 
 class GameObject;
 
@@ -43,8 +44,8 @@ private:
 	void OnEnable();
 	void OnDisable();
 
-	void OnLoadSerialize(JSON_Doc config);
-	void OnSaveSerialize(JSON_Doc config);
+	void OnLoadAbstraction(DataAbstraction& abs);
+	void OnSaveAbstraction(DataAbstraction& abs);
 
 private:
 	float4x4 local_transform = float4x4::identity;

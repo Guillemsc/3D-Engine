@@ -480,6 +480,9 @@
     <ClInclude Include="ResourcePrefab.h">
       <Filter>Sources\5. Resources =============</Filter>
     </ClInclude>
+    <ClInclude Include="GameObjectAbstractor.h">
+      <Filter>Sources\4. GameObjects ===========</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -787,6 +790,9 @@
     </ClCompile>
     <ClCompile Include="ResourcePrefab.cpp">
       <Filter>Sources\5. Resources =============</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectAbstractor.cpp">
+      <Filter>Sources\4. GameObjects ===========</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

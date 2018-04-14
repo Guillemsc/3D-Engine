@@ -9,10 +9,12 @@
 
 class ModuleGameObject;
 class UICanvas;
+class GameObjectAbstractor;
 
 class GameObject
 {
 	friend ModuleGameObject;
+	friend GameObjectAbstractor;
 
 public:
 	GameObject(std::string unique_id, ModuleGameObject* go_module);
@@ -64,8 +66,8 @@ public:
 
 	void OnChangeParent();
 
-	void OnSaveSerialize(JSON_Doc config);
-	void OnLoadSerialize(JSON_Doc config);
+	void OnLoadAbstraction(DataAbstraction& abs);
+	void OnSaveAbstraction(DataAbstraction& abs);
 
 	void SetDraw(bool set);
 
