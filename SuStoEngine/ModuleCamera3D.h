@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __MODULE_CAMERA3D_H__
+#define __MODULE_CAMERA3D_H__
 
 #include "Module.h"
 #include "Globals.h"
@@ -115,3 +116,5 @@ private:
 	float wheel_speed = 0.0f;
 	float mouse_sensitivity = 0.0f;
 };
+
+#endif // !__MODULE_CAMERA3D_H__

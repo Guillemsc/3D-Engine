@@ -11,7 +11,7 @@
 #include "ModuleGameObject.h"
 #include "ResourcePrefabLoader.h"
 
-ResourceManager::ResourceManager(bool start_enabled)
+ResourceManager::ResourceManager(bool start_enabled) : Module(start_enabled)
 {
 
 }

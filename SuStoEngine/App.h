@@ -25,6 +25,7 @@ class Configuration;
 class FileSystem;
 class SceneManager;
 class ResourceManager;
+class ModuleEventSystem;
 
 class Application
 {
@@ -88,6 +89,7 @@ public:
 	FileSystem*		   file_system = nullptr;
 	SceneManager*	   scene_manager = nullptr;
 	ResourceManager*   resource_manager = nullptr;
+	ModuleEventSystem* event_system = nullptr;
 
 	Profiler*		   profiler = nullptr;
 	IDGen*		       id = nullptr;

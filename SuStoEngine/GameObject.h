@@ -10,6 +10,7 @@
 class ModuleGameObject;
 class UICanvas;
 class GameObjectAbstractor;
+class Event;
 
 class GameObject
 {
@@ -72,7 +73,10 @@ public:
 	void SetDraw(bool set);
 
 	void SetDebugDraw(bool set);
- 
+
+	void OnChangeParent(Event ev);
+	void OnDestroy(Event ev);
+
 private:
 	void DrawBBox();
 

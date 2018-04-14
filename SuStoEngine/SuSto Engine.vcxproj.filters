@@ -482,6 +482,9 @@
     </ClInclude>
     <ClInclude Include="GameObjectAbstractor.h">
       <Filter>Sources\4. GameObjects ===========</Filter>
+	</ClInclude>
+    <ClInclude Include="ModuleEventSystem.h">
+      <Filter>Sources\2. Modules ==============</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -793,6 +796,9 @@
     </ClCompile>
     <ClCompile Include="GameObjectAbstractor.cpp">
       <Filter>Sources\4. GameObjects ===========</Filter>
+	</ClCompile>
+    <ClCompile Include="ModuleEventSystem.cpp">
+      <Filter>Sources\2. Modules ==============</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
