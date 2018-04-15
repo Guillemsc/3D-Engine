@@ -188,8 +188,8 @@ void EditorUI::SaveLayoutsInfo()
 	if (layout == nullptr)
 		layout = App->json->LoadJSON("layout.json");
 
-	if (layout == nullptr)
-		layout = App->json->CreateJSON("layout.json");
+	/*if (layout == nullptr)*/
+		//layout = App->json->CreateJSON("layout.json");
 
 	if (layout != nullptr)
 	{

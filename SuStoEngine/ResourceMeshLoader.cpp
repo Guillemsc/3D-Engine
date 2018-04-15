@@ -109,21 +109,21 @@ bool ResourceMeshLoader::LoadFileToEngine(DecomposedFilePath d_filepath, std::ve
 		//App->scene_manager->SavePrefab((d_filepath.file_name + "." + d_filepath.file_extension).c_str(), "prefab", assets_path.c_str(), parent);
 
 		// Crate meta
-		std::string meta_path = (assets_path + d_filepath.file_name + "." + d_filepath.file_extension + ".meta");
-		JSON_Doc* doc = App->json->CreateJSON(meta_path.c_str());
-		if (doc != nullptr)
-		{
-			std::string uid = doc->GetString("uid", "no_uid");
-			doc->SetArray("resources");
+		//std::string meta_path = (assets_path + d_filepath.file_name + "." + d_filepath.file_extension + ".meta");
+		//JSON_Doc* doc = App->json->CreateJSON(meta_path.c_str());
+		//if (doc != nullptr)
+		//{
+		//	std::string uid = doc->GetString("uid", "no_uid");
+		//	doc->SetArray("resources");
 
-			for (std::vector<Resource*>::iterator it = resources.begin(); it != resources.end(); ++it)
-			{
-				doc->AddStringToArray("resources", (*it)->GetUniqueId().c_str());
-			}
+		//	for (std::vector<Resource*>::iterator it = resources.begin(); it != resources.end(); ++it)
+		//	{
+		//		doc->AddStringToArray("resources", (*it)->GetUniqueId().c_str());
+		//	}
 
-			doc->Save();
-			App->json->UnloadJSON(doc);
-		}
+		//	doc->Save();
+		//	App->json->UnloadJSON(doc);
+		//}
 	}
 
 	return ret;
@@ -243,8 +243,8 @@ bool ResourceMeshLoader::ExportResourceToLibrary(Resource * resource)
 		string meta_name = library_path + name + ".meta";
 
 		JSON_Doc* doc = App->json->LoadJSON(meta_name.c_str());
-		if (doc == nullptr)
-			doc = App->json->CreateJSON(meta_name.c_str());
+	/*	if (doc == nullptr)
+			doc = App->json->CreateJSON(meta_name.c_str());*/
 
 		if (doc != nullptr)
 		{

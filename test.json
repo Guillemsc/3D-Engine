@@ -1,0 +1,130 @@
+{
+    "GameObjectsCount": 3,
+    "GameObject_0": {
+        "id": 0,
+        "bools_count": 1,
+        "bool_name_0": "static",
+        "bool_value_0": false,
+        "strings_count": 1,
+        "string_name_0": "name",
+        "string_value_0": "BakerHouse(19)",
+        "Components": [
+            {
+                "ints_count": 1,
+                "int_name_0": "type",
+                "int_value_0": 0,
+                "floats3_count": 2,
+                "float3_name_0": "position",
+                "float3_value_0": [
+                    0,
+                    0,
+                    0
+                ],
+                "float3_name_1": "scale",
+                "float3_value_1": [
+                    1,
+                    1,
+                    1
+                ],
+                "floats4_count": 1,
+                "float4_name_0": "rotation",
+                "float4_value_0": [
+                    0,
+                    0,
+                    0,
+                    1
+                ]
+            }
+        ]
+    },
+    "GameObject_1": {
+        "id": 1,
+        "bools_count": 1,
+        "bool_name_0": "static",
+        "bool_value_0": false,
+        "strings_count": 1,
+        "string_name_0": "name",
+        "string_value_0": "Chimney",
+        "Components": [
+            {
+                "ints_count": 1,
+                "int_name_0": "type",
+                "int_value_0": 0,
+                "floats3_count": 2,
+                "float3_name_0": "position",
+                "float3_value_0": [
+                    0,
+                    0,
+                    0
+                ],
+                "float3_name_1": "scale",
+                "float3_value_1": [
+                    100,
+                    100,
+                    100
+                ],
+                "floats4_count": 1,
+                "float4_name_0": "rotation",
+                "float4_value_0": [
+                    -0.7071068286895752,
+                    0,
+                    0.70710670948028564,
+                    0
+                ]
+            },
+            {
+                "ints_count": 1,
+                "int_name_0": "type",
+                "int_value_0": 1,
+                "strings_count": 1,
+                "string_name_0": "mesh_id",
+                "string_value_0": "3f729df1"
+            }
+        ]
+    },
+    "GameObject_2": {
+        "id": 2,
+        "bools_count": 1,
+        "bool_name_0": "static",
+        "bool_value_0": false,
+        "strings_count": 1,
+        "string_name_0": "name",
+        "string_value_0": "Baker_house",
+        "Components": [
+            {
+                "ints_count": 1,
+                "int_name_0": "type",
+                "int_value_0": 0,
+                "floats3_count": 2,
+                "float3_name_0": "position",
+                "float3_value_0": [
+                    0,
+                    0,
+                    0
+                ],
+                "float3_name_1": "scale",
+                "float3_value_1": [
+                    100,
+                    100,
+                    100
+                ],
+                "floats4_count": 1,
+                "float4_name_0": "rotation",
+                "float4_value_0": [
+                    -0.7071068286895752,
+                    0,
+                    0.70710670948028564,
+                    0
+                ]
+            },
+            {
+                "ints_count": 1,
+                "int_name_0": "type",
+                "int_value_0": 1,
+                "strings_count": 1,
+                "string_name_0": "mesh_id",
+                "string_value_0": "48a2108c"
+            }
+        ]
+    }
+}

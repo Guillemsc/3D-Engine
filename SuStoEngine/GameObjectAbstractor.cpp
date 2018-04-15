@@ -137,23 +137,102 @@ void GameObjectAbstractor::Serialize(GameObjectAbstraction abs, const char* path
 
 			if (doc != nullptr)
 			{
-				doc->SetArray("GameObjects");
-
 				int curr_go_count = 0;
-
-				for (std::vector<IDRelation>::iterator it = abs.id_relations.begin(); it != abs.id_relations.end(); ++it)
+				doc->SetNumber("GameObjectsCount", abs.id_relations.size());
+				for (std::vector<IDRelation>::iterator it = abs.id_relations.begin(); it != abs.id_relations.end(); ++it, ++curr_go_count)
 				{
-					std::string curr_go_section_name = "GameObject_" + std::to_string(curr_go_count);
+					doc->MoveToRoot();
 
-					doc->AddSectionToArray(curr_go_section_name);
-					if (doc->MoveToSection(curr_go_section_name));
+					std::string curr_go_section_name = "GameObject_" + std::to_string(curr_go_count);
+					doc->AddSection(curr_go_section_name);
+
+					if (doc->MoveToSection(curr_go_section_name))
 					{
-						
+						JSON_Doc go_node = doc->GetJsonNode();
+
+						go_node.SetNumber("id", (*it).id);
+
+						(*it).data_game_object.Serialize(go_node);
+
+						doc->SetArray("Components");
+
+						bool curr_comp_count = 0;
+						for (std::vector<DataAbstraction>::iterator comp = (*it).data_components.begin(); comp != (*it).data_components.end(); ++comp, ++curr_comp_count)
+						{
+							JSON_Doc comp_node = doc->GetJsonNode();
+
+							comp_node.AddSectionToArray("Components");
+
+							if (comp_node.MoveToSectionFromArray("Components", curr_comp_count))
+							{
+								(*comp).Serialize(comp_node);
+							}
+						}
+
 					}
 				}
+
+				doc->Save();
+				doc->MoveToRoot();
 			}
 		}
 	}
+}
+
+GameObjectAbstraction GameObjectAbstractor::DeSerialize(const char * filepath)
+{
+	GameObjectAbstraction ret;
+
+	if (App->file_system->FileExists(filepath))
+	{
+		JSON_Doc* doc = App->json->LoadJSON(filepath);
+
+		if (doc != nullptr)
+		{
+			int game_objects_count = doc->GetNumber("GameObjectsCount", 0);
+
+			for (int i = 0; i < game_objects_count; ++i)
+			{
+				doc->MoveToRoot();
+
+				std::string curr_go_section_name = "GameObject_" + std::to_string(i);
+
+				if (doc->MoveToSection(curr_go_section_name))
+				{
+					JSON_Doc go_node = doc->GetJsonNode();
+
+					IDRelation go_relation;
+					int id = go_node.GetNumber("id", -1);
+					if (id != -1)
+					{
+						go_relation.id = id;
+						go_relation.data_game_object.DeSerialize(go_node);
+
+						int components_count = go_node.GetArrayCount("Components");
+
+						for (int c = 0; c < components_count; ++c)
+						{
+							JSON_Doc comp_node = go_node;
+
+							if (comp_node.MoveToSectionFromArray("Components", c))
+							{
+								DataAbstraction comp_data;
+								comp_data.DeSerialize(comp_node);
+
+								go_relation.data_components.push_back(comp_data);
+							}
+						}
+
+						ret.id_relations.push_back(go_relation);
+					}
+				}
+			}
+
+			doc->MoveToRoot();
+		}
+	}
+
+	return ret;
 }
 
 GameObjectAbstraction::GameObjectAbstraction()
@@ -243,6 +322,16 @@ int GameObjectAbstraction::GetIdFromGo(GameObject * go)
 	}
 
 	return ret;
+}
+
+void DataAbstraction::Clear()
+{
+	ints.clear();
+	bools.clear();
+	floats.clear();
+	strings.clear();
+	floats3.clear();
+	floats4.clear();
 }
 
 void DataAbstraction::AddInt(std::string name, int val)
@@ -339,7 +428,9 @@ void DataAbstraction::Serialize(JSON_Doc doc)
 {
 	int counter = 0;
 
-	doc.SetNumber("ints_count", ints.count);
+	if(ints.size() > 0)
+		doc.SetNumber("ints_count", ints.size());
+
 	for (std::map<std::string, int>::iterator it = ints.begin(); it != ints.end(); ++it)
 	{
 		std::string int_name = "int_name_" + std::to_string(counter);
@@ -352,7 +443,9 @@ void DataAbstraction::Serialize(JSON_Doc doc)
 	}
 	
 	counter = 0;
-	doc.SetNumber("bools_count", bools.count);
+	if(bools.size() > 0)
+		doc.SetNumber("bools_count", bools.size());
+
 	for (std::map<std::string, bool>::iterator it = bools.begin(); it != bools.end(); ++it)
 	{
 		std::string bool_name = "bool_name_" + std::to_string(counter);
@@ -365,7 +458,9 @@ void DataAbstraction::Serialize(JSON_Doc doc)
 	}
 
 	counter = 0;
-	doc.SetNumber("floats_count", floats.count);
+	if(floats.size() > 0)
+		doc.SetNumber("floats_count", floats.size());
+
 	for (std::map<std::string, float>::iterator it = floats.begin(); it != floats.end(); ++it)
 	{
 		std::string float_name = "float_name_" + std::to_string(counter);
@@ -377,7 +472,9 @@ void DataAbstraction::Serialize(JSON_Doc doc)
 	}
 
 	counter = 0;
-	doc.SetNumber("strings_count", strings.count);
+	if(strings.size() > 0)
+		doc.SetNumber("strings_count", strings.size());
+
 	for (std::map<std::string, std::string>::iterator it = strings.begin(); it != strings.end(); ++it)
 	{
 		std::string string_name = "string_name_" + std::to_string(counter);
@@ -390,7 +487,9 @@ void DataAbstraction::Serialize(JSON_Doc doc)
 	}
 
 	counter = 0;
-	doc.SetNumber("floats3_count", floats3.count);
+	if(floats3.size() > 0)
+		doc.SetNumber("floats3_count", floats3.size());
+
 	for (std::map<std::string, float3>::iterator it = floats3.begin(); it != floats3.end(); ++it)
 	{
 		std::string float3_name = "float3_name_" + std::to_string(counter);
@@ -403,7 +502,9 @@ void DataAbstraction::Serialize(JSON_Doc doc)
 	}
 
 	counter = 0;
-	doc.SetNumber("floats4_count", floats4.count);
+	if(floats4.size() > 0)
+		doc.SetNumber("floats4_count", floats4.size());
+
 	for (std::map<std::string, float4>::iterator it = floats4.begin(); it != floats4.end(); ++it)
 	{
 		std::string float4_name = "float4_name_" + std::to_string(counter);
@@ -427,31 +528,67 @@ void DataAbstraction::DeSerialize(JSON_Doc doc)
 
 	for (int i = 0; i < ints_count; ++i)
 	{
+		std::string int_name = "int_name_" + std::to_string(i);
+		std::string int_value = "int_value_" + std::to_string(i);
 
+		std::string name = doc.GetString(int_name.c_str());
+		int val = doc.GetNumber(int_value.c_str());
+
+		AddInt(name, val);
 	}
 
 	for (int i = 0; i < bools_count; ++i)
 	{
+		std::string bool_name = "bool_name_" + std::to_string(i);
+		std::string bool_value = "bool_value_" + std::to_string(i);
 
+		std::string name = doc.GetString(bool_name.c_str());
+		bool val = doc.GetBool(bool_value.c_str());
+
+		AddBool(name, val);
 	}
 
 	for (int i = 0; i < floats_count; ++i)
 	{
+		std::string float_name = "float_name_" + std::to_string(i);
+		std::string float_value = "float_value_" + std::to_string(i);
 
+		std::string name = doc.GetString(float_name.c_str());
+		float val = doc.GetNumber(float_value.c_str());
+
+		AddFloat(name, val);
 	}
 
 	for (int i = 0; i < strings_count; ++i)
 	{
+		std::string string_name = "string_name_" + std::to_string(i);
+		std::string string_value = "string_value_" + std::to_string(i);
 
+		std::string name = doc.GetString(string_name.c_str());
+		std::string val = doc.GetString(string_value.c_str());
+
+		AddString(name, val);
 	}
 
 	for (int i = 0; i < floats3_count; ++i)
 	{
+		std::string float3_name = "float3_name_" + std::to_string(i);
+		std::string float3_value = "float3_value_" + std::to_string(i);
 
+		std::string name = doc.GetString(float3_name.c_str());
+		float3 val = doc.GetNumber3(float3_value.c_str());
+
+		AddFloat3(name, val);
 	}
 
 	for (int i = 0; i < floats4_count; ++i)
 	{
+		std::string float4_name = "float4_name_" + std::to_string(i);
+		std::string float4_value = "float4_value_" + std::to_string(i);
 
+		std::string name = doc.GetString(float4_name.c_str());
+		float4 val = doc.GetNumber4(float4_value.c_str());
+
+		AddFloat4(name, val);
 	}
 }

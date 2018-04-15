@@ -11,11 +11,14 @@ enum ComponentType;
 class GameObject;
 class GameObjectAbstractor;
 class GameObjectAbstraction;
+class JSON_Doc;
 
 class DataAbstraction
 {
 public:
 	DataAbstraction() {}
+
+	void Clear();
 
 	void AddInt(std::string name, int val);
 	void AddBool(std::string name, bool val);
@@ -49,6 +52,7 @@ class IDRelation
 	friend GameObjectAbstractor;
 
 public:
+	IDRelation(){}
 	IDRelation(int _id, GameObject* _go)
 	{
 		id = _id;

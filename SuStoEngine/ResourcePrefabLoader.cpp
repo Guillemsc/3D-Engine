@@ -95,6 +95,9 @@ ResourcePrefab * ResourcePrefabLoader::CreatePrefab(GameObject * go)
 
 	App->gameobj->GetAbstractor()->DeAbstract(abs);
 
+	App->gameobj->GetAbstractor()->Serialize(abs, "C:\\Users\\Guillem\\Documents\\GitHub\\3D-Engine\\", "test");
+	App->gameobj->GetAbstractor()->DeSerialize("C:\\Users\\Guillem\\Documents\\GitHub\\3D-Engine\\test.json");
+
 	return rprefab;
 }
 
