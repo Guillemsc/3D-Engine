@@ -746,6 +746,34 @@ std::vector<std::string> FileSystem::GetFilesInPathAndChilds(const char * path)
 	return ret;
 }
 
+Folder FileSystem::GetFilesAndFoldersTree(const char * path)
+{
+	return GetFoldersRecursive(path);
+}
+
+Folder FileSystem::GetFoldersRecursive(const char * path)
+{
+	Folder ret;
+
+	if (FolderExists(path))
+	{
+		std::vector<std::string> new_directories = App->file_system->GetFoldersInPath(path);
+
+		ret.files = App->file_system->GetFilesInPath(path);
+
+		ret.folder_path = path;
+
+		for (std::vector<std::string>::iterator it = new_directories.begin(); it != new_directories.end(); ++it)
+		{
+			Folder to_add = GetFoldersRecursive((*it).c_str());
+
+			ret.folders.push_back(to_add);
+		}
+	}
+
+	return ret;
+}
+
 bool FileSystem::FileExists(const char * path, const char * name, const char * extension)
 {
 	WIN32_FIND_DATA search_data;

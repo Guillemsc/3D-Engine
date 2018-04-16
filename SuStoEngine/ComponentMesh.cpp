@@ -42,7 +42,7 @@ void ComponentMesh::SetMesh(ResourceMesh* _mesh)
 	{
 		mesh = _mesh;
 
-		mesh->LoadMem();
+		mesh->StartUsing();
 
 		has_mesh = true;
 	}
@@ -52,7 +52,7 @@ void ComponentMesh::RemoveMesh()
 {
 	if (mesh != nullptr)
 	{
-		mesh->UnloadMem();
+		mesh->StopUsing();
 
 		mesh = nullptr;
 		has_mesh = false;

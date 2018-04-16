@@ -16,8 +16,8 @@ public:
 
 	void CleanUp();
 
-	void SetAbstraction(const GameObjectAbstraction& abstraction);
-	GameObjectAbstraction GetAbstraction() const;
+	void SetGameObject(GameObject* go);
+	void Instantiate(GameObject* parent = nullptr);
 
 private:
 

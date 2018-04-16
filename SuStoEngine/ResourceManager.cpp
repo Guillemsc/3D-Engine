@@ -35,6 +35,8 @@ bool ResourceManager::Awake()
 	mesh_loader->AddLibraryExtensionToLoad("dds");
 
 	ResourcePrefabLoader* prefab_loader = new ResourcePrefabLoader();
+	prefab_loader->AddAssetExtensionToLoad("prefab");
+	prefab_loader->AddLibraryExtensionToLoad("prefab");
 
 	AddLoader(mesh_loader);
 	AddLoader(texture_loader);

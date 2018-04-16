@@ -37,7 +37,7 @@ void ComponentMaterial::SetTexture(ResourceTexture* text)
 
 	if (texture != nullptr)
 	{
-		texture->LoadMem();
+		texture->StartUsing();
 		has_texture = true;
 	}
 }
@@ -46,7 +46,7 @@ void ComponentMaterial::RemoveTexture()
 {
 	if (texture != nullptr)
 	{
-		texture->UnloadMem();
+		texture->StopUsing();
 
 		texture = nullptr;
 		has_texture = false;

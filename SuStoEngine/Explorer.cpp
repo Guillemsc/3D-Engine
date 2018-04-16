@@ -24,12 +24,6 @@ Explorer::~Explorer()
 
 void Explorer::Start()
 {
-	//ResourceTextureLoader loader;
-	//fbx_icon = loader.LoadTexture("UI\\FBX_icon.png").id;
-	//png_icon = loader.LoadTexture("UI\\PNG_icon.png").id;
-	//tga_icon = loader.LoadTexture("UI\\TGA_icon.png").id;
-	//folder_icon = loader.LoadTexture("UI\\FOLDER_icon.png").id;
-
 	App->file_system->SetLookingPath(App->file_system->GetAssetsPath().c_str());
 }
 
@@ -55,124 +49,56 @@ void Explorer::Draw()
 		ImGui::EndMenuBar();
 	}
 
-	vector<string> files = App->file_system->GetFilesAndFoldersInPath(looking_path.c_str());
-	//files = OrderFiles(files);
-
-	int i = 0;
-	for (vector<string>::iterator it = files.begin(); it != files.end(); ++it)
-	{
-		string path = App->file_system->GetPathFromFilePath((*it).c_str());
-		string filename = App->file_system->GetFileNameFromFilePath((*it).c_str());
-		string extension = App->file_system->GetFileExtension(filename.c_str());
-		extension = ToLowerCase(extension);
-		string name = App->file_system->GetFilenameWithoutExtension(filename.c_str());
-
-		if (TextCmp(filename.c_str(), ".") || TextCmp(filename.c_str(), "..") || TextCmp(extension.c_str(), "meta") || TextCmp(extension.c_str(), "prefab"))
-			continue;
-
-		if (TextCmp(extension.c_str(), "fbx"))
-			type = ExtensionType::FBX;
-		else if (TextCmp(extension.c_str(), "png"))
-			type = ExtensionType::PNG;
-		else if (TextCmp(extension.c_str(), "tga"))
-			type = ExtensionType::TGA;
-		else
-			type = ExtensionType::FOLDER;
-		
-		// set current icon
-		switch (type)
-		{
-		case FOLDER:
-			current_icon = folder_icon;
-			break;
-		case FBX:
-			current_icon = fbx_icon;
-			break;
-		case PNG:
-			current_icon = png_icon;
-			break;
-		case TGA:
-			current_icon = tga_icon;
-			break;
-		}
-
-		ImGui::ImageButtonWithTextDOWN((ImTextureID*)current_icon, filename.c_str(), ImVec2(50, 50), ImVec2(-1, 1), ImVec2(0, 0), 10);
-
-		// Actions with the icons
-		switch (type)
-		{
-		case FOLDER:
-			if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
-				App->file_system->SetLookingPath(path + filename + "\\");
-
-			break;
-		case FBX:
-			if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsMouseHoveringRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax()))
-				App->resource_manager->LoadAssetResourceIntoScene((*it).c_str());
-
-			break;
-		case PNG:
-
-			break;
-		case TGA:
-
-			break;
-		}
+	Folder folders = App->file_system->GetFilesAndFoldersTree(looking_path.c_str());
 
 		// Options ----------
-		ImGui::PushID(name.c_str());
-		if (ImGui::BeginPopupContextItem("HerarchyPopup"))
-		{
-			if (ImGui::Button("Load"))
-			{
-				App->resource_manager->LoadAssetResourceIntoScene((*it).c_str());
-			}
-			if (ImGui::Button("Delete"))
-			{
-				path_delete = (*it).c_str();
-				App->resource_manager->UnloadAssetFromEngine(path_delete.c_str());
-				ImGui::OpenPopup("Delete PopUp");
-			}
-			if (ImGui::Button("Rename"))
-			{
+	//ImGui::PushID(name.c_str());
+	//if (ImGui::BeginPopupContextItem("HerarchyPopup"))
+	//{
+	//	if (ImGui::Button("Load"))
+	//	{
+	//		App->resource_manager->LoadAssetResourceIntoScene((*it).c_str());
+	//	}
+	//	if (ImGui::Button("Delete"))
+	//	{
+	//		path_delete = (*it).c_str();
+	//		App->resource_manager->UnloadAssetFromEngine(path_delete.c_str());
+	//		ImGui::OpenPopup("Delete PopUp");
+	//	}
+	//	if (ImGui::Button("Rename"))
+	//	{
 
-			}
-			if (ImGui::Button("Show in Explorer"))
-			{
-				App->GoToFolder(path.c_str());
-			}
-			if (ImGui::Button("Open"))
-			{
-				App->GoToFolder((*it).c_str());
-			}
-			ImGui::EndPopup();
-		}
-		ImGui::PopID();
-		// -------------------
+	//	}
+	//	if (ImGui::Button("Show in Explorer"))
+	//	{
+	//		App->GoToFolder(path.c_str());
+	//	}
+	//	if (ImGui::Button("Open"))
+	//	{
+	//		App->GoToFolder((*it).c_str());
+	//	}
+	//	ImGui::EndPopup();
+	//}
+	//ImGui::PopID();
+	// -------------------
 
-	if (i < MAX_FILES_HORIZONTAL)
-		ImGui::SameLine();
-	else
-		i = -1;
-	}
+	//if (ImGui::BeginPopupModal("Delete PopUp", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+	//{
+	//	ImGui::Text("Are you sure you want to delete this file?");
+	//	ImGui::Separator();
 
-	if (ImGui::BeginPopupModal("Delete PopUp", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
-	{
-		ImGui::Text("Are you sure you want to delete this file?");
-		ImGui::Separator();
-
-		if (ImGui::Button("Yes, I'm sure", ImVec2(160, 0)))
-		{
-			App->resource_manager->UnloadAssetFromEngine(path_delete.c_str());
-			ImGui::CloseCurrentPopup();
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("No, cancel this action", ImVec2(160, 0)))
-		{
-			ImGui::CloseCurrentPopup();
-		}
-		ImGui::EndPopup();
-	}
+	//	if (ImGui::Button("Yes, I'm sure", ImVec2(160, 0)))
+	//	{
+	//		App->resource_manager->UnloadAssetFromEngine(path_delete.c_str());
+	//		ImGui::CloseCurrentPopup();
+	//	}
+	//	ImGui::SameLine();
+	//	if (ImGui::Button("No, cancel this action", ImVec2(160, 0)))
+	//	{
+	//		ImGui::CloseCurrentPopup();
+	//	}
+	//	ImGui::EndPopup();
+	//}
 	
 
 	ImGui::EndDock();

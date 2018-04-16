@@ -41,7 +41,7 @@ int Resource::UsedCount()
 	return count_ref;
 }
 
-void Resource::LoadMem()
+void Resource::StartUsing()
 {
 	if (!IsUsed())
 		LoadToMemory();
@@ -49,7 +49,7 @@ void Resource::LoadMem()
 	count_ref++;
 }
 
-void Resource::UnloadMem()
+void Resource::StopUsing()
 {
 	count_ref--;
 

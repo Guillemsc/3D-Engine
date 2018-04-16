@@ -38,8 +38,8 @@ public:
 	bool IsUsed();
 	int  UsedCount();
 
-	void LoadMem();
-	void UnloadMem();
+	void StartUsing();
+	void StopUsing();
 
 private:
 	virtual void LoadToMemory() {};
@@ -50,7 +50,7 @@ private:
 	std::string  unique_id;
 	int			 count_ref = 0;
 
-	std::string file_name;
+	std::string  file_name;
 };
 
 #endif

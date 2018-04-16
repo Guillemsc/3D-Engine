@@ -99,6 +99,7 @@ private:
 
 	GameObject* GetGoFromId(int id);
 	int GetIdFromGo(GameObject* go);
+	int GetParentFromId(int id);
 
 private:
 	std::vector<GORelation> go_relations;

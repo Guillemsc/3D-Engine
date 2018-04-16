@@ -63,11 +63,19 @@ GameObject * GameObjectAbstractor::DeAbstract(GameObjectAbstraction abs)
 {
 	GameObject* ret = nullptr;
 
+	bool first_go = true;
+
 	if (abs.GetValid())
 	{
 		for (std::vector<IDRelation>::iterator it = abs.id_relations.begin(); it != abs.id_relations.end(); ++it)
 		{
 			GameObject* obj = App->gameobj->Create();
+
+			if (first_go)
+			{
+				ret = obj;
+				first_go = false;
+			}
 
 			if (obj != nullptr)
 			{
@@ -151,6 +159,7 @@ void GameObjectAbstractor::Serialize(GameObjectAbstraction abs, const char* path
 						JSON_Doc go_node = doc->GetJsonNode();
 
 						go_node.SetNumber("id", (*it).id);
+						go_node.SetNumber("parent_id", abs.GetParentFromId((*it).id));
 
 						(*it).data_game_object.Serialize(go_node);
 
@@ -203,9 +212,16 @@ GameObjectAbstraction GameObjectAbstractor::DeSerialize(const char * filepath)
 
 					IDRelation go_relation;
 					int id = go_node.GetNumber("id", -1);
+					int parent_id = go_node.GetNumber("parent_id", -1);
 					if (id != -1)
 					{
 						go_relation.id = id;
+
+						if (parent_id != -1)
+						{
+							ret.AddRelation(id, parent_id);
+						}
+
 						go_relation.data_game_object.DeSerialize(go_node);
 
 						int components_count = go_node.GetArrayCount("Components");
@@ -229,6 +245,7 @@ GameObjectAbstraction GameObjectAbstractor::DeSerialize(const char * filepath)
 			}
 
 			doc->MoveToRoot();
+			ret.valid = true;
 		}
 	}
 
@@ -317,6 +334,22 @@ int GameObjectAbstraction::GetIdFromGo(GameObject * go)
 		if ((*it).go == go)
 		{
 			ret = (*it).id;
+			break;
+		}
+	}
+
+	return ret;
+}
+
+int GameObjectAbstraction::GetParentFromId(int id)
+{
+	int ret = -1;
+
+	for (std::vector<GORelation>::iterator it = go_relations.begin(); it != go_relations.end(); ++it)
+	{
+		if ((*it).id == id)
+		{
+			ret = (*it).id_parent;
 			break;
 		}
 	}

@@ -1,4 +1,8 @@
 #include "ResourcePrefab.h"
+#include "App.h"
+#include "GameObject.h"
+#include "ModuleGameObject.h"
+#include "GameObjectAbstractor.h"
 
 ResourcePrefab::ResourcePrefab(std::string unique_id) : Resource(unique_id, ResourceType::RT_PREFAB)
 {
@@ -12,12 +16,23 @@ void ResourcePrefab::CleanUp()
 {
 }
 
-void ResourcePrefab::SetAbstraction(const GameObjectAbstraction & _abstraction)
+void ResourcePrefab::SetGameObject(GameObject * go)
 {
-	abstraction = _abstraction;
+	abstraction = App->gameobj->GetAbstractor()->Abstract(go);
 }
 
-GameObjectAbstraction ResourcePrefab::GetAbstraction() const
+void ResourcePrefab::Instantiate(GameObject * parent)
 {
-	return abstraction;
+	if (abstraction.GetValid())
+	{
+		GameObject* instance = App->gameobj->GetAbstractor()->DeAbstract(abstraction);
+
+		if (instance != nullptr)
+		{
+			if (parent != nullptr)
+			{
+				parent->AddChild(instance);
+			}
+		}
+	}
 }

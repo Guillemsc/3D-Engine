@@ -11,7 +11,7 @@ class GameObject;
 class ResourceLoader
 {
 public:
-	ResourceLoader(ResourceType resources_to_load, std::string assets_path, std::string library_path);
+	ResourceLoader(ResourceType resources_to_load, std::string library_path);
 	virtual ~ResourceLoader();
 
 	// Extensions
@@ -63,7 +63,6 @@ public:
 
 protected:
 	ResourceType resources_to_load = ResourceType::RT_NULL;
-	std::string assets_path;
 	std::string library_path;
 
 	std::vector<std::string> assets_extensions_to_load;
