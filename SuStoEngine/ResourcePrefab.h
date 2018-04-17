@@ -17,7 +17,10 @@ public:
 	void CleanUp();
 
 	void SetGameObject(GameObject* go);
+	void SetAbstraction(const GameObjectAbstraction& abs);
 	void Instantiate(GameObject* parent = nullptr);
+
+	GameObjectAbstraction GetAbstraction() const;
 
 private:
 

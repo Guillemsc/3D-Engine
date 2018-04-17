@@ -21,6 +21,11 @@ void ResourcePrefab::SetGameObject(GameObject * go)
 	abstraction = App->gameobj->GetAbstractor()->Abstract(go);
 }
 
+void ResourcePrefab::SetAbstraction(const GameObjectAbstraction& abs)
+{
+	abstraction = abs;
+}
+
 void ResourcePrefab::Instantiate(GameObject * parent)
 {
 	if (abstraction.GetValid())
@@ -35,4 +40,9 @@ void ResourcePrefab::Instantiate(GameObject * parent)
 			}
 		}
 	}
+}
+
+GameObjectAbstraction ResourcePrefab::GetAbstraction() const
+{
+	return abstraction;
 }

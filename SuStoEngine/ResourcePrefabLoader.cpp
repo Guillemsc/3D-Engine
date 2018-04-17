@@ -27,25 +27,25 @@ bool ResourcePrefabLoader::LoadFileToEngine(DecomposedFilePath decomposed_file_p
 {
 	bool ret = true;
 
-	App->file_system->FileCopyPaste(decomposed_file_path.path.c_str(), library_path.c_str(), true);
+	JSON_Doc* doc = App->json->LoadJSON(decomposed_file_path.file_path.c_str());
+	if (doc != nullptr)
+	{
+		GameObjectAbstraction abs = App->gameobj->GetAbstractor()->DeSerialize(decomposed_file_path.file_path.c_str());
 
-	string meta_name = decomposed_file_path.file_path + ".meta";
-	JSON_Doc* doc = App->json->LoadJSON(meta_name.c_str());
+		ResourcePrefab* rprefab = (ResourcePrefab*)App->resource_manager->CreateNewResource(ResourceType::RT_PREFAB);
+		rprefab->SetAbstraction(abs);
 
-	//if (doc == nullptr)
-	//	doc = App->json->CreateJSON(meta_name.c_str());
 
-	//if (doc != nullptr)
-	//{
-	//	doc->Clear();
+		std::string meta_filepath = decomposed_file_path.file_path + ".meta";
 
-	//	doc->SetString("uid", mesh->GetUniqueId().c_str());
-	//	doc->SetString("name", mesh->GetFileName().c_str());
+		JSON_Doc* meta_doc = App->json->CreateJSON(meta_filepath.c_str());
+		if (meta_doc != nullptr)
+		{
+			meta_doc->SetString("resource", rprefab->GetUniqueId().c_str());
 
-	//	doc->Save();
-	//}
-
-	//App->json->UnloadJSON(doc);
+			ExportToLibrary(rprefab);
+		}
+	}
 
 	return ret;
 }
@@ -53,6 +53,49 @@ bool ResourcePrefabLoader::LoadFileToEngine(DecomposedFilePath decomposed_file_p
 bool ResourcePrefabLoader::UnloadAssetFromEngine(DecomposedFilePath decomposed_file_path)
 {
 	App->file_system->FileDelete(decomposed_file_path.file_path.c_str());
+
+	std::string meta_filepath = decomposed_file_path.file_path + ".meta";
+
+	JSON_Doc* meta_doc = App->json->LoadJSON(meta_filepath.c_str());
+	if (meta_doc != nullptr)
+	{
+		std::string resource_uid = meta_doc->GetString("resource");
+
+		std::string resource_filepath = library_path + resource_uid + ".prefab";
+
+		App->file_system->FileDelete(resource_filepath.c_str());
+
+		App->json->UnloadJSON(meta_doc);
+	}
+
+	App->file_system->FileDelete(meta_filepath.c_str());
+
+	return true;
+}
+
+bool ResourcePrefabLoader::ExportToLibrary(Resource * resource)
+{
+	bool ret = true;
+
+	ResourcePrefab* rprefab = (ResourcePrefab*)resource;
+
+	GameObjectAbstraction abs = rprefab->GetAbstraction();
+
+	if (abs.GetValid())
+	{
+		App->gameobj->GetAbstractor()->Serialize(abs, library_path.c_str(), rprefab->GetUniqueId().c_str(), "prefab");
+	}
+
+	return ret;
+}
+
+bool ResourcePrefabLoader::LoadIntoScene(Resource * resource)
+{
+	ResourcePrefab* rprefab = (ResourcePrefab*)resource;
+
+	GameObjectAbstraction abs = rprefab->GetAbstraction();
+
+	rprefab->Instantiate();
 
 	return true;
 }
