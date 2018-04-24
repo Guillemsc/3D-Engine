@@ -95,7 +95,7 @@ void Hierarchy::PrintGoAndChildsRecursive(GameObject * go)
 		// If shift is pressed do fill gap selection
 		else if (App->input->GetKeyRepeat(SDL_SCANCODE_LSHIFT) || App->input->GetKeyRepeat(SDL_SCANCODE_RSHIFT))
 		{
-
+		
 		}
 
 		// Monoselection

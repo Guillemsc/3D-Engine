@@ -16,9 +16,12 @@ struct DecomposedFilePath
 class Folder
 {
 public:
-	std::vector<std::string> files;
+	std::vector<DecomposedFilePath> files;
 	std::string folder_path;
+	std::string folder_name;
 	std::vector<Folder> folders;
+
+	bool valid = false;
 };
 
 class FileSystem : public Module
@@ -38,6 +41,7 @@ public:
 	bool FileCopyPaste(const char* filepath, const char* new_path, bool overwrite);
 	void FileCopyPasteWithNewName(const char* filepath, const char* new_path, const char* new_name);
 	bool FileDelete(const char* filepath);
+	bool FolderDelete(const char* folderpath);
 	bool FileSave(const char * path, const char * file_content, const char * name, const char * extension, int size);
 	std::vector<std::string> GetFilesAndFoldersInPath(const char* path, const char* extension = "");
 	std::vector<std::string> GetFoldersInPath(const char* path);
@@ -79,6 +83,9 @@ public:
 
 	// Example C:/user/folder/file.ex -> C:/user/folder/
 	std::string GetPathFromFilePath(const char* file_path);
+
+	// Example C:/user/folder/ -> folder
+	std::string GetFolderNameFromPath(const char* path);
 
 private:
 	Folder GetFoldersRecursive(const char* path);

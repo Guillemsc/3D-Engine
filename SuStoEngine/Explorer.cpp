@@ -24,32 +24,39 @@ Explorer::~Explorer()
 
 void Explorer::Start()
 {
-	App->file_system->SetLookingPath(App->file_system->GetAssetsPath().c_str());
+	looking_timer.Start();
+	update_folders = true;
 }
 
 void Explorer::Draw()
 {
-	ImGui::BeginDock("Explorer", false, &visible, false, ImGuiWindowFlags_MenuBar);	
-	
-	string looking_path = App->file_system->GetLookingPath();
-
-	if (ImGui::BeginMenuBar())
+	if (looking_timer.ReadSec() > 2.0f)
 	{
-		if (ImGui::MenuItem("Back"))
-		{
-			if (looking_path != App->file_system->GetAssetsPath())
-				App->file_system->SetLookingPath(GetParentDirectory(looking_path));
-		}
-
-		if (ImGui::MenuItem("New Folder"))
-		{
-			App->file_system->CreateFolder(looking_path.c_str(), "new_folder");
-		}
-
-		ImGui::EndMenuBar();
+		looking_timer.Start();
+		update_folders = true;
 	}
 
-	Folder folders = App->file_system->GetFilesAndFoldersTree(looking_path.c_str());
+	ImGui::BeginDock("Explorer", false, &visible, false, ImGuiWindowFlags_MenuBar);	
+
+	ImGui::Columns(2);
+
+	if (update_folders)
+	{
+		folders = App->file_system->GetFilesAndFoldersTree(App->file_system->GetAssetsPath().c_str());
+		update_folders = false;
+	}
+
+	DrawFoldersRecursive(folders);
+
+	ImGui::NextColumn();
+
+	if (looking_folder.valid)
+	{
+		for (std::vector<DecomposedFilePath>::iterator it = looking_folder.files.begin(); it != looking_folder.files.end(); ++it)
+		{
+			ImGui::Selectable((*it).file_name.c_str());
+		}
+	}
 
 		// Options ----------
 	//ImGui::PushID(name.c_str());
@@ -102,6 +109,89 @@ void Explorer::Draw()
 	
 
 	ImGui::EndDock();
+}
+
+void Explorer::UpdateFloders()
+{
+	update_folders = true;
+}
+
+void Explorer::DrawFoldersRecursive(Folder folder)
+{
+	uint flags = ImGuiTreeNodeFlags_OpenOnArrow;
+
+	if (folder.folder_path == App->file_system->GetAssetsPath().c_str())
+	{
+		ImGui::SetNextTreeNodeOpen(true);
+	}
+
+	if (looking_folder.valid && looking_folder.folder_path == folder.folder_path)
+	{
+		flags |= ImGuiTreeNodeFlags_Selected;
+
+		// Update looking folder files and paths
+		looking_folder = folder;
+	}
+
+	if (folder.folders.size() == 0)
+		flags |= ImGuiTreeNodeFlags_Leaf;
+
+	ImGui::PushID(folder.folder_path.c_str());
+	bool opened = ImGui::TreeNodeEx(folder.folder_name.c_str(), flags);
+	ImGui::PopID();
+
+	if (ImGui::IsItemClicked(0) || ImGui::IsItemClicked(1))
+	{
+		looking_folder = folder;
+
+		if (ImGui::IsItemClicked(1))
+		{
+			ImGui::OpenPopup("SelectedFolderPopup");
+		}
+	}
+
+	if (opened)
+	{
+		for (std::vector<Folder>::iterator it = folder.folders.begin(); it != folder.folders.end(); ++it)
+		{
+			DrawFoldersRecursive(*it);
+		}
+
+		ImGui::TreePop();
+	}
+
+	if (looking_folder.valid && looking_folder.folder_path == folder.folder_path)
+	{
+		if (ImGui::BeginPopupContextItem("SelectedFolderPopup"))
+		{
+			if (ImGui::Button("Create folder"))
+			{
+				App->file_system->CreateFolder(folder.folder_path.c_str(), "NewFolder");
+				ImGui::CloseCurrentPopup();
+			}
+
+			if (ImGui::Button("Show in Explorer"))
+			{
+				App->GoToFolder(folder.folder_path.c_str());
+				ImGui::CloseCurrentPopup();
+			}
+
+			if (ImGui::Button("Delete"))
+			{
+				App->file_system->FolderDelete(folder.folder_path.c_str());
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Import new Asset"))
+			{
+
+			}
+
+			ImGui::EndPopup();
+		}
+	}
 }
 
 //void Explorer::CleanUp()
@@ -178,16 +268,16 @@ void Explorer::Draw()
 //	return tmp;
 //}
 
-string Explorer::GetParentDirectory(string child)
-{
-	string parent;
-	
-	parent = child.substr(0, child.find_last_of("\\"));
-	parent = parent.substr(0, parent.find_last_of("\\"));
-	parent += "\\";
-
-	return parent;
-}
+//string Explorer::GetParentDirectory(string child)
+//{
+//	string parent;
+//	
+//	parent = child.substr(0, child.find_last_of("\\"));
+//	parent = parent.substr(0, parent.find_last_of("\\"));
+//	parent += "\\";
+//
+//	return parent;
+//}
 
 //void Explorer::DeleteFileInAssets(string path, string filename)
 //{

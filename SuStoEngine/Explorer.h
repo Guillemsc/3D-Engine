@@ -4,6 +4,8 @@
 #include "EditorUI.h"
 #include "Module.h"
 #include <vector>
+#include "ModuleFileSystem.h"
+#include "Timer.h"
 
 #define SPACING 10
 #define MAX_FILES_HORIZONTAL 8
@@ -19,15 +21,23 @@ public:
 
 	void Start();
 	void Draw();
+
+	void UpdateFloders();
 	//void CleanUp();
 
 	//vector<string> OrderFiles(vector<string> files);
-	string GetParentDirectory(string child);
 	//void DeleteFileInAssets(string path, string filename);
 
-public:
+private:
+	void DrawFoldersRecursive(Folder folder);
 
 private:
+	Folder folders;
+	Folder looking_folder;
+
+	Timer looking_timer;
+
+	bool update_folders = true;
 };
 
 #endif

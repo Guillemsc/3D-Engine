@@ -338,6 +338,33 @@ std::string FileSystem::GetPathFromFilePath(const char * file_path)
 	return ret;
 }
 
+std::string FileSystem::GetFolderNameFromPath(const char * path)
+{
+	std::string s_path = path;
+
+	std::string ret;
+
+	for (int i = 0; i < s_path.size(); ++i)
+	{
+		ret += s_path[i];
+
+		if (s_path[i] == '\\' && s_path.size()-1 != i)
+		{
+			ret.clear();
+		}
+	}
+
+	if (ret.size() > 0)
+	{
+		if (ret[ret.size() - 1] == '\\')
+		{
+			ret = ret.substr(0, ret.size() - 1);
+		}
+	}
+
+	return ret;
+}
+
 string FileSystem::CreateFolder(const char * path, const char * name)
 {
 	string ret;
@@ -538,6 +565,20 @@ bool FileSystem::FileDelete(const char * filepath)
 	}
 	else
 		ret = true;
+
+	return ret;
+}
+
+bool FileSystem::FolderDelete(const char * folderpath)
+{
+	bool ret = false;
+
+	if (RemoveDirectory(folderpath) != 0)
+		ret = true;
+	else
+	{		
+		CONSOLE_LOG("Error deleting path): %s", folderpath);
+	}
 
 	return ret;
 }
@@ -759,9 +800,18 @@ Folder FileSystem::GetFoldersRecursive(const char * path)
 	{
 		std::vector<std::string> new_directories = App->file_system->GetFoldersInPath(path);
 
-		ret.files = App->file_system->GetFilesInPath(path);
+		std::vector<std::string> files = App->file_system->GetFilesInPath(path);
+
+		for (std::vector<std::string>::iterator it = files.begin(); it != files.end(); ++it)
+		{
+			DecomposedFilePath dfp = DecomposeFilePath((*it));
+			ret.files.push_back(dfp);
+		}
 
 		ret.folder_path = path;
+		ret.folder_name = GetFolderNameFromPath(path);
+
+		ret.valid = true;
 
 		for (std::vector<std::string>::iterator it = new_directories.begin(); it != new_directories.end(); ++it)
 		{
