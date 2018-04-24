@@ -65,10 +65,19 @@ JSON_Doc* JSONLoader::CreateJSON(const char * path, const char* name, const char
 
 	std::string filepath = std::string(path) + std::string(name) + std::string(".") + std::string(extension);
 
+	ret = CreateJSON(filepath.c_str());
+
+	return ret;
+}
+
+JSON_Doc * JSONLoader::CreateJSON(const char * path)
+{
+	JSON_Doc* ret = nullptr;
+
 	bool exists = false;
 	for (list<JSON_Doc*>::iterator it = jsons.begin(); it != jsons.end(); it++)
 	{
-		if (TextCmp(filepath.c_str(), (*it)->GetPath().c_str()))
+		if (TextCmp(path, (*it)->GetPath().c_str()))
 		{
 			exists = true;
 			break;
@@ -77,7 +86,7 @@ JSON_Doc* JSONLoader::CreateJSON(const char * path, const char* name, const char
 
 	if (exists)
 	{
-		CONSOLE_LOG("Error creating %s. There is already a file with this path/name", filepath.c_str());
+		CONSOLE_LOG("Error creating %s. There is already a file with this path/name", path);
 	}
 	else
 	{
@@ -85,13 +94,13 @@ JSON_Doc* JSONLoader::CreateJSON(const char * path, const char* name, const char
 
 		if (root_value == nullptr)
 		{
-			CONSOLE_LOG("Error creating %s. Wrong path?", filepath.c_str());
+			CONSOLE_LOG("Error creating %s. Wrong path?", path);
 		}
 		else
 		{
 			JSON_Object* root_object = json_value_get_object(root_value);
 
-			JSON_Doc* new_doc = new JSON_Doc(root_value, root_object, filepath.c_str());
+			JSON_Doc* new_doc = new JSON_Doc(root_value, root_object, path);
 			jsons.push_back(new_doc);
 
 			new_doc->Save();

@@ -20,29 +20,11 @@ public:
 
 	//void ClearFromGameObject(Resource* resource, GameObject* go);
 
-	//bool ExportToLibrary(Resource* resource);
+	bool ExportToLibrary(Resource* resource);
 	//bool ImportFromLibrary(const char* uid);
 
-	//bool LoadIntoScene(Resource* resource);
+	bool LoadIntoScene(Resource* resource);
 
-	//bool IsResourceOnLibrary(Resource* resource);
-	//bool IsResourceOnAssets(Resource* resource);
-
-	//void CreateResourcesMissingOnAssets();
-	//void RemoveResourcesMissingOnLibrary();
-	// ---
-
-	//bool Load(const char* filepath, std::vector<Resource*>& resources);
-	//void Import(const char* filepath);
-	//bool Export(const char* filepath, ResourceTexture* resource);
-	//void ImportAllTextures();
-
-	//void Unload(const char* filepath);
-	//
-	//TextureInfo LoadTexture(const char * filename, bool avoid_flip = false);
-	//void UnloadTexture(unsigned int id);
-
-	bool GetGameObjectFromPrefabPath(const char* filepath, GameObject*& go);
 	ResourcePrefab* CreatePrefab(GameObject* go);
 
 private:
