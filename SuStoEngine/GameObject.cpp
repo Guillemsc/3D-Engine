@@ -68,7 +68,7 @@ void GameObject::Draw()
 	}
 
 	ComponentMesh* component_mesh = (ComponentMesh*)GetComponent(MESH);
-	
+
 	if (component_mesh != nullptr && component_mesh->GetEnabled())
 	{
 		if (component_mesh->HasMesh())
@@ -107,7 +107,7 @@ void GameObject::Draw()
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		}
 	}
-	
+
 	// Reset
 	glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -115,10 +115,6 @@ void GameObject::Draw()
 	glPopMatrix();
 
 	DrawBBox();
-}
-
-void GameObject::UpdateLogic()
-{
 }
 
 void GameObject::CleanUp()
@@ -293,11 +289,6 @@ const GameObject* GameObject::GetParent() const
 	return parent;
 }
 
-GameObject* GameObject::GetParent()
-{
-	return parent;
-}
-
 const std::vector<GameObject*> GameObject::GetChilds() const
 {
 	return childs;
@@ -308,56 +299,55 @@ const uint GameObject::GetChildsCount() const
 	return childs.size();
 }
 
-void GameObject::EraseParent(bool send_to_root)
+void GameObject::SetParent(GameObject * new_parent)
 {
 	if (parent != nullptr)
 	{
-		parent->EraseChild(this);
-		parent = nullptr;
-
-		if(send_to_root)
-			App->gameobj->GetRoot()->AddChild(this);
-	}
-}
-
-void GameObject::EraseChild(GameObject * child, bool send_child_to_root)
-{
-	for (vector<GameObject*>::iterator it = childs.begin(); it != childs.end(); ++it)
-	{		
-		if ((*it) == child)
+		for (vector<GameObject*>::iterator it = parent->childs.begin(); it != parent->childs.end(); ++it)
 		{
-			// Clean
-			childs.erase(it);
-			child->parent = nullptr;
-
-			// Add to root
-			if (send_child_to_root)
+			if ((*it) == this)
 			{
-				App->gameobj->GetRoot()->AddChild(child);
-
-				child->transform->local_transform = child->transform->global_transform;
+				parent->childs.erase(it);
+				break;
 			}
+		}
+	}
 
-			break;
+	parent = nullptr;
+
+	if (new_parent != nullptr)
+	{
+		if (!new_parent->HasChild(this))
+		{
+			new_parent->childs.push_back(this);
+			parent = new_parent;
 		}
 	}
 }
 
-void GameObject::AddChild(GameObject * child)
+void GameObject::EraseParent(bool send_to_root)
 {
-	if (child == nullptr || HasChild(child) || child == this || child == parent)
-		return;
-
-	// Clean from parent
-	if (child->parent != nullptr)
+	if (parent != nullptr)
 	{
-		child->parent->EraseChild(child, false);
-		child->parent = nullptr;
+		for (vector<GameObject*>::iterator it = parent->childs.begin(); it != parent->childs.end(); ++it)
+		{
+			if ((*it) == this)
+			{
+				parent->childs.erase(it);
+				break;
+			}
+		}
+
+		parent = nullptr;
+
+		if (send_to_root)
+		{
+			GameObject* root = App->gameobj->GetRoot();
+
+			if(root != nullptr)
+				SetParent(root);
+		}
 	}
-	
-	// Add new parent
-	child->parent = this;
-	childs.push_back(child);
 }
 
 bool GameObject::HasChild(GameObject * child)
@@ -538,16 +528,6 @@ AABB GameObject::GetBbox() const
 	return local_bbox;
 }
 
-void GameObject::SetIsUI(const bool & set)
-{
-	is_ui = set;
-}
-
-bool GameObject::IsUI() const
-{
-	return is_ui;
-}
-
 void GameObject::OnLoadAbstraction(DataAbstraction & abs)
 {
 	name = abs.GetString("name");
@@ -574,14 +554,6 @@ void GameObject::SetDraw(bool set)
 void GameObject::SetDebugDraw(bool set)
 {
 	debug_draw = set;
-}
-
-void GameObject::OnChangeParent(Event ev)
-{
-}
-
-void GameObject::OnDestroy(Event ev)
-{
 }
  
 void GameObject::DrawBBox()

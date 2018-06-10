@@ -365,6 +365,30 @@ std::string FileSystem::GetFolderNameFromPath(const char * path)
 	return ret;
 }
 
+std::string FileSystem::GetParentFolder(const char * folder_path)
+{
+	std::string s_path = folder_path;
+
+	std::string ret;
+
+	std::string curr_folder;
+	for (int i = 0; i < s_path.size(); ++i)
+	{
+		curr_folder += s_path[i];
+
+		if (s_path[i] == '\\')
+		{
+			if (i + 1 < s_path.size())
+			{
+				ret += curr_folder;
+				curr_folder.clear();
+			}
+		}
+	}
+
+	return ret;
+}
+
 string FileSystem::CreateFolder(const char * path, const char * name)
 {
 	string ret;
@@ -888,6 +912,21 @@ bool FileSystem::FileRename(const char * filepath, const char * new_name)
 		ret = true;
 	
 	return ret;
+}
+
+bool FileSystem::FolderRename(const char * folderpath, const char * new_name)
+{
+	std::string parent_folder = GetParentFolder(folderpath);
+
+	std::string new_path = parent_folder + new_name + '\\';
+	if (MoveFileEx(folderpath, new_path.c_str(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_COPY_ALLOWED) == 0)
+	{
+		DWORD error = GetLastError();
+		if (error != 0)
+			CONSOLE_LOG("Error renaming folder:[%s] to [%s]", folderpath, new_path.c_str())
+	}
+
+	return false;
 }
 
 bool FileSystem::FolderExists(const char * path)

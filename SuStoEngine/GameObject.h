@@ -24,7 +24,6 @@ public:
 	void Start();
 	void UpdateComponents();
 	void Draw();
-	void UpdateLogic();
 	void CleanUp();
 
 	void Enable();
@@ -46,12 +45,10 @@ public:
 	const bool GetStatic() const;
 
 	const GameObject* GetParent() const;
-	GameObject* GetParent();
 	const std::vector<GameObject*> GetChilds() const;
 	const uint GetChildsCount() const;
+	void SetParent(GameObject* parent);
 	void EraseParent(bool send_to_root = true);
-	void EraseChild(GameObject* child, bool send_child_to_root = true);
-	void AddChild(GameObject* child);
 	bool HasChild(GameObject* child);
 
 	void RecursiveCalcGlobalTransform();
@@ -62,20 +59,12 @@ public:
 
 	AABB GetBbox() const;
 
-	void SetIsUI(const bool & set);
-	bool IsUI() const;
-
-	void OnChangeParent();
-
 	void OnLoadAbstraction(DataAbstraction& abs);
 	void OnSaveAbstraction(DataAbstraction& abs);
 
 	void SetDraw(bool set);
 
 	void SetDebugDraw(bool set);
-
-	void OnChangeParent(Event ev);
-	void OnDestroy(Event ev);
 
 private:
 	void DrawBBox();

@@ -93,8 +93,8 @@ bool ModuleGameObject::Update()
 	{
 		(*it)->UpdateComponents();
 
-		if (App->scene_manager->GetState() == SceneState::PLAY)
-			(*it)->UpdateLogic();
+		//if (App->scene_manager->GetState() == SceneState::PLAY)
+		//	(*it)->UpdateLogic();
 
 		(*it)->Draw();
 
@@ -214,7 +214,7 @@ GameObject * ModuleGameObject::Create(std::string id)
 	GameObject* game_object = new GameObject(id, this);
 
 	game_objects.push_back(game_object);
-	root->AddChild(game_object);
+	game_object->SetParent(root);
 	game_object->Start();
 
 	return game_object;
@@ -233,6 +233,9 @@ void ModuleGameObject::Destroy(GameObject * go)
 		if (go == (*it))
 			return;
 	}
+
+	Event ev(EventType::ET_GAMEOBJECT_DESTROY);
+	App->event_system->Send(ev);
 
 	to_delete.push_back(go);
 }
@@ -319,6 +322,8 @@ void ModuleGameObject::DestroySelectedGameObjects()
 	{
 		App->gameobj->Destroy((*it));
 	}
+
+	ClearSelection();
 }
 
 GameObject * ModuleGameObject::GetRoot()
@@ -467,14 +472,14 @@ void ModuleGameObject::DestroyGameObjects()
 		vector<GameObject*> childs = (*to_del)->GetChilds();
 		for (vector<GameObject*>::iterator ch = childs.begin(); ch != childs.end(); ++ch)
 		{
-			(*ch)->parent = nullptr;
+			(*ch)->EraseParent(false);
 			Destroy(*ch);
 		}
 		
 		// Reset parent
 		if ((*to_del)->GetParent() != nullptr)
 		{
-			(*to_del)->GetParent()->EraseChild(*to_del, false);
+			(*to_del)->EraseParent(false);
 		}
 
 		// Delete from list

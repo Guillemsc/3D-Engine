@@ -36,7 +36,7 @@ void ResourcePrefab::Instantiate(GameObject * parent)
 		{
 			if (parent != nullptr)
 			{
-				parent->AddChild(instance);
+				instance->SetParent(parent);
 			}
 		}
 	}

@@ -38,6 +38,8 @@ private:
 	Timer looking_timer;
 
 	bool update_folders = true;
+
+	std::string rename_folder_tmp;
 };
 
 #endif

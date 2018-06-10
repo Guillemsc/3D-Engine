@@ -1,8 +1,3 @@
-
-
-
-
-
 #include "Explorer.h"
 #include "imgui.h"
 #include "imgui_docking.h"
@@ -57,55 +52,6 @@ void Explorer::Draw()
 			ImGui::Selectable((*it).file_name.c_str());
 		}
 	}
-
-		// Options ----------
-	//ImGui::PushID(name.c_str());
-	//if (ImGui::BeginPopupContextItem("HerarchyPopup"))
-	//{
-	//	if (ImGui::Button("Load"))
-	//	{
-	//		App->resource_manager->LoadAssetResourceIntoScene((*it).c_str());
-	//	}
-	//	if (ImGui::Button("Delete"))
-	//	{
-	//		path_delete = (*it).c_str();
-	//		App->resource_manager->UnloadAssetFromEngine(path_delete.c_str());
-	//		ImGui::OpenPopup("Delete PopUp");
-	//	}
-	//	if (ImGui::Button("Rename"))
-	//	{
-
-	//	}
-	//	if (ImGui::Button("Show in Explorer"))
-	//	{
-	//		App->GoToFolder(path.c_str());
-	//	}
-	//	if (ImGui::Button("Open"))
-	//	{
-	//		App->GoToFolder((*it).c_str());
-	//	}
-	//	ImGui::EndPopup();
-	//}
-	//ImGui::PopID();
-	// -------------------
-
-	//if (ImGui::BeginPopupModal("Delete PopUp", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
-	//{
-	//	ImGui::Text("Are you sure you want to delete this file?");
-	//	ImGui::Separator();
-
-	//	if (ImGui::Button("Yes, I'm sure", ImVec2(160, 0)))
-	//	{
-	//		App->resource_manager->UnloadAssetFromEngine(path_delete.c_str());
-	//		ImGui::CloseCurrentPopup();
-	//	}
-	//	ImGui::SameLine();
-	//	if (ImGui::Button("No, cancel this action", ImVec2(160, 0)))
-	//	{
-	//		ImGui::CloseCurrentPopup();
-	//	}
-	//	ImGui::EndPopup();
-	//}
 	
 
 	ImGui::EndDock();
@@ -150,24 +96,19 @@ void Explorer::DrawFoldersRecursive(Folder folder)
 		}
 	}
 
-	if (opened)
-	{
-		for (std::vector<Folder>::iterator it = folder.folders.begin(); it != folder.folders.end(); ++it)
-		{
-			DrawFoldersRecursive(*it);
-		}
-
-		ImGui::TreePop();
-	}
-
 	if (looking_folder.valid && looking_folder.folder_path == folder.folder_path)
 	{
-		if (ImGui::BeginPopupContextItem("SelectedFolderPopup"))
+		if (ImGui::BeginPopup("SelectedFolderPopup"))
 		{
 			if (ImGui::Button("Create folder"))
 			{
 				App->file_system->CreateFolder(folder.folder_path.c_str(), "NewFolder");
 				ImGui::CloseCurrentPopup();
+			}
+
+			if (ImGui::Button("Rename"))
+			{
+				ImGui::OpenPopup("RenameFolderPopup");
 			}
 
 			if (ImGui::Button("Show in Explorer"))
@@ -191,6 +132,36 @@ void Explorer::DrawFoldersRecursive(Folder folder)
 
 			ImGui::EndPopup();
 		}
+
+		if (ImGui::BeginPopup("RenameFolderPopup"))
+		{
+			char name[100];
+			strcpy_s(name, 100, rename_folder_tmp.c_str());
+			if (ImGui::InputText("Factory object name", name, 100))
+			{
+				rename_folder_tmp = name;
+			}
+			if (ImGui::Button("Save"))
+			{
+				App->file_system->FolderRename(folder.folder_path.c_str(), rename_folder_tmp.c_str());
+				UpdateFloders();
+
+				rename_folder_tmp = "";
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+	}
+
+	if (opened)
+	{
+		for (std::vector<Folder>::iterator it = folder.folders.begin(); it != folder.folders.end(); ++it)
+		{
+			DrawFoldersRecursive(*it);
+		}
+
+		ImGui::TreePop();
 	}
 }
 

@@ -124,7 +124,7 @@ GameObject * GameObjectAbstractor::DeAbstract(GameObjectAbstraction abs)
 
 				if (obj != nullptr && parent_obj != nullptr)
 				{
-					parent_obj->AddChild(obj);
+					obj->SetParent(parent_obj);
 				}
 			}
 		}

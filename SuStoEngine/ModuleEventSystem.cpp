@@ -38,6 +38,14 @@ void ModuleEventSystem::Suscribe(EventType type, std::function<void(Event)> func
 		{
 			if ((*it).type == type)
 			{
+				for (std::vector<std::function<void(Event)>>::iterator sus = (*it).sucribed_functions.begin(); sus != (*it).sucribed_functions.end(); ++sus)
+				{
+					if ((*sus).target_type() == function.target_type())
+					{
+						return;
+					}
+				}
+
 				(*it).sucribed_functions.push_back(function);
 			}
 		}
@@ -48,6 +56,21 @@ void ModuleEventSystem::Suscribe(EventType type, std::function<void(Event)> func
 			es.type = type;
 			es.sucribed_functions.push_back(function);
 			suscribers.push_back(es);
+		}
+	}
+}
+
+void ModuleEventSystem::UnSuscribe(std::function<void(Event)> function)
+{
+	for (std::vector<EventSuscribers>::iterator it = suscribers.begin(); it != suscribers.end(); ++it)
+	{
+		for (std::vector<std::function<void(Event)>>::iterator sus = (*it).sucribed_functions.begin(); sus != (*it).sucribed_functions.end(); ++sus)
+		{
+			if ((*sus).target_type() == function.target_type())
+			{
+				(*it).sucribed_functions.erase(sus);
+				break;
+			}
 		}
 	}
 }

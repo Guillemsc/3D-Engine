@@ -36,8 +36,6 @@ void Inspector::Draw()
 				selected[0]->AddComponent(MESH);
 			if (ImGui::MenuItem("Add Camera"))
 				selected[0]->AddComponent(CAMERA);
-			if (ImGui::MenuItem("Add UICanvas"))
-				selected[0]->AddComponent(UI_CANVAS);
 
 			ImGui::EndMenu();
 		}

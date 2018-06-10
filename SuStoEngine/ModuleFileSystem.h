@@ -53,6 +53,7 @@ public:
 	bool FileExists(const char* path, const char* name, const char* extension = "");
 	bool FileExists(const char* filepath);
 	bool FileRename(const char* filepath, const char* new_name);	
+	bool FolderRename(const char* filepath, const char* new_name);
 	bool FolderExists(const char* path);
 
 	string GetAssetsPath();
@@ -86,6 +87,9 @@ public:
 
 	// Example C:/user/folder/ -> folder
 	std::string GetFolderNameFromPath(const char* path);
+
+	// Example C:/user/folder/ -> C:/user/
+	std::string GetParentFolder(const char* folder_path);
 
 private:
 	Folder GetFoldersRecursive(const char* path);

@@ -53,6 +53,7 @@ public:
 	bool CleanUp();
 
 	void Suscribe(EventType type, std::function<void(Event)> function);
+	void UnSuscribe(std::function<void(Event)> function);
 	void Send(Event ev);
 
 private:

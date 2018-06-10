@@ -113,9 +113,21 @@ void Hierarchy::PrintGoAndChildsRecursive(GameObject * go)
 	ImGui::PushID(go->GetUniqueId().c_str());
 	if (ImGui::BeginPopupContextItem("HerarchyPopup"))
 	{
+		std::vector<GameObject*> selected = App->gameobj->GetSelectedGameObjects();
+
 		if (ImGui::Button("Delete"))
 		{
 			App->gameobj->DestroySelectedGameObjects();
+		}
+
+		if (selected.size() == 1)
+		{
+			if (ImGui::Button("Create child"))
+			{
+				GameObject* child = App->gameobj->Create();
+
+				child->SetParent(*selected.begin());
+			}
 		}
 
 		if (ImGui::Button("Create Prefab"))

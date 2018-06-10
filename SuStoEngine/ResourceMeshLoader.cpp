@@ -527,7 +527,7 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 
 			go->SetName(name);
 
-			parent->AddChild(go);
+			go->SetParent(parent);
 
 			go->transform->SetPosition(mesh->GetPosition());
 			go->transform->SetRotation(mesh->GetRotation());
