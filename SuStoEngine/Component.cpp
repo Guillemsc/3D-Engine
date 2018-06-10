@@ -1,13 +1,16 @@
 #include "Component.h"
+#include "App.h"
+#include "ModuleEventSystem.h"
 
-Component::Component(ComponentType _type, GameObject* _owner, std::string _unique_id)
+Component::Component(ComponentType _type, GameObject* _owner, std::string _unique_id, bool _one_per_go)
 {
 	type = _type;
 	owner = _owner;
 	unique_id = _unique_id;
-	name = "---------NO NAME----------";
+	name = "---------- NO NAME ----------";
 
-	enabled = true;
+	SetActive(true);
+
 }
 
 Component::~Component()
@@ -15,37 +18,40 @@ Component::~Component()
 
 }
 
-void Component::Enable()
+void Component::SetActive(const bool & set)
 {
-	if (!enabled)
+	if (active != set)
 	{
-		enabled = true;
-		OnEnable();
+		active = set;
+
+		if(active)
+		{
+			Event ev(EventType::ET_COMPONENT_ACTIVATE);
+			ev.component_activate.component = this;
+			App->event_system->Send(ev);
+		}
+		else
+		{
+			Event ev(EventType::ET_COMPONENT_DEACTIVATE);
+			ev.component_deactivate.component = this;
+			App->event_system->Send(ev);
+		}
 	}
 }
 
-void Component::Disable()
+bool Component::GetActive() const
 {
-	if (enabled)
-	{
-		enabled = false;
-		OnDisable();
-	}
-}
-
-const bool Component::GetEnabled() const
-{
-	return enabled;
-}
-
-void Component::SetEnabled(const bool& set)
-{
-	set ? Enable() : Disable();
+	return active;
 }
 
 void Component::SetName(const char * new_name)
 {
 	name = new_name;
+}
+
+bool Component::GetOnePerGo() const
+{
+	return one_per_go;
 }
 
 void Component::ForceUid(std::string uid)

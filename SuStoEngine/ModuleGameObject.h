@@ -21,14 +21,14 @@ public:
 	bool PreUpdate();
 	bool Update();
 	bool PostUpdate();
-
-	// Called before quitting
 	bool CleanUp();
 
 	GameObject* Create(std::string id);
 	GameObject* Create();
 
 	GameObject* Find(std::string unique_id);
+
+	GameObject* Duplicate(GameObject* go);
 
 	void Destroy(GameObject* go);
 	void DestroyAllGameObjects();
@@ -65,6 +65,8 @@ public:
 	void SetCanMove(bool set);
 
 	GameObjectAbstractor* GetAbstractor() const;
+
+	std::string CheckDuplicateNames();
 
 private:
 	void DestroyGameObjects();

@@ -35,15 +35,14 @@ void GameObject::Start()
 
 	SetName("GameObject");
 
-	AddComponent(TRANSFORM);
-	transform = (ComponentTransform*)GetComponent(TRANSFORM);
+	transform = (ComponentTransform*)AddComponent(TRANSFORM);
 }
 
 void GameObject::UpdateComponents()
 {
 	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
 	{
-		if((*it)->GetEnabled())
+		if((*it)->GetActive())
 			(*it)->Update();
 	}
 }
@@ -59,7 +58,7 @@ void GameObject::Draw()
 
 	ComponentMaterial* component_material = (ComponentMaterial*)GetComponent(MATERIAL);
 
-	if (component_material != nullptr && component_material->GetEnabled())
+	if (component_material != nullptr && component_material->GetActive())
 	{
 		if (component_material->HasTexture())
 		{
@@ -69,7 +68,7 @@ void GameObject::Draw()
 
 	ComponentMesh* component_mesh = (ComponentMesh*)GetComponent(MESH);
 
-	if (component_mesh != nullptr && component_mesh->GetEnabled())
+	if (component_mesh != nullptr && component_mesh->GetActive())
 	{
 		if (component_mesh->HasMesh())
 		{
@@ -157,9 +156,6 @@ Component* GameObject::AddComponent(ComponentType type, string unique_id)
 {
 	Component* ret = nullptr;
 
-	if (ContainsComponent(type))
-		return ret;
-
 	string new_id;
 
 	if (new_id == "")
@@ -177,9 +173,6 @@ Component* GameObject::AddComponent(ComponentType type, string unique_id)
 		case MESH:
 		{
 			ret = new ComponentMesh(this, new_id);
-
-			if (is_static)
-				go_module->RecalculateKDTree();
 		}
 		break;
 		case MATERIAL:
@@ -196,8 +189,24 @@ Component* GameObject::AddComponent(ComponentType type, string unique_id)
 	
 	if (ret != nullptr)
 	{
-		ret->Start();
-		components.push_back(ret);
+		if (ret->GetOnePerGo())
+		{
+			if (ContainsComponent(type))
+			{
+				ret->CleanUp();
+				ret = nullptr;
+			}
+		}
+
+		if (ret != nullptr)
+		{
+			ret->Start();
+			components.push_back(ret);
+
+			Event ev(EventType::ET_COMPONENT_CREATE);
+			ev.component_create.component = ret;
+			App->event_system->Send(ev);
+		}
 	}
 
 	return ret;
@@ -209,11 +218,9 @@ void GameObject::RemoveComponent(ComponentType type)
 	{
 		if ((*it)->GetType() == type)
 		{
-			if (type == MESH)
-			{
-				if (is_static)
-					go_module->RecalculateKDTree();
-			}
+			Event ev(EventType::ET_COMPONENT_CREATE);
+			ev.component_create.component = (*it);
+			App->event_system->Send(ev);
 
 			(*it)->CleanUp();
 			components.erase(it);
@@ -284,12 +291,12 @@ const bool GameObject::GetStatic() const
 	return is_static;
 }
 
-const GameObject* GameObject::GetParent() const
+GameObject* GameObject::GetParent() const
 {
 	return parent;
 }
 
-const std::vector<GameObject*> GameObject::GetChilds() const
+std::vector<GameObject*> GameObject::GetChilds() const
 {
 	return childs;
 }
@@ -323,9 +330,14 @@ void GameObject::SetParent(GameObject * new_parent)
 			parent = new_parent;
 		}
 	}
+
+	if (parent == nullptr)
+	{
+		SetParent(App->gameobj->GetRoot());
+	}
 }
 
-void GameObject::EraseParent(bool send_to_root)
+void GameObject::EraseParent()
 {
 	if (parent != nullptr)
 	{
@@ -340,13 +352,7 @@ void GameObject::EraseParent(bool send_to_root)
 
 		parent = nullptr;
 
-		if (send_to_root)
-		{
-			GameObject* root = App->gameobj->GetRoot();
-
-			if(root != nullptr)
-				SetParent(root);
-		}
+		SetParent(App->gameobj->GetRoot());
 	}
 }
 

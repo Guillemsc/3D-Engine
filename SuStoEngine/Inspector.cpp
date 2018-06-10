@@ -138,16 +138,16 @@ void Inspector::Draw()
 			}
 
 			ImGui::PushID((*it)->GetUniqueId().c_str());
-			bool enabled = (*it)->GetEnabled();
+			bool enabled = (*it)->GetActive();
 			if (ImGui::Checkbox("", &enabled))
 			{
-				(*it)->SetEnabled(enabled);
+				(*it)->SetActive(enabled);
 			}
 			ImGui::PopID();
 			ImGui::SameLine();
 			if (ImGui::CollapsingHeader((*it)->GetName(), ImGuiTreeNodeFlags_DefaultOpen))
 			{
-				if((*it)->GetEnabled())
+				if((*it)->GetActive())
 					(*it)->InspectorDraw(same_components);
 			}
 

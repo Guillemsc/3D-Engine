@@ -217,6 +217,10 @@ GameObject * ModuleGameObject::Create(std::string id)
 	game_object->SetParent(root);
 	game_object->Start();
 
+	Event ev(EventType::ET_GAMEOBJECT_CREATE);
+	ev.game_object_create.go = game_object;
+	App->event_system->Send(ev);
+
 	return game_object;
 }
 
@@ -228,16 +232,20 @@ GameObject * ModuleGameObject::Create()
 
 void ModuleGameObject::Destroy(GameObject * go)
 {
-	for (list<GameObject*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it)
+	if (go != nullptr)
 	{
-		if (go == (*it))
-			return;
+		for (list<GameObject*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it)
+		{
+			if (go == (*it))
+				return;
+		}
+
+		Event ev(EventType::ET_GAMEOBJECT_DESTROY);
+		ev.game_object_destroy.go = go;
+		App->event_system->Send(ev);
+
+		to_delete.push_back(go);
 	}
-
-	Event ev(EventType::ET_GAMEOBJECT_DESTROY);
-	App->event_system->Send(ev);
-
-	to_delete.push_back(go);
 }
 
 GameObject* ModuleGameObject::Find(std::string unique_id)
@@ -251,6 +259,19 @@ GameObject* ModuleGameObject::Find(std::string unique_id)
 			ret = (*it);
 			break;
 		}
+	}
+
+	return ret;
+}
+
+GameObject * ModuleGameObject::Duplicate(GameObject * go)
+{
+	GameObject * ret = nullptr;
+
+	if (go != nullptr)
+	{
+		GameObjectAbstraction abs = GetAbstractor()->Abstract(go);
+		ret = GetAbstractor()->DeAbstract(abs);
 	}
 
 	return ret;
@@ -464,34 +485,59 @@ GameObjectAbstractor * ModuleGameObject::GetAbstractor() const
 	return go_abstractor;
 }
 
+std::string ModuleGameObject::CheckDuplicateNames()
+{
+	for (vector<GameObject*>::const_iterator it = game_objects.begin(); it != game_objects.end(); it++)
+	{
+
+	}
+
+	return std::string();
+}
+
 void ModuleGameObject::DestroyGameObjects()
 {
 	for (list<GameObject*>::iterator to_del = to_delete.begin(); to_del != to_delete.end();)
 	{
-		// Add childs to delete
+		// Add childs to delete and reset parent
 		vector<GameObject*> childs = (*to_del)->GetChilds();
-		for (vector<GameObject*>::iterator ch = childs.begin(); ch != childs.end(); ++ch)
+		for (vector<GameObject*>::iterator ch = childs.begin(); ch != childs.end();)
 		{
-			(*ch)->EraseParent(false);
+			(*ch)->parent = nullptr;
+
 			Destroy(*ch);
+
+			ch = childs.erase(ch);
 		}
 		
 		// Reset parent
 		if ((*to_del)->GetParent() != nullptr)
 		{
-			(*to_del)->EraseParent(false);
+			GameObject* parent = (*to_del)->GetParent();
+
+			if (parent != nullptr)
+			{
+				for (vector<GameObject*>::iterator ch = parent->childs.begin(); ch != parent->childs.end(); ++ch)
+				{
+					if ((*ch) == (*to_del))
+					{
+						parent->childs.erase(ch);
+						break;
+					}
+				}
+
+				(*to_del)->parent = nullptr;
+			}
 		}
 
 		// Delete from list
-		for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end();)
+		for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
 		{
 			if ((*to_del) == (*it))
 			{
-				it = game_objects.erase(it);
+				game_objects.erase(it);
 				break;
 			}
-			else
-				++it;
 		}
 
 		// Delete from selected

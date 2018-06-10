@@ -21,7 +21,7 @@ enum ComponentType
 class Component
 {
 public:
-	Component(ComponentType type, GameObject* owner, std::string unique_id);
+	Component(ComponentType type, GameObject* owner, std::string unique_id, bool one_per_go = false);
 	virtual ~Component();
 
 	virtual void Start() {};
@@ -34,11 +34,11 @@ public:
 
 	std::string GetUniqueId();
 
-	void Enable();
-	void Disable();
-	const bool GetEnabled() const;
-	void SetEnabled(const bool& set);
+	void SetActive(const bool& set);
+	bool GetActive() const;
 	void SetName(const char* new_name);
+
+	bool GetOnePerGo() const;
 
 	virtual void OnGetBoundingBox(AABB &bbox) {};
 	virtual void InspectorDraw(std::vector<Component*> components) {};
@@ -48,18 +48,14 @@ public:
 
 	void ForceUid(std::string uid);
 
-	virtual void OnChangeParent() {};
-
 private:
-	virtual void OnEnable() {};
-	virtual void OnDisable() {};
-
-private:
-	bool		  enabled = false;
+	bool		  active = false;
 	GameObject*   owner = nullptr;
 	ComponentType type;
 	const char*   name = nullptr;
 	std::string	  unique_id;
+
+	bool		  one_per_go = false;
 };
 
 #endif

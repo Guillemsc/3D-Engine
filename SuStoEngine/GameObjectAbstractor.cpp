@@ -460,7 +460,6 @@ float4 DataAbstraction::GetFloat4(std::string name, float4 def)
 void DataAbstraction::Serialize(JSON_Doc doc)
 {
 	int counter = 0;
-
 	if(ints.size() > 0)
 		doc.SetNumber("ints_count", ints.size());
 

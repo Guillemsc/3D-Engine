@@ -44,11 +44,11 @@ public:
 	const bool GetSelected() const;
 	const bool GetStatic() const;
 
-	const GameObject* GetParent() const;
-	const std::vector<GameObject*> GetChilds() const;
+	GameObject* GetParent() const;
+	std::vector<GameObject*> GetChilds() const;
 	const uint GetChildsCount() const;
 	void SetParent(GameObject* parent);
-	void EraseParent(bool send_to_root = true);
+	void EraseParent();
 	bool HasChild(GameObject* child);
 
 	void RecursiveCalcGlobalTransform();

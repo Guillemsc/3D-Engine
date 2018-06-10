@@ -8,8 +8,14 @@
 enum EventType
 {
 	ET_NULL,
+	ET_GAMEOBJECT_CREATE,
 	ET_GAMEOBJECT_DESTROY,
 	ET_GAMEOBJECT_CHANGE_PARENT,
+
+	ET_COMPONENT_CREATE,
+	ET_COMPONENT_DESTROY,
+	ET_COMPONENT_ACTIVATE,
+	ET_COMPONENT_DEACTIVATE,
 };
 
 struct EventSuscribers
@@ -24,6 +30,13 @@ public:
 	Event(const EventType& type);
 	EventType GetType() const;
 
+	// GameObjects
+	struct GameObjectCreate
+	{
+		GameObject* go = nullptr;
+	}
+	game_object_create;
+
 	struct GameObjectDestroy
 	{
 		GameObject* go = nullptr;
@@ -37,6 +50,31 @@ public:
 		GameObject* new_parent = nullptr;
 	}
 	game_object_change_parent;
+
+	// Components
+	struct ComponentCreate
+	{
+		Component* component = nullptr;
+	}
+	component_create;
+
+	struct ComponentDestroy
+	{
+		Component* component = nullptr;
+	}
+	component_destroy;
+
+	struct ComponentActivate
+	{
+		Component* component = nullptr;
+	}
+	component_activate;
+
+	struct ComponentDeactivate
+	{
+		Component* component = nullptr;
+	}
+	component_deactivate;
 
 private:
 	EventType type = ET_NULL;

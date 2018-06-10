@@ -114,22 +114,39 @@ void Hierarchy::PrintGoAndChildsRecursive(GameObject * go)
 	if (ImGui::BeginPopupContextItem("HerarchyPopup"))
 	{
 		std::vector<GameObject*> selected = App->gameobj->GetSelectedGameObjects();
+		
+		if (ImGui::Button("Rename"))
+		{
+
+		}
+
+		if (ImGui::Button("Duplicate"))
+		{
+			App->gameobj->ClearSelection();
+
+			for (std::vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
+			{
+				GameObject* duplicate = App->gameobj->Duplicate(*it);
+
+				App->gameobj->AddGameObjectToSelected(duplicate);
+			}
+		}
 
 		if (ImGui::Button("Delete"))
 		{
 			App->gameobj->DestroySelectedGameObjects();
 		}
-
-		if (selected.size() == 1)
+		
+		if (ImGui::Button("Create child"))
 		{
-			if (ImGui::Button("Create child"))
+			for (std::vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
 			{
 				GameObject* child = App->gameobj->Create();
 
-				child->SetParent(*selected.begin());
+				child->SetParent(*it);
 			}
 		}
-
+		
 		if (ImGui::Button("Create Prefab"))
 		{
 			ResourcePrefabLoader* loader = (ResourcePrefabLoader*)App->resource_manager->GetLoader(ResourceType::RT_PREFAB);
