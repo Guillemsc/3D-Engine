@@ -132,16 +132,21 @@ bool ResourceMeshLoader::UnloadAssetFromEngine(DecomposedFilePath d_filepath)
 {
 	bool ret = true;
 
-	std::string prefab_file = d_filepath.file_path + ".prefab";
 	std::string meta_file = d_filepath.file_path + ".meta";
 
 	App->file_system->FileDelete(d_filepath.file_path.c_str());
-	App->file_system->FileDelete(prefab_file.c_str());
 
 	JSON_Doc* doc = App->json->LoadJSON(meta_file.c_str());
 
 	if (doc != nullptr)
 	{
+		std::string prefab_uid = doc->GetString("prefab_uid");
+
+		std::string prefab_path = library_path + prefab_uid + ".sustomesh" + ".prefab";
+		App->file_system->FileDelete(prefab_path.c_str());
+
+		App->resource_manager->DeleteResource(prefab_uid);
+
 		for (int i = 0; i < doc->GetArrayCount("resources"); ++i)
 		{
 			std::string uid = doc->GetStringFromArray("resources", i);
@@ -243,8 +248,9 @@ bool ResourceMeshLoader::ExportResourceToLibrary(Resource * resource)
 		string meta_name = library_path + name + ".meta";
 
 		JSON_Doc* doc = App->json->LoadJSON(meta_name.c_str());
-	/*	if (doc == nullptr)
-			doc = App->json->CreateJSON(meta_name.c_str());*/
+
+		if (doc == nullptr)
+			doc = App->json->CreateJSON(meta_name.c_str());
 
 		if (doc != nullptr)
 		{
@@ -338,9 +344,20 @@ bool ResourceMeshLoader::LoadAssetResourceIntoScene(DecomposedFilePath decompose
 {
 	bool ret = true;
 
-	std::string prefab_path = decomposed_file_path.file_path + ".prefab";
+	std::string meta_file = decomposed_file_path.file_path + ".meta";
 
-	//App->scene_manager->LoadPrefab(prefab_path.c_str());
+	JSON_Doc* doc = App->json->LoadJSON(meta_file.c_str());
+
+	if (doc != nullptr)
+	{
+		std::string prefab_uid = doc->GetString("prefab_uid");
+
+		std::string prefab_path = library_path + prefab_uid + ".sustomesh" + ".prefab";
+
+		GameObjectAbstraction abs = App->gameobj->GetAbstractor()->DeSerialize(prefab_path.c_str());
+
+		GameObject* go_mesh = App->gameobj->GetAbstractor()->DeAbstract(abs);
+	}
 
 	return ret;
 }
@@ -348,13 +365,23 @@ bool ResourceMeshLoader::IsAssetOnLibrary(DecomposedFilePath d_filepath)
 {
 	bool ret = false;
 
+	int correct = 0;
+
 	std::string meta_file = d_filepath.file_path + ".meta";
 
 	JSON_Doc* doc = App->json->LoadJSON(meta_file.c_str());
 	if(doc != nullptr)
 	{
+		std::string prefab_uid = doc->GetString("prefab_uid");
+
+		std::string prefab_path = library_path + prefab_uid + ".sustomesh" + ".prefab";
+
+		if (App->file_system->FileExists(prefab_path.c_str()))
+		{
+			++correct;
+		}
+
 		int resources_count = doc->GetArrayCount("resources");
-		int correct = 0;
 		for (int i = 0; i < resources_count; ++i)
 		{
 			std::string uid = doc->GetStringFromArray("resources", i);
@@ -368,10 +395,29 @@ bool ResourceMeshLoader::IsAssetOnLibrary(DecomposedFilePath d_filepath)
 			}
 		}
 
-		if (correct == resources_count)
+		if (correct == resources_count + 1)
 			ret = true;
 	}
 	
+	return ret;
+}
+
+bool ResourceMeshLoader::RenameAsset(DecomposedFilePath d_filepath, const char * new_name)
+{
+	bool ret = true;
+
+	std::string meta_file = d_filepath.file_path + ".meta";
+
+	if (!App->file_system->FileRename(d_filepath.file_path.c_str(), new_name))
+	{
+		ret = false;
+	}
+
+	if (App->file_system->FileRename(meta_file.c_str(), new_name))
+	{
+		ret = false;
+	}
+
 	return ret;
 }
 
