@@ -194,6 +194,7 @@ Component* GameObject::AddComponent(ComponentType type, string unique_id)
 			if (ContainsComponent(type))
 			{
 				ret->CleanUp();
+				delete ret;
 				ret = nullptr;
 			}
 		}
@@ -218,16 +219,27 @@ bool GameObject::RemoveComponent(ComponentType type)
 
 	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
 	{
-		if ((*it)->GetType() == type && (*it)->GetCanDestroy())
+		if ((*it)->GetType() == type)
 		{
-			Event ev(EventType::ET_COMPONENT_CREATE);
-			ev.component_create.component = (*it);
-			App->event_system->Send(ev);
+			if ((*it)->GetCanDestroy())
+			{
+				for (std::list<Component*>::iterator des = components_to_destroy.begin(); des != components_to_destroy.end(); ++des)
+				{
+					if ((*des) == (*it))
+					{
+						return false;
+					}
+				}
 
-			(*it)->CleanUp();
-			components.erase(it);
+				Event ev(EventType::ET_COMPONENT_CREATE);
+				ev.component_create.component = (*it);
+				App->event_system->Send(ev);
 
-			ret = true;
+				components_to_destroy.push_back(*it);
+
+				ret = true;
+			}
+
 			break;
 		}
 	}
@@ -239,19 +251,32 @@ bool GameObject::RemoveComponent(Component * comp)
 {
 	bool ret = false;
 
-	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
+	if (comp != nullptr)
 	{
-		if ((*it) == comp)
+		if (comp->GetCanDestroy())
 		{
-			Event ev(EventType::ET_COMPONENT_CREATE);
-			ev.component_create.component = (*it);
-			App->event_system->Send(ev);
+			for (std::list<Component*>::iterator des = components_to_destroy.begin(); des != components_to_destroy.end(); ++des)
+			{
+				if ((*des) == comp)
+				{
+					return false;
+				}
+			}
 
-			(*it)->CleanUp();
-			components.erase(it);
+			for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
+			{
+				if ((*it) == comp)
+				{
+					Event ev(EventType::ET_COMPONENT_CREATE);
+					ev.component_create.component = (*it);
+					App->event_system->Send(ev);
 
-			ret = true;
-			break;
+					components_to_destroy.push_back(comp);
+
+					ret = true;
+					break;
+				}
+			}
 		}
 	}
 
@@ -607,16 +632,21 @@ void GameObject::DrawBBox()
 
 void GameObject::DestroyComponents()
 {
-	for (std::list<Component*>::iterator des = components_to_destroy.begin(); des != components_to_destroy.end(); ++des)
+	for (std::list<Component*>::iterator des = components_to_destroy.begin(); des != components_to_destroy.end();)
 	{
 		for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
 		{
 			if ((*it) == (*des))
 			{
+				(*it)->CleanUp();
+				delete (*it);
 				components.erase(it);
 
+				break;
 			}
 		}
+
+		des = components_to_destroy.erase(des);
 	}
 }
 

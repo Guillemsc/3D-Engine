@@ -137,20 +137,32 @@ void Inspector::Draw()
 				}
 			}
 
-			ImGui::PushID((*it)->GetUniqueId().c_str());
-			bool enabled = (*it)->GetActive();
-			if (ImGui::Checkbox("", &enabled))
+			if ((*it)->GetCanDisable() || (*it)->GetCanDestroy())
 			{
-				(*it)->SetActive(enabled);
+				ImGui::PushID((*it)->GetUniqueId().c_str());
+				bool enabled = (*it)->GetActive();
+
+				if ((*it)->GetCanDisable())
+				{
+					if (ImGui::Checkbox("", &enabled))
+					{
+						(*it)->SetActive(enabled);
+					}
+				}
+
+				if ((*it)->GetCanDestroy())
+				{
+					ImGui::SameLine();
+					if (ImGui::Button("Remove"))
+					{
+						(*selected.begin())->RemoveComponent((*it));
+					}
+				}
+
+				ImGui::SameLine();
+				ImGui::PopID();
 			}
-			ImGui::SameLine();
-			if (ImGui::Button("Remove"))
-			{
-				(*selected.begin())->RemoveComponent((*it));
-				return;
-			}
-			ImGui::PopID();
-			ImGui::SameLine();
+
 			if (ImGui::CollapsingHeader((*it)->GetName(), ImGuiTreeNodeFlags_DefaultOpen))
 			{
 				if((*it)->GetActive())

@@ -2,7 +2,7 @@
 #include "App.h"
 #include "ModuleEventSystem.h"
 
-Component::Component(ComponentType _type, GameObject* _owner, std::string _unique_id, bool _one_per_go, bool _can_destroy)
+Component::Component(ComponentType _type, GameObject* _owner, std::string _unique_id)
 {
 	type = _type;
 	owner = _owner;
@@ -10,9 +10,9 @@ Component::Component(ComponentType _type, GameObject* _owner, std::string _uniqu
 	name = "---------- NO NAME ----------";
 
 	SetActive(true);
-
-	one_per_go = _one_per_go;
-	can_destroy = _can_destroy;
+	SetCanDestroy(true);
+	SetOnePerGo(false);
+	SetCanDisable(true);
 }
 
 Component::~Component()
@@ -51,6 +51,21 @@ void Component::SetName(const char * new_name)
 	name = new_name;
 }
 
+void Component::SetOnePerGo(bool set)
+{
+	one_per_go = set;
+}
+
+void Component::SetCanDestroy(bool set)
+{
+	can_destroy = set;
+}
+
+void Component::SetCanDisable(bool set)
+{
+	can_disable = set;
+}
+
 bool Component::GetOnePerGo() const
 {
 	return one_per_go;
@@ -59,6 +74,11 @@ bool Component::GetOnePerGo() const
 bool Component::GetCanDestroy() const
 {
 	return can_destroy;
+}
+
+bool Component::GetCanDisable() const
+{
+	return can_disable;
 }
 
 void Component::ForceUid(std::string uid)

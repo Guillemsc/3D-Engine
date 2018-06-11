@@ -99,6 +99,8 @@ bool ModuleGameObject::Update()
 		(*it)->Draw();
 
 		(*it)->SetDebugDraw(show_bboxes);
+
+		(*it)->DestroyComponents();
 	}
 
 	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)

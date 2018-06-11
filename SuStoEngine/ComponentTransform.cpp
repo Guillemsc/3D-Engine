@@ -5,10 +5,14 @@
 #include "ModuleInput.h"
 #include "JSONLoader.h"
 
-ComponentTransform::ComponentTransform(GameObject * owner, std::string unique_id) : Component(ComponentType::TRANSFORM, owner, unique_id, true, false)
+ComponentTransform::ComponentTransform(GameObject * owner, std::string unique_id) : Component(ComponentType::TRANSFORM, owner, unique_id)
 {
 	CONSOLE_LOG("Component Transform Created");
 	SetName("Transform");
+
+	SetCanDestroy(false);
+	SetOnePerGo(true);
+	SetCanDisable(false);
 }
 
 ComponentTransform::~ComponentTransform()

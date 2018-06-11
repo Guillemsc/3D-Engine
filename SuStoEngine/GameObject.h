@@ -24,6 +24,7 @@ public:
 	void Start();
 	void UpdateComponents();
 	void Draw();
+	void DestroyComponents();
 	void CleanUp();
 
 	void Enable();
@@ -69,7 +70,6 @@ public:
 
 private:
 	void DrawBBox();
-	void DestroyComponents();
 
 public:
 	ComponentTransform* transform = nullptr;
