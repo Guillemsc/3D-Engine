@@ -143,6 +143,12 @@ void Inspector::Draw()
 			{
 				(*it)->SetActive(enabled);
 			}
+			ImGui::SameLine();
+			if (ImGui::Button("Remove"))
+			{
+				(*selected.begin())->RemoveComponent((*it));
+				return;
+			}
 			ImGui::PopID();
 			ImGui::SameLine();
 			if (ImGui::CollapsingHeader((*it)->GetName(), ImGuiTreeNodeFlags_DefaultOpen))

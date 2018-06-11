@@ -21,7 +21,7 @@ enum ComponentType
 class Component
 {
 public:
-	Component(ComponentType type, GameObject* owner, std::string unique_id, bool one_per_go = false);
+	Component(ComponentType type, GameObject* owner, std::string unique_id, bool one_per_go = false, bool can_destroy = true);
 	virtual ~Component();
 
 	virtual void Start() {};
@@ -39,6 +39,7 @@ public:
 	void SetName(const char* new_name);
 
 	bool GetOnePerGo() const;
+	bool GetCanDestroy() const;
 
 	virtual void OnGetBoundingBox(AABB &bbox) {};
 	virtual void InspectorDraw(std::vector<Component*> components) {};
@@ -56,6 +57,7 @@ private:
 	std::string	  unique_id;
 
 	bool		  one_per_go = false;
+	bool		  can_destroy = true;
 };
 
 #endif

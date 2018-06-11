@@ -32,7 +32,8 @@ public:
 	void SetEnabled(const bool& set);
 
 	Component* AddComponent(ComponentType type, std::string unique_id = "");
-	void RemoveComponent(ComponentType type);
+	bool RemoveComponent(ComponentType type);
+	bool RemoveComponent(Component* comp);
 	bool ContainsComponent(ComponentType type);
 	std::vector<Component*> GetComponents();
 	Component* GetComponent(ComponentType type);
@@ -68,6 +69,7 @@ public:
 
 private:
 	void DrawBBox();
+	void DestroyComponents();
 
 public:
 	ComponentTransform* transform = nullptr;
@@ -81,6 +83,7 @@ private:
 	bool		draw = false;
 
 	std::vector<Component*> components;
+	std::list<Component*> components_to_destroy;
 
 	AABB	    local_bbox;
 

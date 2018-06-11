@@ -212,11 +212,13 @@ Component* GameObject::AddComponent(ComponentType type, string unique_id)
 	return ret;
 }
 
-void GameObject::RemoveComponent(ComponentType type)
+bool GameObject::RemoveComponent(ComponentType type)
 {
+	bool ret = false;
+
 	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
 	{
-		if ((*it)->GetType() == type)
+		if ((*it)->GetType() == type && (*it)->GetCanDestroy())
 		{
 			Event ev(EventType::ET_COMPONENT_CREATE);
 			ev.component_create.component = (*it);
@@ -224,9 +226,36 @@ void GameObject::RemoveComponent(ComponentType type)
 
 			(*it)->CleanUp();
 			components.erase(it);
+
+			ret = true;
 			break;
 		}
 	}
+
+	return ret;
+}
+
+bool GameObject::RemoveComponent(Component * comp)
+{
+	bool ret = false;
+
+	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
+	{
+		if ((*it) == comp)
+		{
+			Event ev(EventType::ET_COMPONENT_CREATE);
+			ev.component_create.component = (*it);
+			App->event_system->Send(ev);
+
+			(*it)->CleanUp();
+			components.erase(it);
+
+			ret = true;
+			break;
+		}
+	}
+
+	return ret;
 }
 
 bool GameObject::ContainsComponent(ComponentType type)
@@ -573,6 +602,21 @@ void GameObject::DrawBBox()
 			DebugDraw(local_bbox, Red, true, 4.0f);
 		else
 			DebugDraw(local_bbox, Green, true, 4.0f);
+	}
+}
+
+void GameObject::DestroyComponents()
+{
+	for (std::list<Component*>::iterator des = components_to_destroy.begin(); des != components_to_destroy.end(); ++des)
+	{
+		for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
+		{
+			if ((*it) == (*des))
+			{
+				components.erase(it);
+
+			}
+		}
 	}
 }
 
