@@ -23,6 +23,10 @@ public:
 	bool PostUpdate();
 	bool CleanUp();
 
+	void GameObjectsPreUpdate();
+	void GameObjectsUpdate();
+	void GameObjectsPostUpdate();
+
 	GameObject* Create(std::string id);
 	GameObject* Create();
 

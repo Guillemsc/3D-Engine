@@ -91,6 +91,7 @@ public:
 	virtual ~GameObjectAbstraction();
 
 	bool GetValid() const;
+	std::string GetName();
 	void Clear();
 
 private:
@@ -107,6 +108,7 @@ private:
 	int max_id = -1;
 
 	bool valid = false;
+	std::string name = "Abstraction";
 };
 
 class GameObjectAbstractor

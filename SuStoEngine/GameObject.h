@@ -22,7 +22,10 @@ public:
 	virtual ~GameObject();
 
 	void Start();
+	void PreUpdate();
 	void UpdateComponents();
+	void Update();
+	void PostUpdate();
 	void Draw();
 	void DestroyComponents();
 	void CleanUp();

@@ -14,6 +14,8 @@
 #include "ResourceTextureLoader.h"
 #include "JSONLoader.h"
 #include "SceneManager.h"
+#include "ResourcePrefab.h"
+#include "ResourcePrefabLoader.h"
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\postprocess.h"
 #include "Assimp\include\cfileio.h"
@@ -106,24 +108,30 @@ bool ResourceMeshLoader::LoadFileToEngine(DecomposedFilePath d_filepath, std::ve
 		App->camera->GetEditorCamera()->Focus(total_abb);
 
 		// Create fbx prefab
-		//App->scene_manager->SavePrefab((d_filepath.file_name + "." + d_filepath.file_extension).c_str(), "prefab", assets_path.c_str(), parent);
+		
+		ResourcePrefabLoader* loader = (ResourcePrefabLoader*)App->resource_manager->GetLoader(ResourceType::RT_PREFAB);
+
+		ResourcePrefab* prefab = loader->CreatePrefab(parent);
+
+		prefab->SerializeCustom(App->file_system->GetLibraryMeshPath().c_str(), prefab->GetUniqueId().c_str(), "meshprefab");
 
 		// Crate meta
-		//std::string meta_path = (assets_path + d_filepath.file_name + "." + d_filepath.file_extension + ".meta");
-		//JSON_Doc* doc = App->json->CreateJSON(meta_path.c_str());
-		//if (doc != nullptr)
-		//{
-		//	std::string uid = doc->GetString("uid", "no_uid");
-		//	doc->SetArray("resources");
+		std::string meta_path = (App->file_system->GetAssetsPath().c_str() + d_filepath.file_name + "." + d_filepath.file_extension + ".meta");
+		JSON_Doc* doc = App->json->CreateJSON(meta_path.c_str());
+		if (doc != nullptr)
+		{
+			doc->SetString("meshprefab_uid", prefab->GetUniqueId().c_str());
 
-		//	for (std::vector<Resource*>::iterator it = resources.begin(); it != resources.end(); ++it)
-		//	{
-		//		doc->AddStringToArray("resources", (*it)->GetUniqueId().c_str());
-		//	}
+			doc->SetArray("resources");
 
-		//	doc->Save();
-		//	App->json->UnloadJSON(doc);
-		//}
+			for (std::vector<Resource*>::iterator it = resources.begin(); it != resources.end(); ++it)
+			{
+				doc->AddStringToArray("resources", (*it)->GetUniqueId().c_str());
+			}
+
+			doc->Save();
+			App->json->UnloadJSON(doc);
+		}
 	}
 
 	return ret;
@@ -140,9 +148,9 @@ bool ResourceMeshLoader::UnloadAssetFromEngine(DecomposedFilePath d_filepath)
 
 	if (doc != nullptr)
 	{
-		std::string prefab_uid = doc->GetString("prefab_uid");
+		std::string prefab_uid = doc->GetString("meshprefab_uid");
 
-		std::string prefab_path = library_path + prefab_uid + ".sustomesh" + ".prefab";
+		std::string prefab_path = App->file_system->GetLibraryMeshPath() + prefab_uid + ".meshprefab";
 		App->file_system->FileDelete(prefab_path.c_str());
 
 		App->resource_manager->DeleteResource(prefab_uid);
@@ -160,8 +168,8 @@ bool ResourceMeshLoader::UnloadAssetFromEngine(DecomposedFilePath d_filepath)
 
 			App->resource_manager->DeleteResource(uid);
 
-			std::string resource_path = library_path + uid + ".sustomesh";
-			std::string meta_path = library_path + uid + ".meta";
+			std::string resource_path = App->file_system->GetLibraryMeshPath() + uid + ".sustomesh";
+			std::string meta_path = App->file_system->GetLibraryMeshPath() + uid + ".meta";
 
 			App->file_system->FileDelete(resource_path.c_str());
 			App->file_system->FileDelete(meta_path.c_str());
@@ -350,9 +358,9 @@ bool ResourceMeshLoader::LoadAssetResourceIntoScene(DecomposedFilePath decompose
 
 	if (doc != nullptr)
 	{
-		std::string prefab_uid = doc->GetString("prefab_uid");
+		std::string prefab_uid = doc->GetString("meshprefab_uid");
 
-		std::string prefab_path = library_path + prefab_uid + ".sustomesh" + ".prefab";
+		std::string prefab_path = App->file_system->GetLibraryMeshPath() + prefab_uid + ".meshprefab";
 
 		GameObjectAbstraction abs = App->gameobj->GetAbstractor()->DeSerialize(prefab_path.c_str());
 

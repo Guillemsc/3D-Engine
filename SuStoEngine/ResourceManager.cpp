@@ -10,6 +10,7 @@
 #include "JSONLoader.h"
 #include "ModuleGameObject.h"
 #include "ResourcePrefabLoader.h"
+#include "ResourcePrefab.h"
 
 ResourceManager::ResourceManager(bool start_enabled) : Module(start_enabled)
 {
@@ -37,6 +38,7 @@ bool ResourceManager::Awake()
 	ResourcePrefabLoader* prefab_loader = new ResourcePrefabLoader();
 	prefab_loader->AddAssetExtensionToLoad("prefab");
 	prefab_loader->AddLibraryExtensionToLoad("prefab");
+	prefab_loader->AddLibraryExtensionToLoad("meshprefab");
 
 	AddLoader(mesh_loader);
 	AddLoader(texture_loader);

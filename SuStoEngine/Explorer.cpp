@@ -49,7 +49,32 @@ void Explorer::Draw()
 	{
 		for (std::vector<DecomposedFilePath>::iterator it = looking_folder.files.begin(); it != looking_folder.files.end(); ++it)
 		{
-			ImGui::Selectable((*it).file_name.c_str());
+			if ((*it).file_extension != "meta")
+			{
+				ImGui::PushID((*it).file_path.c_str());
+
+				ImGui::Selectable((*it).file_name.c_str());
+
+				if (ImGui::IsItemClicked(0) || ImGui::IsItemClicked(1))
+				{
+					if (ImGui::IsItemClicked(1))
+					{
+						ImGui::OpenPopup("SelectedFilePopup");
+					}
+				}
+
+				if (ImGui::BeginPopup("SelectedFolderPopup"))
+				{
+					if (ImGui::Button("Load"))
+					{
+
+					}
+
+					ImGui::EndPopup();
+				}
+
+				ImGui::PopID();
+			}
 		}
 	}
 	
@@ -84,7 +109,6 @@ void Explorer::DrawFoldersRecursive(Folder folder)
 
 	ImGui::PushID(folder.folder_path.c_str());
 	bool opened = ImGui::TreeNodeEx(folder.folder_name.c_str(), flags);
-	ImGui::PopID();
 
 	if (ImGui::IsItemClicked(0) || ImGui::IsItemClicked(1))
 	{
@@ -153,6 +177,8 @@ void Explorer::DrawFoldersRecursive(Folder folder)
 			ImGui::EndPopup();
 		}
 	}
+
+	ImGui::PopID();
 
 	if (opened)
 	{

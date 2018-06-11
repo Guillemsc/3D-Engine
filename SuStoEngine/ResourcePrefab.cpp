@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "ModuleGameObject.h"
 #include "GameObjectAbstractor.h"
+#include "ModuleFileSystem.h"
 
 ResourcePrefab::ResourcePrefab(std::string unique_id) : Resource(unique_id, ResourceType::RT_PREFAB)
 {
@@ -39,6 +40,22 @@ void ResourcePrefab::Instantiate(GameObject * parent)
 				instance->SetParent(parent);
 			}
 		}
+	}
+}
+
+void ResourcePrefab::Serialize()
+{
+	if (abstraction.GetValid())
+	{
+		App->gameobj->GetAbstractor()->Serialize(abstraction, App->file_system->GetLibraryPrefabPath().c_str(), abstraction.GetName().c_str(), "prefab");
+	}
+}
+
+void ResourcePrefab::SerializeCustom(const char * path, const char * name, const char * extension)
+{
+	if (abstraction.GetValid())
+	{
+		App->gameobj->GetAbstractor()->Serialize(abstraction, path, name, extension);
 	}
 }
 

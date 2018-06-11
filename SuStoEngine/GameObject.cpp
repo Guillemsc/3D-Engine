@@ -38,6 +38,10 @@ void GameObject::Start()
 	transform = (ComponentTransform*)AddComponent(TRANSFORM);
 }
 
+void GameObject::PreUpdate()
+{
+}
+
 void GameObject::UpdateComponents()
 {
 	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
@@ -45,6 +49,14 @@ void GameObject::UpdateComponents()
 		if((*it)->GetActive())
 			(*it)->Update();
 	}
+}
+
+void GameObject::Update()
+{
+}
+
+void GameObject::PostUpdate()
+{
 }
 
 void GameObject::Draw()

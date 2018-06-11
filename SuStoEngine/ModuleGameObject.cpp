@@ -73,6 +73,8 @@ bool ModuleGameObject::PreUpdate()
 	float w = App->editorUI->GameRect().right - App->editorUI->GameRect().left;
 	float h = App->editorUI->GameRect().bottom - App->editorUI->GameRect().top;
 
+	GameObjectsPreUpdate();
+
 	return ret;
 }
 
@@ -89,19 +91,7 @@ bool ModuleGameObject::Update()
 	App->camera->GetEditorCamera()->GetElementsToDraw();
 	
 	// Update
-	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
-	{
-		(*it)->UpdateComponents();
-
-		//if (App->scene_manager->GetState() == SceneState::PLAY)
-		//	(*it)->UpdateLogic();
-
-		(*it)->Draw();
-
-		(*it)->SetDebugDraw(show_bboxes);
-
-		(*it)->DestroyComponents();
-	}
+	GameObjectsUpdate();
 
 	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
 	{
@@ -190,6 +180,8 @@ bool ModuleGameObject::PostUpdate()
 {
 	bool ret = true;
 
+	GameObjectsPostUpdate();
+
 	DestroyGameObjects();
 
 	return ret;
@@ -209,6 +201,41 @@ bool ModuleGameObject::CleanUp()
 	RELEASE(go_abstractor);
 
 	return ret;
+}
+
+void ModuleGameObject::GameObjectsPreUpdate()
+{
+	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
+	{
+		(*it)->PreUpdate();
+	}
+}
+
+void ModuleGameObject::GameObjectsUpdate()
+{
+	// Update
+	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
+	{
+		(*it)->UpdateComponents();
+
+		//if (App->scene_manager->GetState() == SceneState::PLAY)
+		//	(*it)->UpdateLogic();
+
+		(*it)->Draw();
+
+		(*it)->SetDebugDraw(show_bboxes);
+	}
+}
+
+void ModuleGameObject::GameObjectsPostUpdate()
+{
+	for (vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
+	{
+		(*it)->PostUpdate();
+
+		// Last
+		(*it)->DestroyComponents();
+	}
 }
 
 GameObject * ModuleGameObject::Create(std::string id)

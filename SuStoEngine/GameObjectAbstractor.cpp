@@ -19,42 +19,48 @@ GameObjectAbstraction GameObjectAbstractor::Abstract(GameObject * go)
 {
 	GameObjectAbstraction ret;
 
-	int id_count = 0;
-
-	std::vector<GameObject*> to_add;
-	to_add.push_back(go);
-
-	while (!to_add.empty())
+	if (go != nullptr)
 	{
-		GameObject* curr = *to_add.begin();
+		ret.name = go->GetName();
 
-		if (curr != App->gameobj->GetRoot())
+		int id_count = 0;
+
+		std::vector<GameObject*> to_add;
+		to_add.push_back(go);
+
+
+		while (!to_add.empty())
 		{
-			int go_id = ret.GetIdFromGo(curr);
+			GameObject* curr = *to_add.begin();
 
-			if (go_id == -1)
-				go_id = ret.AddGo(curr);
-
-			if (curr->parent != nullptr && curr->parent != App->gameobj->GetRoot())
+			if (curr != App->gameobj->GetRoot())
 			{
-				int parent_go_id = ret.GetIdFromGo(curr->parent);
+				int go_id = ret.GetIdFromGo(curr);
 
-				if (parent_go_id == -1)
-					parent_go_id = ret.AddGo(curr);
+				if (go_id == -1)
+					go_id = ret.AddGo(curr);
 
-				ret.AddRelation(go_id, parent_go_id);
+				if (curr->parent != nullptr && curr->parent != App->gameobj->GetRoot())
+				{
+					int parent_go_id = ret.GetIdFromGo(curr->parent);
+
+					if (parent_go_id == -1)
+						parent_go_id = ret.AddGo(curr);
+
+					ret.AddRelation(go_id, parent_go_id);
+				}
 			}
+
+			for (std::vector<GameObject*>::iterator it = curr->childs.begin(); it != curr->childs.end(); ++it)
+			{
+				to_add.push_back(*it);
+			}
+
+			to_add.erase(to_add.begin());
 		}
 
-		for (std::vector<GameObject*>::iterator it = curr->childs.begin(); it != curr->childs.end(); ++it)
-		{
-			to_add.push_back(*it);
-		}
-
-		to_add.erase(to_add.begin());
+		ret.valid = true;
 	}
-
-	ret.valid = true;
 
 	return ret;
 }
@@ -263,6 +269,11 @@ GameObjectAbstraction::~GameObjectAbstraction()
 bool GameObjectAbstraction::GetValid() const
 {
 	return valid;
+}
+
+std::string GameObjectAbstraction::GetName()
+{
+	return name;
 }
 
 void GameObjectAbstraction::Clear()
