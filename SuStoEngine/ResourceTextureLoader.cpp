@@ -31,6 +31,62 @@ ResourceTextureLoader::~ResourceTextureLoader()
 {
 }
 
+Resource * ResourceTextureLoader::CreateResource(std::string new_uid)
+{
+	Resource* ret = nullptr;
+
+	ret = new ResourceTexture(new_uid);
+
+	return ret;
+}
+
+bool ResourceTextureLoader::LoadFileToEngine(DecomposedFilePath decomposed_file_path, std::vector<Resource*>& resources)
+{
+	bool ret = false;
+
+	bool ret = ilLoad(IL_TYPE_UNKNOWN, decomposed_file_path.file_path.c_str());
+	
+	if (ret)
+	{
+		// Get texture info
+		ILinfo ImageInfo;
+		iluGetImageInfo(&ImageInfo);
+
+		if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
+		{
+			iluFlipImage();
+		}
+
+		// Convert image to rgb and a byte chain
+		ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+
+		ILubyte* data = ilGetData();
+		uint data_size = ilGetInteger(IL_IMAGE_SIZE_OF_DATA);
+		uint image_width = ilGetInteger(IL_IMAGE_WIDTH);
+		uint image_height = ilGetInteger(IL_IMAGE_HEIGHT);
+		uint type = ilGetInteger(IL_IMAGE_TYPE);
+
+		if (data_size > 0)
+		{
+
+			ResourceTexture* rtex = (ResourceTexture*)App->resource_manager->CreateNewResource(RT_TEXTURE);
+
+
+
+			App->resource_manager->ExportResourceToLibrary(rtex);
+
+
+			resources.push_back(rtex);
+
+			ret = true;
+		}
+
+		ilDeleteImages(1, &ImageInfo.Id);
+	}
+
+	return ret;
+}
+
 //bool ResourceTextureLoader::Load(const char * filepath, std::vector<Resource*>& resources)
 //{
 //	bool ret = false;

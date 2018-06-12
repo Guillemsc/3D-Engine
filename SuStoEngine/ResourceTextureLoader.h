@@ -25,35 +25,20 @@ public:
 	ResourceTextureLoader();
 	virtual ~ResourceTextureLoader();
 
-	// NEW
-	//Resource* CreateResource(std::string new_uid);
+	Resource* CreateResource(std::string new_uid);
 
-	//bool LoadToEngine(const char* filepath, std::vector<Resource*>& resources);
-	//bool UnloadFromEngine(Resource* resource);
+	bool LoadFileToEngine(DecomposedFilePath decomposed_file_path, std::vector<Resource*>& resources);
 
-	//void ClearFromGameObject(Resource* resource, GameObject* go);
+	bool UnloadAssetFromEngine(DecomposedFilePath decomposed_file_path);
+	void ClearFromGameObject(Resource* resource, GameObject* go);
 
-	//bool ExportToLibrary(Resource* resource);
-	//bool ImportFromLibrary(const char* uid);
+	bool ExportResourceToLibrary(Resource* resource);
+	bool ImportResourceFromLibrary(DecomposedFilePath decomposed_file_path);
 
-	//bool LoadIntoScene(Resource* resource);
+	bool LoadAssetResourceIntoScene(DecomposedFilePath decomposed_file_path);
 
-	//bool IsResourceOnLibrary(Resource* resource);
-	//bool IsResourceOnAssets(Resource* resource);
-
-	//void CreateResourcesMissingOnAssets();
-	//void RemoveResourcesMissingOnLibrary();
-	// ---
-
-	//bool Load(const char* filepath, std::vector<Resource*>& resources);
-	//void Import(const char* filepath);
-	//bool Export(const char* filepath, ResourceTexture* resource);
-	//void ImportAllTextures();
-
-	//void Unload(const char* filepath);
-	//
-	//TextureInfo LoadTexture(const char * filename, bool avoid_flip = false);
-	//void UnloadTexture(unsigned int id);
+	bool IsAssetOnLibrary(DecomposedFilePath d_filepath, std::vector<std::string>& library_files_used);
+	bool RenameAsset(DecomposedFilePath decomposed_file_path, const char* new_name);
 
 
 private:

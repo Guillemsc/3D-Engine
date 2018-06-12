@@ -436,7 +436,7 @@ bool ResourceMeshLoader::RenameAsset(DecomposedFilePath d_filepath, const char *
 		ret = false;
 	}
 
-	if (App->file_system->FileRename(meta_file.c_str(), new_name))
+	if (!App->file_system->FileRename(meta_file.c_str(), new_name))
 	{
 		ret = false;
 	}
