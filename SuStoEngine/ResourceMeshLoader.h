@@ -62,7 +62,7 @@ public:
 	void ClearFromGameObject(Resource* resource, GameObject* go);
 
 	bool ExportResourceToLibrary(Resource* resource);
-	bool ImportResourceFromLibrary(const char* uid);
+	bool ImportResourceFromLibrary(DecomposedFilePath decomposed_file_path);
 
 	bool LoadAssetResourceIntoScene(DecomposedFilePath decomposed_file_path);
 

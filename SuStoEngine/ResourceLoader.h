@@ -48,7 +48,7 @@ public:
 	virtual bool ExportResourceToLibrary(Resource* resource) { return false; };
 
 	// Imports the resource into memory from the library folder
-	virtual bool ImportResourceFromLibrary(const char* uid) { return false; };
+	virtual bool ImportResourceFromLibrary(DecomposedFilePath decomposed_file_path) { return false; };
 
 	// Loads a resource into the scene as s new game object
 	virtual bool LoadAssetResourceIntoScene(DecomposedFilePath decomposed_file_path) { return false; };

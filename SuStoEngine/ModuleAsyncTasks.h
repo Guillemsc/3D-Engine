@@ -2,6 +2,7 @@
 #define _MODULE_ASYNC_TASKS_H_
 
 #include "Module.h"
+#include <functional>
 
 class ModuleAsyncTasks;
 
@@ -31,6 +32,10 @@ public:
 	void FinishTask();
 	AsyncTaskMode GetMode();
 
+	void OnStart(std::function<void(AsyncTask*)> fun);
+	void OnUpdate(std::function<void(AsyncTask*)> fun);
+	void OnFinish(std::function<void(AsyncTask*)> fun);
+
 private:
 	AsyncTaskMode  mode = AsyncTaskMode::AST_FOCUS;
 	bool		   finished = false;
@@ -41,6 +46,10 @@ private:
 	std::string	   phase;
 
 	bool		   first_update = true;
+
+	std::function<void(AsyncTask*)> on_start;
+	std::function<void(AsyncTask*)> on_update;
+	std::function<void(AsyncTask*)> on_finish;
 };
 
 class ModuleAsyncTasks : public Module
@@ -61,7 +70,7 @@ private:
 	void AsyncTaskModeFinish(AsyncTask* task);
 
 private:
-	std::vector<AsyncTask*> running_tasks;
+	std::list<AsyncTask*> running_tasks;
 };
 
 #endif //!_MODULE_ASYNC_TASKS_H_

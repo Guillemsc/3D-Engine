@@ -11,6 +11,7 @@
 #include "ModuleGameObject.h"
 #include "ResourcePrefabLoader.h"
 #include "ResourcePrefab.h"
+#include "ModuleEventSystem.h"
 
 ResourceManager::ResourceManager(bool start_enabled) : Module(start_enabled)
 {
@@ -67,8 +68,15 @@ bool ResourceManager::CleanUp()
 
 void ResourceManager::OnStartEngine()
 {
-	CheckCorrectLibraryAsyncTaks* task = new CheckCorrectLibraryAsyncTaks(AsyncTaskMode::AST_FOCUS, 2);
-	App->async_tasks->StartTask(task);
+	CheckCorrectLibraryAsyncTask* new_task = new CheckCorrectLibraryAsyncTask(AsyncTaskMode::AST_FOCUS, 2);
+	new_task->OnFinish(OnCheckCorrectLibraryFinish);
+	App->async_tasks->StartTask(new_task);
+}
+
+void OnCheckCorrectLibraryFinish(AsyncTask * task)
+{
+	LoadLibraryAsyncTask* new_task = new LoadLibraryAsyncTask(AsyncTaskMode::AST_FOCUS, 2);
+	App->async_tasks->StartTask(new_task);
 }
 
 void ResourceManager::OnLoadFile(const char * filepath)
@@ -307,7 +315,7 @@ void ResourceManager::ImportResourceFromLibrary(const char * filepath)
 
 	if (loader != nullptr)
 	{
-		bool ret = loader->ImportResourceFromLibrary(deco_file.file_name.c_str());
+		bool ret = loader->ImportResourceFromLibrary(deco_file);
 
 		if (ret)
 		{
@@ -501,11 +509,11 @@ void ResourceManager::AddLoader(ResourceLoader * loader)
 	loaders.push_back(loader);
 }
 
-CheckCorrectLibraryAsyncTaks::CheckCorrectLibraryAsyncTaks(AsyncTaskMode mode, uint iterations_per_frame) : AsyncTask(mode, iterations_per_frame, "Loading Resources")
+CheckCorrectLibraryAsyncTask::CheckCorrectLibraryAsyncTask(AsyncTaskMode mode, uint iterations_per_frame) : AsyncTask(mode, iterations_per_frame, "Checking Assets")
 {
 }
 
-void CheckCorrectLibraryAsyncTaks::Start()
+void CheckCorrectLibraryAsyncTask::Start()
 {
 	asset_files_to_check = App->file_system->GetFilesInPathAndChilds(App->file_system->GetAssetsPath().c_str());
 	asset_files_to_check_count = asset_files_to_check.size();
@@ -513,7 +521,7 @@ void CheckCorrectLibraryAsyncTaks::Start()
 	check_asset_files = true;
 }
 
-void CheckCorrectLibraryAsyncTaks::Update()
+void CheckCorrectLibraryAsyncTask::Update()
 {
 	if (check_asset_files)
 		CheckAssetFiles();
@@ -525,11 +533,11 @@ void CheckCorrectLibraryAsyncTaks::Update()
 		ReimportFiles();
 }
 
-void CheckCorrectLibraryAsyncTaks::Finish()
+void CheckCorrectLibraryAsyncTask::Finish()
 {
 }
 
-void CheckCorrectLibraryAsyncTaks::CheckAssetFiles()
+void CheckCorrectLibraryAsyncTask::CheckAssetFiles()
 {
 	if (!asset_files_to_check.empty())
 	{
@@ -565,7 +573,7 @@ void CheckCorrectLibraryAsyncTaks::CheckAssetFiles()
 	}
 }
 
-void CheckCorrectLibraryAsyncTaks::DeleteUnnecessary()
+void CheckCorrectLibraryAsyncTask::DeleteUnnecessary()
 {
 	if (!library_files_to_check.empty())
 	{
@@ -601,7 +609,7 @@ void CheckCorrectLibraryAsyncTaks::DeleteUnnecessary()
 	}
 }
 
-void CheckCorrectLibraryAsyncTaks::ReimportFiles()
+void CheckCorrectLibraryAsyncTask::ReimportFiles()
 {
 	if (!assets_to_reimport.empty())
 	{
@@ -622,4 +630,40 @@ void CheckCorrectLibraryAsyncTaks::ReimportFiles()
 
 		FinishTask();
 	}
+}
+
+LoadLibraryAsyncTask::LoadLibraryAsyncTask(AsyncTaskMode mode, uint iterations_per_frame) : AsyncTask(mode, iterations_per_frame, "Loading Resources")
+{
+}
+
+void LoadLibraryAsyncTask::Start()
+{
+	library_files_to_load = App->file_system->GetFilesInPathAndChilds(App->file_system->GetLibraryPath().c_str());
+	library_files_to_load_count = library_files_to_load.size();
+}
+
+void LoadLibraryAsyncTask::Update()
+{
+	if (!library_files_to_load.empty())
+	{
+		float progress = 100 - (100.0f / (float)library_files_to_load_count) * library_files_to_load.size();
+		progress = (progress / 100.0f) * 100.0f;
+		SetPercentageProgress(progress);
+		SetCurrPhase("Loading Library");
+
+		std::string curr_file = *library_files_to_load.begin();
+
+		App->resource_manager->ImportResourceFromLibrary(curr_file.c_str());
+
+		library_files_to_load.erase(library_files_to_load.begin());
+	}
+	else
+	{
+		SetPercentageProgress(100);
+		FinishTask();
+	}
+}
+
+void LoadLibraryAsyncTask::Finish()
+{
 }

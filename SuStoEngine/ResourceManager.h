@@ -12,12 +12,10 @@ class ResourceMeshLoader;
 class ResourceMesh;
 class ResourceTextureLoader;
 
-
-
-class CheckCorrectLibraryAsyncTaks : public AsyncTask
+class CheckCorrectLibraryAsyncTask : public AsyncTask
 {
 public:
-	CheckCorrectLibraryAsyncTaks(AsyncTaskMode mode, uint iterations_per_frame);
+	CheckCorrectLibraryAsyncTask(AsyncTaskMode mode, uint iterations_per_frame);
 
 	void Start();
 	void Update();
@@ -42,6 +40,23 @@ private:
 	bool check_asset_files = false;
 	bool reimport_files = false;
 	bool delete_unnecessary = false;
+};
+
+void OnCheckCorrectLibraryFinish(AsyncTask* task);
+
+
+class LoadLibraryAsyncTask : public AsyncTask
+{
+public:
+	LoadLibraryAsyncTask(AsyncTaskMode mode, uint iterations_per_frame);
+
+	void Start();
+	void Update();
+	void Finish();
+
+private:
+	int library_files_to_load_count = 0;
+	std::vector<std::string> library_files_to_load;
 };
 
 class ResourceManager : public Module

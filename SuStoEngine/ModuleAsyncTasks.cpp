@@ -16,36 +16,48 @@ bool ModuleAsyncTasks::PreUpdate()
 {
 	bool ret = true;
 
-	for (std::vector<AsyncTask*>::iterator it = running_tasks.begin(); it != running_tasks.end();)
+	for (std::list<AsyncTask*>::iterator it = running_tasks.begin(); it != running_tasks.end();)
 	{
-		if (!(*it)->finished)
+		AsyncTask* curr = (*it);
+
+		if (!curr->finished)
 		{
 			for (int i = 0; i < (*it)->iterations_per_frame; ++i)
 			{
-				if ((*it)->first_update)
+				if (curr->first_update)
 				{
 					AsyncTaskModeStart((*it));
 
-					(*it)->first_update = false;
+					if (curr->on_start)
+						curr->on_start(*it);
+
+					curr->first_update = false;
 				}
 
-				(*it)->Update();
+				if (curr->on_update)
+					curr->on_update(*it);
+
+				curr->Update();
 			}
 
 			++it;
 		}
 		else
 		{
-			(*it)->Finish();
+			curr->Finish();
 
-			AsyncTaskModeFinish((*it));
+			AsyncTaskModeFinish(curr);
+
+			if (curr->on_finish)
+				curr->on_finish(curr);
 
 			Event ev(EventType::ET_ASYNC_TASK_FINISHED);
-			ev.async_task_finished.task = (*it);
+			ev.async_task_finished.task = curr;
 			App->event_system->Send(ev);
 
-			delete (*it);
 			it = running_tasks.erase(it);
+
+			delete curr;
 		}
 	}
 
@@ -56,7 +68,7 @@ bool ModuleAsyncTasks::Update()
 {
 	bool ret = true;
 
-	for (std::vector<AsyncTask*>::iterator it = running_tasks.begin(); it != running_tasks.end(); ++it)
+	for (std::list<AsyncTask*>::iterator it = running_tasks.begin(); it != running_tasks.end(); ++it)
 	{
 		uint flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize 
 			| ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoSavedSettings;
@@ -85,7 +97,7 @@ bool ModuleAsyncTasks::CleanUp()
 {
 	bool ret = true;
 
-	for (std::vector<AsyncTask*>::iterator it = running_tasks.begin(); it != running_tasks.end();)
+	for (std::list<AsyncTask*>::iterator it = running_tasks.begin(); it != running_tasks.end();)
 	{
 		delete (*it);
 		it = running_tasks.erase(it);
@@ -136,7 +148,7 @@ void ModuleAsyncTasks::AsyncTaskModeFinish(AsyncTask* task)
 		case AsyncTaskMode::AST_FOCUS:
 			bool can_disable = true;
 
-			for (std::vector<AsyncTask*>::iterator it = running_tasks.begin(); it != running_tasks.end(); ++it)
+			for (std::list<AsyncTask*>::iterator it = running_tasks.begin(); it != running_tasks.end(); ++it)
 			{
 				if ((*it)->GetMode() == AsyncTaskMode::AST_FOCUS && (*it) != task)
 				{
@@ -194,4 +206,19 @@ std::string AsyncTask::GetCurrPhase()
 AsyncTaskMode AsyncTask::GetMode()
 {
 	return mode;
+}
+
+void AsyncTask::OnStart(std::function<void(AsyncTask*)> fun)
+{
+	on_start = fun;
+}
+
+void AsyncTask::OnUpdate(std::function<void(AsyncTask*)> fun)
+{
+	on_update = fun;
+}
+
+void AsyncTask::OnFinish(std::function<void(AsyncTask*)> fun)
+{
+	on_finish = fun;
 }

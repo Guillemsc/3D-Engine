@@ -278,14 +278,14 @@ bool ResourceMeshLoader::ExportResourceToLibrary(Resource * resource)
 
 	return ret;
 }
-bool ResourceMeshLoader::ImportResourceFromLibrary(const char * uid)
+bool ResourceMeshLoader::ImportResourceFromLibrary(DecomposedFilePath d_filepath)
 {
 	bool ret = true;
 
 	// -------------------------------------
 	// META --------------------------------
 	// -------------------------------------
-	string meta_name = library_path + std::string(uid) + ".meta";
+	string meta_name = d_filepath.path + d_filepath.file_name + ".meta";
 	JSON_Doc* doc = App->json->LoadJSON(meta_name.c_str());
 	if (doc != nullptr)
 	{
@@ -296,55 +296,59 @@ bool ResourceMeshLoader::ImportResourceFromLibrary(const char * uid)
 		// FILE --------------------------------
 		// -------------------------------------
 		//Open the file and get the size
-		FILE* file = fopen((std::string(uid) + ".sustomesh").c_str(), "rb");
-		fseek(file, 0, SEEK_END);
-		uint size = ftell(file);
-		rewind(file);
+		FILE* file = fopen(d_filepath.file_path.c_str(), "rb");
 
-		// Create a buffer to get the data of the file
-		char* buffer = new char[size];
-		char* cursor = buffer;
+		if (file != nullptr)
+		{
+			fseek(file, 0, SEEK_END);
+			uint size = ftell(file);
+			rewind(file);
 
-		// Read the file and close it
-		fread(buffer, sizeof(char), size, file);
-		fclose(file);
+			// Create a buffer to get the data of the file
+			char* buffer = new char[size];
+			char* cursor = buffer;
 
-		// Copy the ranges
-		// ranges[0] = Vertices, ranges[1] = Indices, ranges[2] = Uvs
-		uint ranges[3];
-		uint bytes = sizeof(ranges);
-		memcpy(ranges, cursor, bytes);
-		cursor += bytes;
+			// Read the file and close it
+			fread(buffer, sizeof(char), size, file);
+			fclose(file);
 
-		// Store indices
-		uint* indices = new uint[ranges[1]];
-		bytes = sizeof(uint) * ranges[1];
-		memcpy(indices, cursor, bytes);
-		cursor += bytes;
+			// Copy the ranges
+			// ranges[0] = Vertices, ranges[1] = Indices, ranges[2] = Uvs
+			uint ranges[3];
+			uint bytes = sizeof(ranges);
+			memcpy(ranges, cursor, bytes);
+			cursor += bytes;
 
-		// Store vertices
-		float* vertices = new float[ranges[0] * 3];
-		bytes = sizeof(float) * ranges[0] * 3;
-		memcpy(vertices, cursor, bytes);
-		cursor += bytes;
+			// Store indices
+			uint* indices = new uint[ranges[1]];
+			bytes = sizeof(uint) * ranges[1];
+			memcpy(indices, cursor, bytes);
+			cursor += bytes;
 
-		// Store UVs
-		float* uvs = new float[ranges[2] * 3];
-		bytes = sizeof(float) * ranges[2] * 3;
-		memcpy(uvs, cursor, bytes);
-		cursor += bytes;
+			// Store vertices
+			float* vertices = new float[ranges[0] * 3];
+			bytes = sizeof(float) * ranges[0] * 3;
+			memcpy(vertices, cursor, bytes);
+			cursor += bytes;
 
-		// Create mesh --------------
-		ResourceMesh* new_mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(RT_MESH, uid);
-		new_mesh->SetFaces(vertices, ranges[0], indices, ranges[1]);
-		new_mesh->SetUvs(uvs, ranges[2]);
+			// Store UVs
+			float* uvs = new float[ranges[2] * 3];
+			bytes = sizeof(float) * ranges[2] * 3;
+			memcpy(uvs, cursor, bytes);
+			cursor += bytes;
 
-		new_mesh->SetFileName(resource_name.c_str());
+			// Create mesh --------------
+			ResourceMesh* new_mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(RT_MESH, uid);
+			new_mesh->SetFaces(vertices, ranges[0], indices, ranges[1]);
+			new_mesh->SetUvs(uvs, ranges[2]);
 
-		RELEASE_ARRAY(buffer);
-		RELEASE_ARRAY(indices);
-		RELEASE_ARRAY(vertices);
-		RELEASE_ARRAY(uvs);
+			new_mesh->SetFileName(resource_name.c_str());
+
+			RELEASE_ARRAY(buffer);
+			RELEASE_ARRAY(indices);
+			RELEASE_ARRAY(vertices);
+			RELEASE_ARRAY(uvs);
+		}
 		App->json->UnloadJSON(doc);
 	}
 
