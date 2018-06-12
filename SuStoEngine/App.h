@@ -11,7 +11,6 @@
 class Profiler;
 class JSON_Doc;
 
-
 class XMLLoader;
 class JSONLoader;
 class ModuleWindow;
@@ -26,6 +25,7 @@ class FileSystem;
 class SceneManager;
 class ResourceManager;
 class ModuleEventSystem;
+class ModuleAsyncTasks;
 
 class Application
 {
@@ -90,6 +90,7 @@ public:
 	SceneManager*	   scene_manager = nullptr;
 	ResourceManager*   resource_manager = nullptr;
 	ModuleEventSystem* event_system = nullptr;
+	ModuleAsyncTasks*  async_tasks = nullptr;
 
 	Profiler*		   profiler = nullptr;
 	IDGen*		       id = nullptr;

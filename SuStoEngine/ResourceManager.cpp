@@ -44,6 +44,8 @@ bool ResourceManager::Awake()
 	AddLoader(texture_loader);
 	AddLoader(prefab_loader);
 
+	OnStartEngine();
+
 	return ret;
 }
 
@@ -63,33 +65,15 @@ bool ResourceManager::CleanUp()
 	return ret;
 }
 
+void ResourceManager::OnStartEngine()
+{
+	CheckCorrectLibraryAsyncTaks* task = new CheckCorrectLibraryAsyncTaks(AsyncTaskMode::AST_FOCUS, 10);
+	App->async_tasks->StartTask(task);
+}
+
 void ResourceManager::OnLoadFile(const char * filepath)
 {
 	LoadFileToEngine(filepath);
-}
-
-Resource* ResourceManager::Get(std::string unique_id)
-{
-	return Get(unique_id, ResourceType::RT_NULL);
-}
-
-Resource* ResourceManager::Get(std::string unique_id, ResourceType type)
-{
-	Resource* ret = nullptr;
-
-	for (std::vector<ResourceLoader*>::iterator it = loaders.begin(); it != loaders.end(); ++it)
-	{
-		ResourceLoader* curr_loader = (*it);
-
-		if (type == ResourceType::RT_NULL || type == curr_loader->GetLoaderType())
-		{
-			ret = curr_loader->GetResource(unique_id);
-
-			if (ret != nullptr)
-				break;
-		}
-	}
-	return ret;
 }
 
 ResourceLoader * ResourceManager::GetLoader(ResourceType type)
@@ -138,7 +122,31 @@ ResourceType ResourceManager::LibraryExtensionToType(const char * extension)
 			break;
 		}
 	}
-	
+
+	return ret;
+}
+
+Resource* ResourceManager::Get(std::string unique_id)
+{
+	return Get(unique_id, ResourceType::RT_NULL);
+}
+
+Resource* ResourceManager::Get(std::string unique_id, ResourceType type)
+{
+	Resource* ret = nullptr;
+
+	for (std::vector<ResourceLoader*>::iterator it = loaders.begin(); it != loaders.end(); ++it)
+	{
+		ResourceLoader* curr_loader = (*it);
+
+		if (type == ResourceType::RT_NULL || type == curr_loader->GetLoaderType())
+		{
+			ret = curr_loader->GetResource(unique_id);
+
+			if (ret != nullptr)
+				break;
+		}
+	}
 	return ret;
 }
 
@@ -336,33 +344,22 @@ void ResourceManager::LoadAssetResourceIntoScene(const char* filepath)
 	}
 }
 
-bool ResourceManager::IsAssetOnLibrary(const char * filepath)
+bool ResourceManager::IsAssetOnLibrary(const char * filepath, std::vector<std::string>& library_files_used)
 {
-	return false;
-}
+	bool ret = false;
 
-void ResourceManager::CreateResourcesMissingOnLibrary()
-{
-	std::vector<std::string> library_files = App->file_system->GetFilesInPathAndChilds(App->file_system->GetAssetsPath().c_str());
+	DecomposedFilePath deco_file = App->file_system->DecomposeFilePath(filepath);
 
-	for (std::vector<std::string>::iterator fil_it = library_files.begin(); fil_it != library_files.end(); ++fil_it)
+	ResourceType type = AssetExtensionToType(deco_file.file_extension.c_str());
+
+	ResourceLoader* loader = GetLoader(type);
+
+	if (loader != nullptr)
 	{
-		DecomposedFilePath deco_file = App->file_system->DecomposeFilePath((*fil_it));
-
-		ResourceType type = AssetExtensionToType(deco_file.file_extension.c_str());
-
-		ResourceLoader* loader = GetLoader(type);
-
-
+		ret = loader->IsAssetOnLibrary(deco_file, library_files_used);
 	}
-}
 
-void ResourceManager::RemoveResourcesMissingOnAssets()
-{
-	for (std::vector<ResourceLoader*>::iterator it = loaders.begin(); it != loaders.end(); ++it)
-	{
-		
-	}
+	return ret;
 }
 
 void ResourceManager::RenameAsset(const char * filepath, const char * new_name)
@@ -505,17 +502,101 @@ void ResourceManager::AddLoader(ResourceLoader * loader)
 	loaders.push_back(loader);
 }
 
-//void ResourceManager::OnLoadFile(const char * file_path, const char * file_name, const char * file_extension)
-//{
-//	LoadResource(file_path);
-//}
-//
-//void ResourceManager::DeleteAllResources()
-//{
-//	for (map<std::string, Resource*>::iterator it = resources.begin(); it != resources.end();)
-//	{
-//		(*it).second->CleanUp();
-//		RELEASE(it->second);
-//		it = resources.erase(it);
-//	}
-//}
+CheckCorrectLibraryAsyncTaks::CheckCorrectLibraryAsyncTaks(AsyncTaskMode mode, uint iterations_per_frame) : AsyncTask(mode, iterations_per_frame)
+{
+}
+
+void CheckCorrectLibraryAsyncTaks::Start()
+{
+	asset_files_to_check = App->file_system->GetFilesInPathAndChilds(App->file_system->GetAssetsPath().c_str());
+
+	check_asset_files = true;
+}
+
+void CheckCorrectLibraryAsyncTaks::Update()
+{
+	if (check_asset_files)
+		CheckAssetFiles();
+
+	else if (delete_unnecessary)
+		DeleteUnnecessary();
+
+	else if (reimport_files)
+		ReimportFiles();
+}
+
+void CheckCorrectLibraryAsyncTaks::Finish()
+{
+}
+
+void CheckCorrectLibraryAsyncTaks::CheckAssetFiles()
+{
+	if (!asset_files_to_check.empty())
+	{
+		std::string curr_file = *asset_files_to_check.begin();
+
+		std::vector<std::string> files_to_check;
+		bool correct = App->resource_manager->IsAssetOnLibrary(curr_file.c_str(), files_to_check);
+
+		if (correct)
+		{
+			library_files_used.insert(library_files_used.end(), files_to_check.begin(), files_to_check.end());
+		}
+		else
+		{
+			assets_to_reimport.push_back(curr_file);
+		}
+
+		asset_files_to_check.erase(asset_files_to_check.begin());
+	}
+	else
+	{
+		library_files_to_check = App->file_system->GetFilesInPathAndChilds(App->file_system->GetLibraryPath().c_str());
+
+		check_asset_files = false;
+		delete_unnecessary = true;
+	}
+}
+
+void CheckCorrectLibraryAsyncTaks::DeleteUnnecessary()
+{
+	if (!library_files_to_check.empty())
+	{
+		std::string curr_file = *library_files_to_check.begin();
+
+		bool to_delete = true;
+		for (std::vector<std::string>::iterator it = library_files_used.begin(); it != library_files_used.end(); ++it)
+		{
+			if ((*it) == curr_file)
+			{
+				library_files_used.erase(it);
+				to_delete = false;
+				break;
+			}
+		}
+
+		if (to_delete)
+		{
+			App->file_system->FileDelete(curr_file.c_str());
+		}
+
+		library_files_to_check.erase(library_files_to_check.begin());
+	}
+	else
+	{
+		delete_unnecessary = false;
+		reimport_files = true;
+	}
+}
+
+void CheckCorrectLibraryAsyncTaks::ReimportFiles()
+{
+	if (!assets_to_reimport.empty())
+	{
+		std::string curr_file = *assets_to_reimport.begin();
+
+		App->resource_manager->ExportAssetToLibrary(curr_file.c_str());
+
+		assets_to_reimport.erase(assets_to_reimport.begin());
+	}
+}

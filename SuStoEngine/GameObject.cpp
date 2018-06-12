@@ -243,7 +243,7 @@ bool GameObject::RemoveComponent(ComponentType type)
 					}
 				}
 
-				Event ev(EventType::ET_COMPONENT_CREATE);
+				Event ev(EventType::ET_COMPONENT_DESTROY);
 				ev.component_create.component = (*it);
 				App->event_system->Send(ev);
 

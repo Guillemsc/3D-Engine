@@ -180,10 +180,7 @@ bool ResourceMeshLoader::UnloadAssetFromEngine(DecomposedFilePath d_filepath)
 
 	return ret;
 }
-bool ResourceMeshLoader::ExportAssetToLibrary(DecomposedFilePath decomposed_file_path)
-{
-	return false;
-}
+
 void ResourceMeshLoader::ClearFromGameObject(Resource * resource, GameObject * go)
 {
 	if (go != nullptr)
@@ -198,6 +195,14 @@ void ResourceMeshLoader::ClearFromGameObject(Resource * resource, GameObject * g
 			}
 		}
 	}
+}
+bool ResourceMeshLoader::ExportAssetToLibrary(DecomposedFilePath d_filepath)
+{
+	bool ret = false;
+
+	const aiScene* scene = aiImportFile(d_filepath.file_path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
+
+	return ret;
 }
 bool ResourceMeshLoader::ExportResourceToLibrary(Resource * resource)
 {
@@ -369,7 +374,7 @@ bool ResourceMeshLoader::LoadAssetResourceIntoScene(DecomposedFilePath decompose
 
 	return ret;
 }
-bool ResourceMeshLoader::IsAssetOnLibrary(DecomposedFilePath d_filepath)
+bool ResourceMeshLoader::IsAssetOnLibrary(DecomposedFilePath d_filepath, std::vector<std::string>& library_files_used)
 {
 	bool ret = false;
 
@@ -380,9 +385,11 @@ bool ResourceMeshLoader::IsAssetOnLibrary(DecomposedFilePath d_filepath)
 	JSON_Doc* doc = App->json->LoadJSON(meta_file.c_str());
 	if(doc != nullptr)
 	{
-		std::string prefab_uid = doc->GetString("prefab_uid");
+		std::string prefab_uid = doc->GetString("meshprefab_uid");
 
-		std::string prefab_path = library_path + prefab_uid + ".sustomesh" + ".prefab";
+		std::string prefab_path = library_path + prefab_uid + ".meshprefab";
+
+		library_files_used.push_back(prefab_path);
 
 		if (App->file_system->FileExists(prefab_path.c_str()))
 		{
@@ -396,6 +403,9 @@ bool ResourceMeshLoader::IsAssetOnLibrary(DecomposedFilePath d_filepath)
 
 			std::string resource_path = library_path + uid + ".sustomesh";
 			std::string meta_path = library_path + uid + ".meta";
+
+			library_files_used.push_back(resource_path);
+			library_files_used.push_back(meta_path);
 
 			if (App->file_system->FileExists(resource_path.c_str()) && App->file_system->FileExists(meta_path.c_str()))
 			{

@@ -482,8 +482,11 @@
     </ClInclude>
     <ClInclude Include="GameObjectAbstractor.h">
       <Filter>Sources\4. GameObjects ===========</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="ModuleEventSystem.h">
+      <Filter>Sources\2. Modules ==============</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleAsyncTasks.h">
       <Filter>Sources\2. Modules ==============</Filter>
     </ClInclude>
   </ItemGroup>
@@ -796,8 +799,11 @@
     </ClCompile>
     <ClCompile Include="GameObjectAbstractor.cpp">
       <Filter>Sources\4. GameObjects ===========</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="ModuleEventSystem.cpp">
+      <Filter>Sources\2. Modules ==============</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleAsyncTasks.cpp">
       <Filter>Sources\2. Modules ==============</Filter>
     </ClCompile>
   </ItemGroup>

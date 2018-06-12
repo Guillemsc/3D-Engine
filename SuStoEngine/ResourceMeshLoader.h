@@ -62,13 +62,13 @@ public:
 	void ClearFromGameObject(Resource* resource, GameObject* go);
 
 	bool ExportAssetToLibrary(DecomposedFilePath decomposed_file_path);
-	bool ExportResourceToLibrary(Resource* resource);
 
+	bool ExportResourceToLibrary(Resource* resource);
 	bool ImportResourceFromLibrary(const char* uid);
 
 	bool LoadAssetResourceIntoScene(DecomposedFilePath decomposed_file_path);
 
-	bool IsAssetOnLibrary(DecomposedFilePath d_filepath);
+	bool IsAssetOnLibrary(DecomposedFilePath d_filepath, std::vector<std::string>& library_files_used);
 	bool RenameAsset(DecomposedFilePath decomposed_file_path, const char* new_name);
 
 

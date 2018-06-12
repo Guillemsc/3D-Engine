@@ -6,10 +6,38 @@
 #include <map>
 #include <vector>
 #include "ResourceLoader.h"
+#include "ModuleAsyncTasks.h"
 
 class ResourceMeshLoader;
 class ResourceMesh;
 class ResourceTextureLoader;
+
+
+
+class CheckCorrectLibraryAsyncTaks : public AsyncTask
+{
+public:
+	CheckCorrectLibraryAsyncTaks(AsyncTaskMode mode, uint iterations_per_frame);
+
+	void Start();
+	void Update();
+	void Finish();
+
+private:
+	void CheckAssetFiles();
+	void ReimportFiles();
+	void DeleteUnnecessary();
+
+private:
+	std::vector<std::string> asset_files_to_check;
+	std::vector<std::string> assets_to_reimport;
+	std::vector<std::string> library_files_used;
+	std::vector<std::string> library_files_to_check;
+
+	bool check_asset_files = false;
+	bool reimport_files = false;
+	bool delete_unnecessary = false;
+};
 
 class ResourceManager : public Module
 {
@@ -21,15 +49,16 @@ public:
 	bool Start();
 	bool CleanUp();
 
+	void OnStartEngine();
 	void OnLoadFile(const char* filepath);
-
-	// Resource management
-	Resource * Get(std::string unique_id);
-	Resource * Get(std::string unique_id, ResourceType type);
 
 	ResourceLoader* GetLoader(ResourceType type);
 	ResourceType AssetExtensionToType(const char* extension);
 	ResourceType LibraryExtensionToType(const char* extension);
+
+	// Resource management
+	Resource* Get(std::string unique_id);
+	Resource* Get(std::string unique_id, ResourceType type);
 
 	Resource* CreateNewResource(ResourceType type);
 	Resource* CreateNewResource(ResourceType type, std::string unique_id);
@@ -43,9 +72,7 @@ public:
 	void ExportResourceToLibrary(Resource* resource);
 	void ImportResourceFromLibrary(const char* uid);
 	void LoadAssetResourceIntoScene(const char* filepath);
-	bool IsAssetOnLibrary(const char* filepath);
-	void CreateResourcesMissingOnLibrary();
-	void RemoveResourcesMissingOnAssets();
+	bool IsAssetOnLibrary(const char* filepath, std::vector<std::string>& library_files_used = std::vector<std::string>());
 	void RenameAsset(const char* filepath, const char* new_name);
 
 	std::string GetNewUID();
@@ -53,7 +80,6 @@ public:
 private:
 	void AddLoader(ResourceLoader* loader);
 
-	//void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension);
 	//void DeleteAllResources();
 
 private:

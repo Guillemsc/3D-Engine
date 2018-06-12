@@ -57,7 +57,7 @@ public:
 	virtual bool LoadAssetResourceIntoScene(DecomposedFilePath decomposed_file_path) { return false; };
 
 	// Returns true if the resource can be found on the library folder
-	virtual bool IsAssetOnLibrary(DecomposedFilePath decomposed_file_path) { return false; };
+	virtual bool IsAssetOnLibrary(DecomposedFilePath decomposed_file_path, std::vector<std::string>& library_files_used) { return false; };
 
 	// Renames the library resource and all other necessary files
 	virtual bool RenameAsset(DecomposedFilePath decomposed_file_path, const char* new_name) { return false; };

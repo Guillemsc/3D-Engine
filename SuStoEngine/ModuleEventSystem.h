@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "GameObject.h"
+#include "ModuleAsyncTasks.h"
 #include <functional>
 
 enum EventType
@@ -16,6 +17,9 @@ enum EventType
 	ET_COMPONENT_DESTROY,
 	ET_COMPONENT_ACTIVATE,
 	ET_COMPONENT_DEACTIVATE,
+
+	ET_ASYNC_TASK_STARTED,
+	ET_ASYNC_TASK_FINISHED,
 };
 
 struct EventSuscribers
@@ -75,6 +79,19 @@ public:
 		Component* component = nullptr;
 	}
 	component_deactivate;
+
+	// Async Tasks
+	struct AsyncTaskStarted
+	{
+		AsyncTask* task = nullptr;
+	}
+	async_task_started;
+
+	struct AsyncTaskFinished
+	{
+		AsyncTask* task = nullptr;
+	}
+	async_task_finished;
 
 private:
 	EventType type = ET_NULL;

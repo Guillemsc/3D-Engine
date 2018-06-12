@@ -63,11 +63,16 @@ void Explorer::Draw()
 					}
 				}
 
-				if (ImGui::BeginPopup("SelectedFolderPopup"))
+				if (ImGui::BeginPopup("SelectedFilePopup"))
 				{
 					if (ImGui::Button("Load"))
 					{
+						App->resource_manager->LoadAssetResourceIntoScene((*it).file_path.c_str());
+					}
 
+					if (ImGui::Button("Delete"))
+					{
+						App->resource_manager->UnloadAssetFromEngine((*it).file_path.c_str());
 					}
 
 					ImGui::EndPopup();
