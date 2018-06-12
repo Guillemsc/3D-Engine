@@ -14,7 +14,7 @@ public:
 	virtual ~Hierarchy();
 
 	void Start();
-	void Draw();
+	void Draw(uint flags);
 
 private:
 	void PrintGoAndChildsRecursive(GameObject* go);

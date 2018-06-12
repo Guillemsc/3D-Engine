@@ -92,7 +92,7 @@ bool EditorUI::Start()
 
 	ImGuizmo::Enable(true);
 
-	for (vector<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
+	for (vector<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); ++it)
 	{
 		(*it)->Start();
 	}
@@ -147,7 +147,7 @@ bool EditorUI::CleanUp()
 
 	CONSOLE_LOG("Destroying ImGui");
 
-	for (vector<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
+	for (vector<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); ++it)
 	{
 		(*it)->CleanUp();
 		delete (*it);
@@ -197,7 +197,7 @@ void EditorUI::SaveLayoutsInfo()
 
 		layout->ClearArray("layouts");
 		layout->SetArray("layouts");
-		for (list<string>::iterator it = layouts.begin(); it != layouts.end(); it++)
+		for (list<string>::iterator it = layouts.begin(); it != layouts.end(); ++it)
 		{
 			layout->AddStringToArray("layouts", (*it).c_str());
 		}
@@ -262,9 +262,14 @@ void EditorUI::DrawDockingEditor()
 	ImGui::BeginDockspace();
 
 	// Draw editor elements
-	for (vector<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); it++)
+	for (vector<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); ++it)
 	{
-		(*it)->Draw();
+		uint flags = 0;
+
+		if (!(*it)->GetInteractable())
+			flags |= ImGuiWindowFlags_NoInputs;
+
+		(*it)->Draw(flags);
 	}
 
 	ImGui::EndDockspace();
@@ -318,7 +323,7 @@ void EditorUI::SaveCurrentLayout()
 
 void EditorUI::SaveNewLayout(const char * layout)
 {
-	for (list<string>::iterator it = layouts.begin(); it != layouts.end(); it++)
+	for (list<string>::iterator it = layouts.begin(); it != layouts.end(); ++it)
 	{
 		if (TextCmp((*it).c_str(), layout))
 		{
@@ -398,6 +403,14 @@ Inspector * EditorUI::GetInspector()
 Explorer * EditorUI::GetExplorer()
 {
 	return explorer;
+}
+
+void EditorUI::SetEditorInteractable(bool set)
+{
+	for (vector<EditorElement*>::iterator it = editor_elements.begin(); it != editor_elements.end(); ++it)
+	{
+		(*it)->SetInteractable(set);
+	}
 }
 
 
@@ -637,4 +650,12 @@ void EditorUI::LoadStyle(const char * name)
 	}
 }
 
+void EditorElement::SetInteractable(bool set)
+{
+	interactable = set;
+}
 
+bool EditorElement::GetInteractable() const
+{
+	return interactable;
+}

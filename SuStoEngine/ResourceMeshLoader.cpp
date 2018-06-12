@@ -116,6 +116,10 @@ bool ResourceMeshLoader::LoadFileToEngine(DecomposedFilePath d_filepath, std::ve
 
 		// Crate meta
 		std::string meta_path = (App->file_system->GetAssetsPath().c_str() + d_filepath.file_name + "." + d_filepath.file_extension + ".meta");
+
+		if (App->file_system->FileExists(meta_path.c_str()))
+			App->file_system->FileDelete(meta_path.c_str());
+
 		JSON_Doc* doc = App->json->CreateJSON(meta_path.c_str());
 		if (doc != nullptr)
 		{
@@ -254,10 +258,10 @@ bool ResourceMeshLoader::ExportResourceToLibrary(Resource * resource)
 		// -------------------------------------
 		string meta_name = library_path + name + ".meta";
 
-		JSON_Doc* doc = App->json->LoadJSON(meta_name.c_str());
+		if (App->file_system->FileExists(meta_name.c_str()))
+			App->file_system->FileDelete(meta_name.c_str());
 
-		if (doc == nullptr)
-			doc = App->json->CreateJSON(meta_name.c_str());
+		JSON_Doc* doc = App->json->CreateJSON(meta_name.c_str());
 
 		if (doc != nullptr)
 		{
@@ -267,10 +271,9 @@ bool ResourceMeshLoader::ExportResourceToLibrary(Resource * resource)
 			doc->SetString("name", mesh->GetFileName().c_str());
 
 			doc->Save();
+
+			App->json->UnloadJSON(doc);
 		}
-
-		App->json->UnloadJSON(doc);
-
 	}
 
 	return ret;
@@ -373,43 +376,47 @@ bool ResourceMeshLoader::IsAssetOnLibrary(DecomposedFilePath d_filepath, std::ve
 	bool ret = false;
 
 	int correct = 0;
+	int resources_count = -9999;
 
 	std::string meta_file = d_filepath.file_path + ".meta";
 
-	JSON_Doc* doc = App->json->LoadJSON(meta_file.c_str());
-	if(doc != nullptr)
+	if (App->file_system->FileExists(meta_file.c_str()))
 	{
-		std::string prefab_uid = doc->GetString("meshprefab_uid");
-
-		std::string prefab_path = library_path + prefab_uid + ".meshprefab";
-
-		library_files_used.push_back(prefab_path);
-
-		if (App->file_system->FileExists(prefab_path.c_str()))
+		JSON_Doc* doc = App->json->LoadJSON(meta_file.c_str());
+		if (doc != nullptr)
 		{
-			++correct;
-		}
+			std::string prefab_uid = doc->GetString("meshprefab_uid");
 
-		int resources_count = doc->GetArrayCount("resources");
-		for (int i = 0; i < resources_count; ++i)
-		{
-			std::string uid = doc->GetStringFromArray("resources", i);
+			std::string prefab_path = library_path + prefab_uid + ".meshprefab";
 
-			std::string resource_path = library_path + uid + ".sustomesh";
-			std::string meta_path = library_path + uid + ".meta";
+			library_files_used.push_back(prefab_path);
 
-			library_files_used.push_back(resource_path);
-			library_files_used.push_back(meta_path);
-
-			if (App->file_system->FileExists(resource_path.c_str()) && App->file_system->FileExists(meta_path.c_str()))
+			if (App->file_system->FileExists(prefab_path.c_str()))
 			{
 				++correct;
 			}
-		}
 
-		if (correct == resources_count + 1)
-			ret = true;
+			int resources_count = doc->GetArrayCount("resources");
+			for (int i = 0; i < resources_count; ++i)
+			{
+				std::string uid = doc->GetStringFromArray("resources", i);
+
+				std::string resource_path = library_path + uid + ".sustomesh";
+				std::string meta_path = library_path + uid + ".meta";
+
+				library_files_used.push_back(resource_path);
+				library_files_used.push_back(meta_path);
+
+				if (App->file_system->FileExists(resource_path.c_str()) && App->file_system->FileExists(meta_path.c_str()))
+				{
+					++correct;
+				}
+			}
+		}
 	}
+
+	if (correct == resources_count + 1)
+		ret = true;
 	
 	return ret;
 }

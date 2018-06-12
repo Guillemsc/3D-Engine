@@ -19,7 +19,7 @@ public:
 	virtual ~Configuration();
 
 	void Start();
-	void Draw();
+	void Draw(uint flags);
 
 	void OpenGLOptions();
 

@@ -11,7 +11,7 @@ public:
 	virtual ~EngineTest();
 
 	void Start();
-	void Draw();
+	void Draw(uint flags);
 
 private:
 	void GenerateRandomNumbers(float2 range, int quantity);

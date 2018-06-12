@@ -46,8 +46,6 @@ JSON_Doc* JSONLoader::LoadJSON(const char * path)
 		}
 		else
 		{
-			CONSOLE_LOG("Succes loading %s", path);
-
 			JSON_Doc* new_doc = new JSON_Doc(user_data, root_object, path);
 			jsons.push_back(new_doc);
 

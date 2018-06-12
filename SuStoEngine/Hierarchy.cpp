@@ -21,9 +21,11 @@ void Hierarchy::Start()
 {
 }
 
-void Hierarchy::Draw()
+void Hierarchy::Draw(uint flags)
 {
-	ImGui::BeginDock("Hierarchy", false, &visible, false, ImGuiWindowFlags_MenuBar);
+	flags |= ImGuiWindowFlags_MenuBar;
+
+	ImGui::BeginDock("Hierarchy", false, &visible, false, flags);
 	
 	// Menu
 	if (ImGui::BeginMenuBar())

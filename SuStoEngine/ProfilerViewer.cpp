@@ -21,7 +21,7 @@ void ProfilerViewer::Start()
 	record = false;
 }
 
-void ProfilerViewer::Draw()
+void ProfilerViewer::Draw(uint flags)
 {
 	if (App->input->GetKeyBindingDown("profiler"))
 	{
@@ -34,7 +34,7 @@ void ProfilerViewer::Draw()
 	}
 
 	ImGui::SetNextWindowSize(ImVec2(400, 800), 2);
-	ImGui::BeginDock("Profiler", false, &visible, false, 0);
+	ImGui::BeginDock("Profiler", false, &visible, false, flags);
 	
 	ImGui::Text("Mode:");
 	ImGui::RadioButton("General", &profiler_mode, 1); ImGui::SameLine();

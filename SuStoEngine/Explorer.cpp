@@ -23,15 +23,17 @@ void Explorer::Start()
 	update_folders = true;
 }
 
-void Explorer::Draw()
+void Explorer::Draw(uint flags)
 {
+	flags |= ImGuiWindowFlags_MenuBar;
+
 	if (looking_timer.ReadSec() > 2.0f)
 	{
 		looking_timer.Start();
 		update_folders = true;
 	}
 
-	ImGui::BeginDock("Explorer", false, &visible, false, ImGuiWindowFlags_MenuBar);	
+	ImGui::BeginDock("Explorer", false, &visible, false, flags);
 
 	ImGui::Columns(2);
 

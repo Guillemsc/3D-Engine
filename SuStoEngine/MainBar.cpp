@@ -29,7 +29,7 @@ void MainBar::Start()
 {
 }
 
-void MainBar::Draw()
+void MainBar::Draw(uint flags)
 {
 	if (ImGui::BeginMainMenuBar())
 	{

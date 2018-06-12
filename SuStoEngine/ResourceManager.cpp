@@ -67,7 +67,7 @@ bool ResourceManager::CleanUp()
 
 void ResourceManager::OnStartEngine()
 {
-	CheckCorrectLibraryAsyncTaks* task = new CheckCorrectLibraryAsyncTaks(AsyncTaskMode::AST_FOCUS, 1);
+	CheckCorrectLibraryAsyncTaks* task = new CheckCorrectLibraryAsyncTaks(AsyncTaskMode::AST_FOCUS, 2);
 	App->async_tasks->StartTask(task);
 }
 

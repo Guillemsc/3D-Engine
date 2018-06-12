@@ -14,7 +14,7 @@ public:
 	virtual ~Game();
 
 	void Start();
-	void Draw();
+	void Draw(uint flags);
 	void CleanUp();
 
 public:

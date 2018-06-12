@@ -39,6 +39,8 @@ private:
 
 	float		   progress = 0.0f;
 	std::string	   phase;
+
+	bool		   first_update = true;
 };
 
 class ModuleAsyncTasks : public Module
@@ -53,6 +55,10 @@ public:
 	bool CleanUp();
 
 	void StartTask(AsyncTask* start);
+
+private:
+	void AsyncTaskModeStart(AsyncTask* task);
+	void AsyncTaskModeFinish(AsyncTask* task);
 
 private:
 	std::vector<AsyncTask*> running_tasks;

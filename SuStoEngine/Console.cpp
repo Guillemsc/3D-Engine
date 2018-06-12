@@ -19,9 +19,9 @@ void Console::Start()
 	
 }
 
-void Console::Draw()
+void Console::Draw(uint flags)
 {
-	bool ret = true;
+	flags |= ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
 
 	AddLogs();
 	
@@ -30,7 +30,7 @@ void Console::Draw()
 		visible = !visible;
 	}
 
-	ImGui::BeginDock("Console", false, &visible, false, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+	ImGui::BeginDock("Console", false, &visible, false, flags);
 		
 	if (ImGui::SmallButton("Clear"))
 		CommandInput(".Clear");

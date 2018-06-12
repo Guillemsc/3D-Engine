@@ -48,8 +48,10 @@ void Hardware::Start()
 	App->window->GetDisplaySize(window_w, window_h);
 }
 
-void Hardware::Draw()
+void Hardware::Draw(uint flags)
 {
+	flags |= ImGuiWindowFlags_AlwaysAutoResize;
+
 	ImGuiStyle * style = &ImGui::GetStyle();
 	ImVec4 sec_colour = style->Colors[ImGuiCol_ComboBg];
 	sec_colour.x += +0.2f;
@@ -59,7 +61,7 @@ void Hardware::Draw()
 	if (!visible)
 		return;
 
-	if (ImGui::Begin("Hardware", &visible, ImGuiWindowFlags_AlwaysAutoResize))
+	if (ImGui::Begin("Hardware", &visible, flags))
 	{
 		ImGui::Text("SDL_Version:");
 		ImGui::SameLine();

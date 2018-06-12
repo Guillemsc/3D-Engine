@@ -17,9 +17,11 @@ void Inspector::Start()
 {
 }
 
-void Inspector::Draw()
+void Inspector::Draw(uint flags)
 {
-	ImGui::BeginDock("Inspector", false, &visible, false, ImGuiWindowFlags_MenuBar);
+	flags |= ImGuiWindowFlags_MenuBar;
+
+	ImGui::BeginDock("Inspector", false, &visible, false, flags);
 
 	vector<GameObject*> selected = App->gameobj->GetSelectedGameObjects();
 

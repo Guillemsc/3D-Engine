@@ -26,10 +26,17 @@ public:
 	virtual ~EditorElement() {};
 
 	virtual void Start() {};
-	virtual void Draw() {};
+	virtual void Draw(uint flags) {};
 	virtual void CleanUp() {};
 
+	void SetInteractable(bool set);
+	bool GetInteractable() const;
+
+public:
 	bool visible = false;
+
+protected:
+	bool interactable = true;
 };
 
 class EditorUI : public Module
@@ -83,6 +90,8 @@ public:
 	Hierarchy* GetHerarchy();
 	Inspector* GetInspector();
 	Explorer* GetExplorer();
+
+	void SetEditorInteractable(bool set);
 
 private:
 	void AddEditor(EditorElement* el);

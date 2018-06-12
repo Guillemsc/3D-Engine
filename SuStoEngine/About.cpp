@@ -16,12 +16,14 @@ void About::Start()
 {
 }
 
-void About::Draw()
+void About::Draw(uint flags)
 {
+	flags |= ImGuiWindowFlags_AlwaysAutoResize;
+
 	if (!visible)
 		return;
 
-	if (ImGui::Begin("About SuSto Engine", &visible, ImGuiWindowFlags_AlwaysAutoResize))
+	if (ImGui::Begin("About SuSto Engine", &visible, flags))
 	{
 		ImGui::Text("SuSto Engine %s", App->GetVersion());
 		ImGui::Separator();

@@ -35,7 +35,7 @@ public:
 	virtual ~Console();
 
 	void Start();
-	void Draw();
+	void Draw(uint flags);
 
 	void AddLog(const char* txt, ConsoleTextType type = ConsoleTextType::C_T_T_DEFAULT);
 	void AddLog(ConsoleText console_text);

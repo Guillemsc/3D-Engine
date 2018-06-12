@@ -22,9 +22,11 @@ void Game::Start()
 	position = { 0, 0 };
 }
 
-void Game::Draw()
+void Game::Draw(uint flags)
 {
-	ImGui::BeginDock("Game", false, &visible, false, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+	flags |= ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+
+	ImGui::BeginDock("Game", false, &visible, false, flags);
 	
 	ImGuizmo::SetDrawlist();
 

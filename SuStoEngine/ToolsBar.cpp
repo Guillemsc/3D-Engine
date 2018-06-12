@@ -17,13 +17,15 @@ void ToolsBar::Start()
 {
 }
 
-void ToolsBar::Draw()
+void ToolsBar::Draw(uint flags)
 {
+	flags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize
+		| ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+
 	ImGui::SetNextWindowPos(ImVec2(-5, 20));
 	ImGui::SetNextWindowSize(ImVec2(App->window->GetWindowSize().x + 10, 27));
 	bool open = true;
-	ImGui::Begin("tool_Bar", &open, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize 
-		| ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+	ImGui::Begin("tool_Bar", &open, flags);
 
 	ImGui::SetCursorPos(ImVec2(20, 3));
 	if (ImGui::Button("Move"))

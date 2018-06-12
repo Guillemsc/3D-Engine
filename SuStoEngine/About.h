@@ -11,7 +11,7 @@ public:
 	virtual ~About();
 
 	void Start();
-	void Draw();
+	void Draw(uint flags);
 
 public:
 

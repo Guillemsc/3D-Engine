@@ -22,9 +22,9 @@ void EngineTest::Start()
 	range_demo.y = 100;
 }
 
-void EngineTest::Draw()
+void EngineTest::Draw(uint flags)
 {
-	ImGui::BeginDock("Engine Tests", false, &visible, false);
+	ImGui::BeginDock("Engine Tests", false, &visible, false, flags);
 	
 	ImGui::Separator();
 

@@ -14,7 +14,7 @@ public:
 	virtual ~Hardware();
 
 	void Start();
-	void Draw();
+	void Draw(uint flags);
 
 public:
 

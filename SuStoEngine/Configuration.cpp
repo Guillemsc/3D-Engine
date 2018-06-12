@@ -41,7 +41,7 @@ void Configuration::Start()
 	camera_speed = App->camera->GetCameraSpeed();
 }
 
-void Configuration::Draw()
+void Configuration::Draw(uint flags)
 {
 	if (App->input->GetKeyBindingDown("configuration"))
 	{
@@ -58,7 +58,7 @@ void Configuration::Draw()
 	ImGui::SetNextWindowPos(ImVec2(window_width - window_width / 4, 23), 2);
 	ImGui::SetNextWindowSize(ImVec2(window_width / 4, window_height - 23), 2);
 
-	ImGui::BeginDock("Configuration", false, &visible, false);
+	ImGui::BeginDock("Configuration", false, &visible, false, flags);
 	
 	// ---------------------------------------------------------------------
 	// App -----------------------------------------------------------------

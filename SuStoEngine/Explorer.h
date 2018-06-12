@@ -20,7 +20,7 @@ public:
 	virtual ~Explorer();
 
 	void Start();
-	void Draw();
+	void Draw(uint flags);
 
 	void UpdateFloders();
 	//void CleanUp();

@@ -11,7 +11,7 @@ public:
 	virtual ~MainBar();
 
 	void Start();
-	void Draw();
+	void Draw(uint flags);
 
 public:
 

@@ -20,14 +20,25 @@ bool ModuleAsyncTasks::PreUpdate()
 	{
 		if (!(*it)->finished)
 		{
-			for(int i = 0; i < (*it)->iterations_per_frame; ++i)
+			for (int i = 0; i < (*it)->iterations_per_frame; ++i)
+			{
+				if ((*it)->first_update)
+				{
+					AsyncTaskModeStart((*it));
+
+					(*it)->first_update = false;
+				}
+
 				(*it)->Update();
+			}
 
 			++it;
 		}
 		else
 		{
 			(*it)->Finish();
+
+			AsyncTaskModeFinish((*it));
 
 			Event ev(EventType::ET_ASYNC_TASK_FINISHED);
 			ev.async_task_finished.task = (*it);
@@ -47,14 +58,15 @@ bool ModuleAsyncTasks::Update()
 
 	for (std::vector<AsyncTask*>::iterator it = running_tasks.begin(); it != running_tasks.end(); ++it)
 	{
-		bool t = true;
+		uint flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize 
+			| ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoSavedSettings;
 
-		uint flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize;
-
-		if (ImGui::Begin((*it)->task_name.c_str(), &t, flags))
+		ImVec2 size = ImGui::GetWindowSize();
+		ImGui::SetNextWindowPos(ImVec2((size.x * 0.5), (size.y * 0.5f - 60)));
+		if (ImGui::Begin((*it)->task_name.c_str(), nullptr, flags))
 		{
 			ImGui::Text((*it)->phase.c_str());
-			ImGui::ProgressBar((*it)->progress * 0.01f, ImVec2(0, 0));
+			ImGui::ProgressBar((*it)->progress * 0.01f, ImVec2(400, 0));
 			ImGui::End();
 		}
 	}
@@ -93,6 +105,51 @@ void ModuleAsyncTasks::StartTask(AsyncTask* start)
 		App->event_system->Send(ev);
 
 		start->Start();
+	}
+}
+
+void ModuleAsyncTasks::AsyncTaskModeStart(AsyncTask* task)
+{
+	if (task != nullptr)
+	{
+		switch (task->GetMode())
+		{
+		case AsyncTaskMode::AST_BACKGROUND:
+			break;
+
+		case AsyncTaskMode::AST_FOCUS:
+			App->editorUI->SetEditorInteractable(false);
+			break;
+		}
+	}
+}
+
+void ModuleAsyncTasks::AsyncTaskModeFinish(AsyncTask* task)
+{
+	if (task != nullptr)
+	{
+		switch (task->GetMode())
+		{
+		case AsyncTaskMode::AST_BACKGROUND:
+			break;
+
+		case AsyncTaskMode::AST_FOCUS:
+			bool can_disable = true;
+
+			for (std::vector<AsyncTask*>::iterator it = running_tasks.begin(); it != running_tasks.end(); ++it)
+			{
+				if ((*it)->GetMode() == AsyncTaskMode::AST_FOCUS && (*it) != task)
+				{
+					can_disable = false;
+					break;
+				}
+
+				if (can_disable)
+					App->editorUI->SetEditorInteractable(true);
+			}
+
+			break;
+		}
 	}
 }
 

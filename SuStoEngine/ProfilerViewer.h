@@ -11,7 +11,7 @@ public:
 	virtual ~ProfilerViewer();
 
 	void Start();
-	void Draw();
+	void Draw(uint flags);
 public:
 
 private:
