@@ -18,7 +18,8 @@ class GameObject
 	friend GameObjectAbstractor;
 
 public:
-	GameObject(std::string unique_id, ModuleGameObject* go_module);
+	GameObject();
+	GameObject(std::string unique_id);
 	virtual ~GameObject();
 
 	void Start();
@@ -94,8 +95,6 @@ private:
 	std::vector<GameObject*> childs;
 
 	bool		is_ui = false;
-
-	ModuleGameObject* go_module = nullptr;
 
 	bool debug_draw = false;
 };

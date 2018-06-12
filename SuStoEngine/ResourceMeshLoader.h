@@ -61,8 +61,6 @@ public:
 	bool UnloadAssetFromEngine(DecomposedFilePath decomposed_file_path);
 	void ClearFromGameObject(Resource* resource, GameObject* go);
 
-	bool ExportAssetToLibrary(DecomposedFilePath decomposed_file_path);
-
 	bool ExportResourceToLibrary(Resource* resource);
 	bool ImportResourceFromLibrary(const char* uid);
 

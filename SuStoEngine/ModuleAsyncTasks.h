@@ -16,11 +16,17 @@ class AsyncTask
 	friend ModuleAsyncTasks;
 
 public:
-	AsyncTask(AsyncTaskMode mode, uint iterations_per_frame);
+	AsyncTask(AsyncTaskMode mode, uint iterations_per_frame, std::string task_name);
 
 	virtual void Start() {};
 	virtual void Update() {};
 	virtual void Finish() {};
+
+	void SetPercentageProgress(float set);
+	float GetPercentageProgress();
+
+	void SetCurrPhase(std::string phase);
+	std::string GetCurrPhase();
 
 	void FinishTask();
 	AsyncTaskMode GetMode();
@@ -29,6 +35,10 @@ private:
 	AsyncTaskMode  mode = AsyncTaskMode::AST_FOCUS;
 	bool		   finished = false;
 	uint		   iterations_per_frame = 0;
+	std::string	   task_name;
+
+	float		   progress = 0.0f;
+	std::string	   phase;
 };
 
 class ModuleAsyncTasks : public Module

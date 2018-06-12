@@ -1,6 +1,7 @@
 #include "ModuleAsyncTasks.h"
 #include "App.h"
 #include "ModuleEventSystem.h"
+#include "imgui.h"
 
 ModuleAsyncTasks::ModuleAsyncTasks(bool start_enabled) : Module(start_enabled)
 {
@@ -44,6 +45,20 @@ bool ModuleAsyncTasks::Update()
 {
 	bool ret = true;
 
+	for (std::vector<AsyncTask*>::iterator it = running_tasks.begin(); it != running_tasks.end(); ++it)
+	{
+		bool t = true;
+
+		uint flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize;
+
+		if (ImGui::Begin((*it)->task_name.c_str(), &t, flags))
+		{
+			ImGui::Text((*it)->phase.c_str());
+			ImGui::ProgressBar((*it)->progress * 0.01f, ImVec2(0, 0));
+			ImGui::End();
+		}
+	}
+
 	return ret;
 }
 
@@ -81,15 +96,42 @@ void ModuleAsyncTasks::StartTask(AsyncTask* start)
 	}
 }
 
-AsyncTask::AsyncTask(AsyncTaskMode _mode, uint _iterations_per_frame)
+AsyncTask::AsyncTask(AsyncTaskMode _mode, uint _iterations_per_frame, std::string _task_name)
 {
 	mode = _mode;
 	iterations_per_frame = _iterations_per_frame;
+	task_name = _task_name;
 }
 
 void AsyncTask::FinishTask()
 {
 	finished = true;
+}
+
+void AsyncTask::SetPercentageProgress(float set)
+{
+	progress = set;
+
+	if (progress < 0)
+		progress = 0.0f;
+
+	if (progress > 100)
+		progress = 100.0f;
+}
+
+float AsyncTask::GetPercentageProgress()
+{
+	return progress;
+}
+
+void AsyncTask::SetCurrPhase(std::string _phase)
+{
+	phase = _phase;
+}
+
+std::string AsyncTask::GetCurrPhase()
+{
+	return phase;
 }
 
 AsyncTaskMode AsyncTask::GetMode()

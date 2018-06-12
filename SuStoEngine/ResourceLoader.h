@@ -44,9 +44,6 @@ public:
 	// Removes elements of a GameObject that use this resource
 	virtual void ClearFromGameObject(Resource* resource, GameObject* go) {  };
 
-	// Exports an asset to the library
-	virtual bool ExportAssetToLibrary(DecomposedFilePath decomposed_file_path) { return false; };
-
 	// Exports resource into the library folder with own format
 	virtual bool ExportResourceToLibrary(Resource* resource) { return false; };
 

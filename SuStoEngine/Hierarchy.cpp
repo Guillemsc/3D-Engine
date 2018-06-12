@@ -51,10 +51,13 @@ void Hierarchy::Draw()
 	{
 		GameObject* go = App->gameobj->Create();
 
-		App->gameobj->ClearSelection();
-		App->gameobj->AddGameObjectToSelected(go);
+		if (go != nullptr)
+		{
+			App->gameobj->ClearSelection();
+			App->gameobj->AddGameObjectToSelected(go);
 
-		create_empty_game_object = false;
+			create_empty_game_object = false;
+		}
 	}
 }
 

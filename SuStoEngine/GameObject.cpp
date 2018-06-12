@@ -19,10 +19,18 @@
 
 #include "Glew/include/glew.h" 
 
-GameObject::GameObject(std::string _unique_id, ModuleGameObject* _go_module)
+GameObject::GameObject()
+{
+	unique_id = App->resource_manager->GetNewUID();
+
+	transform = (ComponentTransform*)AddComponent(TRANSFORM);
+}
+
+GameObject::GameObject(std::string _unique_id)
 {
 	unique_id = _unique_id;
-	go_module = _go_module;
+
+	transform = (ComponentTransform*)AddComponent(TRANSFORM);
 }
 
 GameObject::~GameObject()
@@ -34,8 +42,6 @@ void GameObject::Start()
 	CONSOLE_LOG("Game Object Created");
 
 	SetName("GameObject");
-
-	transform = (ComponentTransform*)AddComponent(TRANSFORM);
 }
 
 void GameObject::PreUpdate()

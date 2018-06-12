@@ -79,9 +79,8 @@ bool ResourceMeshLoader::LoadFileToEngine(DecomposedFilePath d_filepath, std::ve
 		}
 
 		// Create root go
-		GameObject* parent = nullptr;
+		GameObject* parent = new GameObject();
 
-		parent = App->gameobj->Create();
 		parent->transform->SetPosition(float3(position.x, position.y, position.z));
 		parent->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 		parent->transform->SetScale(float3(scale.x, scale.y, scale.z));
@@ -132,6 +131,8 @@ bool ResourceMeshLoader::LoadFileToEngine(DecomposedFilePath d_filepath, std::ve
 			doc->Save();
 			App->json->UnloadJSON(doc);
 		}
+
+		App->gameobj->Destroy(parent);
 	}
 
 	return ret;
@@ -196,14 +197,7 @@ void ResourceMeshLoader::ClearFromGameObject(Resource * resource, GameObject * g
 		}
 	}
 }
-bool ResourceMeshLoader::ExportAssetToLibrary(DecomposedFilePath d_filepath)
-{
-	bool ret = false;
 
-	const aiScene* scene = aiImportFile(d_filepath.file_path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
-
-	return ret;
-}
 bool ResourceMeshLoader::ExportResourceToLibrary(Resource * resource)
 {
 	bool ret = true;
@@ -450,7 +444,7 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 
 	aiMesh* aimesh = nullptr;
 	ResourceMesh* mesh = nullptr;
-	GameObject* go = nullptr;
+	GameObject* go = new GameObject();
 	string name = node->mName.C_Str();
 
 	for (int i = 0; i < node->mNumMeshes; i++)
@@ -584,8 +578,6 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 		// CREATE GAME OBJECT
 		if (mesh_valid && node_valid && parent != nullptr)
 		{
-			go = App->gameobj->Create();
-
 			if (name == "")
 				name = "no_name";
 

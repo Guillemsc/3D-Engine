@@ -29,9 +29,14 @@ private:
 	void DeleteUnnecessary();
 
 private:
+	int asset_files_to_check_count = 0;
 	std::vector<std::string> asset_files_to_check;
+
+	int assets_to_reimport_count = 0;
 	std::vector<std::string> assets_to_reimport;
 	std::vector<std::string> library_files_used;
+
+	int library_files_to_check_count = 0;
 	std::vector<std::string> library_files_to_check;
 
 	bool check_asset_files = false;
@@ -67,7 +72,6 @@ public:
 	// Resource, assets and library management
 	void LoadFileToEngine(const char* filepath);
 	void UnloadAssetFromEngine(const char* filepath);
-	void ExportAssetToLibrary(const char* filepath);
 	void ClearResourceFromGameObjects(Resource* res);
 	void ExportResourceToLibrary(Resource* resource);
 	void ImportResourceFromLibrary(const char* uid);

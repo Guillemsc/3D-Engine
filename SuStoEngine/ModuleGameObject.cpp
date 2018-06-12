@@ -45,7 +45,7 @@ bool ModuleGameObject::Awake()
 	go_abstractor = new GameObjectAbstractor();
 
 	// Root GameObject
-	root = new GameObject("Root", this);
+	root = new GameObject("Root");
 	root->Start();
 	root->SetName("Root");
 
@@ -240,15 +240,26 @@ void ModuleGameObject::GameObjectsPostUpdate()
 
 GameObject * ModuleGameObject::Create(std::string id)
 {
-	GameObject* game_object = new GameObject(id, this);
+	GameObject* game_object = new GameObject(id);
 
-	game_objects.push_back(game_object);
-	game_object->SetParent(root);
-	game_object->Start();
+	bool can_add = AddGO(game_object);
 
-	Event ev(EventType::ET_GAMEOBJECT_CREATE);
-	ev.game_object_create.go = game_object;
-	App->event_system->Send(ev);
+	if (can_add)
+	{
+		game_object->SetParent(root);
+		game_object->Start();
+
+		Event ev(EventType::ET_GAMEOBJECT_CREATE);
+		ev.game_object_create.go = game_object;
+		App->event_system->Send(ev);
+	}
+	else
+	{
+		game_object->CleanUp();
+		delete game_object;
+
+		game_object = nullptr;
+	}
 
 	return game_object;
 }
@@ -257,6 +268,32 @@ GameObject * ModuleGameObject::Create()
 {
 	string new_id = App->resource_manager->GetNewUID();
 	return Create(new_id);
+}
+
+bool ModuleGameObject::AddGO(GameObject * go)
+{
+	bool ret = false;
+
+	if (go != nullptr)
+	{
+		bool exists = false;
+		for (std::vector<GameObject*>::iterator it = game_objects.begin(); it != game_objects.end(); ++it)
+		{
+			if ((*it)->GetUniqueId() == go->GetUniqueId() || go == (*it))
+			{
+				exists = true;
+				break;
+			}
+		}
+
+		if (!exists)
+		{
+			game_objects.push_back(go);
+			ret = true;
+		}
+	}
+
+	return ret;
 }
 
 void ModuleGameObject::Destroy(GameObject * go)
@@ -328,31 +365,37 @@ const vector<GameObject*> ModuleGameObject::GetListGameObjects() const
 
 void ModuleGameObject::AddGameObjectToSelected(GameObject * go)
 {
-	if (go->GetSelected())
-		return;
-
-	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
+	if (go != nullptr)
 	{
-		if ((*it) == go)
-			return;
-	}
+		if (!go->GetSelected())
+		{
+			for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
+			{
+				if ((*it) == go)
+					return;
+			}
 
-	selected.push_back(go);
-	go->selected = true;
+			selected.push_back(go);
+			go->selected = true;
+		}
+	}
 }
 
 void ModuleGameObject::RemoveGameObjectFromSelected(GameObject * go)
 {
-	if (!go->GetSelected())
-		return;
-
-	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
+	if (go != nullptr)
 	{
-		if ((*it) == go)
+		if (go->GetSelected())
 		{
-			go->selected = false,
-			selected.erase(it);
-			return;
+			for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
+			{
+				if ((*it) == go)
+				{
+					go->selected = false,
+						selected.erase(it);
+					return;
+				}
+			}
 		}
 	}
 }
@@ -388,21 +431,24 @@ const vector<GameObject*> ModuleGameObject::GetSelectedGameObjects() const
 
 void ModuleGameObject::AddGameObjectToStatic(GameObject * go)
 {
-	if (go->GetStatic())
-		return;
-	
-	for (vector<GameObject*>::iterator it = statics.begin(); it != statics.end(); ++it)
+	if (go != nullptr)
 	{
-		if ((*it) == go)
-		{
+		if (go->GetStatic())
 			return;
+
+		for (vector<GameObject*>::iterator it = statics.begin(); it != statics.end(); ++it)
+		{
+			if ((*it) == go)
+			{
+				return;
+			}
 		}
+
+		statics.push_back(go);
+		go->is_static = true;
+
+		RecalculateKDTree();
 	}
-
-	statics.push_back(go);
-	go->is_static = true;
-
-	RecalculateKDTree();
 }
 
 void ModuleGameObject::RemoveGameObjectFromStatic(GameObject * go)

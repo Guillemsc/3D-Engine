@@ -29,6 +29,7 @@ public:
 
 	GameObject* Create(std::string id);
 	GameObject* Create();
+	bool AddGO(GameObject* go);
 
 	GameObject* Find(std::string unique_id);
 

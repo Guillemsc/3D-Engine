@@ -67,7 +67,7 @@ bool ResourceManager::CleanUp()
 
 void ResourceManager::OnStartEngine()
 {
-	CheckCorrectLibraryAsyncTaks* task = new CheckCorrectLibraryAsyncTaks(AsyncTaskMode::AST_FOCUS, 10);
+	CheckCorrectLibraryAsyncTaks* task = new CheckCorrectLibraryAsyncTaks(AsyncTaskMode::AST_FOCUS, 1);
 	App->async_tasks->StartTask(task);
 }
 
@@ -205,8 +205,20 @@ void ResourceManager::LoadFileToEngine(const char * filepath)
 
 		if (type != ResourceType::RT_NULL)
 		{
+			bool can_load = false;
+
 			std::string new_path;
 			if (App->file_system->FileCopyPaste(filepath, App->file_system->GetAssetsPath().c_str(), false, new_path))
+			{
+				can_load = true;
+			}
+			else if (deco_file.path == App->file_system->GetAssetsPath())
+			{
+				new_path = filepath;
+				can_load = true;
+			}
+
+			if (can_load)
 			{
 				deco_file = App->file_system->DecomposeFilePath(new_path.c_str());
 
@@ -242,19 +254,6 @@ void ResourceManager::UnloadAssetFromEngine(const char* filepath)
 	if (loader != nullptr)
 	{
 		loader->UnloadAssetFromEngine(d_filepath);
-	}
-}
-
-void ResourceManager::ExportAssetToLibrary(const char * filepath)
-{
-	DecomposedFilePath d_filepath = App->file_system->DecomposeFilePath(filepath);
-
-	ResourceType type = AssetExtensionToType(d_filepath.file_extension.c_str());
-	ResourceLoader* loader = GetLoader(type);
-
-	if (loader != nullptr)
-	{
-		loader->ExportAssetToLibrary(d_filepath);
 	}
 }
 
@@ -502,13 +501,14 @@ void ResourceManager::AddLoader(ResourceLoader * loader)
 	loaders.push_back(loader);
 }
 
-CheckCorrectLibraryAsyncTaks::CheckCorrectLibraryAsyncTaks(AsyncTaskMode mode, uint iterations_per_frame) : AsyncTask(mode, iterations_per_frame)
+CheckCorrectLibraryAsyncTaks::CheckCorrectLibraryAsyncTaks(AsyncTaskMode mode, uint iterations_per_frame) : AsyncTask(mode, iterations_per_frame, "Loading Resources")
 {
 }
 
 void CheckCorrectLibraryAsyncTaks::Start()
 {
 	asset_files_to_check = App->file_system->GetFilesInPathAndChilds(App->file_system->GetAssetsPath().c_str());
+	asset_files_to_check_count = asset_files_to_check.size();
 
 	check_asset_files = true;
 }
@@ -533,6 +533,11 @@ void CheckCorrectLibraryAsyncTaks::CheckAssetFiles()
 {
 	if (!asset_files_to_check.empty())
 	{
+		float progress = 100 - ((float)asset_files_to_check_count / 100.0f) * asset_files_to_check.size();
+		progress = progress / 100.0f * 33.0f;
+		SetPercentageProgress(progress);
+		SetCurrPhase("Checking asset files");
+
 		std::string curr_file = *asset_files_to_check.begin();
 
 		std::vector<std::string> files_to_check;
@@ -545,6 +550,7 @@ void CheckCorrectLibraryAsyncTaks::CheckAssetFiles()
 		else
 		{
 			assets_to_reimport.push_back(curr_file);
+			assets_to_reimport_count = assets_to_reimport.size();
 		}
 
 		asset_files_to_check.erase(asset_files_to_check.begin());
@@ -552,6 +558,7 @@ void CheckCorrectLibraryAsyncTaks::CheckAssetFiles()
 	else
 	{
 		library_files_to_check = App->file_system->GetFilesInPathAndChilds(App->file_system->GetLibraryPath().c_str());
+		library_files_to_check_count = library_files_to_check.size();
 
 		check_asset_files = false;
 		delete_unnecessary = true;
@@ -562,6 +569,11 @@ void CheckCorrectLibraryAsyncTaks::DeleteUnnecessary()
 {
 	if (!library_files_to_check.empty())
 	{
+		float progress = 100 - (100.0f / (float)library_files_to_check_count) * library_files_to_check.size();
+		progress = (progress / 100.0f) * 33.0f;
+		SetPercentageProgress(33 + progress);
+		SetCurrPhase("Deleting library garbage");
+
 		std::string curr_file = *library_files_to_check.begin();
 
 		bool to_delete = true;
@@ -593,10 +605,21 @@ void CheckCorrectLibraryAsyncTaks::ReimportFiles()
 {
 	if (!assets_to_reimport.empty())
 	{
+		float progress = 100 - (100.0f / (float)assets_to_reimport_count) * assets_to_reimport.size();
+		progress = (progress / 100.0f) * 33.0f;
+		SetPercentageProgress(66 + progress);
+		SetCurrPhase("Reimporting files");
+
 		std::string curr_file = *assets_to_reimport.begin();
 
-		App->resource_manager->ExportAssetToLibrary(curr_file.c_str());
+		App->resource_manager->LoadFileToEngine(curr_file.c_str());
 
 		assets_to_reimport.erase(assets_to_reimport.begin());
+	}
+	else
+	{
+		SetPercentageProgress(100);
+
+		FinishTask();
 	}
 }
