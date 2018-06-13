@@ -16,6 +16,7 @@ public:
 	void Update();
 	void CleanUp();
 
+	void ChangeMesh(ResourceMesh* mesh);
 	void SetMesh(ResourceMesh* mesh);
 	void RemoveMesh();
 	ResourceMesh* GetMesh() const;

@@ -12,6 +12,7 @@
 #include "ResourcePrefabLoader.h"
 #include "ResourcePrefab.h"
 #include "ModuleEventSystem.h"
+#include "imgui.h"
 
 ResourceManager::ResourceManager(bool start_enabled) : Module(start_enabled)
 {
@@ -31,10 +32,10 @@ bool ResourceManager::Awake()
 	mesh_loader->AddLibraryExtensionToLoad("sustomesh");
 
 	ResourceTextureLoader* texture_loader = new ResourceTextureLoader();
-	mesh_loader->AddAssetExtensionToLoad("png");
-	mesh_loader->AddAssetExtensionToLoad("tga");
-	mesh_loader->AddAssetExtensionToLoad("dds");
-	mesh_loader->AddLibraryExtensionToLoad("dds");
+	texture_loader->AddAssetExtensionToLoad("png");
+	texture_loader->AddAssetExtensionToLoad("tga");
+	texture_loader->AddAssetExtensionToLoad("dds");
+	texture_loader->AddLibraryExtensionToLoad("dds");
 
 	ResourcePrefabLoader* prefab_loader = new ResourcePrefabLoader();
 	prefab_loader->AddAssetExtensionToLoad("prefab");
@@ -203,7 +204,7 @@ bool ResourceManager::DeleteResource(std::string unique_id)
 	return ret;
 }
 
-void ResourceManager::LoadFileToEngine(const char * filepath)
+void ResourceManager::LoadFileToEngine(const char * filepath, std::vector<Resource*>& resources)
 {
 	if (App->file_system->FileExists(filepath))
 	{
@@ -234,8 +235,6 @@ void ResourceManager::LoadFileToEngine(const char * filepath)
 
 				if (loader != nullptr)
 				{
-					std::vector<Resource*> resources;
-
 					bool ret = loader->LoadFileToEngine(deco_file, resources);
 
 					if (ret)
@@ -392,116 +391,63 @@ void ResourceManager::RenameAsset(const char * filepath, const char * new_name)
 	}
 }
 
-//void ResourceManager::SaveResourceIntoFile(Resource * res)
-//{
-//	if (res != nullptr)
-//	{
-//		switch (res->GetType())
-//		{
-//		case ResourceType::RT_MESH:
-//			mesh_loader->Export(App->file_system->GetLibraryMeshPath().c_str(), (ResourceMesh*)res);
-//			break;
-//		case ResourceType::RT_TEXTURE:
-//			texture_loader->Export(App->file_system->GetLibraryTexturePath().c_str(), (ResourceTexture*)res);
-//			break;
-//		case ResourceType::RT_SCENE:
-//			break;
-//		}
-//	}
-//}
-//
-//bool ResourceManager::LoadResource(const char * file_path)
-//{
-//	vector<Resource*> resources;
-//	return LoadResource(file_path, resources);
-//}
-//
-//bool ResourceManager::LoadResource(const char * file_path, vector<Resource*>& resources)
-//{
-//	bool ret = false;
-//
-//	resources.clear();
-//
-//	string name = App->file_system->GetFileNameFromFilePath(file_path);
-//	string extension = ToLowerCase(App->file_system->GetFileExtension(name.c_str()));
-//
-//	bool valid_extension = false;
-//
-//	if (TextCmp("fbx", extension.c_str()))
-//	{
-//		ret = mesh_loader->Load(file_path, resources, true);
-//		valid_extension = true;
-//	}
-//	else if (TextCmp("png", extension.c_str()) || TextCmp("dds", extension.c_str()) || TextCmp("tga", extension.c_str()))
-//	{
-//		ret = texture_loader->Load(file_path, resources);
-//	}
-//
-//	if (ret)
-//	{
-//		App->file_system->FileCopyPaste(file_path, App->file_system->GetAssetsPath().c_str());
-//		
-//		// Save meta file ---------------------------
-//		string uid = GetNewUID();
-//		string json_name = App->file_system->GetAssetsPath() + name + ".meta";
-//		JSON_Doc* meta = App->json->CreateJSON(json_name.c_str());
-//		if (meta)
-//		{
-//			meta->SetString("uid", uid.c_str());
-//
-//			meta->SetArray("resources");
-//			for (vector<Resource*>::iterator res = resources.begin(); res != resources.end(); ++res)
-//			{
-//				meta->AddStringToArray("resources", (*res)->GetUniqueId().c_str());
-//			}
-//
-//			meta->Save();
-//		}
-//
-//	}
-//
-//	return ret;
-//}
-//
-//void ResourceManager::ImportAllResources()
-//{
-//	mesh_loader->ImportAllMeshes();
-//	texture_loader->ImportAllTextures();
-//}
-//
-//void ResourceManager::LoadFileIntoScene(const char * file_path)
-//{
-//	string name = App->file_system->GetFileNameFromFilePath(file_path);
-//	string extension = ToLowerCase(App->file_system->GetFileExtension(name.c_str()));
-//
-//	if (TextCmp("fbx", extension.c_str()))
-//	{
-//		mesh_loader->LoadIntoScene(file_path);
-//	}
-//	else if (TextCmp("png", extension.c_str()) || TextCmp("dds", extension.c_str()) || TextCmp("tga", extension.c_str()))
-//	{
-//
-//	}
-//}
-//
-//void ResourceManager::DeImportFile(const char * file_path)
-//{
-//	string name = App->file_system->GetFileNameFromFilePath(file_path);
-//	string extension = ToLowerCase(App->file_system->GetFileExtension(name.c_str()));
-//
-//	if (TextCmp("fbx", extension.c_str()))
-//	{
-//		mesh_loader->Unload(file_path);
-//	}
-//	else if (TextCmp("png", extension.c_str()) || TextCmp("dds", extension.c_str()) || TextCmp("tga", extension.c_str()))
-//	{
-//		texture_loader->Unload(file_path);
-//	}
-//}
-
 std::string ResourceManager::GetNewUID()
 {
 	return GetUIDRandomHexadecimal();
+}
+
+Resource* ResourceManager::DrawResourceSelector(const char * name, ResourceType type, Resource* res)
+{
+	Resource* ret = nullptr;
+
+	std::string res_name = "empty";
+
+	if (res != nullptr)
+		res_name = res->GetFileName();
+
+	std::string line_text = std::string(name) + ": ";
+
+	ImGui::PushID(name);
+
+	ImGui::Text(line_text.c_str());
+	ImGui::SameLine();
+
+	ImGui::TextColored({ 0.45f, 0.86f, 1, 1.0f }, res_name.c_str());
+	ImGui::SameLine();
+
+	if (ImGui::SmallButton("+"))
+	{
+		draw_resource_selector_win = true;
+	}
+
+	if (draw_resource_selector_win)
+	{
+		uint flags = ImGuiWindowFlags_NoCollapse;
+		if (ImGui::Begin(name, &draw_resource_selector_win, flags))
+		{
+			ResourceLoader* loader = GetLoader(type);
+
+			std::map<std::string, Resource*> resources = loader->GetResources();
+
+			for (std::map<std::string, Resource*>::iterator it = resources.begin(); it != resources.end(); ++it)
+			{
+				if ((*it).second != res)
+				{
+					if (ImGui::Selectable((*it).second->GetFileName().c_str()))
+					{
+						ret = (*it).second;
+						draw_resource_selector_win = false;
+					}
+				}
+			}
+
+			ImGui::End();
+		}
+	}
+
+	ImGui::PopID();
+
+	return ret;
 }
 
 void ResourceManager::AddLoader(ResourceLoader * loader)

@@ -85,7 +85,7 @@ public:
 	bool DeleteResource(std::string unique_id);
 
 	// Resource, assets and library management
-	void LoadFileToEngine(const char* filepath);
+	void LoadFileToEngine(const char* filepath, std::vector<Resource*>& resources = std::vector<Resource*>());
 	void UnloadAssetFromEngine(const char* filepath);
 	void ClearResourceFromGameObjects(Resource* res);
 	void ExportResourceToLibrary(Resource* resource);
@@ -96,6 +96,8 @@ public:
 
 	std::string GetNewUID();
 
+	Resource* DrawResourceSelector(const char* name, ResourceType type, Resource* res);
+
 private:
 	void AddLoader(ResourceLoader* loader);
 
@@ -103,6 +105,8 @@ private:
 
 private:
 	std::vector<ResourceLoader*> loaders;	
+
+	bool draw_resource_selector_win = false;
 };
 
 #endif

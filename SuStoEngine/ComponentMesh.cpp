@@ -34,6 +34,15 @@ void ComponentMesh::CleanUp()
 	RemoveMesh();
 }
 
+void ComponentMesh::ChangeMesh(ResourceMesh * _mesh)
+{
+	if (mesh != _mesh)
+	{
+		RemoveMesh();
+		SetMesh(_mesh);
+	}
+}
+
 void ComponentMesh::SetMesh(ResourceMesh* _mesh)
 {
 	RemoveMesh();
@@ -85,8 +94,12 @@ void ComponentMesh::InspectorDraw(std::vector<Component*> components)
 		return;
 	}
 
+	ResourceMesh* change_mesh = (ResourceMesh*)App->resource_manager->DrawResourceSelector("Mesh", ResourceType::RT_MESH, mesh);
+
+	if (change_mesh != nullptr)
+		ChangeMesh(change_mesh);
+	
 	ImGui::TextWrapped("Unique id: %s", mesh->GetUniqueId().c_str());
-	ImGui::Text("Mesh: %s", mesh->GetFileName().c_str());
 	ImGui::Text("Used by: %d GameObjects", mesh->UsedCount());
 	ImGui::Text("Id vertices: %d", mesh->GetIdVertices());
 	ImGui::Text("Num vertices: %d", mesh->GetNumVertices());

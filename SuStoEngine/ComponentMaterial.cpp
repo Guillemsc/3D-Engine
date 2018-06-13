@@ -29,6 +29,15 @@ void ComponentMaterial::CleanUp()
 	RemoveTexture();
 }
 
+void ComponentMaterial::ChangeTexture(ResourceTexture * text)
+{
+	if (texture != text)
+	{
+		RemoveTexture();
+		SetTexture(text);
+	}
+}
+
 void ComponentMaterial::SetTexture(ResourceTexture* text)
 {
 	RemoveTexture();
@@ -65,18 +74,19 @@ const bool ComponentMaterial::HasTexture() const
 
 void ComponentMaterial::InspectorDraw(std::vector<Component*> components)
 {
-	if (!has_texture)
-	{
-		ImGui::Text("No texture loaded");
-		return;
-	}
+	ResourceTexture* change_mesh = (ResourceTexture*)App->resource_manager->DrawResourceSelector("Texture", ResourceType::RT_TEXTURE, texture);
 
-	ImGui::Text("Unique id: %s", texture->GetUniqueId().c_str());
-	ImGui::Text("Texture: %s", texture->GetFileName().c_str());
-	ImGui::Text("Used by %d GameObjects", texture->UsedCount());
-	ImGui::Text("Id texture: %d", texture->GetTextureId());
-	ImGui::Text("Preview:");
-	ImGui::Image((ImTextureID)texture->GetTextureId(), ImVec2(200, 200));
+	if (change_mesh != nullptr)
+		ChangeTexture(change_mesh);
+	
+	if (has_texture)
+	{
+		ImGui::Text("Unique id: %s", texture->GetUniqueId().c_str());
+		ImGui::Text("Used by %d GameObjects", texture->UsedCount());
+		ImGui::Text("Id texture: %d", texture->GetTextureId());
+		ImGui::Text("Preview:");
+		ImGui::Image((ImTextureID)texture->GetTextureId(), ImVec2(200, 200));
+	}
 }
 
 void ComponentMaterial::OnEnable()

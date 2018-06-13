@@ -29,6 +29,8 @@ public:
 	void AddResource(Resource* resource);
 	bool DeleteResource(std::string unique_id);
 
+	std::map<std::string, Resource*> GetResources();
+
 	virtual Resource* CreateResource(std::string new_uid) { return nullptr; };
 
 	// LOADER ---------------------------------------------------

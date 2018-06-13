@@ -94,6 +94,11 @@ bool ResourceLoader::DeleteResource(std::string unique_id)
 	return ret;
 }
 
+std::map<std::string, Resource*> ResourceLoader::GetResources()
+{
+	return resources;
+}
+
 ResourceType ResourceLoader::GetLoaderType()
 {
 	return resources_to_load;

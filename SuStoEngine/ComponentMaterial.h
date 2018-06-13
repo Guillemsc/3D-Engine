@@ -18,6 +18,7 @@ public:
 	void Update();
 	void CleanUp();
 
+	void ChangeTexture(ResourceTexture* text);
 	void SetTexture(ResourceTexture* text);
 	void RemoveTexture();
 	ResourceTexture* GetTexture();
