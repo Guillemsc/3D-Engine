@@ -533,8 +533,6 @@ void CheckCorrectLibraryAsyncTask::CheckAssetFiles()
 
 		bool is_meta = App->resource_manager->FileIsMeta(curr_file.c_str());
 
-		bool correct = App->resource_manager->IsAssetOnLibrary(curr_file.c_str(), files_to_check);
-
 		if (is_meta)
 		{
 			asset_metas_to_check.push_back(curr_file);
@@ -542,6 +540,8 @@ void CheckCorrectLibraryAsyncTask::CheckAssetFiles()
 		}
 		else
 		{
+			bool correct = App->resource_manager->IsAssetOnLibrary(curr_file.c_str(), files_to_check);
+
 			if (correct)
 			{
 				library_files_used.insert(library_files_used.end(), files_to_check.begin(), files_to_check.end());

@@ -402,7 +402,7 @@ bool ResourceMeshLoader::IsAssetOnLibrary(DecomposedFilePath d_filepath, std::ve
 				++correct;
 			}
 
-			int resources_count = doc->GetArrayCount("resources");
+			resources_count = doc->GetArrayCount("resources");
 			for (int i = 0; i < resources_count; ++i)
 			{
 				std::string uid = doc->GetStringFromArray("resources", i);
