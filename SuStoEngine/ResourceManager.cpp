@@ -407,7 +407,6 @@ bool ResourceManager::IsAssetMeta(const char* filepath, const char* metapath)
 			}
 		}
 	}
-		ret = true;
 
 	return ret;
 }
