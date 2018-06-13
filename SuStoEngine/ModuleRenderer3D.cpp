@@ -395,9 +395,20 @@ uint ModuleRenderer3D::LoadTextureBuffer(const void* texture, uint size, int for
 {
 	uint id = 0;
 
+	GLenum err;
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		CONSOLE_LOG("%d", err);
+	}
+
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glGenTextures(size, (GLuint*)&(id));
 	glBindTexture(GL_TEXTURE_2D, id);
+
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		CONSOLE_LOG("%d", err);
+	}
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t);
@@ -405,6 +416,12 @@ uint ModuleRenderer3D::LoadTextureBuffer(const void* texture, uint size, int for
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, texture);
+
+	while ((err = glGetError()) != GL_NO_ERROR)
+	{
+		CONSOLE_LOG("%d", err);
+	}
+
 
 	return id;
 }

@@ -19,6 +19,7 @@
 
 #include "Glew/include/glew.h" 
 
+
 GameObject::GameObject()
 {
 	unique_id = App->resource_manager->GetNewUID();
@@ -81,6 +82,12 @@ void GameObject::Draw()
 		if (component_material->HasTexture())
 		{
 			glBindTexture(GL_TEXTURE_2D, component_material->GetTexture()->GetTextureId());
+
+			GLenum err;
+			while ((err = glGetError()) != GL_NO_ERROR)
+			{
+				CONSOLE_LOG("%d", err);
+			}
 		}
 	}
 
@@ -113,6 +120,12 @@ void GameObject::Draw()
 
 					// Draw
 					glDrawElements((GLenum)GL_TRIANGLES, component_mesh->GetMesh()->GetNumIndices(), GL_UNSIGNED_INT, NULL);
+
+					GLenum err;
+					while ((err = glGetError()) != GL_NO_ERROR)
+					{
+						CONSOLE_LOG("%d", err);
+					}
 				}
 			}
 

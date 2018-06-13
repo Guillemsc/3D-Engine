@@ -46,17 +46,17 @@
             "Label": "Configuration",
             "pos_X": 6,
             "pos_Y": 53,
-            "size_X": 396,
-            "size_Y": 655,
-            "status": 1,
+            "size_X": 333,
+            "size_Y": 648,
+            "status": 0,
             "active": false,
-            "opened": false,
+            "opened": true,
             "location": "121",
             "child0": -1,
             "child1": -1,
-            "prev_tab": -1,
+            "prev_tab": 5,
             "next_tab": -1,
-            "parent": -1
+            "parent": 10
         },
         "Dock3": {
             "ID": "3",
@@ -106,7 +106,7 @@
             "child0": -1,
             "child1": -1,
             "prev_tab": -1,
-            "next_tab": -1,
+            "next_tab": 2,
             "parent": 10
         },
         "Dock6": {

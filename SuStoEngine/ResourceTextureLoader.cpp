@@ -65,15 +65,20 @@ bool ResourceTextureLoader::LoadFileToEngine(DecomposedFilePath d_filepath, std:
 		uint data_size = ilGetInteger(IL_IMAGE_SIZE_OF_DATA);
 		uint image_width = ilGetInteger(IL_IMAGE_WIDTH);
 		uint image_height = ilGetInteger(IL_IMAGE_HEIGHT);
-		uint type = ilGetInteger(IL_IMAGE_TYPE);
+		uint format = ilGetInteger(IL_IMAGE_FORMAT);
 
 		if (data_size > 0)
 		{
 			ResourceTexture* rtex = (ResourceTexture*)App->resource_manager->CreateNewResource(RT_TEXTURE);
 
-			rtex->SetData(data, data_size, image_width, image_height, type, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
+			rtex->SetData(data, data_size, image_width, image_height, format, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
 
 			rtex->SetFileName(d_filepath.file_name.c_str());
+
+			if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
+			{
+				rtex->SetFlipped(true);
+			}
 
 			App->resource_manager->ExportResourceToLibrary(rtex);
 
@@ -161,56 +166,62 @@ void ResourceTextureLoader::ClearFromGameObject(Resource * resource, GameObject 
 bool ResourceTextureLoader::ExportResourceToLibrary(Resource * resource)
 {
 	bool ret = false;
-	
-	string uid = resource->GetUniqueId();
-	
-	// -------------------------------------
-	// FILE --------------------------------
-	// -------------------------------------
-	uint size = 0;
-	byte* data = nullptr;
-	
-	// To pick a specific DXT compression use
-	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
-	
-	// Get the size of the data buffer
-	size = ilSaveL(IL_DDS, NULL, 0);
-	
-	if (size > 0)
-	{
-		ilEnable(IL_FILE_OVERWRITE);
-	
-		// Allocate data buffer
-		data = new byte[size];
-	
-		// Save to buffer with the ilSaveIL function
-		if (ilSaveL(IL_DDS, data, size) > 0)
-			ret = App->file_system->FileSave(App->file_system->GetLibraryTexturePath().c_str(), (char*)data, uid.c_str(), "dds", size);
-	
-		RELEASE_ARRAY(data);
 
-		ret = true;
+	if (resource != nullptr)
+	{
+		ResourceTexture* resource_txt = (ResourceTexture*)resource;
+
+		string uid = resource->GetUniqueId();
+
+		// -------------------------------------
+		// FILE --------------------------------
+		// -------------------------------------
+		uint size = 0;
+		byte* data = nullptr;
+
+		// To pick a specific DXT compression use
+		ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
+
+		// Get the size of the data buffer
+		size = ilSaveL(IL_DDS, NULL, 0);
+
+		if (size > 0)
+		{
+			ilEnable(IL_FILE_OVERWRITE);
+
+			// Allocate data buffer
+			data = new byte[size];
+
+			// Save to buffer with the ilSaveIL function
+			if (ilSaveL(IL_DDS, data, size) > 0)
+				ret = App->file_system->FileSave(App->file_system->GetLibraryTexturePath().c_str(), (char*)data, uid.c_str(), "dds", size);
+
+			RELEASE_ARRAY(data);
+
+			ret = true;
+		}
+
+		// -------------------------------------
+		// META --------------------------------
+		// -------------------------------------
+		string meta_path = App->file_system->GetLibraryTexturePath() + uid + ".meta";
+
+		if (App->file_system->FileExists(meta_path.c_str()))
+			App->file_system->FileDelete(meta_path.c_str());
+
+		JSON_Doc* doc = App->json->CreateJSON(meta_path.c_str());
+
+		if (doc != nullptr)
+		{
+			doc->SetString("uid", resource_txt->GetUniqueId().c_str());
+			doc->SetString("name", resource_txt->GetFileName().c_str());
+			doc->SetBool("flipped", resource_txt->GetFlipped());
+
+			doc->Save();
+
+			App->json->UnloadJSON(doc);
+		}
 	}
-	
-	// -------------------------------------
-	// META --------------------------------
-	// -------------------------------------
-	string meta_path = App->file_system->GetLibraryTexturePath() + uid + ".meta";
-	
-	if (App->file_system->FileExists(meta_path.c_str()))
-		App->file_system->FileDelete(meta_path.c_str());
-
-	JSON_Doc* doc = App->json->CreateJSON(meta_path.c_str());
-	
-	if (doc != nullptr)
-	{
-		doc->SetString("uid", resource->GetUniqueId().c_str());
-		doc->SetString("name", resource->GetFileName().c_str());
-	
-		doc->Save();
-
-		App->json->UnloadJSON(doc);
-	}	
 
 	return ret;
 }
@@ -256,14 +267,14 @@ bool ResourceTextureLoader::ImportResourceFromLibrary(DecomposedFilePath d_filep
 			uint data_size = ilGetInteger(IL_IMAGE_SIZE_OF_DATA);
 			uint image_width = ilGetInteger(IL_IMAGE_WIDTH);
 			uint image_height = ilGetInteger(IL_IMAGE_HEIGHT);
-			uint type = ilGetInteger(IL_IMAGE_TYPE);
+			uint format = ilGetInteger(IL_IMAGE_FORMAT);
 
 			if (data_size > 0)
 			{
 				// Create texture
 				ResourceTexture* ret = (ResourceTexture*)App->resource_manager->CreateNewResource(RT_TEXTURE, uid.c_str());
 
-				ret->SetData(data, data_size, image_width, image_height, type, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
+				ret->SetData(data, data_size, image_width, image_height, format, GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
 				ret->SetFlipped(flipped);
 				ret->SetFileName(resource_name.c_str());
 			}

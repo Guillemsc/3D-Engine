@@ -26,7 +26,7 @@ void ComponentCamera::Start()
 
 void ComponentCamera::Update()
 {
-	camera->SetPosition(GetOwner()->transform->GetPosition());
+	camera->SetPosition(GetOwner()->transform->GetLocalPosition());
 	camera->SetZDir(GetOwner()->transform->GetGlobalTransform().WorldZ());
 	camera->SetYDir(GetOwner()->transform->GetGlobalTransform().WorldY());
 
