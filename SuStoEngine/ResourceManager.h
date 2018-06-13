@@ -23,6 +23,7 @@ public:
 
 private:
 	void CheckAssetFiles();
+	void CheckAssetMetaFiles();
 	void ReimportFiles();
 	void DeleteUnnecessary();
 
@@ -37,7 +38,11 @@ private:
 	int library_files_to_check_count = 0;
 	std::vector<std::string> library_files_to_check;
 
+	int asset_metas_to_check_count = 0;
+	std::vector<std::string> asset_metas_to_check;
+
 	bool check_asset_files = false;
+	bool check_asset_meta_files = false;
 	bool reimport_files = false;
 	bool delete_unnecessary = false;
 };
@@ -93,6 +98,10 @@ public:
 	void LoadAssetResourceIntoScene(const char* filepath);
 	bool IsAssetOnLibrary(const char* filepath, std::vector<std::string>& library_files_used = std::vector<std::string>());
 	void RenameAsset(const char* filepath, const char* new_name);
+
+	// Meta control
+	bool IsAssetMeta(const char* filepath, const char* metapath);
+	bool FileIsMeta(const char* filepath);
 
 	std::string GetNewUID();
 

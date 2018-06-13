@@ -391,6 +391,42 @@ void ResourceManager::RenameAsset(const char * filepath, const char * new_name)
 	}
 }
 
+bool ResourceManager::IsAssetMeta(const char* filepath, const char* metapath)
+{
+	bool ret = false;
+
+	if (App->file_system->FileExists(filepath))
+	{
+		if (App->file_system->FileExists(metapath))
+		{
+			std::string filepath_meta = std::string(filepath) + ".meta";
+
+			if (filepath_meta == std::string(metapath))
+			{
+				ret = true;
+			}
+		}
+	}
+		ret = true;
+
+	return ret;
+}
+
+bool ResourceManager::FileIsMeta(const char * filepath)
+{
+	bool ret = false;
+
+	if (App->file_system->FileExists(filepath))
+	{
+		DecomposedFilePath deco_file = App->file_system->DecomposeFilePath(filepath);
+
+		if (deco_file.file_extension == "meta")
+			ret = true;
+	}
+
+	return ret;
+}
+
 std::string ResourceManager::GetNewUID()
 {
 	return GetUIDRandomHexadecimal();
@@ -469,6 +505,9 @@ void CheckCorrectLibraryAsyncTask::Update()
 	if (check_asset_files)
 		CheckAssetFiles();
 
+	else if (check_asset_meta_files)
+		CheckAssetMetaFiles();
+
 	else if (delete_unnecessary)
 		DeleteUnnecessary();
 
@@ -485,33 +524,93 @@ void CheckCorrectLibraryAsyncTask::CheckAssetFiles()
 	if (!asset_files_to_check.empty())
 	{
 		float progress = 100 - ((float)asset_files_to_check_count / 100.0f) * asset_files_to_check.size();
-		progress = progress / 100.0f * 33.0f;
+		progress = progress / 100.0f * 25.0f;
 		SetPercentageProgress(progress);
 		SetCurrPhase("Checking asset files");
 
 		std::string curr_file = *asset_files_to_check.begin();
 
 		std::vector<std::string> files_to_check;
+
+		bool is_meta = App->resource_manager->FileIsMeta(curr_file.c_str());
+
 		bool correct = App->resource_manager->IsAssetOnLibrary(curr_file.c_str(), files_to_check);
 
-		if (correct)
+		if (is_meta)
 		{
-			library_files_used.insert(library_files_used.end(), files_to_check.begin(), files_to_check.end());
+			asset_metas_to_check.push_back(curr_file);
+			asset_metas_to_check_count = asset_metas_to_check.size();
 		}
 		else
 		{
-			assets_to_reimport.push_back(curr_file);
-			assets_to_reimport_count = assets_to_reimport.size();
+			if (correct)
+			{
+				library_files_used.insert(library_files_used.end(), files_to_check.begin(), files_to_check.end());
+			}
+			else
+			{
+				assets_to_reimport.push_back(curr_file);
+				assets_to_reimport_count = assets_to_reimport.size();
+			}
+		}
+		asset_files_to_check.erase(asset_files_to_check.begin());
+	}
+	else
+	{
+		asset_files_to_check = App->file_system->GetFilesInPathAndChilds(App->file_system->GetAssetsPath().c_str());
+		asset_files_to_check_count = asset_files_to_check.size();
+
+		check_asset_files = false;
+		check_asset_meta_files = true;
+	}
+}
+
+void CheckCorrectLibraryAsyncTask::CheckAssetMetaFiles()
+{
+	if (!asset_metas_to_check.empty())
+	{
+		float progress = 100 - ((float)asset_metas_to_check_count / 100.0f) * asset_metas_to_check.size();
+		progress = progress / 100.0f * 25.0f;
+		SetPercentageProgress(25 + progress);
+		SetCurrPhase("Checking asset meta files");
+
+		std::string curr_file = *asset_metas_to_check.begin();
+
+		bool used = false;
+		for (std::vector<std::string>::iterator it = asset_files_to_check.begin(); it != asset_files_to_check.end();)
+		{
+			bool is_meta = App->resource_manager->FileIsMeta((*it).c_str());
+
+			if (!is_meta)
+			{
+				if (App->resource_manager->IsAssetMeta((*it).c_str(), curr_file.c_str()))
+				{
+					used = true;
+					it = asset_files_to_check.erase(it);
+					break;
+				}
+				else
+					++it;
+			}
+			else
+			{
+				it = asset_files_to_check.erase(it);
+			}
 		}
 
-		asset_files_to_check.erase(asset_files_to_check.begin());
+		if (!used)
+		{
+			App->file_system->FileDelete(curr_file.c_str());
+		}
+
+		asset_metas_to_check.erase(asset_metas_to_check.begin());
 	}
 	else
 	{
 		library_files_to_check = App->file_system->GetFilesInPathAndChilds(App->file_system->GetLibraryPath().c_str());
 		library_files_to_check_count = library_files_to_check.size();
 
-		check_asset_files = false;
+		check_asset_meta_files = false;
 		delete_unnecessary = true;
 	}
 }
@@ -521,8 +620,8 @@ void CheckCorrectLibraryAsyncTask::DeleteUnnecessary()
 	if (!library_files_to_check.empty())
 	{
 		float progress = 100 - (100.0f / (float)library_files_to_check_count) * library_files_to_check.size();
-		progress = (progress / 100.0f) * 33.0f;
-		SetPercentageProgress(33 + progress);
+		progress = (progress / 100.0f) * 25.0f;
+		SetPercentageProgress(50 + progress);
 		SetCurrPhase("Deleting library garbage");
 
 		std::string curr_file = *library_files_to_check.begin();
@@ -557,8 +656,8 @@ void CheckCorrectLibraryAsyncTask::ReimportFiles()
 	if (!assets_to_reimport.empty())
 	{
 		float progress = 100 - (100.0f / (float)assets_to_reimport_count) * assets_to_reimport.size();
-		progress = (progress / 100.0f) * 33.0f;
-		SetPercentageProgress(66 + progress);
+		progress = (progress / 100.0f) * 25.0f;
+		SetPercentageProgress(75 + progress);
 		SetCurrPhase("Reimporting files");
 
 		std::string curr_file = *assets_to_reimport.begin();

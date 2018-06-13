@@ -11,6 +11,8 @@ struct DecomposedFilePath
 	std::string file_extension_lower_case;
 	std::string path;
 	std::string file_path;
+
+	std::vector<std::string> file_extensions;
 };
 
 class Folder

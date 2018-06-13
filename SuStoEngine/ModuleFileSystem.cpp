@@ -123,6 +123,16 @@ DecomposedFilePath FileSystem::DecomposeFilePath(std::string file_path)
 
 		if (curr_word == '.')
 		{
+			if (adding_file_extension)
+			{
+				if (ret.file_extension.size() > 0)
+				{
+					ret.file_extension = ret.file_extension.substr(0, ret.file_extension.size() - 1);
+
+					ret.file_extensions.push_back(ret.file_extension);
+				}
+			}
+
 			adding_file_extension = true;
 			ret.file_extension.clear();
 		}
@@ -149,6 +159,7 @@ DecomposedFilePath FileSystem::DecomposeFilePath(std::string file_path)
 	}
 
 	ret.file_extension_lower_case = ToLowerCase(ret.file_extension);
+	ret.file_extensions.push_back(ret.file_extension);
 
 	// Path ---------------------
 
@@ -901,7 +912,20 @@ bool FileSystem::FileExists(const char * filepath)
 {
 	DecomposedFilePath d_filepath = DecomposeFilePath(filepath);
 
-	return FileExists(d_filepath.path.c_str(), d_filepath.file_name.c_str(), d_filepath.file_extension.c_str());
+	std::string extension;
+
+	int count = 0;
+	for (std::vector<std::string>::iterator it = d_filepath.file_extensions.begin(); it != d_filepath.file_extensions.end(); ++it)
+	{
+		extension += (*it);
+
+		if (d_filepath.file_extensions.size() > 1 && count < d_filepath.file_extensions.size() - 1)
+			extension += ".";
+
+		++count;
+	}
+
+	return FileExists(d_filepath.path.c_str(), d_filepath.file_name.c_str(), extension.c_str());
 }
 
 bool FileSystem::FileRename(const char * filepath, const char * new_name)
