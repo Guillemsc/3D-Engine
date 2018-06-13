@@ -417,33 +417,30 @@ Resource* ResourceManager::DrawResourceSelector(const char * name, ResourceType 
 
 	if (ImGui::SmallButton("+"))
 	{
-		draw_resource_selector_win = true;
+		ImGui::OpenPopup("HerarchyPopup");
 	}
 
-	if (draw_resource_selector_win)
+	if (ImGui::BeginPopupContextItem("HerarchyPopup"))
 	{
-		uint flags = ImGuiWindowFlags_NoCollapse;
-		if (ImGui::Begin(name, &draw_resource_selector_win, flags))
+		ResourceLoader* loader = GetLoader(type);
+
+		std::map<std::string, Resource*> resources = loader->GetResources();
+
+		for (std::map<std::string, Resource*>::iterator it = resources.begin(); it != resources.end(); ++it)
 		{
-			ResourceLoader* loader = GetLoader(type);
-
-			std::map<std::string, Resource*> resources = loader->GetResources();
-
-			for (std::map<std::string, Resource*>::iterator it = resources.begin(); it != resources.end(); ++it)
+			if ((*it).second != res)
 			{
-				if ((*it).second != res)
+				if (ImGui::Selectable((*it).second->GetFileName().c_str()))
 				{
-					if (ImGui::Selectable((*it).second->GetFileName().c_str()))
-					{
-						ret = (*it).second;
-						draw_resource_selector_win = false;
-					}
+					ret = (*it).second;
+					draw_resource_selector_win = false;
 				}
 			}
-
-			ImGui::End();
 		}
+
+		ImGui::EndPopup();
 	}
+	
 
 	ImGui::PopID();
 

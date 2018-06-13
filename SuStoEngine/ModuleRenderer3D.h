@@ -70,8 +70,8 @@ private:
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 
-	FBO* fbo_texture;
-	uint texture_id;
+	FBO* fbo_texture = nullptr;
+	uint texture_id = 0;
 
 	bool wireframe = false;
 	bool points = false;

@@ -96,7 +96,7 @@ private:
 
 	bool		is_ui = false;
 
-	bool debug_draw = false;
+	bool		debug_draw = false;
 };
 
 #endif

@@ -222,7 +222,7 @@ bool ResourceTextureLoader::ImportResourceFromLibrary(DecomposedFilePath d_filep
 	// -------------------------------------
 	// META --------------------------------
 	// -------------------------------------
-	string meta_path = d_filepath.file_path + ".meta";
+	string meta_path = d_filepath.path + d_filepath.file_name + ".meta";
 
 	JSON_Doc* doc = App->json->LoadJSON(meta_path.c_str());
 	if (doc != nullptr)
