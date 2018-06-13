@@ -159,7 +159,7 @@ bool ModuleRenderer3D::PreUpdate()
 	glLoadMatrixf(App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr());
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetViewMatrix());
+	glLoadMatrixf(App->camera->GetCurrentCamera()->GetOpenGLViewMatrix().ptr());
 
 	// light 0 on cam pos
 	lights[0].SetPos(0, 0, 0);
