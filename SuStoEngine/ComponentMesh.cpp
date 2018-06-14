@@ -89,7 +89,7 @@ void ComponentMesh::OnGetBoundingBox(AABB& box)
 void ComponentMesh::InspectorDraw(std::vector<Component*> components)
 {
 	Resource* curr_res = mesh;
-	if (App->resource_manager->DrawResourceSelector("Mesh", ResourceType::RT_MESH, curr_res))
+	if (App->resource_manager->DrawResourceSelector(GetUniqueId().c_str(), "Mesh", ResourceType::RT_MESH, curr_res))
 	{
 		ChangeMesh((ResourceMesh*)curr_res);
 	}

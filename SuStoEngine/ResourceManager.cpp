@@ -455,7 +455,7 @@ std::string ResourceManager::GetNewUID()
 	return GetUIDRandomHexadecimal();
 }
 
-bool ResourceManager::DrawResourceSelector(const char * name, ResourceType type, Resource*& res)
+bool ResourceManager::DrawResourceSelector(const char* id, const char * name, ResourceType type, Resource*& res)
 {
 	bool ret = false;
 
@@ -466,7 +466,7 @@ bool ResourceManager::DrawResourceSelector(const char * name, ResourceType type,
 
 	std::string line_text = std::string(name) + ": ";
 
-	ImGui::PushID(name);
+	ImGui::PushID(id);
 
 	ImGui::Text(line_text.c_str());
 	ImGui::SameLine();

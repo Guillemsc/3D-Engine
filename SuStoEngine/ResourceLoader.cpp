@@ -103,3 +103,8 @@ ResourceType ResourceLoader::GetLoaderType()
 {
 	return resources_to_load;
 }
+
+float3 ResourceLoader::GetResourceColour() const
+{
+	return resource_colour;
+}

@@ -5,6 +5,7 @@
 #include "ModuleFileSystem.h"
 #include <map>
 #include <vector>
+#include "Math/float3.h"
 
 class GameObject;
 
@@ -61,6 +62,9 @@ public:
 	// Renames the library resource and all other necessary files
 	virtual bool RenameAsset(DecomposedFilePath decomposed_file_path, const char* new_name) { return false; };
 
+	// Apparence
+	float3 GetResourceColour() const;
+
 protected:
 	ResourceType resources_to_load = ResourceType::RT_NULL;
 	std::string library_path;
@@ -69,6 +73,8 @@ protected:
 	std::vector<std::string> library_extensions_to_load;
 
 	std::map<std::string, Resource*> resources;
+
+	float3 resource_colour = float3::zero;
 };
 
 #endif //!__RESOURCE_LOADER_H__

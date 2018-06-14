@@ -107,7 +107,7 @@ public:
 
 	std::string GetNewUID();
 
-	bool DrawResourceSelector(const char* name, ResourceType type, Resource*& res);
+	bool DrawResourceSelector(const char* id, const char* name, ResourceType type, Resource*& res);
 
 private:
 	void AddLoader(ResourceLoader* loader);
