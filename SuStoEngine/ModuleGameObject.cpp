@@ -391,8 +391,9 @@ void ModuleGameObject::RemoveGameObjectFromSelected(GameObject * go)
 			{
 				if ((*it) == go)
 				{
-					go->selected = false,
-						selected.erase(it);
+					go->selected = false;
+					selected.erase(it);
+
 					return;
 				}
 			}

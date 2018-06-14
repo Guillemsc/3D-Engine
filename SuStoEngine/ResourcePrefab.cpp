@@ -43,14 +43,6 @@ void ResourcePrefab::Instantiate(GameObject * parent)
 	}
 }
 
-void ResourcePrefab::Serialize()
-{
-	if (abstraction.GetValid())
-	{
-		App->gameobj->GetAbstractor()->Serialize(abstraction, App->file_system->GetLibraryPrefabPath().c_str(), abstraction.GetName().c_str(), "prefab");
-	}
-}
-
 void ResourcePrefab::SerializeCustom(const char * path, const char * name, const char * extension)
 {
 	if (abstraction.GetValid())

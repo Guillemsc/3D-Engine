@@ -19,7 +19,6 @@ public:
 	void SetGameObject(GameObject* go);
 	void SetAbstraction(const GameObjectAbstraction& abs);
 	void Instantiate(GameObject* parent = nullptr);
-	void Serialize();
 	void SerializeCustom(const char* path, const char* name, const char* extension);
 
 	GameObjectAbstraction GetAbstraction() const;

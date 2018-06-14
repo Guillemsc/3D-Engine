@@ -23,13 +23,14 @@ public:
 	void Draw(uint flags);
 
 	void UpdateFloders();
-	//void CleanUp();
 
-	//vector<string> OrderFiles(vector<string> files);
-	//void DeleteFileInAssets(string path, string filename);
+	void AddToSelectedFiles(std::string file);
+	void RemoveFromSelectedFiles(std::string file);
+	void ClearSelectedFiles();
 
 private:
-	void DrawFoldersRecursive(Folder folder);
+	void DrawFoldersRecursive(const Folder& folder);
+	void DrawFiles(const Folder& folder);
 
 private:
 	Folder folders;
@@ -40,6 +41,8 @@ private:
 	bool update_folders = true;
 
 	std::string rename_folder_tmp;
+
+	std::vector<std::string> selected_files;
 };
 
 #endif

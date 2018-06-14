@@ -431,9 +431,9 @@ std::string ResourceManager::GetNewUID()
 	return GetUIDRandomHexadecimal();
 }
 
-Resource* ResourceManager::DrawResourceSelector(const char * name, ResourceType type, Resource* res)
+bool ResourceManager::DrawResourceSelector(const char * name, ResourceType type, Resource*& res)
 {
-	Resource* ret = nullptr;
+	bool ret = false;
 
 	std::string res_name = "empty";
 
@@ -461,16 +461,31 @@ Resource* ResourceManager::DrawResourceSelector(const char * name, ResourceType 
 
 		std::map<std::string, Resource*> resources = loader->GetResources();
 
+		if (ImGui::Selectable("Null"))
+		{
+			res = nullptr;
+			draw_resource_selector_win = false;
+			ret = true;
+		}
+
+		ImGui::Separator();
+
 		for (std::map<std::string, Resource*>::iterator it = resources.begin(); it != resources.end(); ++it)
 		{
 			if ((*it).second != res)
 			{
+				ImGui::PushID((*it).second->GetUniqueId().c_str());
+
 				if (ImGui::Selectable((*it).second->GetFileName().c_str()))
 				{
-					ret = (*it).second;
+					res = (*it).second;
 					draw_resource_selector_win = false;
+					ret = true;
 				}
+
+				ImGui::PopID();
 			}
+
 		}
 
 		ImGui::EndPopup();

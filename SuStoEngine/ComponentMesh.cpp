@@ -88,24 +88,22 @@ void ComponentMesh::OnGetBoundingBox(AABB& box)
 
 void ComponentMesh::InspectorDraw(std::vector<Component*> components)
 {
-	if (!has_mesh)
+	Resource* curr_res = mesh;
+	if (App->resource_manager->DrawResourceSelector("Mesh", ResourceType::RT_MESH, curr_res))
 	{
-		ImGui::Text("No mesh loaded");
-		return;
+		ChangeMesh((ResourceMesh*)curr_res);
 	}
 
-	ResourceMesh* change_mesh = (ResourceMesh*)App->resource_manager->DrawResourceSelector("Mesh", ResourceType::RT_MESH, mesh);
-
-	if (change_mesh != nullptr)
-		ChangeMesh(change_mesh);
-	
-	ImGui::TextWrapped("Unique id: %s", mesh->GetUniqueId().c_str());
-	ImGui::Text("Used by: %d GameObjects", mesh->UsedCount());
-	ImGui::Text("Id vertices: %d", mesh->GetIdVertices());
-	ImGui::Text("Num vertices: %d", mesh->GetNumVertices());
-	ImGui::Text("Id indices: %d", mesh->GetIdIndices());
-	ImGui::Text("Num indices: %d", mesh->GetNumIndices());
-	ImGui::Text("Id uv: %d", mesh->GetIdUV());
+	if (mesh != nullptr)
+	{
+		ImGui::TextWrapped("Unique id: %s", mesh->GetUniqueId().c_str());
+		ImGui::Text("Used by: %d GameObjects", mesh->UsedCount());
+		ImGui::Text("Id vertices: %d", mesh->GetIdVertices());
+		ImGui::Text("Num vertices: %d", mesh->GetNumVertices());
+		ImGui::Text("Id indices: %d", mesh->GetIdIndices());
+		ImGui::Text("Num indices: %d", mesh->GetNumIndices());
+		ImGui::Text("Id uv: %d", mesh->GetIdUV());
+	}
 }
 
 void ComponentMesh::OnLoadAbstraction(DataAbstraction& abs)

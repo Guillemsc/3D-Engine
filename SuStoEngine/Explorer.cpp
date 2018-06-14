@@ -47,45 +47,8 @@ void Explorer::Draw(uint flags)
 
 	ImGui::NextColumn();
 
-	if (looking_folder.valid)
-	{
-		for (std::vector<DecomposedFilePath>::iterator it = looking_folder.files.begin(); it != looking_folder.files.end(); ++it)
-		{
-			if ((*it).file_extension != "meta")
-			{
-				ImGui::PushID((*it).file_path.c_str());
-
-				ImGui::Selectable((*it).file_name.c_str());
-
-				if (ImGui::IsItemClicked(0) || ImGui::IsItemClicked(1))
-				{
-					if (ImGui::IsItemClicked(1))
-					{
-						ImGui::OpenPopup("SelectedFilePopup");
-					}
-				}
-
-				if (ImGui::BeginPopup("SelectedFilePopup"))
-				{
-					if (ImGui::Button("Load"))
-					{
-						App->resource_manager->LoadAssetResourceIntoScene((*it).file_path.c_str());
-					}
-
-					if (ImGui::Button("Delete"))
-					{
-						App->resource_manager->UnloadAssetFromEngine((*it).file_path.c_str());
-					}
-
-					ImGui::EndPopup();
-				}
-
-				ImGui::PopID();
-			}
-		}
-	}
+	DrawFiles(looking_folder);
 	
-
 	ImGui::EndDock();
 }
 
@@ -94,7 +57,46 @@ void Explorer::UpdateFloders()
 	update_folders = true;
 }
 
-void Explorer::DrawFoldersRecursive(Folder folder)
+void Explorer::AddToSelectedFiles(std::string file)
+{
+	bool found = false;
+
+	if (App->file_system->FileExists(file.c_str()))
+	{
+		for (std::vector<std::string>::iterator it = selected_files.begin(); it != selected_files.end(); ++it)
+		{
+			if ((*it) == file)
+			{
+				found = true;
+				break;
+			}
+		}
+
+		if (!found)
+		{
+			selected_files.push_back(file);
+		}
+	}
+}
+
+void Explorer::RemoveFromSelectedFiles(std::string file)
+{
+	for (std::vector<std::string>::iterator it = selected_files.begin(); it != selected_files.end(); ++it)
+	{
+		if ((*it) == file)
+		{
+			selected_files.erase(it);
+			break;
+		}
+	}
+}
+
+void Explorer::ClearSelectedFiles()
+{
+	selected_files.clear();
+}
+
+void Explorer::DrawFoldersRecursive(const Folder& folder)
 {
 	uint flags = ImGuiTreeNodeFlags_OpenOnArrow;
 
@@ -189,12 +191,54 @@ void Explorer::DrawFoldersRecursive(Folder folder)
 
 	if (opened)
 	{
-		for (std::vector<Folder>::iterator it = folder.folders.begin(); it != folder.folders.end(); ++it)
+		for (std::vector<Folder>::const_iterator it = folder.folders.begin(); it != folder.folders.end(); ++it)
 		{
 			DrawFoldersRecursive(*it);
 		}
 
 		ImGui::TreePop();
+	}
+}
+
+void Explorer::DrawFiles(const Folder& folder)
+{
+	if (folder.valid)
+	{
+		for (std::vector<DecomposedFilePath>::const_iterator it = folder.files.begin(); it != folder.files.end(); ++it)
+		{
+			if ((*it).file_extension != "meta")
+			{
+				ImGui::PushID((*it).file_path.c_str());
+
+				ImGui::Selectable((*it).file_name.c_str());
+
+				if (ImGui::IsItemClicked(0) || ImGui::IsItemClicked(1))
+				{
+					if (ImGui::IsItemClicked(1))
+					{
+						AddToSelectedFiles((*it).file_path);
+						ImGui::OpenPopup("SelectedFilePopup");
+					}
+				}
+
+				if (ImGui::BeginPopup("SelectedFilePopup"))
+				{
+					if (ImGui::Button("Load"))
+					{
+						App->resource_manager->LoadAssetResourceIntoScene((*it).file_path.c_str());
+					}
+
+					if (ImGui::Button("Delete"))
+					{
+						App->resource_manager->UnloadAssetFromEngine((*it).file_path.c_str());
+					}
+
+					ImGui::EndPopup();
+				}
+
+				ImGui::PopID();
+			}
+		}
 	}
 }
 

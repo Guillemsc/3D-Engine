@@ -28,7 +28,6 @@ GameObjectAbstraction GameObjectAbstractor::Abstract(GameObject * go)
 		std::vector<GameObject*> to_add;
 		to_add.push_back(go);
 
-
 		while (!to_add.empty())
 		{
 			GameObject* curr = *to_add.begin();
@@ -146,6 +145,9 @@ void GameObjectAbstractor::Serialize(GameObjectAbstraction abs, const char* path
 		if (App->file_system->FolderExists(path))
 		{
 			std::string filepath = std::string(path) + std::string(name) + std::string(".") + std::string(extension);
+
+			if (App->file_system->FileExists(filepath.c_str()))
+				App->file_system->FileDelete(filepath.c_str());
 
 			JSON_Doc* doc = App->json->CreateJSON(path, name, extension);
 

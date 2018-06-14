@@ -74,12 +74,13 @@ const bool ComponentMaterial::HasTexture() const
 
 void ComponentMaterial::InspectorDraw(std::vector<Component*> components)
 {
-	ResourceTexture* change_mesh = (ResourceTexture*)App->resource_manager->DrawResourceSelector("Texture", ResourceType::RT_TEXTURE, texture);
-
-	if (change_mesh != nullptr)
-		ChangeTexture(change_mesh);
+	Resource* curr_res = texture;
+	if (App->resource_manager->DrawResourceSelector("Texture", ResourceType::RT_TEXTURE, curr_res))
+	{
+		ChangeTexture((ResourceTexture*)curr_res);
+	}
 	
-	if (has_texture)
+	if (texture != nullptr)
 	{
 		ImGui::Text("Unique id: %s", texture->GetUniqueId().c_str());
 		ImGui::Text("Used by %d GameObjects", texture->UsedCount());

@@ -63,6 +63,7 @@ public:
 	bool FileRename(const char* filepath, const char* new_name);	
 	bool FolderRename(const char* filepath, const char* new_name);
 	bool FolderExists(const char* path);
+	std::string FileRenameOnNameCollision(const char* path, const char* name, const char* extension);
 
 	bool FolderWatch(const char * path, const std::function<void(const std::experimental::filesystem::path&)> &callback, bool watch_subfolders = false);
 
@@ -78,12 +79,6 @@ public:
 	void SetLookingPath(const string & new_path);
 
 	DecomposedFilePath DecomposeFilePath(std::string file_path);
-
-	// Same name file renaming
-	std::string NewNameForFileNameCollision(const char* filename);
-	int GetFileNameNumber(const char* filename);
-	std::string SetFileNameNumber(const char* filename, int number);
-
 
 	// DEPRECATED ---------------------------------------------------
 
@@ -106,6 +101,12 @@ public:
 	std::string GetParentFolder(const char* folder_path);
 
 private:
+	// Same name file renaming
+	std::string NewNameForFileNameCollision(const char* filename);
+	int GetFileNameNumber(const char* filename);
+	std::string SetFileNameNumber(const char* filename, int number);
+
+
 	Folder GetFoldersRecursive(const char* path);
 	void UnwatchAllFolders();
 

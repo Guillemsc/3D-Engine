@@ -464,21 +464,11 @@ void FileSystem::FileMove(const char * filepath, const char * new_path, bool rep
 
 		if (!replace_existing)
 		{
+			d_filepath.file_name = FileRenameOnNameCollision(new_path, d_filepath.file_name.c_str(), d_filepath.file_extension.c_str());
+
 			std::string new_filepath = s_new_path + d_filepath.file_name + "." + d_filepath.file_extension;
 
-			bool need_rename = false;
-			while (App->file_system->FileExists(new_filepath.c_str()))
-			{		
-				std::string check_new_name = NewNameForFileNameCollision(d_filepath.file_name.c_str());
-				d_filepath.file_name = check_new_name;
-
-				new_filepath = s_new_path + d_filepath.file_name + "." + d_filepath.file_extension;
-
-				need_rename = true;
-			}
-
-			if(need_rename)
-				FileRename(d_filepath.file_path.c_str(), d_filepath.file_name.c_str());
+			App->file_system->FileRename(filepath, d_filepath.file_name.c_str());
 
 			std::string curr_path = d_filepath.path + d_filepath.file_name + "." + d_filepath.file_extension;
 			std::string curr_new_path = s_new_path + d_filepath.file_name + "." + d_filepath.file_extension;
@@ -526,19 +516,16 @@ bool FileSystem::FileCopyPaste(const char * filepath, const char * new_path, boo
 
 			if (!overwrite)
 			{
+				d_filepath.file_name = FileRenameOnNameCollision(new_path, d_filepath.file_name.c_str(), d_filepath.file_extension.c_str());
+
+				std::string new_filepath = s_new_path + d_filepath.file_name + "." + d_filepath.file_extension;
+
 				bool need_rename = false;
-				while (App->file_system->FileExists(new_filepath.c_str()))
-				{
-					std::string check_new_name = NewNameForFileNameCollision(d_filepath.file_name.c_str());
-					d_filepath.file_name = check_new_name;
-
-					new_filepath = s_new_path + d_filepath.file_name + "." + d_filepath.file_extension;
-
+				if (d_filepath.file_name != original_name)
 					need_rename = true;
-				}
 
-				if (need_rename)
-					FileRename(d_filepath.file_path.c_str(), d_filepath.file_name.c_str());
+				if(need_rename)
+					App->file_system->FileRename(filepath, d_filepath.file_name.c_str());
 
 				std::string curr_path = d_filepath.path + d_filepath.file_name + "." + d_filepath.file_extension;
 				std::string curr_new_path = s_new_path + d_filepath.file_name + "." + d_filepath.file_extension;
@@ -971,6 +958,35 @@ bool FileSystem::FolderExists(const char * path)
 	DWORD ftyp = GetFileAttributesA(path);
 	if (ftyp == INVALID_FILE_ATTRIBUTES)
 		ret = false;
+
+	return ret;
+}
+
+std::string FileSystem::FileRenameOnNameCollision(const char * path, const char* name, const char* extension)
+{
+	std::string ret;
+
+	std::string s_path = path;
+	std::string s_name = name;
+	std::string s_extension = extension;
+
+	ret = s_name;
+
+	std::string new_filepath = s_path + s_name + "." + std::string(extension);
+
+	bool need_rename = false;
+	while (App->file_system->FileExists(new_filepath.c_str()))
+	{
+		std::string check_new_name = NewNameForFileNameCollision(s_name.c_str());
+		s_name = check_new_name;
+
+		new_filepath = s_path + s_name + "." + s_extension;
+
+		need_rename = true;
+	}
+
+	if (need_rename)
+		ret = s_name;
 
 	return ret;
 }

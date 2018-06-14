@@ -17,13 +17,15 @@ public:
 
 	bool LoadFileToEngine(DecomposedFilePath decomposed_file_path, std::vector<Resource*>& resources);
 	bool UnloadAssetFromEngine(DecomposedFilePath decomposed_file_path);
+	void ClearFromGameObject(Resource* resource, GameObject* go);
 
-	//void ClearFromGameObject(Resource* resource, GameObject* go);
+	bool ExportResourceToLibrary(Resource* resource);
+	bool ImportResourceFromLibrary(const char* uid);
 
-	bool ExportToLibrary(Resource* resource);
-	//bool ImportFromLibrary(const char* uid);
+	bool LoadAssetResourceIntoScene(Resource* resource);
 
-	bool LoadIntoScene(Resource* resource);
+	bool IsAssetOnLibrary(DecomposedFilePath d_filepath, std::vector<std::string>& library_files_used);
+	bool RenameAsset(DecomposedFilePath decomposed_file_path, const char* new_name);
 
 	ResourcePrefab* CreatePrefab(GameObject* go);
 

@@ -53,7 +53,6 @@ public:
 	ResourceMeshLoader();
 	virtual ~ResourceMeshLoader();
 
-	// NEW
 	Resource* CreateResource(std::string new_uid);
 
 	bool LoadFileToEngine(DecomposedFilePath decomposed_file_path, std::vector<Resource*>& resources);
