@@ -70,6 +70,9 @@
     <Filter Include="Sources\6. ThirdParties ============\tinyfile">
       <UniqueIdentifier>{f5f16706-eac0-4e6b-8184-32e70f3e036c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\6. ThirdParties ============\FileWatch">
+      <UniqueIdentifier>{ba1d51e3-f9e7-4b87-8e5d-e3893b9f1e6c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleAudio.h">
@@ -488,6 +491,9 @@
     </ClInclude>
     <ClInclude Include="ModuleAsyncTasks.h">
       <Filter>Sources\2. Modules ==============</Filter>
+    </ClInclude>
+    <ClInclude Include="FileWatch.h">
+      <Filter>Sources\6. ThirdParties ============\FileWatch</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

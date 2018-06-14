@@ -34,6 +34,8 @@ bool FileSystem::Start()
 {
 	bool ret = true;
 
+	FolderWatch(assets_path.c_str(), Changed, true);
+
 	return ret;
 }
 
@@ -41,12 +43,29 @@ bool FileSystem::Update()
 {
 	bool ret = true;
 
+	//for (std::vector<WatchingFloder>::iterator it = watching_folders.begin(); it != watching_folders.end(); ++it)
+	//{
+	//	std::experimental::filesystem::file_time_type time_type = std::experimental::filesystem::last_write_time((*it).folder);
+	//	std::time_t curr_time = decltype(time_type)::clock::to_time_t(time_type);
+
+	//	std::time_t last_time = decltype((*it).last_time)::clock::to_time_t((*it).last_time);
+
+	//	if (curr_time > last_time)
+	//	{
+	//		int i = 0;
+	//		++i;
+	//	}
+
+	//}
+
 	return ret;
 }
 
 bool FileSystem::CleanUp()
 {
 	bool ret = true;
+
+	UnwatchAllFolders();
 
 	return ret;
 }
@@ -858,6 +877,11 @@ Folder FileSystem::GetFoldersRecursive(const char * path)
 	return ret;
 }
 
+void FileSystem::UnwatchAllFolders()
+{
+
+}
+
 bool FileSystem::FileExists(const char * path, const char * name, const char * extension)
 {
 	WIN32_FIND_DATA search_data;
@@ -951,5 +975,24 @@ bool FileSystem::FolderExists(const char * path)
 	return ret;
 }
 
+bool FileSystem::FolderWatch(const char * path, const std::function<void(const std::experimental::filesystem::path&)> &callback, bool watch_subfolders)
+{
+	bool ret = false;
 
+	if (FolderExists(path))
+	{
+	/*	WatchingFloder wfolder;
+		wfolder.folder = path;
+		wfolder.last_time = std::experimental::filesystem::last_write_time(path);
+		watching_folders.push_back(wfolder);*/
+	}
 
+	return ret;
+}
+
+void Changed(const std::experimental::filesystem::path & path)
+{
+	CONSOLE_LOG(" -----------------------enter-----------------------");
+	int i = 0;
+	++i;
+}

@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include <filesystem>
+#include <functional>
 
 struct DecomposedFilePath
 {
@@ -22,6 +23,13 @@ public:
 	std::vector<Folder> folders;
 
 	bool valid = false;
+};
+
+class WatchingFloder
+{
+public:
+	std::string folder;
+	std::experimental::filesystem::file_time_type last_time;
 };
 
 class FileSystem : public Module
@@ -56,6 +64,8 @@ public:
 	bool FolderRename(const char* filepath, const char* new_name);
 	bool FolderExists(const char* path);
 
+	bool FolderWatch(const char * path, const std::function<void(const std::experimental::filesystem::path&)> &callback, bool watch_subfolders = false);
+
 	string GetAssetsPath();
 	string GetLibraryPath();
 	string GetLibraryMeshPath();
@@ -69,9 +79,13 @@ public:
 
 	DecomposedFilePath DecomposeFilePath(std::string file_path);
 
+	// Same name file renaming
 	std::string NewNameForFileNameCollision(const char* filename);
 	int GetFileNameNumber(const char* filename);
 	std::string SetFileNameNumber(const char* filename, int number);
+
+
+	// DEPRECATED ---------------------------------------------------
 
 	// Example file.ex -> .ex
 	std::string GetFileExtension(const char* file_name);
@@ -93,6 +107,7 @@ public:
 
 private:
 	Folder GetFoldersRecursive(const char* path);
+	void UnwatchAllFolders();
 
 private:
 	string assets_path;
@@ -104,6 +119,10 @@ private:
 	string settings_path;
 
 	string looking_path;
+
+	std::vector<WatchingFloder> watching_folders;
 };
+
+void Changed(const std::experimental::filesystem::path& path);
 
 #endif // __MODULE_FILE_SYSTEM_H__
