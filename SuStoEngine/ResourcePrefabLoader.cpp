@@ -104,17 +104,15 @@ bool ResourcePrefabLoader::ExportResourceToLibrary(Resource * resource)
 	return ret;
 }
 
-bool ResourcePrefabLoader::ImportResourceFromLibrary(const char * uid)
+bool ResourcePrefabLoader::ImportResourceFromLibrary(DecomposedFilePath d_filepath)
 {
 	bool ret = false;
 
-	std::string prefab_path = library_path + uid + ".prefab";
-
-	GameObjectAbstraction abs = App->gameobj->GetAbstractor()->DeSerialize(prefab_path.c_str());
+	GameObjectAbstraction abs = App->gameobj->GetAbstractor()->DeSerialize(d_filepath.file_path.c_str());
 
 	if (abs.GetValid())
 	{
-		ResourcePrefab* r_prefab = (ResourcePrefab*)App->resource_manager->CreateNewResource(ResourceType::RT_PREFAB);
+		ResourcePrefab* r_prefab = (ResourcePrefab*)App->resource_manager->CreateNewResource(ResourceType::RT_PREFAB, d_filepath.file_name.c_str());
 
 		r_prefab->SetAbstraction(abs);
 
@@ -124,21 +122,27 @@ bool ResourcePrefabLoader::ImportResourceFromLibrary(const char * uid)
 	return ret;
 }
 
-bool ResourcePrefabLoader::LoadAssetResourceIntoScene(Resource * resource)
+bool ResourcePrefabLoader::LoadAssetIntoScene(DecomposedFilePath d_filepath)
 {
 	bool ret = false;
 
-	if (resource != nullptr)
+	std::string meta_path = d_filepath.file_path + ".meta";
+
+	if (App->file_system->FileExists(meta_path.c_str()))
 	{
-		ResourcePrefab* rprefab = (ResourcePrefab*)resource;
-
-		GameObjectAbstraction abs = rprefab->GetAbstraction();
-
-		if (abs.GetValid())
+		JSON_Doc* doc = App->json->LoadJSON(meta_path.c_str());
+		if (doc != nullptr)
 		{
-			rprefab->Instantiate();
+			std::string uid = doc->GetString("resource");
 
-			ret = true;
+			std::string resource_path = library_path + uid + ".prefab";
+
+			GameObjectAbstraction abs = App->gameobj->GetAbstractor()->DeSerialize(resource_path.c_str());
+
+			if (abs.GetValid())
+			{
+				App->gameobj->GetAbstractor()->DeAbstract(abs);
+			}
 		}
 	}
 
@@ -162,6 +166,8 @@ bool ResourcePrefabLoader::IsAssetOnLibrary(DecomposedFilePath d_filepath, std::
 
 			if (App->file_system->FileExists(resource_path.c_str()))
 			{
+				library_files_used.push_back(resource_path);
+
 				ret = true;
 			}
 		}

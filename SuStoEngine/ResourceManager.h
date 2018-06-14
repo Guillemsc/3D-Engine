@@ -96,7 +96,7 @@ public:
 	void ClearResourceFromGameObjects(Resource* res);
 	void ExportResourceToLibrary(Resource* resource);
 	void ImportResourceFromLibrary(const char* uid);
-	void LoadAssetResourceIntoScene(const char* filepath);
+	void LoadAssetIntoScene(const char* filepath);
 	bool IsAssetOnLibrary(const char* filepath, std::vector<std::string>& library_files_used = std::vector<std::string>());
 	void ReimportAssetToEngine(const char* filepath);
 	void RenameAsset(const char* filepath, const char* new_name);

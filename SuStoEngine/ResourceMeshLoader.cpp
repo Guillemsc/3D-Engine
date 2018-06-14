@@ -154,6 +154,8 @@ bool ResourceMeshLoader::RemoveAssetInfoFromEngine(DecomposedFilePath d_filepath
 	{
 		std::string prefab_uid = doc->GetString("meshprefab_uid");
 
+		App->resource_manager->DeleteResource(prefab_uid);
+
 		std::string prefab_path = App->file_system->GetLibraryMeshPath() + prefab_uid + ".meshprefab";
 		App->file_system->FileDelete(prefab_path.c_str());
 
@@ -361,7 +363,7 @@ bool ResourceMeshLoader::ImportResourceFromLibrary(DecomposedFilePath d_filepath
 
 	return ret;
 }
-bool ResourceMeshLoader::LoadAssetResourceIntoScene(DecomposedFilePath decomposed_file_path)
+bool ResourceMeshLoader::LoadAssetIntoScene(DecomposedFilePath decomposed_file_path)
 {
 	bool ret = false;
 
@@ -373,15 +375,13 @@ bool ResourceMeshLoader::LoadAssetResourceIntoScene(DecomposedFilePath decompose
 	{
 		std::string prefab_uid = doc->GetString("meshprefab_uid");
 
-		std::string prefab_path = App->file_system->GetLibraryMeshPath() + prefab_uid + ".meshprefab";
+		ResourcePrefab* r_prefab = (ResourcePrefab*)App->resource_manager->Get(prefab_uid);
 
-		GameObjectAbstraction abs = App->gameobj->GetAbstractor()->DeSerialize(prefab_path.c_str());
+		GameObjectAbstraction abs = r_prefab->GetAbstraction();
 
 		if (abs.GetValid())
 		{
-			GameObject* go_mesh = App->gameobj->GetAbstractor()->DeAbstract(abs);
-
-			ret = true;
+			App->gameobj->GetAbstractor()->DeAbstract(abs);
 		}
 	}
 

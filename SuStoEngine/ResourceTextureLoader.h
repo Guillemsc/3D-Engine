@@ -35,7 +35,7 @@ public:
 	bool ExportResourceToLibrary(Resource* resource);
 	bool ImportResourceFromLibrary(DecomposedFilePath decomposed_file_path);
 
-	bool LoadAssetResourceIntoScene(DecomposedFilePath decomposed_file_path);
+	bool LoadAssetIntoScene(DecomposedFilePath decomposed_file_path);
 
 	bool IsAssetOnLibrary(DecomposedFilePath d_filepath, std::vector<std::string>& library_files_used);
 	bool RenameAsset(DecomposedFilePath decomposed_file_path, const char* new_name);

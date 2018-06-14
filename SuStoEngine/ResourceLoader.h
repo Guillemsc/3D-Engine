@@ -53,7 +53,7 @@ public:
 	virtual bool ImportResourceFromLibrary(DecomposedFilePath decomposed_file_path) { return false; };
 
 	// Loads a resource into the scene as s new game object
-	virtual bool LoadAssetResourceIntoScene(DecomposedFilePath decomposed_file_path) { return false; };
+	virtual bool LoadAssetIntoScene(DecomposedFilePath decomposed_file_path) { return false; };
 
 	// Returns true if the resource can be found on the library folder
 	virtual bool IsAssetOnLibrary(DecomposedFilePath decomposed_file_path, std::vector<std::string>& library_files_used) { return false; };

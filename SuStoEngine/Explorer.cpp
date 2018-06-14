@@ -226,7 +226,7 @@ void Explorer::DrawFiles(const Folder& folder)
 				{
 					if (ImGui::Button("Load"))
 					{
-						App->resource_manager->LoadAssetResourceIntoScene((*it).file_path.c_str());
+						App->resource_manager->LoadAssetIntoScene((*it).file_path.c_str());
 						ImGui::CloseCurrentPopup();
 					}
 

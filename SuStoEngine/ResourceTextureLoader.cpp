@@ -293,7 +293,7 @@ bool ResourceTextureLoader::ImportResourceFromLibrary(DecomposedFilePath d_filep
 	return ret;
 }
 
-bool ResourceTextureLoader::LoadAssetResourceIntoScene(DecomposedFilePath decomposed_file_path)
+bool ResourceTextureLoader::LoadAssetIntoScene(DecomposedFilePath decomposed_file_path)
 {
 	return false;
 }

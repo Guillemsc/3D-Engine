@@ -345,7 +345,7 @@ void ResourceManager::ImportResourceFromLibrary(const char * filepath)
 	}
 }
 
-void ResourceManager::LoadAssetResourceIntoScene(const char* filepath)
+void ResourceManager::LoadAssetIntoScene(const char* filepath)
 {
 	DecomposedFilePath deco_file = App->file_system->DecomposeFilePath(filepath);
 
@@ -355,7 +355,7 @@ void ResourceManager::LoadAssetResourceIntoScene(const char* filepath)
 
 	if (loader != nullptr)
 	{
-		bool ret = loader->LoadAssetResourceIntoScene(deco_file);
+		bool ret = loader->LoadAssetIntoScene(deco_file);
 
 		if (ret)
 		{
