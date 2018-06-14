@@ -6,7 +6,7 @@
         "Testlay3"
     ],
     "default": {
-        "Docks_Size": 12,
+        "Docks_Size": 13,
         "Dock0": {
             "ID": "0",
             "Label": "Game",
@@ -202,12 +202,29 @@
             "size_X": 1227,
             "size_Y": 303,
             "status": 0,
-            "active": true,
+            "active": false,
             "opened": true,
             "location": "31",
             "child0": -1,
             "child1": -1,
             "prev_tab": 1,
+            "next_tab": 12,
+            "parent": 7
+        },
+        "Dock12": {
+            "ID": "12",
+            "Label": "Resources monitoring",
+            "pos_X": 6,
+            "pos_Y": 701,
+            "size_X": 1227,
+            "size_Y": 303,
+            "status": 0,
+            "active": true,
+            "opened": true,
+            "location": "31",
+            "child0": -1,
+            "child1": -1,
+            "prev_tab": 11,
             "next_tab": -1,
             "parent": 7
         }

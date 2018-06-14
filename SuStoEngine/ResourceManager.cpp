@@ -103,6 +103,11 @@ ResourceLoader * ResourceManager::GetLoader(ResourceType type)
 	return ret;
 }
 
+std::vector<ResourceLoader*> ResourceManager::GetLoaders() const
+{
+	return loaders;
+}
+
 ResourceType ResourceManager::AssetExtensionToType(const char * extension)
 {
 	ResourceType ret = ResourceType::RT_NULL;

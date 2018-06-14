@@ -3,10 +3,11 @@
 #include "Globals.h"
 #include "Functions.h"
 
-ResourceLoader::ResourceLoader(ResourceType _resources_to_load, std::string _library_path)
+ResourceLoader::ResourceLoader(ResourceType _resources_to_load, std::string _library_path, std::string _loader_name)
 {
 	resources_to_load = _resources_to_load;
 	library_path = _library_path;
+	loader_name = _loader_name;
 }
 
 ResourceLoader::~ResourceLoader()

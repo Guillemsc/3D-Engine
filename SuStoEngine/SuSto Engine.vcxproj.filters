@@ -495,6 +495,9 @@
     <ClInclude Include="FileWatch.h">
       <Filter>Sources\6. ThirdParties ============\FileWatch</Filter>
     </ClInclude>
+    <ClInclude Include="ResourcesMonitoring.h">
+      <Filter>Sources\3. Editor ================</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -811,6 +814,9 @@
     </ClCompile>
     <ClCompile Include="ModuleAsyncTasks.cpp">
       <Filter>Sources\2. Modules ==============</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourcesMonitoring.cpp">
+      <Filter>Sources\3. Editor ================</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

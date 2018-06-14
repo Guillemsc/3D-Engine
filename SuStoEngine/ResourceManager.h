@@ -78,6 +78,7 @@ public:
 	void OnLoadFile(const char* filepath);
 
 	ResourceLoader* GetLoader(ResourceType type);
+	std::vector<ResourceLoader*> GetLoaders() const;
 	ResourceType AssetExtensionToType(const char* extension);
 	ResourceType LibraryExtensionToType(const char* extension);
 

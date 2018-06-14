@@ -219,6 +219,7 @@
     <ClInclude Include="ResourcePrefab.h" />
     <ClInclude Include="ResourcePrefabLoader.h" />
     <ClInclude Include="ResourceScene.h" />
+    <ClInclude Include="ResourcesMonitoring.h" />
     <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="ResourceTextureLoader.h" />
     <ClInclude Include="SceneManager.h" />
@@ -329,6 +330,7 @@
     <ClCompile Include="ResourcePrefab.cpp" />
     <ClCompile Include="ResourcePrefabLoader.cpp" />
     <ClCompile Include="ResourceScene.cpp" />
+    <ClCompile Include="ResourcesMonitoring.cpp" />
     <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="ResourceTextureLoader.cpp" />
     <ClCompile Include="SceneManager.cpp" />

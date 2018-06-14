@@ -21,6 +21,7 @@
 #include "JSONLoader.h"
 #include "ModuleGameObject.h"
 #include "SceneManager.h"
+#include "ResourcesMonitoring.h"
 #include "ImGuizmo.h"
 
 //https://github.com/ocornut/imgui/issues/351
@@ -64,6 +65,7 @@ bool EditorUI::Awake()
 	hierarchy = new Hierarchy(true);
 	inspector = new Inspector(true);
 	explorer = new Explorer(true);
+	resources_monitoring = new ResourcesMonitoring(false);
 
 	AddEditor(main_bar);
 	AddEditor(tools_bar);
@@ -74,6 +76,7 @@ bool EditorUI::Awake()
 	AddEditor(profiler_viewer);
 	AddEditor(engine_test);
 	AddEditor(hardware);
+	AddEditor(resources_monitoring);
 	AddEditor(hierarchy);
 	AddEditor(inspector);
 	AddEditor(explorer);
@@ -403,6 +406,11 @@ Inspector * EditorUI::GetInspector()
 Explorer * EditorUI::GetExplorer()
 {
 	return explorer;
+}
+
+ResourcesMonitoring * EditorUI::GetResourcesMonitoring()
+{
+	return resources_monitoring;
 }
 
 void EditorUI::SetEditorInteractable(bool set)

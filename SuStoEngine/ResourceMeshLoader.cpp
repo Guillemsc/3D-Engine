@@ -24,7 +24,7 @@
 
 
 ResourceMeshLoader::ResourceMeshLoader() : 
-ResourceLoader(ResourceType::RT_MESH, App->file_system->GetLibraryMeshPath())
+ResourceLoader(ResourceType::RT_MESH, App->file_system->GetLibraryMeshPath(), "MeshLoader")
 {
 	
 }

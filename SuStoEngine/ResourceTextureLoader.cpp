@@ -20,7 +20,7 @@
 #pragma comment (lib, "Devil/libx86/ILUT.lib")
 
 ResourceTextureLoader::ResourceTextureLoader() : 
-ResourceLoader(ResourceType::RT_TEXTURE, App->file_system->GetLibraryTexturePath())
+ResourceLoader(ResourceType::RT_TEXTURE, App->file_system->GetLibraryTexturePath(), "TexturesLoader")
 {
 	ilInit();
 	iluInit();

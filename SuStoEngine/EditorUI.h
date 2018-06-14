@@ -16,6 +16,7 @@ class Game;
 class Hierarchy;
 class Inspector;
 class Explorer;
+class ResourcesMonitoring;
 
 class ImVec4;
 
@@ -90,6 +91,7 @@ public:
 	Hierarchy* GetHerarchy();
 	Inspector* GetInspector();
 	Explorer* GetExplorer();
+	ResourcesMonitoring* GetResourcesMonitoring();
 
 	void SetEditorInteractable(bool set);
 
@@ -111,6 +113,7 @@ private:
 	Hierarchy*			 hierarchy = nullptr;
 	Inspector*			 inspector = nullptr;
 	Explorer*			 explorer = nullptr;
+	ResourcesMonitoring* resources_monitoring = nullptr;
 
 	vector<EditorElement*> editor_elements;
 

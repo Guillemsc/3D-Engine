@@ -16,6 +16,7 @@
 #include "ProfilerViewer.h"
 #include "Functions.h"
 #include "Explorer.h"
+#include "ResourcesMonitoring.h"
 
 MainBar::MainBar(bool start_enabled) : EditorElement(start_enabled)
 {
@@ -91,6 +92,8 @@ void MainBar::Draw(uint flags)
 			ImGui::MenuItem("Console", NULL, &App->editorUI->GetConsole()->visible);
 
 			ImGui::MenuItem("Configuration", NULL, &App->editorUI->GetConfiguration()->visible);
+
+			ImGui::MenuItem("Resources Monitoring", NULL, &App->editorUI->GetResourcesMonitoring()->visible);
 
 			ImGui::MenuItem("Profiler", NULL, &App->editorUI->GetProfilerViewer()->visible);
 

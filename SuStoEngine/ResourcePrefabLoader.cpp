@@ -6,7 +6,7 @@
 #include "App.h"
 
 ResourcePrefabLoader::ResourcePrefabLoader():
-ResourceLoader(ResourceType::RT_PREFAB, App->file_system->GetLibraryPrefabPath())
+ResourceLoader(ResourceType::RT_PREFAB, App->file_system->GetLibraryPrefabPath(), "PrefabLoader")
 {
 }
 

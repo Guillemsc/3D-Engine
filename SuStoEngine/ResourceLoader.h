@@ -12,7 +12,7 @@ class GameObject;
 class ResourceLoader
 {
 public:
-	ResourceLoader(ResourceType resources_to_load, std::string library_path);
+	ResourceLoader(ResourceType resources_to_load, std::string library_path, std::string loader_name);
 	virtual ~ResourceLoader();
 
 	// Extensions
@@ -74,6 +74,7 @@ protected:
 
 	std::map<std::string, Resource*> resources;
 
+	std::string loader_name;
 	float3 resource_colour = float3::zero;
 };
 
