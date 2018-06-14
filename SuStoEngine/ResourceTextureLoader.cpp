@@ -112,11 +112,9 @@ bool ResourceTextureLoader::LoadFileToEngine(DecomposedFilePath d_filepath, std:
 	return ret;
 }
 
-bool ResourceTextureLoader::UnloadAssetFromEngine(DecomposedFilePath d_filepath)
+bool ResourceTextureLoader::RemoveAssetInfoFromEngine(DecomposedFilePath d_filepath)
 {
 	bool ret = false;
-
-	App->file_system->FileDelete(d_filepath.file_path.c_str());
 
 	std::string meta_path = d_filepath.file_path + ".meta";
 
@@ -155,9 +153,12 @@ void ResourceTextureLoader::ClearFromGameObject(Resource * resource, GameObject 
 
 		if (c_mat != nullptr)
 		{
-			if (c_mat->GetTexture()->GetUniqueId() == resource->GetUniqueId())
+			if (c_mat->GetTexture() != nullptr)
 			{
-				c_mat->RemoveTexture();
+				if (c_mat->GetTexture()->GetUniqueId() == resource->GetUniqueId())
+				{
+					c_mat->RemoveTexture();
+				}
 			}
 		}
 	}

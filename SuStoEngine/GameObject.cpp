@@ -614,6 +614,21 @@ float4x4 GameObject::GetParentTransform()
 	return trans;
 }
 
+void GameObject::SetPrefabInstance(ResourcePrefab * _prefab_instance)
+{
+	prefab_instance = _prefab_instance;
+}
+
+ResourcePrefab * GameObject::GetPrefabInstance() const
+{
+	return prefab_instance;
+}
+
+void GameObject::UpdatePrefabInstance()
+{
+
+}
+
 AABB GameObject::GetBbox() const
 {
 	return local_bbox;

@@ -57,7 +57,7 @@ public:
 
 	bool LoadFileToEngine(DecomposedFilePath decomposed_file_path, std::vector<Resource*>& resources);
 
-	bool UnloadAssetFromEngine(DecomposedFilePath decomposed_file_path);
+	bool RemoveAssetInfoFromEngine(DecomposedFilePath decomposed_file_path);
 	void ClearFromGameObject(Resource* resource, GameObject* go);
 
 	bool ExportResourceToLibrary(Resource* resource);

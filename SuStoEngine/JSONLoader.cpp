@@ -222,6 +222,16 @@ void JSON_Doc::ClearArray(const string& arr)
 	}
 }
 
+void JSON_Doc::RemoveArrayIndex(const string & arr, int index)
+{
+	JSON_Array* array = json_object_get_array(object, arr.c_str());
+
+	if (array != nullptr)
+	{
+		json_array_remove(array, index);
+	}
+}
+
 const int JSON_Doc::GetArrayCount(const string& set) const
 {
 	int ret = 0;

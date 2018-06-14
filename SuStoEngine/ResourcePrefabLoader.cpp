@@ -57,9 +57,9 @@ bool ResourcePrefabLoader::LoadFileToEngine(DecomposedFilePath decomposed_file_p
 	return ret;
 }
 
-bool ResourcePrefabLoader::UnloadAssetFromEngine(DecomposedFilePath decomposed_file_path)
+bool ResourcePrefabLoader::RemoveAssetInfoFromEngine(DecomposedFilePath decomposed_file_path)
 {
-	App->file_system->FileDelete(decomposed_file_path.file_path.c_str());
+	bool ret = false;
 
 	std::string meta_filepath = decomposed_file_path.file_path + ".meta";
 
@@ -77,7 +77,7 @@ bool ResourcePrefabLoader::UnloadAssetFromEngine(DecomposedFilePath decomposed_f
 
 	App->file_system->FileDelete(meta_filepath.c_str());
 
-	return true;
+	return ret;
 }
 
 void ResourcePrefabLoader::ClearFromGameObject(Resource * resource, GameObject * go)
@@ -181,13 +181,15 @@ ResourcePrefab * ResourcePrefabLoader::CreatePrefab(GameObject * go)
 
 	if (go != nullptr)
 	{
+		std::string name = go->GetName();
+
 		r_prefab = (ResourcePrefab*)App->resource_manager->CreateNewResource(ResourceType::RT_PREFAB);
 		
 		r_prefab->SetGameObject(go);
 
-		std::string uid = r_prefab->GetUniqueId();
+		r_prefab->SetFileName(name.c_str());
 
-		std::string name = go->GetName();
+		std::string uid = r_prefab->GetUniqueId();
 
 		name = App->file_system->FileRenameOnNameCollision(App->file_system->GetAssetsPath().c_str(), name.c_str(), "prefab");
 
@@ -208,10 +210,45 @@ ResourcePrefab * ResourcePrefabLoader::CreatePrefab(GameObject * go)
 			App->json->UnloadJSON(meta_doc);
 		}
 
-		App->gameobj->GetAbstractor()->Serialize(r_prefab->GetAbstraction(), library_path.c_str(), uid.c_str(), "prefab");
-		
+		App->gameobj->GetAbstractor()->Serialize(r_prefab->GetAbstraction(), library_path.c_str(), uid.c_str(), "prefab");		
 	}
 
 	return r_prefab;
+}
+
+void ResourcePrefabLoader::UpdatePrefab(const char* prefab_filepath, GameObject* go)
+{
+	if (go != nullptr)
+	{
+		DecomposedFilePath d_filepath = App->file_system->DecomposeFilePath(prefab_filepath);
+
+		std::string meta_path = std::string(prefab_filepath) + ".meta";
+
+		JSON_Doc* doc = App->json->LoadJSON(meta_path.c_str());
+		if (doc != nullptr)
+		{
+			std::string uid = doc->GetString("resource");
+
+			ResourcePrefab* r_prefab = (ResourcePrefab*)App->resource_manager->Get(uid);
+
+			if (r_prefab != nullptr)
+			{
+				GameObjectAbstraction abs = r_prefab->GetAbstraction();
+
+				if (abs.GetValid())
+				{
+					std::string resource_filepath = library_path + uid + ".prefab";
+
+					App->file_system->FileDelete(prefab_filepath);
+					App->file_system->FileDelete(resource_filepath.c_str());
+
+					App->gameobj->GetAbstractor()->Serialize(abs, d_filepath.path.c_str(), d_filepath.file_name.c_str(), "prefab");
+					App->gameobj->GetAbstractor()->Serialize(abs, library_path.c_str(), uid.c_str(), "prefab");
+				}
+			}
+
+			App->json->UnloadJSON(doc);
+		}
+	}
 }
 

@@ -6,6 +6,7 @@
 #include "Component.h"
 
 #include "ComponentTransform.h"
+#include "ResourcePrefab.h"
 
 class ModuleGameObject;
 class UICanvas;
@@ -63,6 +64,10 @@ public:
 	void TestRay(const LineSegment& segment, bool& hit, float& dist);
 	float4x4 GetParentTransform();
 
+	void SetPrefabInstance(ResourcePrefab* prefab_instance);
+	ResourcePrefab* GetPrefabInstance() const;
+	void UpdatePrefabInstance();
+
 	AABB GetBbox() const;
 
 	void OnLoadAbstraction(DataAbstraction& abs);
@@ -79,24 +84,26 @@ public:
 	ComponentTransform* transform = nullptr;
  
 private:
-	std::string unique_id;
-	std::string name;
-	bool		enabled = false;
-	bool		selected = false;
-	bool		is_static = false;
-	bool		draw = false;
+	std::string		unique_id;
+	std::string		name;
+	bool			enabled = false;
+	bool			selected = false;
+	bool			is_static = false;
+	bool			draw = false;
 
 	std::vector<Component*> components;
 	std::list<Component*> components_to_destroy;
 
-	AABB	    local_bbox;
+	AABB	        local_bbox;
 
-	GameObject* parent = nullptr;
+	GameObject*		parent = nullptr;
 	std::vector<GameObject*> childs;
 
-	bool		is_ui = false;
+	ResourcePrefab* prefab_instance = nullptr;
 
-	bool		debug_draw = false;
+	bool		    is_ui = false;
+
+	bool		    debug_draw = false;
 };
 
 #endif

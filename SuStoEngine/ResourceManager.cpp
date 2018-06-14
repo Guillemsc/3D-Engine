@@ -253,6 +253,24 @@ void ResourceManager::LoadFileToEngine(const char * filepath, std::vector<Resour
 
 void ResourceManager::UnloadAssetFromEngine(const char* filepath)
 {
+	if (App->file_system->FileExists(filepath))
+	{
+		DecomposedFilePath d_filepath = App->file_system->DecomposeFilePath(filepath);
+
+		ResourceType type = AssetExtensionToType(d_filepath.file_extension.c_str());
+		ResourceLoader* loader = GetLoader(type);
+
+		if (loader != nullptr)
+		{
+			loader->RemoveAssetInfoFromEngine(d_filepath);
+		}
+
+		App->file_system->FileDelete(filepath);
+	}
+}
+
+void ResourceManager::RemoveAssetInfoFromEngine(const char * filepath)
+{
 	DecomposedFilePath d_filepath = App->file_system->DecomposeFilePath(filepath);
 
 	ResourceType type = AssetExtensionToType(d_filepath.file_extension.c_str());
@@ -260,7 +278,7 @@ void ResourceManager::UnloadAssetFromEngine(const char* filepath)
 
 	if (loader != nullptr)
 	{
-		loader->UnloadAssetFromEngine(d_filepath);
+		loader->RemoveAssetInfoFromEngine(d_filepath);
 	}
 }
 
@@ -366,6 +384,12 @@ bool ResourceManager::IsAssetOnLibrary(const char * filepath, std::vector<std::s
 	}
 
 	return ret;
+}
+
+void ResourceManager::ReimportAssetToEngine(const char * filepath)
+{
+	RemoveAssetInfoFromEngine(filepath);
+	LoadFileToEngine(filepath);
 }
 
 void ResourceManager::RenameAsset(const char * filepath, const char * new_name)

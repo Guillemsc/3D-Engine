@@ -162,6 +162,13 @@ void ComponentTransform::OnDisable()
 
 void ComponentTransform::OnSaveAbstraction(DataAbstraction & abs)
 {
+	abs.AddFloat3("position", local_position);
+	abs.AddFloat4("rotation", float4(local_rotation_quat.x, local_rotation_quat.y, local_rotation_quat.z, local_rotation_quat.w));
+	abs.AddFloat3("scale", local_scale);
+}
+
+void ComponentTransform::OnLoadAbstraction(DataAbstraction & abs)
+{
 	float3 position = abs.GetFloat3("position");
 	float4 rotation = abs.GetFloat4("rotation");
 	float3 scale = abs.GetFloat3("scale");
@@ -169,13 +176,6 @@ void ComponentTransform::OnSaveAbstraction(DataAbstraction & abs)
 	SetPosition(position);
 	SetRotation(Quat(rotation.x, rotation.y, rotation.z, rotation.w));
 	SetScale(scale);
-}
-
-void ComponentTransform::OnLoadAbstraction(DataAbstraction & abs)
-{
-	abs.AddFloat3("position", local_position);
-	abs.AddFloat4("rotation", float4(local_rotation_quat.x, local_rotation_quat.y, local_rotation_quat.z, local_rotation_quat.w));
-	abs.AddFloat3("scale", local_scale);
 }
 
 void ComponentTransform::InspectorDraw(std::vector<Component*> components)

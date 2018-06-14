@@ -27,6 +27,7 @@ public:
 
 	void SetArray(const string& set);
 	void ClearArray(const string& arr);
+	void RemoveArrayIndex(const string& arr, int index);
 	void AddStringToArray(const string& arr, const char* str);
 	void AddBoolToArray(const string& arr, bool bo);
 	void AddNumberToArray(const string& arr, double set);

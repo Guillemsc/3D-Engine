@@ -16,7 +16,8 @@ public:
 	Resource* CreateResource(std::string new_uid);
 
 	bool LoadFileToEngine(DecomposedFilePath decomposed_file_path, std::vector<Resource*>& resources);
-	bool UnloadAssetFromEngine(DecomposedFilePath decomposed_file_path);
+
+	bool RemoveAssetInfoFromEngine(DecomposedFilePath decomposed_file_path);
 	void ClearFromGameObject(Resource* resource, GameObject* go);
 
 	bool ExportResourceToLibrary(Resource* resource);
@@ -28,6 +29,7 @@ public:
 	bool RenameAsset(DecomposedFilePath decomposed_file_path, const char* new_name);
 
 	ResourcePrefab* CreatePrefab(GameObject* go);
+	void UpdatePrefab(const char* prefab_filepath, GameObject* go);
 
 private:
 

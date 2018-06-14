@@ -210,7 +210,8 @@ void Explorer::DrawFiles(const Folder& folder)
 			{
 				ImGui::PushID((*it).file_path.c_str());
 
-				ImGui::Selectable((*it).file_name.c_str());
+				std::string file_name = "[" + (*it).file_extension + "] " + (*it).file_name;
+				ImGui::Selectable(file_name.c_str());
 
 				if (ImGui::IsItemClicked(0) || ImGui::IsItemClicked(1))
 				{
@@ -226,11 +227,21 @@ void Explorer::DrawFiles(const Folder& folder)
 					if (ImGui::Button("Load"))
 					{
 						App->resource_manager->LoadAssetResourceIntoScene((*it).file_path.c_str());
+						ImGui::CloseCurrentPopup();
 					}
+
+					ImGui::Separator();
 
 					if (ImGui::Button("Delete"))
 					{
 						App->resource_manager->UnloadAssetFromEngine((*it).file_path.c_str());
+						ImGui::CloseCurrentPopup();
+					}
+
+					if (ImGui::Button("Reimport"))
+					{
+						App->resource_manager->ReimportAssetToEngine((*it).file_path.c_str());
+						ImGui::CloseCurrentPopup();
 					}
 
 					ImGui::EndPopup();

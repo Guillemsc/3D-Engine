@@ -40,8 +40,8 @@ public:
 	// Loads a file from outside the engine as a new resource
 	virtual bool LoadFileToEngine(DecomposedFilePath decomposed_file_path, std::vector<Resource*>& resources) { return false; };
 
-	// Unloads a loaded resource from the engine
-	virtual bool UnloadAssetFromEngine(DecomposedFilePath decomposed_file_path) { return false; };
+	// Unloads all the asset engine information
+	virtual bool RemoveAssetInfoFromEngine(DecomposedFilePath decomposed_file_path) { return false; };
 
 	// Removes elements of a GameObject that use this resource
 	virtual void ClearFromGameObject(Resource* resource, GameObject* go) {  };

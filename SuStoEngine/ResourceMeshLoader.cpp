@@ -108,9 +108,9 @@ bool ResourceMeshLoader::LoadFileToEngine(DecomposedFilePath d_filepath, std::ve
 
 		// Create fbx prefab
 		
-		ResourcePrefabLoader* loader = (ResourcePrefabLoader*)App->resource_manager->GetLoader(ResourceType::RT_PREFAB);
+		ResourcePrefab* prefab = (ResourcePrefab*)App->resource_manager->CreateNewResource(ResourceType::RT_PREFAB);
 
-		ResourcePrefab* prefab = loader->CreatePrefab(parent);
+		prefab->SetGameObject(parent);
 
 		prefab->SerializeCustom(App->file_system->GetLibraryMeshPath().c_str(), prefab->GetUniqueId().c_str(), "meshprefab");
 
@@ -141,13 +141,12 @@ bool ResourceMeshLoader::LoadFileToEngine(DecomposedFilePath d_filepath, std::ve
 
 	return ret;
 }
-bool ResourceMeshLoader::UnloadAssetFromEngine(DecomposedFilePath d_filepath)
+
+bool ResourceMeshLoader::RemoveAssetInfoFromEngine(DecomposedFilePath d_filepath)
 {
-	bool ret = true;
+	bool ret = false;
 
 	std::string meta_file = d_filepath.file_path + ".meta";
-
-	App->file_system->FileDelete(d_filepath.file_path.c_str());
 
 	JSON_Doc* doc = App->json->LoadJSON(meta_file.c_str());
 
@@ -160,7 +159,8 @@ bool ResourceMeshLoader::UnloadAssetFromEngine(DecomposedFilePath d_filepath)
 
 		App->resource_manager->DeleteResource(prefab_uid);
 
-		for (int i = 0; i < doc->GetArrayCount("resources"); ++i)
+		int resources_count = doc->GetArrayCount("resources");;
+		for (int i = 0; i < resources_count; ++i)
 		{
 			std::string uid = doc->GetStringFromArray("resources", i);
 
@@ -178,12 +178,13 @@ bool ResourceMeshLoader::UnloadAssetFromEngine(DecomposedFilePath d_filepath)
 
 			App->file_system->FileDelete(resource_path.c_str());
 			App->file_system->FileDelete(meta_path.c_str());
+
+			ret = true;
 		}
 
 		App->json->UnloadJSON(doc);
 	}
 
-	App->file_system->FileDelete(meta_file.c_str());
 
 	return ret;
 }
@@ -196,9 +197,10 @@ void ResourceMeshLoader::ClearFromGameObject(Resource * resource, GameObject * g
 
 		if (mesh != nullptr)
 		{
-			if (mesh->GetMesh()->GetUniqueId() == resource->GetUniqueId())
+			if (mesh->GetMesh() != nullptr)
 			{
-				mesh->RemoveMesh();
+				if(mesh->GetMesh()->GetUniqueId() == resource->GetUniqueId())
+					mesh->RemoveMesh();
 			}
 		}
 	}
@@ -350,15 +352,18 @@ bool ResourceMeshLoader::ImportResourceFromLibrary(DecomposedFilePath d_filepath
 			RELEASE_ARRAY(indices);
 			RELEASE_ARRAY(vertices);
 			RELEASE_ARRAY(uvs);
+
+			ret = true;
 		}
+
 		App->json->UnloadJSON(doc);
 	}
 
-	return true;
+	return ret;
 }
 bool ResourceMeshLoader::LoadAssetResourceIntoScene(DecomposedFilePath decomposed_file_path)
 {
-	bool ret = true;
+	bool ret = false;
 
 	std::string meta_file = decomposed_file_path.file_path + ".meta";
 
@@ -372,7 +377,12 @@ bool ResourceMeshLoader::LoadAssetResourceIntoScene(DecomposedFilePath decompose
 
 		GameObjectAbstraction abs = App->gameobj->GetAbstractor()->DeSerialize(prefab_path.c_str());
 
-		GameObject* go_mesh = App->gameobj->GetAbstractor()->DeAbstract(abs);
+		if (abs.GetValid())
+		{
+			GameObject* go_mesh = App->gameobj->GetAbstractor()->DeAbstract(abs);
+
+			ret = true;
+		}
 	}
 
 	return ret;

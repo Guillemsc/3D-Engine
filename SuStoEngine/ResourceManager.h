@@ -92,11 +92,13 @@ public:
 	// Resource, assets and library management
 	void LoadFileToEngine(const char* filepath, std::vector<Resource*>& resources = std::vector<Resource*>());
 	void UnloadAssetFromEngine(const char* filepath);
+	void RemoveAssetInfoFromEngine(const char* filepath);
 	void ClearResourceFromGameObjects(Resource* res);
 	void ExportResourceToLibrary(Resource* resource);
 	void ImportResourceFromLibrary(const char* uid);
 	void LoadAssetResourceIntoScene(const char* filepath);
 	bool IsAssetOnLibrary(const char* filepath, std::vector<std::string>& library_files_used = std::vector<std::string>());
+	void ReimportAssetToEngine(const char* filepath);
 	void RenameAsset(const char* filepath, const char* new_name);
 
 	// Meta control
