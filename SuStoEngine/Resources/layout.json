@@ -208,7 +208,7 @@
             "child0": -1,
             "child1": -1,
             "prev_tab": 1,
-            "next_tab": 12,
+            "next_tab": -1,
             "parent": 7
         },
         "Dock12": {
@@ -218,15 +218,15 @@
             "pos_Y": 701,
             "size_X": 1227,
             "size_Y": 303,
-            "status": 0,
+            "status": 1,
             "active": false,
-            "opened": true,
+            "opened": false,
             "location": "31",
             "child0": -1,
             "child1": -1,
-            "prev_tab": 11,
+            "prev_tab": -1,
             "next_tab": -1,
-            "parent": 7
+            "parent": -1
         }
     }
 }

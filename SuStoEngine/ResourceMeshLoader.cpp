@@ -81,8 +81,8 @@ bool ResourceMeshLoader::LoadFileToEngine(DecomposedFilePath d_filepath, std::ve
 		// Create root go
 		GameObject* parent = new GameObject();
 
-		parent->transform->SetPosition(float3(position.x, position.y, position.z));
-		parent->transform->SetRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
+		parent->transform->SetLocalPosition(float3(position.x, position.y, position.z));
+		parent->transform->SetLocalRotation(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 		parent->transform->SetScale(float3(scale.x, scale.y, scale.z));
 
 		string name = App->file_system->GetFileNameFromFilePath(d_filepath.file_path.c_str());
@@ -612,8 +612,8 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 
 			go->SetParent(parent);
 
-			go->transform->SetPosition(mesh->GetPosition());
-			go->transform->SetRotation(mesh->GetRotation());
+			go->transform->SetLocalPosition(mesh->GetPosition());
+			go->transform->SetLocalRotation(mesh->GetRotation());
 			go->transform->SetScale(mesh->GetScale());
 
 			go->AddComponent(MESH);

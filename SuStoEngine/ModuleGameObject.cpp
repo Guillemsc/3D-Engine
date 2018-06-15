@@ -93,81 +93,7 @@ bool ModuleGameObject::Update()
 	// Update
 	GameObjectsUpdate();
 
-	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
-	{
-		float4x4 global_transform_trans = (*it)->transform->GetGlobalTransform().Transposed();
-		float t[16];
-
-		ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetOpenGLViewMatrix().ptr(),
-			App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr(),
-			current_gizmo_operation,
-			curr_guizmo_mode,
-			global_transform_trans.ptr(), t);
-
-		float4x4 moved_transformation = float4x4(
-			t[0], t[4], t[8], t[12],
-			t[1], t[5], t[9], t[13],
-			t[2], t[6], t[10], t[14],
-			t[3], t[7], t[11], t[15]);
-
-		if (ImGuizmo::IsUsing() && can_move)
-		{
-	
-			switch (current_gizmo_operation)
-			{
-				case ImGuizmo::OPERATION::TRANSLATE:
-				{
-					float4x4 new_trans = moved_transformation * (*it)->transform->GetGlobalTransform();
-					(*it)->transform->SetGlobalTransform(new_trans);
-					/*if (pos.IsFinite())
-					{
-						if ((*it)->parent != nullptr)
-						{
-							pos = (*it)->parent->transform->GetGlobalTransform().Inverted().TransformPos(pos);
-						}
-
-						(*it)->transform->Translate(pos);
-					}*/
-				}
-				break;
-
-				case ImGuizmo::OPERATION::ROTATE:
-				{
-					float4x4 new_trans = moved_transformation * (*it)->transform->GetGlobalTransform();
-					(*it)->transform->SetGlobalTransform(new_trans);
-			/*		if (rot.IsFinite()) 
-					{
-						if ((*it)->parent != nullptr) 
-						{
-							rot = (*it)->parent->transform->GetGlobalTransform().Inverted().TransformPos(rot);
-						}
-
-						(*it)->transform->Rotate(rot);
-					}	*/			
-				}
-				break;
-				case ImGuizmo::OPERATION::SCALE:
-				{
-					float4x4 new_trans = moved_transformation * (*it)->transform->GetGlobalTransform();
-					(*it)->transform->SetGlobalTransform(new_trans);
-					/*if (sc.IsFinite()) 
-					{
-						(*it)->transform->SetScale(sc);
-					}*/
-				}
-				break;
-			}
-		}
-	}
-
-	if (ImGuizmo::IsOver() || ImGuizmo::IsUsing())
-	{
-		can_pick = false;
-	}
-	else
-	{
-		can_pick = true;
-	}
+	UpdateTransformationGuizmos();
 	
 	if (show_kdtree)
 		kdtree->DebugDraw();
@@ -521,6 +447,16 @@ ImGuizmo::OPERATION ModuleGameObject::GetGuizmoOperation() const
 	return current_gizmo_operation;
 }
 
+void ModuleGameObject::SetGuizmoMode(ImGuizmo::MODE mode)
+{
+	curr_guizmo_mode = mode;
+}
+
+ImGuizmo::MODE ModuleGameObject::GetGuizmoMode()
+{
+	return curr_guizmo_mode;
+}
+
 KDTree * ModuleGameObject::GetKDTree()
 {
 	return kdtree;
@@ -565,16 +501,6 @@ void ModuleGameObject::SetCanMove(bool set)
 GameObjectAbstractor * ModuleGameObject::GetAbstractor() const
 {
 	return go_abstractor;
-}
-
-std::string ModuleGameObject::CheckDuplicateNames()
-{
-	for (vector<GameObject*>::const_iterator it = game_objects.begin(); it != game_objects.end(); it++)
-	{
-
-	}
-
-	return std::string();
 }
 
 void ModuleGameObject::DestroyGameObjects()
@@ -688,6 +614,76 @@ void ModuleGameObject::UpdateKDTree()
 	{
 		update_kdtree = false;
 		kdtree->CreateTree(statics);
+	}
+}
+
+void ModuleGameObject::UpdateTransformationGuizmos()
+{
+	ImGuizmo::MODE mode_to_apply = curr_guizmo_mode;
+
+	if (current_gizmo_operation == ImGuizmo::OPERATION::SCALE)
+		mode_to_apply = ImGuizmo::MODE::WORLD;
+
+	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
+	{
+		float4x4 global_transform_trans = (*it)->transform->GetGlobalTransform().Transposed();
+		float t[16];
+
+		ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetOpenGLViewMatrix().ptr(),
+			App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr(),
+			current_gizmo_operation,
+			mode_to_apply,
+			global_transform_trans.ptr(), t);
+
+		float4x4 moved_transformation = float4x4(
+			t[0], t[4], t[8], t[12],
+			t[1], t[5], t[9], t[13],
+			t[2], t[6], t[10], t[14],
+			t[3], t[7], t[11], t[15]);
+
+		if (ImGuizmo::IsUsing() && can_move)
+		{
+			switch (current_gizmo_operation)
+			{
+			case ImGuizmo::OPERATION::TRANSLATE:
+			{
+				float4x4 new_trans = moved_transformation * (*it)->transform->GetGlobalTransform();
+				(*it)->transform->SetGlobalTransform(new_trans);
+			}
+			break;
+
+			case ImGuizmo::OPERATION::ROTATE:
+			{
+				float4x4 new_trans = moved_transformation * (*it)->transform->GetGlobalTransform();
+				(*it)->transform->SetGlobalTransform(new_trans);
+			}
+			break;
+			case ImGuizmo::OPERATION::SCALE:
+			{
+				float4x4 save_trans = moved_transformation;
+				moved_transformation = moved_transformation * last_moved_transformation.Inverted();
+
+				float4x4 new_trans = moved_transformation * (*it)->transform->GetGlobalTransform();
+				(*it)->transform->SetGlobalTransform(new_trans);
+
+				last_moved_transformation = save_trans;
+			}
+			break;
+			}
+		}
+		else
+		{
+			last_moved_transformation = float4x4::identity;
+		}
+	}
+
+	if (ImGuizmo::IsOver() || ImGuizmo::IsUsing())
+	{
+		can_pick = false;
+	}
+	else
+	{
+		can_pick = true;
 	}
 }
 

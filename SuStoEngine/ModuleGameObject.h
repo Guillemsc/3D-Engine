@@ -59,6 +59,8 @@ public:
 
 	void SetGuizmoOperation(ImGuizmo::OPERATION op);
 	ImGuizmo::OPERATION GetGuizmoOperation() const;
+	void SetGuizmoMode(ImGuizmo::MODE mode);
+	ImGuizmo::MODE GetGuizmoMode();
 
 	KDTree* GetKDTree();
 	void RecalculateKDTree();
@@ -72,12 +74,11 @@ public:
 
 	GameObjectAbstractor* GetAbstractor() const;
 
-	std::string CheckDuplicateNames();
-
 private:
 	void DestroyGameObjects();
 	void MousePick();
 	void UpdateKDTree();
+	void UpdateTransformationGuizmos();
 
 private:
 	vector<GameObject*>   game_objects;
@@ -101,6 +102,8 @@ private:
 	GameObjectAbstractor* go_abstractor = nullptr;
 
 	ImGuizmo::MODE        curr_guizmo_mode = ImGuizmo::MODE::LOCAL;
+
+	float4x4			  last_moved_transformation = float4x4::identity;
 };
 
 void GameObjectEvents(Event ev);

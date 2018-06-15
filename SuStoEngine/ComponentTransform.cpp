@@ -38,23 +38,23 @@ const float4x4 ComponentTransform::GetLocalTransform() const
 	return local_transform;
 }
 
-const void ComponentTransform::SetPosition(const float3 & pos)
+const void ComponentTransform::SetLocalPosition(const float3 & pos)
 {
 	local_position = float4x4::FromTRS(pos, Quat::identity, float3::one);
 
 	RecalculateLocalTransform();
 }
 
-const void ComponentTransform::SetRotation(const float3 & rotation)
+const void ComponentTransform::SetLocalRotation(const float3 & rotation)
 {
-	local_rotation_quat = Quat::FromEulerXYZ(rotation.x*DEGTORAD, rotation.y*DEGTORAD, rotation.z*DEGTORAD);
+	local_rotation_quat = Quat::FromEulerXYZ(rotation.x * DEGTORAD, rotation.y * DEGTORAD, rotation.z * DEGTORAD);
 
 	local_rotation_euler = rotation;
 
 	RecalculateLocalTransform();
 }
 
-const void ComponentTransform::SetRotation(const Quat & quat)
+const void ComponentTransform::SetLocalRotation(const Quat & quat)
 {
 	local_rotation_quat = quat;
 	local_rotation_euler = local_rotation_quat.ToEulerXYZ() * RADTODEG;
@@ -64,7 +64,41 @@ const void ComponentTransform::SetRotation(const Quat & quat)
 
 const void ComponentTransform::SetScale(const float3 & scale)
 {
-	local_scale = float4x4::FromTRS(float3::zero, Quat::identity, scale);
+	float3 scal_mod = scale;
+
+	if (scal_mod.x < 0)
+		scal_mod.x = 0.001f;
+
+	if (scal_mod.y < 0)
+		scal_mod.y = 0.001f;
+
+	if (scal_mod.z < 0)
+		scal_mod.z = 0.001f;
+
+	local_scale = float4x4::FromTRS(float3::zero, Quat::identity, scal_mod);
+
+	RecalculateLocalTransform();
+}
+
+const void ComponentTransform::SetLocalPosRotScal(const float3 & pos, const Quat & quater, const float3 & scale)
+{
+	local_position = float4x4::FromTRS(pos, Quat::identity, float3::one);
+
+	local_rotation_quat = quater;
+	local_rotation_euler = local_rotation_quat.ToEulerXYZ() * RADTODEG;
+
+	float3 scal_mod = scale;
+
+	if (scal_mod.x < 0)
+		scal_mod.x = 0.001f;
+
+	if (scal_mod.y < 0)
+		scal_mod.y = 0.001f;
+
+	if (scal_mod.z < 0)
+		scal_mod.z = 0.001f;
+
+	local_scale = float4x4::FromTRS(float3::zero, Quat::identity, scal_mod);
 
 	RecalculateLocalTransform();
 }
@@ -96,6 +130,11 @@ const void ComponentTransform::Scale(const float3 & scale)
 const void ComponentTransform::SetLocalTransform(const float4x4 & transform)
 {
 	local_transform = transform;
+
+	float3 pos; Quat rot; float3 scal;
+	transform.Decompose(pos, rot, scal);
+
+	SetLocalPosRotScal(pos, rot, scal);
 }
 
 const float4x4 ComponentTransform::GetGlobalTransform() const
@@ -109,7 +148,9 @@ const void ComponentTransform::SetGlobalTransform(const float4x4 & transform)
 
 	if (GetOwner()->GetParent() != nullptr)
 	{
-		local_transform = GetOwner()->GetParent()->transform->GetGlobalTransform().Inverted() * global_transform;
+		float4x4 new_local = GetOwner()->GetParent()->transform->GetGlobalTransform().Inverted() * global_transform;
+
+		SetLocalTransform(new_local);
 	}
 }
 
@@ -171,8 +212,9 @@ void ComponentTransform::OnDisable()
 
 void ComponentTransform::OnSaveAbstraction(DataAbstraction & abs)
 {
+	Quat local_rot = GetLocalRotationQuat();
 	abs.AddFloat3("position", GetLocalPosition());
-	//abs.AddFloat4("rotation", float4(local_rotation_quat.x, local_rotation_quat.y, local_rotation_quat.z, local_rotation_quat.w));
+	abs.AddFloat4("rotation", float4(local_rot.x, local_rot.y, local_rot.z, local_rot.w));
 	abs.AddFloat3("scale", GetScale());
 }
 
@@ -182,8 +224,8 @@ void ComponentTransform::OnLoadAbstraction(DataAbstraction & abs)
 	float4 rotation = abs.GetFloat4("rotation");
 	float3 scale = abs.GetFloat3("scale");
 
-	SetPosition(position);
-	SetRotation(Quat(rotation.x, rotation.y, rotation.z, rotation.w));
+	SetLocalPosition(position);
+	SetLocalRotation(Quat(rotation.x, rotation.y, rotation.z, rotation.w));
 	SetScale(scale);
 }
 
@@ -194,12 +236,12 @@ void ComponentTransform::InspectorDraw(std::vector<Component*> components)
 	float3 scale = GetScale();
 
 	if (ImGui::DragFloat3("Position", (float*)&position, 0.1f))
-		SetPosition(position);
+		SetLocalPosition(position);
 
 	if (ImGui::DragFloat3("Rotation", (float*)&rotation, 0.1f))
-		SetRotation(rotation);
+		SetLocalRotation(rotation);
 
-	if (ImGui::DragFloat3("Scale", (float*)&scale, 0.1f))
+	if (ImGui::DragFloat3("Scale", (float*)&scale, 0.1f, 0.0f))
 		SetScale(scale);
 }
 

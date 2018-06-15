@@ -30,12 +30,12 @@ void ToolsBar::Draw(uint flags)
 
 	// Transformation buttons -----------------------------------------
 
-	bool to_change = false;
+	bool to_change_trans_colour = false;
 
 	if (App->gameobj->GetGuizmoOperation() == ImGuizmo::OPERATION::TRANSLATE)
 	{
 		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.6f, 0.6f, 0.6f));
-		to_change = true;
+		to_change_trans_colour = true;
 	}
 
 	ImGui::SetCursorPos(ImVec2(40, 6));
@@ -44,16 +44,16 @@ void ToolsBar::Draw(uint flags)
 		App->gameobj->SetGuizmoOperation(ImGuizmo::OPERATION::TRANSLATE);
 	}
 
-	if (to_change)
+	if (to_change_trans_colour)
 	{
 		ImGui::PopStyleColor(1);
-		to_change = false;
+		to_change_trans_colour = false;
 	}
 
 	if (App->gameobj->GetGuizmoOperation() == ImGuizmo::OPERATION::ROTATE)
 	{
 		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.6f, 0.6f, 0.6f));
-		to_change = true;
+		to_change_trans_colour = true;
 	}
 
 	ImGui::SetCursorPos(ImVec2(114, 6));
@@ -62,16 +62,16 @@ void ToolsBar::Draw(uint flags)
 		App->gameobj->SetGuizmoOperation(ImGuizmo::OPERATION::ROTATE);
 	}
 
-	if (to_change)
+	if (to_change_trans_colour)
 	{
 		ImGui::PopStyleColor(1);
-		to_change = false;
+		to_change_trans_colour = false;
 	}
 
 	if (App->gameobj->GetGuizmoOperation() == ImGuizmo::OPERATION::SCALE)
 	{
 		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.6f, 0.6f, 0.6f));
-		to_change = true;
+		to_change_trans_colour = true;
 	}
 
 	ImGui::SetCursorPos(ImVec2(167, 6));
@@ -80,10 +80,52 @@ void ToolsBar::Draw(uint flags)
 		App->gameobj->SetGuizmoOperation(ImGuizmo::OPERATION::SCALE);
 	}
 
-	if (to_change)
+	if (to_change_trans_colour)
 	{
 		ImGui::PopStyleColor(1);
-		to_change = false;
+		to_change_trans_colour = false;
+	}
+
+	// ----------------------------------------------------------------
+
+	// Transformation mode buttons ------------------------------------
+
+	bool to_change_mode_colour = false;
+
+	if (App->gameobj->GetGuizmoMode() == ImGuizmo::MODE::LOCAL)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.6f, 0.6f, 0.6f));
+		to_change_mode_colour = true;
+	}
+
+	ImGui::SetCursorPos(ImVec2(250, 6));
+	if (ImGui::Button("LOCAL"))
+	{
+		App->gameobj->SetGuizmoMode(ImGuizmo::MODE::LOCAL);
+	}
+
+	if (to_change_mode_colour)
+	{
+		ImGui::PopStyleColor(1);
+		to_change_mode_colour = false;
+	}
+
+	if (App->gameobj->GetGuizmoMode() == ImGuizmo::MODE::WORLD)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.6f, 0.6f, 0.6f));
+		to_change_mode_colour = true;
+	}
+
+	ImGui::SetCursorPos(ImVec2(300, 6));
+	if (ImGui::Button("WORLD"))
+	{
+		App->gameobj->SetGuizmoMode(ImGuizmo::MODE::WORLD);
+	}
+
+	if (to_change_mode_colour)
+	{
+		ImGui::PopStyleColor(1);
+		to_change_mode_colour = false;
 	}
 
 	// ----------------------------------------------------------------

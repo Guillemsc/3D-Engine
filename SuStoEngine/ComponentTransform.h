@@ -23,10 +23,11 @@ public:
 	const float4x4 GetGlobalTransform() const;
 	const void SetGlobalTransform(const float4x4& transform);
 
-	const void SetPosition(const float3& pos);
-	const void SetRotation(const float3& rotation);
-	const void SetRotation(const Quat& quater);
+	const void SetLocalPosition(const float3& pos);
+	const void SetLocalRotation(const float3& rotation);
+	const void SetLocalRotation(const Quat& quater);
 	const void SetScale(const float3& scale);
+	const void SetLocalPosRotScal(const float3& pos, const Quat& quater, const float3& scale);
 
 	const void Translate(const float3& pos);
 	const void Rotate(const float3& rotate);
