@@ -58,6 +58,7 @@ public:
 	const vector<GameObject*> GetDynamicGameObjects() const;
 
 	void SetGuizmoOperation(ImGuizmo::OPERATION op);
+	ImGuizmo::OPERATION GetGuizmoOperation() const;
 
 	KDTree* GetKDTree();
 	void RecalculateKDTree();
@@ -98,6 +99,8 @@ private:
 	bool			      can_move = true;
 
 	GameObjectAbstractor* go_abstractor = nullptr;
+
+	ImGuizmo::MODE        curr_guizmo_mode = ImGuizmo::MODE::LOCAL;
 };
 
 void GameObjectEvents(Event ev);

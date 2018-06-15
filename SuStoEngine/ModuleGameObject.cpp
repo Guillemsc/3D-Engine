@@ -101,7 +101,7 @@ bool ModuleGameObject::Update()
 		ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetOpenGLViewMatrix().ptr(),
 			App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr(),
 			current_gizmo_operation,
-			ImGuizmo::MODE::LOCAL,
+			curr_guizmo_mode,
 			global_transform_trans.ptr(), t);
 
 		float4x4 moved_transformation = float4x4(
@@ -112,17 +112,14 @@ bool ModuleGameObject::Update()
 
 		if (ImGuizmo::IsUsing() && can_move)
 		{
-			float3 pos;
-			Quat quat_rot;
-			float3 scal;
-			moved_transformation.Decompose(pos, quat_rot, scal);
-			float3 rot = float3(quat_rot.ToEulerXYZ().x * RADTODEG, quat_rot.ToEulerXYZ().y * RADTODEG, quat_rot.ToEulerXYZ().z * RADTODEG);
-
+	
 			switch (current_gizmo_operation)
 			{
 				case ImGuizmo::OPERATION::TRANSLATE:
 				{
-					if (pos.IsFinite())
+					float4x4 new_trans = moved_transformation * (*it)->transform->GetGlobalTransform();
+					(*it)->transform->SetGlobalTransform(new_trans);
+					/*if (pos.IsFinite())
 					{
 						if ((*it)->parent != nullptr)
 						{
@@ -130,13 +127,15 @@ bool ModuleGameObject::Update()
 						}
 
 						(*it)->transform->Translate(pos);
-					}
+					}*/
 				}
 				break;
 
 				case ImGuizmo::OPERATION::ROTATE:
 				{
-					if (rot.IsFinite()) 
+					float4x4 new_trans = moved_transformation * (*it)->transform->GetGlobalTransform();
+					(*it)->transform->SetGlobalTransform(new_trans);
+			/*		if (rot.IsFinite()) 
 					{
 						if ((*it)->parent != nullptr) 
 						{
@@ -144,11 +143,13 @@ bool ModuleGameObject::Update()
 						}
 
 						(*it)->transform->Rotate(rot);
-					}				
+					}	*/			
 				}
 				break;
 				case ImGuizmo::OPERATION::SCALE:
 				{
+					float4x4 new_trans = moved_transformation * (*it)->transform->GetGlobalTransform();
+					(*it)->transform->SetGlobalTransform(new_trans);
 					/*if (sc.IsFinite()) 
 					{
 						(*it)->transform->SetScale(sc);
@@ -513,6 +514,11 @@ const vector<GameObject*> ModuleGameObject::GetDynamicGameObjects() const
 void ModuleGameObject::SetGuizmoOperation(ImGuizmo::OPERATION op)
 {
 	current_gizmo_operation = op;
+}
+
+ImGuizmo::OPERATION ModuleGameObject::GetGuizmoOperation() const
+{
+	return current_gizmo_operation;
 }
 
 KDTree * ModuleGameObject::GetKDTree()

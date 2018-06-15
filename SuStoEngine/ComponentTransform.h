@@ -19,9 +19,9 @@ public:
 	void CleanUp();
 
 	const float4x4 GetLocalTransform() const;
-	//const void SetLocalTransform(const float4x4& transform);
+	const void SetLocalTransform(const float4x4& transform);
 	const float4x4 GetGlobalTransform() const;
-	//const void SetGlobalTransform(const float4x4& transform);
+	const void SetGlobalTransform(const float4x4& transform);
 
 	const void SetPosition(const float3& pos);
 	const void SetRotation(const float3& rotation);
@@ -50,10 +50,10 @@ private:
 
 private:
 	float4x4 local_transform = float4x4::identity;
-	float3   local_position;
+	float4x4 local_position = float4x4::identity;
 	float3   local_rotation_euler;
-	Quat     local_rotation_quat;
-	float3   local_scale;
+	float4x4     local_rotation_quat;
+	float4x4 local_scale = float4x4::identity;
 
 	float4x4 global_transform = float4x4::identity;
 

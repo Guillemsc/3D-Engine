@@ -25,25 +25,68 @@ void ToolsBar::Draw(uint flags)
 	ImGui::SetNextWindowPos(ImVec2(-5, 20));
 	ImGui::SetNextWindowSize(ImVec2(App->window->GetWindowSize().x + 10, 27));
 	bool open = true;
+
 	ImGui::Begin("tool_Bar", &open, flags);
 
-	ImGui::SetCursorPos(ImVec2(20, 3));
-	if (ImGui::Button("Move"))
+	// Transformation buttons -----------------------------------------
+
+	bool to_change = false;
+
+	if (App->gameobj->GetGuizmoOperation() == ImGuizmo::OPERATION::TRANSLATE)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.6f, 0.6f, 0.6f));
+		to_change = true;
+	}
+
+	ImGui::SetCursorPos(ImVec2(40, 6));
+	if (ImGui::Button("TRANSLATE"))
 	{
 		App->gameobj->SetGuizmoOperation(ImGuizmo::OPERATION::TRANSLATE);
 	}
 
-	ImGui::SetCursorPos(ImVec2(64, 3));
-	if (ImGui::Button("Rotate"))
+	if (to_change)
+	{
+		ImGui::PopStyleColor(1);
+		to_change = false;
+	}
+
+	if (App->gameobj->GetGuizmoOperation() == ImGuizmo::OPERATION::ROTATE)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.6f, 0.6f, 0.6f));
+		to_change = true;
+	}
+
+	ImGui::SetCursorPos(ImVec2(114, 6));
+	if (ImGui::Button("ROTATE"))
 	{
 		App->gameobj->SetGuizmoOperation(ImGuizmo::OPERATION::ROTATE);
 	}
 
-	ImGui::SetCursorPos(ImVec2(120, 3));
-	if (ImGui::Button("Scale"))
+	if (to_change)
+	{
+		ImGui::PopStyleColor(1);
+		to_change = false;
+	}
+
+	if (App->gameobj->GetGuizmoOperation() == ImGuizmo::OPERATION::SCALE)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.6f, 0.6f, 0.6f));
+		to_change = true;
+	}
+
+	ImGui::SetCursorPos(ImVec2(167, 6));
+	if (ImGui::Button("SCALE"))
 	{
 		App->gameobj->SetGuizmoOperation(ImGuizmo::OPERATION::SCALE);
 	}
+
+	if (to_change)
+	{
+		ImGui::PopStyleColor(1);
+		to_change = false;
+	}
+
+	// ----------------------------------------------------------------
 
 	if (App->scene_manager->GetState() == SceneState::EDIT)
 	{

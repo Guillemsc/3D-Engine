@@ -463,6 +463,10 @@ void GameObject::RecursiveCalcGlobalTransform()
 	{
 		transform->global_transform = parent->transform->global_transform * transform->local_transform;
 	}
+	else
+	{
+		transform->global_transform = transform->local_transform;
+	}
 
 	if (!childs.empty())
 	{

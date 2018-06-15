@@ -21,12 +21,6 @@ ComponentTransform::~ComponentTransform()
 
 void ComponentTransform::Start()
 {
-	local_transform.SetIdentity();
-	local_position = float3::zero;
-	local_rotation_euler = float3::zero;
-	local_rotation_quat = Quat::identity;
-	local_scale = float3::one;
-
 	global_transform.SetIdentity();
 }
 
@@ -46,7 +40,7 @@ const float4x4 ComponentTransform::GetLocalTransform() const
 
 const void ComponentTransform::SetPosition(const float3 & pos)
 {
-	local_position = pos;
+	local_position = float4x4::FromTRS(pos, Quat::identity, float3::one);
 
 	RecalculateLocalTransform();
 }
@@ -70,19 +64,19 @@ const void ComponentTransform::SetRotation(const Quat & quat)
 
 const void ComponentTransform::SetScale(const float3 & scale)
 {
-	local_scale = scale;
+	local_scale = float4x4::FromTRS(float3::zero, Quat::identity, scale);
 
 	RecalculateLocalTransform();
 }
 
 const void ComponentTransform::Translate(const float3 & pos)
 {
-	if (pos.x != 0 || pos.y != 0 || pos.z != 0)
-	{
-		local_position += pos;
+	//if (pos.x != 0 || pos.y != 0 || pos.z != 0)
+	//{
+	//	local_position += pos;
 
-		RecalculateLocalTransform();
-	}
+	//	RecalculateLocalTransform();
+	//}
 }
 
 const void ComponentTransform::Rotate(const float3 & rotate)
@@ -94,31 +88,38 @@ const void ComponentTransform::Rotate(const float3 & rotate)
 
 const void ComponentTransform::Scale(const float3 & scale)
 {
-	local_scale += scale;
+	//local_scale += scale;
 
-	RecalculateLocalTransform();
+	//RecalculateLocalTransform();
 }
 
-//const void ComponentTransform::SetLocalTransform(const float4x4 & transform)
-//{
-//	local_transform = transform;
-//
-//	transform.Decompose(local_position, local_rotation_quat, local_scale);
-//}
+const void ComponentTransform::SetLocalTransform(const float4x4 & transform)
+{
+	local_transform = transform;
+}
 
 const float4x4 ComponentTransform::GetGlobalTransform() const
 {
 	return global_transform;
 }
 
-//const void ComponentTransform::SetGlobalTransform(const float4x4 & transform)
-//{
-//	global_transform = transform;
-//}
+const void ComponentTransform::SetGlobalTransform(const float4x4 & transform)
+{
+	global_transform = transform;
+
+	if (GetOwner()->GetParent() != nullptr)
+	{
+		local_transform = GetOwner()->GetParent()->transform->GetGlobalTransform().Inverted() * global_transform;
+	}
+}
 
 const float3 ComponentTransform::GetLocalPosition() const
 {
-	return local_position;
+	float3 ret = float3::zero;
+	Quat rot;
+	float3 scal;
+	local_position.Decompose(ret, rot, scal);
+	return ret;
 }
 
 const float3 ComponentTransform::GetGlobalPosition() const
@@ -139,17 +140,25 @@ const float3 ComponentTransform::GetLocalRotationEuler() const
 
 const Quat ComponentTransform::GetLocalRotationQuat() const
 {
-	return local_rotation_quat;
+	float3 ret = float3::zero;
+	Quat rot;
+	float3 scal;
+	local_rotation_quat.Decompose(ret, rot, scal);
+	return rot;
 }
 
 const float3 ComponentTransform::GetScale() const
 {
-	return local_scale;
+	float3 ret = float3::zero;
+	Quat rot;
+	float3 scal;
+	local_scale.Decompose(ret, rot, scal);
+	return scal;
 }
 
 void ComponentTransform::RecalculateLocalTransform()
 {
-	local_transform = float4x4::FromTRS(local_position, local_rotation_quat, local_scale);
+	local_transform = local_position * local_rotation_quat * local_scale;
 }
 
 void ComponentTransform::OnEnable()
@@ -162,9 +171,9 @@ void ComponentTransform::OnDisable()
 
 void ComponentTransform::OnSaveAbstraction(DataAbstraction & abs)
 {
-	abs.AddFloat3("position", local_position);
-	abs.AddFloat4("rotation", float4(local_rotation_quat.x, local_rotation_quat.y, local_rotation_quat.z, local_rotation_quat.w));
-	abs.AddFloat3("scale", local_scale);
+	abs.AddFloat3("position", GetLocalPosition());
+	//abs.AddFloat4("rotation", float4(local_rotation_quat.x, local_rotation_quat.y, local_rotation_quat.z, local_rotation_quat.w));
+	abs.AddFloat3("scale", GetScale());
 }
 
 void ComponentTransform::OnLoadAbstraction(DataAbstraction & abs)
