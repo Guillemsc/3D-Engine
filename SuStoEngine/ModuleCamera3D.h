@@ -51,7 +51,7 @@ private:
 	uint last_height = 0;
 
 	int max_msaa_samples = 8;
-	int current_msaa_samples = 0;
+	int current_msaa_samples = 8;
 
 	bool created = false;
 };

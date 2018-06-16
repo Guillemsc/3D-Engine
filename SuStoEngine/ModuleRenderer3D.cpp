@@ -10,6 +10,8 @@
 #include "ImGuizmo.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
+#include "GameObject.h"
+#include "ModuleGameObject.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -68,8 +70,8 @@ bool ModuleRenderer3D::Awake()
 		if (SDL_GL_SetSwapInterval(App->window->GetVsync()) < 0)
 			CONSOLE_LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 
-		fbo_texture = new FBO();
-		fbo_texture->Create(App->window->GetWindowSize().x, App->window->GetWindowSize().y);
+		//fbo_texture = new FBO();
+		//fbo_texture->Create(App->window->GetWindowSize().x, App->window->GetWindowSize().y);
 
 		//Initialize Projection Matrix
 		glMatrixMode(GL_PROJECTION);
@@ -177,8 +179,9 @@ bool ModuleRenderer3D::PostUpdate()
 {
 	bool ret = true;
 
-	// Finish 3d Draw scene
-	//fbo_texture->Unbind();
+	// Draw scene
+	RenderScene();
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Disable light
@@ -225,6 +228,13 @@ void ModuleRenderer3D::RenderScene()
 		Camera3D* curr_camera = (*it);
 
 		curr_camera->Bind(0, 0, window_size.x, window_size.y);
+
+		const std::vector<GameObject*> game_object = App->gameobj->GetListGameObjects();
+
+		for (std::vector<GameObject*>::const_iterator go = game_object.begin(); go != game_object.end(); ++go)
+		{
+			(*go)->Draw();
+		}
 
 		curr_camera->Unbind();
 	}
@@ -593,9 +603,9 @@ void ModuleRenderer3D::Set2DMultisample(uint samples, uint width, uint height)
 	}
 }
 
-void ModuleRenderer3D::SetFrameBufferTexture2D(uint id)
+void ModuleRenderer3D::SetFrameBufferTexture2D(uint target, uint id)
 {
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, id, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, target, id, 0);
 
 	GLenum error = glGetError();
 	if (error != GL_NO_ERROR)
@@ -612,17 +622,6 @@ void ModuleRenderer3D::RenderStorageMultisample(uint samples, uint width, uint h
 	if (error != GL_NO_ERROR)
 	{
 		CONSOLE_LOG("Error rendering storage multisample: %s\n", gluErrorString(error));
-	}
-}
-
-void ModuleRenderer3D::RenderRenderBuffer(uint samples, uint width, uint height)
-{
-	glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH24_STENCIL8, width, height);
-
-	GLenum error = glGetError();
-	if (error != GL_NO_ERROR)
-	{
-		CONSOLE_LOG("Error rendering render buffer: %s\n", gluErrorString(error));
 	}
 }
 
@@ -739,6 +738,17 @@ void ModuleRenderer3D::BindFrameBuffer(uint id) const
 	if (error != GL_NO_ERROR)
 	{
 		CONSOLE_LOG("Error binding frame buffer: %s\n", gluErrorString(error));
+	}
+}
+
+void ModuleRenderer3D::RenderFrameBuffer(uint id) const
+{
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, id);
+
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+	{
+		CONSOLE_LOG("Error rendering frame buffer: %s\n", gluErrorString(error));
 	}
 }
 
@@ -982,6 +992,20 @@ void ModuleRenderer3D::SetUniformFloat(uint program, const char * name, float da
 	if (error != GL_NO_ERROR)
 	{
 		CONSOLE_LOG("Error Setting uniform float %s: %s\n", name, gluErrorString(error));
+	}
+}
+
+void ModuleRenderer3D::SetUniformBool(uint program, const char * name, bool data)
+{
+	GLint modelLoc = glGetUniformLocation(program, name);
+
+	if (modelLoc != -1)
+		glUniform1i(modelLoc, data);
+
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+	{
+		CONSOLE_ERROR("Error Setting uniform float %s: %s\n", name, gluErrorString(error));
 	}
 }
 

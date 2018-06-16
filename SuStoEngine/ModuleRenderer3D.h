@@ -81,9 +81,8 @@ public:
 	void UnbindRenderBuffer() const;
 
 	void Set2DMultisample(uint samples, uint width, uint height);
-	void SetFrameBufferTexture2D(uint id);
+	void SetFrameBufferTexture2D(uint target, uint id);
 	void RenderStorageMultisample(uint samples, uint width, uint height);
-	void RenderRenderBuffer(uint samples, uint width, uint height);
 
 	void LoadArrayToVRAM(uint size, float* values, GLenum type = GL_STATIC_DRAW) const;
 	void LoadArrayToVRAM(uint size, uint* values, GLenum type = GL_STATIC_DRAW) const;
@@ -101,6 +100,7 @@ public:
 
 	uint GenFrameBuffer() const;
 	void BindFrameBuffer(uint id) const;
+	void RenderFrameBuffer(uint id) const;
 	void UnbindFrameBuffer() const;
 	uint CheckFrameBufferStatus();
 	void DeleteFrameBuffer(uint& id);
@@ -121,6 +121,7 @@ public:
 	void SetUniformForViewAndProjection(uint program, const char* view_name, const char* proj_name);
 
 	void SetUniformFloat(uint program, const char* name, float data);
+	void SetUniformBool(uint program, const char* name, bool data);
 
 	uint CreateShaderProgram();
 	void UseShaderProgram(uint id);

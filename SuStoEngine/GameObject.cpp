@@ -94,7 +94,6 @@ void GameObject::Draw()
 
 	if (curr_shader != nullptr)
 	{
-
 		ComponentMesh* component_mesh = (ComponentMesh*)GetComponent(MESH);
 
 		if (component_mesh != nullptr && component_mesh->GetActive())
@@ -147,13 +146,13 @@ void GameObject::Draw()
 		}
 	}
 
+	DrawBBox();
+
 	// Reset
 	App->renderer3D->UnbindTexture();
 
 	// Pop matrix
 	//glPopMatrix();
-
-	DrawBBox();
 }
 
 void GameObject::CleanUp()
