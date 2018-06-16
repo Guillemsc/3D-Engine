@@ -227,6 +227,11 @@ bool ResourceTextureLoader::ExportResourceToLibrary(Resource * resource)
 	return ret;
 }
 
+bool ResourceTextureLoader::ExportResourceToAssets(Resource * resource)
+{
+	return false;
+}
+
 bool ResourceTextureLoader::ImportResourceFromLibrary(DecomposedFilePath d_filepath)
 {	
 	bool ret = false;

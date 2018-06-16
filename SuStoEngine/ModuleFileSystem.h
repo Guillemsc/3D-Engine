@@ -73,6 +73,7 @@ public:
 	string GetLibraryPrefabPath();
 	string GetLibraryTexturePath();
 	string GetLibraryScenePath();
+	string GetLibraryShadersPath();
 	string GetSettingsPath();
 
 	std::string GetLookingPath();
@@ -117,6 +118,7 @@ private:
 	string library_prefab_path;
 	string library_texture_path;
 	string library_scene_path;
+	string library_shaders_path;
 	string settings_path;
 
 	string looking_path;

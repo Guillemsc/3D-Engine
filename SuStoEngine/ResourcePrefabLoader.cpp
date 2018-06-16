@@ -104,6 +104,44 @@ bool ResourcePrefabLoader::ExportResourceToLibrary(Resource * resource)
 	return ret;
 }
 
+bool ResourcePrefabLoader::ExportResourceToAssets(Resource * resource)
+{
+	bool ret = false;
+
+	if (resource != nullptr)
+	{
+		ResourcePrefab* r_prefab = (ResourcePrefab*)resource;
+
+		GameObjectAbstraction abs = r_prefab->GetAbstraction();
+
+		if (abs.GetValid())
+		{
+			std::string name = r_prefab->GetFileName();
+
+			name = App->file_system->FileRenameOnNameCollision(App->file_system->GetAssetsPath().c_str(), name.c_str(), "prefab");
+
+			App->gameobj->GetAbstractor()->Serialize(r_prefab->GetAbstraction(), App->file_system->GetAssetsPath().c_str(), name.c_str(), "prefab");
+
+			std::string meta_filepath = App->file_system->GetAssetsPath() + name + ".prefab" + ".meta";
+
+			if (App->file_system->FileExists(meta_filepath.c_str()))
+				App->file_system->FileDelete(meta_filepath.c_str());
+
+			JSON_Doc* meta_doc = App->json->CreateJSON(meta_filepath.c_str());
+			if (meta_doc != nullptr)
+			{
+				meta_doc->SetString("resource", r_prefab->GetUniqueId().c_str());
+
+				meta_doc->Save();
+
+				App->json->UnloadJSON(meta_doc);
+			}
+		}
+	}
+
+	return ret;
+}
+
 bool ResourcePrefabLoader::ImportResourceFromLibrary(DecomposedFilePath d_filepath)
 {
 	bool ret = false;
@@ -195,28 +233,8 @@ ResourcePrefab * ResourcePrefabLoader::CreatePrefab(GameObject * go)
 
 		r_prefab->SetFileName(name.c_str());
 
-		std::string uid = r_prefab->GetUniqueId();
-
-		name = App->file_system->FileRenameOnNameCollision(App->file_system->GetAssetsPath().c_str(), name.c_str(), "prefab");
-
-		App->gameobj->GetAbstractor()->Serialize(r_prefab->GetAbstraction(), App->file_system->GetAssetsPath().c_str(), name.c_str(), "prefab");
-
-		std::string meta_filepath = App->file_system->GetAssetsPath() + name + ".prefab" + ".meta";
-
-		if (App->file_system->FileExists(meta_filepath.c_str()))
-			App->file_system->FileDelete(meta_filepath.c_str());
-
-		JSON_Doc* meta_doc = App->json->CreateJSON(meta_filepath.c_str());
-		if (meta_doc != nullptr)
-		{
-			meta_doc->SetString("resource", r_prefab->GetUniqueId().c_str());
-
-			meta_doc->Save();
-
-			App->json->UnloadJSON(meta_doc);
-		}
-
-		App->gameobj->GetAbstractor()->Serialize(r_prefab->GetAbstraction(), library_path.c_str(), uid.c_str(), "prefab");		
+		ExportResourceToAssets(r_prefab);
+		ExportResourceToLibrary(r_prefab);
 	}
 
 	return r_prefab;

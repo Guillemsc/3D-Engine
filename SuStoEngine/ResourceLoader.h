@@ -15,6 +15,8 @@ public:
 	ResourceLoader(ResourceType resources_to_load, std::string library_path, std::string loader_name);
 	virtual ~ResourceLoader();
 
+	virtual void Start() {};
+
 	// Extensions
 
 	void AddAssetExtensionToLoad(const char* extension);
@@ -39,28 +41,31 @@ public:
 	ResourceType GetLoaderType();
 
 	// Loads a file from outside the engine as a new resource
-	virtual bool LoadFileToEngine(DecomposedFilePath decomposed_file_path, std::vector<Resource*>& resources) { return false; };
+	virtual bool LoadFileToEngine(DecomposedFilePath decomposed_file_path, std::vector<Resource*>& resources) = 0;
 
 	// Unloads all the asset engine information
-	virtual bool RemoveAssetInfoFromEngine(DecomposedFilePath decomposed_file_path) { return false; };
+	virtual bool RemoveAssetInfoFromEngine(DecomposedFilePath decomposed_file_path) = 0;
 
 	// Removes elements of a GameObject that use this resource
-	virtual void ClearFromGameObject(Resource* resource, GameObject* go) {  };
+	virtual void ClearFromGameObject(Resource* resource, GameObject* go) = 0;
 
 	// Exports resource into the library folder with own format
-	virtual bool ExportResourceToLibrary(Resource* resource) { return false; };
+	virtual bool ExportResourceToAssets(Resource* resource) = 0;
+
+	// Exports resource into the library folder with own format
+	virtual bool ExportResourceToLibrary(Resource* resource) = 0;
 
 	// Imports the resource into memory from the library folder
-	virtual bool ImportResourceFromLibrary(DecomposedFilePath decomposed_file_path) { return false; };
+	virtual bool ImportResourceFromLibrary(DecomposedFilePath decomposed_file_path) = 0;
 
 	// Loads a resource into the scene as s new game object
-	virtual bool LoadAssetIntoScene(DecomposedFilePath decomposed_file_path) { return false; };
+	virtual bool LoadAssetIntoScene(DecomposedFilePath decomposed_file_path) = 0;
 
 	// Returns true if the resource can be found on the library folder
-	virtual bool IsAssetOnLibrary(DecomposedFilePath decomposed_file_path, std::vector<std::string>& library_files_used) { return false; };
+	virtual bool IsAssetOnLibrary(DecomposedFilePath decomposed_file_path, std::vector<std::string>& library_files_used) = 0;
 
 	// Renames the library resource and all other necessary files
-	virtual bool RenameAsset(DecomposedFilePath decomposed_file_path, const char* new_name) { return false; };
+	virtual bool RenameAsset(DecomposedFilePath decomposed_file_path, const char* new_name) = 0;
 
 	// Apparence
 	float3 GetResourceColour() const;

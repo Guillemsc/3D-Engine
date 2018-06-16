@@ -100,6 +100,7 @@ public:
 	void SetCurrentCameraToEditorCamera();
 
 	const float* GetViewMatrix() const;
+	const float* GetProjectionMatrix() const;
 
 private:
 	const bool IsMouseInsideWindow() const;

@@ -1,17 +1,20 @@
-#ifndef __RESOURCE_PREFAB_LOADER_H__
-#define __RESOURCE_PREFAB_LOADER_H__
+#ifndef __RESOURCE_SHADER_LOADER_H__
+#define __RESOURCE_SHADER_LOADER_H__
 
 #include "ResourceLoader.h"
 #include "Resource.h"
+#include "ResourceShader.h"
 #include <vector>
 
-class ResourcePrefab;
+class ResourceShader;
 
-class ResourcePrefabLoader : public ResourceLoader
+class ResourceShaderLoader : public ResourceLoader
 {
 public:
-	ResourcePrefabLoader();
-	virtual ~ResourcePrefabLoader();
+	ResourceShaderLoader();
+	virtual ~ResourceShaderLoader();
+
+	void Start();
 
 	Resource* CreateResource(std::string new_uid);
 
@@ -29,13 +32,17 @@ public:
 	bool IsAssetOnLibrary(DecomposedFilePath d_filepath, std::vector<std::string>& library_files_used);
 	bool RenameAsset(DecomposedFilePath decomposed_file_path, const char* new_name);
 
-	ResourcePrefab* CreatePrefab(GameObject* go);
-	void UpdatePrefab(const char* prefab_filepath, GameObject* go);
+	void CreateDefaultShaders();
+	ResourceShader* CreateShader(ResourceShaderType type, const char* code);
 
 private:
+	std::string ShaderTypeEnumToString(ResourceShaderType type);
+	ResourceShaderType ShaderTypeStringToEnum(const char* str);
 
 private:
+	ResourceShader* default_vertex = nullptr;
+	ResourceShader* default_fragment = nullptr;
 
 };
 
-#endif
+#endif // !__RESOURCE_SHADER_LOADER_H__

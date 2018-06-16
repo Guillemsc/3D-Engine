@@ -498,6 +498,12 @@
     <ClInclude Include="ResourcesMonitoring.h">
       <Filter>Sources\3. Editor ================</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceShaderLoader.h">
+      <Filter>Sources\5. Resources =============\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceShader.h">
+      <Filter>Sources\5. Resources =============</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -817,6 +823,12 @@
     </ClCompile>
     <ClCompile Include="ResourcesMonitoring.cpp">
       <Filter>Sources\3. Editor ================</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceShaderLoader.cpp">
+      <Filter>Sources\5. Resources =============\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceShader.cpp">
+      <Filter>Sources\5. Resources =============</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

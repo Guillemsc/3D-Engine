@@ -18,6 +18,7 @@ enum ResourceType
 	RT_MESH,
 	RT_PREFAB,
 	RT_SCENE,
+	RT_SHADER,
 };
 
 class Resource
@@ -26,7 +27,7 @@ public:
 	Resource(std::string unique_id, ResourceType type);
 	virtual ~Resource();
 
-	virtual void CleanUp() {};
+	virtual void CleanUp() = 0;
 
 	void SetFileName(const char* file_name);
 	std::string GetFileName();

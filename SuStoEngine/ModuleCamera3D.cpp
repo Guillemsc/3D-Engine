@@ -176,6 +176,11 @@ const float * ModuleCamera3D::GetViewMatrix() const
 	return current_camera->GetOpenGLViewMatrix().ptr();
 }
 
+const float * ModuleCamera3D::GetProjectionMatrix() const
+{
+	return current_camera->GetOpenGLProjectionMatrix().ptr();
+}
+
 // -----------------------------------------------------------------
 bool ModuleCamera3D::Update()
 {

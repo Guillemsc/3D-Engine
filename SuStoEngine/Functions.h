@@ -27,6 +27,9 @@ bool TextCmp(const char* text1, const char* text2);
 // Copies a string to another
 void TextCpy(char * destination, const char * origen);
 
+// Gets size of a string
+int TextLnght(char * txt);
+
 // Separate a string into tokens using the indicated iterator
 void Tokenize(std::string string, const char separator, std::list<std::string>& tokens);
 

@@ -46,6 +46,66 @@ public:
 	void SetDiffuseLight(const bool & enabled, const float color[4]) const;
 	void SetSpecularLight(const bool & enabled, const float color[4]) const;
 
+	// OpenGl control -----------------------------------------
+	uint GenBuffer() const;
+
+	void BindArrayBuffer(uint id) const;
+	void BindElementArrayBuffer(uint id) const;
+
+	void RenderElement(uint num_indices) const;
+
+	void UnbindArraybuffer() const;
+	void UnbindElementArrayBuffer() const;
+
+	void EnableState(GLenum type) const;
+	void DisableState(GLenum type) const;
+
+	void SetVertexPointer() const;
+	void SetNormalsPointer() const;
+	void SetTexCoordPointer();
+
+	void BindTexture(uint id) const;
+	void UnbindTexture() const;
+
+	void LoadArrayToVRAM(uint size, float* values, GLenum type = GL_STATIC_DRAW) const;
+	void LoadArrayToVRAM(uint size, uint* values, GLenum type = GL_STATIC_DRAW) const;
+	uint LoadTextureToVRAM(uint w, uint h, GLubyte* tex_data, GLint format) const;
+
+	void PushMatrix();
+	void PopMatrix();
+	void MultMatrix(float* matrix);
+	// --------------------------------------------------------
+
+	// Shaders ------------------------------------------------
+	uint GenVertexArrayBuffer() const;
+	void BindVertexArrayBuffer(uint id) const;
+	void UnbindVertexArrayBuffer() const;
+
+	uint CreateVertexShader(const char* source);
+	uint CreateFragmentShader(const char* source);
+	void DeleteShader(uint shader_id);
+
+	uint GetProgramBinary(uint program_id, uint buff_size, char* buff) const;
+	int GetProgramSize(uint program_id) const;
+	void LoadProgramFromBinary(uint program_id, uint buff_size, const char* buff);
+
+	void EnableVertexAttributeArray(uint id);
+	void DisableVertexAttributeArray(uint id);
+	void SetVertexAttributePointer(uint id, uint element_size, uint elements_gap, uint infogap);
+
+	void SetUniformMatrix(uint program, const char* name, float* data);
+	void SetUniformForViewAndProjection(uint program, const char* view_name, const char* proj_name);
+
+	void SetUniformFloat(uint program, const char* name, float data);
+
+	uint CreateShaderProgram();
+	void UseShaderProgram(uint id);
+	void AttachShaderToProgram(uint program_id, uint shader_id);
+	bool LinkProgram(uint program_id);
+	void DeleteProgram(uint program_id);
+	// --------------------------------------------------------
+
+	// Deprecated ---------------------------------------------
 	const bool GetPoligonModeWireframe() const;
 	const bool GetPoligonModePoints() const;
 	const bool GetPoligonModeFill() const;
@@ -63,6 +123,7 @@ public:
 	void UnloadTextureBuffer(uint id, uint size);
 
 	void DrawGrid(int HALF_GRID_SIZE);
+	// -------------------------------------------------
 
 private:
 	Light lights[MAX_LIGHTS];

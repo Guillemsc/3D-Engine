@@ -284,6 +284,10 @@ bool ResourceMeshLoader::ExportResourceToLibrary(Resource * resource)
 
 	return ret;
 }
+bool ResourceMeshLoader::ExportResourceToAssets(Resource * resource)
+{
+	return false;
+}
 bool ResourceMeshLoader::ImportResourceFromLibrary(DecomposedFilePath d_filepath)
 {
 	bool ret = true;

@@ -61,6 +61,7 @@ public:
 	void ClearFromGameObject(Resource* resource, GameObject* go);
 
 	bool ExportResourceToLibrary(Resource* resource);
+	bool ExportResourceToAssets(Resource* resource);
 	bool ImportResourceFromLibrary(DecomposedFilePath decomposed_file_path);
 
 	bool LoadAssetIntoScene(DecomposedFilePath decomposed_file_path);

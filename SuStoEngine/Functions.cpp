@@ -52,6 +52,18 @@ void TextCpy(char* destination, const char * origen)
 	}
 }
 
+int TextLnght(char * txt)
+{
+	int ret = 0;
+
+	if (txt != nullptr)
+	{
+		ret = strlen(txt);
+	}
+
+	return ret;
+}
+
 void Tokenize(std::string string, const char separator, std::list<std::string>& tokens)
 {
 	uint i = 0;

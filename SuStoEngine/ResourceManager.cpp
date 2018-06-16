@@ -12,6 +12,7 @@
 #include "ResourcePrefabLoader.h"
 #include "ResourcePrefab.h"
 #include "ModuleEventSystem.h"
+#include "ResourceShaderLoader.h"
 #include "imgui.h"
 
 ResourceManager::ResourceManager(bool start_enabled) : Module(start_enabled)
@@ -33,6 +34,7 @@ bool ResourceManager::Awake()
 
 	ResourceTextureLoader* texture_loader = new ResourceTextureLoader();
 	texture_loader->AddAssetExtensionToLoad("png");
+	texture_loader->AddAssetExtensionToLoad("jpg");
 	texture_loader->AddAssetExtensionToLoad("tga");
 	texture_loader->AddAssetExtensionToLoad("dds");
 	texture_loader->AddLibraryExtensionToLoad("dds");
@@ -42,9 +44,14 @@ bool ResourceManager::Awake()
 	prefab_loader->AddLibraryExtensionToLoad("prefab");
 	prefab_loader->AddLibraryExtensionToLoad("meshprefab");
 
+	ResourceShaderLoader* shader_loader = new ResourceShaderLoader();
+	shader_loader->AddLibraryExtensionToLoad("vert");
+	shader_loader->AddLibraryExtensionToLoad("frag");
+
 	AddLoader(mesh_loader);
 	AddLoader(texture_loader);
 	AddLoader(prefab_loader);
+	AddLoader(shader_loader);
 
 	OnStartEngine();
 
@@ -54,6 +61,10 @@ bool ResourceManager::Awake()
 bool ResourceManager::Start()
 {
 	bool ret = true;
+
+	// Start loaders
+	for (std::vector<ResourceLoader*>::iterator it = loaders.begin(); it != loaders.end(); ++it)
+		(*it)->Start();
 
 	return ret;
 }
@@ -68,7 +79,8 @@ bool ResourceManager::CleanUp()
 }
 
 void ResourceManager::OnStartEngine()
-{
+{	
+	// Start async assets check 
 	CheckCorrectLibraryAsyncTask* new_task = new CheckCorrectLibraryAsyncTask(AsyncTaskMode::AST_FOCUS, 2);
 	new_task->OnFinish(OnCheckCorrectLibraryFinish);
 	App->async_tasks->StartTask(new_task);
@@ -76,6 +88,7 @@ void ResourceManager::OnStartEngine()
 
 void OnCheckCorrectLibraryFinish(AsyncTask * task)
 {
+	// Start async resource load 
 	LoadLibraryAsyncTask* new_task = new LoadLibraryAsyncTask(AsyncTaskMode::AST_FOCUS, 2);
 	App->async_tasks->StartTask(new_task);
 }
@@ -174,7 +187,7 @@ Resource* ResourceManager::CreateNewResource(ResourceType type, std::string uniq
 {
 	Resource* res = nullptr;
 
-	res = Get(unique_id);
+	res = Get(unique_id, type);
 
 	if (res == nullptr)
 	{

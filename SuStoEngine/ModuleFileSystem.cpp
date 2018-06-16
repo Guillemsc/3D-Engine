@@ -16,6 +16,7 @@ FileSystem::FileSystem(bool start_enabled) : Module(start_enabled)
 	library_prefab_path = CreateFolder(library_path.c_str(), "Prefabs");
 	library_texture_path = CreateFolder(library_path.c_str(), "Textures");
 	library_scene_path = CreateFolder(library_path.c_str(), "Scenes");
+	library_shaders_path = CreateFolder(library_path.c_str(), "Shades");
 	settings_path = CreateFolder(App->GetBasePath(), "Settings");
 }
 
@@ -98,6 +99,11 @@ string FileSystem::GetLibraryTexturePath()
 string FileSystem::GetLibraryScenePath()
 {
 	return library_scene_path;
+}
+
+string FileSystem::GetLibraryShadersPath()
+{
+	return library_shaders_path;
 }
 
 string FileSystem::GetSettingsPath()
