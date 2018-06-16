@@ -61,10 +61,8 @@ bool ResourceShaderLoader::ExportResourceToLibrary(Resource * resource)
 
 		if (doc != nullptr)
 		{
-			std::string type = ShaderTypeEnumToString(resource_shad->GetShaderType());
-
-			doc->SetString("shader_type", type.c_str());
-			doc->SetString("code", resource_shad->GetCode().c_str());
+			doc->SetString("vertex_code", resource_shad->GetVertexCode().c_str());
+			doc->SetString("fragment_code", resource_shad->GetVertexCode().c_str());
 
 			doc->Save();
 
@@ -93,12 +91,12 @@ bool ResourceShaderLoader::ImportResourceFromLibrary(DecomposedFilePath d_filepa
 	JSON_Doc* doc = App->json->LoadJSON(meta_path.c_str());
 	if (doc != nullptr)
 	{
-		ResourceShaderType type = ShaderTypeStringToEnum(doc->GetString("shader_type"));
-		std::string code = doc->GetString("code");
+		std::string vertex_code = doc->GetString("vertex_code");
+		std::string fragment_code = doc->GetString("fragment_code");
 
 		ResourceShader* r_shader = (ResourceShader*)App->resource_manager->CreateNewResource(ResourceType::RT_SHADER, d_filepath.file_name);
 	
-		r_shader->SetData(type, code.c_str());
+		r_shader->SetData(vertex_code.c_str(), fragment_code.c_str());
 
 		App->json->UnloadJSON(doc);
 	}
@@ -142,9 +140,6 @@ void ResourceShaderLoader::CreateDefaultShaders()
 			TexCoord = texCoord.xy;\n \
 		}";
 
-	default_vertex = (ResourceShader*)App->resource_manager->CreateNewResource(ResourceType::RT_SHADER);
-	default_vertex->SetData(ResourceShaderType::ST_VERTEX, vert_shader);
-
 	char frag_shader[512] =
 		"#version 330 core\n \
 		in vec4 ourColor;\n \
@@ -157,20 +152,20 @@ void ResourceShaderLoader::CreateDefaultShaders()
 			color = texture(ourTexture, TexCoord);\n \
 		}";
 
-	default_fragment = (ResourceShader*)App->resource_manager->CreateNewResource(ResourceType::RT_SHADER);
-	default_fragment->SetData(ResourceShaderType::ST_FRAGMENT, frag_shader);
+	default_shader = (ResourceShader*)App->resource_manager->CreateNewResource(ResourceType::RT_SHADER);
+	default_shader->SetData(vert_shader, frag_shader);
 
 }
 
-ResourceShader* ResourceShaderLoader::CreateShader(ResourceShaderType type, const char* code)
+ResourceShader* ResourceShaderLoader::CreateShader(const char* vertex_code, const char* fragment_code)
 {
 	ResourceShader* ret = nullptr;
 
-	if (type != ResourceShaderType::ST_NULL && code != nullptr)
+	if (vertex_code != nullptr && fragment_code != nullptr)
 	{
 		ret = (ResourceShader*)App->resource_manager->CreateNewResource(ResourceType::RT_SHADER);
 
-		ret->SetData(type, code);
+		ret->SetData(vertex_code, fragment_code);
 
 		ExportResourceToLibrary(ret);
 	}
@@ -178,36 +173,7 @@ ResourceShader* ResourceShaderLoader::CreateShader(ResourceShaderType type, cons
 	return ret;
 }
 
-std::string ResourceShaderLoader::ShaderTypeEnumToString(ResourceShaderType type)
+ResourceShader * ResourceShaderLoader::GetDefaultShader() const
 {
-	std::string ret = "null";
-
-	switch (type)
-	{
-	case ResourceShaderType::ST_VERTEX:
-		ret = "vert";
-		break;
-
-	case ResourceShaderType::ST_FRAGMENT:
-		ret = "frag";
-		break;
-	}
-
-	return ret;
-}
-
-ResourceShaderType ResourceShaderLoader::ShaderTypeStringToEnum(const char * str)
-{
-	ResourceShaderType ret = ResourceShaderType::ST_NULL;
-
-	if (TextCmp(str, "vert"))
-	{
-		ret = ResourceShaderType::ST_VERTEX;
-	}
-	else if (TextCmp(str, "frag"))
-	{
-		ret = ResourceShaderType::ST_FRAGMENT;
-	}
-
-	return ret;
+	return default_shader;
 }

@@ -3,6 +3,8 @@
 #include "App.h"
 #include "ResourceTexture.h"
 #include "ResourceManager.h"
+#include "ResourceShader.h"
+#include "ResourceShaderLoader.h"
 #include "imgui.h"
 #include "JSONLoader.h"
 
@@ -18,6 +20,8 @@ ComponentMaterial::~ComponentMaterial()
 
 void ComponentMaterial::Start()
 {
+	ResourceShaderLoader* rsl = (ResourceShaderLoader*)App->resource_manager->GetLoader(ResourceType::RT_SHADER);
+	shader = rsl->GetDefaultShader();
 }
 
 void ComponentMaterial::Update()
@@ -70,6 +74,11 @@ ResourceTexture * ComponentMaterial::GetTexture()
 const bool ComponentMaterial::HasTexture() const
 {
 	return has_texture;
+}
+
+ResourceShader * ComponentMaterial::GetShader()
+{
+	return shader;
 }
 
 void ComponentMaterial::InspectorDraw(std::vector<Component*> components)

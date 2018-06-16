@@ -42,7 +42,7 @@ bool EditorUI::Awake()
 
 	CONSOLE_LOG("Loading ImGui");
 
-	ret = ImGui_ImplSdlGL2_Init(App->window->window);
+	ret = ImGui_ImplSdlGL3_Init(App->window->window);
 
 	// Styles
 	//	-default
@@ -108,7 +108,7 @@ bool EditorUI::PreUpdate()
 	bool ret = true;
 
 	// ImGui new frame
-	ImGui_ImplSdlGL2_NewFrame(App->window->window);
+	ImGui_ImplSdlGL3_NewFrame(App->window->window);
 
 	// ImGuizmo begin frame
 	ImGuizmo::BeginFrame();
@@ -158,7 +158,7 @@ bool EditorUI::CleanUp()
 
 	editor_elements.clear();
 
-	ImGui_ImplSdlGL2_Shutdown();
+	ImGui_ImplSdlGL3_Shutdown();
 
 	return ret;
 }
@@ -231,7 +231,7 @@ void EditorUI::SaveScene(JSON_Doc * config)
 void EditorUI::ImGuiInput(SDL_Event* const ev)
 {
 	// ImGui Input
-	ImGui_ImplSdlGL2_ProcessEvent(ev);
+	ImGui_ImplSdlGL3_ProcessEvent(ev);
 }
 
 

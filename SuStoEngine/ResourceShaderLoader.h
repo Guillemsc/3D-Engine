@@ -33,15 +33,14 @@ public:
 	bool RenameAsset(DecomposedFilePath decomposed_file_path, const char* new_name);
 
 	void CreateDefaultShaders();
-	ResourceShader* CreateShader(ResourceShaderType type, const char* code);
+	ResourceShader* CreateShader(const char* vertex_code, const char* fragment_code);
+
+	ResourceShader* GetDefaultShader() const;
 
 private:
-	std::string ShaderTypeEnumToString(ResourceShaderType type);
-	ResourceShaderType ShaderTypeStringToEnum(const char* str);
 
 private:
-	ResourceShader* default_vertex = nullptr;
-	ResourceShader* default_fragment = nullptr;
+	ResourceShader* default_shader = nullptr;
 
 };
 

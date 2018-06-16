@@ -16,6 +16,7 @@
 #include "JSONLoader.h"
 #include "ResourceManager.h"
 #include "ModuleEventSystem.h"
+#include "ResourceShader.h"
 
 #include "Glew/include/glew.h" 
 
@@ -72,77 +73,85 @@ void GameObject::Draw()
 		return;
 
 	// Push matrix
-	glPushMatrix();
-	glMultMatrixf(transform->GetGlobalTransform().Transposed().ptr());
+	//glPushMatrix();
+	//glMultMatrixf(transform->GetGlobalTransform().Transposed().ptr());
 
 	ComponentMaterial* component_material = (ComponentMaterial*)GetComponent(MATERIAL);
 
+	ResourceShader* curr_shader = nullptr;
+
 	if (component_material != nullptr && component_material->GetActive())
 	{
+		curr_shader = component_material->GetShader();
+
+		curr_shader->UseProgram();
+
 		if (component_material->HasTexture())
 		{
-			glBindTexture(GL_TEXTURE_2D, component_material->GetTexture()->GetTextureId());
-
-			GLenum err;
-			while ((err = glGetError()) != GL_NO_ERROR)
-			{
-				CONSOLE_LOG("%d", err);
-			}
+			App->renderer3D->BindTexture(component_material->GetTexture()->GetTextureId());
 		}
 	}
 
-	ComponentMesh* component_mesh = (ComponentMesh*)GetComponent(MESH);
-
-	if (component_mesh != nullptr && component_mesh->GetActive())
+	if (curr_shader != nullptr)
 	{
-		if (component_mesh->HasMesh())
+
+		ComponentMesh* component_mesh = (ComponentMesh*)GetComponent(MESH);
+
+		if (component_mesh != nullptr && component_mesh->GetActive())
 		{
-			// Vertex
-			glEnableClientState(GL_VERTEX_ARRAY);
-
-			if (component_mesh->GetMesh()->GetIdVertices() != 0)
+			if (component_mesh->HasMesh())
 			{
-				glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdVertices());
-				glVertexPointer(3, GL_FLOAT, 0, NULL);
+				App->renderer3D->SetUniformMatrix(curr_shader->GetProgramId(), "Model", transform->GetGlobalTransform().Transposed().ptr());
 
-				if (component_mesh->GetMesh()->GetIdUV() != 0)
-				{
-					// UV
-					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-					glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdUV());
-					glTexCoordPointer(3, GL_FLOAT, 0, NULL);
-				}
+				App->renderer3D->SetUniformForViewAndProjection(curr_shader->GetProgramId(), "view", "projection");
 
-				if (component_mesh->GetMesh()->GetIdIndices() != 0)
-				{
-					// Index
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdIndices());
+				//// Vertex
+				//glEnableClientState(GL_VERTEX_ARRAY);
 
-					// Draw
-					glDrawElements((GLenum)GL_TRIANGLES, component_mesh->GetMesh()->GetNumIndices(), GL_UNSIGNED_INT, NULL);
+				//if (component_mesh->GetMesh()->GetIdVertices() != 0)
+				//{
+				//	glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdVertices());
+				//	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-					GLenum err;
-					while ((err = glGetError()) != GL_NO_ERROR)
-					{
-						CONSOLE_LOG("%d", err);
-					}
-				}
+				//	if (component_mesh->GetMesh()->GetIdUV() != 0)
+				//	{
+				//		// UV
+				//		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+				//		glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdUV());
+				//		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+				//	}
+
+				//	if (component_mesh->GetMesh()->GetIdIndices() != 0)
+				//	{
+				//		// Index
+				//		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdIndices());
+
+				//		// Draw
+				//		glDrawElements((GLenum)GL_TRIANGLES, component_mesh->GetMesh()->GetNumIndices(), GL_UNSIGNED_INT, NULL);
+
+				//		GLenum err;
+				//		while ((err = glGetError()) != GL_NO_ERROR)
+				//		{
+				//			CONSOLE_LOG("%d", err);
+				//		}
+				//	}
+				//}
+
+				//// Disable
+				//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+				//glDisableClientState(GL_VERTEX_ARRAY);
+
+				//glBindBuffer(GL_ARRAY_BUFFER, 0);
+				//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 			}
-
-			// Disable
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-			glDisableClientState(GL_VERTEX_ARRAY);
-
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		}
 	}
 
 	// Reset
-	glBindTexture(GL_TEXTURE_2D, 0);
+	App->renderer3D->UnbindTexture();
 
 	// Pop matrix
-	glPopMatrix();
+	//glPopMatrix();
 
 	DrawBBox();
 }

@@ -15,67 +15,165 @@ void ResourceShader::CleanUp()
 {
 }
 
-void ResourceShader::SetData(ResourceShaderType _shader_type, const char * _code)
-{
-	shader_type = _shader_type;
-	
-	UpdateCode(_code);
+void ResourceShader::SetData(const char* vertex_code, const char* fragment_code)
+{	
+	UpdateVertexCode(vertex_code);
+	UpdateFragmentCode(fragment_code);
 }
 
-void ResourceShader::UpdateCode(const char * code)
+void ResourceShader::UpdateVertexCode(const char * code)
 {
 	if (code != nullptr)
 	{
-		shader_code = code;
+		vertex_code = code;
 
-		CompileShader();
+		CompileVertexShader();
 	}
 }
 
-ResourceShaderType ResourceShader::GetShaderType() const
+void ResourceShader::UpdateFragmentCode(const char * code)
 {
-	return ResourceShaderType();
-}
-
-std::string ResourceShader::GetCode()
-{
-	return shader_code;
-}
-
-uint ResourceShader::GetShaderId() const
-{
-	return uint();
-}
-
-bool ResourceShader::GetCompiles() const
-{
-	return false;
-}
-
-void ResourceShader::CompileShader()
-{
-	compiles = false;
-
-	if (shader_id > 0)
+	if (code != nullptr)
 	{
-		App->renderer3D->DeleteShader(shader_id);
-		shader_id = 0;
+		fragment_code = code;
+
+		CompileFragmentShader();
+	}
+}
+
+std::string ResourceShader::GetVertexCode()
+{
+	return vertex_code;
+}
+
+std::string ResourceShader::GetFragmentCode()
+{
+	return fragment_code;
+}
+
+uint ResourceShader::GetVertexId() const
+{
+	return vertex_id;
+}
+
+uint ResourceShader::GetFragmentId() const
+{
+	return fragment_id;
+}
+
+bool ResourceShader::GetVertexCompiles() const
+{
+	return vertex_compiles;
+}
+
+bool ResourceShader::GetFragmentCompiles() const
+{
+	return fragment_compiles;
+}
+
+bool ResourceShader::GetProgramLinked() const
+{
+	return program_linked;
+}
+
+uint ResourceShader::GetProgramId() const
+{
+	return program_id;
+}
+
+void ResourceShader::UseProgram()
+{
+	if(program_id > 0)
+		App->renderer3D->UseShaderProgram(program_id);
+}
+
+void ResourceShader::CompileVertexShader()
+{
+	vertex_compiles = false;
+
+	if (vertex_id > 0)
+	{
+		App->renderer3D->DeleteShader(vertex_id);
+		vertex_id = 0;
 	}
 
-	switch (shader_type)
-	{
-	case ResourceShaderType::ST_VERTEX:
-		shader_id = App->renderer3D->CreateVertexShader(shader_code.c_str());
-		break;
+	vertex_id = App->renderer3D->CreateVertexShader(vertex_code.c_str());
 
-	case ResourceShaderType::ST_FRAGMENT:
-		shader_id = App->renderer3D->CreateFragmentShader(shader_code.c_str());
-		break;
+	if (vertex_id != 0)
+	{
+		CONSOLE_LOG("Vertex shader compilation Success :)");
+		vertex_compiles = true;
 	}
 
-	if (shader_id != 0)
+	if (CanLinkProgram())
+		LinkProgram();
+}
+
+void ResourceShader::CompileFragmentShader()
+{
+	fragment_compiles = false;
+
+	if (fragment_id > 0)
 	{
-		CONSOLE_LOG("Shader compilation Success :)");
-		compiles = true;
+		App->renderer3D->DeleteShader(fragment_id);
+		fragment_id = 0;
+	}
+
+	fragment_id = App->renderer3D->CreateFragmentShader(fragment_code.c_str());
+
+	if (vertex_id != 0)
+	{
+		CONSOLE_LOG("Fragment shader compilation Success :)");
+		fragment_compiles = true;
+	}
+
+	if (CanLinkProgram())
+		LinkProgram();
+}
+
+bool ResourceShader::CanLinkProgram()
+{
+	bool ret = false;
+
+	if (vertex_compiles && fragment_compiles)
+	{
+		if (vertex_id > 0 && fragment_id > 0)
+		{
+			ret = true;
+		}
+	}
+
+	return ret;
+}
+
+void ResourceShader::LinkProgram()
+{
+	if (program_id > 0)
+	{
+		App->renderer3D->DeleteProgram(program_id);
+		program_id = 0;
+		program_linked = false;
+	}
+
+	if (CanLinkProgram())
+	{
+		program_id = App->renderer3D->CreateShaderProgram();
+
+		App->renderer3D->AttachShaderToProgram(program_id, vertex_id);
+		App->renderer3D->AttachShaderToProgram(program_id, fragment_id);
+
+		if (App->renderer3D->LinkProgram(program_id) == false)
+		{
+			CONSOLE_LOG("Error while linking shader program, check errors above.");
+
+			App->renderer3D->DeleteProgram(program_id);
+			program_id = 0;
+			program_linked = false;
+		}
+		else
+		{
+			CONSOLE_LOG("Shader Program %d created :)", program_id);
+			program_linked = true;
+		}
 	}
 }

@@ -8,13 +8,6 @@
 
 class GameObject;
 
-enum ResourceShaderType
-{
-	ST_NULL,
-	ST_VERTEX,
-	ST_FRAGMENT,
-};
-
 class ResourceShader : public Resource
 {
 public:
@@ -23,24 +16,42 @@ public:
 
 	void CleanUp();
 
-	void SetData(ResourceShaderType shader_type, const char* code);
+	void SetData(const char* vertex_code, const char* fragment_code);
 
-	void UpdateCode(const char* code);
+	void UpdateVertexCode(const char* code);
+	void UpdateFragmentCode(const char* code);
 
-	ResourceShaderType GetShaderType() const;
-	std::string GetCode();
-	uint GetShaderId() const;
-	bool GetCompiles() const;
+	std::string GetVertexCode();
+	std::string GetFragmentCode();
+
+	uint GetVertexId() const;
+	uint GetFragmentId() const;
+
+	bool GetVertexCompiles() const;
+	bool GetFragmentCompiles() const;
+
+	bool GetProgramLinked() const;
+	uint GetProgramId() const;
+	void UseProgram();
 
 private:
-	void CompileShader();
+	void CompileVertexShader();
+	void CompileFragmentShader();
+	bool CanLinkProgram();
+	void LinkProgram();
 
 private:
-	ResourceShaderType shader_type = ResourceShaderType::ST_NULL;
+	std::string vertex_code;
+	std::string fragment_code;
 
-	std::string shader_code;
-	uint		shader_id = 0;
-	bool		compiles = false;
+	uint		vertex_id = 0;
+	uint		fragment_id = 0;
+
+	bool		vertex_compiles = false;
+	bool		fragment_compiles = false;
+
+	uint		program_id = 0;
+	bool		program_linked = false;
 
 };
 

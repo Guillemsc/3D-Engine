@@ -7,6 +7,7 @@
 
 class GameObject;
 class ResourceTexture;
+class ResourceShader;
 
 class ComponentMaterial : public Component
 {
@@ -24,6 +25,8 @@ public:
 	ResourceTexture* GetTexture();
 	const bool HasTexture() const;
 
+	ResourceShader* GetShader();
+
 	void InspectorDraw(std::vector<Component*> components);
 
 	void OnLoadAbstraction(DataAbstraction& abs);
@@ -36,8 +39,8 @@ private:
 private:
 	ResourceTexture* texture = nullptr;
 	bool	 has_texture = false;
-
-	float2   text_inspector_size = float2(0, 0);
+	
+	ResourceShader* shader = nullptr;
 
 };
 
