@@ -173,11 +173,12 @@ void ModuleWindow::GetWindowSize(int & width, int & height)
 	SDL_GetWindowSize(window, &width, &height);
 }
 
-const vec2 ModuleWindow::GetWindowSize()
+const float2 ModuleWindow::GetWindowSize()
 {
 	int w, h;
 	GetWindowSize(w, h);
-	return vec2(w, h);
+
+	return float2(w, h);
 }
 
 void ModuleWindow::GetDisplaySize(int & width, int & height)

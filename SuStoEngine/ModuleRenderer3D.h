@@ -32,7 +32,8 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
-	uint GetScreenTexture();
+
+	void RenderScene();
 
 	void SetPoligonModeWireframe() const;
 	void SetPoligonModePoints(float point_size = 4.0f) const;
@@ -47,6 +48,10 @@ public:
 	void SetSpecularLight(const bool & enabled, const float color[4]) const;
 
 	// OpenGl control -----------------------------------------
+	void SetViewport(uint start_x, uint start_y, uint width, uint height);
+	void GetViewport(uint& start_x, uint& start_y, uint& width, uint& height);
+	void Clear(uint buffer);
+
 	uint GenBuffer() const;
 
 	void BindArrayBuffer(uint id) const;
@@ -64,8 +69,21 @@ public:
 	void SetNormalsPointer() const;
 	void SetTexCoordPointer();
 
+	uint GenTexture() const;
 	void BindTexture(uint id) const;
+	void BindTexture(uint target, uint id) const;
 	void UnbindTexture() const;
+	void UnbindTexture(uint target) const;
+	void DeleteTexture(uint& id) const;
+
+	uint GenRenderBuffer() const;
+	void BindRenderBuffer(uint id) const;
+	void UnbindRenderBuffer() const;
+
+	void Set2DMultisample(uint samples, uint width, uint height);
+	void SetFrameBufferTexture2D(uint id);
+	void RenderStorageMultisample(uint samples, uint width, uint height);
+	void RenderRenderBuffer(uint samples, uint width, uint height);
 
 	void LoadArrayToVRAM(uint size, float* values, GLenum type = GL_STATIC_DRAW) const;
 	void LoadArrayToVRAM(uint size, uint* values, GLenum type = GL_STATIC_DRAW) const;
@@ -80,6 +98,12 @@ public:
 	uint GenVertexArrayBuffer() const;
 	void BindVertexArrayBuffer(uint id) const;
 	void UnbindVertexArrayBuffer() const;
+
+	uint GenFrameBuffer() const;
+	void BindFrameBuffer(uint id) const;
+	void UnbindFrameBuffer() const;
+	uint CheckFrameBufferStatus();
+	void DeleteFrameBuffer(uint& id);
 
 	uint CreateVertexShader(const char* source);
 	uint CreateFragmentShader(const char* source);
@@ -130,9 +154,6 @@ private:
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
-
-	FBO* fbo_texture = nullptr;
-	uint texture_id = 0;
 
 	bool wireframe = false;
 	bool points = false;

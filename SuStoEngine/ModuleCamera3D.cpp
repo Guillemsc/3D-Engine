@@ -13,6 +13,7 @@
 #include "ModuleGameObject.h"
 #include "ComponentMesh.h"
 #include "KDTree.h"
+#include "ModuleRenderer3D.h"
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
@@ -110,6 +111,7 @@ void ModuleCamera3D::DestroyAllCameras()
 {
 	for (vector<Camera3D*>::iterator it = cameras.begin(); it != cameras.end();)
 	{
+		(*it)->CleanUp();
 		RELEASE(*it);
 		it = cameras.erase(it);
 	}
@@ -291,6 +293,36 @@ Camera3D::Camera3D()
 	SetFarPlaneDistance(10000.0f);
 	SetAspectRatio(1.3f);
 	SetFOV(60);
+
+	render_tex = new RenderTexture();
+}
+
+void Camera3D::CleanUp()
+{
+	render_tex->CleanUp();
+	RELEASE(render_tex);
+}
+
+void Camera3D::Bind(uint x, uint y, uint width, uint heigth)
+{
+	if(render_tex != nullptr)
+		render_tex->Bind(x, y, width, heigth);
+}
+
+void Camera3D::Unbind()
+{
+	if(render_tex != nullptr)
+		render_tex->Unbind();
+}
+
+uint Camera3D::GetTextId()
+{
+	uint ret = 0;
+
+	if (render_tex != nullptr)
+		ret = render_tex->GetTextureID();
+
+	return ret;
 }
 
 void Camera3D::SetPosition(const float3 & pos)
@@ -584,4 +616,161 @@ void Camera3D::Focus(const float3 & focus_center, const float & distance)
 void Camera3D::Focus(const AABB & aabb)
 {
 	Focus(aabb.CenterPoint(), aabb.Size().Length());
+}
+
+RenderTexture::RenderTexture()
+{
+}
+
+RenderTexture::~RenderTexture()
+{
+}
+
+void RenderTexture::CleanUp()
+{
+	if(created)
+		Destroy();
+}
+
+bool RenderTexture::Create(uint _x, uint _y, uint _width, uint _height)
+{
+	bool ret = true;
+
+	x = _x;
+	y = _y;
+	width = _width;
+	height = _height;
+
+	if (x < 0)
+		x = 0;
+
+	if (y < 0)
+		y = 0;
+
+	if (width < 1)
+		width = 1;
+
+	if (height < 1)
+		height = 1;
+
+	//Create MSAA framebufer
+	fbo_msaa_id = App->renderer3D->GenFrameBuffer();
+	App->renderer3D->BindFrameBuffer(fbo_msaa_id);
+
+	//Create a multisampled color attachment texture
+	texture_msaa_id = App->renderer3D->GenTexture();
+	App->renderer3D->BindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture_msaa_id);
+	App->renderer3D->Set2DMultisample(current_msaa_samples, width, height);
+	App->renderer3D->UnbindTexture(GL_TEXTURE_2D_MULTISAMPLE);
+	App->renderer3D->SetFrameBufferTexture2D(texture_msaa_id);
+
+	//Create a renderbuffer for depth and stencil
+	rbo_id = App->renderer3D->GenRenderBuffer();
+	App->renderer3D->BindRenderBuffer(rbo_id);
+	App->renderer3D->RenderStorageMultisample(current_msaa_samples, width, height);
+	App->renderer3D->UnbindRenderBuffer();
+	App->renderer3D->RenderRenderBuffer(current_msaa_samples, width, height);
+
+	GLenum error = App->renderer3D->CheckFrameBufferStatus();
+	if (error != GL_FRAMEBUFFER_COMPLETE)
+	{
+		CONSOLE_ERROR("RenderTextureMSAA: Framebuffer is not complete! %s", gluErrorString(error));
+		ret = false;
+	}
+
+	App->renderer3D->UnbindFrameBuffer();
+
+	//configure post-processing framebuffer
+	fbo_id = App->renderer3D->GenFrameBuffer();
+	App->renderer3D->BindFrameBuffer(fbo_id);
+
+	//create the color attachment texture
+	texture_id = App->renderer3D->GenTexture();
+	App->renderer3D->BindTexture(texture_id);
+	App->renderer3D->LoadTextureToVRAM(width, height, 0, GL_RGB);
+	App->renderer3D->SetFrameBufferTexture2D(texture_id);
+
+
+	error = App->renderer3D->CheckFrameBufferStatus();
+	if (error != GL_FRAMEBUFFER_COMPLETE)
+	{
+		CONSOLE_ERROR("RenderTextureMSAA: Intermediate framebuffer is not complete! %s", gluErrorString(error));
+		ret = false;
+	}
+	App->renderer3D->UnbindFrameBuffer();
+
+	created = true;
+
+	return ret;
+}
+
+void RenderTexture::Resize(uint x, uint y, uint width, uint height)
+{
+	Destroy();
+
+	Create(x, y, width, height);
+}
+
+void RenderTexture::Bind(uint x, uint y, uint _width, uint _height)
+{
+	if (!created)
+		Create(x, y, _width, _height);
+
+	if (width != _width || height != _height)
+		Resize(x, y, width, height);
+	
+	App->renderer3D->GetViewport(last_x, last_y, last_width, last_height);
+
+	App->renderer3D->BindFrameBuffer(fbo_msaa_id);
+	App->renderer3D->SetViewport(0, 0, width, height);
+	App->renderer3D->Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void RenderTexture::Unbind()
+{
+	App->renderer3D->UnbindFrameBuffer();
+	glViewport(last_x, last_y, last_width, last_height);
+}
+
+void RenderTexture::ChangeMSAALevel(int MSAA_level)
+{
+	Destroy();
+
+	current_msaa_samples = MSAA_level;
+
+	Create(x, y, width, height);
+}
+
+void RenderTexture::Destroy()
+{
+	App->renderer3D->DeleteTexture(texture_id);
+	App->renderer3D->DeleteTexture(texture_msaa_id);
+	App->renderer3D->DeleteFrameBuffer(fbo_id);
+	App->renderer3D->DeleteFrameBuffer(fbo_msaa_id);
+	App->renderer3D->DeleteFrameBuffer(rbo_id);
+}
+
+uint RenderTexture::GetTextureID() const
+{
+	return texture_id;
+}
+
+int RenderTexture::GetMaxMSAALevel() const
+{
+	return max_msaa_samples;
+}
+
+int RenderTexture::GetCurrentMSAALevel() const
+{
+	return current_msaa_samples;
+}
+
+uint RenderTexture::GetWidth() const
+{
+	return width;
+}
+
+uint RenderTexture::GetHeight() const
+{
+	return height;
 }

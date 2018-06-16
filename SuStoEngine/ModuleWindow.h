@@ -28,7 +28,7 @@ public:
 
 	void SetWindowSize(int width, int height);
 	void GetWindowSize(int &width, int &height);
-	const vec2 GetWindowSize();
+	const float2 GetWindowSize();
 	void GetDisplaySize(int &width, int &height);
 	const vec2 GetDisplaySize();
 	void SetFullscreen(const bool& set);

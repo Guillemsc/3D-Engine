@@ -1,5 +1,4 @@
 #include "Game.h"
-
 #include "imgui_docking.h"
 #include "App.h"
 #include "ModuleWindow.h"
@@ -7,6 +6,7 @@
 #include "FBO.h"
 #include "ImGuizmo.h"
 #include "Functions.h"
+#include "ModuleCamera3D.h"
 
 Game::Game(bool start_enabled)
 {
@@ -44,7 +44,7 @@ void Game::Draw(uint flags)
 		ImGuizmo::SetRect(position.x, position.y, size.x, size.y);
 	}
 
-	ImGui::Image((void*)App->renderer3D->GetScreenTexture(), ImVec2(size.x, size.y), ImVec2(0, 1), ImVec2(1, 0));
+	ImGui::Image((void*)App->camera->GetEditorCamera()->GetTextId(), ImVec2(size.x, size.y), ImVec2(0, 1), ImVec2(1, 0));
 
 	ImGui::EndDock();
 }

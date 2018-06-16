@@ -7,11 +7,65 @@
 #include "glmath.h"
 
 class GameObject;
+class RenderTexture;
+
+class RenderTexture
+{
+public:
+	RenderTexture();
+	~RenderTexture();
+
+	void CleanUp();
+
+	void Bind(uint x, uint y, uint width, uint height);
+	void Unbind();
+	void ChangeMSAALevel(int MSAA_level);
+
+	uint GetTextureID() const;
+	int GetMaxMSAALevel() const;
+	int GetCurrentMSAALevel() const;
+
+	uint GetWidth() const;
+	uint GetHeight() const;
+
+private:
+	bool Create(uint x, uint y, uint width, uint height);
+	void Resize(uint x, uint y, uint width, uint height);
+	void Destroy();
+
+private:
+	uint fbo_id = 0;
+	uint fbo_msaa_id = 0;
+	uint texture_id = 0;
+	uint rbo_id = 0;
+	uint texture_msaa_id = 0;
+
+	uint x = 0;
+	uint y = 0;
+	uint width = 0;
+	uint height = 0;
+
+	uint last_x = 0;
+	uint last_y = 0;
+	uint last_width = 0;
+	uint last_height = 0;
+
+	int max_msaa_samples = 8;
+	int current_msaa_samples = 0;
+
+	bool created = false;
+};
 
 class Camera3D
 {
 public:
 	Camera3D();
+
+	void CleanUp();
+
+	void Bind(uint x, uint y, uint width, uint heigth);
+	void Unbind();
+	uint GetTextId();
 
 	void SetPosition(const float3& pos);
 	const float3 GetPosition();
@@ -59,11 +113,13 @@ public:
 	Frustum GetFrustum();
 
 private:
-	Frustum frustum;
-	float	aspect_ratio = 0.0f;
-	float   vertical_fov = 0.0f;
+	Frustum		   frustum;
+	float		   aspect_ratio = 0.0f;
+	float          vertical_fov = 0.0f;
 
-	bool	frustum_culling = true;
+	bool	       frustum_culling = true;
+
+	RenderTexture* render_tex = nullptr;
 };
 
 class ModuleCamera3D : public Module

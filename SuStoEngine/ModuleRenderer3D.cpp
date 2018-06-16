@@ -151,7 +151,7 @@ bool ModuleRenderer3D::PreUpdate()
 {
 	bool ret = true;
 
-	fbo_texture->Bind();
+	//fbo_texture->Bind();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
@@ -178,7 +178,7 @@ bool ModuleRenderer3D::PostUpdate()
 	bool ret = true;
 
 	// Finish 3d Draw scene
-	fbo_texture->Unbind();
+	//fbo_texture->Unbind();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Disable light
@@ -203,9 +203,6 @@ bool ModuleRenderer3D::CleanUp()
 
 	CONSOLE_LOG("Destroying 3D Renderer");
 
-	fbo_texture->Unbind();
-	RELEASE(fbo_texture);
-
 	SDL_GL_DeleteContext(context);
 
 	return ret;
@@ -217,9 +214,20 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	App->camera->GetCurrentCamera()->SetAspectRatio((float)width / (float)height);
 }
 
-uint ModuleRenderer3D::GetScreenTexture()
+void ModuleRenderer3D::RenderScene()
 {
-	return fbo_texture->GetTexture();
+	std::vector<Camera3D*> cameras = App->camera->GetCameras();
+
+	float2 window_size = App->window->GetWindowSize();
+
+	for (std::vector<Camera3D*>::iterator it = cameras.begin(); it != cameras.end(); ++it)
+	{
+		Camera3D* curr_camera = (*it);
+
+		curr_camera->Bind(0, 0, window_size.x, window_size.y);
+
+		curr_camera->Unbind();
+	}
 }
 
 void ModuleRenderer3D::SetPoligonModeWireframe() const
@@ -318,6 +326,44 @@ void ModuleRenderer3D::SetSpecularLight(const bool & enabled, const float color[
 		glEnable(GL_LIGHT2);
 	else
 		glDisable(GL_LIGHT2);
+}
+
+void ModuleRenderer3D::SetViewport(uint start_x, uint start_y, uint width, uint height)
+{
+	glViewport(start_x, start_y, width, height);
+
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+	{
+		CONSOLE_LOG("Error setting viewport: %s\n", gluErrorString(error));
+	}
+}
+
+void ModuleRenderer3D::GetViewport(uint & start_x, uint & start_y, uint & width, uint & height)
+{
+	GLint viewport[4]; glGetIntegerv(GL_VIEWPORT, viewport);
+
+	start_x = viewport[0];
+	start_y = viewport[1];
+	width = viewport[2];
+	height = viewport[3];
+
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+	{
+		CONSOLE_LOG("Error getting viewport: %s\n", gluErrorString(error));
+	}
+}
+
+void ModuleRenderer3D::Clear(uint buffer)
+{
+	glClear(buffer);
+
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+	{
+		CONSOLE_LOG("Error clearing buffer: %s\n", gluErrorString(error));
+	}
 }
 
 uint ModuleRenderer3D::GenBuffer() const
@@ -438,9 +484,29 @@ void ModuleRenderer3D::SetTexCoordPointer()
 	}
 }
 
+uint ModuleRenderer3D::GenTexture() const
+{
+	uint ret = 0;
+
+	glGenTextures(1, &ret);
+
+	return ret;
+}
+
 void ModuleRenderer3D::BindTexture(uint id) const
 {
 	glBindTexture(GL_TEXTURE_2D, id);
+
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+	{
+		CONSOLE_LOG("Error bind texture: %s\n", gluErrorString(error));
+	}
+}
+
+void ModuleRenderer3D::BindTexture(uint target, uint id) const
+{
+	glBindTexture((GLenum)target, id);
 
 	GLenum error = glGetError();
 	if (error != GL_NO_ERROR)
@@ -457,6 +523,106 @@ void ModuleRenderer3D::UnbindTexture() const
 	if (error != GL_NO_ERROR)
 	{
 		CONSOLE_LOG("Error unbind texture: %s\n", gluErrorString(error));
+	}
+}
+
+void ModuleRenderer3D::UnbindTexture(uint target) const
+{
+	glBindTexture((GLenum)target, 0);
+
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+	{
+		CONSOLE_LOG("Error unbind texture: %s\n", gluErrorString(error));
+	}
+}
+
+void ModuleRenderer3D::DeleteTexture(uint& id) const
+{
+	if (id > 0)
+	{
+		glDeleteTextures(1, &id);
+
+		GLenum error = glGetError();
+		if (error != GL_NO_ERROR)
+		{
+			CONSOLE_LOG("Error deleting texture: %s\n", gluErrorString(error));
+		}
+	}
+}
+
+uint ModuleRenderer3D::GenRenderBuffer() const
+{
+	uint ret = 0;
+
+	glGenRenderbuffers(1, &ret);
+
+	return ret;
+}
+
+void ModuleRenderer3D::BindRenderBuffer(uint id) const
+{
+	glBindRenderbuffer(GL_RENDERBUFFER, id);
+
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+	{
+		CONSOLE_LOG("Error binding render buffer: %s\n", gluErrorString(error));
+	}
+}
+
+void ModuleRenderer3D::UnbindRenderBuffer() const
+{
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+	{
+		CONSOLE_LOG("Error unbind render buffer: %s\n", gluErrorString(error));
+	}
+}
+
+void ModuleRenderer3D::Set2DMultisample(uint samples, uint width, uint height)
+{
+	glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGB, width, height, GL_TRUE);
+
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+	{
+		CONSOLE_LOG("Error setting 2D multisample texture: %s\n", gluErrorString(error));
+	}
+}
+
+void ModuleRenderer3D::SetFrameBufferTexture2D(uint id)
+{
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, id, 0);
+
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+	{
+		CONSOLE_LOG("Error setting frame buffer texture2D: %s\n", gluErrorString(error));
+	}
+}
+
+void ModuleRenderer3D::RenderStorageMultisample(uint samples, uint width, uint height)
+{
+	glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH24_STENCIL8, width, height);
+
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+	{
+		CONSOLE_LOG("Error rendering storage multisample: %s\n", gluErrorString(error));
+	}
+}
+
+void ModuleRenderer3D::RenderRenderBuffer(uint samples, uint width, uint height)
+{
+	glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH24_STENCIL8, width, height);
+
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+	{
+		CONSOLE_LOG("Error rendering render buffer: %s\n", gluErrorString(error));
 	}
 }
 
@@ -553,6 +719,66 @@ void ModuleRenderer3D::UnbindVertexArrayBuffer() const
 	if (error != GL_NO_ERROR)
 	{
 		CONSOLE_LOG("Error unbind array buffer: %s\n", gluErrorString(error));
+	}
+}
+
+uint ModuleRenderer3D::GenFrameBuffer() const
+{
+	uint ret = 0;
+
+	glGenFramebuffers(1, (GLuint*)&ret);
+
+	return ret;
+}
+
+void ModuleRenderer3D::BindFrameBuffer(uint id) const
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, id);
+
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+	{
+		CONSOLE_LOG("Error binding frame buffer: %s\n", gluErrorString(error));
+	}
+}
+
+void ModuleRenderer3D::UnbindFrameBuffer() const
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+	{
+		CONSOLE_LOG("Error unbinding frame buffer: %s\n", gluErrorString(error));
+	}
+}
+
+uint ModuleRenderer3D::CheckFrameBufferStatus()
+{
+	uint ret = 0;
+
+	ret = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+	{
+		CONSOLE_LOG("Error checking frame buffer status: %s\n", gluErrorString(error));
+	}
+
+	return ret;
+}
+
+void ModuleRenderer3D::DeleteFrameBuffer(uint & id)
+{
+	if (id > 0)
+	{
+		glDeleteFramebuffers(1, &id);
+
+		GLenum error = glGetError();
+		if (error != GL_NO_ERROR)
+		{
+			CONSOLE_LOG("Error deleting frame buffer: %s\n", gluErrorString(error));
+		}
 	}
 }
 
