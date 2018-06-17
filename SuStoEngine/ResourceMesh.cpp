@@ -4,6 +4,7 @@
 
 ResourceMesh::ResourceMesh(std::string unique_id) : Resource(unique_id, ResourceType::RT_MESH)
 {
+	vao_id = App->renderer3D->GenVertexArrayBuffer();
 }
 
 ResourceMesh::~ResourceMesh()
@@ -29,6 +30,47 @@ void ResourceMesh::CleanUp()
 	id_uv = 0;
 	num_uvs = 0;
 	RELEASE_ARRAY(uvs);
+}
+
+void ResourceMesh::SendToShaders()
+{
+	vao_id = App->renderer3D->GenVertexArrayBuffer();
+
+	App->renderer3D->BindVertexArrayBuffer(vao_id);
+
+	App->renderer3D->BindArrayBuffer(id_vertices);
+
+	//vertices
+	App->renderer3D->SetVertexAttributePointer(0, 3, 13, 0);
+	App->renderer3D->EnableVertexAttributeArray(0);
+
+	//texture coords
+	App->renderer3D->SetVertexAttributePointer(1, 3, 13, 3);
+	App->renderer3D->EnableVertexAttributeArray(1);
+
+	//normals
+	App->renderer3D->SetVertexAttributePointer(2, 3, 13, 6);
+	App->renderer3D->EnableVertexAttributeArray(2);
+
+	//colors
+	App->renderer3D->SetVertexAttributePointer(3, 4, 13, 9);
+	App->renderer3D->EnableVertexAttributeArray(3);
+
+	App->renderer3D->BindElementArrayBuffer(id_indices);
+
+	App->renderer3D->UnbindVertexArrayBuffer();
+
+	on_shaders = true;
+}
+
+void ResourceMesh::Render()
+{
+	if (!on_shaders)
+		SendToShaders();
+
+	App->renderer3D->BindVertexArrayBuffer(vao_id);
+
+	App->renderer3D->RenderElement(num_indices);
 }
 
 void ResourceMesh::SetFaces(float * _vertices, uint _num_vertices, uint * _indices, uint _num_indices)
@@ -61,15 +103,6 @@ void ResourceMesh::SetUvs(float * _uvs, uint _num_uvs)
 		memcpy(uvs, _uvs, sizeof(float) * _num_uvs * 3);
 		num_uvs = _num_uvs;
 	}
-}
-
-void ResourceMesh::SetTransform(float3 _pos, Quat _rotation, float3 _scale)
-{
-	position = _pos;
-	rotation = _rotation;
-	scale = _scale;
-
-	CalcMeshBBox();
 }
 
 uint ResourceMesh::GetIdVertices()
@@ -125,50 +158,6 @@ AABB ResourceMesh::GetBBox()
 float ResourceMesh::GetDiagonal()
 {
 	return bbox.Diagonal().Length();
-}
-
-float3 ResourceMesh::GetPosition()
-{
-	return position;
-}
-
-Quat ResourceMesh::GetRotation()
-{
-	return rotation;
-}
-
-float3 ResourceMesh::GetScale()
-{
-	return scale;
-}
-
-void ResourceMesh::Render()
-{
-	glEnable(GL_VERTEX_ARRAY);
-	
-	glBindBuffer(GL_ARRAY_BUFFER, id_vertices);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indices);
-
-	//Apply UV if exist
-	if (num_uvs != 0)
-	{
-		glEnable(GL_TEXTURE_COORD_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, id_uv);
-		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
-	}
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	glDisable(GL_BLEND);
-	glDisable(GL_VERTEX_ARRAY);
-	glDisable(GL_TEXTURE_COORD_ARRAY);
 }
 
 void ResourceMesh::LoadToMemory()

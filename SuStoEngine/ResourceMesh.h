@@ -13,9 +13,11 @@ public:
 
 	void CleanUp();
 
+	void SendToShaders();
+	void Render();
+
 	void SetFaces(float* vertices, uint num_vertices, uint* indices, uint num_indices);
 	void SetUvs(float* uvs, uint num_uvs);
-	void SetTransform(float3 pos, Quat rotation, float3 scale);
 
 	uint GetIdVertices();
 	uint GetNumVertices();
@@ -29,12 +31,6 @@ public:
 	AABB GetBBox();
 	float GetDiagonal();
 
-	float3 GetPosition();
-	Quat   GetRotation();
-	float3 GetScale();
-
-	void Render();
-
 private:
 	void CalcMeshBBox();
 
@@ -42,6 +38,8 @@ private:
 	void UnloadFromMemory();
 
 private:
+	uint   vao_id = 0;
+
 	uint   id_vertices = 0;
 	uint   num_vertices = 0;
 	float* vertices = nullptr;
@@ -54,11 +52,9 @@ private:
 	uint   num_uvs = 0;
 	float* uvs = nullptr;
 
-	float3 position = float3::zero;
-	Quat   rotation = Quat::identity;
-	float3 scale = float3(1, 1, 1);
-
 	AABB   bbox;
+
+	bool   on_shaders = false;
 };
 
 #endif

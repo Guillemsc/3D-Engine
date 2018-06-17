@@ -148,9 +148,9 @@ void ModuleGameObject::GameObjectsUpdate()
 		//if (App->scene_manager->GetState() == SceneState::PLAY)
 		//	(*it)->UpdateLogic();
 
-		(*it)->Draw();
+		//(*it)->Draw();
 
-		(*it)->SetDebugDraw(show_bboxes);
+		//(*it)->SetDebugDraw(show_bboxes);
 	}
 }
 

@@ -126,6 +126,8 @@ private:
 	bool                 show_imgui_test_window	= false;
 
 	char				 layout_name[255];
+
+	bool				 draw_editor = true;
 };
 
 #endif // __j1FILESYSTEM_H__

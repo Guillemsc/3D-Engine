@@ -555,8 +555,6 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 			position = float3(aitranslation.x, aitranslation.y, aitranslation.z);
 			scale = float3(aiscaling.x, aiscaling.y, aiscaling.z);
 			rotation = Quat(airotation.x, airotation.y, airotation.z, airotation.w);
-
-			mesh->SetTransform(position, rotation, scale);
 		}
 
 		// GENERAL BBOX
@@ -616,9 +614,9 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 
 			go->SetParent(parent);
 
-			go->transform->SetLocalPosition(mesh->GetPosition());
-			go->transform->SetLocalRotation(mesh->GetRotation());
-			go->transform->SetScale(mesh->GetScale());
+			go->transform->SetLocalPosition(position);
+			go->transform->SetLocalRotation(rotation);
+			go->transform->SetScale(scale);
 
 			go->AddComponent(MESH);
 			ComponentMesh* cmesh = (ComponentMesh*)go->GetComponent(MESH);

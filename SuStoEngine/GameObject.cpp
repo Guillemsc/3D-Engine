@@ -72,10 +72,6 @@ void GameObject::Draw()
 	if (!draw)
 		return;
 
-	// Push matrix
-	//glPushMatrix();
-	//glMultMatrixf(transform->GetGlobalTransform().Transposed().ptr());
-
 	ComponentMaterial* component_material = (ComponentMaterial*)GetComponent(MATERIAL);
 
 	ResourceShader* curr_shader = nullptr;
@@ -104,44 +100,7 @@ void GameObject::Draw()
 
 				App->renderer3D->SetUniformForViewAndProjection(curr_shader->GetProgramId(), "view", "projection");
 
-				//// Vertex
-				//glEnableClientState(GL_VERTEX_ARRAY);
-
-				//if (component_mesh->GetMesh()->GetIdVertices() != 0)
-				//{
-				//	glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdVertices());
-				//	glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-				//	if (component_mesh->GetMesh()->GetIdUV() != 0)
-				//	{
-				//		// UV
-				//		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-				//		glBindBuffer(GL_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdUV());
-				//		glTexCoordPointer(3, GL_FLOAT, 0, NULL);
-				//	}
-
-				//	if (component_mesh->GetMesh()->GetIdIndices() != 0)
-				//	{
-				//		// Index
-				//		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, component_mesh->GetMesh()->GetIdIndices());
-
-				//		// Draw
-				//		glDrawElements((GLenum)GL_TRIANGLES, component_mesh->GetMesh()->GetNumIndices(), GL_UNSIGNED_INT, NULL);
-
-				//		GLenum err;
-				//		while ((err = glGetError()) != GL_NO_ERROR)
-				//		{
-				//			CONSOLE_LOG("%d", err);
-				//		}
-				//	}
-				//}
-
-				//// Disable
-				//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-				//glDisableClientState(GL_VERTEX_ARRAY);
-
-				//glBindBuffer(GL_ARRAY_BUFFER, 0);
-				//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+				component_mesh->GetMesh()->Render();
 			}
 		}
 	}

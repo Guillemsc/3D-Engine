@@ -23,6 +23,7 @@
 #include "SceneManager.h"
 #include "ResourcesMonitoring.h"
 #include "ImGuizmo.h"
+#include "ModuleInput.h"
 
 //https://github.com/ocornut/imgui/issues/351
 
@@ -120,7 +121,13 @@ bool EditorUI::Update()
 {
 	bool ret = true;
 
-	DrawDockingEditor();
+	if(draw_editor)
+		DrawDockingEditor();
+
+	if (App->input->GetKeyDown("F1"))
+	{
+		draw_editor = !draw_editor;
+	}
 
 	return ret;
 }
