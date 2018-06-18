@@ -385,6 +385,12 @@ uint ModuleRenderer3D::GenBuffer() const
 	return ret;
 }
 
+void ModuleRenderer3D::UnloadBuffer(uint& id)
+{
+	if(id > 0)
+		glDeleteBuffers(1, &id);
+}
+
 void ModuleRenderer3D::BindArrayBuffer(uint id) const
 {
 	glBindBuffer(GL_ARRAY_BUFFER, id);
@@ -1195,12 +1201,6 @@ uint ModuleRenderer3D::LoadTextureBuffer(const void* texture, uint size, int for
 
 
 	return id;
-}
-
-void ModuleRenderer3D::UnloadBuffer(uint id, uint size)
-{
-	if(id != 0)
-		glDeleteBuffers(1, (GLuint*)&id);
 }
 
 void ModuleRenderer3D::UnloadTextureBuffer(uint id, uint size)

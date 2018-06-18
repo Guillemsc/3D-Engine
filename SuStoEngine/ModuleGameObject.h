@@ -106,6 +106,6 @@ private:
 	float4x4			  last_moved_transformation = float4x4::identity;
 };
 
-void GameObjectEvents(Event ev);
+void OnAddComponent(Event ev);
 
 #endif // !__MODULE_GAME_OBJECT_H__

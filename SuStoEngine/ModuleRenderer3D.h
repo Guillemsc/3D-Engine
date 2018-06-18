@@ -53,6 +53,7 @@ public:
 	void Clear(uint buffer);
 
 	uint GenBuffer() const;
+	void UnloadBuffer(uint& id);
 
 	void BindArrayBuffer(uint id) const;
 	void BindElementArrayBuffer(uint id) const;
@@ -144,7 +145,6 @@ public:
 	uint LoadBuffer(float* elements, uint size);
 	uint LoadBuffer(uint* elements, uint size);
 	uint LoadTextureBuffer(const void* texture, uint size, int format, int width, int height, uint wrap_s, uint wrap_t, uint mag, uint min);
-	void UnloadBuffer(uint id, uint size);
 	void UnloadTextureBuffer(uint id, uint size);
 
 	void DrawGrid(int HALF_GRID_SIZE);

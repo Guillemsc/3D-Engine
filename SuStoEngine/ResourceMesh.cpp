@@ -25,15 +25,12 @@ void ResourceMesh::CleanUp()
 	id_indices = 0;
 	num_indices = 0;
 	RELEASE_ARRAY(indices);
-
-	// UVs
-	id_uv = 0;
-	num_uvs = 0;
-	RELEASE_ARRAY(uvs);
 }
 
 void ResourceMesh::SendToShaders()
 {
+	LoadToMemory();
+
 	vao_id = App->renderer3D->GenVertexArrayBuffer();
 
 	App->renderer3D->BindVertexArrayBuffer(vao_id);
@@ -59,15 +56,10 @@ void ResourceMesh::SendToShaders()
 	App->renderer3D->BindElementArrayBuffer(id_indices);
 
 	App->renderer3D->UnbindVertexArrayBuffer();
-
-	on_shaders = true;
 }
 
 void ResourceMesh::Render()
 {
-	if (!on_shaders)
-		SendToShaders();
-
 	App->renderer3D->BindVertexArrayBuffer(vao_id);
 
 	App->renderer3D->RenderElement(num_indices);
@@ -78,8 +70,8 @@ void ResourceMesh::SetFaces(float * _vertices, uint _num_vertices, uint * _indic
 	if (_num_vertices > 0)
 	{
 		// Vertices
-		vertices = new float[_num_vertices * 3];
-		memcpy(vertices, _vertices, sizeof(float) * _num_vertices * 3);
+		vertices = new float[_num_vertices * 13];
+		memcpy(vertices, _vertices, sizeof(float) * _num_vertices * 13);
 		num_vertices = _num_vertices;
 
 		if (_num_indices > 0)
@@ -91,17 +83,8 @@ void ResourceMesh::SetFaces(float * _vertices, uint _num_vertices, uint * _indic
 		}
 
 		CalcMeshBBox();
-	}
-}
 
-void ResourceMesh::SetUvs(float * _uvs, uint _num_uvs)
-{
-	if (_num_uvs > 0)
-	{
-		// UVs
-		uvs = new float[_num_uvs * 3];
-		memcpy(uvs, _uvs, sizeof(float) * _num_uvs * 3);
-		num_uvs = _num_uvs;
+		SendToShaders();
 	}
 }
 
@@ -125,16 +108,6 @@ uint ResourceMesh::GetNumIndices()
 	return num_indices;
 }
 
-uint ResourceMesh::GetIdUV()
-{
-	return id_uv;
-}
-
-uint ResourceMesh::GetNumUVs()
-{
-	return num_uvs;
-}
-
 float * ResourceMesh::GetVertices()
 {
 	return vertices;
@@ -143,11 +116,6 @@ float * ResourceMesh::GetVertices()
 uint * ResourceMesh::GetIndices()
 {
 	return indices;
-}
-
-float * ResourceMesh::GetUVs()
-{
-	return uvs;
 }
 
 AABB ResourceMesh::GetBBox()
@@ -163,33 +131,36 @@ float ResourceMesh::GetDiagonal()
 void ResourceMesh::LoadToMemory()
 {
 	if (id_vertices == 0 && vertices != nullptr)
-		id_vertices = App->renderer3D->LoadBuffer(vertices, num_vertices * 3);
+	{
+		id_vertices = App->renderer3D->GenBuffer();
+		App->renderer3D->BindArrayBuffer(id_vertices);
+		App->renderer3D->LoadArrayToVRAM(sizeof(float) * num_vertices * 13, vertices, GL_STATIC_DRAW);
+		App->renderer3D->UnbindArraybuffer();
+	}
 
 	if (id_indices == 0 && indices != nullptr)
-		id_indices = App->renderer3D->LoadBuffer(indices, num_indices);
+	{
+		id_indices = App->renderer3D->GenBuffer();
+		App->renderer3D->BindArrayBuffer(id_indices);
+		App->renderer3D->LoadArrayToVRAM(sizeof(uint) * num_indices, indices, GL_STATIC_DRAW);
+		App->renderer3D->UnbindArraybuffer();
 
-	if (id_uv == 0 && uvs != nullptr)
-		id_uv = App->renderer3D->LoadBuffer(uvs, num_uvs * 3);
+		id_indices = App->renderer3D->LoadBuffer(indices, num_indices);
+	}
 }
 
 void ResourceMesh::UnloadFromMemory()
 {
-	if (id_vertices != 0)
+	if (id_vertices > 0)
 	{
-		App->renderer3D->UnloadBuffer(id_vertices, num_vertices * 3);
+		App->renderer3D->UnloadBuffer(id_vertices);
 		id_vertices = 0;
 	}
 
-	if (id_indices != 0)
+	if (id_indices > 0)
 	{
-		App->renderer3D->UnloadBuffer(id_indices, num_indices);
-		id_indices = 0;
-	}
-
-	if (id_uv != 0)
-	{
-		App->renderer3D->UnloadBuffer(id_uv, num_uvs * 3);
-		id_uv = 0;
+		App->renderer3D->UnloadBuffer(id_indices);
+		id_vertices = 0;
 	}
 }
 

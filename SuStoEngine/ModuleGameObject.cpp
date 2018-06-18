@@ -37,8 +37,7 @@ bool ModuleGameObject::Awake()
 
 	CONSOLE_LOG("Creating Module GameObject");	
 
-	App->event_system->Suscribe(EventType::ET_GAMEOBJECT_DESTROY, GameObjectEvents);
-	App->event_system->Suscribe(EventType::ET_GAMEOBJECT_CHANGE_PARENT, GameObjectEvents);
+	App->event_system->Suscribe(EventType::ET_COMPONENT_CREATE, OnAddComponent);
 
 	// KDTree
 	kdtree = new KDTree();
@@ -687,6 +686,20 @@ void ModuleGameObject::UpdateTransformationGuizmos()
 	}
 }
 
-void GameObjectEvents(Event ev)
+void OnAddComponent(Event ev)
 {
+	Component* cmp = ev.component_create.component;
+
+	if (cmp != nullptr)
+	{
+		if (cmp->GetType() == ComponentType::MESH)
+		{
+			GameObject* go = cmp->GetOwner();
+
+			if (go->ComponentTypeCount(ComponentType::MATERIAL) == 0)
+			{
+				go->AddComponent(ComponentType::MATERIAL);
+			}
+		}
+	}
 }

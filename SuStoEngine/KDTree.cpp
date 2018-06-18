@@ -451,7 +451,7 @@ void KDTree::CreateTree(std::vector<GameObject*>& elements, uint ele_on_partitio
 		root_node = new Node(ele_on_partition);
 		for (int i = 0; i < elements.size(); ++i)
 		{
-			if (!elements[i]->ContainsComponent(ComponentType::MESH))
+			if (!elements[i]->HasComponent(ComponentType::MESH))
 				continue;
 
 			root_node->AddElement(elements[i]);

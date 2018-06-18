@@ -40,7 +40,8 @@ public:
 	Component* AddComponent(ComponentType type, std::string unique_id = "");
 	bool RemoveComponent(ComponentType type);
 	bool RemoveComponent(Component* comp);
-	bool ContainsComponent(ComponentType type);
+	bool HasComponent(ComponentType type);
+	uint ComponentTypeCount(ComponentType type);
 	std::vector<Component*> GetComponents();
 	Component* GetComponent(ComponentType type);
 

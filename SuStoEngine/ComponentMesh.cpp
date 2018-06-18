@@ -14,6 +14,8 @@ ComponentMesh::ComponentMesh(GameObject * owner, std::string unique_id) : Compon
 {
 	CONSOLE_LOG("Component Mesh Created");
 	SetName("Mesh");
+
+	SetOnePerGo(true);
 }
 
 ComponentMesh::~ComponentMesh()
@@ -102,7 +104,6 @@ void ComponentMesh::InspectorDraw(std::vector<Component*> components)
 		ImGui::Text("Num vertices: %d", mesh->GetNumVertices());
 		ImGui::Text("Id indices: %d", mesh->GetIdIndices());
 		ImGui::Text("Num indices: %d", mesh->GetNumIndices());
-		ImGui::Text("Id uv: %d", mesh->GetIdUV());
 	}
 }
 
@@ -115,11 +116,9 @@ void ComponentMesh::OnLoadAbstraction(DataAbstraction& abs)
 }
 
 void ComponentMesh::OnSaveAbstraction(DataAbstraction& abs)
-{
-	if (has_mesh)
-	{
-		abs.AddString("mesh_id", mesh->GetUniqueId().c_str());
-	}
+{	
+	if(mesh != nullptr)
+		abs.AddString("mesh_id", mesh->GetUniqueId().c_str());	
 }
 
 void ComponentMesh::OnEnable()

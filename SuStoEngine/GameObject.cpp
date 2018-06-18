@@ -189,7 +189,7 @@ Component* GameObject::AddComponent(ComponentType type, string unique_id)
 	{
 		if (ret->GetOnePerGo())
 		{
-			if (ContainsComponent(type))
+			if (HasComponent(type))
 			{
 				ret->CleanUp();
 				delete ret;
@@ -281,7 +281,7 @@ bool GameObject::RemoveComponent(Component * comp)
 	return ret;
 }
 
-bool GameObject::ContainsComponent(ComponentType type)
+bool GameObject::HasComponent(ComponentType type)
 {
 	bool ret = false;
 
@@ -292,6 +292,19 @@ bool GameObject::ContainsComponent(ComponentType type)
 			ret = true;
 			break;
 		}
+	}
+
+	return ret;
+}
+
+uint GameObject::ComponentTypeCount(ComponentType type)
+{
+	uint ret = 0;
+
+	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
+	{
+		if ((*it)->GetType() == type)
+			++ret;
 	}
 
 	return ret;

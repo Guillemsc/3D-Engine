@@ -12,6 +12,8 @@ ComponentMaterial::ComponentMaterial(GameObject * owner, std::string unique_id) 
 {
 	CONSOLE_LOG("Component Material Created");
 	SetName("Material");
+
+	SetOnePerGo(true);
 }
 
 ComponentMaterial::~ComponentMaterial()

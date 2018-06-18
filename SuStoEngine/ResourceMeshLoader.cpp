@@ -221,11 +221,10 @@ bool ResourceMeshLoader::ExportResourceToLibrary(Resource * resource)
 		// -------------------------------------
 		// FILE --------------------------------
 		// -------------------------------------
-		uint ranges[3] = { mesh->GetNumVertices(), mesh->GetNumIndices(), mesh->GetNumUVs() };
+		uint ranges[2] = { mesh->GetNumVertices(), mesh->GetNumIndices()};
 		uint size = sizeof(ranges) +
 			sizeof(uint) * mesh->GetNumIndices() +
-			sizeof(float) * mesh->GetNumVertices() * 3 +
-			sizeof(float) * mesh->GetNumUVs() * 3;
+			sizeof(float) * mesh->GetNumVertices() * 13;
 
 		// Allocate data
 		char* data = new char[size];
@@ -242,13 +241,9 @@ bool ResourceMeshLoader::ExportResourceToLibrary(Resource * resource)
 		cursor += bytes;
 
 		// Store vertices
-		bytes = sizeof(float) * mesh->GetNumVertices() * 3;
+		bytes = sizeof(float) * mesh->GetNumVertices() * 13;
 		memcpy(cursor, mesh->GetVertices(), bytes);
 		cursor += bytes;
-
-		// Store UVs
-		bytes = sizeof(float) * mesh->GetNumUVs() * 3;
-		memcpy(cursor, mesh->GetUVs(), bytes);
 
 		//fopen
 		if (App->file_system->FileSave(library_path.c_str(), data, name.c_str(), "sustomesh", size) == false)
@@ -324,7 +319,7 @@ bool ResourceMeshLoader::ImportResourceFromLibrary(DecomposedFilePath d_filepath
 
 			// Copy the ranges
 			// ranges[0] = Vertices, ranges[1] = Indices, ranges[2] = Uvs
-			uint ranges[3];
+			uint ranges[2];
 			uint bytes = sizeof(ranges);
 			memcpy(ranges, cursor, bytes);
 			cursor += bytes;
@@ -336,28 +331,20 @@ bool ResourceMeshLoader::ImportResourceFromLibrary(DecomposedFilePath d_filepath
 			cursor += bytes;
 
 			// Store vertices
-			float* vertices = new float[ranges[0] * 3];
-			bytes = sizeof(float) * ranges[0] * 3;
+			float* vertices = new float[ranges[0] * 13];
+			bytes = sizeof(float) * ranges[0] * 13;
 			memcpy(vertices, cursor, bytes);
-			cursor += bytes;
-
-			// Store UVs
-			float* uvs = new float[ranges[2] * 3];
-			bytes = sizeof(float) * ranges[2] * 3;
-			memcpy(uvs, cursor, bytes);
 			cursor += bytes;
 
 			// Create mesh --------------
 			ResourceMesh* new_mesh = (ResourceMesh*)App->resource_manager->CreateNewResource(RT_MESH, uid);
 			new_mesh->SetFaces(vertices, ranges[0], indices, ranges[1]);
-			new_mesh->SetUvs(uvs, ranges[2]);
 
 			new_mesh->SetFileName(resource_name.c_str());
 
 			RELEASE_ARRAY(buffer);
 			RELEASE_ARRAY(indices);
 			RELEASE_ARRAY(vertices);
-			RELEASE_ARRAY(uvs);
 
 			ret = true;
 		}
@@ -502,42 +489,107 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 			}
 		}
 
-		// VERTICES && INDICES
+		// VERTICES
+		uint num_vertices = aimesh->mNumVertices;
+		float* vertices = nullptr;
 		if (mesh_valid && node_valid && !mesh_already_loaded)
 		{
-			float* vertices = new float[aimesh->mNumVertices * 3];
+			vertices = new float[num_vertices * 3];
 			memcpy(vertices, aimesh->mVertices, sizeof(float) * aimesh->mNumVertices * 3);
+		}
 
-			uint* indices = new uint[aimesh->mNumFaces * 3];
+		// INDICES
+		uint num_indices = 0;
+		uint* indices = nullptr;
+		if (mesh_valid && node_valid && !mesh_already_loaded)
+		{
+			num_indices = aimesh->mNumFaces * 3;
 
-			for (uint i = 0; i < aimesh->mNumFaces && mesh_valid; ++i)
+			indices = new uint[num_indices]; // assume each face is a triangle
+			for (uint i = 0; i < aimesh->mNumFaces; ++i)
 			{
 				if (aimesh->mFaces[i].mNumIndices == 3)
 				{
 					memcpy(&indices[i * 3], aimesh->mFaces[i].mIndices, 3 * sizeof(uint));
 				}
-				else
-				{
-					CONSOLE_LOG("WARNING, geometry face with != 3 indices!");
-					mesh_valid = false;
-				}
 			}
-
-			mesh->SetFaces(vertices, aimesh->mNumVertices, indices, aimesh->mNumFaces * 3);
-
-			RELEASE_ARRAY(vertices);
-			RELEASE_ARRAY(indices);
 		}
 
 		// UVS
+		uint num_uvs = 0;
+		float* uvs = nullptr;
 		if (mesh_valid && node_valid && !mesh_already_loaded && aimesh->HasTextureCoords(0))
 		{
-			float* uvs = new float[aimesh->mNumVertices * 3];
-			memcpy(uvs, (float*)aimesh->mTextureCoords[0], sizeof(float) * aimesh->mNumVertices * 3);
+			if (aimesh->HasTextureCoords(0))
+			{
+				num_uvs = aimesh->mNumVertices;
 
-			mesh->SetUvs(uvs, aimesh->mNumVertices);
+				uvs = new float[aimesh->mNumVertices * 3];
+				memcpy(uvs, (float*)aimesh->mTextureCoords[0], sizeof(float) * aimesh->mNumVertices * 3);
+			}
+		}
 
-			RELEASE_ARRAY(uvs);
+		// NORMALS
+		uint num_normals = 0;
+		float* normals = nullptr;
+		if (mesh_valid && node_valid && !mesh_already_loaded)
+		{
+			if (aimesh->HasNormals())
+			{
+				num_normals = aimesh->mNumVertices;
+
+				normals = new float[num_normals * 3];
+				memcpy(normals, aimesh->mNormals, sizeof(float)*num_normals * 3);
+			}
+		}
+
+		// COLOUR
+		uint colors_num = 0;
+		float* colors = nullptr;
+		if (mesh_valid && node_valid && !mesh_already_loaded)
+		{
+			if (aimesh->HasVertexColors(0))
+			{
+				colors_num = aimesh->mNumVertices;
+
+				colors = new float[colors_num * 4];
+				memcpy(colors, aimesh->mColors[0], sizeof(float)*colors_num * 4);
+			}
+		}
+
+		// GENERATE
+		if (mesh_valid && node_valid && !mesh_already_loaded)
+		{
+			float* vert_info = new float[num_vertices * 13];
+
+			float null[3] = { 0.f,0.f,0.f };
+			float null_color[4] = { 1.f,1.f,1.f,1.f };
+
+			for (int v = 0; v < num_vertices; ++v)
+			{
+				//copy vertex pos
+				memcpy(vert_info + v * 13, vertices + v * 3, sizeof(float) * 3);
+
+				//copy tex coord
+				if (uvs != nullptr)
+					memcpy(vert_info + v * 13 + 3, uvs + v * 3, sizeof(float) * 3);
+				else
+					memcpy(vert_info + v * 13 + 3, null, sizeof(float) * 3);
+
+				//copy normals
+				if (normals != nullptr)
+					memcpy(vert_info + v * 13 + 6, normals + v * 3, sizeof(float) * 3);
+				else
+					memcpy(vert_info + v * 13 + 6, null, sizeof(float) * 3);
+
+				//copy colors
+				if (colors != nullptr)
+					memcpy(vert_info + v * 13 + 9, colors + v * 3, sizeof(float) * 4);
+				else
+					memcpy(vert_info + v * 13 + 9, null_color, sizeof(float) * 4);
+			}
+
+			mesh->SetFaces(vert_info, num_vertices, indices, num_indices);
 		}
 
 		// POSITION, ROTATION AND SCALE
@@ -640,6 +692,12 @@ void ResourceMeshLoader::RecursiveLoadMesh(const aiScene * scene, aiNode * node,
 		}
 		else if (!mesh_valid && !mesh_already_loaded && mesh != nullptr)
 			App->resource_manager->DeleteResource(mesh->GetUniqueId());
+
+		RELEASE_ARRAY(vertices);
+		RELEASE_ARRAY(indices);
+		RELEASE_ARRAY(uvs);
+		RELEASE_ARRAY(normals);
+		RELEASE_ARRAY(colors);
 	}
 
 	// Select parent

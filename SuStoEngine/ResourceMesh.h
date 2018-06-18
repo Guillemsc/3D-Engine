@@ -23,11 +23,8 @@ public:
 	uint GetNumVertices();
 	uint GetIdIndices();
 	uint GetNumIndices();
-	uint GetIdUV();
-	uint GetNumUVs();
 	float* GetVertices();
 	uint* GetIndices();
-	float* GetUVs();
 	AABB GetBBox();
 	float GetDiagonal();
 
@@ -48,13 +45,8 @@ private:
 	uint   num_indices = 0;
 	uint*  indices = nullptr;
 
-	uint   id_uv = 0;
-	uint   num_uvs = 0;
-	float* uvs = nullptr;
 
 	AABB   bbox;
-
-	bool   on_shaders = false;
 };
 
 #endif
