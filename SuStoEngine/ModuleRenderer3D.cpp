@@ -97,8 +97,8 @@ bool ModuleRenderer3D::Awake()
 			ret = false;
 		}
 
-		glHint(GL_FRAGMENT_SHADER_DERIVATIVE_HINT, GL_NICEST);
-		glHint(GL_TEXTURE_COMPRESSION_HINT, GL_NICEST);
+		//glHint(GL_FRAGMENT_SHADER_DERIVATIVE_HINT, GL_NICEST);
+		//glHint(GL_TEXTURE_COMPRESSION_HINT, GL_NICEST);
 
 		glClearDepth(1.0f);
 
@@ -158,12 +158,12 @@ bool ModuleRenderer3D::PreUpdate()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glLoadMatrixf(App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr());
+	//glMatrixMode(GL_PROJECTION);
+	//glLoadIdentity();
+	//glLoadMatrixf(App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr());
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(App->camera->GetCurrentCamera()->GetOpenGLViewMatrix().ptr());
+	//glMatrixMode(GL_MODELVIEW);
+	//glLoadMatrixf(App->camera->GetCurrentCamera()->GetOpenGLViewMatrix().ptr());
 
 	// light 0 on cam pos
 	lights[0].SetPos(0, 0, 0);
